@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 module AUIPSInferno
+  # This test group verifies support for the `$summary` operation according to the IG
   class SummaryOperation < Inferno::TestGroup
     title 'Summary Operation Tests'
     description %(

@@ -5,6 +5,7 @@ require 'ipa_test_kit'
 require_relative 'au_ips_inferno/summary_operation_group'
 
 module AUIPSInferno
+  # AU PS suite
   class Suite < Inferno::TestSuite
     id :au_ips_inferno
     title 'AU IPS Inferno Test Suite'
