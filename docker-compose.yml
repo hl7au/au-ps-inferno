@@ -5,6 +5,7 @@ services:
       context: ./
     volumes:
       - ./data:/opt/inferno/data
+      - ./:/opt/inferno
     depends_on:
       - validator_service
   worker:
