@@ -1,5 +1,23 @@
 # AU IPS Inferno Test Kit
 
+## Run Inferno locally via Docker
+
+It is highly recommended that you use Docker to run these tests. This test kit requires at least 10 GB of memory are available to Docker.
+1. Clone this repo.
+2. Run the setup script to initialize the database
+
+```bash
+make setup
+```
+
+3. Run project
+
+```bash
+make run
+```
+
+4. Navigate to http://localhost. The AU Core test suite will be available.
+
 ## License
 Copyright 2024 TODO
 
