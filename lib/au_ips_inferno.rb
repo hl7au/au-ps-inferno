@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'ips_test_kit'
-require 'ipa_test_kit'
 require_relative 'au_ips_inferno/summary_operation_group'
 
 module AUIPSInferno
@@ -30,7 +29,6 @@ module AUIPSInferno
       igs 'hl7.fhir.uv.ips#1.1.0'
     end
 
-    group from: :ipa_v100_smart_launch
     group from: :ips_resource_validation
     group do
       title 'IPS Server Operations for Generating IPS Bundles Tests'

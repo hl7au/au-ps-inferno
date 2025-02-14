@@ -10,7 +10,6 @@ group :development, :test do
   gem 'debug'
 end
 
-gem 'ipa_test_kit', '~> 0.5.0'
 gem 'ips_test_kit', '~> 0.10.2'
 gem 'pg', '~> 1.5'
 gem 'rubocop', '~> 1.71.2'
