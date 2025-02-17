@@ -48,6 +48,7 @@ module AUIPSInferno
       end
 
       group from: :ips_summary_group
+      group from: :ips_docref_operation
     end
   end
 end
