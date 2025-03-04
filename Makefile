@@ -30,3 +30,13 @@ tests:
 
 rubocop:
 	$(compose) $(inferno) rubocop
+
+generate:
+	sudo rm -rf lib/au_ps_inferno/generated/
+	$(compose) $(inferno) bundle exec rake au_ps:generate
+	$(compose) $(inferno) rubocop -A
+
+generate_local:
+	sudo rm -rf lib/au_ps_inferno/generated/
+	bundle exec rake au_ps:generate
+	# rubocop -A lib/au_core_test_kit/

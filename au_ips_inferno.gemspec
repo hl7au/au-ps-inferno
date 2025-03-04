@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
 Gem::Specification.new do |spec|
-  spec.name          = 'au_ips_inferno'
+  spec.name          = 'au_ps_inferno'
   spec.version       = '0.0.1'
   spec.authors       = ['Ilya Beda', 'Pavel Rozhkov']
   spec.email         = ['ilya@beda.software', 'pavel.r@beda.software']
   spec.date          = Time.now.utc.strftime('%Y-%m-%d')
-  spec.summary       = 'AU IPS Inferno Test Kit'
-  spec.description   = 'AU IPS Inferno Test Kit'
+  spec.summary       = 'AU PS Inferno Test Kit'
+  spec.description   = 'AU PS Inferno Test Kit'
   spec.homepage      = 'https://github.com/hl7au/au-ps-inferno'
   spec.license       = 'Apache-2.0'
   spec.add_runtime_dependency 'inferno_core', '~> 0.6.2'
