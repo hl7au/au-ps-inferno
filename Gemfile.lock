@@ -1,7 +1,14 @@
+GIT
+  remote: https://github.com/beda-software/inferno_ps_suite_generator
+  revision: 8d6709e98fcbdbf367d0c1570b1a3e2cbe10fb50
+  ref: 8d6709e98fcbdbf367d0c1570b1a3e2cbe10fb50
+  specs:
+    inferno_ps_suite_generator (0.1.0)
+
 PATH
   remote: .
   specs:
-    au_ips_inferno (0.0.1)
+    au_ps_inferno (0.0.1)
       inferno_core (~> 0.6.2)
 
 GEM
@@ -162,8 +169,6 @@ GEM
       thor (~> 1.2.1)
       tty-markdown (~> 0.7.1)
     io-console (0.7.2)
-    ips_test_kit (0.10.2)
-      inferno_core (>= 0.4.37)
     irb (1.13.1)
       rdoc (>= 4.0.0)
       reline (>= 0.4.2)
@@ -328,11 +333,11 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
-  au_ips_inferno!
+  au_ps_inferno!
   database_cleaner-sequel (~> 1.8)
   debug
   factory_bot (~> 6.1)
-  ips_test_kit (~> 0.10.2)
+  inferno_ps_suite_generator!
   pg (~> 1.5)
   rspec (~> 3.10)
   rubocop (~> 1.71.2)

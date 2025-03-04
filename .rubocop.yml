@@ -1,4 +1,4 @@
 AllCops:
   Exclude:
     - 'spec/spec_helper.rb'
-
+    - 'lib/au_ps_inferno/generated/**/*'
