@@ -1,63 +1,28 @@
 # frozen_string_literal: true
 
 module AUPSTestKit
-  class AuPsConditionEntryTest < Inferno::TestGroup
-    title 'AU PS Condition'
-    description 'TODO description: AuPsConditionEntryTest'
+  class AuPsConditionEntryTest < Inferno::Test
+    title 'Server returns AU PS Condition resource that matches the AU PS Condition profile'
+    description %(
+      This test will validate that the AU PS Condition resource returned from the server matches the AU PS Condition profile.
+    )
     id :au_ps_au_ps_condition_entry_test
 
-    test do
-      title 'Server returns correct Condition resource from the Condition read interaction'
-      description %(
-        This test will verify that Condition resources can be read from the server.
-      )
+    optional
 
-      optional
+    uses_request :summary_operation
 
-      uses_request :summary_operation
-
-      run do
-        initial_bundle = resource
-        existing_resources = initial_bundle.entry.map(&:resource).select do |r|
-          r.resourceType == 'Condition' && r.meta&.profile&.include?('http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-condition')
-        end
-
-        skip_if existing_resources.empty?,
-                "No existing resources of type 'Condition' with profile 'http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-condition' found."
-
-        existing_resources.each do |r|
-          fhir_read('Condition', r.id)
-          assert_response_status(200)
-          assert_resource_type('Condition')
-
-          assert resource.id == r.id,
-                 "Requested resource with id #{r.id}, received resource with id #{resource.id}"
-        end
+    run do
+      initial_bundle = resource
+      existing_resources = initial_bundle.entry.map(&:resource).select do |r|
+        r.resourceType == 'Condition' && r.meta&.profile&.include?('http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-condition')
       end
-    end
 
-    test do
-      title 'Server returns Condition resource that matches the Condition profile'
-      description %(
-        This test will validate that the Condition resource returned from the server matches the Medication (IPS) profile.
-      )
+      skip_if existing_resources.empty?,
+              "No existing resources of type 'Condition' with profile 'http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-condition' found."
 
-      optional
-
-      uses_request :summary_operation
-
-      run do
-        initial_bundle = resource
-        existing_resources = initial_bundle.entry.map(&:resource).select do |r|
-          r.resourceType == 'Condition' && r.meta&.profile&.include?('http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-condition')
-        end
-
-        skip_if existing_resources.empty?,
-                "No existing resources of type 'Condition' with profile 'http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-condition' found."
-
-        existing_resources.each do |r|
-          assert_valid_resource(resource: r, profile_url: 'http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-condition')
-        end
+      existing_resources.each do |r|
+        assert_valid_resource(resource: r, profile_url: 'http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-condition')
       end
     end
   end

@@ -13,7 +13,7 @@ module AUPSTestKit
       fhir_operation("Patient/#{patient_id}/$summary", name: :summary_operation, operation_method: :get)
       assert_response_status(200)
       assert_resource_type(:bundle)
-      assert_valid_resource(profile_url: 'http://hl7.org/fhir/uv/ips/StructureDefinition/Bundle-uv-ips')
+      assert_valid_resource(profile_url: 'http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-bundle')
     end
   end
 end

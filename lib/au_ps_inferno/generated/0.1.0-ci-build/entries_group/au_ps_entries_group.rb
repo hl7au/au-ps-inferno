@@ -71,68 +71,68 @@ module AUPSTestKit
     id :au_ps_entries
     run_as_group
 
-    group from: :au_ps_au_ps_patient_entry_test
+    test from: :au_ps_au_ps_patient_entry_test
 
-    group from: :au_ps_au_ps_allergyintolerance_entry_test
+    test from: :au_ps_au_ps_allergyintolerance_entry_test
 
-    group from: :au_ps_au_ps_condition_entry_test
+    test from: :au_ps_au_ps_condition_entry_test
 
-    group from: :au_ps_device_entry_test
+    test from: :au_ps_device_entry_test
 
-    group from: :au_ps_deviceusestatement_ips_entry_test
+    test from: :au_ps_deviceusestatement_ips_entry_test
 
-    group from: :au_ps_diagnosticreport_ips_entry_test
+    test from: :au_ps_diagnosticreport_ips_entry_test
 
-    group from: :au_ps_imagingstudy_ips_entry_test
+    test from: :au_ps_imagingstudy_ips_entry_test
 
-    group from: :au_ps_au_ps_immunization_entry_test
+    test from: :au_ps_au_ps_immunization_entry_test
 
-    group from: :au_ps_au_ps_medication_entry_test
+    test from: :au_ps_au_ps_medication_entry_test
 
-    group from: :au_ps_au_ps_medicationrequest_entry_test
+    test from: :au_ps_au_ps_medicationrequest_entry_test
 
-    group from: :au_ps_au_ps_medicationstatement_entry_test
+    test from: :au_ps_au_ps_medicationstatement_entry_test
 
-    group from: :au_ps_au_ps_practitioner_entry_test
+    test from: :au_ps_au_ps_practitioner_entry_test
 
-    group from: :au_ps_au_ps_practitionerrole_entry_test
+    test from: :au_ps_au_ps_practitionerrole_entry_test
 
-    group from: :au_ps_au_ps_procedure_entry_test
+    test from: :au_ps_au_ps_procedure_entry_test
 
-    group from: :au_ps_au_ps_organization_entry_test
+    test from: :au_ps_au_ps_organization_entry_test
 
-    group from: :au_ps_observation_pregnancy_expected_delivery_date_ips_entry_test
+    test from: :au_ps_observation_pregnancy_expected_delivery_date_ips_entry_test
 
-    group from: :au_ps_observation_pregnancy_outcome_ips_entry_test
+    test from: :au_ps_observation_pregnancy_outcome_ips_entry_test
 
-    group from: :au_ps_observation_pregnancy_status_ips_entry_test
+    test from: :au_ps_observation_pregnancy_status_ips_entry_test
 
-    group from: :au_ps_observation_social_history_alcohol_use_ips_entry_test
+    test from: :au_ps_observation_social_history_alcohol_use_ips_entry_test
 
-    group from: :au_ps_observation_social_history_tobacco_use_ips_entry_test
+    test from: :au_ps_observation_social_history_tobacco_use_ips_entry_test
 
-    group from: :au_ps_observation_results_laboratorypathology_ips_entry_test
+    test from: :au_ps_observation_results_laboratorypathology_ips_entry_test
 
-    group from: :au_ps_observation_results_radiology_ips_entry_test
+    test from: :au_ps_observation_results_radiology_ips_entry_test
 
-    group from: :au_ps_observation_entry_test
+    test from: :au_ps_observation_entry_test
 
-    group from: :au_ps_specimen_ips_entry_test
+    test from: :au_ps_specimen_ips_entry_test
 
-    group from: :au_ps_flag_alert_ips_entry_test
+    test from: :au_ps_flag_alert_ips_entry_test
 
-    group from: :au_ps_clinicalimpression_entry_test
+    test from: :au_ps_clinicalimpression_entry_test
 
-    group from: :au_ps_careplan_entry_test
+    test from: :au_ps_careplan_entry_test
 
-    group from: :au_ps_consent_entry_test
+    test from: :au_ps_consent_entry_test
 
-    group from: :au_ps_documentreference_entry_test
+    test from: :au_ps_documentreference_entry_test
 
-    group from: :au_ps_au_ps_encounter_entry_test
+    test from: :au_ps_au_ps_encounter_entry_test
 
-    group from: :au_ps_au_core_location_entry_test
+    test from: :au_ps_au_core_location_entry_test
 
-    group from: :au_ps_au_ps_relatedperson_entry_test
+    test from: :au_ps_au_ps_relatedperson_entry_test
   end
 end

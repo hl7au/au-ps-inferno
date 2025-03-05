@@ -5,6 +5,7 @@ module AUPSTestKit
     title 'Server declares support for $docref operation in CapabilityStatement'
     description 'The IPS Server declares support for DocumentReference/$docref operation in its server CapabilityStatement'
     id :au_ps_docref_operation_support
+    optional
 
     run do
       fhir_get_capability_statement

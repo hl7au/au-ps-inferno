@@ -39,4 +39,4 @@ generate:
 generate_local:
 	sudo rm -rf lib/au_ps_inferno/generated/
 	bundle exec rake au_ps:generate
-	# rubocop -A lib/au_core_test_kit/
+	rubocop -A .

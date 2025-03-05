@@ -14,7 +14,7 @@ module AUPSTestKit
       first_resource = resource.entry.first.resource
 
       assert first_resource.is_a?(FHIR::Composition), 'The first entry in the Bundle is not a Composition'
-      assert_valid_resource(resource: first_resource, profile_url: 'http://hl7.org/fhir/uv/ips/StructureDefinition/Composition-uv-ips')
+      assert_valid_resource(resource: first_resource, profile_url: 'http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-composition')
     end
   end
 end
