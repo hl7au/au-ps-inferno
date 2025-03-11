@@ -33,8 +33,8 @@ namespace :au_ps do
         test_kit_module_name: 'AUPSTestKit',
         test_suite_class_name: 'AUPSInferno',
         base_output_file_name: 'au_ps_inferno.rb',
-        version: '0.1.0-ci-build',
-        igs: 'hl7.fhir.uv.ips#1.1.0'
+        version: '0.1.0-preview',
+        igs: 'hl7.fhir.au.ps#0.1.0-preview'
       }
     )
   end
