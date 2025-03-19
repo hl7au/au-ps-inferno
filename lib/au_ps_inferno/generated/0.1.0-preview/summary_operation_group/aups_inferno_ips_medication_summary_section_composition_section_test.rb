@@ -10,11 +10,12 @@ module AUPSTestKit
 
     run do
       composition_entry = resource.entry.find { |r| r.resource.resourceType == 'Composition' }
-      return unless composition_entry # Ensure a Composition exists
+      skip_if !composition_entry, "Composition entry does not exists"
 
       composition_resource = composition_entry.resource
       current_section = composition_resource.section.find { |s| s.code.coding.first.code == '10160-0' }
-      return unless current_section && current_section.entry # Ensure section and entries exist
+      skip_if !current_section, "Section does not exists"
+      skip_if !current_section.entry, "Section entry does not exists"
 
       section_entries_refs = current_section.entry.map { |e| e.reference }
       target_resources_and_profiles = 'MedicationStatement::http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medicationstatement;MedicationRequest::http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medicationrequest'.split(';').map do |segment|
