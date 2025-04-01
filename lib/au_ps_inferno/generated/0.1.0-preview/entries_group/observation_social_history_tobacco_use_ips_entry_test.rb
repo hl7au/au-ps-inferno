@@ -14,6 +14,11 @@ module AUPSTestKit
 
     run do
       initial_bundle = resource
+      
+      existing_resources = initial_bundle.entry.map(&:resource).select do |r|
+        r.resourceType == 'Observation' && r.meta&.profile&.include?('http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-tobaccouse-uv-ips')
+      end
+      
       existing_resources = initial_bundle.entry.map(&:resource).select do |r|
         r.resourceType == 'Observation' && r.meta&.profile&.include?('http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-tobaccouse-uv-ips')
       end
@@ -21,7 +26,9 @@ module AUPSTestKit
       skip_if existing_resources.empty?, "No existing resources of type 'Observation' with profile 'http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-tobaccouse-uv-ips' found."
 
       existing_resources.each do |r|
+        
         assert_valid_resource(resource: r, profile_url: 'http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-tobaccouse-uv-ips')
+        
       end
     end
   end

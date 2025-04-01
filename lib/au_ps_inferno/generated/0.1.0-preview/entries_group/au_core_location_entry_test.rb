@@ -14,6 +14,11 @@ module AUPSTestKit
 
     run do
       initial_bundle = resource
+      
+      existing_resources = initial_bundle.entry.map(&:resource).select do |r|
+        r.resourceType == 'Location' && r.meta&.profile&.include?('http://hl7.org.au/fhir/core/StructureDefinition/au-core-location')
+      end
+      
       existing_resources = initial_bundle.entry.map(&:resource).select do |r|
         r.resourceType == 'Location' && r.meta&.profile&.include?('http://hl7.org.au/fhir/core/StructureDefinition/au-core-location')
       end
@@ -21,7 +26,9 @@ module AUPSTestKit
       skip_if existing_resources.empty?, "No existing resources of type 'Location' with profile 'http://hl7.org.au/fhir/core/StructureDefinition/au-core-location' found."
 
       existing_resources.each do |r|
+        
         assert_valid_resource(resource: r, profile_url: 'http://hl7.org.au/fhir/core/StructureDefinition/au-core-location')
+        
       end
     end
   end

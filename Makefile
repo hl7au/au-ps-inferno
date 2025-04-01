@@ -25,6 +25,8 @@ setup: pull build migrate
 
 run: build up
 
+restart: stop down pull build migrate up
+
 tests:
 	$(compose) $(inferno) bundle exec rspec
 

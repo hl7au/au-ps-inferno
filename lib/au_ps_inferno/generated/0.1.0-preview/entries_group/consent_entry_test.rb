@@ -14,6 +14,11 @@ module AUPSTestKit
 
     run do
       initial_bundle = resource
+      
+      existing_resources = initial_bundle.entry.map(&:resource).select do |r|
+        r.resourceType == 'Consent'
+      end
+      
       existing_resources = initial_bundle.entry.map(&:resource).select do |r|
         r.resourceType == 'Consent' && r.meta&.profile&.include?('')
       end
@@ -21,7 +26,9 @@ module AUPSTestKit
       skip_if existing_resources.empty?, "No existing resources of type 'Consent' with profile '' found."
 
       existing_resources.each do |r|
-        assert_valid_resource(resource: r, profile_url: '')
+        
+        assert_valid_resource(resource: r)
+        
       end
     end
   end
