@@ -18,7 +18,7 @@ namespace :db do
   end
 end
 
-namespace :au_ps do
+namespace :au_ps do # rubocop:disable Metrics/BlockLength
   desc 'Generate tests'
   task :generate do
     InfernoPsSuiteGenerator::Generator.generate(
