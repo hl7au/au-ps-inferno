@@ -12,6 +12,6 @@ end
 
 # gem 'inferno_ps_suite_generator', path: '../inferno_ps_suite_generator'
 gem 'inferno_ps_suite_generator', git: 'https://github.com/beda-software/inferno_ps_suite_generator',
-                                  ref: '009bc37300f6c5aed6c68fc9656d6c63e5d89085'
+                                  ref: 'e6e27d1dfe0444e8219885e972c3812af5497a34'
 gem 'pg', '~> 1.5'
 gem 'rubocop', '~> 1.71.2'
