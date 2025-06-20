@@ -1,10 +1,12 @@
 # frozen_string_literal: true
 
 module AUPSTestKit
-  class AUPSInfernoIPSMedicationSummarySectionCompositionSectionTest < Inferno::Test
-    title 'Validate IPS Medication Summary Section'
-    description 'This test verifies that the IPS Medication Summary Section within the Composition entry of a $summary Bundle is correctly structured. It extracts the references listed in the section, checks that the corresponding resources exist in the Bundle, and ensures they conform to the expected resource type and profile requirements.'
-    id :au_ps_ips_medication_summary_section_composition_section_test
+  class AUPSInfernoIPSImmunizationsSectionCompositionSectionTest < Inferno::Test
+    title 'Validate IPS Immunizations Section'
+    description 'This test verifies that the IPS Immunizations Section within the Composition entry of a $summary Bundle is correctly structured. It extracts the references listed in the section, checks that the corresponding resources exist in the Bundle, and ensures they conform to the expected resource type and profile requirements.'
+    id :au_ps_ips_immunizations_section_composition_section_test
+    
+    optional
     
     uses_request :summary_operation
 
@@ -13,14 +15,14 @@ module AUPSTestKit
       skip_if !composition_entry, "Composition entry does not exist"
 
       composition_resource = composition_entry.resource
-      current_section = composition_resource.section.find { |s| s.code.coding.first.code == '10160-0' }
+      current_section = composition_resource.section.find { |s| s.code.coding.first.code == '11369-6' }
       skip_if !current_section, "Section does not exist"
       skip_if !current_section.entry, "Section entry does not exist"
       skip_if current_section.entry.length == 0, "Section entry count is 0"
 
       section_entries_refs = current_section.entry.map { |e| e.reference }
 
-      target_resources_and_profiles = 'MedicationStatement::http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medicationstatement;MedicationRequest::http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medicationrequest'.split(';').map do |segment|
+      target_resources_and_profiles = 'Immunization::http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-immunization'.split(';').map do |segment|
         resource, profiles = segment.split('::')
         {
           resource: resource,

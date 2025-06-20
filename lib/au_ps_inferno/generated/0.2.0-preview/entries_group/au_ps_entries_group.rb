@@ -45,6 +45,56 @@ require_relative './observation_results_laboratorypathology_ips_entry_test'
 
 require_relative './observation_results_radiology_ips_entry_test'
 
+require_relative './vital_signs_profile_entry_test'
+
+require_relative './specimen_ips_entry_test'
+
+require_relative './flag_alert_ips_entry_test'
+
+require_relative './clinicalimpression_entry_test'
+
+require_relative './careplan_entry_test'
+
+require_relative './consent_entry_test'
+
+require_relative './documentreference_entry_test'
+
+require_relative './au_ps_encounter_entry_test'
+
+require_relative './au_core_location_entry_test'
+
+require_relative './au_ps_relatedperson_entry_test'
+
+require_relative './au_ps_patient_entry_test'
+
+require_relative './au_ps_allergyintolerance_entry_test'
+
+require_relative './au_ps_condition_entry_test'
+
+require_relative './device_entry_test'
+
+require_relative './deviceusestatement_ips_entry_test'
+
+require_relative './diagnosticreport_ips_entry_test'
+
+require_relative './imagingstudy_ips_entry_test'
+
+require_relative './au_ps_immunization_entry_test'
+
+require_relative './au_ps_medication_entry_test'
+
+require_relative './au_ps_medicationrequest_entry_test'
+
+require_relative './au_ps_medicationstatement_entry_test'
+
+require_relative './au_ps_practitioner_entry_test'
+
+require_relative './au_ps_practitionerrole_entry_test'
+
+require_relative './au_ps_procedure_entry_test'
+
+require_relative './au_ps_organization_entry_test'
+
 require_relative './observation_entry_test'
 
 require_relative './specimen_ips_entry_test'
@@ -160,6 +210,106 @@ module AUPSTestKit
     
     
     test from: :au_ps_observation_results_radiology_ips_entry_test
+    
+    
+    
+    test from: :au_ps_vital_signs_profile_entry_test
+    
+    
+    
+    test from: :au_ps_specimen_ips_entry_test
+    
+    
+    
+    test from: :au_ps_flag_alert_ips_entry_test
+    
+    
+    
+    test from: :au_ps_clinicalimpression_entry_test
+    
+    
+    
+    test from: :au_ps_careplan_entry_test
+    
+    
+    
+    test from: :au_ps_consent_entry_test
+    
+    
+    
+    test from: :au_ps_documentreference_entry_test
+    
+    
+    
+    test from: :au_ps_au_ps_encounter_entry_test
+    
+    
+    
+    test from: :au_ps_au_core_location_entry_test
+    
+    
+    
+    test from: :au_ps_au_ps_relatedperson_entry_test
+    
+    
+    
+    test from: :au_ps_au_ps_patient_entry_test
+    
+    
+    
+    test from: :au_ps_au_ps_allergyintolerance_entry_test
+    
+    
+    
+    test from: :au_ps_au_ps_condition_entry_test
+    
+    
+    
+    test from: :au_ps_device_entry_test
+    
+    
+    
+    test from: :au_ps_deviceusestatement_ips_entry_test
+    
+    
+    
+    test from: :au_ps_diagnosticreport_ips_entry_test
+    
+    
+    
+    test from: :au_ps_imagingstudy_ips_entry_test
+    
+    
+    
+    test from: :au_ps_au_ps_immunization_entry_test
+    
+    
+    
+    test from: :au_ps_au_ps_medication_entry_test
+    
+    
+    
+    test from: :au_ps_au_ps_medicationrequest_entry_test
+    
+    
+    
+    test from: :au_ps_au_ps_medicationstatement_entry_test
+    
+    
+    
+    test from: :au_ps_au_ps_practitioner_entry_test
+    
+    
+    
+    test from: :au_ps_au_ps_practitionerrole_entry_test
+    
+    
+    
+    test from: :au_ps_au_ps_procedure_entry_test
+    
+    
+    
+    test from: :au_ps_au_ps_organization_entry_test
     
     
     

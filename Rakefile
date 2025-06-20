@@ -34,8 +34,8 @@ namespace :au_ps do # rubocop:disable Metrics/BlockLength
         test_kit_module_name: 'AUPSTestKit',
         test_suite_class_name: 'AUPSInferno',
         base_output_file_name: 'au_ps_inferno.rb',
-        version: '0.1.0-preview',
-        igs: 'hl7.fhir.au.ps#0.1.0-preview',
+        version: '0.2.0-preview',
+        igs: 'hl7.fhir.au.ps#0.2.0-preview',
         tx_server_url: 'https://tx.dev.hl7.org.au/fhir',
         specific_profiles: {
           docref_op: 'http://hl7.org/fhir/uv/ipa/OperationDefinition/docref',

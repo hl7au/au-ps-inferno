@@ -52,9 +52,7 @@
     :entries:
     - :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medicationstatement
       :resource_type: MedicationStatement
-    - :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medicationrequest
-      :resource_type: MedicationRequest
-  - :title: Immunizations Section
+  - :title: IPS Immunizations Section
     :definition: "The Immunizations Section defines a patient's current immunization
       status and pertinent immunization history.\r\nThe primary use case for the Immunization
       Section is to enable communication of a patient's immunization status.\r\nThe
@@ -68,6 +66,163 @@
     :entries:
     - :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-immunization
       :resource_type: Immunization
+  - :title: IPS Results Section
+    :definition: This section assembles relevant observation results collected on
+      the patient or produced on in-vitro biologic specimens collected from the patient.
+      Some of these results may be laboratory results, others may be anatomic pathology
+      results, others, radiology results, and others, clinical results.
+    :min: 0
+    :max: '1'
+    :code:
+      :code: 30954-2
+      :system_value: http://loinc.org
+    :entries:
+    - :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-diagnosticresult-path
+      :resource_type: Observation
+    - :profile: http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-results-radiology-uv-ips
+      :resource_type: Observation
+    - :profile: http://hl7.org/fhir/uv/ips/StructureDefinition/DiagnosticReport-uv-ips
+      :resource_type: DiagnosticReport
+  - :title: IPS History of Procedures Section
+    :definition: "The History of Procedures Section contains a description of the
+      patient past procedures that are pertinent to the scope of this document.\r\nProcedures
+      may refer for example to:\r\n1. Invasive Diagnostic procedure:e.g. Cardiac catheterization;
+      (the results of these procedure are documented in the results section)\r\n2.
+      Therapeutic procedure: e.g. dialysis;\r\n3. Surgical procedure: e.g. appendectomy"
+    :min: 0
+    :max: '1'
+    :code:
+      :code: 47519-4
+      :system_value: http://loinc.org
+    :entries:
+    - :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-procedure
+      :resource_type: Procedure
+  - :title: IPS Medical Devices Section
+    :definition: The medical devices section contains narrative text and coded entries
+      describing the patient history of medical device use.
+    :min: 0
+    :max: '1'
+    :code:
+      :code: 46264-8
+      :system_value: http://loinc.org
+    :entries:
+    - :profile: http://hl7.org/fhir/uv/ips/StructureDefinition/DeviceUseStatement-uv-ips
+      :resource_type: DeviceUseStatement
+  - :title: IPS Advance Directives Section
+    :definition: The advance directives section contains a narrative description of
+      patient's advance directive.
+    :min: 0
+    :max: '1'
+    :code:
+      :code: 42348-3
+      :system_value: http://loinc.org
+    :entries:
+    - :profile: http://hl7.org/fhir/StructureDefinition/Consent
+      :resource_type: Consent
+  - :title: IPS Alerts Section
+    :definition: The alerts section flags potential concerns and/or dangers to/from
+      the patient and may also include obstacles to care.
+    :min: 0
+    :max: '1'
+    :code:
+      :code: 104605-1
+      :system_value: http://loinc.org
+    :entries:
+    - :profile: http://hl7.org/fhir/uv/ips/StructureDefinition/Flag-alert-uv-ips
+      :resource_type: Flag
+  - :title: IPS Functional Status
+    :definition: "The functional status section shall contain a narrative description
+      of capability of the patient to perform acts of daily living, including possible
+      needs of the patient to be continuously assessed by third parties. The invalidity
+      status may in fact influence decisions about how to administer treatments.\r\nProfiles
+      to express disabilities and functional assessments will be specified by future
+      versions of this guide."
+    :min: 0
+    :max: '1'
+    :code:
+      :code: 47420-5
+      :system_value: http://loinc.org
+    :entries:
+    - :profile: http://hl7.org/fhir/uv/ips/StructureDefinition/Condition-uv-ips
+      :resource_type: Condition
+    - :profile: http://hl7.org/fhir/StructureDefinition/ClinicalImpression
+      :resource_type: ClinicalImpression
+  - :title: IPS History of Past Illness Section
+    :definition: The History of Past Illness section contains a description of the
+      conditions the patient suffered in the past.
+    :min: 0
+    :max: '1'
+    :code:
+      :code: 11348-0
+      :system_value: http://loinc.org
+    :entries:
+    - :profile: http://hl7.org/fhir/uv/ips/StructureDefinition/Condition-uv-ips
+      :resource_type: Condition
+  - :title: IPS History of Pregnancy Section
+    :definition: "The history of pregnancy section shall contain information about
+      whether the patient is currently pregnant or not.\r\nIt may contain addition
+      summarizing information about the outcome of earlier pregnancies."
+    :min: 0
+    :max: '1'
+    :code:
+      :code: 10162-6
+      :system_value: http://loinc.org
+    :entries:
+    - :profile: http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-pregnancy-status-uv-ips
+      :resource_type: Observation
+    - :profile: http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-pregnancy-outcome-uv-ips
+      :resource_type: Observation
+  - :title: IPS Patient Story Section
+    :definition: The section contains narrative text along with optional resources
+      that express what matters to a patient. This may include needs, strengths, values,
+      concerns and preferences to others providing support and care. The patient’s
+      story, provided here, may be told by the patient or by a proxy.
+    :min: 0
+    :max: '1'
+    :code:
+      :code: 81338-6
+      :system_value: http://loinc.org
+    :entries: []
+  - :title: IPS Plan of Care Section
+    :definition: The plan of care section contains a narrative description of the
+      expectations for care including proposals, goals, and order requests for monitoring,
+      tracking, or improving the condition of the patient.
+    :min: 0
+    :max: '1'
+    :code:
+      :code: 18776-5
+      :system_value: http://loinc.org
+    :entries:
+    - :profile: http://hl7.org/fhir/StructureDefinition/CarePlan
+      :resource_type: CarePlan
+  - :title: IPS Social History Section
+    :definition: The social history section contains a description of the person’s
+      Health related "lifestyle factors" or "lifestyle observations" (e.g. smoke habits;
+      alcohol consumption; diets, risky habits.)
+    :min: 0
+    :max: '1'
+    :code:
+      :code: 29762-2
+      :system_value: http://loinc.org
+    :entries:
+    - :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-smokingstatus
+      :resource_type: Observation
+    - :profile: http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-alcoholuse-uv-ips
+      :resource_type: Observation
+  - :title: IPS Vital Signs Section
+    :definition: The Vital signs section includes blood pressure, body temperature,
+      heart rate, and respiratory rate. It may also include other clinical findings,
+      such as height, weight, body mass index, head circumference, and pulse oximetry.
+      In particular, notable vital signs or physical findings such as the most recent,
+      maximum and/or minimum, baseline, or relevant trends may be included
+    :min: 0
+    :max: '1'
+    :code:
+      :code: 8716-3
+      :system_value: http://loinc.org
+    :entries:
+    - :profile: http://hl7.org/fhir/StructureDefinition/vitalsigns
+      :resource_type: Observation
 - :title: AU PS Patient
   :resource_type: Patient
   :resource_profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-patient
@@ -143,44 +298,9 @@
   :resource_profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-organization
   :min: 0
   :max: "*"
-- :title: Observation Pregnancy - Expected Delivery Date (IPS)
-  :resource_type: Observation
-  :resource_profile: http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-pregnancy-edd-uv-ips
-  :min: 0
-  :max: "*"
-- :title: Observation Pregnancy - Outcome (IPS)
-  :resource_type: Observation
-  :resource_profile: http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-pregnancy-outcome-uv-ips
-  :min: 0
-  :max: "*"
-- :title: Observation Pregnancy - Status (IPS)
-  :resource_type: Observation
-  :resource_profile: http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-pregnancy-status-uv-ips
-  :min: 0
-  :max: "*"
-- :title: Observation Social History - Alcohol Use (IPS)
-  :resource_type: Observation
-  :resource_profile: http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-alcoholuse-uv-ips
-  :min: 0
-  :max: "*"
-- :title: Observation Social History - Tobacco Use (IPS)
-  :resource_type: Observation
-  :resource_profile: http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-tobaccouse-uv-ips
-  :min: 0
-  :max: "*"
-- :title: Observation Results - Laboratory/Pathology (IPS)
-  :resource_type: Observation
-  :resource_profile: http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-results-laboratory-pathology-uv-ips
-  :min: 0
-  :max: "*"
-- :title: Observation Results - Radiology (IPS)
-  :resource_type: Observation
-  :resource_profile: http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-results-radiology-uv-ips
-  :min: 0
-  :max: "*"
 - :title: Observation
   :resource_type: Observation
-  :resource_profile: http://hl7.org/fhir/StructureDefinition/vitalsigns
+  :resource_profile: http://hl7.org/fhir/StructureDefinition/Observation
   :min: 0
   :max: "*"
 - :title: Specimen (IPS)

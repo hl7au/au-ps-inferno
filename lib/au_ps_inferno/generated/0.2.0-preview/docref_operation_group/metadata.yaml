@@ -1,0 +1,9 @@
+---
+- :test_id: au_ps_docref_operation_support
+  :file_name: "./lib/au_ps_inferno/generated/0.2.0-preview/docref_operation_group/docref_operation_support.rb"
+- :test_id: au_ps_docref_operation_success
+  :file_name: "./lib/au_ps_inferno/generated/0.2.0-preview/docref_operation_group/docref_operation_success.rb"
+- :test_id: au_ps_docref_operation_support
+  :file_name: "./lib/au_ps_inferno/generated/0.2.0-preview/docref_operation_group/docref_operation_support.rb"
+- :test_id: au_ps_docref_operation_success
+  :file_name: "./lib/au_ps_inferno/generated/0.2.0-preview/docref_operation_group/docref_operation_success.rb"

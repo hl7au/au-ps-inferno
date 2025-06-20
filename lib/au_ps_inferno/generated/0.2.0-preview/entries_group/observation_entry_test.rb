@@ -16,18 +16,18 @@ module AUPSTestKit
       initial_bundle = resource
       
       existing_resources = initial_bundle.entry.map(&:resource).select do |r|
-        r.resourceType == 'Observation' && r.meta&.profile&.include?('http://hl7.org/fhir/StructureDefinition/vitalsigns')
+        r.resourceType == 'Observation' && r.meta&.profile&.include?('http://hl7.org/fhir/StructureDefinition/Observation')
       end
       
       existing_resources = initial_bundle.entry.map(&:resource).select do |r|
-        r.resourceType == 'Observation' && r.meta&.profile&.include?('http://hl7.org/fhir/StructureDefinition/vitalsigns')
+        r.resourceType == 'Observation' && r.meta&.profile&.include?('http://hl7.org/fhir/StructureDefinition/Observation')
       end
 
-      skip_if existing_resources.empty?, "No existing resources of type 'Observation' with profile 'http://hl7.org/fhir/StructureDefinition/vitalsigns' found."
+      skip_if existing_resources.empty?, "No existing resources of type 'Observation' with profile 'http://hl7.org/fhir/StructureDefinition/Observation' found."
 
       existing_resources.each do |r|
         
-        assert_valid_resource(resource: r, profile_url: 'http://hl7.org/fhir/StructureDefinition/vitalsigns')
+        assert_valid_resource(resource: r, profile_url: 'http://hl7.org/fhir/StructureDefinition/Observation')
         
       end
     end
