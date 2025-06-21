@@ -36,7 +36,7 @@ module AUPSTestKit
     end
 
     fhir_resource_validator do
-      igs 'hl7.fhir.au.ps#0.2.0-preview'
+      igs 'hl7.fhir.au.ps#current'
 
       
       cli_context do
@@ -47,9 +47,7 @@ module AUPSTestKit
 
     
     group from: :au_ps_summary_operation
-    
     group from: :au_ps_entries
-    
     group from: :au_ps_docref_operation_group
     
   end
