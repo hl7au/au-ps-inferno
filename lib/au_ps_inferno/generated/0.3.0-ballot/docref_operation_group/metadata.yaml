@@ -1,0 +1,5 @@
+---
+- :test_id: au_ps_docref_operation_support
+  :file_name: "./lib/au_ps_inferno/generated/0.3.0-ballot/docref_operation_group/docref_operation_support.rb"
+- :test_id: au_ps_docref_operation_success
+  :file_name: "./lib/au_ps_inferno/generated/0.3.0-ballot/docref_operation_group/docref_operation_success.rb"
