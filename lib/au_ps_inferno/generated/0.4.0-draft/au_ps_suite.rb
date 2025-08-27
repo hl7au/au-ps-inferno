@@ -15,7 +15,8 @@ module AUPSTestKit
     description 'AU PS Inferno consist of $summary tests, $summary entries tests and $docref tests'
 
     input :url,
-          title: 'FHIR Server Base Url'
+          title: 'FHIR Server Base Url',
+          optional: true
 
     input :credentials,
           title: 'OAuth Credentials',
@@ -48,9 +49,9 @@ module AUPSTestKit
     
     group from: :au_ps_summary_operation
     
-    group from: :au_ps_entries
+    # group from: :au_ps_entries
     
-    group from: :au_ps_docref_operation_group
+    # group from: :au_ps_docref_operation_group
     
   end
 end
