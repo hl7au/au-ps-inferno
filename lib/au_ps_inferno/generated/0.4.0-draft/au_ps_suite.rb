@@ -36,7 +36,7 @@ module AUPSTestKit
     end
 
     fhir_resource_validator do
-      igs 'hl7.fhir.au.ps#0.3.0-ballot'
+      igs 'hl7.fhir.au.ps#0.4.0-draft'
 
       
       cli_context do

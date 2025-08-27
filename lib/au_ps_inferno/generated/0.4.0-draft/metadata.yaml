@@ -236,9 +236,24 @@
   :resource_profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-allergyintolerance
   :min: 0
   :max: "*"
+- :title: CareTeam
+  :resource_type: CareTeam
+  :resource_profile:
+  :min: 0
+  :max: "*"
+- :title: ClinicalImpression
+  :resource_type: ClinicalImpression
+  :resource_profile:
+  :min: 0
+  :max: "*"
 - :title: AU PS Condition
   :resource_type: Condition
   :resource_profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-condition
+  :min: 0
+  :max: "*"
+- :title: Consent
+  :resource_type: Consent
+  :resource_profile:
   :min: 0
   :max: "*"
 - :title: Device
@@ -256,6 +271,21 @@
   :resource_profile: http://hl7.org/fhir/uv/ips/StructureDefinition/DiagnosticReport-uv-ips
   :min: 0
   :max: "*"
+- :title: DocumentReference
+  :resource_type: DocumentReference
+  :resource_profile:
+  :min: 0
+  :max: "*"
+- :title: AU PS Encounter
+  :resource_type: Encounter
+  :resource_profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-encounter
+  :min: 0
+  :max: "*"
+- :title: Flag - Alert (IPS)
+  :resource_type: Flag
+  :resource_profile: http://hl7.org/fhir/uv/ips/StructureDefinition/Flag-alert-uv-ips
+  :min: 0
+  :max: "*"
 - :title: ImagingStudy (IPS)
   :resource_type: ImagingStudy
   :resource_profile: http://hl7.org/fhir/uv/ips/StructureDefinition/ImagingStudy-uv-ips
@@ -264,6 +294,16 @@
 - :title: AU PS Immunization
   :resource_type: Immunization
   :resource_profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-immunization
+  :min: 0
+  :max: "*"
+- :title: ImmunizationRecommendation
+  :resource_type: ImmunizationRecommendation
+  :resource_profile:
+  :min: 0
+  :max: "*"
+- :title: AU Core Location
+  :resource_type: Location
+  :resource_profile: http://hl7.org.au/fhir/core/StructureDefinition/au-core-location
   :min: 0
   :max: "*"
 - :title: AU PS Medication
@@ -281,6 +321,16 @@
   :resource_profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medicationstatement
   :min: 0
   :max: "*"
+- :title: Observation
+  :resource_type: Observation
+  :resource_profile: http://hl7.org/fhir/StructureDefinition/Observation
+  :min: 0
+  :max: "*"
+- :title: AU PS Organization
+  :resource_type: Organization
+  :resource_profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-organization
+  :min: 0
+  :max: "*"
 - :title: AU PS Practitioner
   :resource_type: Practitioner
   :resource_profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-practitioner
@@ -296,68 +346,13 @@
   :resource_profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-procedure
   :min: 0
   :max: "*"
-- :title: AU PS Organization
-  :resource_type: Organization
-  :resource_profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-organization
-  :min: 0
-  :max: "*"
-- :title: Observation
-  :resource_type: Observation
-  :resource_profile: http://hl7.org/fhir/StructureDefinition/Observation
-  :min: 0
-  :max: "*"
-- :title: Specimen (IPS)
-  :resource_type: Specimen
-  :resource_profile: http://hl7.org/fhir/uv/ips/StructureDefinition/Specimen-uv-ips
-  :min: 0
-  :max: "*"
-- :title: Flag - Alert (IPS)
-  :resource_type: Flag
-  :resource_profile: http://hl7.org/fhir/uv/ips/StructureDefinition/Flag-alert-uv-ips
-  :min: 0
-  :max: "*"
-- :title: ClinicalImpression
-  :resource_type: ClinicalImpression
-  :resource_profile:
-  :min: 0
-  :max: "*"
-- :title: CarePlan
-  :resource_type: CarePlan
-  :resource_profile:
-  :min: 0
-  :max: "*"
-- :title: Consent
-  :resource_type: Consent
-  :resource_profile:
-  :min: 0
-  :max: "*"
-- :title: DocumentReference
-  :resource_type: DocumentReference
-  :resource_profile:
-  :min: 0
-  :max: "*"
-- :title: AU PS Encounter
-  :resource_type: Encounter
-  :resource_profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-encounter
-  :min: 0
-  :max: "*"
-- :title: AU Core Location
-  :resource_type: Location
-  :resource_profile: http://hl7.org.au/fhir/core/StructureDefinition/au-core-location
-  :min: 0
-  :max: "*"
 - :title: AU PS RelatedPerson
   :resource_type: RelatedPerson
   :resource_profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-relatedperson
   :min: 0
   :max: "*"
-- :title: CareTeam
-  :resource_type: CareTeam
-  :resource_profile:
-  :min: 0
-  :max: "*"
-- :title: ImmunizationRecommendation
-  :resource_type: ImmunizationRecommendation
-  :resource_profile:
+- :title: Specimen (IPS)
+  :resource_type: Specimen
+  :resource_profile: http://hl7.org/fhir/uv/ips/StructureDefinition/Specimen-uv-ips
   :min: 0
   :max: "*"
