@@ -2,8 +2,8 @@
 
 module AUPSTestKit
   class SummaryOperationReturnBundle < Inferno::Test
-    title 'Server returns valid Bundle resource for $summary operation or validates provided Bundle'
-    description 'Validates that a Bundle resource conforms to the AU PS Bundle profile. The test can either make a $summary operation request to retrieve and validate a Bundle, or validate a Bundle resource provided as input.'
+    title 'Return a valid Bundle for $summary or validate a provided Bundle'
+    description 'Validates that a Bundle resource conforms to the AU PS Bundle profile. This test either makes a $summary operation request to retrieve and validate a Bundle, or validates a provided Bundle resource.'
     id :au_ps_summary_operation_return_bundle
 
     input :patient_id,

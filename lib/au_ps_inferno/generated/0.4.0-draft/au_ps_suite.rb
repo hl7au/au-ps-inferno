@@ -11,8 +11,8 @@ require_relative './docref_operation_group/au_ps_docref_group'
 module AUPSTestKit
   class Suite < Inferno::TestSuite
     id :au_ps_suite
-    title 'AU PS Inferno'
-    description 'AU PS Inferno consist of $summary tests, $summary entries tests and $docref tests'
+    title 'AU PS Inferno - $summary'
+    description 'This suite includes $summary operation tests.'
 
     input :url,
           title: 'FHIR Server Base Url',

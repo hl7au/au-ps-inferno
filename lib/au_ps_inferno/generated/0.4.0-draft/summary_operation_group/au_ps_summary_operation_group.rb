@@ -42,8 +42,8 @@ require_relative './aups_inferno_patient_summary_vital_signs_section_composition
 
 module AUPSTestKit
   class SummaryOperationGroup < Inferno::TestGroup
-    title '$summary Operation Tests'
-    description 'Verify support for the $summary operation as as described in the AU PS Guidance'
+    title '$summary Operation: Return Bundle'
+    description 'Verify that the $summary operation returns a valid AU PS Bundle, or validate a provided Bundle.'
     id :au_ps_summary_operation
     run_as_group
 
