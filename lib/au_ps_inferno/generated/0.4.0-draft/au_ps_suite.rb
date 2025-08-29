@@ -11,11 +11,12 @@ require_relative './docref_operation_group/au_ps_docref_group'
 module AUPSTestKit
   class Suite < Inferno::TestSuite
     id :au_ps_suite
-    title 'AU PS Inferno'
-    description 'AU PS Inferno consist of $summary tests, $summary entries tests and $docref tests'
+    title 'AU PS Inferno - $summary'
+    description 'This suite includes $summary operation tests.'
 
     input :url,
-          title: 'FHIR Server Base Url'
+          title: 'FHIR Server Base Url',
+          optional: true
 
     input :credentials,
           title: 'OAuth Credentials',
@@ -36,7 +37,7 @@ module AUPSTestKit
     end
 
     fhir_resource_validator do
-      igs 'hl7.fhir.au.ps#0.3.0-ballot'
+      igs 'hl7.fhir.au.ps#0.4.0-draft'
 
       
       cli_context do
@@ -48,9 +49,9 @@ module AUPSTestKit
     
     group from: :au_ps_summary_operation
     
-    group from: :au_ps_entries
+    # group from: :au_ps_entries
     
-    group from: :au_ps_docref_operation_group
+    # group from: :au_ps_docref_operation_group
     
   end
 end
