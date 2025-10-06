@@ -7,6 +7,8 @@ require_relative './entries_group/au_ps_entries_group'
 
 require_relative './docref_operation_group/au_ps_docref_group'
 
+require_relative '../../custom_groups/capability_statement_group/capability_statement_group'
+
 
 module AUPSTestKit
   class Suite < Inferno::TestSuite
@@ -46,7 +48,7 @@ module AUPSTestKit
       
     end
 
-    
+    group from: :au_ps_cs_group
     group from: :au_ps_summary_operation
     
     # group from: :au_ps_entries
