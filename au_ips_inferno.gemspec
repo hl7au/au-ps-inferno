@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.description   = 'AU PS Inferno Test Kit'
   spec.homepage      = 'https://github.com/hl7au/au-ps-inferno'
   spec.license       = 'Apache-2.0'
-  spec.add_runtime_dependency 'inferno_core', '~> 0.6.2'
+  spec.add_runtime_dependency 'inferno_core', '~> 1.0.6'
   spec.add_development_dependency 'database_cleaner-sequel', '~> 1.8'
   spec.add_development_dependency 'factory_bot', '~> 6.1'
   spec.add_development_dependency 'rspec', '~> 3.10'
