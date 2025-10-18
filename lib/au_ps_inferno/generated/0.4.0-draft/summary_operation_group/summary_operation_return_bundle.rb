@@ -1,7 +1,11 @@
 # frozen_string_literal: true
 
+require_relative '../../../validator_helpers'
+
 module AUPSTestKit
   class SummaryOperationReturnBundle < Inferno::Test
+    include ValidatorHelpers
+
     title 'Return a valid Bundle for $summary or validate a provided Bundle'
     description 'Validates that a Bundle resource conforms to the AU PS Bundle profile. This test either makes a $summary operation request to retrieve and validate a Bundle, or validates a provided Bundle resource.'
     id :au_ps_summary_operation_return_bundle
@@ -22,6 +26,7 @@ module AUPSTestKit
     makes_request :summary_operation
 
     run do
+      show_validator_version
       profile_with_version = 'http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-bundle|0.4.0-draft'
       if bundle_resource.present?
         resource = FHIR.from_contents(bundle_resource)
