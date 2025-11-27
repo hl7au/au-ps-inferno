@@ -8,8 +8,8 @@ SECTIONS = %w[11450-4 48765-2 10160-0].freeze
 
 module AUPSTestKit
   class AUPSCompositionMandatorySection < Inferno::Test
-    title 'Composition has must-support elements'
-    description 'Checks that the Composition resource contains mandatory must-support elements (status, type, subject.reference, date, author, title, section.title, section.text) and provides information about optional must-support elements (text, identifier, attester, custodian, event).'
+    title 'Composition contains mandatory sections with entry references'
+    description 'Displays information about mandatory sections (Allergies and Intolerances, Medication Summary, Problem List) in the Composition resource, including the entry references within each section.'
     id :au_ps_composition_mandatory_sections
 
     def show_message(message, state_value)
@@ -31,8 +31,7 @@ module AUPSTestKit
       SECTIONS.each do |section_code|
         section = composition_resource.section_by_code(section_code)
         info "SECTION: #{section.code.coding.first.display}"
-        section_references = section.entry_references
-        section_references.each do |ref|
+          section.entry_references.each do |ref|
           info au_ps_bundle_resource.resource_info_by_entry_full_url(ref)
         end
       end
