@@ -14,15 +14,7 @@ module AUPSTestKit
     id :au_ps_composition_mandatory_sections
 
     def composition_mandatory_sections_info
-      au_ps_bundle_resource = BundleDecorator.new(scratch[:ips_bundle_resource].to_hash)
-      composition_resource = au_ps_bundle_resource.composition_resource
-      SECTIONS.each do |section_code|
-        section = composition_resource.section_by_code(section_code)
-        info "SECTION: #{section.code.coding.first.display}"
-          section.entry_references.each do |ref|
-          info au_ps_bundle_resource.resource_info_by_entry_full_url(ref)
-        end
-      end
+      get_composition_sections_info(SECTIONS)
     end
 
     run do
