@@ -26,8 +26,8 @@ OPTIONAL_MS_ELEMENTS = [
 
 module AUPSTestKit
   class AUPSCompositionMUSTSUPPORTElements < BasicTest
-    title 'Composition has must-support elements'
-    description 'Checks that the Composition resource contains mandatory must-support elements (status, type, subject.reference, date, author, title, section.title, section.text) and provides information about optional must-support elements (text, identifier, attester, custodian, event).'
+    title TEXTS[:au_ps_composition_must_support_elements][:title]
+    description TEXTS[:au_ps_composition_must_support_elements][:description]
     id :au_ps_composition_must_support_elements
 
     def composition_mandatory_ms_elements_info

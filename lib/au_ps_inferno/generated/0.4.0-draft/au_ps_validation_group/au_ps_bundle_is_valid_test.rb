@@ -1,11 +1,14 @@
 # frozen_string_literal: true
 
 require 'jsonpath'
+require_relative '../../../utils/constants'
 
 module AUPSTestKit
   class AUPSBundleIsValidTest < Inferno::Test
-    title 'AU PS Bundle is valid'
-    description 'Validates that a Bundle resource conforms to the AU PS Bundle profile (http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-bundle). The test accepts either a patient_id to request Patient/{patient_id}/$summary, an identifier to request Patient/$summary?identifier={identifier}, or a pre-existing Bundle resource to validate directly.'
+    include Constants
+
+    title TEXTS[:au_ps_bundle_is_valid_test][:title]
+    description TEXTS[:au_ps_bundle_is_valid_test][:description]
     id :au_ps_bundle_is_valid_test
 
     input :patient_id,

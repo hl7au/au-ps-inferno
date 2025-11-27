@@ -6,8 +6,8 @@ require_relative '../../../utils/basic_test_class'
 
 module AUPSTestKit
   class AUPSCompositionRecommendedSection < BasicTest
-    title 'Composition contains recommended sections with entry references'
-    description 'Displays information about recommended sections'
+    title TEXTS[:au_ps_composition_recommended_sections][:title]
+    description TEXTS[:au_ps_composition_recommended_sections][:description]
     id :au_ps_composition_recommended_sections
 
     run do

@@ -6,11 +6,14 @@ require_relative './au_ps_composition_must_support_elements'
 require_relative './au_ps_composition_mandatory_sections'
 require_relative './au_ps_composition_recommended_sections'
 require_relative './au_ps_composition_optional_sections'
+require_relative '../../../utils/constants'
 
 module AUPSTestKit
   class AUPSValidationGroup < Inferno::TestGroup
-    title 'AU PS Bundle Validation'
-    description 'Verify that an AU PS Bundle is valid and contains required must support elements.'
+    include Constants
+
+    title TEXTS[:au_ps_validation_group][:title]
+    description TEXTS[:au_ps_validation_group][:description]
     id :au_ps_validation_group
     run_as_group
 
