@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'jsonpath'
+require_relative '../../../utils/basic_test_class'
 
 MANDATORY_MS_ELEMENTS = [
   {:expression => "$.status", :label => "status"},
@@ -24,23 +25,10 @@ OPTIONAL_MS_ELEMENTS = [
   {:expression => "$.event.period", :label => "event.period"}].freeze
 
 module AUPSTestKit
-  class AUPSCompositionMUSTSUPPORTElements < Inferno::Test
+  class AUPSCompositionMUSTSUPPORTElements < BasicTest
     title 'Composition has must-support elements'
     description 'Checks that the Composition resource contains mandatory must-support elements (status, type, subject.reference, date, author, title, section.title, section.text) and provides information about optional must-support elements (text, identifier, attester, custodian, event).'
     id :au_ps_composition_must_support_elements
-
-    def show_message(message, state_value)
-      if state_value
-        info message
-      else
-        warning message
-      end
-    end
-    
-    def execute_statistics(json_data, json_path_expression, message_base, humanized_name)
-      data_value = JsonPath.on(json_data, json_path_expression).first.present?
-      show_message("#{message_base}: #{humanized_name}: #{data_value}", data_value)
-    end
 
     def composition_mandatory_ms_elements_info
       composition_resource = JsonPath.on(scratch[:ips_bundle_resource].to_json,

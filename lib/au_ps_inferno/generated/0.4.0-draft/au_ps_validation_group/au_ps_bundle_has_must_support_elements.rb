@@ -1,20 +1,13 @@
 # frozen_string_literal: true
 
 require 'jsonpath'
+require_relative '../../../utils/basic_test_class'
 
 module AUPSTestKit
-  class AUPSBundleHasMUSTSUPPORTElements < Inferno::Test
+  class AUPSBundleHasMUSTSUPPORTElements < BasicTest
     title 'Bundle has mandatory must-support elements'
     description 'Checks that the Bundle resource contains mandatory must-support elements (identifier, type, timestamp) and that all entries have a fullUrl. Also provides information about the resource types included in the Bundle.'
     id :au_ps_bundle_has_must_support_elements
-
-    def show_message(message, state_value)
-      if state_value
-        info message
-      else
-        warning message
-      end
-    end
 
     def bundle_mandatory_ms_elements_info
       data_for_testing = scratch[:ips_bundle_resource].to_json
