@@ -6,6 +6,11 @@ class CompositionDecorator < FHIR::Composition
   end
 
   def section_by_code(code)
-    SectionDecorator.new(section.find { |s| s.code.coding.first.code == code }.to_hash)
+    section_data = section.find { |s| s.code.coding.first.code == code }
+    if section_data.nil?
+      return nil
+    end
+
+    SectionDecorator.new(section_data.to_hash)
   end
 end

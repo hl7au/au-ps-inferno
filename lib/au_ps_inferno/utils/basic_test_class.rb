@@ -1,5 +1,9 @@
+require_relative 'constants'
+require_relative 'bundle_decorator'
+
 module AUPSTestKit
   class BasicTest < Inferno::Test
+    include Constants
     def show_message(message, state_value)
       if state_value
         info message
@@ -18,9 +22,18 @@ module AUPSTestKit
       composition_resource = au_ps_bundle_resource.composition_resource
       sections_array_codes.each do |section_code|
         section = composition_resource.section_by_code(section_code)
-        info "SECTION: #{section.code.coding.first.display}"
-        section.entry_references.each do |ref|
-          info au_ps_bundle_resource.resource_info_by_entry_full_url(ref)
+        if section.nil?
+          warning "Section #{section_code} not found in Composition resource"
+          next
+        end
+        section_references = section.entry_references
+        if section_references.empty?
+          warning "Section #{section.code.coding.first.display}(#{section_code}) has no entries"
+        else
+          info "SECTION: #{section.code.coding.first.display}"
+          section.entry_references.each do |ref|
+            info au_ps_bundle_resource.resource_info_by_entry_full_url(ref)
+          end
         end
       end
     end
