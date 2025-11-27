@@ -179,6 +179,8 @@ GEM
       rdoc (>= 4.0.0)
       reline (>= 0.4.2)
     json (2.10.1)
+    jsonpath (0.5.8)
+      multi_json
     jwt (2.8.1)
       base64
     kramdown (2.5.1)
@@ -349,6 +351,7 @@ DEPENDENCIES
   debug
   factory_bot (~> 6.1)
   inferno_ps_suite_generator!
+  jsonpath (~> 0.5.8)
   pg (~> 1.5)
   rspec (~> 3.10)
   rubocop (~> 1.71.2)
@@ -358,4 +361,4 @@ RUBY VERSION
    ruby 3.3.6p108
 
 BUNDLED WITH
-   2.5.11
+   2.7.2
