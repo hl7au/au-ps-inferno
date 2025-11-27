@@ -32,6 +32,10 @@ module Constants
     :au_ps_composition_optional_sections => {
       :title => 'Composition contains optional sections with entry references',
       :description => 'Displays information about optional sections'
+    },
+    :au_ps_composition_other_sections => {
+      :title => 'Composition contains other sections with entry references',
+      :description => 'Displays information about other sections'
     }
   }
 end

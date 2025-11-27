@@ -5,6 +5,10 @@ class CompositionDecorator < FHIR::Composition
     super(composition)
   end
 
+  def section_codes
+    section.map { |s| s.code.coding.first.code }
+  end
+
   def section_by_code(code)
     section_data = section.find { |s| s.code.coding.first.code == code }
     if section_data.nil?
