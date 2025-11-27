@@ -1,14 +1,6 @@
 # frozen_string_literal: true
 
-
-require_relative './summary_operation_group/au_ps_summary_operation_group'
-
-require_relative './entries_group/au_ps_entries_group'
-
-require_relative './docref_operation_group/au_ps_docref_group'
-
-require_relative '../../custom_groups/capability_statement_group/capability_statement_group'
-
+require_relative './au_ps_validation_group/au_ps_validation_group'
 
 module AUPSTestKit
   class Suite < Inferno::TestSuite
@@ -48,12 +40,7 @@ module AUPSTestKit
       
     end
 
-    group from: :au_ps_cs_group
-    group from: :au_ps_summary_operation
-    
-    # group from: :au_ps_entries
-    
-    # group from: :au_ps_docref_operation_group
-    
+    group from: :au_ps_validation_group
+
   end
 end
