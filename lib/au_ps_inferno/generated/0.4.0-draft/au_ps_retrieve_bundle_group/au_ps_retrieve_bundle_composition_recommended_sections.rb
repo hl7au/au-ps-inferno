@@ -6,8 +6,8 @@ require_relative '../../../utils/basic_test_class'
 
 module AUPSTestKit
   class AUPSRetrieveBundleCompositionRecommendedSection < BasicTest
-    title TEXTS[:au_ps_composition_recommended_sections][:title]
-    description TEXTS[:au_ps_composition_recommended_sections][:description]
+    title TEXTS[:au_ps_retrieve_bundle_composition_recommended_sections][:title]
+    description TEXTS[:au_ps_retrieve_bundle_composition_recommended_sections][:description]
     id :au_ps_retrieve_bundle_composition_recommended_sections
 
     run do

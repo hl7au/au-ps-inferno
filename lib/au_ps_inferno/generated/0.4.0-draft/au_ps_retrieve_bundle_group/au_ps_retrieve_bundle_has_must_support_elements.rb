@@ -5,8 +5,8 @@ require_relative '../../../utils/basic_test_class'
 
 module AUPSTestKit
   class AUPSRetrieveBundleHasMUSTSUPPORTElements < BasicTest
-    title 'Bundle has mandatory must-support elements'
-    description 'Checks that the Bundle resource contains mandatory must-support elements (identifier, type, timestamp) and that all entries have a fullUrl. Also provides information about the resource types included in the Bundle.'
+    title TEXTS[:au_ps_retrieve_bundle_has_must_support_elements][:title]
+    description TEXTS[:au_ps_retrieve_bundle_has_must_support_elements][:description]
     id :au_ps_retrieve_bundle_has_must_support_elements
 
     run do

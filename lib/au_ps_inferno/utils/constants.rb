@@ -102,6 +102,30 @@ module Constants
     :au_ps_retrieve_valid_bundle => {
       :title => 'Server provides valid requested AU PS Bundle',
       :description => 'Retrieve document Bundle using Bundle read interaction or other HTTP GET request and verify response is valid AU PS Bundle'
-    }
+    },
+    :au_ps_retrieve_bundle_has_must_support_elements => {
+      :title => 'Bundle has mandatory must-support elements',
+      :description => 'Checks that the Bundle resource contains mandatory must-support elements (identifier, type, timestamp) and that all entries have a fullUrl. Also provides information about the resource types included in the Bundle.'
+    },
+    :au_ps_retrieve_bundle_composition_must_support_elements => {
+      :title => 'Composition has must-support elements',
+      :description => 'Checks that the Composition resource contains mandatory must-support elements (status, type, subject.reference, date, author, title, section.title, section.text) and provides information about optional must-support elements (text, identifier, attester, custodian, event).'
+    },
+    :au_ps_retrieve_bundle_composition_mandatory_sections => {
+      :title => 'Composition contains mandatory sections with entry references',
+      :description => 'Displays information about mandatory sections (Allergies and Intolerances, Medication Summary, Problem List) in the Composition resource, including the entry references within each section.'
+    },
+    :au_ps_retrieve_bundle_composition_recommended_sections => {
+      :title => 'Composition contains recommended sections with entry references',
+      :description => 'Displays information about recommended sections'
+    },
+    :au_ps_retrieve_bundle_composition_optional_sections => {
+      :title => 'Composition contains optional sections with entry references',
+      :description => 'Displays information about optional sections'
+    },
+    :au_ps_retrieve_bundle_composition_other_sections => {
+      :title => 'Composition contains other sections with entry references',
+      :description => 'Displays information about other sections'
+    },
   }
 end
