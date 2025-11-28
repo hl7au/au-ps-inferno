@@ -12,9 +12,13 @@ module AUPSTestKit
       end
     end
 
-    def execute_statistics(json_data, json_path_expression, message_base, humanized_name)
+    def boolean_to_humanized_string(boolean_value)
+      boolean_value ? 'Yes' : 'No'
+    end
+
+    def execute_statistics(json_data, json_path_expression, humanized_name)
       data_value = JsonPath.on(json_data, json_path_expression).first.present?
-      show_message("#{message_base}: #{humanized_name}: #{data_value}", data_value)
+      "**#{humanized_name}**: #{boolean_to_humanized_string(data_value)}"
     end
 
     def get_composition_sections_info(sections_array_codes)
@@ -30,10 +34,10 @@ module AUPSTestKit
         if section_references.empty?
           warning "Section #{section.code.coding.first.display}(#{section_code}) has no entries"
         else
-          info "SECTION: #{section.code.coding.first.display}"
-          section.entry_references.each do |ref|
-            info au_ps_bundle_resource.resource_info_by_entry_full_url(ref)
-          end
+          section_resources_array = section.entry_references.map do |ref|
+            au_ps_bundle_resource.resource_info_by_entry_full_url(ref)
+          end.join("\n\n")
+          info "**Section #{section.code.coding.first.display}**:\n\n#{section_resources_array}"
         end
       end
     end

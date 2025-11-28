@@ -16,19 +16,18 @@ module AUPSTestKit
       timestamp = JsonPath.on(data_for_testing, '$.timestamp').first.present?
       all_entries_have_full_url = JsonPath.on(data_for_testing, '$.entry[*].fullUrl').length == JsonPath.on(data_for_testing, '$.entry[*]').length
 
-      show_message("Mandatory Must Support elements populated: identifier: #{identifier}", identifier)
-      show_message("Mandatory Must Support elements populated: type: #{type}", type)
-      show_message("Mandatory Must Support elements populated: timestamp: #{timestamp}", timestamp)
-      show_message("Mandatory Must Support elements populated: All entry exists fullUrl: #{all_entries_have_full_url}", all_entries_have_full_url)
+      ms_elements_array = ["**identifier**: #{boolean_to_humanized_string(identifier)}", "**type**: #{boolean_to_humanized_string(type)}",
+                           "**timestamp**: #{boolean_to_humanized_string(timestamp)}", "**All entry exists fullUrl**: #{boolean_to_humanized_string(all_entries_have_full_url)}"].join("\n\n")
+      info "**Mandatory Must Support elements populated**:\n\n#{ms_elements_array}"
 
-      info "List entry resource by type (and meta.profile if exists):"
-      JsonPath.on(data_for_testing, '$.entry[*].resource').each do |resource|
+      entry_resources_array = JsonPath.on(data_for_testing, '$.entry[*].resource').map do |resource|
         resource_type = JsonPath.on(resource, '$.resourceType').first
         profiles = JsonPath.on(resource, '$.meta.profile')
-        result_message = profiles.empty? ? resource_type : "#{resource_type} (#{profiles.join(', ')})"
+        result_message = profiles.empty? ? resource_type : "#{resource_type} (#{profiles.join(", ")})"
 
-        info result_message
-      end
+        result_message
+      end.join("\n\n")
+      info "**List entry resource by type (and meta.profile if exists)**:\n\n#{entry_resources_array}"
     end
 
     run do

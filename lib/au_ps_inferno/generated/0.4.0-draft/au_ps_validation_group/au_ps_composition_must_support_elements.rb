@@ -33,18 +33,18 @@ module AUPSTestKit
     def composition_mandatory_ms_elements_info
       composition_resource = JsonPath.on(scratch[:ips_bundle_resource].to_json,
                                          '$.entry[?(@.resource.resourceType == "Composition")].resource').first
-      message_base = "List of Mandatory Must Support elements populated"
 
-      MANDATORY_MS_ELEMENTS.each { |element| execute_statistics(composition_resource, element[:expression], message_base, element[:label]) }
+      mandatory_elements = MANDATORY_MS_ELEMENTS.map { |element| execute_statistics(composition_resource, element[:expression], element[:label]) }
       section_title = JsonPath.on(composition_resource, '$.section.*').length == JsonPath.on(composition_resource, '$.section.*.title').length
       section_text = JsonPath.on(composition_resource, '$.section.*').length == JsonPath.on(composition_resource, '$.section.*.text').length
-      show_message("#{message_base}: section.title: #{section_title}", section_title)
-      show_message("#{message_base}: section.text: #{section_text}", section_text)
+      mandatory_elements.push("**section.title**: #{boolean_to_humanized_string(section_title)}")
+      mandatory_elements.push("**section.text**: #{boolean_to_humanized_string(section_text)}")
+      info "**List of Mandatory Must Support elements populated**:\n\n#{mandatory_elements.join("\n\n")}"
 
-      OPTIONAL_MS_ELEMENTS.each do |element|
-        execute_statistics(composition_resource, element[:expression],
-                           "List of Optional Must Support elements populated", element[:label])
-      end
+      optional_elements = OPTIONAL_MS_ELEMENTS.map do |element|
+        execute_statistics(composition_resource, element[:expression], element[:label])
+      end.join("\n\n")
+      info "**List of Optional Must Support elements populated**:\n\n#{optional_elements}"
     end
 
     run do
