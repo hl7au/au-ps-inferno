@@ -1,4 +1,24 @@
 module Constants
+  MANDATORY_MS_ELEMENTS = [
+    {:expression => "$.status", :label => "status"},
+    {:expression => "$.type", :label => "type"},
+    {:expression => "$.subject.reference", :label => "subject.reference"},
+    {:expression => "$.date", :label => "date"},
+    {:expression => "$.author[0]", :label => "author"},
+    {:expression => "$.title", :label => "title"}
+  ].freeze
+  OPTIONAL_MS_ELEMENTS = [
+    {:expression => "$.text", :label => "text"},
+    {:expression => "$.identifier", :label => "identifier"},
+    {:expression => "$.attester", :label => "asserter"},
+    {:expression => "$.attester.mode", :label => "asserter.mode"},
+    {:expression => "$.attester.time", :label => "asserter.time"},
+    {:expression => "$.attester.party", :label => "asserter.party"},
+    {:expression => "$.custodian", :label => "custodian"},
+    {:expression => "$.event.code.coding.code", :label => "event"},
+    {:expression => "$.event.code", :label => "event.code"},
+    {:expression => "$.event.period", :label => "event.period"}].freeze
+
   MANDATORY_SECTIONS = %w[11450-4 48765-2 10160-0].freeze
   RECOMMENDED_SECTIONS = %w[11369-6 30954-2 47519-4 46264-8].freeze
   OPTIONAL_SECTIONS = %w[42348-3 104605-1 47420-5 11348-0 10162-6 81338-6 18776-5 29762-2 8716-3].freeze
@@ -74,6 +94,14 @@ module Constants
     :au_ps_cs_supports_au_ps_profiles => {
       :title => 'CapabilityStatement supports AU PS Profiles',
       :description => 'AU PS Profiles referenced as supported in CapabilityStatement'
+    },
+    :au_ps_retrieve_bundle_group => {
+      :title => 'Retrieve AU PS Bundle validation tests',
+      :description => 'Retrieve document Bundle using Bundle read interaction or other HTTP GET request and verify response is valid AU PS Bundle'
+    },
+    :au_ps_retrieve_valid_bundle => {
+      :title => 'Server provides valid requested AU PS Bundle',
+      :description => 'Retrieve document Bundle using Bundle read interaction or other HTTP GET request and verify response is valid AU PS Bundle'
     }
   }
 end
