@@ -1,10 +1,3 @@
-GIT
-  remote: https://github.com/beda-software/inferno_ps_suite_generator
-  revision: 931d89cd52028a4a6bcf5c501020b195e2fc593e
-  ref: 931d89cd52028a4a6bcf5c501020b195e2fc593e
-  specs:
-    inferno_ps_suite_generator (0.1.0)
-
 PATH
   remote: .
   specs:
@@ -350,7 +343,6 @@ DEPENDENCIES
   database_cleaner-sequel (~> 1.8)
   debug
   factory_bot (~> 6.1)
-  inferno_ps_suite_generator!
   jsonpath (~> 0.5.8)
   pg (~> 1.5)
   rspec (~> 3.10)
