@@ -8,7 +8,7 @@ require_relative './au_ps_summary_bundle_group/au_ps_summary_bundle_group'
 module AUPSTestKit
   class Suite < Inferno::TestSuite
     id :au_ps_suite
-    title 'AU PS Inferno - $summary'
+    title 'AU PS Inferno'
     description 'This suite includes $summary operation tests.'
 
     input :url,
