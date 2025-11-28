@@ -127,5 +127,37 @@ module Constants
       :title => 'Composition contains other sections with entry references',
       :description => 'Displays information about other sections'
     },
+    :au_ps_summary_bundle_group => {
+      :title => 'Generate AU PS using IPS $summary validation tests',
+      :description => 'Generate AU Patient Summary using IPS $summary operation and verify response is valid AU PS Bundle'
+    },
+    :au_ps_summary_valid_bundle => {
+      :title => 'Server generates AU Patient Summary using IPS $summary operation',
+      :description => 'Generate AU Patient Summary using IPS $summary operation and verify response is valid AU PS Bundle'
+    },
+    :au_ps_summary_bundle_has_must_support_elements => {
+      :title => 'Bundle has mandatory must-support elements',
+      :description => 'Checks that the Bundle resource contains mandatory must-support elements (identifier, type, timestamp) and that all entries have a fullUrl. Also provides information about the resource types included in the Bundle.'
+    },
+    :au_ps_summary_bundle_composition_must_support_elements => {
+      :title => 'Composition has must-support elements',
+      :description => 'Checks that the Composition resource contains mandatory must-support elements (status, type, subject.reference, date, author, title, section.title, section.text) and provides information about optional must-support elements (text, identifier, attester, custodian, event).'
+    },
+    :au_ps_summary_bundle_composition_mandatory_sections => {
+      :title => 'Composition contains mandatory sections with entry references',
+      :description => 'Displays information about mandatory sections (Allergies and Intolerances, Medication Summary, Problem List) in the Composition resource, including the entry references within each section.'
+    },
+    :au_ps_summary_bundle_composition_recommended_sections => {
+      :title => 'Composition contains recommended sections with entry references',
+      :description => 'Displays information about recommended sections'
+    },
+    :au_ps_summary_bundle_composition_optional_sections => {
+      :title => 'Composition contains optional sections with entry references',
+      :description => 'Displays information about optional sections'
+    },
+    :au_ps_summary_bundle_composition_other_sections => {
+      :title => 'Composition contains other sections with entry references',
+      :description => 'Displays information about other sections'
+    },
   }
 end

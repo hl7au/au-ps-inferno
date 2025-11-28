@@ -3,6 +3,7 @@
 require_relative './au_ps_validation_group/au_ps_validation_group'
 require_relative './au_ps_retrieve_cs_group/au_ps_retrieve_cs_group'
 require_relative './au_ps_retrieve_bundle_group/au_ps_retrieve_bundle_group'
+require_relative './au_ps_summary_bundle_group/au_ps_summary_bundle_group'
 
 module AUPSTestKit
   class Suite < Inferno::TestSuite
@@ -45,6 +46,7 @@ module AUPSTestKit
     group from: :au_ps_validation_group
     group from: :au_ps_retrieve_cs_group
     group from: :au_ps_retrieve_bundle_group
+    group from: :au_ps_summary_bundle_group
 
   end
 end

@@ -11,51 +11,27 @@ module AUPSTestKit
     description TEXTS[:au_ps_bundle_is_valid_test][:description]
     id :au_ps_bundle_is_valid_test
 
-    input :patient_id,
-          optional: true,
-          description: 'To request Patient/{patient_id}/$summary'
-
-    input :identifier,
-          optional: true,
-          description: 'To request Patient/$summary?identifier={identifier}'
-
     input :bundle_resource,
           optional: true,
           description: 'If you want to check existing Bundle resource',
           type: 'textarea'
 
-    makes_request :summary_operation
-
-    def get_and_save_data(bundle_resource)
-      if bundle_resource.present?
-        info 'Using provided Bundle resource'
-        resource = FHIR.from_contents(bundle_resource)
-        scratch[:ips_bundle_resource] = resource
-      else
-        info 'Making $summary operation request'
-        operation_path = if patient_id
-                           "Patient/#{patient_id}/$summary"
-                         else
-                           "Patient/$summary?identifier=#{identifier}"
-                         end
-        response = fhir_operation(operation_path, name: :summary_operation, operation_method: :get)
-        resource_from_request = FHIR.from_contents(response.response_body)
-        scratch[:ips_bundle_resource] = resource_from_request
-      end
+    def skip_test?
+      bundle_resource.blank?
+    end
+    def get_and_save_data
+      info 'Validate provided Bundle resource'
+      resource = FHIR.from_contents(bundle_resource)
+      scratch[:ips_bundle_resource] = resource
       info "Bundle resource saved to scratch: #{scratch[:ips_bundle_resource]}"
     end
 
-    def validate_bundle(resource, profile_with_version)
-      resource_is_valid?(resource: resource, profile_url: profile_with_version)
-      errors_found = messages.any? { |message| message[:type] == "error" }
-      assert !errors_found, "Resource does not conform to the profile #{profile_with_version}"
-    end
-
     run do
-      get_and_save_data(bundle_resource)
-      # validate_bundle(
-      #   scratch[:ips_bundle_resource],
-      #   'http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-bundle|0.4.0-draft')
+      skip_if skip_test?, 'No Bundle resource provided'
+      get_and_save_data
+      validate_bundle(
+        scratch[:ips_bundle_resource],
+        'http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-bundle|0.4.0-draft')
     end
   end
 end
