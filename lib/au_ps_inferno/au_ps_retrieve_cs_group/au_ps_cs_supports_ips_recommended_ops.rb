@@ -24,12 +24,14 @@ module AUPSTestKit
       resource = scratch[:capability_statement]
       operations = resource.rest&.flat_map do |rest|
         rest.resource
-          &.select { |r| r.respond_to?(:operation) }
-          &.flat_map(&:operation)
+            &.select { |r| r.respond_to?(:operation) }
+            &.flat_map(&:operation)
       end&.compact
 
-      is_operation_defined?(operations, 'http://hl7.org/fhir/uv/ips/OperationDefinition/summary', %w[summary patient-summary], :summary_op_defined)
-      is_operation_defined?(operations, 'http://hl7.org/fhir/uv/ipa/OperationDefinition/docref', %w[docref], :docref_op_defined)
+      is_operation_defined?(operations, 'http://hl7.org/fhir/uv/ips/OperationDefinition/summary',
+                            %w[summary patient-summary], :summary_op_defined)
+      is_operation_defined?(operations, 'http://hl7.org/fhir/uv/ipa/OperationDefinition/docref', %w[docref],
+                            :docref_op_defined)
     end
   end
 end

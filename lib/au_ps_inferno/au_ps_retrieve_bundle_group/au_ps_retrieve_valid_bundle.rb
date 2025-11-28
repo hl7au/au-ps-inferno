@@ -32,33 +32,32 @@ module AUPSTestKit
       info "Retrieving Bundle resource from url #{bundle_url}"
       uri = URI(bundle_url)
       response = Net::HTTP.get_response(uri)
-      assert response.code =="200", "Bundle resource not found at #{bundle_url}"
+      assert response.code == '200', "Bundle resource not found at #{bundle_url}"
       bundle_resource = FHIR.from_contents(response.body)
-      assert bundle_resource.resourceType == 'Bundle', "Resource have different type than Bundle"
+      assert bundle_resource.resourceType == 'Bundle', 'Resource have different type than Bundle'
       info "Bundle resource saved to scratch: #{bundle_resource.to_json}"
       scratch[:ips_bundle_resource] = bundle_resource
     end
 
     def skip_test?
-      !((url.present? && bundle_id.present?) || (bundle_url.present?))
+      !((url.present? && bundle_id.present?) || bundle_url.present?)
     end
 
     def get_and_save_data
-      if url.present? && bundle_id.present?
-        get_bundle_resource_from_fhir_server(bundle_id)
-      end
+      get_bundle_resource_from_fhir_server(bundle_id) if url.present? && bundle_id.present?
 
-      if bundle_url.present?
-        get_bundle_resource_from_url(bundle_url)
-      end
+      return unless bundle_url.present?
+
+      get_bundle_resource_from_url(bundle_url)
     end
 
     run do
-      skip_if skip_test?, "There is no FHIR server URL, Bundle ID or Bundle URL provided"
+      skip_if skip_test?, 'There is no FHIR server URL, Bundle ID or Bundle URL provided'
       get_and_save_data
       validate_bundle(
         scratch[:ips_bundle_resource],
-        'http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-bundle|0.4.0-draft')
+        'http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-bundle|0.4.0-draft'
+      )
     end
   end
 end

@@ -18,6 +18,7 @@ module AUPSTestKit
     def skip_test?
       bundle_resource.blank?
     end
+
     def get_and_save_data
       info 'Validate provided Bundle resource'
       resource = FHIR.from_contents(bundle_resource)
@@ -30,7 +31,8 @@ module AUPSTestKit
       get_and_save_data
       validate_bundle(
         scratch[:ips_bundle_resource],
-        'http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-bundle|0.4.0-draft')
+        'http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-bundle|0.4.0-draft'
+      )
     end
   end
 end

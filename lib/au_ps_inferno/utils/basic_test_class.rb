@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'constants'
 require_relative 'bundle_decorator'
 
@@ -30,13 +32,18 @@ module AUPSTestKit
         end
       end
     end
+
     def composition_mandatory_ms_elements_info
       composition_resource = JsonPath.on(scratch[:ips_bundle_resource].to_json,
                                          '$.entry[?(@.resource.resourceType == "Composition")].resource').first
 
-      mandatory_elements = MANDATORY_MS_ELEMENTS.map { |element| execute_statistics(composition_resource, element[:expression], element[:label]) }
-      section_title = JsonPath.on(composition_resource, '$.section.*').length == JsonPath.on(composition_resource, '$.section.*.title').length
-      section_text = JsonPath.on(composition_resource, '$.section.*').length == JsonPath.on(composition_resource, '$.section.*.text').length
+      mandatory_elements = MANDATORY_MS_ELEMENTS.map do |element|
+        execute_statistics(composition_resource, element[:expression], element[:label])
+      end
+      section_title = JsonPath.on(composition_resource,
+                                  '$.section.*').length == JsonPath.on(composition_resource, '$.section.*.title').length
+      section_text = JsonPath.on(composition_resource,
+                                 '$.section.*').length == JsonPath.on(composition_resource, '$.section.*.text').length
       mandatory_elements.push("**section.title**: #{boolean_to_humanized_string(section_title)}")
       mandatory_elements.push("**section.text**: #{boolean_to_humanized_string(section_text)}")
       info "**List of Mandatory Must Support elements populated**:\n\n#{mandatory_elements.join("\n\n")}"
@@ -52,7 +59,9 @@ module AUPSTestKit
       identifier = JsonPath.on(data_for_testing, '$.identifier').first.present?
       type = JsonPath.on(data_for_testing, '$.type').first.present?
       timestamp = JsonPath.on(data_for_testing, '$.timestamp').first.present?
-      all_entries_have_full_url = JsonPath.on(data_for_testing, '$.entry[*].fullUrl').length == JsonPath.on(data_for_testing, '$.entry[*]').length
+      all_entries_have_full_url = JsonPath.on(data_for_testing,
+                                              '$.entry[*].fullUrl').length == JsonPath.on(data_for_testing,
+                                                                                          '$.entry[*]').length
 
       ms_elements_array = ["**identifier**: #{boolean_to_humanized_string(identifier)}", "**type**: #{boolean_to_humanized_string(type)}",
                            "**timestamp**: #{boolean_to_humanized_string(timestamp)}", "**All entry exists fullUrl**: #{boolean_to_humanized_string(all_entries_have_full_url)}"].join("\n\n")
@@ -61,7 +70,7 @@ module AUPSTestKit
       entry_resources_array = JsonPath.on(data_for_testing, '$.entry[*].resource').map do |resource|
         resource_type = JsonPath.on(resource, '$.resourceType').first
         profiles = JsonPath.on(resource, '$.meta.profile')
-        result_message = profiles.empty? ? resource_type : "#{resource_type} (#{profiles.join(", ")})"
+        result_message = profiles.empty? ? resource_type : "#{resource_type} (#{profiles.join(', ')})"
 
         result_message
       end.join("\n\n")
@@ -73,11 +82,10 @@ module AUPSTestKit
     end
 
     def validate_bundle(resource, profile_with_version)
-      if skip_validation?
-        return
-      end
+      return if skip_validation?
+
       resource_is_valid?(resource: resource, profile_url: profile_with_version)
-      errors_found = messages.any? { |message| message[:type] == "error" }
+      errors_found = messages.any? { |message| message[:type] == 'error' }
       assert !errors_found, "Resource does not conform to the profile #{profile_with_version}"
     end
 

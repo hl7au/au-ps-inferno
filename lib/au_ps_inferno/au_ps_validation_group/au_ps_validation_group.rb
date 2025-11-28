@@ -25,6 +25,5 @@ module AUPSTestKit
     test from: :au_ps_composition_recommended_sections
     test from: :au_ps_composition_optional_sections
     test from: :au_ps_composition_other_sections
-
   end
 end

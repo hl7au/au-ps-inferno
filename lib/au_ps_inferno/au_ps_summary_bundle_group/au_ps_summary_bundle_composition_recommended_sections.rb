@@ -3,7 +3,6 @@
 require 'jsonpath'
 require_relative '../utils/basic_test_class'
 
-
 module AUPSTestKit
   class AUPSSummaryBundleCompositionRecommendedSection < BasicTest
     title TEXTS[:au_ps_summary_bundle_composition_recommended_sections][:title]

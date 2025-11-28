@@ -12,6 +12,5 @@ module AUPSTestKit
 
     test from: :au_ps_docref_operation_support
     test from: :au_ps_docref_operation_success
-
   end
 end

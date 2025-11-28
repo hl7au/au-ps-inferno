@@ -18,7 +18,7 @@ module AUPSTestKit
           }
         ]
       )
-      fhir_operation("/DocumentReference/$docref", body: parameters)
+      fhir_operation('/DocumentReference/$docref', body: parameters)
       assert_response_status(200)
     end
   end

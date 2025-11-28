@@ -14,15 +14,16 @@ module AUPSTestKit
 
       operations = resource.rest&.flat_map do |rest|
         rest.resource
-          &.select { |r| r.type == 'DocumentReference' && r.respond_to?(:operation) }
-          &.flat_map(&:operation)
+            &.select { |r| r.type == 'DocumentReference' && r.respond_to?(:operation) }
+            &.flat_map(&:operation)
       end&.compact
 
       operation_defined = operations.any? do |operation|
-        operation.definition == 'http://hl7.org/fhir/uv/ipa/OperationDefinition/docref' || 'docref' == operation.name.downcase
+        operation.definition == 'http://hl7.org/fhir/uv/ipa/OperationDefinition/docref' || operation.name.downcase == 'docref'
       end
 
-      assert operation_defined, 'Server CapabilityStatement did not declare support for $docref operation in DocumentReference resource.'
+      assert operation_defined,
+             'Server CapabilityStatement did not declare support for $docref operation in DocumentReference resource.'
     end
   end
 end

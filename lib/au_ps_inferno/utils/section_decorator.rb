@@ -1,9 +1,7 @@
-class SectionDecorator < FHIR::Composition::Section
-  def initialize(section)
-    super(section)
-  end
+# frozen_string_literal: true
 
+class SectionDecorator < FHIR::Composition::Section
   def entry_references
-    entry&.map { |e| e.reference } || []
+    entry&.map(&:reference) || []
   end
 end
