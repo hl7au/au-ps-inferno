@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative './au_ps_validation_group/au_ps_validation_group'
+require_relative './au_ps_retrieve_cs_group/au_ps_retrieve_cs_group'
 
 module AUPSTestKit
   class Suite < Inferno::TestSuite
@@ -41,6 +42,7 @@ module AUPSTestKit
     end
 
     group from: :au_ps_validation_group
+    group from: :au_ps_retrieve_cs_group
 
   end
 end

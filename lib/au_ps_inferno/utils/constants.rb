@@ -4,6 +4,28 @@ module Constants
   OPTIONAL_SECTIONS = %w[42348-3 104605-1 47420-5 11348-0 10162-6 81338-6 18776-5 29762-2 8716-3].freeze
   ALL_SECTIONS = (MANDATORY_SECTIONS + RECOMMENDED_SECTIONS + OPTIONAL_SECTIONS).freeze
 
+  AU_PS_PROFILES_MAPPING_REQUIRED = {
+    "http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-bundle" => "AU PS Bundle",
+    "http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-composition" => "AU PS Composition",
+    "http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-patient" => "AU PS Patient",
+    "http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-condition" => "AU PS Condition",
+    "http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-allergyintolerance" => "AU PS AllergyIntolerance",
+    "http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medicationstatement" => "AU PS MedicationStatement",
+    "http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medicationrequest" => "AU PS MedicationRequest"
+  }
+  AU_PS_PROFILES_MAPPING_OTHER = {
+    "http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-encounter" => "AU PS Encounter",
+    "http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-immunization" => "AU PS Immunization",
+    "http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medication" => "AU PS Medication",
+    "http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-diagnosticresult-path" => "AU PS Pathology Result Observation",
+    "http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-smokingstatus" => "AU PS Smoking Status",
+    "http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-organization" => "AU PS Organization",
+    "http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-practitioner" => "AU PS Practitioner",
+    "http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-practitionerrole" => "AU PS PractitionerRole",
+    "http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-procedure" => "AU PS Procedure",
+    "http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-relatedperson" => "AU PS RelatedPerson",
+  }
+
   TEXTS = {
     :au_ps_validation_group => {
       :title => 'AU PS Bundle Validation',
@@ -36,6 +58,22 @@ module Constants
     :au_ps_composition_other_sections => {
       :title => 'Composition contains other sections with entry references',
       :description => 'Displays information about other sections'
+    },
+    :au_ps_retrieve_cs_group => {
+      :title => 'Retrieve Capability Statement Tests',
+      :description => 'Verify server provides valid Capability Statement and reports supported AU PS profiles and IPS recommended operations'
+    },
+    :au_ps_cs_is_valid => {
+      :title => 'CapabilityStatement is valid',
+      :description => 'Verify CapabilityStatement resource is valid'
+    },
+    :au_ps_cs_supports_ips_recommended_ops => {
+      :title => 'CapabilityStatement supports IPS Recommended Operations',
+      :description => 'IPS recommended operations referenced as supported in CapabilityStatement'
+    },
+    :au_ps_cs_supports_au_ps_profiles => {
+      :title => 'CapabilityStatement supports AU PS Profiles',
+      :description => 'AU PS Profiles referenced as supported in CapabilityStatement'
     }
   }
 end
