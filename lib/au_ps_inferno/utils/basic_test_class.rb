@@ -7,6 +7,14 @@ module AUPSTestKit
   class BasicTest < Inferno::Test
     include Constants
 
+    def t_title(test_or_group_id)
+      TEXTS.dig(test_or_group_id, :title) || "Title is not defined for #{test_or_group_id}"
+    end
+
+    def t_description(test_or_group_id)
+      TEXTS.dig(test_or_group_id, :description) || "Description is not defined for #{test_or_group_id}"
+    end
+
     def scratch_bundle
       scratch[:bundle_ips_resource]
     end
