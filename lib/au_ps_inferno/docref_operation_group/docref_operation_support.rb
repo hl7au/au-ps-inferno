@@ -1,7 +1,9 @@
 # frozen_string_literal: true
 
+require_relative '../utils/basic_test_class'
+
 module AUPSTestKit
-  class DocrefOperationSupport < Inferno::Test
+  class DocrefOperationSupport < BasicTest
     title 'Server declares support for $docref operation in CapabilityStatement'
     description 'The IPS Server declares support for DocumentReference/$docref operation in its server CapabilityStatement'
     id :au_ps_docref_operation_support

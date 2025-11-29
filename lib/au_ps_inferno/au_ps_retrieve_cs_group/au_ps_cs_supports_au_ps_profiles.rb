@@ -1,11 +1,10 @@
 # frozen_string_literal: true
 
 require 'jsonpath'
-require_relative '../utils/constants'
+require_relative '../utils/basic_test_class'
 
 module AUPSTestKit
-  class AUPSCSSupportsAUPSProfiles < Inferno::Test
-    include Constants
+  class AUPSCSSupportsAUPSProfiles < BasicTest
 
     title TEXTS[:au_ps_cs_supports_au_ps_profiles][:title]
     description TEXTS[:au_ps_cs_supports_au_ps_profiles][:description]
