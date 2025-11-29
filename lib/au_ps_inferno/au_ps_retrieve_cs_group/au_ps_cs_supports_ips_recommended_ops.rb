@@ -21,6 +21,7 @@ module AUPSTestKit
     end
 
     run do
+      skip_if scratch[:capability_statement].blank?, 'No CapabilityStatement resource provided'
       resource = scratch[:capability_statement]
       operations = resource.rest&.flat_map do |rest|
         rest.resource

@@ -27,6 +27,7 @@ module AUPSTestKit
           optional: true
 
     run do
+      skip_if url.blank?, 'No FHIR server specified'
       fhir_get_capability_statement
       scratch[:capability_statement] = resource
       info "Capability Statement saved to scratch: #{scratch[:capability_statement]}"

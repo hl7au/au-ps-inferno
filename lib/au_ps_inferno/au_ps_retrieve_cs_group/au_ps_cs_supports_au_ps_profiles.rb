@@ -27,6 +27,7 @@ module AUPSTestKit
     end
 
     run do
+      skip_if scratch[:capability_statement].blank?, 'No CapabilityStatement resource provided'
       check_profiles_status(
         scratch[:capability_statement],
         AU_PS_PROFILES_MAPPING_REQUIRED,

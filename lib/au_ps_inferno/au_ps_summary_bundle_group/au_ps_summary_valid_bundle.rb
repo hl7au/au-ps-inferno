@@ -39,6 +39,7 @@ module AUPSTestKit
     end
 
     run do
+      skip_if url.blank?, 'No FHIR server specified'
       get_and_save_data
       validate_ips_bundle
     end
