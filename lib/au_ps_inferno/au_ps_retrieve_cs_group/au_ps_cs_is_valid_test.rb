@@ -3,6 +3,7 @@
 require_relative '../utils/basic_test_class'
 
 module AUPSTestKit
+  # Verify CapabilityStatement resource is valid
   class AUPSCSIsValid < BasicTest
     title t_title(:au_ps_cs_is_valid)
     description t_description(:au_ps_cs_is_valid)

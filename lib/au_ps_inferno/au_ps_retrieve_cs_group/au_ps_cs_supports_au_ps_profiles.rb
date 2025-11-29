@@ -4,6 +4,7 @@ require 'jsonpath'
 require_relative '../utils/basic_test_class'
 
 module AUPSTestKit
+  # AU PS Profiles referenced as supported in CapabilityStatement
   class AUPSCSSupportsAUPSProfiles < BasicTest
     title t_title(:au_ps_cs_supports_au_ps_profiles)
     description t_description(:au_ps_cs_supports_au_ps_profiles)

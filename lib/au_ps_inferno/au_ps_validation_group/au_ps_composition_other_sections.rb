@@ -4,6 +4,7 @@ require 'jsonpath'
 require_relative '../utils/basic_test_class'
 
 module AUPSTestKit
+  # AU PS Composition Other Sections
   class AUPSCompositionOtherSection < BasicTest
     title t_title(:au_ps_composition_other_sections)
     description t_description(:au_ps_composition_other_sections)

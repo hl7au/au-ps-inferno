@@ -10,6 +10,7 @@ require_relative './au_ps_summary_bundle_composition_optional_sections'
 require_relative './au_ps_summary_bundle_composition_other_sections'
 
 module AUPSTestKit
+  # Generate AU Patient Summary using IPS $summary operation and verify response is valid AU PS Bundle
   class AUPSSummaryBundleGroup < Inferno::TestGroup
     extend Constants
 

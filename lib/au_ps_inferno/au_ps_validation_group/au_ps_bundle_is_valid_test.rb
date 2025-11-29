@@ -5,6 +5,7 @@ require_relative '../utils/constants'
 require_relative '../utils/basic_test_class'
 
 module AUPSTestKit
+  # The Bundle resource is valid against the AU PS Bundle profile
   class AUPSBundleIsValidTest < BasicTest
     id :au_ps_bundle_is_valid_test
     title t_title(:au_ps_bundle_is_valid_test)

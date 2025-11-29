@@ -4,6 +4,7 @@ require 'jsonpath'
 require_relative '../utils/basic_test_class'
 
 module AUPSTestKit
+  # The mandatory sections populated in the Composition resource.
   class AUPSCompositionMandatorySection < BasicTest
     title t_title(:au_ps_composition_mandatory_sections)
     description t_description(:au_ps_composition_mandatory_sections)

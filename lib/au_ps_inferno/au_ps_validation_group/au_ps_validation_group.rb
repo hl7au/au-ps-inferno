@@ -10,6 +10,7 @@ require_relative './au_ps_composition_other_sections'
 require_relative '../utils/constants'
 
 module AUPSTestKit
+  # Verify that the AU PS Bundle is valid
   class AUPSValidationGroup < Inferno::TestGroup
     extend Constants
 

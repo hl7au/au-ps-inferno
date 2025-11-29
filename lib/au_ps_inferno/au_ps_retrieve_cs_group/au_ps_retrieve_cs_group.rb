@@ -6,6 +6,7 @@ require_relative './au_ps_cs_supports_au_ps_profiles'
 require_relative '../utils/constants'
 
 module AUPSTestKit
+  # Tests for CapabilityStatement resource
   class AUPSRetrieveCSGroup < Inferno::TestGroup
     extend Constants
 

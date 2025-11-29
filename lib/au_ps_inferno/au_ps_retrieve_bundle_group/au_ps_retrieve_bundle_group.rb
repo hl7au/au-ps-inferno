@@ -10,6 +10,8 @@ require_relative './au_ps_retrieve_bundle_composition_optional_sections'
 require_relative './au_ps_retrieve_bundle_composition_other_sections'
 
 module AUPSTestKit
+  # Retrieve document Bundle using Bundle read interaction or other HTTP GET request and verify
+  # is valid AU PS Bundle
   class AUPSRetrieveBundleGroup < Inferno::TestGroup
     extend Constants
 

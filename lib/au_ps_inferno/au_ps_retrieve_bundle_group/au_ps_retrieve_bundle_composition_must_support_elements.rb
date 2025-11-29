@@ -4,6 +4,7 @@ require 'jsonpath'
 require_relative '../utils/basic_test_class'
 
 module AUPSTestKit
+  # The Must Support elements populated in the Composition resource.
   class AUPSRetrieveBundleCompositionMUSTSUPPORTElements < BasicTest
     title t_title(:au_ps_retrieve_bundle_composition_must_support_elements)
     description t_description(:au_ps_retrieve_bundle_composition_must_support_elements)
