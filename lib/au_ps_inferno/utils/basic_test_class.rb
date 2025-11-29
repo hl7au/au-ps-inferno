@@ -89,6 +89,13 @@ module AUPSTestKit
       assert !errors_found, "Resource does not conform to the profile #{profile_with_version}"
     end
 
+    def validate_ips_bundle
+      validate_bundle(
+        scratch[:ips_bundle_resource],
+        'http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-bundle|0.4.0-draft'
+      )
+    end
+
     def show_message(message, state_value)
       if state_value
         info message

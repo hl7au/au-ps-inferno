@@ -40,10 +40,7 @@ module AUPSTestKit
 
     run do
       get_and_save_data
-      validate_bundle(
-        scratch[:ips_bundle_resource],
-        'http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-bundle|0.4.0-draft'
-      )
+      validate_ips_bundle
     end
   end
 end
