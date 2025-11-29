@@ -75,8 +75,12 @@ module AUPSTestKit
                                               '$.entry[*].fullUrl').length == JsonPath.on(data_for_testing,
                                                                                           '$.entry[*]').length
 
-      ms_elements_array = ["**identifier**: #{boolean_to_humanized_string(identifier)}", "**type**: #{boolean_to_humanized_string(type)}",
-                           "**timestamp**: #{boolean_to_humanized_string(timestamp)}", "**All entry exists fullUrl**: #{boolean_to_humanized_string(all_entries_have_full_url)}"].join("\n\n")
+      ms_elements_array = [
+        "**identifier**: #{boolean_to_humanized_string(identifier)}",
+        "**type**: #{boolean_to_humanized_string(type)}",
+        "**timestamp**: #{boolean_to_humanized_string(timestamp)}",
+        "**All entry exists fullUrl**: #{boolean_to_humanized_string(all_entries_have_full_url)}"
+      ].join("\n\n")
       info "**Mandatory Must Support elements populated**:\n\n#{ms_elements_array}"
 
       entry_resources_array = JsonPath.on(data_for_testing, '$.entry[*].resource').map do |resource|

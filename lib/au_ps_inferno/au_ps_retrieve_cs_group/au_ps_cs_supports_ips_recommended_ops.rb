@@ -9,12 +9,14 @@ module AUPSTestKit
     description t_description(:au_ps_cs_supports_ips_recommended_ops)
     id :au_ps_cs_supports_ips_recommended_ops
 
-    def is_operation_defined?(operations, op_def_url, names_arr, scratch_key)
+    def operation_defined?(operations, op_def_url, names_arr, scratch_key)
       operation_defined = operations.any? do |operation|
         operation.definition == op_def_url || names_arr.include?(operation.name.downcase)
       end
 
-      info "Server CapabilityStatement declares support for operation with operation definition #{op_def_url}: #{operation_defined}"
+      message_base = 'Server CapabilityStatement declares support for operation with operation definition'
+
+      info "#{message_base} #{op_def_url}: #{operation_defined}"
 
       scratch[scratch_key] = operation_defined
     end
@@ -28,10 +30,10 @@ module AUPSTestKit
             &.flat_map(&:operation)
       end&.compact
 
-      is_operation_defined?(operations, 'http://hl7.org/fhir/uv/ips/OperationDefinition/summary',
-                            %w[summary patient-summary], :summary_op_defined)
-      is_operation_defined?(operations, 'http://hl7.org/fhir/uv/ipa/OperationDefinition/docref', %w[docref],
-                            :docref_op_defined)
+      operation_defined?(operations, 'http://hl7.org/fhir/uv/ips/OperationDefinition/summary',
+                         %w[summary patient-summary], :summary_op_defined)
+      operation_defined?(operations, 'http://hl7.org/fhir/uv/ipa/OperationDefinition/docref', %w[docref],
+                         :docref_op_defined)
     end
   end
 end

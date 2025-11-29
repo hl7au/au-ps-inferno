@@ -31,7 +31,7 @@ module AUPSTestKit
     fhir_client do
       url :url
       oauth_credentials :credentials
-      headers header_name && header_value ? { header_name => header_value } : {}
+      headers(header_name.present? && header_value.present? ? { header_name => header_value } : {})
     end
 
     fhir_resource_validator do
