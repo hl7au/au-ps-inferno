@@ -5,12 +5,12 @@ require_relative '../utils/basic_test_class'
 
 module AUPSTestKit
   class AUPSCompositionRecommendedSection < BasicTest
-    title TEXTS[:au_ps_composition_recommended_sections][:title]
-    description TEXTS[:au_ps_composition_recommended_sections][:description]
+    title t_title(:au_ps_composition_recommended_sections)
+    description t_description(:au_ps_composition_recommended_sections)
     id :au_ps_composition_recommended_sections
 
     run do
-      get_composition_sections_info(RECOMMENDED_SECTIONS)
+      get_composition_sections_info(Constants::RECOMMENDED_SECTIONS)
     end
   end
 end

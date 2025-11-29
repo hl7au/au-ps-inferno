@@ -8,8 +8,8 @@ require_relative '../utils/basic_test_class'
 module AUPSTestKit
   class AUPSSummaryValidBundle < BasicTest
     id :au_ps_summary_valid_bundle
-    title TEXTS[:au_ps_summary_valid_bundle][:title]
-    description TEXTS[:au_ps_summary_valid_bundle][:description]
+    title t_title(:au_ps_summary_valid_bundle)
+    description t_description(:au_ps_summary_valid_bundle)
 
     input :patient_id,
           optional: true,

@@ -4,9 +4,8 @@ require_relative '../utils/basic_test_class'
 
 module AUPSTestKit
   class AUPSCSSupportsIPSRecommendedOPS < BasicTest
-
-    title TEXTS[:au_ps_cs_supports_ips_recommended_ops][:title]
-    description TEXTS[:au_ps_cs_supports_ips_recommended_ops][:description]
+    title t_title(:au_ps_cs_supports_ips_recommended_ops)
+    description t_description(:au_ps_cs_supports_ips_recommended_ops)
     id :au_ps_cs_supports_ips_recommended_ops
 
     def is_operation_defined?(operations, op_def_url, names_arr, scratch_key)

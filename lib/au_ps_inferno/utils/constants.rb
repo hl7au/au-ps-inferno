@@ -163,4 +163,12 @@ module Constants
       description: 'Displays information about other sections'
     }
   }.freeze
+
+  def t_title(test_or_group_id)
+    TEXTS.dig(test_or_group_id, :title) || "Title is not defined for #{test_or_group_id}"
+  end
+
+  def t_description(test_or_group_id)
+    TEXTS.dig(test_or_group_id, :description) || "Description is not defined for #{test_or_group_id}"
+  end
 end

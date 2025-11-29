@@ -5,8 +5,8 @@ require_relative '../utils/basic_test_class'
 
 module AUPSTestKit
   class AUPSRetrieveBundleCompositionMUSTSUPPORTElements < BasicTest
-    title TEXTS[:au_ps_retrieve_bundle_composition_must_support_elements][:title]
-    description TEXTS[:au_ps_retrieve_bundle_composition_must_support_elements][:description]
+    title t_title(:au_ps_retrieve_bundle_composition_must_support_elements)
+    description t_description(:au_ps_retrieve_bundle_composition_must_support_elements)
     id :au_ps_retrieve_bundle_composition_must_support_elements
 
     run do

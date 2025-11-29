@@ -11,10 +11,10 @@ require_relative './au_ps_retrieve_bundle_composition_other_sections'
 
 module AUPSTestKit
   class AUPSRetrieveBundleGroup < Inferno::TestGroup
-    include Constants
+    extend Constants
 
-    title TEXTS[:au_ps_retrieve_bundle_group][:title]
-    description TEXTS[:au_ps_retrieve_bundle_group][:description]
+    title t_title(:au_ps_retrieve_bundle_group)
+    description t_description(:au_ps_retrieve_bundle_group)
     id :au_ps_retrieve_bundle_group
     run_as_group
 

@@ -11,10 +11,10 @@ require_relative '../utils/constants'
 
 module AUPSTestKit
   class AUPSValidationGroup < Inferno::TestGroup
-    include Constants
+    extend Constants
 
-    title TEXTS[:au_ps_validation_group][:title]
-    description TEXTS[:au_ps_validation_group][:description]
+    title t_title(:au_ps_validation_group)
+    description t_description(:au_ps_validation_group)
     id :au_ps_validation_group
     run_as_group
 

@@ -5,12 +5,12 @@ require_relative '../utils/basic_test_class'
 
 module AUPSTestKit
   class AUPSCompositionMandatorySection < BasicTest
-    title TEXTS[:au_ps_composition_mandatory_sections][:title]
-    description TEXTS[:au_ps_composition_mandatory_sections][:description]
+    title t_title(:au_ps_composition_mandatory_sections)
+    description t_description(:au_ps_composition_mandatory_sections)
     id :au_ps_composition_mandatory_sections
 
     run do
-      get_composition_sections_info(MANDATORY_SECTIONS)
+      get_composition_sections_info(Constants::MANDATORY_SECTIONS)
     end
   end
 end

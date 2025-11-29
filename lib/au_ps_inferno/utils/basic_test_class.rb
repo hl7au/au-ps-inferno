@@ -5,15 +5,7 @@ require_relative 'bundle_decorator'
 
 module AUPSTestKit
   class BasicTest < Inferno::Test
-    include Constants
-
-    def t_title(test_or_group_id)
-      TEXTS.dig(test_or_group_id, :title) || "Title is not defined for #{test_or_group_id}"
-    end
-
-    def t_description(test_or_group_id)
-      TEXTS.dig(test_or_group_id, :description) || "Description is not defined for #{test_or_group_id}"
-    end
+    extend Constants
 
     def scratch_bundle
       scratch[:bundle_ips_resource]
@@ -27,7 +19,7 @@ module AUPSTestKit
       check_bundle_exists_in_scratch
       au_ps_bundle_resource = BundleDecorator.new(scratch_bundle.to_hash)
       composition_resource = au_ps_bundle_resource.composition_resource
-      other_section_codes = composition_resource.section_codes - ALL_SECTIONS
+      other_section_codes = composition_resource.section_codes - Constants::ALL_SECTIONS
       if other_section_codes.empty?
         info 'No other sections found'
       else
@@ -55,7 +47,7 @@ module AUPSTestKit
       composition_resource = JsonPath.on(scratch_bundle.to_json,
                                          '$.entry[?(@.resource.resourceType == "Composition")].resource').first
 
-      mandatory_elements = MANDATORY_MS_ELEMENTS.map do |element|
+      mandatory_elements = Constants::MANDATORY_MS_ELEMENTS.map do |element|
         execute_statistics(composition_resource, element[:expression], element[:label])
       end
       section_title = JsonPath.on(composition_resource,
@@ -66,7 +58,7 @@ module AUPSTestKit
       mandatory_elements.push("**section.text**: #{boolean_to_humanized_string(section_text)}")
       info "**List of Mandatory Must Support elements populated**:\n\n#{mandatory_elements.join("\n\n")}"
 
-      optional_elements = OPTIONAL_MS_ELEMENTS.map do |element|
+      optional_elements = Constants::OPTIONAL_MS_ELEMENTS.map do |element|
         execute_statistics(composition_resource, element[:expression], element[:label])
       end.join("\n\n")
       info "**List of Optional Must Support elements populated**:\n\n#{optional_elements}"

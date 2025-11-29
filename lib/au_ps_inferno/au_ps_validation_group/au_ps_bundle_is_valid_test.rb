@@ -6,9 +6,9 @@ require_relative '../utils/basic_test_class'
 
 module AUPSTestKit
   class AUPSBundleIsValidTest < BasicTest
-    title TEXTS[:au_ps_bundle_is_valid_test][:title]
-    description TEXTS[:au_ps_bundle_is_valid_test][:description]
     id :au_ps_bundle_is_valid_test
+    title t_title(:au_ps_bundle_is_valid_test)
+    description t_description(:au_ps_bundle_is_valid_test)
 
     input :bundle_resource,
           optional: true,

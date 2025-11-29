@@ -7,10 +7,10 @@ require_relative '../utils/constants'
 
 module AUPSTestKit
   class AUPSRetrieveCSGroup < Inferno::TestGroup
-    include Constants
+    extend Constants
 
-    title TEXTS[:au_ps_retrieve_cs_group][:title]
-    description TEXTS[:au_ps_retrieve_cs_group][:description]
+    title t_title(:au_ps_retrieve_cs_group)
+    description t_description(:au_ps_retrieve_cs_group)
     id :au_ps_retrieve_cs_group
     run_as_group
 

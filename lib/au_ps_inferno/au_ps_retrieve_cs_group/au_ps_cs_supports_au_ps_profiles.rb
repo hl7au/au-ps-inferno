@@ -6,8 +6,8 @@ require_relative '../utils/basic_test_class'
 module AUPSTestKit
   class AUPSCSSupportsAUPSProfiles < BasicTest
 
-    title TEXTS[:au_ps_cs_supports_au_ps_profiles][:title]
-    description TEXTS[:au_ps_cs_supports_au_ps_profiles][:description]
+    title t_title(:au_ps_cs_supports_au_ps_profiles)
+    description t_description(:au_ps_cs_supports_au_ps_profiles)
     id :au_ps_cs_supports_au_ps_profiles
 
     def check_profiles_status(cs_resource, profiles_mapping, general_message)
@@ -29,13 +29,13 @@ module AUPSTestKit
       skip_if scratch[:capability_statement].blank?, 'No CapabilityStatement resource provided'
       check_profiles_status(
         scratch[:capability_statement],
-        AU_PS_PROFILES_MAPPING_REQUIRED,
+        Constants::AU_PS_PROFILES_MAPPING_REQUIRED,
         'For each of the following AU PS profiles indicate if it is referenced as a supported profile'
       )
 
       check_profiles_status(
         scratch[:capability_statement],
-        AU_PS_PROFILES_MAPPING_OTHER,
+        Constants::AU_PS_PROFILES_MAPPING_OTHER,
         'List any other AU PS profiles referenced as supported profile'
       )
     end

@@ -5,8 +5,8 @@ require_relative '../utils/basic_test_class'
 module AUPSTestKit
   class AUPSCSIsValid < BasicTest
 
-    title TEXTS[:au_ps_cs_is_valid][:title]
-    description TEXTS[:au_ps_cs_is_valid][:description]
+    title t_title(:au_ps_cs_is_valid)
+    description t_description(:au_ps_cs_is_valid)
     id :au_ps_cs_is_valid
 
     input :url,

@@ -5,8 +5,8 @@ require_relative '../utils/basic_test_class'
 
 module AUPSTestKit
   class AUPSSummaryBundleHasMUSTSUPPORTElements < BasicTest
-    title TEXTS[:au_ps_summary_bundle_has_must_support_elements][:title]
-    description TEXTS[:au_ps_summary_bundle_has_must_support_elements][:description]
+    title t_title(:au_ps_summary_bundle_has_must_support_elements)
+    description t_description(:au_ps_summary_bundle_has_must_support_elements)
     id :au_ps_summary_bundle_has_must_support_elements
 
     run do
