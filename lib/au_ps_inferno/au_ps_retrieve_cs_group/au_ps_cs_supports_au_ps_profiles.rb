@@ -11,16 +11,10 @@ module AUPSTestKit
     id :au_ps_cs_supports_au_ps_profiles
 
     def check_profiles_status(cs_resource, profiles_mapping, general_message)
-      profile = JsonPath.on(cs_resource.to_json, '$.rest.*.resource.*.profile')
-      supported_profile = JsonPath.on(cs_resource.to_json, '$.rest.*.resource.*.supportedProfile')
-      all_profiles = (profile + supported_profile).uniq
-
+      all_profiles = (JsonPath.on(cs_resource.to_json, '$.rest.*.resource.*.profile')
+                      + JsonPath.on(cs_resource.to_json, '$.rest.*.resource.*.supportedProfile')).uniq
       au_ps_profiles_status_array = profiles_mapping.keys.map do |profile_url|
-        if all_profiles.include?(profile_url)
-          "#{profiles_mapping[profile_url]} (#{profile_url}): Yes"
-        else
-          "#{profiles_mapping[profile_url]} (#{profile_url}): No"
-        end
+        "#{profiles_mapping[profile_url]} (#{profile_url}): #{all_profiles.include?(profile_url) ? 'Yes' : 'No'}"
       end.join("\n\n")
       info "**#{general_message}**:\n\n#{au_ps_profiles_status_array}"
     end
