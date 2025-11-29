@@ -7,7 +7,12 @@ module AUPSTestKit
   class BasicTest < Inferno::Test
     include Constants
 
+    def check_bundle_exists_in_scratch
+      skip_if scratch[:ips_bundle_resource].blank?, 'No Bundle resource provided'
+    end
+
     def check_other_sections
+      check_bundle_exists_in_scratch
       au_ps_bundle_resource = BundleDecorator.new(scratch[:ips_bundle_resource].to_hash)
       composition_resource = au_ps_bundle_resource.composition_resource
       other_section_codes = composition_resource.section_codes - ALL_SECTIONS
@@ -34,6 +39,7 @@ module AUPSTestKit
     end
 
     def composition_mandatory_ms_elements_info
+      check_bundle_exists_in_scratch
       composition_resource = JsonPath.on(scratch[:ips_bundle_resource].to_json,
                                          '$.entry[?(@.resource.resourceType == "Composition")].resource').first
 
@@ -55,6 +61,7 @@ module AUPSTestKit
     end
 
     def bundle_mandatory_ms_elements_info
+      check_bundle_exists_in_scratch
       data_for_testing = scratch[:ips_bundle_resource].to_json
       identifier = JsonPath.on(data_for_testing, '$.identifier').first.present?
       type = JsonPath.on(data_for_testing, '$.type').first.present?
@@ -90,6 +97,7 @@ module AUPSTestKit
     end
 
     def validate_ips_bundle
+      check_bundle_exists_in_scratch
       validate_bundle(
         scratch[:ips_bundle_resource],
         'http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-bundle|0.4.0-draft'
@@ -114,6 +122,7 @@ module AUPSTestKit
     end
 
     def get_composition_sections_info(sections_array_codes)
+      check_bundle_exists_in_scratch
       au_ps_bundle_resource = BundleDecorator.new(scratch[:ips_bundle_resource].to_hash)
       composition_resource = au_ps_bundle_resource.composition_resource
       sections_array_codes.each do |section_code|
