@@ -20,7 +20,7 @@ module AUPSTestKit
       bundle_resource.blank?
     end
 
-    def get_and_save_data
+    def read_and_save_data
       info 'Validate provided Bundle resource'
       resource = FHIR.from_contents(bundle_resource)
       scratch[:bundle_ips_resource] = resource
@@ -29,7 +29,7 @@ module AUPSTestKit
 
     run do
       skip_if skip_test?, 'No Bundle resource provided'
-      get_and_save_data
+      read_and_save_data
       validate_ips_bundle
     end
   end

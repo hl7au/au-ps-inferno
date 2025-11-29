@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# Common constants used in tests
 module Constants
   MANDATORY_MS_ELEMENTS = [
     { expression: '$.status', label: 'status' },

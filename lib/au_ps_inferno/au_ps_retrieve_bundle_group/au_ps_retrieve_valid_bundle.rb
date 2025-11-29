@@ -44,7 +44,7 @@ module AUPSTestKit
       !((url.present? && bundle_id.present?) || bundle_url.present?)
     end
 
-    def get_and_save_data
+    def read_and_save_data
       get_bundle_resource_from_fhir_server(bundle_id) if url.present? && bundle_id.present?
 
       return unless bundle_url.present?
@@ -54,7 +54,7 @@ module AUPSTestKit
 
     run do
       skip_if skip_test?, 'There is no FHIR server URL, Bundle ID or Bundle URL provided'
-      get_and_save_data
+      read_and_save_data
       validate_ips_bundle
     end
   end

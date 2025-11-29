@@ -11,7 +11,7 @@ module AUPSTestKit
     id :au_ps_summary_bundle_composition_mandatory_sections
 
     run do
-      get_composition_mandatory_sections_info
+      read_composition_mandatory_sections_info
     end
   end
 end

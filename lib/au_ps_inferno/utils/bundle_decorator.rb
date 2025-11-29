@@ -2,6 +2,7 @@
 
 require_relative 'composition_decorator'
 
+# A decorator for FHIR::Bundle to add convenience methods
 class BundleDecorator < FHIR::Bundle
   def composition_resource
     composition_resource_data = entry.find { |e| e.resource.resourceType == 'Composition' }.resource.to_hash

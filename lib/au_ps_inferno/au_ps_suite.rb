@@ -6,6 +6,7 @@ require_relative './au_ps_retrieve_bundle_group/au_ps_retrieve_bundle_group'
 require_relative './au_ps_summary_bundle_group/au_ps_summary_bundle_group'
 
 module AUPSTestKit
+  # The test suite for the AU PS Inferno profile.
   class Suite < Inferno::TestSuite
     id :au_ps_suite
     title 'AU PS Inferno'

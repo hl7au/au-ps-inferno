@@ -4,6 +4,7 @@ require_relative 'constants'
 require_relative 'bundle_decorator'
 
 module AUPSTestKit
+  # A base class for all tests to decrease code duplication
   class BasicTest < Inferno::Test
     extend Constants
 
@@ -125,7 +126,7 @@ module AUPSTestKit
       "**#{humanized_name}**: #{boolean_to_humanized_string(data_value)}"
     end
 
-    def get_composition_sections_info(sections_array_codes)
+    def read_composition_sections_info(sections_array_codes)
       check_bundle_exists_in_scratch
       au_ps_bundle_resource = BundleDecorator.new(scratch_bundle.to_hash)
       composition_resource = au_ps_bundle_resource.composition_resource
@@ -147,16 +148,16 @@ module AUPSTestKit
       end
     end
 
-    def get_composition_mandatory_sections_info
-      get_composition_sections_info(Constants::MANDATORY_SECTIONS)
+    def read_composition_mandatory_sections_info
+      read_composition_sections_info(Constants::MANDATORY_SECTIONS)
     end
 
-    def get_composition_optional_sections_info
-      get_composition_sections_info(Constants::OPTIONAL_SECTIONS)
+    def read_composition_optional_sections_info
+      read_composition_sections_info(Constants::OPTIONAL_SECTIONS)
     end
 
-    def get_composition_recommended_sections_info
-      get_composition_sections_info(Constants::RECOMMENDED_SECTIONS)
+    def read_composition_recommended_sections_info
+      read_composition_sections_info(Constants::RECOMMENDED_SECTIONS)
     end
   end
 end

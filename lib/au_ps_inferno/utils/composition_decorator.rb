@@ -2,6 +2,7 @@
 
 require_relative 'section_decorator'
 
+# Decorator for FHIR::Composition to add convenience methods
 class CompositionDecorator < FHIR::Composition
   def section_codes
     section.map { |s| s.code.coding.first.code }

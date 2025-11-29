@@ -34,7 +34,7 @@ module AUPSTestKit
       end
     end
 
-    def get_and_save_data
+    def read_and_save_data
       info 'Making $summary operation request'
       response = fhir_operation(operation_path, name: :summary_operation, operation_method: :get)
       resource_from_request = FHIR.from_contents(response.response_body)
@@ -44,7 +44,7 @@ module AUPSTestKit
 
     run do
       skip_if url.blank?, 'No FHIR server specified'
-      get_and_save_data
+      read_and_save_data
       validate_ips_bundle
     end
   end
