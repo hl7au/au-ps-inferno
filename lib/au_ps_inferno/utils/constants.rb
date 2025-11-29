@@ -9,6 +9,7 @@ module Constants
     { expression: '$.author[0]', label: 'author' },
     { expression: '$.title', label: 'title' }
   ].freeze
+
   OPTIONAL_MS_ELEMENTS = [
     { expression: '$.text', label: 'text' },
     { expression: '$.identifier', label: 'identifier' },
@@ -36,11 +37,13 @@ module Constants
     'http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medicationstatement' => 'AU PS MedicationStatement',
     'http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medicationrequest' => 'AU PS MedicationRequest'
   }.freeze
+
   AU_PS_PROFILES_MAPPING_OTHER = {
     'http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-encounter' => 'AU PS Encounter',
     'http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-immunization' => 'AU PS Immunization',
     'http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medication' => 'AU PS Medication',
-    'http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-diagnosticresult-path' => 'AU PS Pathology Result Observation',
+    'http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-diagnosticresult-path' =>
+      'AU PS Pathology Result Observation',
     'http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-smokingstatus' => 'AU PS Smoking Status',
     'http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-organization' => 'AU PS Organization',
     'http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-practitioner' => 'AU PS Practitioner',
@@ -56,19 +59,28 @@ module Constants
     },
     au_ps_bundle_is_valid_test: {
       title: 'AU PS Bundle is valid',
-      description: 'Validates that a Bundle resource conforms to the AU PS Bundle profile (http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-bundle). The test accepts either a patient_id to request Patient/{patient_id}/$summary, an identifier to request Patient/$summary?identifier={identifier}, or a pre-existing Bundle resource to validate directly.'
+      description: 'Validates that a Bundle resource conforms to the AU PS Bundle profile ' \
+        '(http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-bundle). The test accepts either a ' \
+        'patient_id to request Patient/{patient_id}/$summary, an identifier to request ' \
+        'Patient/$summary?identifier={identifier}, or a pre-existing Bundle resource to validate directly.'
     },
     au_ps_bundle_has_must_support_elements: {
       title: 'Bundle has mandatory must-support elements',
-      description: 'Checks that the Bundle resource contains mandatory must-support elements (identifier, type, timestamp) and that all entries have a fullUrl. Also provides information about the resource types included in the Bundle.'
+      description: 'Checks that the Bundle resource contains mandatory must-support elements (identifier, ' \
+        'type, timestamp) and that all entries have a fullUrl. Also provides information about the ' \
+        'resource types included in the Bundle.'
     },
     au_ps_composition_must_support_elements: {
       title: 'Composition has must-support elements',
-      description: 'Checks that the Composition resource contains mandatory must-support elements (status, type, subject.reference, date, author, title, section.title, section.text) and provides information about optional must-support elements (text, identifier, attester, custodian, event).'
+      description: 'Checks that the Composition resource contains mandatory must-support elements ' \
+        '(status, type, subject.reference, date, author, title, section.title, section.text) and provides ' \
+        'information about optional must-support elements (text, identifier, attester, custodian, event).'
     },
     au_ps_composition_mandatory_sections: {
       title: 'Composition contains mandatory sections with entry references',
-      description: 'Displays information about mandatory sections (Allergies and Intolerances, Medication Summary, Problem List) in the Composition resource, including the entry references within each section.'
+      description: 'Displays information about mandatory sections (Allergies and Intolerances, ' \
+        'Medication Summary, Problem List) in the Composition resource, including the entry references within ' \
+        'each section.'
     },
     au_ps_composition_recommended_sections: {
       title: 'Composition contains recommended sections with entry references',
@@ -84,7 +96,8 @@ module Constants
     },
     au_ps_retrieve_cs_group: {
       title: 'Retrieve Capability Statement Tests',
-      description: 'Verify server provides valid Capability Statement and reports supported AU PS profiles and IPS recommended operations'
+      description: 'Verify server provides valid Capability Statement and reports supported AU PS profiles ' \
+        'and IPS recommended operations'
     },
     au_ps_cs_is_valid: {
       title: 'CapabilityStatement is valid',
@@ -100,23 +113,31 @@ module Constants
     },
     au_ps_retrieve_bundle_group: {
       title: 'Retrieve AU PS Bundle validation tests',
-      description: 'Retrieve document Bundle using Bundle read interaction or other HTTP GET request and verify response is valid AU PS Bundle'
+      description: 'Retrieve document Bundle using Bundle read interaction or other HTTP GET request and ' \
+        'verify response is valid AU PS Bundle'
     },
     au_ps_retrieve_valid_bundle: {
       title: 'Server provides valid requested AU PS Bundle',
-      description: 'Retrieve document Bundle using Bundle read interaction or other HTTP GET request and verify response is valid AU PS Bundle'
+      description: 'Retrieve document Bundle using Bundle read interaction or other HTTP GET request and ' \
+        'verify response is valid AU PS Bundle'
     },
     au_ps_retrieve_bundle_has_must_support_elements: {
       title: 'Bundle has mandatory must-support elements',
-      description: 'Checks that the Bundle resource contains mandatory must-support elements (identifier, type, timestamp) and that all entries have a fullUrl. Also provides information about the resource types included in the Bundle.'
+      description: 'Checks that the Bundle resource contains mandatory must-support elements (identifier, ' \
+        'type, timestamp) and that all entries have a fullUrl. Also provides information about the ' \
+        'resource types included in the Bundle.'
     },
     au_ps_retrieve_bundle_composition_must_support_elements: {
       title: 'Composition has must-support elements',
-      description: 'Checks that the Composition resource contains mandatory must-support elements (status, type, subject.reference, date, author, title, section.title, section.text) and provides information about optional must-support elements (text, identifier, attester, custodian, event).'
+      description: 'Checks that the Composition resource contains mandatory must-support elements ' \
+        '(status, type, subject.reference, date, author, title, section.title, section.text) and provides ' \
+        'information about optional must-support elements (text, identifier, attester, custodian, event).'
     },
     au_ps_retrieve_bundle_composition_mandatory_sections: {
       title: 'Composition contains mandatory sections with entry references',
-      description: 'Displays information about mandatory sections (Allergies and Intolerances, Medication Summary, Problem List) in the Composition resource, including the entry references within each section.'
+      description: 'Displays information about mandatory sections (Allergies and Intolerances, ' \
+        'Medication Summary, Problem List) in the Composition resource, including the entry references ' \
+        'within each section.'
     },
     au_ps_retrieve_bundle_composition_recommended_sections: {
       title: 'Composition contains recommended sections with entry references',
@@ -132,23 +153,31 @@ module Constants
     },
     au_ps_summary_bundle_group: {
       title: 'Generate AU PS using IPS $summary validation tests',
-      description: 'Generate AU Patient Summary using IPS $summary operation and verify response is valid AU PS Bundle'
+      description: 'Generate AU Patient Summary using IPS $summary operation and verify response is valid ' \
+        'AU PS Bundle'
     },
     au_ps_summary_valid_bundle: {
       title: 'Server generates AU Patient Summary using IPS $summary operation',
-      description: 'Generate AU Patient Summary using IPS $summary operation and verify response is valid AU PS Bundle'
+      description: 'Generate AU Patient Summary using IPS $summary operation and verify response is valid ' \
+        'AU PS Bundle'
     },
     au_ps_summary_bundle_has_must_support_elements: {
       title: 'Bundle has mandatory must-support elements',
-      description: 'Checks that the Bundle resource contains mandatory must-support elements (identifier, type, timestamp) and that all entries have a fullUrl. Also provides information about the resource types included in the Bundle.'
+      description: 'Checks that the Bundle resource contains mandatory must-support elements (identifier, ' \
+        'type, timestamp) and that all entries have a fullUrl. Also provides information about the ' \
+        'resource types included in the Bundle.'
     },
     au_ps_summary_bundle_composition_must_support_elements: {
       title: 'Composition has must-support elements',
-      description: 'Checks that the Composition resource contains mandatory must-support elements (status, type, subject.reference, date, author, title, section.title, section.text) and provides information about optional must-support elements (text, identifier, attester, custodian, event).'
+      description: 'Checks that the Composition resource contains mandatory must-support elements ' \
+        '(status, type, subject.reference, date, author, title, section.title, section.text) and provides ' \
+        'information about optional must-support elements (text, identifier, attester, custodian, event).'
     },
     au_ps_summary_bundle_composition_mandatory_sections: {
       title: 'Composition contains mandatory sections with entry references',
-      description: 'Displays information about mandatory sections (Allergies and Intolerances, Medication Summary, Problem List) in the Composition resource, including the entry references within each section.'
+      description: 'Displays information about mandatory sections (Allergies and Intolerances, ' \
+        'Medication Summary, Problem List) in the Composition resource, including the entry references ' \
+        'within each section.'
     },
     au_ps_summary_bundle_composition_recommended_sections: {
       title: 'Composition contains recommended sections with entry references',
