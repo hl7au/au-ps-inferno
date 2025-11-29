@@ -10,13 +10,23 @@ module AUPSTestKit
     description t_description(:au_ps_cs_supports_au_ps_profiles)
     id :au_ps_cs_supports_au_ps_profiles
 
-    def check_profiles_status(cs_resource, profiles_mapping, general_message)
-      all_profiles = (JsonPath.on(cs_resource.to_json, '$.rest.*.resource.*.profile')
-                      + JsonPath.on(cs_resource.to_json, '$.rest.*.resource.*.supportedProfile')).uniq
+    def check_profiles_status(_cs_resource, profiles_mapping, general_message)
       au_ps_profiles_status_array = profiles_mapping.keys.map do |profile_url|
-        "#{profiles_mapping[profile_url]} (#{profile_url}): #{all_profiles.include?(profile_url) ? 'Yes' : 'No'}"
+        "#{profiles_mapping[profile_url]} (#{profile_url}): #{cs_profiles.include?(profile_url) ? 'Yes' : 'No'}"
       end.join("\n\n")
       info "**#{general_message}**:\n\n#{au_ps_profiles_status_array}"
+    end
+
+    def read_profiles
+      JsonPath.on(scratch[:capability_statement].to_json, '$.rest.*.resource.*.profile')
+    end
+
+    def read_supported_profiles
+      JsonPath.on(scratch[:capability_statement].to_json, '$.rest.*.resource.*.supportedProfile')
+    end
+
+    def cs_profiles
+      read_profiles + read_supported_profiles
     end
 
     run do
