@@ -10,7 +10,7 @@ module AUPSTestKit
     id :au_ps_composition_recommended_sections
 
     run do
-      get_composition_sections_info(Constants::RECOMMENDED_SECTIONS)
+      get_composition_recommended_sections_info
     end
   end
 end

@@ -10,7 +10,7 @@ module AUPSTestKit
     id :au_ps_retrieve_bundle_composition_optional_sections
 
     run do
-      get_composition_sections_info(Constants::OPTIONAL_SECTIONS)
+      get_composition_optional_sections_info
     end
   end
 end

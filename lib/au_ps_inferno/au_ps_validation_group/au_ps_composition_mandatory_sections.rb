@@ -10,7 +10,7 @@ module AUPSTestKit
     id :au_ps_composition_mandatory_sections
 
     run do
-      get_composition_sections_info(Constants::MANDATORY_SECTIONS)
+      get_composition_mandatory_sections_info
     end
   end
 end

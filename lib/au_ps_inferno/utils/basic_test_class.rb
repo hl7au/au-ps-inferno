@@ -146,5 +146,17 @@ module AUPSTestKit
         end
       end
     end
+
+    def get_composition_mandatory_sections_info
+      get_composition_sections_info(Constants::MANDATORY_SECTIONS)
+    end
+
+    def get_composition_optional_sections_info
+      get_composition_sections_info(Constants::OPTIONAL_SECTIONS)
+    end
+
+    def get_composition_recommended_sections_info
+      get_composition_sections_info(Constants::RECOMMENDED_SECTIONS)
+    end
   end
 end
