@@ -10,7 +10,7 @@ module AUPSTestKit
     description t_description(:au_ps_cs_supports_au_ps_profiles)
     id :au_ps_cs_supports_au_ps_profiles
 
-    def check_profiles_status(_cs_resource, profiles_mapping, general_message)
+    def check_profiles_status(profiles_mapping, general_message)
       au_ps_profiles_status_array = profiles_mapping.keys.map do |profile_url|
         "#{profiles_mapping[profile_url]} (#{profile_url}): #{cs_profiles.include?(profile_url) ? 'Yes' : 'No'}"
       end.join("\n\n")
@@ -32,13 +32,11 @@ module AUPSTestKit
     run do
       skip_if scratch[:capability_statement].blank?, 'No CapabilityStatement resource provided'
       check_profiles_status(
-        scratch[:capability_statement],
         Constants::AU_PS_PROFILES_MAPPING_REQUIRED,
         'For each of the following AU PS profiles indicate if it is referenced as a supported profile'
       )
 
       check_profiles_status(
-        scratch[:capability_statement],
         Constants::AU_PS_PROFILES_MAPPING_OTHER,
         'List any other AU PS profiles referenced as supported profile'
       )
