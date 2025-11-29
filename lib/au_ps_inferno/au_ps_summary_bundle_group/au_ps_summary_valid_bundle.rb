@@ -25,17 +25,20 @@ module AUPSTestKit
       (patient_id.blank? && identifier.blank?) || url.blank?
     end
 
+    def operation_path
+      if patient_id
+        "Patient/#{patient_id}/$summary"
+      else
+        "Patient/$summary?identifier=#{identifier}"
+      end
+    end
+
     def get_and_save_data
       info 'Making $summary operation request'
-      operation_path = if patient_id
-                         "Patient/#{patient_id}/$summary"
-                       else
-                         "Patient/$summary?identifier=#{identifier}"
-                       end
       response = fhir_operation(operation_path, name: :summary_operation, operation_method: :get)
       resource_from_request = FHIR.from_contents(response.response_body)
-      scratch[:ips_bundle_resource] = resource_from_request
-      info "Bundle resource saved to scratch: #{scratch[:ips_bundle_resource]}"
+      scratch[:bundle_ips_resource] = resource_from_request
+      info "Bundle resource saved to scratch: #{scratch_bundle}"
     end
 
     run do

@@ -25,7 +25,7 @@ module AUPSTestKit
       assert_response_status(200)
       assert_resource_type(:bundle)
       info "Bundle resource saved to scratch: #{resource.to_json}"
-      scratch[:ips_bundle_resource] = resource
+      resource
     end
 
     def get_bundle_resource_from_url(bundle_url)
@@ -36,7 +36,7 @@ module AUPSTestKit
       bundle_resource = FHIR.from_contents(response.body)
       assert bundle_resource.resourceType == 'Bundle', 'Resource have different type than Bundle'
       info "Bundle resource saved to scratch: #{bundle_resource.to_json}"
-      scratch[:ips_bundle_resource] = bundle_resource
+      bundle_resource
     end
 
     def skip_test?

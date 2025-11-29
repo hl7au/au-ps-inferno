@@ -7,13 +7,17 @@ module AUPSTestKit
   class BasicTest < Inferno::Test
     include Constants
 
+    def scratch_bundle
+      scratch[:bundle_ips_resource]
+    end
+
     def check_bundle_exists_in_scratch
-      skip_if scratch[:ips_bundle_resource].blank?, 'No Bundle resource provided'
+      skip_if scratch_bundle.blank?, 'No Bundle resource provided'
     end
 
     def check_other_sections
       check_bundle_exists_in_scratch
-      au_ps_bundle_resource = BundleDecorator.new(scratch[:ips_bundle_resource].to_hash)
+      au_ps_bundle_resource = BundleDecorator.new(scratch_bundle.to_hash)
       composition_resource = au_ps_bundle_resource.composition_resource
       other_section_codes = composition_resource.section_codes - ALL_SECTIONS
       if other_section_codes.empty?
@@ -40,7 +44,7 @@ module AUPSTestKit
 
     def composition_mandatory_ms_elements_info
       check_bundle_exists_in_scratch
-      composition_resource = JsonPath.on(scratch[:ips_bundle_resource].to_json,
+      composition_resource = JsonPath.on(scratch_bundle.to_json,
                                          '$.entry[?(@.resource.resourceType == "Composition")].resource').first
 
       mandatory_elements = MANDATORY_MS_ELEMENTS.map do |element|
@@ -62,7 +66,7 @@ module AUPSTestKit
 
     def bundle_mandatory_ms_elements_info
       check_bundle_exists_in_scratch
-      data_for_testing = scratch[:ips_bundle_resource].to_json
+      data_for_testing = scratch_bundle.to_json
       identifier = JsonPath.on(data_for_testing, '$.identifier').first.present?
       type = JsonPath.on(data_for_testing, '$.type').first.present?
       timestamp = JsonPath.on(data_for_testing, '$.timestamp').first.present?
@@ -99,7 +103,7 @@ module AUPSTestKit
     def validate_ips_bundle
       check_bundle_exists_in_scratch
       validate_bundle(
-        scratch[:ips_bundle_resource],
+        scratch_bundle,
         'http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-bundle|0.4.0-draft'
       )
     end
@@ -123,7 +127,7 @@ module AUPSTestKit
 
     def get_composition_sections_info(sections_array_codes)
       check_bundle_exists_in_scratch
-      au_ps_bundle_resource = BundleDecorator.new(scratch[:ips_bundle_resource].to_hash)
+      au_ps_bundle_resource = BundleDecorator.new(scratch_bundle.to_hash)
       composition_resource = au_ps_bundle_resource.composition_resource
       sections_array_codes.each do |section_code|
         section = composition_resource.section_by_code(section_code)
