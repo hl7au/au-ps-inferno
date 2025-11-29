@@ -5,7 +5,6 @@ require_relative '../utils/basic_test_class'
 
 module AUPSTestKit
   class AUPSCSSupportsAUPSProfiles < BasicTest
-
     title t_title(:au_ps_cs_supports_au_ps_profiles)
     description t_description(:au_ps_cs_supports_au_ps_profiles)
     id :au_ps_cs_supports_au_ps_profiles
