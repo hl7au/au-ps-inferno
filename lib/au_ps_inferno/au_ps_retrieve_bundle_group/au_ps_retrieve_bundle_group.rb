@@ -19,6 +19,7 @@ module AUPSTestKit
     description 'Retrieve document Bundle using Bundle read interaction or other HTTP GET request and ' \
       'verify response is valid AU PS Bundle'
     id :au_ps_retrieve_bundle_group
+
     run_as_group
 
     test from: :au_ps_retrieve_valid_bundle

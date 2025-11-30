@@ -18,6 +18,13 @@ module AUPSTestKit
     description 'Generate AU Patient Summary using IPS $summary operation and verify response is valid ' \
       'AU PS Bundle'
     id :au_ps_summary_bundle_group
+
+    fhir_client do
+      url :url
+      oauth_credentials :credentials
+      headers(header_name.present? && header_value.present? ? { header_name => header_value } : {})
+    end
+
     run_as_group
 
     test from: :au_ps_summary_valid_bundle

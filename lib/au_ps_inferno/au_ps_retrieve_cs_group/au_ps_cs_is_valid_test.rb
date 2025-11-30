@@ -9,22 +9,6 @@ module AUPSTestKit
     title 'CapabilityStatement is valid'
     description 'Verify CapabilityStatement resource is valid'
 
-    input :url,
-          title: 'FHIR Server Base Url',
-          optional: true
-
-    input :credentials,
-          title: 'OAuth Credentials',
-          type: :oauth_credentials,
-          optional: true
-
-    input :header_name,
-          title: 'Header name',
-          optional: true
-    input :header_value,
-          title: 'Header value',
-          optional: true
-
     run do
       skip_if url.blank?, 'No FHIR server specified'
       fhir_get_capability_statement

@@ -96,6 +96,37 @@ module AUPSTestKit
       read_composition_sections_info(Constants::RECOMMENDED_SECTIONS)
     end
 
+    def operation_defined?(operations, op_def_url, names_arr, scratch_key)
+      operation_defined = operations.any? do |operation|
+        operation.definition == op_def_url || names_arr.include?(operation.name.downcase)
+      end
+
+      message_base = 'Server CapabilityStatement declares support for operation with operation definition'
+
+      info "#{message_base} #{op_def_url}: #{boolean_to_humanized_string(operation_defined)}"
+
+      scratch[scratch_key] = operation_defined
+    end
+
+    def operations
+      fhir_get_capability_statement
+      scratch[:capability_statement] = resource
+      resource.rest&.flat_map do |rest|
+        rest.resource
+          &.select { |res| res.respond_to?(:operation) }
+          &.flat_map(&:operation)
+      end&.compact
+    end
+    def summary_op_defined?
+      operation_defined?(operations, 'http://hl7.org/fhir/uv/ips/OperationDefinition/summary',
+                         %w[summary patient-summary], :summary_op_defined)
+    end
+
+    def docref_op_defined?
+      operation_defined?(operations, 'http://hl7.org/fhir/uv/ipa/OperationDefinition/docref', %w[docref],
+                         :docref_op_defined)
+    end
+
     private
 
     def entry_resources_info

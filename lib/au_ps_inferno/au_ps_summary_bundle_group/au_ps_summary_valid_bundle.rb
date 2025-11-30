@@ -3,15 +3,32 @@
 require 'net/http'
 require 'uri'
 
-require_relative '../utils/basic_test_with_url'
+require_relative '../utils/basic_test_class'
 
 module AUPSTestKit
   # The Bundle resource is valid against the AU PS Bundle profile
-  class AUPSSummaryValidBundle < BasicTestWithURL
+  class AUPSSummaryValidBundle < BasicTest
     id :au_ps_summary_valid_bundle
     title 'Server generates AU Patient Summary using IPS $summary operation'
     description 'Generate AU Patient Summary using IPS $summary operation and verify response is valid ' \
       'AU PS Bundle'
+
+    input :url,
+          title: 'FHIR Server Base Url',
+          optional: true
+
+    input :credentials,
+          title: 'OAuth Credentials',
+          type: :oauth_credentials,
+          optional: true
+
+    input :header_name,
+          title: 'Header name',
+          optional: true
+
+    input :header_value,
+          title: 'Header value',
+          optional: true
 
     input :patient_id,
           optional: true,
@@ -20,6 +37,12 @@ module AUPSTestKit
     input :identifier,
           optional: true,
           description: 'To request Patient/$summary?identifier={identifier}'
+
+    fhir_client do
+      url :url
+      oauth_credentials :credentials
+      headers(header_name.present? && header_value.present? ? { header_name => header_value } : {})
+    end
 
     makes_request :summary_operation
 
@@ -45,7 +68,8 @@ module AUPSTestKit
 
     run do
       skip_if url.blank?, 'No FHIR server specified'
-      skip_if scratch[:summary_op_defined] != true, 'Server does not declare support for $summary operation'
+      summary_op_defined? if scratch[:summary_op_defined].blank?
+      skip_if scratch[:summary_op_defined] == false, 'Server does not declare support for $summary operation'
       read_and_save_data
       validate_ips_bundle
     end
