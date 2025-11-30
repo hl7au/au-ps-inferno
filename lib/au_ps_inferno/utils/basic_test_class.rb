@@ -18,8 +18,7 @@ module AUPSTestKit
 
     def check_other_sections
       check_bundle_exists_in_scratch
-      au_ps_bundle_resource = BundleDecorator.new(scratch_bundle.to_hash)
-      composition_resource = au_ps_bundle_resource.composition_resource
+      composition_resource = BundleDecorator.new(scratch_bundle.to_hash).composition_resource
       other_section_codes = composition_resource.section_codes - Constants::ALL_SECTIONS
       info 'No other sections found' if other_section_codes.empty?
       other_section_codes.each do |section_code|
@@ -28,13 +27,14 @@ module AUPSTestKit
     end
 
     def check_composition_section_code(section_code, composition_resource)
+      return unless section_code.present? || composition_resource.present?
       section = composition_resource.section_by_code(section_code)
       return if section_is_nil?(section, section_code)
 
       section_references_are_empty?(section, section_code)
       info "SECTION: #{section.code.coding.first.display}"
       section.entry_references.each do |ref|
-        info au_ps_bundle_resource.resource_info_by_entry_full_url(ref)
+        info BundleDecorator.new(scratch_bundle.to_hash).resource_info_by_entry_full_url(ref)
       end
     end
 
@@ -42,9 +42,11 @@ module AUPSTestKit
       return unless section.nil?
 
       warning "Section #{section_code} not found in Composition resource"
+      true
     end
 
     def section_references_are_empty?(section, section_code)
+      return unless section.present?
       section_references = section.entry_references
       return unless section_references.empty?
 
