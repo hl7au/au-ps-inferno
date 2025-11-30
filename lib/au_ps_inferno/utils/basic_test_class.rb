@@ -70,17 +70,18 @@ module AUPSTestKit
     end
 
     def composition_section_title_info
-      "**section.title**: #{boolean_to_humanized_string(JsonPath.on(composition_resource,
-                                                                    '$.section.*').length == JsonPath.on(
-                                                                      composition_resource, '$.section.*.title'
-                                                                    ).length)}"
+      "**section.title**: #{check_section_element_completeness('$.section.*.title')}"
     end
 
     def composition_section_text_info
-      "**section.text**: #{boolean_to_humanized_string(JsonPath.on(composition_resource,
-                                                                   '$.section.*').length == JsonPath.on(
-                                                                     composition_resource, '$.section.*.text'
-                                                                   ).length)}"
+      "**section.text**: #{check_section_element_completeness('$.section.*.text')}"
+    end
+
+    def check_section_element_completeness(json_path_expression)
+      boolean_to_humanized_string(JsonPath.on(composition_resource,
+                                              '$.section.*').length == JsonPath.on(
+                                                composition_resource, json_path_expression
+                                              ).length)
     end
 
     def composition_resource
