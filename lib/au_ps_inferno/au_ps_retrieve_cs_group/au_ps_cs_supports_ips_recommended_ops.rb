@@ -5,8 +5,8 @@ require_relative '../utils/basic_test_class'
 module AUPSTestKit
   # IPS recommended operations referenced as supported in CapabilityStatement
   class AUPSCSSupportsIPSRecommendedOPS < BasicTest
-    title t_title(:au_ps_cs_supports_ips_recommended_ops)
-    description t_description(:au_ps_cs_supports_ips_recommended_ops)
+    title 'CapabilityStatement supports IPS Recommended Operations'
+    description 'IPS recommended operations referenced as supported in CapabilityStatement'
     id :au_ps_cs_supports_ips_recommended_ops
 
     def operation_defined?(operations, op_def_url, names_arr, scratch_key)

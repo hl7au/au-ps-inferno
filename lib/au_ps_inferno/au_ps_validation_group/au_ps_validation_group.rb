@@ -14,8 +14,8 @@ module AUPSTestKit
   class AUPSValidationGroup < Inferno::TestGroup
     extend Constants
 
-    title t_title(:au_ps_validation_group)
-    description t_description(:au_ps_validation_group)
+    title 'AU PS Bundle Validation'
+    description 'Verify that an AU PS Bundle is valid and contains required must support elements.'
     id :au_ps_validation_group
     run_as_group
 

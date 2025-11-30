@@ -10,8 +10,9 @@ module AUPSTestKit
   class AUPSRetrieveCSGroup < Inferno::TestGroup
     extend Constants
 
-    title t_title(:au_ps_retrieve_cs_group)
-    description t_description(:au_ps_retrieve_cs_group)
+    title 'Retrieve Capability Statement Tests'
+    description 'Verify server provides valid Capability Statement and reports supported AU PS profiles ' \
+      'and IPS recommended operations'
     id :au_ps_retrieve_cs_group
     run_as_group
 

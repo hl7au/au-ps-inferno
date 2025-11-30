@@ -14,8 +14,9 @@ module AUPSTestKit
   class AUPSSummaryBundleGroup < Inferno::TestGroup
     extend Constants
 
-    title t_title(:au_ps_summary_bundle_group)
-    description t_description(:au_ps_summary_bundle_group)
+    title 'Generate AU PS using IPS $summary validation tests'
+    description 'Generate AU Patient Summary using IPS $summary operation and verify response is valid ' \
+      'AU PS Bundle'
     id :au_ps_summary_bundle_group
     run_as_group
 

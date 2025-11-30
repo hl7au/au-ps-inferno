@@ -6,8 +6,10 @@ require_relative '../utils/basic_test_class'
 module AUPSTestKit
   # The mandatory sections populated in the Composition resource.
   class AUPSRetrieveBundleCompositionMandatorySection < BasicTest
-    title t_title(:au_ps_retrieve_bundle_composition_mandatory_sections)
-    description t_description(:au_ps_retrieve_bundle_composition_mandatory_sections)
+    title 'Composition contains mandatory sections with entry references'
+    description 'Displays information about mandatory sections (Allergies and Intolerances, ' \
+      'Medication Summary, Problem List) in the Composition resource, including the entry references ' \
+      'within each section.'
     id :au_ps_retrieve_bundle_composition_mandatory_sections
 
     run do

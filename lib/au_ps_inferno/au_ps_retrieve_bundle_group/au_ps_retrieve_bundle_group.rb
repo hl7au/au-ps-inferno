@@ -15,8 +15,9 @@ module AUPSTestKit
   class AUPSRetrieveBundleGroup < Inferno::TestGroup
     extend Constants
 
-    title t_title(:au_ps_retrieve_bundle_group)
-    description t_description(:au_ps_retrieve_bundle_group)
+    title 'Retrieve AU PS Bundle validation tests'
+    description 'Retrieve document Bundle using Bundle read interaction or other HTTP GET request and ' \
+      'verify response is valid AU PS Bundle'
     id :au_ps_retrieve_bundle_group
     run_as_group
 
