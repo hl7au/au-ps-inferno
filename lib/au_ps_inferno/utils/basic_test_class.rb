@@ -113,10 +113,11 @@ module AUPSTestKit
       scratch[:capability_statement] = resource
       resource.rest&.flat_map do |rest|
         rest.resource
-          &.select { |res| res.respond_to?(:operation) }
-          &.flat_map(&:operation)
+            &.select { |res| res.respond_to?(:operation) }
+            &.flat_map(&:operation)
       end&.compact
     end
+
     def summary_op_defined?
       operation_defined?(operations, 'http://hl7.org/fhir/uv/ips/OperationDefinition/summary',
                          %w[summary patient-summary], :summary_op_defined)
