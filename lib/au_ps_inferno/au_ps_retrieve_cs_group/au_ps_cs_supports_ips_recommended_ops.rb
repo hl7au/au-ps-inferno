@@ -16,7 +16,7 @@ module AUPSTestKit
 
       message_base = 'Server CapabilityStatement declares support for operation with operation definition'
 
-      info "#{message_base} #{op_def_url}: #{operation_defined}"
+      info "#{message_base} #{op_def_url}: #{boolean_to_humanized_string(operation_defined)}"
 
       scratch[scratch_key] = operation_defined
     end

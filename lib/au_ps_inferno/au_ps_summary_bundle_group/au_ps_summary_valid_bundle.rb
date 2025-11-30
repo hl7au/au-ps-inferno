@@ -45,6 +45,7 @@ module AUPSTestKit
 
     run do
       skip_if url.blank?, 'No FHIR server specified'
+      skip_if scratch[:summary_op_defined] != true, 'Server does not declare support for $summary operation'
       read_and_save_data
       validate_ips_bundle
     end
