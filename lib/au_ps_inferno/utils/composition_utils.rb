@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative 'bundle_decorator'
+
 # Utilities for FHIR Composition resources
 module CompositionUtils
   def scratch_bundle
@@ -15,10 +17,12 @@ module CompositionUtils
     return if section_is_nil?(section, section_code)
 
     section_references_are_empty?(section, section_code)
-    info "SECTION: #{section.code.coding.first.display}"
-    section.entry_references.each do |ref|
-      info BundleDecorator.new(scratch_bundle.to_hash).resource_info_by_entry_full_url(ref)
-    end
+    sections_info = section.entry_references.map do |ref|
+      BundleDecorator.new(scratch_bundle.to_hash).resource_info_by_entry_full_url(ref)
+    end.join("\n\n")
+    return unless sections_info.present?
+
+    info "SECTION: #{section.code.coding.first.display}\n\n#{sections_info}"
   end
 
   def section_is_nil?(section, section_code)
