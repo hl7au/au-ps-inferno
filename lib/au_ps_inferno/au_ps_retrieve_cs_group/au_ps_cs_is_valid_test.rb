@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
-require_relative '../utils/basic_test_class'
+require_relative '../utils/basic_test_with_url'
 
 module AUPSTestKit
   # Verify CapabilityStatement resource is valid
-  class AUPSCSIsValid < BasicTest
+  class AUPSCSIsValid < BasicTestWithURL
+    id :au_ps_cs_is_valid
     title 'CapabilityStatement is valid'
     description 'Verify CapabilityStatement resource is valid'
-    id :au_ps_cs_is_valid
 
     input :url,
           title: 'FHIR Server Base Url',

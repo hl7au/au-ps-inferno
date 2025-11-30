@@ -3,11 +3,11 @@
 require 'net/http'
 require 'uri'
 
-require_relative '../utils/basic_test_class'
+require_relative '../utils/basic_test_with_url'
 
 module AUPSTestKit
   # The Bundle resource is valid against the AU PS Bundle profile
-  class AUPSRetrieveValidBundle < BasicTest
+  class AUPSRetrieveValidBundle < BasicTestWithURL
     id :au_ps_retrieve_valid_bundle
     title 'Server provides valid requested AU PS Bundle'
     description 'Retrieve document Bundle using Bundle read interaction or other HTTP GET request and ' \

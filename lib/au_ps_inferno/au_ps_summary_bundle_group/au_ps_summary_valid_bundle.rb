@@ -3,11 +3,11 @@
 require 'net/http'
 require 'uri'
 
-require_relative '../utils/basic_test_class'
+require_relative '../utils/basic_test_with_url'
 
 module AUPSTestKit
   # The Bundle resource is valid against the AU PS Bundle profile
-  class AUPSSummaryValidBundle < BasicTest
+  class AUPSSummaryValidBundle < BasicTestWithURL
     id :au_ps_summary_valid_bundle
     title 'Server generates AU Patient Summary using IPS $summary operation'
     description 'Generate AU Patient Summary using IPS $summary operation and verify response is valid ' \

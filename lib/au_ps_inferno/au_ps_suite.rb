@@ -12,28 +12,6 @@ module AUPSTestKit
     title 'AU PS Inferno'
     description 'This suite includes $summary operation tests.'
 
-    input :url,
-          title: 'FHIR Server Base Url',
-          optional: true
-
-    input :credentials,
-          title: 'OAuth Credentials',
-          type: :oauth_credentials,
-          optional: true
-
-    input :header_name,
-          title: 'Header name',
-          optional: true
-    input :header_value,
-          title: 'Header value',
-          optional: true
-
-    fhir_client do
-      url :url
-      oauth_credentials :credentials
-      headers(header_name.present? && header_value.present? ? { header_name => header_value } : {})
-    end
-
     fhir_resource_validator do
       igs 'hl7.fhir.au.ps#0.4.0-draft'
 
