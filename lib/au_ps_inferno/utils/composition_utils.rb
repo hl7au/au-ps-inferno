@@ -22,14 +22,18 @@ module CompositionUtils
     end.join("\n\n")
     return unless sections_info.present?
 
-    info "SECTION: #{section.code.coding.first.display}\n\n#{sections_info}"
+    info "SECTION: #{section.code_display_str}\n\n#{sections_info}"
   end
 
   def section_is_nil?(section, section_code)
     return unless section.nil?
 
-    warning "Section #{section_code} not found in Composition resource"
+    warning "Section #{sections_codes[section_code]} (#{section_code}) not found in Composition resource"
     true
+  end
+
+  def sections_codes
+    Constants::SECTIONS_CODES_MAPPING
   end
 
   def section_references_are_empty?(section, section_code)

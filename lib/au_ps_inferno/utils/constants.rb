@@ -28,6 +28,16 @@ module Constants
   RECOMMENDED_SECTIONS = %w[11369-6 30954-2 47519-4 46264-8].freeze
   OPTIONAL_SECTIONS = %w[42348-3 104605-1 47420-5 11348-0 10162-6 81338-6 18776-5 29762-2 8716-3].freeze
   ALL_SECTIONS = (MANDATORY_SECTIONS + RECOMMENDED_SECTIONS + OPTIONAL_SECTIONS).freeze
+  SECTIONS_CODES_MAPPING = {
+    '11450-4' => 'Problem list', '48765-2' => 'Allergies and adverse reactions Document',
+    '10160-0' => 'History of Medication use Narrative', '11369-6' => 'History of Immunization note',
+    '30954-2' => 'Relevant diagnostic tests/laboratory data note', '47519-4' => 'History of Procedures Document',
+    '46264-8' => 'History of medical device use', '42348-3' => 'Advance healthcare directives',
+    '104605-1' => 'Alert', '47420-5' => 'Functional status assessment note',
+    '11348-0' => 'History of Past illness note', '10162-6' => 'History of pregnancies Narrative',
+    '81338-6' => 'Patient Goals, preferences, and priorities for care experience',
+    '18776-5' => 'Plan of care note', '29762-2' => 'Social history note', '8716-3' => 'Vital signs note'
+  }.freeze
 
   AU_PS_PROFILES_MAPPING_REQUIRED = {
     'http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-bundle' => 'AU PS Bundle',
