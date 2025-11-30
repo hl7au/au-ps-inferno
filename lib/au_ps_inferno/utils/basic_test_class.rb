@@ -21,26 +21,34 @@ module AUPSTestKit
       au_ps_bundle_resource = BundleDecorator.new(scratch_bundle.to_hash)
       composition_resource = au_ps_bundle_resource.composition_resource
       other_section_codes = composition_resource.section_codes - Constants::ALL_SECTIONS
-      if other_section_codes.empty?
-        info 'No other sections found'
-      else
-        other_section_codes.each do |section_code|
-          section = composition_resource.section_by_code(section_code)
-          if section.nil?
-            warning "Section #{section_code} not found in Composition resource"
-            next
-          end
-          section_references = section.entry_references
-          if section_references.empty?
-            warning "Section #{section.code.coding.first.display}(#{section_code}) has no entries"
-          else
-            info "SECTION: #{section.code.coding.first.display}"
-            section.entry_references.each do |ref|
-              info au_ps_bundle_resource.resource_info_by_entry_full_url(ref)
-            end
-          end
-        end
+      info 'No other sections found' if other_section_codes.empty?
+      other_section_codes.each do |section_code|
+        check_composition_section_code(section_code, composition_resource)
       end
+    end
+
+    def check_composition_section_code(section_code, composition_resource)
+      section = composition_resource.section_by_code(section_code)
+      return if section_is_nil?(section, section_code)
+
+      section_references_are_empty?(section, section_code)
+      info "SECTION: #{section.code.coding.first.display}"
+      section.entry_references.each do |ref|
+        info au_ps_bundle_resource.resource_info_by_entry_full_url(ref)
+      end
+    end
+
+    def section_is_nil?(section, section_code)
+      return unless section.nil?
+
+      warning "Section #{section_code} not found in Composition resource"
+    end
+
+    def section_references_are_empty?(section, section_code)
+      section_references = section.entry_references
+      return unless section_references.empty?
+
+      warning "Section #{section.code.coding.first.display}(#{section_code}) has no entries"
     end
 
     def composition_mandatory_ms_elements_info
