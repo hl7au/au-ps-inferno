@@ -67,42 +67,40 @@ module AUPSTestKit
 
     def bundle_mandatory_ms_elements_info
       check_bundle_exists_in_scratch
-      data_for_testing = scratch_bundle.to_json
-      identifier = JsonPath.on(data_for_testing, '$.identifier').first.present?
-      type = JsonPath.on(data_for_testing, '$.type').first.present?
-      timestamp = JsonPath.on(data_for_testing, '$.timestamp').first.present?
-      all_entries_have_full_url = JsonPath.on(data_for_testing,
-                                              '$.entry[*].fullUrl').length == JsonPath.on(data_for_testing,
-                                                                                          '$.entry[*]').length
+      info "**Mandatory Must Support elements populated**:\n\n#{mandatory_ms_elements_info}"
+      info "**List entry resource by type (and meta.profile if exists)**:\n\n#{entry_resources_info}"
+    end
 
-      ms_elements_array = [
-        "**identifier**: #{boolean_to_humanized_string(identifier)}",
-        "**type**: #{boolean_to_humanized_string(type)}",
-        "**timestamp**: #{boolean_to_humanized_string(timestamp)}",
-        "**All entry exists fullUrl**: #{boolean_to_humanized_string(all_entries_have_full_url)}"
+    def mandatory_ms_elements_info
+      [
+        "**identifier**: #{boolean_to_humanized_string(identifier_info)}",
+        "**type**: #{boolean_to_humanized_string(type_info)}",
+        "**timestamp**: #{boolean_to_humanized_string(timestamp_info)}",
+        "**All entry exists fullUrl**: #{boolean_to_humanized_string(all_entries_have_full_url_info)}"
       ].join("\n\n")
-      info "**Mandatory Must Support elements populated**:\n\n#{ms_elements_array}"
+    end
 
-      entry_resources_array = JsonPath.on(data_for_testing, '$.entry[*].resource').map do |resource|
-        resource_type = JsonPath.on(resource, '$.resourceType').first
-        profiles = JsonPath.on(resource, '$.meta.profile')
-        result_message = profiles.empty? ? resource_type : "#{resource_type} (#{profiles.join(', ')})"
+    def all_entries_have_full_url_info
+      data_for_testing = scratch_bundle.to_json
+      JsonPath.on(data_for_testing,
+                  '$.entry[*].fullUrl').length == JsonPath.on(data_for_testing,
+                                                              '$.entry[*]').length
+    end
 
-        result_message
-      end.join("\n\n")
-      info "**List entry resource by type (and meta.profile if exists)**:\n\n#{entry_resources_array}"
+    def timestamp_info
+      JsonPath.on(scratch_bundle.to_json, '$.timestamp').first.present?
+    end
+
+    def type_info
+      JsonPath.on(scratch_bundle.to_json, '$.type').first.present?
+    end
+
+    def identifier_info
+      JsonPath.on(scratch_bundle.to_json, '$.identifier').first.present?
     end
 
     def skip_validation?
       true
-    end
-
-    def validate_bundle(resource, profile_with_version)
-      return if skip_validation?
-
-      resource_is_valid?(resource: resource, profile_url: profile_with_version)
-      errors_found = messages.any? { |message| message[:type] == 'error' }
-      assert !errors_found, "Resource does not conform to the profile #{profile_with_version}"
     end
 
     def validate_ips_bundle
@@ -113,12 +111,35 @@ module AUPSTestKit
       )
     end
 
-    def show_message(message, state_value)
-      if state_value
-        info message
-      else
-        warning message
-      end
+    def read_composition_mandatory_sections_info
+      read_composition_sections_info(Constants::MANDATORY_SECTIONS)
+    end
+
+    def read_composition_optional_sections_info
+      read_composition_sections_info(Constants::OPTIONAL_SECTIONS)
+    end
+
+    def read_composition_recommended_sections_info
+      read_composition_sections_info(Constants::RECOMMENDED_SECTIONS)
+    end
+
+    private
+
+    def entry_resources_info
+      JsonPath.on(scratch_bundle.to_json, '$.entry[*].resource').map do |resource|
+        resource_type = JsonPath.on(resource, '$.resourceType').first
+        profiles = JsonPath.on(resource, '$.meta.profile')
+        result_message = profiles.empty? ? resource_type : "#{resource_type} (#{profiles.join(', ')})"
+        result_message
+      end.join("\n\n")
+    end
+
+    def validate_bundle(resource, profile_with_version)
+      return if skip_validation?
+
+      resource_is_valid?(resource: resource, profile_url: profile_with_version)
+      errors_found = messages.any? { |message| message[:type] == 'error' }
+      assert !errors_found, "Resource does not conform to the profile #{profile_with_version}"
     end
 
     def boolean_to_humanized_string(boolean_value)
@@ -150,18 +171,6 @@ module AUPSTestKit
           info "**Section #{section.code.coding.first.display}**:\n\n#{section_resources_array}"
         end
       end
-    end
-
-    def read_composition_mandatory_sections_info
-      read_composition_sections_info(Constants::MANDATORY_SECTIONS)
-    end
-
-    def read_composition_optional_sections_info
-      read_composition_sections_info(Constants::OPTIONAL_SECTIONS)
-    end
-
-    def read_composition_recommended_sections_info
-      read_composition_sections_info(Constants::RECOMMENDED_SECTIONS)
     end
   end
 end
