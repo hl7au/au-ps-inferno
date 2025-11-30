@@ -26,7 +26,7 @@ module AUPSTestKit
       resource = scratch[:capability_statement]
       operations = resource.rest&.flat_map do |rest|
         rest.resource
-            &.select { |r| r.respond_to?(:operation) }
+            &.select { |res| res.respond_to?(:operation) }
             &.flat_map(&:operation)
       end&.compact
 
