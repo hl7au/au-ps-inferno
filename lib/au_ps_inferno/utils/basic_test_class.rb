@@ -53,24 +53,38 @@ module AUPSTestKit
 
     def composition_mandatory_ms_elements_info
       check_bundle_exists_in_scratch
-      composition_resource = JsonPath.on(scratch_bundle.to_json,
-                                         '$.entry[?(@.resource.resourceType == "Composition")].resource').first
-
-      mandatory_elements = Constants::MANDATORY_MS_ELEMENTS.map do |element|
-        execute_statistics(composition_resource, element[:expression], element[:label])
-      end
-      section_title = JsonPath.on(composition_resource,
-                                  '$.section.*').length == JsonPath.on(composition_resource, '$.section.*.title').length
-      section_text = JsonPath.on(composition_resource,
-                                 '$.section.*').length == JsonPath.on(composition_resource, '$.section.*.text').length
-      mandatory_elements.push("**section.title**: #{boolean_to_humanized_string(section_title)}")
-      mandatory_elements.push("**section.text**: #{boolean_to_humanized_string(section_text)}")
-      info "**List of Mandatory Must Support elements populated**:\n\n#{mandatory_elements.join("\n\n")}"
-
+      info "**List of Mandatory Must Support elements populated**:\n\n#{composition_mandatory_elements_info}"
       optional_elements = Constants::OPTIONAL_MS_ELEMENTS.map do |element|
         execute_statistics(composition_resource, element[:expression], element[:label])
       end.join("\n\n")
       info "**List of Optional Must Support elements populated**:\n\n#{optional_elements}"
+    end
+
+    def composition_mandatory_elements_info
+      mandatory_elements = Constants::MANDATORY_MS_ELEMENTS.map do |element|
+        execute_statistics(composition_resource, element[:expression], element[:label])
+      end
+      mandatory_elements.push(composition_section_title_info)
+      mandatory_elements.push(composition_section_text_info)
+      mandatory_elements.join("\n\n")
+    end
+
+    def composition_section_title_info
+      "**section.title**: #{boolean_to_humanized_string(JsonPath.on(composition_resource,
+                                                                    '$.section.*').length == JsonPath.on(
+                                                                      composition_resource, '$.section.*.title'
+                                                                    ).length)}"
+    end
+
+    def composition_section_text_info
+      "**section.text**: #{boolean_to_humanized_string(JsonPath.on(composition_resource,
+                                                                   '$.section.*').length == JsonPath.on(
+                                                                     composition_resource, '$.section.*.text'
+                                                                   ).length)}"
+    end
+
+    def composition_resource
+      JsonPath.on(scratch_bundle.to_json, '$.entry[?(@.resource.resourceType == "Composition")].resource').first
     end
 
     def bundle_mandatory_ms_elements_info
