@@ -112,10 +112,14 @@ module AUPSTestKit
       fhir_get_capability_statement
       scratch[:capability_statement] = resource
       resource.rest&.flat_map do |rest|
-        rest.resource
-            &.select { |res| res.respond_to?(:operation) }
-            &.flat_map(&:operation)
+        select_op(rest)
       end&.compact
+    end
+
+    def select_op(rest)
+      rest.resource
+          &.select { |res| res.respond_to?(:operation) }
+          &.flat_map(&:operation)
     end
 
     def summary_op_defined?
