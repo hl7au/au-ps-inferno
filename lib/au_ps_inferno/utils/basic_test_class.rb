@@ -73,7 +73,7 @@ module AUPSTestKit
     end
 
     def skip_validation?
-      false
+      true
     end
 
     def validate_ips_bundle

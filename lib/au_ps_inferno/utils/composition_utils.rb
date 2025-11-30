@@ -19,7 +19,7 @@ module CompositionUtils
     section_references_are_empty?(section, section_code)
     sections_info = section.entry_references.map do |ref|
       BundleDecorator.new(scratch_bundle.to_hash).resource_info_by_entry_full_url(ref)
-    end.join("\n\n")
+    end.join("\n\n") || section.empty_reason_str
     return unless sections_info.present?
 
     info "SECTION: #{section.code_display_str}\n\n#{sections_info}"
@@ -42,7 +42,12 @@ module CompositionUtils
     section_references = section.entry_references
     return unless section_references.empty?
 
-    warning "Section #{section.code.coding.first.display}(#{section_code}) has no entries"
+    empty_reason_str = section.empty_reason_str
+    if empty_reason_str.present?
+      warning "Section #{section.code.coding.first.display}(#{section_code}) has no entries because #{empty_reason_str}"
+    else
+      warning "Section #{section.code.coding.first.display}(#{section_code}) has no entries"
+    end
   end
 
   def boolean_to_humanized_string(boolean_value)
