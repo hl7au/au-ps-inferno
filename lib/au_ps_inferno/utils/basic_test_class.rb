@@ -27,7 +27,6 @@ module AUPSTestKit
     end
 
     def check_composition_section_code(section_code, composition_resource)
-      return unless section_code.present? || composition_resource.present?
       section = composition_resource.section_by_code(section_code)
       return if section_is_nil?(section, section_code)
 
@@ -47,6 +46,7 @@ module AUPSTestKit
 
     def section_references_are_empty?(section, section_code)
       return unless section.present?
+
       section_references = section.entry_references
       return unless section_references.empty?
 
