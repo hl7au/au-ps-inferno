@@ -98,12 +98,13 @@ module AUPSTestKit
     private
 
     def entry_resources_info
-      JsonPath.on(scratch_bundle.to_json, '$.entry[*].resource').map do |resource|
+      group_section_output(JsonPath.on(scratch_bundle.to_json, '$.entry[*].resource').map do |resource|
         resource_type = JsonPath.on(resource, '$.resourceType').first
         profiles = JsonPath.on(resource, '$.meta.profile')
+        profiles = profiles.sort
         result_message = profiles.empty? ? resource_type : "#{resource_type} (#{profiles.join(', ')})"
         result_message
-      end.join("\n\n")
+      end).join("\n\n")
     end
 
     def validate_bundle(resource, profile_with_version)
