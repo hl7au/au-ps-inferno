@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require 'jsonpath'
 require_relative '../utils/basic_test_class'
+require_relative '../utils/capability_statement_decorator'
 
 module AUPSTestKit
   # AU PS Profiles referenced as supported in CapabilityStatement
@@ -17,16 +17,9 @@ module AUPSTestKit
       info "**#{general_message}**:\n\n#{au_ps_profiles_status_array}"
     end
 
-    def read_profiles
-      JsonPath.on(scratch[:capability_statement].to_json, '$.rest.*.resource.*.profile')
-    end
-
-    def read_supported_profiles
-      JsonPath.on(scratch[:capability_statement].to_json, '$.rest.*.resource.*.supportedProfile')
-    end
-
     def cs_profiles
-      read_profiles + read_supported_profiles
+      cs_resource = CapabilityStatementDecorator.new(scratch[:capability_statement].to_hash)
+      cs_resource.all_profiles
     end
 
     run do
