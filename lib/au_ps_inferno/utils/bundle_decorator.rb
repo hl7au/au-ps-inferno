@@ -14,7 +14,7 @@ class BundleDecorator < FHIR::Bundle
     return "Entry with fullUrl #{entry_full_url} not found in Bundle" if entry_by_full_url.nil?
 
     resource = entry_by_full_url.resource
-    profiles = resource.meta&.profile || []
+    profiles = (resource.meta&.profile || []).sort
     profiles = profiles.length.positive? ? profiles.join(', ') : 'Without Profiles'
 
     "#{resource.resourceType} (#{profiles})"
