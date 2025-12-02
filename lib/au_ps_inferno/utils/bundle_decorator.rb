@@ -53,7 +53,7 @@ class BundleDecorator < FHIR::Bundle
 
     return entry.find { |entr| entr.fullUrl == entry_reference } if is_urn || is_url
 
-    resolve_entry_reference_as_reference(entry_reference) if is_reference
+    return resolve_entry_reference_as_reference(entry_reference) if is_reference
 
     nil
   end
