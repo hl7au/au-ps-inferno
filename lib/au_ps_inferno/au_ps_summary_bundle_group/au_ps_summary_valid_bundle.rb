@@ -13,6 +13,8 @@ module AUPSTestKit
     description 'Generate AU Patient Summary using IPS $summary operation and verify response is valid ' \
       'AU PS Bundle'
 
+    input_order :url, :patient_id, :identifier, :credentials, :header_name, :header_value
+    
     input :url,
           title: 'FHIR Server Base Url',
           optional: true

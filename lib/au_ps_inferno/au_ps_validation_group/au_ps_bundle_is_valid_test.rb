@@ -10,9 +10,7 @@ module AUPSTestKit
     id :au_ps_bundle_is_valid_test
     title 'AU PS Bundle is valid'
     description 'Validates that a Bundle resource conforms to the AU PS Bundle profile ' \
-      '(http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-bundle). The test accepts either a ' \
-      'patient_id to request Patient/{patient_id}/$summary, an identifier to request ' \
-      'Patient/$summary?identifier={identifier}, or a pre-existing Bundle resource to validate directly.'
+      '(http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-bundle). The test accepts a pre-existing Bundle resource to validate directly.'
 
     input :bundle_resource,
           optional: true,

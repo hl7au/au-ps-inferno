@@ -13,13 +13,15 @@ module AUPSTestKit
     description 'Retrieve document Bundle using Bundle read interaction or other HTTP GET request and ' \
       'verify response is valid AU PS Bundle'
 
+    input_order :bundle_url, :url, :bundle_id, :credentials, :header_name, :header_value
+
     input :bundle_id,
           optional: true,
           description: 'To request Bundle/{bundle_id}'
 
     input :bundle_url,
           optional: true,
-          description: 'To request Patient/$summary?identifier={identifier}'
+          description: 'To retrieve document Bundle using HTTP GET request'
 
     input :url,
           title: 'FHIR Server Base Url',
