@@ -11,6 +11,7 @@ class BundleDecorator < FHIR::Bundle
       super(data.to_hash)
     end
   end
+
   def composition_resource
     composition_resource_data = entry.find { |entr| entr.resource.resourceType == 'Composition' }.resource.to_hash
     CompositionDecorator.new(composition_resource_data)
