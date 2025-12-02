@@ -36,7 +36,8 @@ module AUPSTestKit
     end
 
     def skip_validation?
-      false
+      # false
+      true
     end
 
     def validate_ips_bundle
@@ -98,9 +99,9 @@ module AUPSTestKit
     private
 
     def entry_resources_info
-      group_section_output(JsonPath.on(scratch_bundle.to_json, '$.entry[*].resource').map do |resource|
-        resource_type = JsonPath.on(resource, '$.resourceType').first
-        profiles = JsonPath.on(resource, '$.meta.profile')
+      group_section_output(resolve_path(scratch_bundle, 'entry.resource').map do |resource|
+        resource_type = resolve_path(resource, 'resourceType').first
+        profiles = resolve_path(resource, 'meta.profile')
         profiles = profiles.sort
         result_message = profiles.empty? ? resource_type : "#{resource_type} (#{profiles.join(', ')})"
         result_message

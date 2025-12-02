@@ -3,25 +3,25 @@
 # Common constants used in tests
 module Constants
   MANDATORY_MS_ELEMENTS = [
-    { expression: '$.status', label: 'status' },
-    { expression: '$.type', label: 'type' },
-    { expression: '$.subject.reference', label: 'subject.reference' },
-    { expression: '$.date', label: 'date' },
-    { expression: '$.author[0]', label: 'author' },
-    { expression: '$.title', label: 'title' }
+    { expression: 'status', label: 'status' },
+    { expression: 'type', label: 'type' },
+    { expression: 'subject.reference', label: 'subject.reference' },
+    { expression: 'date', label: 'date' },
+    { expression: 'author', label: 'author' },
+    { expression: 'title', label: 'title' }
   ].freeze
 
   OPTIONAL_MS_ELEMENTS = [
-    { expression: '$.text', label: 'text' },
-    { expression: '$.identifier', label: 'identifier' },
-    { expression: '$.attester', label: 'asserter' },
-    { expression: '$.attester.mode', label: 'asserter.mode' },
-    { expression: '$.attester.time', label: 'asserter.time' },
-    { expression: '$.attester.party', label: 'asserter.party' },
-    { expression: '$.custodian', label: 'custodian' },
-    { expression: '$.event.code.coding.code', label: 'event' },
-    { expression: '$.event.code', label: 'event.code' },
-    { expression: '$.event.period', label: 'event.period' }
+    { expression: 'text', label: 'text' },
+    { expression: 'identifier', label: 'identifier' },
+    { expression: 'attester', label: 'attester' },
+    { expression: 'attester.mode', label: 'attester.mode' },
+    { expression: 'attester.time', label: 'attester.time' },
+    { expression: 'attester.party', label: 'attester.party' },
+    { expression: 'custodian', label: 'custodian' },
+    { expression: 'event.code.coding.code', label: 'event' },
+    { expression: 'event.code', label: 'event.code' },
+    { expression: 'event.period', label: 'event.period' }
   ].freeze
 
   MANDATORY_SECTIONS = %w[11450-4 48765-2 10160-0].freeze

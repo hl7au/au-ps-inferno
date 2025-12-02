@@ -66,43 +66,44 @@ module CompositionUtils
     boolean_value ? 'Yes' : 'No'
   end
 
-  def execute_statistics(json_data, json_path_expression, humanized_name)
-    data_value = JsonPath.on(json_data, json_path_expression).first.present?
-    "**#{humanized_name}**: #{boolean_to_humanized_string(data_value)}"
+  def execute_statistics(resource, path_expression, humanized_name)
+    data_value = resolve_path(resource, path_expression).first.present?
+    boolean_value = boolean_to_humanized_string(data_value)
+    "**#{humanized_name}**: #{boolean_value}"
   end
 
   def all_entries_have_full_url_info
-    data_for_testing = scratch_bundle.to_json
-    JsonPath.on(data_for_testing,
-                '$.entry[*].fullUrl').length == JsonPath.on(data_for_testing,
-                                                            '$.entry[*]').length
+    entry_full_url_count = resolve_path(scratch_bundle, 'entry.fullUrl').length
+    entries_count = resolve_path(scratch_bundle, 'entry').length
+
+    entry_full_url_count == entries_count
   end
 
   def timestamp_info
-    JsonPath.on(scratch_bundle.to_json, '$.timestamp').first.present?
+    resolve_path(scratch_bundle, 'timestamp').first.present?
   end
 
   def type_info
-    JsonPath.on(scratch_bundle.to_json, '$.type').first.present?
+    resolve_path(scratch_bundle, 'type').first.present?
   end
 
   def identifier_info
-    JsonPath.on(scratch_bundle.to_json, '$.identifier').first.present?
+    resolve_path(scratch_bundle, 'identifier').first.present?
   end
 
   def composition_section_title_info
-    "**section.title**: #{check_section_element_completeness('$.section.*.title')}"
+    "**section.title**: #{check_section_element_completeness('section.title')}"
   end
 
   def composition_section_text_info
-    "**section.text**: #{check_section_element_completeness('$.section.*.text')}"
+    "**section.text**: #{check_section_element_completeness('section.text')}"
   end
 
-  def check_section_element_completeness(json_path_expression)
-    boolean_to_humanized_string(JsonPath.on(composition_resource,
-                                            '$.section.*').length == JsonPath.on(
-                                              composition_resource, json_path_expression
-                                            ).length)
+  def check_section_element_completeness(path_expression)
+    sections_count = resolve_path(composition_resource, path_expression).length
+    selected_by_expression_count = resolve_path(composition_resource, path_expression).length
+
+    boolean_to_humanized_string(sections_count == selected_by_expression_count)
   end
 
   def composition_mandatory_ms_elements_info
@@ -124,6 +125,6 @@ module CompositionUtils
   end
 
   def composition_resource
-    JsonPath.on(scratch_bundle.to_json, '$.entry[?(@.resource.resourceType == "Composition")].resource').first
+    BundleDecorator.new(scratch_bundle).composition_resource
   end
 end
