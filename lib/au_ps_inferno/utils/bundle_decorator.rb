@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative 'composition_decorator'
+require_relative 'bundle_entry_decorator'
 
 # A decorator for FHIR::Bundle to add convenience methods
 class BundleDecorator < FHIR::Bundle
@@ -13,8 +14,9 @@ class BundleDecorator < FHIR::Bundle
   end
 
   def composition_resource
-    composition_resource_data = entry.find { |entr| entr.resource.resourceType == 'Composition' }.resource.to_hash
-    CompositionDecorator.new(composition_resource_data)
+    return nil if composition_entry.nil?
+
+    CompositionDecorator.new(composition_entry.resource)
   end
 
   def composition_entry
@@ -39,8 +41,8 @@ class BundleDecorator < FHIR::Bundle
       entry_full_url = entr.fullUrl
       next unless entry_full_url.start_with?('http') || entry_full_url.start_with?('https')
 
-      url_without_params = entry_full_url.split('?').first
-      base_url = url_without_params.split(entry_reference).first
+      base_url = BundleEntryDecorator.new(composition_entry).full_url_base
+      next if base_url.nil?
 
       entr.fullUrl == base_url + entry_reference
     end
