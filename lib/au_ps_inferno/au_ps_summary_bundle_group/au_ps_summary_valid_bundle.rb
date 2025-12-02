@@ -14,7 +14,7 @@ module AUPSTestKit
       'AU PS Bundle'
 
     input_order :url, :patient_id, :identifier, :profile, :credentials, :header_name, :header_value
-    
+
     input :url,
           title: 'FHIR Server Base Url',
           optional: true
@@ -59,17 +59,11 @@ module AUPSTestKit
 
     def operation_path
       if patient_id
-        if profile
-          "Patient/#{patient_id}/$summary?profile=#{profile}"
-        else
-          "Patient/#{patient_id}/$summary"
-        end
+        profile ? "Patient/#{patient_id}/$summary?profile=#{profile}" : "Patient/#{patient_id}/$summary"
+      elsif profile
+        "Patient/$summary?identifier=#{identifier}&profile=#{profile}"
       else
-        if profile
-          "Patient/$summary?identifier=#{identifier}&profile=#{profile}"
-        else
-          "Patient/$summary?identifier=#{identifier}"
-        end
+        "Patient/$summary?identifier=#{identifier}"
       end
     end
 
