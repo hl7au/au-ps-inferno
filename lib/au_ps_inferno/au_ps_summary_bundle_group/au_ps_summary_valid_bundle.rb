@@ -13,7 +13,7 @@ module AUPSTestKit
     description 'Generate AU Patient Summary using IPS $summary operation and verify response is valid ' \
       'AU PS Bundle'
 
-    input_order :url, :patient_id, :identifier, :credentials, :header_name, :header_value
+    input_order :url, :patient_id, :identifier, :profile, :credentials, :header_name, :header_value
     
     input :url,
           title: 'FHIR Server Base Url',
@@ -40,6 +40,11 @@ module AUPSTestKit
           optional: true,
           description: 'To request Patient/$summary?identifier={identifier}'
 
+    input :profile,
+          optional: true,
+          default: 'http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-bundle',
+          description: 'To specify profile for the patient summary'
+
     fhir_client do
       url :url
       oauth_credentials :credentials
@@ -54,9 +59,17 @@ module AUPSTestKit
 
     def operation_path
       if patient_id
-        "Patient/#{patient_id}/$summary"
+        if profile
+          "Patient/#{patient_id}/$summary?profile=#{profile}"
+        else
+          "Patient/#{patient_id}/$summary"
+        end
       else
-        "Patient/$summary?identifier=#{identifier}"
+        if profile
+          "Patient/$summary?identifier=#{identifier}&profile=#{profile}"
+        else
+          "Patient/$summary?identifier=#{identifier}"
+        end
       end
     end
 
