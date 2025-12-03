@@ -13,7 +13,7 @@ module AUPSTestKit
     description 'This suite includes $summary operation tests.'
 
     fhir_resource_validator do
-      igs 'hl7.fhir.au.ps#0.4.0-draft'
+      igs 'hl7.fhir.au.ps#0.5.0-preview'
 
       cli_context do
         txServer ENV.fetch('TX_SERVER_URL', 'https://tx.dev.hl7.org.au/fhir')

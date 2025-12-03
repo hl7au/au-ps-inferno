@@ -4,7 +4,7 @@
 This is an [Inferno](https://inferno-framework.github.io/inferno-core/) test kit for the [AU PS Implementation Guide](http://hl7.org.au/fhir/ps/)
 
 **Currently available versions:**
-1. [0.4.0-draft](https://hl7.org.au/fhir/ps/0.4.0-draft)
+1. [0.5.0-preview](https://hl7.org.au/fhir/ps/0.5.0-preview)
 
 ## Use Inferno as a service
 You can test your FHIR server using this link [https://inferno.hl7.org.au/test-kits/au-ps](https://inferno.hl7.org.au/test-kits/au-ps/)

@@ -43,7 +43,7 @@ module AUPSTestKit
       check_bundle_exists_in_scratch
       validate_bundle(
         scratch_bundle,
-        'http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-bundle|0.4.0-draft'
+        'http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-bundle|0.5.0-preview'
       )
     end
 
