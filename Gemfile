@@ -10,6 +10,5 @@ group :development, :test do
   gem 'debug'
 end
 
-gem 'jsonpath', '~> 0.5.8'
 gem 'pg', '~> 1.5'
 gem 'rubocop', '~> 1.71.2'

@@ -172,8 +172,6 @@ GEM
       rdoc (>= 4.0.0)
       reline (>= 0.4.2)
     json (2.10.1)
-    jsonpath (0.5.8)
-      multi_json
     jwt (2.8.1)
       base64
     kramdown (2.5.1)
@@ -343,7 +341,6 @@ DEPENDENCIES
   database_cleaner-sequel (~> 1.8)
   debug
   factory_bot (~> 6.1)
-  jsonpath (~> 0.5.8)
   pg (~> 1.5)
   rspec (~> 3.10)
   rubocop (~> 1.71.2)
