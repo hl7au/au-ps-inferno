@@ -2,6 +2,13 @@
 
 # Helpers for validating FHIR resources
 module ValidatorHelpers
+  VALIDATOR_KEY = 'validator_version'
+  WRAPPER_KEY = 'validator_wrapper_version'
+  RESPONSE_VALIDATOR_KEY = 'validatorVersion'
+  RESPONSE_WRAPPER_KEY = 'validatorWrapperVersion'
+  RESPONSE_KEYS = [RESPONSE_VALIDATOR_KEY, RESPONSE_WRAPPER_KEY].freeze
+  DEFAULT_VALUE = 'Unknown'
+
   def show_validator_version
     versions = read_or_create_validator_version
     if versions.nil?
@@ -9,8 +16,8 @@ module ValidatorHelpers
       return
     end
 
-    validator_version = versions['validator_version'] || 'Unknown'
-    wrapper_version = versions['validator_wrapper_version'] || 'Unknown'
+    validator_version = versions[VALIDATOR_KEY] || DEFAULT_VALUE
+    wrapper_version = versions[WRAPPER_KEY] || DEFAULT_VALUE
 
     info "Using validator version #{validator_version} and validator wrapper version #{wrapper_version}"
   end
@@ -28,7 +35,7 @@ module ValidatorHelpers
   end
 
   def response_valid?(version_data)
-    %w[validatorVersion validatorWrapperVersion].all? { |key| version_data.keys.include?(key) }
+    RESPONSE_KEYS.all? { |key| version_data.keys.include?(key) }
   end
 
   def fetch_and_cache_versions
@@ -41,21 +48,21 @@ module ValidatorHelpers
       return warning "Invalid response from validator at #{validator_url}: #{version_data}"
     end
 
-    cache_versions(version_data['validatorVersion'], version_data['validatorWrapperVersion'])
-    build_version_hash(version_data['validatorVersion'], version_data['validatorWrapperVersion'])
+    cache_versions(version_data[RESPONSE_VALIDATOR_KEY], version_data[RESPONSE_WRAPPER_KEY])
+    build_version_hash(version_data[RESPONSE_VALIDATOR_KEY], version_data[RESPONSE_WRAPPER_KEY])
   end
 
   def cache_versions(validator_version, validator_wrapper_version)
-    scratch[:validator_version] = validator_version
-    scratch[:validator_wrapper_version] = validator_wrapper_version
+    scratch[VALIDATOR_KEY.to_sym] = validator_version
+    scratch[WRAPPER_KEY.to_sym] = validator_wrapper_version
   end
 
   def version_cached?
-    scratch[:validator_version] && scratch[:validator_wrapper_version]
+    scratch[VALIDATOR_KEY.to_sym] && scratch[WRAPPER_KEY.to_sym]
   end
 
   def cached_versions
-    build_version_hash(scratch[:validator_version], scratch[:validator_wrapper_version])
+    build_version_hash(scratch[VALIDATOR_KEY.to_sym], scratch[WRAPPER_KEY.to_sym])
   end
 
   def fetch_validator_version(url)
