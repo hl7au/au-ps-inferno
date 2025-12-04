@@ -3,12 +3,14 @@
 require_relative 'constants'
 require_relative 'bundle_decorator'
 require_relative 'composition_utils'
+require_relative 'validator_helpers'
 
 module AUPSTestKit
   # A base class for all tests to decrease code duplication
   class BasicTest < Inferno::Test
     extend Constants
     include CompositionUtils
+    include ValidatorHelpers
 
     def check_other_sections
       check_bundle_exists_in_scratch
@@ -109,6 +111,8 @@ module AUPSTestKit
 
     def validate_bundle(resource, profile_with_version)
       return if skip_validation?
+
+      show_validator_version
 
       resource_is_valid?(resource: resource, profile_url: profile_with_version)
       errors_found = messages.any? { |message| message[:type] == 'error' }
