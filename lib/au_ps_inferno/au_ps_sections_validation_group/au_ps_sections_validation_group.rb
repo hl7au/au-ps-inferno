@@ -9,6 +9,7 @@ require_relative './au_ps_sections_procedures_validation'
 require_relative './au_ps_sections_medical_devices_validation'
 require_relative './au_ps_sections_advance_directives_validation'
 require_relative './au_ps_sections_alerts_validation'
+require_relative './au_ps_sections_functional_status_validation'
 require_relative '../utils/constants'
 
 module AUPSTestKit
@@ -30,5 +31,6 @@ module AUPSTestKit
     test from: :au_ps_sections_medical_devices_validation
     test from: :au_ps_sections_advance_directives_validation
     test from: :au_ps_sections_alerts_validation
+    test from: :au_ps_sections_functional_status_validation
   end
 end
