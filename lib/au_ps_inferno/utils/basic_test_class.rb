@@ -97,6 +97,57 @@ module AUPSTestKit
                          :docref_op_defined)
     end
 
+    def validate_section_resources(section_name)
+      assert bundle_resource.present?, 'Bundle resource not found'
+      target_resources_hash = Constants::SECTIONS_NAMES_MAPPING[section_name]['resources']
+      target_resource_types = target_resources_hash.keys.map do |resource_type_key|
+        resource_type_key.to_s.split('|').first
+      end
+      is_multiprofile = target_resource_types.uniq.select do |resource_type|
+        target_resource_types.count(resource_type) > 1
+      end.length > 0
+
+      bundle_resource = BundleDecorator.new(scratch_bundle)
+      composition_r = bundle_resource.composition_resource
+      assert composition_r.present?, 'Composition resource not found'
+      info "section code and name: #{section_name} & #{Constants::SECTIONS_NAMES_MAPPING[section_name]['code']}"
+      target_section = composition_r.section_by_code(Constants::SECTIONS_NAMES_MAPPING[section_name]['code'])
+      info "target_section: #{target_section.code_display_str}"
+      assert target_section.present?, 'Section not found'
+      section_references = target_section.entry_references
+      assert section_references.present?, 'Section references not found'
+      section_references.each do |ref|
+        resource = bundle_resource.resource_by_reference(ref)
+        assert resource.present?, "Resource not found for reference #{ref}"
+        assert target_resource_types.uniq.include?(resource.resourceType), "Resource #{resource.resourceType} is not expected for section #{target_section.code_display_str}"
+
+        if target_resources_hash.keys.length == 0
+          resource_is_valid?(resource: resource)
+        else
+          target_resources_hash.keys.each do |resource_type_key|
+            resource_is_okay = true
+            resource_type_info = target_resources_hash[resource_type_key]
+            resource_type_key_splitted = resource_type_key.to_s.split('|')
+            resource_type = resource_type_key_splitted.first
+            next unless resource.resourceType == resource_type
+
+            requirements = resource_type_info.keys.include?('requirements') ? resource_type_info['requirements'] : []
+            if requirements.any?
+              resource_is_okay = requirements.map do |req|
+                find_a_value_at(resource, req['path']) == req['value']
+              end.all?
+            end
+
+            if resource_is_okay
+              profile_url = resource_type_key_splitted.last if resource_type_key_splitted.length == 2
+              resource_is_valid?(resource: resource, profile_url: profile_url)
+            end
+            break unless is_multiprofile
+          end
+        end
+      end
+    end
+
     private
 
     def entry_resources_info
