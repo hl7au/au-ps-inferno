@@ -110,9 +110,7 @@ module AUPSTestKit
       bundle_resource = BundleDecorator.new(scratch_bundle)
       composition_r = bundle_resource.composition_resource
       assert composition_r.present?, 'Composition resource not found'
-      info "section code and name: #{section_name} & #{Constants::SECTIONS_NAMES_MAPPING[section_name]['code']}"
       target_section = composition_r.section_by_code(Constants::SECTIONS_NAMES_MAPPING[section_name]['code'])
-      info "target_section: #{target_section.code_display_str}"
       assert target_section.present?, 'Section not found'
       section_references = target_section.entry_references
       assert section_references.present?, 'Section references not found'
