@@ -15,6 +15,7 @@ require_relative './au_ps_sections_pregnancy_validation'
 require_relative './au_ps_sections_patient_story_validation'
 require_relative './au_ps_sections_plan_of_care_validation'
 require_relative './au_ps_sections_social_history_validation'
+require_relative './au_ps_sections_vital_signs_validation'
 require_relative '../utils/constants'
 
 module AUPSTestKit
@@ -42,5 +43,6 @@ module AUPSTestKit
     test from: :au_ps_sections_patient_story_validation
     test from: :au_ps_sections_plan_of_care_validation
     test from: :au_ps_sections_social_history_validation
+    test from: :au_ps_sections_vital_signs_validation
   end
 end
