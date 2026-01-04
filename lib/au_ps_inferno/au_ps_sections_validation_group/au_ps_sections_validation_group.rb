@@ -12,6 +12,7 @@ require_relative './au_ps_sections_alerts_validation'
 require_relative './au_ps_sections_functional_status_validation'
 require_relative './au_ps_sections_past_problems_validation'
 require_relative './au_ps_sections_pregnancy_validation'
+require_relative './au_ps_sections_patient_story_validation'
 require_relative '../utils/constants'
 
 module AUPSTestKit
@@ -36,5 +37,6 @@ module AUPSTestKit
     test from: :au_ps_sections_functional_status_validation
     test from: :au_ps_sections_past_problems_validation
     test from: :au_ps_sections_pregnancy_validation
+    test from: :au_ps_sections_patient_story_validation
   end
 end
