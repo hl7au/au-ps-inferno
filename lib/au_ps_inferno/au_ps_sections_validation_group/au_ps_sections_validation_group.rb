@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 require_relative './au_ps_sections_problems_validation'
+require_relative './au_ps_sections_allergies_validation'
+require_relative './au_ps_sections_medications_validation'
+require_relative './au_ps_sections_immunizations_validation'
 require_relative '../utils/constants'
 
 module AUPSTestKit
@@ -14,5 +17,8 @@ module AUPSTestKit
     run_as_group
 
     test from: :au_ps_sections_problems_validation
+    test from: :au_ps_sections_allergies_validation
+    test from: :au_ps_sections_medications_validation
+    test from: :au_ps_sections_immunizations_validation
   end
 end
