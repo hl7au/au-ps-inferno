@@ -121,6 +121,8 @@ module AUPSTestKit
 
         if target_resources_hash.keys.length == 0
           resource_is_valid?(resource: resource)
+          errors_found = messages.any? { |message| message[:type] == 'error' }
+          assert !errors_found, "Resource does not conform to the resource #{resource.resourceType}"
         else
           target_resources_hash.keys.each do |resource_type_key|
             resource_is_okay = true
@@ -139,6 +141,8 @@ module AUPSTestKit
             if resource_is_okay
               profile_url = resource_type_key_splitted.last if resource_type_key_splitted.length == 2
               resource_is_valid?(resource: resource, profile_url: profile_url)
+              errors_found = messages.any? { |message| message[:type] == 'error' }
+              assert !errors_found, "Resource does not conform to the profile #{profile_url}"
             end
             break unless is_multiprofile
           end
