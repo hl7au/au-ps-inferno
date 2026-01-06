@@ -105,8 +105,10 @@ module AUPSTestKit
       end
       is_multiprofile = target_resource_types.uniq.select do |resource_type|
         target_resource_types.count(resource_type) > 1
-      end.length > 0
+      end.length.positive?
 
+      section_errors = []
+      section_warnings = []
       bundle_resource = BundleDecorator.new(scratch_bundle)
       composition_r = bundle_resource.composition_resource
       assert composition_r.present?, 'Composition resource not found'
@@ -114,17 +116,20 @@ module AUPSTestKit
       assert target_section.present?, 'Section not found'
       section_references = target_section.entry_references
       assert section_references.present?, 'Section references not found'
-      section_references.each do |ref|
+      section_references.each_with_index do |ref, idx|
+        errors = []
+        warnings = []
         resource = bundle_resource.resource_by_reference(ref)
         assert resource.present?, "Resource not found for reference #{ref}"
-        assert target_resource_types.uniq.include?(resource.resourceType), "Resource #{resource.resourceType} is not expected for section #{target_section.code_display_str}"
+        assert target_resource_types.uniq.include?(resource.resourceType),
+               "Resource #{resource.resourceType} is not expected for section #{target_section.code_display_str}"
 
-        if target_resources_hash.keys.length == 0
+        if target_resources_hash.keys.empty?
           resource_is_valid?(resource: resource)
           errors_found = messages.any? { |message| message[:type] == 'error' }
           assert !errors_found, "Resource does not conform to the resource #{resource.resourceType}"
         else
-          target_resources_hash.keys.each do |resource_type_key|
+          target_resources_hash.each_key do |resource_type_key|
             resource_is_okay = true
             resource_type_info = target_resources_hash[resource_type_key]
             resource_type_key_splitted = resource_type_key.to_s.split('|')
@@ -141,16 +146,37 @@ module AUPSTestKit
             if resource_is_okay
               profile_url = resource_type_key_splitted.last if resource_type_key_splitted.length == 2
               resource_is_valid?(resource: resource, profile_url: profile_url)
-              errors_found = messages.any? { |message| message[:type] == 'error' }
-              assert !errors_found, "Resource does not conform to the profile #{profile_url}"
+              messages.select { |message| message[:type] == 'error' }.each do |error_message|
+                errors << { resource_type: resource_type, idx: idx, message: error_message, profile: profile_url }
+              end
+              messages.select { |message| message[:type] == 'warning' }.each do |warning_message|
+                warnings << { resource_type: resource_type, idx: idx, message: warning_message, profile: profile_url }
+              end
             end
             break unless is_multiprofile
           end
         end
+        errors.each do |error_message|
+          section_errors << error_message
+        end
+        warnings.each do |warning_message|
+          section_warnings << warning_message
+        end
       end
+      info "Errors: #{section_errors}"
+      info "Warnings: #{section_warnings}"
+      assert section_errors.none?, 'Some resources are not valid according to the section requirements'
     end
 
     private
+
+    def collect_messages(type)
+      messages.select { |message| message[:type] == type }
+    end
+
+    def keep_messages(messages_array, type)
+      messages_array.push(*collect_messages(type)) if collect_messages(type).any?
+    end
 
     def entry_resources_info
       group_section_output(resolve_path(scratch_bundle, 'entry.resource').map do |resource|
