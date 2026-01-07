@@ -151,16 +151,16 @@ module Constants
           'requirements' => [
             {
               'path' => 'code.coding.code',
-              'value' => [
-                '11636-8',
-                '11637-6',
-                '11638-4',
-                '11639-2',
-                '11640-0',
-                '11612-9',
-                '11613-7',
-                '11614-5',
-                '33065-4'
+              'value' => %w[
+                11636-8
+                11637-6
+                11638-4
+                11639-2
+                11640-0
+                11612-9
+                11613-7
+                11614-5
+                33065-4
               ]
             }
           ]
@@ -177,7 +177,7 @@ module Constants
       'display' => 'Plan of care note',
       'resources' => {
         'CarePlan' => {},
-        'ImmunizationRecommendation' => {},
+        'ImmunizationRecommendation' => {}
       }
     },
     'SOCIAL_HISTORY_NOTE' => {
