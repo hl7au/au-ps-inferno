@@ -73,11 +73,10 @@ module SectionTestModule
            "Resource #{resource.resourceType} is not expected for section #{target_section.code_display_str}"
 
     if target_resources_hash.keys.empty?
-      validation_response = validate_without_runnable_messages(resource, nil)
-      messages_array = validation_response[:message_hashes]
+      messages_array = validate_without_runnable_messages(resource, nil)
       if messages_array.any?
-        collect_messages_and_keep(messages_array, 'error', errors, resource, idx, nil)
-        collect_messages_and_keep(messages_array, 'warning', warnings, resource, idx, nil)
+        errors.concat(collect_messages_and_keep(messages_array, 'error', resource, idx, nil))
+        warnings.concat(collect_messages_and_keep(messages_array, 'warning', resource, idx, nil))
       end
     else
       target_resources_hash.each_key do |resource_type_key|
@@ -97,13 +96,11 @@ module SectionTestModule
 
         if resource_is_okay
           profile_url = resource_type_key_splitted.last if resource_type_key_splitted.length == 2
-          validation_response = validate_without_runnable_messages(resource, profile_url)
-          info validation_response.to_s
-          next unless validation_response[:message_hashes].any?
+          messages_array = validate_without_runnable_messages(resource, profile_url)
+          next unless messages_array.any?
 
-          collect_messages_and_keep(validation_response[:message_hashes], 'error', errors, resource, idx, profile_url)
-          collect_messages_and_keep(validation_response[:message_hashes], 'warning', warnings, resource, idx,
-                                    profile_url)
+          errors.concat(collect_messages_and_keep(messages_array, 'error', resource, idx, profile_url))
+          warnings.concat(collect_messages_and_keep(messages_array, 'warning', resource, idx, profile_url))
         end
         break unless is_multiprofile
       end
@@ -112,18 +109,39 @@ module SectionTestModule
   end
 
   def build_message_hash(resource, idx, profile_url, message)
-    { id: resource.id ? "#{resource.resourceType}/#{resource.id}[#{idx}]" : "#{resource.resourceType}[#{idx}]",
-      message: message[:message], profile: profile_url }
+    id = resource.id ? "#{resource.resourceType}/#{resource.id}[#{idx}]" : "#{resource.resourceType}[#{idx}]"
+    { id: id, message: message[:message], profile: profile_url }
   end
 
-  def collect_messages_and_keep(messages_array, type, target_array, resource, idx, profile_url)
+  def collect_messages_and_keep(messages_array, type, resource, idx, profile_url)
     filtered_messages = collect_messages(messages_array, type)
     filtered_messages.map { |message| build_message_hash(resource, idx, profile_url, message) }
-    target_array.concat(filtered_messages)
   end
 
   def validate_without_runnable_messages(resource, profile_url)
-    resource_is_valid?(resource: resource, profile_url: profile_url, add_messages_to_runnable: false)
+    custom_resource_is_valid?(resource: resource, profile_url: profile_url)
+  end
+
+  def custom_resource_is_valid?(resource:, profile_url: nil)
+    initial_message_count = messages.length
+
+    resource_is_valid?(resource: resource, profile_url: profile_url)
+
+    all_messages = messages
+    new_messages = if all_messages.length > initial_message_count
+                     all_messages[initial_message_count..]
+                   else
+                     []
+                   end
+
+    messages.slice!(initial_message_count..-1) if messages.is_a?(Array) && messages.length > initial_message_count
+
+    new_messages.map do |msg|
+      {
+        type: msg[:type] || msg['type'] || 'error',
+        message: msg[:message] || msg['message'] || msg.to_s
+      }
+    end
   end
 
   def collect_messages(messages_array, type)
@@ -135,7 +153,8 @@ module SectionTestModule
     messages_ids.map do |message_id|
       filtered_messages = messages_array.select do |message|
         message[:id] == message_id
-      end.map { |message| message[:message] }.uniq
+      end
+      filtered_messages.map { |message| message[:message] }.uniq
       "## #{message_id}:\n\n #{filtered_messages.map { |message| message }.join('\n\n')}"
     end.join("\n\n")
   end
