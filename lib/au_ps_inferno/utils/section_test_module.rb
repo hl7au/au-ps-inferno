@@ -12,15 +12,31 @@ module SectionTestModule
     target_section = get_target_section(section_name, bundle_resource_decorator)
     section_references = get_section_references(target_section)
 
-    section_errors, section_warnings = validate_all_section_references(
+    validation_messages = validate_all_section_references(
       section_references, bundle_resource_decorator, target_resources_hash,
       target_resource_types, is_multiprofile, target_section
     )
 
-    report_validation_results(section_errors, section_warnings)
+    info "Validation messages: #{validation_messages}"
+
+    report_validation_results(filter_error_messages(validation_messages), filter_warning_messages(validation_messages))
   end
 
   private
+
+  def messages_by_type(validation_messages, msg_type)
+    validation_messages.filter do |validation_message|
+      validation_message[:type] == msg_type
+    end
+  end
+
+  def filter_error_messages(validation_messages)
+    messages_by_type(validation_messages, 'error')
+  end
+
+  def filter_warning_messages(validation_messages)
+    messages_by_type(validation_messages, 'warning')
+  end
 
   def extract_target_resource_types(target_resources_hash)
     target_resources_hash.keys.map do |resource_type_key|
@@ -50,17 +66,12 @@ module SectionTestModule
 
   def validate_all_section_references(section_references, bundle_resource, target_resources_hash,
                                       target_resource_types, is_multiprofile, target_section)
-    section_errors = []
-    section_warnings = []
-    section_references.each_with_index do |ref, idx|
-      errors, warnings = validate_section_reference(
-        ref, idx, bundle_resource, target_resources_hash, target_resource_types,
-        is_multiprofile, target_section
-      )
-      section_errors.concat(errors)
-      section_warnings.concat(warnings)
-    end
-    [section_errors, section_warnings]
+    section_references.map.with_index do |ref, idx|
+      validate_section_reference(ref, idx, bundle_resource, target_resources_hash, target_resource_types,
+                                 is_multiprofile, target_section).then do |errors, warnings|
+        [errors, warnings]
+      end
+    end.flatten
   end
 
   def validate_section_reference(ref, idx, bundle_resource, target_resources_hash, target_resource_types,
@@ -110,7 +121,7 @@ module SectionTestModule
 
   def build_message_hash(resource, idx, profile_url, message)
     id = resource.id ? "#{resource.resourceType}/#{resource.id}[#{idx}]" : "#{resource.resourceType}[#{idx}]"
-    { id: id, message: message[:message], profile: profile_url }
+    { id: id, message: message[:message], type: message[:type], profile: profile_url }
   end
 
   def collect_messages_and_keep(messages_array, type, resource, idx, profile_url)
@@ -154,7 +165,7 @@ module SectionTestModule
       filtered_messages = messages_array.select do |message|
         message[:id] == message_id
       end
-      filtered_messages.map { |message| message[:message] }.uniq
+      filtered_messages = filtered_messages.map { |message| message[:message] }.uniq
       "## #{message_id}:\n\n #{filtered_messages.map { |message| message }.join('\n\n')}"
     end.join("\n\n")
   end
