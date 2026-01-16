@@ -1,10 +1,12 @@
 # frozen_string_literal: true
 
-require_relative '../utils/section_test_class'
+require_relative '../utils/basic_test_class'
+require_relative '../utils/section_test_module'
 
 module AUPSTestKit
   # The optional sections populated in the Composition resource.
-  class AUPSSectionsPlanOfCareValidation < SectionTest
+  class AUPSSectionsPlanOfCareValidation < BasicTest
+    include SectionTestModule
     title 'Validate PLAN OF CARE NOTE Section References and Resources'
     description 'Validates that the PLAN OF CARE NOTE section in the Composition resource contains valid references that resolve to expected resource types in the bundle, and that each referenced resource conforms to its specified FHIR profile(s).'
     id :au_ps_sections_plan_of_care_validation
