@@ -17,8 +17,6 @@ module SectionTestModule
       target_resource_types, is_multiprofile, target_section
     )
 
-    info "Validation messages: #{validation_messages}"
-
     report_validation_results(filter_error_messages(validation_messages), filter_warning_messages(validation_messages))
   end
 
