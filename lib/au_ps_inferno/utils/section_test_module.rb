@@ -123,8 +123,7 @@ module SectionTestModule
   end
 
   def collect_messages_and_keep(messages_array, type, resource, idx, profile_url)
-    filtered_messages = collect_messages(messages_array, type)
-    filtered_messages.map { |message| build_message_hash(resource, idx, profile_url, message) }
+    collect_messages(messages_array, type).map { |message| build_message_hash(resource, idx, profile_url, message) }
   end
 
   def validate_without_runnable_messages(resource, profile_url)
