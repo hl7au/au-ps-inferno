@@ -26,7 +26,6 @@ module AUPSTestKit
     title 'AU PS Sections Validation'
     description 'Verify that an AU PS Sections are valid.'
     id :au_ps_sections_validation_group
-    run_as_group
 
     test from: :au_ps_sections_problems_validation
     test from: :au_ps_sections_allergies_validation
