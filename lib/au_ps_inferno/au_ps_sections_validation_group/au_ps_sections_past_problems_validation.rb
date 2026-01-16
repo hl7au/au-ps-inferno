@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-require_relative '../utils/basic_test_class'
+require_relative '../utils/section_test_class'
 
 module AUPSTestKit
   # The optional sections populated in the Composition resource.
-  class AUPSSectionsPastProblemsValidation < BasicTest
+  class AUPSSectionsPastProblemsValidation < SectionTest
     title 'Validate HISTORY OF PAST ILLNESS NOTE Section References and Resources'
     description 'Validates that the HISTORY OF PAST ILLNESS NOTE section in the Composition resource contains valid references that resolve to expected resource types in the bundle, and that each referenced resource conforms to its specified FHIR profile(s).'
     id :au_ps_sections_past_problems_validation
