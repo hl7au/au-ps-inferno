@@ -55,17 +55,24 @@ module SectionTestModule
     warnings = []
     resource = section_test_entity.get_resource_by_reference(ref)
     assert resource.present?, "Resource not found for reference #{ref}"
-    assert section_test_entity.resource_type_is_expected?(resource.resourceType),
-           "Resource #{resource.resourceType} is not expected for section #{section_test_entity.name}"
+    resource_is_expected?(section_test_entity, resource)
 
     messages = { errors: errors, warnings: warnings }
+    conditional_validation(resource, idx, messages, section_test_entity)
+    [errors, warnings]
+  end
+
+  def conditional_validation(resource, idx, messages, section_test_entity)
     if section_test_entity.target_resources_hash.keys.empty?
       add_validation_messages(resource, idx, nil, messages)
     else
-      validate_with_resource_hash(resource: resource, idx: idx, messages: messages,
-                                  section_test_entity: section_test_entity)
+      validate_with_resource_hash(resource, idx, messages, section_test_entity)
     end
-    [errors, warnings]
+  end
+
+  def resource_is_expected?(section_test_entity, resource)
+    assert section_test_entity.resource_type_is_expected?(resource.resourceType),
+           "Resource #{resource.resourceType} is not expected for section #{section_test_entity.humanized_name}"
   end
 
   def parse_resource_type_key(resource_type_key)
@@ -84,7 +91,7 @@ module SectionTestModule
     messages[:warnings].concat(collect_messages_and_keep(messages_array, 'warning', resource, idx, profile_url))
   end
 
-  def validate_with_resource_hash(resource:, idx:, messages:, section_test_entity:)
+  def validate_with_resource_hash(resource, idx, messages, section_test_entity)
     section_test_entity.target_resources_hash.each_key do |resource_type_key|
       parsed_key = parse_resource_type_key(resource_type_key)
       next unless resource.resourceType == parsed_key[:resource_type]
