@@ -1,27 +1,16 @@
 # frozen_string_literal: true
 
+require_relative 'section_test_class'
+
 # A base class for all tests that validate sections of the AU PS Bundle
 module SectionTestModule
   def validate_section_resources(section_name)
-    assert bundle_resource.present?, 'Bundle resource not found'
-    target_resources_hash = Constants::SECTIONS_NAMES_MAPPING[section_name]['resources']
-    target_resource_types = extract_target_resource_types(target_resources_hash)
+    assert scratch_bundle.present?, 'Bundle resource not found'
+    section_test_entity = SectionTestClass.new(Constants::SECTIONS_NAMES_MAPPING[section_name], scratch_bundle)
+    assert section_test_entity.data.present?, 'Section data not found'
+    assert section_test_entity.references.present?, 'Section entity references not found'
 
-    bundle_resource_decorator = BundleDecorator.new(scratch_bundle)
-    target_section = get_target_section(section_name, bundle_resource_decorator)
-
-    validation_context = {
-      target_resources_hash: target_resources_hash,
-      target_resource_types: target_resource_types,
-      is_multiprofile: check_multiprofile?(target_resource_types)
-    }
-    validation_messages = validate_all_section_references(
-      get_section_references(target_section),
-      bundle_resource_decorator,
-      validation_context,
-      target_section
-    )
-
+    validation_messages = validate_all_section_references(section_test_entity)
     report_validation_results(filter_error_messages(validation_messages), filter_warning_messages(validation_messages))
   end
 
@@ -41,43 +30,9 @@ module SectionTestModule
     messages_by_type(validation_messages, 'warning')
   end
 
-  def extract_target_resource_types(target_resources_hash)
-    target_resources_hash.keys.map do |resource_type_key|
-      resource_type_key.to_s.split('|').first
-    end
-  end
-
-  def check_multiprofile?(target_resource_types)
-    target_resource_types.uniq.select do |resource_type|
-      target_resource_types.count(resource_type) > 1
-    end.length.positive?
-  end
-
-  def get_target_section(section_name, bundle_resource_decorator)
-    composition_r = bundle_resource_decorator.composition_resource
-    assert composition_r.present?, 'Composition resource not found'
-    target_section = composition_r.section_by_code(Constants::SECTIONS_NAMES_MAPPING[section_name]['code'])
-    assert target_section.present?, 'Section not found'
-    target_section
-  end
-
-  def get_section_references(target_section)
-    section_references = target_section.entry_references
-    assert section_references.present?, 'Section references not found'
-    section_references
-  end
-
-  def validate_all_section_references(section_references, bundle_resource, validation_context, target_section)
-    section_references.map.with_index do |ref, idx|
-      validate_section_reference(
-        ref,
-        idx,
-        bundle_resource,
-        validation_context[:target_resources_hash],
-        validation_context[:target_resource_types],
-        validation_context[:is_multiprofile],
-        target_section
-      ).then do |errors, warnings|
+  def validate_all_section_references(section_test_entity)
+    section_test_entity.references.map.with_index do |ref, idx|
+      validate_section_reference(ref, idx, section_test_entity).then do |errors, warnings|
         [errors, warnings]
       end
     end.flatten
@@ -95,26 +50,20 @@ module SectionTestModule
     end.all?
   end
 
-  def validate_section_reference(ref, idx, bundle_resource, target_resources_hash, target_resource_types,
-                                 is_multiprofile, target_section)
+  def validate_section_reference(ref, idx, section_test_entity)
     errors = []
     warnings = []
-    resource = bundle_resource.resource_by_reference(ref)
+    resource = section_test_entity.get_resource_by_reference(ref)
     assert resource.present?, "Resource not found for reference #{ref}"
-    assert target_resource_types.uniq.include?(resource.resourceType),
-           "Resource #{resource.resourceType} is not expected for section #{target_section.code_display_str}"
+    assert section_test_entity.resource_type_is_expected?(resource.resourceType),
+           "Resource #{resource.resourceType} is not expected for section #{section_test_entity.name}"
 
     messages = { errors: errors, warnings: warnings }
-    if target_resources_hash.keys.empty?
+    if section_test_entity.target_resources_hash.keys.empty?
       add_validation_messages(resource, idx, nil, messages)
     else
-      validate_with_resource_hash(
-        resource: resource,
-        idx: idx,
-        target_resources_hash: target_resources_hash,
-        is_multiprofile: is_multiprofile,
-        messages: messages
-      )
+      validate_with_resource_hash(resource: resource, idx: idx, messages: messages,
+                                  section_test_entity: section_test_entity)
     end
     [errors, warnings]
   end
@@ -135,18 +84,18 @@ module SectionTestModule
     messages[:warnings].concat(collect_messages_and_keep(messages_array, 'warning', resource, idx, profile_url))
   end
 
-  def validate_with_resource_hash(resource:, idx:, target_resources_hash:, is_multiprofile:, messages:)
-    target_resources_hash.each_key do |resource_type_key|
+  def validate_with_resource_hash(resource:, idx:, messages:, section_test_entity:)
+    section_test_entity.target_resources_hash.each_key do |resource_type_key|
       parsed_key = parse_resource_type_key(resource_type_key)
       next unless resource.resourceType == parsed_key[:resource_type]
 
-      resource_type_info = target_resources_hash[resource_type_key]
+      resource_type_info = section_test_entity.target_resources_hash[resource_type_key]
       requirements = resource_type_info.key?('requirements') ? resource_type_info['requirements'] : []
 
       next unless could_be_validated?(requirements, resource)
 
       add_validation_messages(resource, idx, parsed_key[:profile_url], messages)
-      break unless is_multiprofile
+      break unless section_test_entity.is_multiprofile
     end
   end
 
