@@ -6,15 +6,13 @@ module SectionTestModule
     assert bundle_resource.present?, 'Bundle resource not found'
     target_resources_hash = Constants::SECTIONS_NAMES_MAPPING[section_name]['resources']
     target_resource_types = extract_target_resource_types(target_resources_hash)
-    is_multiprofile = check_multiprofile?(target_resource_types)
 
     bundle_resource_decorator = BundleDecorator.new(scratch_bundle)
     target_section = get_target_section(section_name, bundle_resource_decorator)
-    section_references = get_section_references(target_section)
 
     validation_messages = validate_all_section_references(
-      section_references, bundle_resource_decorator, target_resources_hash,
-      target_resource_types, is_multiprofile, target_section
+      get_section_references(target_section), bundle_resource_decorator, target_resources_hash,
+      target_resource_types, check_multiprofile?(target_resource_types), target_section
     )
 
     report_validation_results(filter_error_messages(validation_messages), filter_warning_messages(validation_messages))
@@ -72,6 +70,18 @@ module SectionTestModule
     end.flatten
   end
 
+  def could_be_validated?(requirements, resource)
+    return true if requirements.empty?
+
+    requirements.map do |req|
+      if req['value'].instance_of?(Array)
+        req['value'].include?(find_a_value_at(resource, req['path']))
+      else
+        find_a_value_at(resource, req['path']) == req['value']
+      end
+    end.all?
+  end
+
   def validate_section_reference(ref, idx, bundle_resource, target_resources_hash, target_resource_types,
                                  is_multiprofile, target_section)
     errors = []
@@ -89,7 +99,6 @@ module SectionTestModule
       end
     else
       target_resources_hash.each_key do |resource_type_key|
-        resource_is_okay = true
         resource_type_info = target_resources_hash[resource_type_key]
         resource_type_key_splitted = resource_type_key.to_s.split('|')
         resource_type = resource_type_key_splitted.first
@@ -97,11 +106,7 @@ module SectionTestModule
         next unless resource.resourceType == resource_type
 
         requirements = resource_type_info.keys.include?('requirements') ? resource_type_info['requirements'] : []
-        if requirements.any?
-          resource_is_okay = requirements.map do |req|
-            find_a_value_at(resource, req['path']) == req['value']
-          end.all?
-        end
+        resource_is_okay = could_be_validated?(requirements, resource)
 
         if resource_is_okay
           profile_url = resource_type_key_splitted.last if resource_type_key_splitted.length == 2
