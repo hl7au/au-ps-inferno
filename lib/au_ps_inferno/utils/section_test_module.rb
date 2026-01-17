@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative 'section_test_class'
+require_relative 'messages_keeper_class'
 
 # A base class for all tests that validate sections of the AU PS Bundle
 module SectionTestModule
@@ -10,32 +11,17 @@ module SectionTestModule
     assert section_test_entity.data.present?, 'Section data not found'
     assert section_test_entity.references.present?, 'Section entity references not found'
 
-    validation_messages = validate_all_section_references(section_test_entity)
-    report_validation_results(filter_error_messages(validation_messages), filter_warning_messages(validation_messages))
+    validate_all_section_references(section_test_entity)
   end
 
   private
 
-  def messages_by_type(validation_messages, msg_type)
-    validation_messages.filter do |validation_message|
-      validation_message[:type] == msg_type
-    end
-  end
-
-  def filter_error_messages(validation_messages)
-    messages_by_type(validation_messages, 'error')
-  end
-
-  def filter_warning_messages(validation_messages)
-    messages_by_type(validation_messages, 'warning')
-  end
-
   def validate_all_section_references(section_test_entity)
-    section_test_entity.references.map.with_index do |ref, idx|
-      validate_section_reference(ref, idx, section_test_entity).then do |errors, warnings|
-        [errors, warnings]
-      end
-    end.flatten
+    messages_keeper = MessagesKeeper.new
+    section_test_entity.references.each_with_index do |ref, idx|
+      validate_section_reference(ref, idx, section_test_entity, messages_keeper)
+    end
+    report_validation_results(messages_keeper)
   end
 
   def could_be_validated?(requirements, resource)
@@ -50,23 +36,19 @@ module SectionTestModule
     end.all?
   end
 
-  def validate_section_reference(ref, idx, section_test_entity)
-    errors = []
-    warnings = []
+  def validate_section_reference(ref, idx, section_test_entity, messages_keeper)
     resource = section_test_entity.get_resource_by_reference(ref)
     assert resource.present?, "Resource not found for reference #{ref}"
     resource_is_expected?(section_test_entity, resource)
 
-    messages = { errors: errors, warnings: warnings }
-    conditional_validation(resource, idx, messages, section_test_entity)
-    [errors, warnings]
+    conditional_validation(resource, idx, section_test_entity, messages_keeper)
   end
 
-  def conditional_validation(resource, idx, messages, section_test_entity)
+  def conditional_validation(resource, idx, section_test_entity, messages_keeper)
     if section_test_entity.target_resources_hash.keys.empty?
-      add_validation_messages(resource, idx, nil, messages)
+      custom_resource_is_valid?(resource: resource, profile_url: nil, idx: idx, messages_keeper: messages_keeper)
     else
-      validate_with_resource_hash(resource, idx, messages, section_test_entity)
+      validate_with_resource_hash(resource, idx, section_test_entity, messages_keeper)
     end
   end
 
@@ -83,15 +65,7 @@ module SectionTestModule
     }
   end
 
-  def add_validation_messages(resource, idx, profile_url, messages)
-    messages_array = validate_without_runnable_messages(resource, profile_url)
-    return unless messages_array.any?
-
-    messages[:errors].concat(collect_messages_and_keep(messages_array, 'error', resource, idx, profile_url))
-    messages[:warnings].concat(collect_messages_and_keep(messages_array, 'warning', resource, idx, profile_url))
-  end
-
-  def validate_with_resource_hash(resource, idx, messages, section_test_entity)
+  def validate_with_resource_hash(resource, idx, section_test_entity, messages_keeper)
     section_test_entity.target_resources_hash.each_key do |resource_type_key|
       parsed_key = parse_resource_type_key(resource_type_key)
       next unless resource.resourceType == parsed_key[:resource_type]
@@ -101,7 +75,8 @@ module SectionTestModule
 
       next unless could_be_validated?(requirements, resource)
 
-      add_validation_messages(resource, idx, parsed_key[:profile_url], messages)
+      custom_resource_is_valid?(resource: resource, profile_url: parsed_key[:profile_url], idx: idx,
+                                messages_keeper: messages_keeper)
       break unless section_test_entity.is_multiprofile
     end
   end
@@ -111,15 +86,7 @@ module SectionTestModule
     { id: id, message: message[:message], type: message[:type], profile: profile_url }
   end
 
-  def collect_messages_and_keep(messages_array, type, resource, idx, profile_url)
-    collect_messages(messages_array, type).map { |message| build_message_hash(resource, idx, profile_url, message) }
-  end
-
-  def validate_without_runnable_messages(resource, profile_url)
-    custom_resource_is_valid?(resource: resource, profile_url: profile_url)
-  end
-
-  def custom_resource_is_valid?(resource:, profile_url: nil)
+  def custom_resource_is_valid?(resource:, profile_url: nil, idx: nil, messages_keeper: nil)
     initial_message_count = messages.length
 
     resource_is_valid?(resource: resource, profile_url: profile_url)
@@ -133,16 +100,9 @@ module SectionTestModule
 
     messages.slice!(initial_message_count..-1) if messages.is_a?(Array) && messages.length > initial_message_count
 
-    new_messages.map do |msg|
-      {
-        type: msg[:type] || msg['type'] || 'error',
-        message: msg[:message] || msg['message'] || msg.to_s
-      }
+    new_messages.each do |msg|
+      messages_keeper.add_message(build_message_hash(resource, idx, profile_url, msg))
     end
-  end
-
-  def collect_messages(messages_array, type)
-    messages_array.select { |message| message[:type] == type }
   end
 
   def formatted_output_messages(messages_array)
@@ -156,14 +116,13 @@ module SectionTestModule
     end.join("\n\n")
   end
 
-  def report_validation_results(section_errors, section_warnings)
-    add_message('error', "# Errors:\n\n #{formatted_output_messages(section_errors)}") if section_errors.any?
-    warning "# Warnings:\n\n #{formatted_output_messages(section_warnings)}" if section_warnings.any?
-    assert section_errors.none?, 'Some resources are not valid according to the section requirements'
-  end
-
-  def keep_messages(messages_array, type)
-    messages_array.push(*collect_messages(type)) if collect_messages(type).any?
+  def report_validation_results(messages_keeper)
+    if messages_keeper.errors.any?
+      add_message('error',
+                  "# Errors:\n\n #{formatted_output_messages(messages_keeper.errors)}")
+    end
+    warning "# Warnings:\n\n #{formatted_output_messages(messages_keeper.warnings)}" if messages_keeper.warnings.any?
+    assert messages_keeper.errors.empty?, 'Some resources are not valid according to the section requirements'
   end
 
   def entry_resources_info
