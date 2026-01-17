@@ -10,9 +10,16 @@ module SectionTestModule
     bundle_resource_decorator = BundleDecorator.new(scratch_bundle)
     target_section = get_target_section(section_name, bundle_resource_decorator)
 
+    validation_context = {
+      target_resources_hash: target_resources_hash,
+      target_resource_types: target_resource_types,
+      is_multiprofile: check_multiprofile?(target_resource_types)
+    }
     validation_messages = validate_all_section_references(
-      get_section_references(target_section), bundle_resource_decorator, target_resources_hash,
-      target_resource_types, check_multiprofile?(target_resource_types), target_section
+      get_section_references(target_section),
+      bundle_resource_decorator,
+      validation_context,
+      target_section
     )
 
     report_validation_results(filter_error_messages(validation_messages), filter_warning_messages(validation_messages))
@@ -60,11 +67,17 @@ module SectionTestModule
     section_references
   end
 
-  def validate_all_section_references(section_references, bundle_resource, target_resources_hash,
-                                      target_resource_types, is_multiprofile, target_section)
+  def validate_all_section_references(section_references, bundle_resource, validation_context, target_section)
     section_references.map.with_index do |ref, idx|
-      validate_section_reference(ref, idx, bundle_resource, target_resources_hash, target_resource_types,
-                                 is_multiprofile, target_section).then do |errors, warnings|
+      validate_section_reference(
+        ref,
+        idx,
+        bundle_resource,
+        validation_context[:target_resources_hash],
+        validation_context[:target_resource_types],
+        validation_context[:is_multiprofile],
+        target_section
+      ).then do |errors, warnings|
         [errors, warnings]
       end
     end.flatten
@@ -91,35 +104,50 @@ module SectionTestModule
     assert target_resource_types.uniq.include?(resource.resourceType),
            "Resource #{resource.resourceType} is not expected for section #{target_section.code_display_str}"
 
+    messages = { errors: errors, warnings: warnings }
     if target_resources_hash.keys.empty?
-      messages_array = validate_without_runnable_messages(resource, nil)
-      if messages_array.any?
-        errors.concat(collect_messages_and_keep(messages_array, 'error', resource, idx, nil))
-        warnings.concat(collect_messages_and_keep(messages_array, 'warning', resource, idx, nil))
-      end
+      add_validation_messages(resource, idx, nil, messages)
     else
-      target_resources_hash.each_key do |resource_type_key|
-        resource_type_info = target_resources_hash[resource_type_key]
-        resource_type_key_splitted = resource_type_key.to_s.split('|')
-        resource_type = resource_type_key_splitted.first
-        resource&.id
-        next unless resource.resourceType == resource_type
-
-        requirements = resource_type_info.keys.include?('requirements') ? resource_type_info['requirements'] : []
-        resource_is_okay = could_be_validated?(requirements, resource)
-
-        if resource_is_okay
-          profile_url = resource_type_key_splitted.last if resource_type_key_splitted.length == 2
-          messages_array = validate_without_runnable_messages(resource, profile_url)
-          next unless messages_array.any?
-
-          errors.concat(collect_messages_and_keep(messages_array, 'error', resource, idx, profile_url))
-          warnings.concat(collect_messages_and_keep(messages_array, 'warning', resource, idx, profile_url))
-        end
-        break unless is_multiprofile
-      end
+      validate_with_resource_hash(
+        resource: resource,
+        idx: idx,
+        target_resources_hash: target_resources_hash,
+        is_multiprofile: is_multiprofile,
+        messages: messages
+      )
     end
     [errors, warnings]
+  end
+
+  def parse_resource_type_key(resource_type_key)
+    parts = resource_type_key.to_s.split('|')
+    {
+      resource_type: parts.first,
+      profile_url: parts.length == 2 ? parts.last : nil
+    }
+  end
+
+  def add_validation_messages(resource, idx, profile_url, messages)
+    messages_array = validate_without_runnable_messages(resource, profile_url)
+    return unless messages_array.any?
+
+    messages[:errors].concat(collect_messages_and_keep(messages_array, 'error', resource, idx, profile_url))
+    messages[:warnings].concat(collect_messages_and_keep(messages_array, 'warning', resource, idx, profile_url))
+  end
+
+  def validate_with_resource_hash(resource:, idx:, target_resources_hash:, is_multiprofile:, messages:)
+    target_resources_hash.each_key do |resource_type_key|
+      parsed_key = parse_resource_type_key(resource_type_key)
+      next unless resource.resourceType == parsed_key[:resource_type]
+
+      resource_type_info = target_resources_hash[resource_type_key]
+      requirements = resource_type_info.key?('requirements') ? resource_type_info['requirements'] : []
+
+      next unless could_be_validated?(requirements, resource)
+
+      add_validation_messages(resource, idx, parsed_key[:profile_url], messages)
+      break unless is_multiprofile
+    end
   end
 
   def build_message_hash(resource, idx, profile_url, message)
