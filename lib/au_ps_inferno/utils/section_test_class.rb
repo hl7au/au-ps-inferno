@@ -39,6 +39,11 @@ class SectionTestClass
     nil
   end
 
+  def find_requirements(resource_type_key)
+    resource_type_info = @target_resources_hash[resource_type_key]
+    resource_type_info.key?('requirements') ? resource_type_info['requirements'] : []
+  end
+
   private
 
   def extract_target_resource_types(target_resources_hash)

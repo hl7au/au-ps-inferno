@@ -46,7 +46,7 @@ module SectionTestModule
 
   def conditional_validation(resource, idx, section_test_entity, messages_keeper)
     if section_test_entity.target_resources_hash.keys.empty?
-      custom_resource_is_valid?(resource: resource, profile_url: nil, idx: idx, messages_keeper: messages_keeper)
+      get_validation_messages(resource: resource, idx: idx, messages_keeper: messages_keeper)
     else
       validate_with_resource_hash(resource, idx, section_test_entity, messages_keeper)
     end
@@ -70,13 +70,10 @@ module SectionTestModule
       parsed_key = parse_resource_type_key(resource_type_key)
       next unless resource.resourceType == parsed_key[:resource_type]
 
-      resource_type_info = section_test_entity.target_resources_hash[resource_type_key]
-      requirements = resource_type_info.key?('requirements') ? resource_type_info['requirements'] : []
+      next unless could_be_validated?(section_test_entity.find_requirements(resource_type_key), resource)
 
-      next unless could_be_validated?(requirements, resource)
-
-      custom_resource_is_valid?(resource: resource, profile_url: parsed_key[:profile_url], idx: idx,
-                                messages_keeper: messages_keeper)
+      get_validation_messages(resource: resource, profile_url: parsed_key[:profile_url], idx: idx,
+                              messages_keeper: messages_keeper)
       break unless section_test_entity.is_multiprofile
     end
   end
@@ -86,19 +83,13 @@ module SectionTestModule
     { id: id, message: message[:message], type: message[:type], profile: profile_url }
   end
 
-  def custom_resource_is_valid?(resource:, profile_url: nil, idx: nil, messages_keeper: nil)
+  def get_validation_messages(resource:, idx:, messages_keeper:, profile_url: nil)
     initial_message_count = messages.length
 
     resource_is_valid?(resource: resource, profile_url: profile_url)
 
-    all_messages = messages
-    new_messages = if all_messages.length > initial_message_count
-                     all_messages[initial_message_count..]
-                   else
-                     []
-                   end
-
-    messages.slice!(initial_message_count..-1) if messages.is_a?(Array) && messages.length > initial_message_count
+    new_messages = messages.length > initial_message_count ? messages[initial_message_count..] : []
+    messages.slice!(initial_message_count..-1) if messages.length > initial_message_count
 
     new_messages.each do |msg|
       messages_keeper.add_message(build_message_hash(resource, idx, profile_url, msg))
