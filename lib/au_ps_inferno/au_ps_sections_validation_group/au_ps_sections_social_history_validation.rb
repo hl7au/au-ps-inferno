@@ -8,7 +8,9 @@ module AUPSTestKit
   class AUPSSectionsSocialHistoryValidation < BasicTest
     include SectionTestModule
     title 'Validate SOCIAL HISTORY NOTE Section References and Resources'
-    description 'Validates that the SOCIAL HISTORY NOTE section in the Composition resource contains valid references that resolve to expected resource types in the bundle, and that each referenced resource conforms to its specified FHIR profile(s).'
+    description 'Validates that the SOCIAL HISTORY NOTE section in the Composition resource contains valid ' \
+                'references that resolve to expected resource types in the bundle, and that each referenced ' \
+                'resource conforms to its specified FHIR profile(s).'
     id :au_ps_sections_social_history_validation
     optional true
 

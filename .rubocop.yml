@@ -2,3 +2,7 @@ AllCops:
   Exclude:
     - 'spec/spec_helper.rb'
     - 'lib/au_ps_inferno/generated/**/*'
+
+Metrics/ModuleLength:
+  Exclude:
+    - 'lib/au_ps_inferno/utils/constants.rb'

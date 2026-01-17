@@ -8,7 +8,9 @@ module AUPSTestKit
   class AUPSSectionsImmunizationValidation < BasicTest
     include SectionTestModule
     title 'Validate HISTORY OF IMMUNIZATION NOTE Section References and Resources'
-    description 'Validates that the HISTORY OF IMMUNIZATION NOTE section in the Composition resource contains valid references that resolve to expected resource types in the bundle, and that each referenced resource conforms to its specified FHIR profile(s).'
+    description 'Validates that the HISTORY OF IMMUNIZATION NOTE section in the Composition resource ' \
+                'contains valid references that resolve to expected resource types in the bundle, and that ' \
+                'each referenced resource conforms to its specified FHIR profile(s).'
     id :au_ps_sections_immunizations_validation
     optional true
 

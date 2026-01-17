@@ -8,7 +8,9 @@ module AUPSTestKit
   class AUPSSectionsAdvanceDirectivesValidation < BasicTest
     include SectionTestModule
     title 'Validate ADVANCE HEALTHCARE DIRECTIVES Section References and Resources'
-    description 'Validates that the ADVANCE HEALTHCARE DIRECTIVES section in the Composition resource contains valid references that resolve to expected resource types in the bundle, and that each referenced resource conforms to its specified FHIR profile(s).'
+    description 'Validates that the ADVANCE HEALTHCARE DIRECTIVES section in the Composition resource ' \
+                'contains valid references that resolve to expected resource types in the bundle, and ' \
+                'that each referenced resource conforms to its specified FHIR profile(s).'
     id :au_ps_sections_advance_directives_validation
     optional true
 
