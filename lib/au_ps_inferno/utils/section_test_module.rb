@@ -108,9 +108,7 @@ module SectionTestModule
   end
 
   def filtered_messages_by_signature(messages_array, signature)
-    messages_array.select do |message|
-      message[:signature] == signature
-    end
+    messages_array.select { |message| message[:signature] == signature }
   end
 
   def uniq_attribute_values(messages_array, attribute)
@@ -126,10 +124,8 @@ module SectionTestModule
   def entry_resources_info
     group_section_output(resolve_path(scratch_bundle, 'entry.resource').map do |resource|
       resource_type = resolve_path(resource, 'resourceType').first
-      profiles = resolve_path(resource, 'meta.profile')
-      profiles = profiles.sort
-      result_message = profiles.empty? ? resource_type : "#{resource_type} (#{profiles.join(', ')})"
-      result_message
+      profiles = resolve_path(resource, 'meta.profile').sort
+      profiles.empty? ? resource_type : "#{resource_type} (#{profiles.join(', ')})"
     end).join("\n\n")
   end
 end
