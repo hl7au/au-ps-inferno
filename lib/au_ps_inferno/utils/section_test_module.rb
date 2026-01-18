@@ -78,11 +78,6 @@ module SectionTestModule
     end
   end
 
-  def build_message_hash(resource, idx, profile_url, message)
-    id = resource.id ? "#{resource.resourceType}/#{resource.id}[#{idx}]" : "#{resource.resourceType}[#{idx}]"
-    { id: id, message: message[:message], type: message[:type], profile: profile_url }
-  end
-
   def get_validation_messages(resource:, idx:, messages_keeper:, profile_url: nil)
     initial_message_count = messages.length
 
@@ -92,27 +87,39 @@ module SectionTestModule
     messages.slice!(initial_message_count..-1) if messages.length > initial_message_count
 
     new_messages.each do |msg|
-      messages_keeper.add_message(build_message_hash(resource, idx, profile_url, msg))
+      messages_keeper.add_message(MessagesKeeper.build_rich_message_hash(resource, idx, profile_url, msg))
     end
   end
 
   def formatted_output_messages(messages_array)
-    messages_ids = messages_array.map { |message| message[:id] }.uniq.sort
-    messages_ids.map do |message_id|
-      filtered_messages = messages_array.select do |message|
-        message[:id] == message_id
-      end
-      filtered_messages = filtered_messages.map { |message| message[:message] }.uniq
-      "## #{message_id}:\n\n #{filtered_messages.map { |message| message }.join('\n\n')}"
+    uniq_attribute_values(messages_array, :signature).map do |signature|
+      filtered_messages = filtered_messages_by_signature(messages_array, signature)
+      idx = uniq_attribute_values(filtered_messages, :idx).join(', ')
+      ids = uniq_attribute_values(filtered_messages, :resource_id).join(', ')
+      [calculate_title(filtered_messages.first), idx.present? ? "**IDx:** #{idx}" : nil,
+       ids.present? ? "**IDs:** #{ids}" : nil, filtered_messages.first[:message]].compact.join("\n\n")
     end.join("\n\n")
   end
 
-  def report_validation_results(messages_keeper)
-    if messages_keeper.errors.any?
-      add_message('error',
-                  "# Errors:\n\n #{formatted_output_messages(messages_keeper.errors)}")
+  def calculate_title(message)
+    profile = message[:profile]
+    resource_type = message[:resource_type]
+    profile.present? ? "### #{resource_type} (#{profile})" : "### #{resource_type}"
+  end
+
+  def filtered_messages_by_signature(messages_array, signature)
+    messages_array.select do |message|
+      message[:signature] == signature
     end
-    warning "# Warnings:\n\n #{formatted_output_messages(messages_keeper.warnings)}" if messages_keeper.warnings.any?
+  end
+
+  def uniq_attribute_values(messages_array, attribute)
+    messages_array.map { |message| message[attribute] }.uniq.sort
+  end
+
+  def report_validation_results(messages_keeper)
+    add_message('error', formatted_output_messages(messages_keeper.errors)) if messages_keeper.errors.any?
+    warning formatted_output_messages(messages_keeper.warnings) if messages_keeper.warnings.any?
     assert messages_keeper.errors.empty?, 'Some resources are not valid according to the section requirements'
   end
 
