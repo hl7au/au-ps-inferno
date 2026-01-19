@@ -106,7 +106,7 @@ module SectionTestModule
       ids = uniq_attribute_values(filtered_messages, :resource_id).join(', ')
       [calculate_title(filtered_messages.first), idx.present? ? "**IDx:** #{idx}" : nil,
        ids.present? ? "**IDs:** #{ids}" : nil, filtered_messages.first[:message]].compact.join("\n\n")
-    end.join("\n\n")
+    end
   end
 
   def calculate_title(message)
@@ -124,8 +124,8 @@ module SectionTestModule
   end
 
   def report_validation_results(messages_keeper)
-    add_message('error', formatted_output_messages(messages_keeper.errors)) if messages_keeper.errors.any?
-    warning formatted_output_messages(messages_keeper.warnings) if messages_keeper.warnings.any?
+    formatted_output_messages(messages_keeper.errors).each { |message| add_message('error', message) }
+    formatted_output_messages(messages_keeper.warnings).each { |message| add_message('warning', message) }
     assert messages_keeper.errors.empty?, 'Some resources are not valid according to the section requirements'
   end
 end
