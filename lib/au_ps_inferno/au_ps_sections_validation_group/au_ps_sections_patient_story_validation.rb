@@ -1,12 +1,10 @@
 # frozen_string_literal: true
 
 require_relative '../utils/basic_test_class'
-require_relative '../utils/section_test_module'
 
 module AUPSTestKit
   # The optional sections populated in the Composition resource.
   class AUPSSectionsPatientStoryValidation < BasicTest
-    include SectionTestModule
     title 'Validate PATIENT GOALS PREFERENCES AND PRIORITIES FOR CARE EXPERIENCE Section References and Resources'
     description 'Validates that the PATIENT GOALS PREFERENCES AND PRIORITIES FOR CARE EXPERIENCE section ' \
                 'in the Composition resource contains valid references that resolve to expected resource ' \

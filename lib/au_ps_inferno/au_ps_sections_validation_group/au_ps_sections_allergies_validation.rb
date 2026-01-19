@@ -1,12 +1,10 @@
 # frozen_string_literal: true
 
 require_relative '../utils/basic_test_class'
-require_relative '../utils/section_test_module'
 
 module AUPSTestKit
   # The optional sections populated in the Composition resource.
   class AUPSSectionsAllergiesValidation < BasicTest
-    include SectionTestModule
     title 'Validate ALLERGIES AND ADVERSE REACTIONS DOCUMENT Section References and Resources'
     description 'Validates that the ALLERGIES AND ADVERSE REACTIONS DOCUMENT section in the Composition ' \
                 'resource contains valid references that resolve to expected resource types in the bundle, ' \

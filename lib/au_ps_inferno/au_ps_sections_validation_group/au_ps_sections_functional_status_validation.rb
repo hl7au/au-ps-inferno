@@ -1,12 +1,10 @@
 # frozen_string_literal: true
 
 require_relative '../utils/basic_test_class'
-require_relative '../utils/section_test_module'
 
 module AUPSTestKit
   # The optional sections populated in the Composition resource.
   class AUPSSectionsFunctionalStatusValidation < BasicTest
-    include SectionTestModule
     title 'Validate FUNCTIONAL STATUS ASSESSMENT NOTE Section References and Resources'
     description 'Validates that the FUNCTIONAL STATUS ASSESSMENT NOTE section in the Composition resource ' \
                 'contains valid references that resolve to expected resource types in the bundle, and that ' \

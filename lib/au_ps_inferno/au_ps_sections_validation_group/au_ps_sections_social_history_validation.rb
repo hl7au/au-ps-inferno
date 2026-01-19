@@ -1,12 +1,10 @@
 # frozen_string_literal: true
 
 require_relative '../utils/basic_test_class'
-require_relative '../utils/section_test_module'
 
 module AUPSTestKit
   # The optional sections populated in the Composition resource.
   class AUPSSectionsSocialHistoryValidation < BasicTest
-    include SectionTestModule
     title 'Validate SOCIAL HISTORY NOTE Section References and Resources'
     description 'Validates that the SOCIAL HISTORY NOTE section in the Composition resource contains valid ' \
                 'references that resolve to expected resource types in the bundle, and that each referenced ' \

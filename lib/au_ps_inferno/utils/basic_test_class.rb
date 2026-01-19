@@ -4,6 +4,7 @@ require_relative 'constants'
 require_relative 'bundle_decorator'
 require_relative 'composition_utils'
 require_relative 'validator_helpers'
+require_relative 'section_test_module'
 
 module AUPSTestKit
   # A base class for all tests to decrease code duplication
@@ -11,6 +12,7 @@ module AUPSTestKit
     extend Constants
     include CompositionUtils
     include ValidatorHelpers
+    include SectionTestModule
 
     def check_other_sections
       check_bundle_exists_in_scratch

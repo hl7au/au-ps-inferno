@@ -14,6 +14,14 @@ module SectionTestModule
     validate_all_section_references(section_test_entity)
   end
 
+  def entry_resources_info
+    group_section_output(resolve_path(scratch_bundle, 'entry.resource').map do |resource|
+      resource_type = resolve_path(resource, 'resourceType').first
+      profiles = resolve_path(resource, 'meta.profile').sort
+      profiles.empty? ? resource_type : "#{resource_type} (#{profiles.join(', ')})"
+    end).join("\n\n")
+  end
+
   private
 
   def validate_all_section_references(section_test_entity)
@@ -119,13 +127,5 @@ module SectionTestModule
     add_message('error', formatted_output_messages(messages_keeper.errors)) if messages_keeper.errors.any?
     warning formatted_output_messages(messages_keeper.warnings) if messages_keeper.warnings.any?
     assert messages_keeper.errors.empty?, 'Some resources are not valid according to the section requirements'
-  end
-
-  def entry_resources_info
-    group_section_output(resolve_path(scratch_bundle, 'entry.resource').map do |resource|
-      resource_type = resolve_path(resource, 'resourceType').first
-      profiles = resolve_path(resource, 'meta.profile').sort
-      profiles.empty? ? resource_type : "#{resource_type} (#{profiles.join(', ')})"
-    end).join("\n\n")
   end
 end
