@@ -106,7 +106,7 @@ module SectionTestModule
       ids = uniq_attribute_values(filtered_messages, :resource_id).join(', ')
       refs = uniq_attribute_values(filtered_messages, :ref).join(', ')
       [calculate_title(filtered_messages.first), idx.present? ? "**IDx:** #{idx}" : nil,
-       refs.present? ? "**Refs:** #{refs}" : nil,
+       refs.present? ? "**REFs:** #{refs}" : nil,
        ids.present? ? "**IDs:** #{ids}" : nil, filtered_messages.first[:message]].compact.join("\n\n")
     end
   end
