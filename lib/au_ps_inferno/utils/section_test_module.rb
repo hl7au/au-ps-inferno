@@ -2,6 +2,8 @@
 
 require_relative 'section_test_class'
 require_relative 'messages_keeper_class'
+require_relative 'rich_message_class'
+require_relative 'rich_validation_message'
 
 # A base class for all tests that validate sections of the AU PS Bundle
 module SectionTestModule
@@ -95,39 +97,23 @@ module SectionTestModule
     messages.slice!(initial_message_count..-1) if messages.length > initial_message_count
 
     new_messages.each do |msg|
-      messages_keeper.add_message(MessagesKeeper.build_rich_message_hash(ref, resource, idx, profile_url, msg))
+      messages_keeper.add_message(RichMessage.new(resource, msg, profile_url, idx, ref))
     end
   end
 
   def formatted_output_messages(messages_array)
-    uniq_attribute_values(messages_array, :signature).map do |signature|
-      filtered_messages = filtered_messages_by_signature(messages_array, signature)
-      idx = uniq_attribute_values(filtered_messages, :idx).join(', ')
-      ids = uniq_attribute_values(filtered_messages, :resource_id).join(', ')
-      refs = uniq_attribute_values(filtered_messages, :ref).join(', ')
-      [calculate_title(filtered_messages.first), idx.present? ? "**IDx:** #{idx}" : nil,
-       refs.present? ? "**REFs:** #{refs}" : nil,
-       ids.present? ? "**IDs:** #{ids}" : nil, filtered_messages.first[:message]].compact.join("\n\n")
+    messages_array.map(&:signature).uniq.sort.map do |signature|
+      RichValidationMessage.new(MessagesKeeper.filtered_messages_by_signature(messages_array, signature))
     end
   end
 
-  def calculate_title(message)
-    profile = message[:profile]
-    resource_type = message[:resource_type]
-    profile.present? ? "### #{resource_type} (#{profile})" : "### #{resource_type}"
-  end
-
-  def filtered_messages_by_signature(messages_array, signature)
-    messages_array.select { |message| message[:signature] == signature }
-  end
-
-  def uniq_attribute_values(messages_array, attribute)
-    messages_array.map { |message| message[attribute] }.uniq.sort
-  end
-
   def report_validation_results(messages_keeper)
-    formatted_output_messages(messages_keeper.errors).each { |message| add_message('error', message) }
-    formatted_output_messages(messages_keeper.warnings).each { |message| add_message('warning', message) }
+    formatted_output_messages(messages_keeper.errors).each do |rich_validation_message|
+      add_message('error', rich_validation_message.to_s)
+    end
+    formatted_output_messages(messages_keeper.warnings).each do |rich_validation_message|
+      add_message('warning', rich_validation_message.to_s)
+    end
     assert messages_keeper.errors.empty?, 'Some resources are not valid according to the section requirements'
   end
 end

@@ -1,41 +1,12 @@
 # frozen_string_literal: true
 
-require 'digest'
+require_relative 'rich_message_class'
 
 # A class to keep messages for a section test
 class MessagesKeeper
   class << self
-    def build_rich_message_hash(ref, resource, idx, profile_url, message)
-      # NOTE: I don't like this method, because we need to pass arguments that are not related to the message itself.
-      # But it's easier to use than to pass a block to the add_message method. So, let's keep it for now.
-      # Pavel Rozhkov, 2026-01-18
-      build_hash(ref, resource, idx, profile_url, message)
-    end
-
-    private
-
-    def build_hash(ref, resource, idx, profile_url, message)
-      message_body = cleanup_message_body(message[:message], resource.resourceType, resource.id)
-      {
-        message: message_body,
-        type: message[:type],
-        resource_type: resource.resourceType,
-        profile: profile_url,
-        resource_id: resource.id,
-        idx: idx,
-        ref: ref,
-        signature: Digest::MD5.hexdigest([resource.resourceType, profile_url, message_body].compact.join('|'))
-      }
-    end
-
-    def cleanup_message_body(message, resource_type, resource_id)
-      # This function is used to remove resourceType/id from the message body.
-      # AllergyIntolerance: AllergyIntolerance.code: None of the ...
-      # AllergyIntolerance/123: AllergyIntolerance.code: None of the ...
-      # should be converted to:
-      # AllergyIntolerance.code: None of the ...
-      string_to_replace = resource_id.present? ? "#{resource_type}/#{resource_id}: " : "#{resource_type}: "
-      message.sub(string_to_replace, '')
+    def filtered_messages_by_signature(messages_array, signature)
+      messages_array.select { |message| message.signature == signature }
     end
   end
 
@@ -61,7 +32,7 @@ class MessagesKeeper
 
   def messages_of_type(msg_type)
     @messages.filter do |message|
-      message[:type] == msg_type
+      message.type == msg_type
     end
   end
 end
