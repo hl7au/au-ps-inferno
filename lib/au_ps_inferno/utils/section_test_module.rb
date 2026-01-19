@@ -49,14 +49,14 @@ module SectionTestModule
     assert resource.present?, "Resource not found for reference #{ref}"
     resource_is_expected?(section_test_entity, resource)
 
-    conditional_validation(resource, idx, section_test_entity, messages_keeper)
+    conditional_validation(ref, resource, idx, section_test_entity, messages_keeper)
   end
 
-  def conditional_validation(resource, idx, section_test_entity, messages_keeper)
+  def conditional_validation(ref, resource, idx, section_test_entity, messages_keeper)
     if section_test_entity.target_resources_hash.keys.empty?
-      get_validation_messages(resource: resource, idx: idx, messages_keeper: messages_keeper)
+      get_validation_messages(ref, resource: resource, idx: idx, messages_keeper: messages_keeper)
     else
-      validate_with_resource_hash(resource, idx, section_test_entity, messages_keeper)
+      validate_with_resource_hash(ref, resource, idx, section_test_entity, messages_keeper)
     end
   end
 
@@ -73,20 +73,20 @@ module SectionTestModule
     }
   end
 
-  def validate_with_resource_hash(resource, idx, section_test_entity, messages_keeper)
+  def validate_with_resource_hash(ref, resource, idx, section_test_entity, messages_keeper)
     section_test_entity.target_resources_hash.each_key do |resource_type_key|
       parsed_key = parse_resource_type_key(resource_type_key)
       next unless resource.resourceType == parsed_key[:resource_type]
 
       next unless could_be_validated?(section_test_entity.find_requirements(resource_type_key), resource)
 
-      get_validation_messages(resource: resource, profile_url: parsed_key[:profile_url], idx: idx,
+      get_validation_messages(ref: ref, resource: resource, profile_url: parsed_key[:profile_url], idx: idx,
                               messages_keeper: messages_keeper)
       break unless section_test_entity.is_multiprofile
     end
   end
 
-  def get_validation_messages(resource:, idx:, messages_keeper:, profile_url: nil)
+  def get_validation_messages(ref:, resource:, idx:, messages_keeper:, profile_url: nil)
     initial_message_count = messages.length
 
     resource_is_valid?(resource: resource, profile_url: profile_url)
@@ -95,7 +95,7 @@ module SectionTestModule
     messages.slice!(initial_message_count..-1) if messages.length > initial_message_count
 
     new_messages.each do |msg|
-      messages_keeper.add_message(MessagesKeeper.build_rich_message_hash(resource, idx, profile_url, msg))
+      messages_keeper.add_message(MessagesKeeper.build_rich_message_hash(ref, resource, idx, profile_url, msg))
     end
   end
 
@@ -104,7 +104,9 @@ module SectionTestModule
       filtered_messages = filtered_messages_by_signature(messages_array, signature)
       idx = uniq_attribute_values(filtered_messages, :idx).join(', ')
       ids = uniq_attribute_values(filtered_messages, :resource_id).join(', ')
+      refs = uniq_attribute_values(filtered_messages, :ref).join(', ')
       [calculate_title(filtered_messages.first), idx.present? ? "**IDx:** #{idx}" : nil,
+       refs.present? ? "**Refs:** #{refs}" : nil,
        ids.present? ? "**IDs:** #{ids}" : nil, filtered_messages.first[:message]].compact.join("\n\n")
     end
   end

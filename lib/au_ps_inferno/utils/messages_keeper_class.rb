@@ -5,16 +5,16 @@ require 'digest'
 # A class to keep messages for a section test
 class MessagesKeeper
   class << self
-    def build_rich_message_hash(resource, idx, profile_url, message)
+    def build_rich_message_hash(ref, resource, idx, profile_url, message)
       # NOTE: I don't like this method, because we need to pass arguments that are not related to the message itself.
       # But it's easier to use than to pass a block to the add_message method. So, let's keep it for now.
       # Pavel Rozhkov, 2026-01-18
-      build_hash(resource, idx, profile_url, message)
+      build_hash(ref, resource, idx, profile_url, message)
     end
 
     private
 
-    def build_hash(resource, idx, profile_url, message)
+    def build_hash(ref, resource, idx, profile_url, message)
       message_body = cleanup_message_body(message[:message], resource.resourceType, resource.id)
       {
         message: message_body,
@@ -23,6 +23,7 @@ class MessagesKeeper
         profile: profile_url,
         resource_id: resource.id,
         idx: idx,
+        ref: ref,
         signature: Digest::MD5.hexdigest([resource.resourceType, profile_url, message_body].compact.join('|'))
       }
     end
