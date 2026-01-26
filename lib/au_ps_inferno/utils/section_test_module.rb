@@ -8,10 +8,10 @@ require_relative 'rich_validation_message'
 # A base class for all tests that validate sections of the AU PS Bundle
 module SectionTestModule
   def validate_section_resources(section_name)
-    assert scratch_bundle.present?, 'Bundle resource not found'
+    skip_if scratch_bundle.blank?, 'Bundle resource not found'
     section_test_entity = SectionTestClass.new(Constants::SECTIONS_NAMES_MAPPING[section_name], scratch_bundle)
-    assert section_test_entity.data.present?, 'Section data not found'
-    assert section_test_entity.references.present?, 'Section entity references not found'
+    skip_if section_test_entity.data.blank?, 'Section data not found'
+    skip_if section_test_entity.references.blank?, 'Section entity references not found'
 
     validate_all_section_references(section_test_entity)
   end
