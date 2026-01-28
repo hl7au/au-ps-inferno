@@ -34,6 +34,11 @@ class BundleDecorator < FHIR::Bundle
     "#{resource.resourceType} (#{profiles})"
   end
 
+  def resource_by_reference(entry_reference)
+    entry = resolve_entry_reference(entry_reference)
+    entry&.resource
+  end
+
   private
 
   def resolve_entry_reference_as_reference(entry_reference)

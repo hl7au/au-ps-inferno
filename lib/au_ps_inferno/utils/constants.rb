@@ -39,6 +39,178 @@ module Constants
     '18776-5' => 'Plan of care note', '29762-2' => 'Social history note', '8716-3' => 'Vital signs note'
   }.freeze
 
+  SECTIONS_NAMES_MAPPING = {
+    'PROBLEM_LIST' => {
+      'code' => '11450-4',
+      'display' => 'Problem list',
+      'resources' => {
+        'Condition|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-condition' => {}
+      }
+    },
+    'ALLERGIES_AND_ADVERSE_REACTIONS_DOCUMENT' => {
+      'code' => '48765-2',
+      'display' => 'Allergies and adverse reactions Document',
+      'resources' => {
+        'AllergyIntolerance|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-allergyintolerance' => {}
+      }
+    },
+    'HISTORY_OF_MEDICATION_USE_NARRATIVE' => {
+      'code' => '10160-0',
+      'display' => 'History of Medication use Narrative',
+      'resources' => {
+        'MedicationStatement|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medicationstatement' => {},
+        'MedicationRequest|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medicationrequest' => {}
+      }
+    },
+    'HISTORY_OF_IMMUNIZATION_NOTE' => {
+      'code' => '11369-6',
+      'display' => 'History of Immunization note',
+      'resources' => {
+        'Immunization|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-immunization' => {}
+      }
+    },
+    'RELEVANT_DIAGNOSTIC_TESTS_LABORATORY_DATA_NOTE' => {
+      'code' => '30954-2',
+      'display' => 'Relevant diagnostic tests/laboratory data note',
+      'resources' => {
+        'Observation|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-diagnosticresult-path' => {
+          'requirements' => [
+            {
+              'path' => 'category.coding.code',
+              'value' => 'laboratory'
+            }
+          ]
+        },
+        'Observation|http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-results-radiology-uv-ips' => {
+          'requirements' => [
+            {
+              'path' => 'category.coding.code',
+              'value' => 'imaging'
+            }
+          ]
+        },
+        'DiagnosticReport|http://hl7.org/fhir/uv/ips/StructureDefinition/DiagnosticReport-uv-ips' => {}
+      }
+    },
+    'HISTORY_OF_PROCEDURES_DOCUMENT' => {
+      'code' => '47519-4',
+      'display' => 'History of Procedures Document',
+      'resources' => {
+        'Procedure|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-procedure' => {}
+      }
+    },
+    'HISTORY_OF_MEDICAL_DEVICE_USE' => {
+      'code' => '46264-8',
+      'display' => 'History of medical device use',
+      'resources' => {
+        'DeviceUseStatement|http://hl7.org/fhir/uv/ips/StructureDefinition/DeviceUseStatement-uv-ips' => {}
+      }
+    },
+    'ADVANCE_HEALTHCARE_DIRECTIVES' => {
+      'code' => '42348-3',
+      'display' => 'Advance healthcare directives',
+      'resources' => {
+        'Consent' => {}
+      }
+    },
+    'ALERT' => {
+      'code' => '104605-1',
+      'display' => 'Alert',
+      'resources' => {
+        'Flag|http://hl7.org/fhir/uv/ips/StructureDefinition/Flag-alert-uv-ips' => {}
+      }
+    },
+    'FUNCTIONAL_STATUS_ASSESSMENT_NOTE' => {
+      'code' => '47420-5',
+      'display' => 'Functional status assessment note',
+      'resources' => {
+        'Condition|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-condition' => {},
+        'ClinicalImpression' => {}
+      }
+    },
+    'HISTORY_OF_PAST_ILLNESS_NOTE' => {
+      'code' => '11348-0',
+      'display' => 'History of Past illness note',
+      'resources' => {
+        'Condition|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-condition' => {}
+      }
+    },
+    'HISTORY_OF_PREGNANCIES_NARRATIVE' => {
+      'code' => '10162-6',
+      'display' => 'History of pregnancies Narrative',
+      'resources' => {
+        'Observation|http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-pregnancy-status-uv-ips' => {
+          'requirements' => [
+            {
+              'path' => 'code.coding.code',
+              'value' => '82810-3'
+            }
+          ]
+        },
+        'Observation|http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-pregnancy-outcome-uv-ips' => {
+          'requirements' => [
+            {
+              'path' => 'code.coding.code',
+              'value' => %w[
+                11636-8
+                11637-6
+                11638-4
+                11639-2
+                11640-0
+                11612-9
+                11613-7
+                11614-5
+                33065-4
+              ]
+            }
+          ]
+        }
+      }
+    },
+    'PATIENT_GOALS_PREFERENCES_AND_PRIORITIES_FOR_CARE_EXPERIENCE' => {
+      'code' => '81338-6',
+      'display' => 'Patient Goals, preferences, and priorities for care experience',
+      'resources' => {}
+    },
+    'PLAN_OF_CARE_NOTE' => {
+      'code' => '18776-5',
+      'display' => 'Plan of care note',
+      'resources' => {
+        'CarePlan' => {},
+        'ImmunizationRecommendation' => {}
+      }
+    },
+    'SOCIAL_HISTORY_NOTE' => {
+      'code' => '29762-2',
+      'display' => 'Social history note',
+      'resources' => {
+        'Observation|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-smokingstatus' => {
+          'requirements' => [
+            {
+              'path' => 'code.coding.code',
+              'value' => '1747861000168109'
+            }
+          ]
+        },
+        'Observation|http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-alcoholuse-uv-ips' => {
+          'requirements' => [
+            {
+              'path' => 'code.coding.code',
+              'value' => '74013-4'
+            }
+          ]
+        }
+      }
+    },
+    'VITAL_SIGNS_NOTE' => {
+      'code' => '8716-3',
+      'display' => 'Vital signs note',
+      'resources' => {
+        'Observation|http://hl7.org/fhir/StructureDefinition/vitalsigns' => {}
+      }
+    }
+  }.freeze
+
   AU_PS_PROFILES_MAPPING_REQUIRED = {
     'http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-bundle' => 'AU PS Bundle',
     'http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-composition' => 'AU PS Composition',

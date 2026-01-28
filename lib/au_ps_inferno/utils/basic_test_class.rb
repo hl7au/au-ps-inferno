@@ -4,6 +4,7 @@ require_relative 'constants'
 require_relative 'bundle_decorator'
 require_relative 'composition_utils'
 require_relative 'validator_helpers'
+require_relative 'section_test_module'
 
 module AUPSTestKit
   # A base class for all tests to decrease code duplication
@@ -11,6 +12,7 @@ module AUPSTestKit
     extend Constants
     include CompositionUtils
     include ValidatorHelpers
+    include SectionTestModule
 
     def check_other_sections
       check_bundle_exists_in_scratch
@@ -98,16 +100,6 @@ module AUPSTestKit
     end
 
     private
-
-    def entry_resources_info
-      group_section_output(resolve_path(scratch_bundle, 'entry.resource').map do |resource|
-        resource_type = resolve_path(resource, 'resourceType').first
-        profiles = resolve_path(resource, 'meta.profile')
-        profiles = profiles.sort
-        result_message = profiles.empty? ? resource_type : "#{resource_type} (#{profiles.join(', ')})"
-        result_message
-      end).join("\n\n")
-    end
 
     def validate_bundle(resource, profile_with_version)
       return if skip_validation?
