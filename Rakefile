@@ -15,3 +15,11 @@ namespace :db do
     Inferno::Utils::Migration.new.run
   end
 end
+
+namespace :generator do
+  desc 'Generate test suites for the AU PS and IPS implementation guides'
+  task :generate do
+    require 'au_ps_inferno/generator/generator'
+    Generator.new('lib/au_ps_inferno/igs/0.5.0-preview.tgz').generate
+  end
+end
