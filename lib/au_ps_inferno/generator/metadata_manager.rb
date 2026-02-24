@@ -7,9 +7,11 @@ class Generator
   #
   # Extracts Composition StructureDefinition sections and their entry constraints
   # (profiles, cardinality, mustSupport, section codes) and serializes them to YAML.
+  # @see Generator::IGResourcesExtractor for loading IG resources
   # rubocop:disable Metrics/ClassLength
   class MetadataManager
     # @param ig_resources [Array<FHIR::Model>] Parsed IG resources (e.g. from IGResourcesExtractor#ig_resources)
+    # @return [Generator::MetadataManager]
     def initialize(ig_resources)
       @ig_resources = ig_resources
       @composition_sections = []
@@ -41,14 +43,21 @@ class Generator
 
     private
 
+    # Populates @composition_optional_ms_elements with mustSupport elements where min is 0.
+    # @return [void]
     def extract_optional_ms_elements
       @composition_optional_ms_elements = extract_ms_elements_by_predicate(->(element) { element.min.zero? })
     end
 
+    # Populates @composition_mandatory_ms_elements with mustSupport elements where min > 0.
+    # @return [void]
     def extract_required_ms_elements
       @composition_mandatory_ms_elements = extract_ms_elements_by_predicate(->(element) { element.min.positive? })
     end
 
+    # Filters Composition mustSupport elements (no slices) by predicate and returns path suffixes.
+    # @param predicate [Proc] Called with each element; keeps element when truthy (e.g. min.zero?, min.positive?)
+    # @return [Array<String>] Sorted unique paths with "Composition." prefix removed (e.g. +section.title+)
     def extract_ms_elements_by_predicate(predicate)
       elements = composition_extract_ms_elements_without_slices.filter do |element|
         predicate.call(element)
@@ -58,6 +67,8 @@ class Generator
       end.uniq.sort
     end
 
+    # Returns Composition snapshot elements that are mustSupport, non-sliced, and under Composition.
+    # @return [Array<FHIR::Element>] Snapshot elements; empty if no Composition StructureDefinition
     def composition_extract_ms_elements_without_slices
       composition_structure_definition = get_structure_definition_by_type('Composition')
       return [] if composition_structure_definition.nil?
@@ -68,6 +79,7 @@ class Generator
       end
     end
 
+    # Returns IG resources whose resourceType matches the given type.
     # @param type [String] FHIR resource type (e.g. +StructureDefinition+)
     # @return [Array<FHIR::Model>]
     def get_resources_by_type(type)
@@ -76,6 +88,7 @@ class Generator
       end
     end
 
+    # Finds the StructureDefinition for a logical resource type (e.g. Composition, Patient).
     # @param type [String] Logical type (e.g. +Composition+)
     # @return [FHIR::StructureDefinition, nil]
     def get_structure_definition_by_type(type)
@@ -99,16 +112,26 @@ class Generator
       raise profile_not_found_error(profile_url, entry_id, available)
     end
 
+    # Finds a StructureDefinition by canonical base URL (version stripped).
+    # @param base_url [String] Canonical URL without version (e.g. +http://hl7.org/fhir/StructureDefinition/Patient+)
+    # @return [FHIR::StructureDefinition, nil]
     def find_structure_definition_by_base_url(base_url)
       get_resources_by_type('StructureDefinition').find do |resource|
         resource.url.to_s.split('|').first == base_url
       end
     end
 
+    # Collects all non-empty canonical URLs from StructureDefinitions in the IG.
+    # @return [Array<String>] Sorted list of URL strings
     def structure_definition_urls
       get_resources_by_type('StructureDefinition').map { |r| r.url.to_s }.reject(&:empty?).sort
     end
 
+    # Builds the error message when a profile has no matching StructureDefinition.
+    # @param profile_url [String] Requested profile URL
+    # @param entry_id [String, nil] Optional entry id for context
+    # @param available [Array<String>] List of available StructureDefinition URLs
+    # @return [String] Error message suitable for RuntimeError
     def profile_not_found_error(profile_url, entry_id, available)
       context = entry_id ? " (entry: #{entry_id})" : ''
       hint = 'Add JSON via ADDITIONAL_IG_RESOURCES or additional_resources_path.'
@@ -135,6 +158,7 @@ class Generator
       end
     end
 
+    # Builds a full section metadata hash including code and entries.
     # @param section [FHIR::Element] Snapshot element for Composition.section (with sliceName)
     # @param elements [Array<FHIR::Element>] All snapshot elements from the Composition StructureDefinition
     # @return [Hash] Section metadata (:id, :short, :definition, :min, :max, :required, :mustSupport, :code, :entries)
@@ -147,6 +171,7 @@ class Generator
       }
     end
 
+    # Builds the basic section fields from a snapshot element (no code or entries).
     # @param section [FHIR::Element] Snapshot element for Composition.section (with sliceName)
     # @return [Hash] Basic section fields (:id, :short, :definition, :min, :max, :required, :mustSupport)
     def build_basic_section_data(section)
@@ -174,6 +199,7 @@ class Generator
       filtered_element.patternCodeableConcept.coding.first.code
     end
 
+    # Collects entry elements for a section and builds entry metadata for each.
     # @param elements [Array<FHIR::Element>] Snapshot elements
     # @param section_id [String] Section element id (e.g. +Composition.section:sectionProblems+)
     # @return [Array<Hash>] Entry metadata hashes (see {#build_section_entry_data})
@@ -187,6 +213,7 @@ class Generator
       end
     end
 
+    # Builds entry metadata from a section entry snapshot element (id, cardinality, mustSupport, profiles).
     # @param entry [FHIR::Element] Snapshot element for section entry (e.g. Composition.section:...entry:problem)
     # @return [Hash] Entry metadata (:id, :min, :max, :required, :mustSupport, :profiles)
     def build_section_entry_data(entry)
@@ -200,9 +227,11 @@ class Generator
       }
     end
 
-    # @param entry_id [String] Entry element id (for error messages)
+    # Resolves Reference type targetProfile URLs to "resourceType|profile" using IG StructureDefinitions.
+    # @param entry_id [String] Entry element id (for error messages when profile is missing)
     # @param element [FHIR::Element] Snapshot element with type Reference and targetProfile
     # @return [Array<String>] Strings in the form "resourceType|profile" for each target profile
+    # @raise [RuntimeError] when a targetProfile has no matching StructureDefinition (see {#get_structure_definition_by_profile})
     def get_section_entry_profiles(entry_id, element)
       ref_types = element.type&.select { |t| t.code == 'Reference' } || []
       profile_urls = ref_types.flat_map(&:targetProfile).to_a.compact
