@@ -16,7 +16,7 @@
     :required: false
     :mustSupport: true
     :profiles:
-    - http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-condition
+    - Condition|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-condition
 - :id: Composition.section:sectionAllergies
   :short: Patient Summary Allergies and Intolerances Section
   :definition: Information about a patient's relevant allergies or intolerances, describing
@@ -37,7 +37,7 @@
     :required: false
     :mustSupport: true
     :profiles:
-    - http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-allergyintolerance
+    - AllergyIntolerance|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-allergyintolerance
 - :id: Composition.section:sectionMedications
   :short: Patient Summary Medication Summary Section
   :definition: "Information about a patient's medications relevant for the scope of
@@ -61,8 +61,8 @@
     :required: false
     :mustSupport: true
     :profiles:
-    - http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medicationstatement
-    - http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medicationrequest
+    - MedicationStatement|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medicationstatement
+    - MedicationRequest|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medicationrequest
 - :id: Composition.section:sectionImmunizations
   :short: Patient Summary Immunizations Section
   :definition: "Information about a patient's current immunisation status and pertinent
@@ -83,7 +83,7 @@
     :required: false
     :mustSupport: true
     :profiles:
-    - http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-immunization
+    - Immunization|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-immunization
 - :id: Composition.section:sectionResults
   :short: Patient Summary Results Section
   :definition: Information about a patient's relevant observation results collected
@@ -102,21 +102,21 @@
     :required: false
     :mustSupport: true
     :profiles:
-    - http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-diagnosticresult-path
+    - Observation|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-diagnosticresult-path
   - :id: Composition.section:sectionResults.entry:results-observation-radiology
     :min: 0
     :max: "*"
     :required: false
     :mustSupport: true
     :profiles:
-    - http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-results-radiology-uv-ips
+    - Observation|http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-results-radiology-uv-ips
   - :id: Composition.section:sectionResults.entry:results-diagnosticReport
     :min: 0
     :max: "*"
     :required: false
     :mustSupport: true
     :profiles:
-    - http://hl7.org/fhir/uv/ips/StructureDefinition/DiagnosticReport-uv-ips
+    - DiagnosticReport|http://hl7.org/fhir/uv/ips/StructureDefinition/DiagnosticReport-uv-ips
 - :id: Composition.section:sectionProceduresHx
   :short: Patient Summary History of Procedures Section
   :definition: "Information about a patient's past procedures that are pertinent to
@@ -136,7 +136,7 @@
     :required: false
     :mustSupport: true
     :profiles:
-    - http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-procedure
+    - Procedure|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-procedure
 - :id: Composition.section:sectionMedicalDevices
   :short: Patient Summary Medical Devices Section
   :definition: Information about a patient's history of medical device use.
@@ -152,7 +152,7 @@
     :required: false
     :mustSupport: true
     :profiles:
-    - http://hl7.org/fhir/uv/ips/StructureDefinition/DeviceUseStatement-uv-ips
+    - DeviceUseStatement|http://hl7.org/fhir/uv/ips/StructureDefinition/DeviceUseStatement-uv-ips
 - :id: Composition.section:sectionAdvanceDirectives
   :short: Patient Summary Advance Directives Section
   :definition: Information about a patient's advance directives.
@@ -168,7 +168,7 @@
     :required: false
     :mustSupport: false
     :profiles:
-    - http://hl7.org/fhir/StructureDefinition/Consent
+    - Consent|http://hl7.org/fhir/StructureDefinition/Consent
 - :id: Composition.section:sectionAlerts
   :short: Patient Summary Alerts Section
   :definition: Information about a patient's alerts pertinent to the scope of the
@@ -186,7 +186,7 @@
     :required: false
     :mustSupport: false
     :profiles:
-    - http://hl7.org/fhir/uv/ips/StructureDefinition/Flag-alert-uv-ips
+    - Flag|http://hl7.org/fhir/uv/ips/StructureDefinition/Flag-alert-uv-ips
 - :id: Composition.section:sectionFunctionalStatus
   :short: Patient Summary Functional Status Section
   :definition: "Information about a patient's functional status including a description
@@ -207,14 +207,14 @@
     :required: false
     :mustSupport: false
     :profiles:
-    - http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-condition
+    - Condition|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-condition
   - :id: Composition.section:sectionFunctionalStatus.entry:functionalAssessment
     :min: 0
     :max: "*"
     :required: false
     :mustSupport: false
     :profiles:
-    - http://hl7.org/fhir/StructureDefinition/ClinicalImpression
+    - ClinicalImpression|http://hl7.org/fhir/StructureDefinition/ClinicalImpression
 - :id: Composition.section:sectionPastProblems
   :short: Patient Summary History of Past Illness Section
   :definition: Information about a patient's conditions that were suffered in the
@@ -231,7 +231,7 @@
     :required: false
     :mustSupport: false
     :profiles:
-    - http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-condition
+    - Condition|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-condition
 - :id: Composition.section:sectionPregnancyHx
   :short: Patient Summary History of Pregnancy Section
   :definition: Information about whether a patient is currently pregnant or not and
@@ -248,14 +248,14 @@
     :required: false
     :mustSupport: false
     :profiles:
-    - http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-pregnancy-status-uv-ips
+    - Observation|http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-pregnancy-status-uv-ips
   - :id: Composition.section:sectionPregnancyHx.entry:pregnancyOutcome
     :min: 0
     :max: "*"
     :required: false
     :mustSupport: false
     :profiles:
-    - http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-pregnancy-outcome-uv-ips
+    - Observation|http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-pregnancy-outcome-uv-ips
 - :id: Composition.section:sectionPatientStory
   :short: Patient Summary Patient Story Section
   :definition: Information about what matters to a patient. This can include needs,
@@ -284,14 +284,14 @@
     :required: false
     :mustSupport: false
     :profiles:
-    - http://hl7.org/fhir/StructureDefinition/CarePlan
+    - CarePlan|http://hl7.org/fhir/StructureDefinition/CarePlan
   - :id: Composition.section:sectionPlanOfCare.entry:immunizationRecommendation
     :min: 0
     :max: "*"
     :required: false
     :mustSupport: false
     :profiles:
-    - http://hl7.org/fhir/StructureDefinition/ImmunizationRecommendation
+    - ImmunizationRecommendation|http://hl7.org/fhir/StructureDefinition/ImmunizationRecommendation
 - :id: Composition.section:sectionSocialHistory
   :short: Patient Summary Social History Section
   :definition: Information about a patient's health related "lifestyle factors" or
@@ -309,14 +309,14 @@
     :required: false
     :mustSupport: false
     :profiles:
-    - http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-smokingstatus
+    - Observation|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-smokingstatus
   - :id: Composition.section:sectionSocialHistory.entry:alcoholUse
     :min: 0
     :max: '1'
     :required: false
     :mustSupport: false
     :profiles:
-    - http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-alcoholuse-uv-ips
+    - Observation|http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-alcoholuse-uv-ips
 - :id: Composition.section:sectionVitalSigns
   :short: Patient Summary Vital Signs Section
   :definition: Information about a patient's vital signs including blood pressure,
@@ -337,4 +337,4 @@
     :required: false
     :mustSupport: false
     :profiles:
-    - http://hl7.org/fhir/StructureDefinition/vitalsigns
+    - Observation|http://hl7.org/fhir/StructureDefinition/vitalsigns
