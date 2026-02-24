@@ -13,6 +13,8 @@ class Generator
     def initialize(ig_resources)
       @ig_resources = ig_resources
       @composition_sections = []
+      @composition_mandatory_ms_elements = []
+      @composition_optional_ms_elements = []
     end
 
     # Generates composition section metadata from IG resources (in-memory only).
@@ -20,6 +22,8 @@ class Generator
     # @return [void]
     def initiate_build
       generate_metadata_for_composition
+      extract_required_ms_elements
+      extract_optional_ms_elements
     end
 
     # Builds composition metadata and writes it to a YAML file.
@@ -28,10 +32,41 @@ class Generator
     # @return [void]
     def save_to_file(file_path)
       initiate_build
-      File.write(file_path, YAML.dump({ composition_sections: @composition_sections }))
+      File.write(file_path, YAML.dump(
+                              { composition_sections: @composition_sections,
+                                composition_mandatory_ms_elements: @composition_mandatory_ms_elements,
+                                composition_optional_ms_elements: @composition_optional_ms_elements }
+                            ))
     end
 
     private
+
+    def extract_optional_ms_elements
+      @composition_optional_ms_elements = extract_ms_elements_by_predicate(->(element) { element.min.zero? })
+    end
+
+    def extract_required_ms_elements
+      @composition_mandatory_ms_elements = extract_ms_elements_by_predicate(->(element) { element.min.positive? })
+    end
+
+    def extract_ms_elements_by_predicate(predicate)
+      elements = composition_extract_ms_elements_without_slices.filter do |element|
+        predicate.call(element)
+      end
+      elements.map do |element|
+        element.base.path.gsub('Composition.', '')
+      end.uniq.sort
+    end
+
+    def composition_extract_ms_elements_without_slices
+      composition_structure_definition = get_structure_definition_by_type('Composition')
+      return [] if composition_structure_definition.nil?
+
+      elements = composition_structure_definition.snapshot.element
+      elements.filter do |element|
+        element.mustSupport == true && !element.base.path.include?(':') && element.base.path.include?('Composition.')
+      end
+    end
 
     # @param type [String] FHIR resource type (e.g. +StructureDefinition+)
     # @return [Array<FHIR::Model>]

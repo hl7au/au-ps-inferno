@@ -338,3 +338,27 @@
     :mustSupport: false
     :profiles:
     - Observation|http://hl7.org/fhir/StructureDefinition/vitalsigns
+:composition_mandatory_ms_elements:
+- attester.mode
+- author
+- date
+- event.code
+- section
+- section.code
+- section.text
+- section.title
+- status
+- subject
+- title
+- type
+:composition_optional_ms_elements:
+- attester
+- attester.party
+- attester.time
+- custodian
+- event
+- event.period
+- identifier
+- section
+- section.emptyReason
+- section.entry
