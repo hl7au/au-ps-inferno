@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 
+require 'zlib'
+require 'rubygems/package'
+require 'fhir_models'
+
 # Extracts FHIR resources from an Implementation Guide (IG) package archive.
 #
 # Reads a .tar.gz (or .tgz) package, parses JSON entries that represent FHIR

@@ -1,5 +1,5 @@
 ---
-composition_sections:
+:composition_sections:
 - :id: Composition.section:sectionProblems
   :short: Patient Summary Problems Section
   :definition: Information about a patient's clinical problems or conditions that
