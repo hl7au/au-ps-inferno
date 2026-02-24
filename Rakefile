@@ -17,9 +17,15 @@ namespace :db do
 end
 
 namespace :generator do
-  desc 'Generate test suites for the AU PS and IPS implementation guides'
+  desc 'Generate AU PS/IPS test suites. Set ADDITIONAL_IG_RESOURCES to a folder to load extra JSON resources.'
   task :generate do
     require 'au_ps_inferno/generator/generator'
-    Generator.new('lib/au_ps_inferno/igs/0.5.0-preview.tgz').generate
+    extra = ENV['ADDITIONAL_IG_RESOURCES']
+    if extra.nil? || extra.empty?
+      default_extra = File.join(File.dirname(__FILE__), 'additional_resources')
+      extra = default_extra if File.directory?(default_extra)
+    end
+    opts = extra ? { additional_resources_path: extra } : {}
+    Generator.new('lib/au_ps_inferno/igs/0.5.0-preview.tgz', **opts).generate
   end
 end

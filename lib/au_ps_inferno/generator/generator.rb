@@ -10,15 +10,20 @@ require_relative 'metadata_manager'
 # @example
 #   generator = Generator.new('/path/to/ig')
 #   generator.generate
+#
+# @example With additional resources folder (e.g. missing StructureDefinitions)
+#   generator = Generator.new('/path/to/ig', additional_resources_path: 'path/to/extra-ig-resources')
+#   generator.generate
 class Generator
-  # Initializes a Generator with a given IG directory path.
+  # Initializes a Generator with a given IG package path and optional folder for extra resources.
   #
-  # @param ig_path [String] Path to the Implementation Guide (IG) directory.
-  def initialize(ig_path)
-    resources_manager = IGResourcesExtractor.new(ig_path)
+  # @param ig_path [String] Path to the IG package file (.tar.gz or .tgz).
+  # @param additional_resources_path [String, nil] Optional path to a folder of JSON FHIR resources
+  #   (StructureDefinition, SearchParameter, etc.) to load in addition to the package.
+  def initialize(ig_path, additional_resources_path: nil)
     @ig_path = ig_path
-    @resources_manager = resources_manager
-    @metadata = MetadataManager.new(resources_manager.ig_resources)
+    @resources_manager = IGResourcesExtractor.new(ig_path, additional_resources_path: additional_resources_path)
+    @metadata = MetadataManager.new(@resources_manager.ig_resources)
   end
 
   # Extract resources and save metadata to a YAML file.

@@ -7,6 +7,7 @@ class Generator
   #
   # Extracts Composition StructureDefinition sections and their entry constraints
   # (profiles, cardinality, mustSupport, section codes) and serializes them to YAML.
+  # rubocop:disable Metrics/ClassLength
   class MetadataManager
     # @param ig_resources [Array<FHIR::Model>] Parsed IG resources (e.g. from IGResourcesExtractor#ig_resources)
     def initialize(ig_resources)
@@ -48,6 +49,40 @@ class Generator
       end
     end
 
+    # Finds a StructureDefinition in ig_resources whose canonical URL matches the given profile.
+    # Matches by URL with or without version (canonical form "url|version").
+    # @param profile_url [String] Canonical profile URL (e.g. from Reference.type.targetProfile)
+    # @param entry_id [String, nil] Optional entry element id for error context
+    # @return [FHIR::StructureDefinition]
+    # @raise [RuntimeError] when no StructureDefinition in ig_resources has this profile URL
+    def get_structure_definition_by_profile(profile_url, entry_id = nil)
+      base_url = profile_url.to_s.split('|').first
+      sd = find_structure_definition_by_base_url(base_url)
+      return sd if sd
+
+      available = structure_definition_urls
+      raise profile_not_found_error(profile_url, entry_id, available)
+    end
+
+    def find_structure_definition_by_base_url(base_url)
+      get_resources_by_type('StructureDefinition').find do |resource|
+        resource.url.to_s.split('|').first == base_url
+      end
+    end
+
+    def structure_definition_urls
+      get_resources_by_type('StructureDefinition').map { |r| r.url.to_s }.reject(&:empty?).sort
+    end
+
+    def profile_not_found_error(profile_url, entry_id, available)
+      context = entry_id ? " (entry: #{entry_id})" : ''
+      hint = 'Add JSON via ADDITIONAL_IG_RESOURCES or additional_resources_path.'
+      sample = available.join(', ')
+      "No StructureDefinition found in IG resources for profile: #{profile_url.inspect}#{context}. " \
+        "Ensure the IG includes it or #{hint} " \
+        "Available URLs (#{available.size}): #{sample}"
+    end
+
     # Populates @composition_sections from the Composition StructureDefinition.
     # No-op when no Composition StructureDefinition is present in the IG.
     # @return [void]
@@ -67,7 +102,7 @@ class Generator
 
     # @param section [FHIR::Element] Snapshot element for Composition.section (with sliceName)
     # @param elements [Array<FHIR::Element>] All snapshot elements from the Composition StructureDefinition
-    # @return [Hash{Symbol => Object}] Section metadata (+:id+, +:short+, +:definition+, +:min+, +:max+, +:required+, +:mustSupport+, +:code+, +:entries+)
+    # @return [Hash] Section metadata (:id, :short, :definition, :min, :max, :required, :mustSupport, :code, :entries)
     def build_section_data(section, elements)
       basic_section_data = build_basic_section_data(section)
       {
@@ -78,7 +113,7 @@ class Generator
     end
 
     # @param section [FHIR::Element] Snapshot element for Composition.section (with sliceName)
-    # @return [Hash{Symbol => Object}] Basic section fields (+:id+, +:short+, +:definition+, +:min+, +:max+, +:required+, +:mustSupport+)
+    # @return [Hash] Basic section fields (:id, :short, :definition, :min, :max, :required, :mustSupport)
     def build_basic_section_data(section)
       {
         id: section.id,
@@ -117,8 +152,8 @@ class Generator
       end
     end
 
-    # @param entry [FHIR::Element] Snapshot element for a section entry (e.g. +Composition.section:sectionProblems.entry:problem+)
-    # @return [Hash{Symbol => Object}] Entry metadata (+:id+, +:min+, +:max+, +:required+, +:mustSupport+, +:profiles+)
+    # @param entry [FHIR::Element] Snapshot element for section entry (e.g. Composition.section:...entry:problem)
+    # @return [Hash] Entry metadata (:id, :min, :max, :required, :mustSupport, :profiles)
     def build_section_entry_data(entry)
       {
         id: entry.id,
@@ -126,18 +161,22 @@ class Generator
         max: entry.max,
         required: entry.min.positive?,
         mustSupport: entry.mustSupport || false,
-        profiles: get_section_entry_profiles(entry)
+        profiles: get_section_entry_profiles(entry.id, entry)
       }
     end
 
+    # @param entry_id [String] Entry element id (for error messages)
     # @param element [FHIR::Element] Snapshot element with type Reference and targetProfile
-    # @return [Array<String>] Target profile URLs for the Reference type(s)
-    def get_section_entry_profiles(element)
-      filtered_element = element.type.filter do |type|
-        type.code == 'Reference'
-      end
+    # @return [Array<String>] Strings in the form "resourceType|profile" for each target profile
+    def get_section_entry_profiles(entry_id, element)
+      ref_types = element.type&.select { |t| t.code == 'Reference' } || []
+      profile_urls = ref_types.flat_map(&:targetProfile).to_a.compact
 
-      filtered_element.map(&:targetProfile).flatten
+      profile_urls.map do |profile_url|
+        sd = get_structure_definition_by_profile(profile_url, entry_id)
+        "#{sd.type}|#{profile_url}"
+      end
     end
   end
+  # rubocop:enable Metrics/ClassLength
 end
