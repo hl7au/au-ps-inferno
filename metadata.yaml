@@ -1,7 +1,6 @@
 ---
 :composition_sections:
 - :id: Composition.section:sectionProblems
-  :code: 11450-4
   :short: Patient Summary Problems Section
   :definition: Information about a patient's clinical problems or conditions that
     are currently being monitored.
@@ -9,6 +8,7 @@
   :max: '1'
   :required: true
   :mustSupport: true
+  :code: 11450-4
   :entries:
   - :id: Composition.section:sectionProblems.entry:problem
     :min: 0
@@ -18,7 +18,6 @@
     :profiles:
     - http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-condition
 - :id: Composition.section:sectionAllergies
-  :code: 48765-2
   :short: Patient Summary Allergies and Intolerances Section
   :definition: Information about a patient's relevant allergies or intolerances, describing
     the kind of reaction (e.g. rash, anaphylaxis, etc.); preferably the agents that
@@ -30,6 +29,7 @@
   :max: '1'
   :required: true
   :mustSupport: true
+  :code: 48765-2
   :entries:
   - :id: Composition.section:sectionAllergies.entry:allergyOrIntolerance
     :min: 0
@@ -39,7 +39,6 @@
     :profiles:
     - http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-allergyintolerance
 - :id: Composition.section:sectionMedications
-  :code: 10160-0
   :short: Patient Summary Medication Summary Section
   :definition: "Information about a patient's medications relevant for the scope of
     the patient summary.\r\nThe actual content could depend on the jurisdiction, it
@@ -54,6 +53,7 @@
   :max: '1'
   :required: true
   :mustSupport: true
+  :code: 10160-0
   :entries:
   - :id: Composition.section:sectionMedications.entry:medicationStatementOrRequest
     :min: 0
@@ -64,7 +64,6 @@
     - http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medicationstatement
     - http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medicationrequest
 - :id: Composition.section:sectionImmunizations
-  :code: 11369-6
   :short: Patient Summary Immunizations Section
   :definition: "Information about a patient's current immunisation status and pertinent
     immunisation history.\r\nThe primary use case for this section is to enable communication
@@ -76,6 +75,7 @@
   :max: '1'
   :required: false
   :mustSupport: true
+  :code: 11369-6
   :entries:
   - :id: Composition.section:sectionImmunizations.entry:immunization
     :min: 0
@@ -85,7 +85,6 @@
     :profiles:
     - http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-immunization
 - :id: Composition.section:sectionResults
-  :code: 30954-2
   :short: Patient Summary Results Section
   :definition: Information about a patient's relevant observation results collected
     on the patient or produced on in-vitro biologic specimens collected from the patient.
@@ -95,6 +94,7 @@
   :max: '1'
   :required: false
   :mustSupport: true
+  :code: 30954-2
   :entries:
   - :id: Composition.section:sectionResults.entry:results-observation-laboratory-pathology
     :min: 0
@@ -118,7 +118,6 @@
     :profiles:
     - http://hl7.org/fhir/uv/ips/StructureDefinition/DiagnosticReport-uv-ips
 - :id: Composition.section:sectionProceduresHx
-  :code: 47519-4
   :short: Patient Summary History of Procedures Section
   :definition: "Information about a patient's past procedures that are pertinent to
     the scope of this patient summary.\r\nProcedures could refer, for example to:\r\n1.
@@ -129,6 +128,7 @@
   :max: '1'
   :required: false
   :mustSupport: true
+  :code: 47519-4
   :entries:
   - :id: Composition.section:sectionProceduresHx.entry:procedure
     :min: 0
@@ -138,13 +138,13 @@
     :profiles:
     - http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-procedure
 - :id: Composition.section:sectionMedicalDevices
-  :code: 46264-8
   :short: Patient Summary Medical Devices Section
   :definition: Information about a patient's history of medical device use.
   :min: 0
   :max: '1'
   :required: false
   :mustSupport: true
+  :code: 46264-8
   :entries:
   - :id: Composition.section:sectionMedicalDevices.entry:deviceStatement
     :min: 0
@@ -154,13 +154,13 @@
     :profiles:
     - http://hl7.org/fhir/uv/ips/StructureDefinition/DeviceUseStatement-uv-ips
 - :id: Composition.section:sectionAdvanceDirectives
-  :code: 42348-3
   :short: Patient Summary Advance Directives Section
   :definition: Information about a patient's advance directives.
   :min: 0
   :max: '1'
   :required: false
   :mustSupport: true
+  :code: 42348-3
   :entries:
   - :id: Composition.section:sectionAdvanceDirectives.entry:advanceDirectivesConsent
     :min: 0
@@ -170,7 +170,6 @@
     :profiles:
     - http://hl7.org/fhir/StructureDefinition/Consent
 - :id: Composition.section:sectionAlerts
-  :code: 104605-1
   :short: Patient Summary Alerts Section
   :definition: Information about a patient's alerts pertinent to the scope of the
     patient summary including flagging potential concerns and/or dangers to/from the
@@ -179,6 +178,7 @@
   :max: '1'
   :required: false
   :mustSupport: true
+  :code: 104605-1
   :entries:
   - :id: Composition.section:sectionAlerts.entry:alertsFlag
     :min: 0
@@ -188,7 +188,6 @@
     :profiles:
     - http://hl7.org/fhir/uv/ips/StructureDefinition/Flag-alert-uv-ips
 - :id: Composition.section:sectionFunctionalStatus
-  :code: 47420-5
   :short: Patient Summary Functional Status Section
   :definition: "Information about a patient's functional status including a description
     of capability of the patient to perform acts of daily living, including possible
@@ -200,6 +199,7 @@
   :max: '1'
   :required: false
   :mustSupport: true
+  :code: 47420-5
   :entries:
   - :id: Composition.section:sectionFunctionalStatus.entry:disability
     :min: 0
@@ -216,7 +216,6 @@
     :profiles:
     - http://hl7.org/fhir/StructureDefinition/ClinicalImpression
 - :id: Composition.section:sectionPastProblems
-  :code: 11348-0
   :short: Patient Summary History of Past Illness Section
   :definition: Information about a patient's conditions that were suffered in the
     past and are no longer tracked in the Problem List.
@@ -224,6 +223,7 @@
   :max: '1'
   :required: false
   :mustSupport: true
+  :code: 11348-0
   :entries:
   - :id: Composition.section:sectionPastProblems.entry:pastProblem
     :min: 0
@@ -233,7 +233,6 @@
     :profiles:
     - http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-condition
 - :id: Composition.section:sectionPregnancyHx
-  :code: 10162-6
   :short: Patient Summary History of Pregnancy Section
   :definition: Information about whether a patient is currently pregnant or not and
     can contain addition summarising information about the outcome of earlier pregnancies.
@@ -241,6 +240,7 @@
   :max: '1'
   :required: false
   :mustSupport: true
+  :code: 10162-6
   :entries:
   - :id: Composition.section:sectionPregnancyHx.entry:pregnancyStatus
     :min: 0
@@ -257,7 +257,6 @@
     :profiles:
     - http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-pregnancy-outcome-uv-ips
 - :id: Composition.section:sectionPatientStory
-  :code: 81338-6
   :short: Patient Summary Patient Story Section
   :definition: Information about what matters to a patient. This can include needs,
     strengths, values, concerns and preferences to others providing support and care.
@@ -266,9 +265,9 @@
   :max: '1'
   :required: false
   :mustSupport: true
+  :code: 81338-6
   :entries: []
 - :id: Composition.section:sectionPlanOfCare
-  :code: 18776-5
   :short: Patient Summary Plan of Care Section
   :definition: Information about a patient's plans of care containing the expectations
     for care including proposals, goals, and order requests for monitoring, tracking,
@@ -277,6 +276,7 @@
   :max: '1'
   :required: false
   :mustSupport: true
+  :code: 18776-5
   :entries:
   - :id: Composition.section:sectionPlanOfCare.entry:carePlan
     :min: 0
@@ -293,7 +293,6 @@
     :profiles:
     - http://hl7.org/fhir/StructureDefinition/ImmunizationRecommendation
 - :id: Composition.section:sectionSocialHistory
-  :code: 29762-2
   :short: Patient Summary Social History Section
   :definition: Information about a patient's health related "lifestyle factors" or
     "lifestyle observations" (e.g. smoke habits, alcohol consumption, diets, risky
@@ -302,6 +301,7 @@
   :max: '1'
   :required: false
   :mustSupport: true
+  :code: 29762-2
   :entries:
   - :id: Composition.section:sectionSocialHistory.entry:smokingTobaccoUse
     :min: 0
@@ -318,7 +318,6 @@
     :profiles:
     - http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-alcoholuse-uv-ips
 - :id: Composition.section:sectionVitalSigns
-  :code: 8716-3
   :short: Patient Summary Vital Signs Section
   :definition: Information about a patient's vital signs including blood pressure,
     body temperature, heart rate, and respiratory rate. It can also include other
@@ -330,6 +329,7 @@
   :max: '1'
   :required: false
   :mustSupport: true
+  :code: 8716-3
   :entries:
   - :id: Composition.section:sectionVitalSigns.entry:vitalSign
     :min: 0
