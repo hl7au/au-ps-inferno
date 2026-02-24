@@ -231,7 +231,8 @@ class Generator
     # @param entry_id [String] Entry element id (for error messages when profile is missing)
     # @param element [FHIR::Element] Snapshot element with type Reference and targetProfile
     # @return [Array<String>] Strings in the form "resourceType|profile" for each target profile
-    # @raise [RuntimeError] when a targetProfile has no matching StructureDefinition (see {#get_structure_definition_by_profile})
+    # @raise [RuntimeError] when no StructureDefinition matches a targetProfile.
+    #   See {#get_structure_definition_by_profile}.
     def get_section_entry_profiles(entry_id, element)
       ref_types = element.type&.select { |t| t.code == 'Reference' } || []
       profile_urls = ref_types.flat_map(&:targetProfile).to_a.compact
