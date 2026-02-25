@@ -99,4 +99,8 @@ configurer.add_step('/fhir/ValueSet', 'POST', File.read('./resources/ValueSet-am
                     { 'Content-Type' => 'application/json', 'Authorization' => authorization })
 configurer.add_step('/fhir/CodeSystem', 'POST',
                     File.read('./resources/CodeSystem-australian-indigenous-status-1.json'), { 'Content-Type' => 'application/json', 'Authorization' => authorization })
+configurer.add_step('/fhir/ValueSet', 'POST', File.read('./resources/ValueSet-ihi-status-1.json'),
+                    { 'Content-Type' => 'application/json', 'Authorization' => authorization })
+configurer.add_step('/fhir/ValueSet', 'POST', File.read('./resources/ValueSet-ihi-record-status-1.json'),
+                    { 'Content-Type' => 'application/json', 'Authorization' => authorization })
 configurer.execute_all

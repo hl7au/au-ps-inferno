@@ -3,14 +3,14 @@
 require_relative '../../utils/basic_test_class'
 
 module AUPSTestKit
-  # Automatically generated test for <%= section_name %> section validation
-  class <%= test_class_name %> < BasicTest
-    title 'Validate <%= section_name %> Section References and Resources'
-    description 'Validates that the <%= section_name %> section in the Composition resource contains valid ' \
+  # The optional sections populated in the Composition resource.
+  class AUPSSectionsVitalSignsValidation < BasicTest
+    title 'Validate VITAL SIGNS NOTE Section References and Resources'
+    description 'Validates that the VITAL SIGNS NOTE section in the Composition resource contains valid ' \
                 'references that resolve to expected resource types in the bundle, and that each ' \
                 'referenced resource conforms to its specified FHIR profile(s).'
-    id :<%= test_id %>
-    optional <%= optional %>
+    id :au_ps_sections_vital_signs_validation
+    optional true
 
     input :bundle_resource,
           optional: true,
@@ -30,7 +30,7 @@ module AUPSTestKit
     run do
       skip_if skip_test?, 'No Bundle resource provided'
       read_and_save_data
-      validate_section_resources('<%= section_id %>')
+      validate_section_resources('VITAL_SIGNS_NOTE')
     end
   end
 end

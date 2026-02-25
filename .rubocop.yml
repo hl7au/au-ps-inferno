@@ -2,6 +2,7 @@ AllCops:
   Exclude:
     - 'spec/spec_helper.rb'
     - 'lib/au_ps_inferno/generated/**/*'
+    - 'aidbox_config.rb'
 
 Metrics/ModuleLength:
   Exclude:
