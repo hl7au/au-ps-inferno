@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'yaml'
+require_relative 'constants'
 
 class Generator
   # Builds and persists metadata for Composition sections from IG resources.
@@ -10,6 +11,7 @@ class Generator
   # @see Generator::IGResourcesExtractor for loading IG resources
   # rubocop:disable Metrics/ClassLength
   class MetadataManager
+    include Constants
     # @param ig_resources [Array<FHIR::Model>] Parsed IG resources (e.g. from IGResourcesExtractor#ig_resources)
     # @return [Generator::MetadataManager]
     def initialize(ig_resources)
@@ -51,9 +53,14 @@ class Generator
         {
           url: profile.url.to_s,
           name: profile.name,
-          title: profile.title
+          title: profile.title,
+          required: profile_required?(profile)
         }
       end
+    end
+
+    def profile_required?(profile)
+      REQUIRED_PROFILES.include?(profile.url.to_s)
     end
 
     def main_profiles

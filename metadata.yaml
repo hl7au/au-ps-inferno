@@ -366,51 +366,68 @@
 - :url: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-allergyintolerance
   :name: AUPSAllergyIntolerance
   :title: AU PS AllergyIntolerance
+  :required: true
 - :url: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-bundle
   :name: AUPSBundle
   :title: AU PS Bundle
+  :required: true
 - :url: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-composition
   :name: AUPSComposition
   :title: AU PS Composition
+  :required: true
 - :url: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-condition
   :name: AUPSCondition
   :title: AU PS Condition
+  :required: true
 - :url: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-diagnosticresult-path
   :name: AUPSPathologyResult
   :title: AU PS Pathology Result Observation
+  :required: false
 - :url: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-encounter
   :name: AUPSEncounter
   :title: AU PS Encounter
+  :required: false
 - :url: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-immunization
   :name: AUPSImmunization
   :title: AU PS Immunization
+  :required: false
 - :url: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medication
   :name: AUPSMedication
   :title: AU PS Medication
+  :required: false
 - :url: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medicationrequest
   :name: AUPSMedicationRequest
   :title: AU PS MedicationRequest
+  :required: true
 - :url: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medicationstatement
   :name: AUPSMedicationStatement
   :title: AU PS MedicationStatement
+  :required: true
 - :url: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-organization
   :name: AUPSOrganization
   :title: AU PS Organization
+  :required: false
 - :url: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-patient
   :name: AUPSPatient
   :title: AU PS Patient
+  :required: true
 - :url: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-practitioner
   :name: AUPSPractitioner
   :title: AU PS Practitioner
+  :required: false
 - :url: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-practitionerrole
   :name: AUPSPractitionerRole
   :title: AU PS PractitionerRole
+  :required: false
 - :url: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-procedure
   :name: AUPSProcedure
   :title: AU PS Procedure
+  :required: false
 - :url: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-relatedperson
   :name: AUPSRelatedPerson
   :title: AU PS RelatedPerson
+  :required: false
 - :url: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-smokingstatus
   :name: AUPSSmokingStatus
   :title: AU PS Smoking Status
+  :required: false
