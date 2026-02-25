@@ -30,6 +30,13 @@ class Generator
       puts "Test file generated: #{path}"
     end
 
+    def test_file_summary
+      {
+        file_path: output_file_path,
+        attribtes: @attributes
+      }
+    end
+
     private
 
     # Returns the absolute path to the ERB template file,

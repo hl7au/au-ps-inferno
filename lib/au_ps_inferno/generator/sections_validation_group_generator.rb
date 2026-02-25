@@ -42,11 +42,13 @@ class Generator
     #
     # @return [void]
     def generate
-      TestFileGenerator.new(
+      test_file_generator = TestFileGenerator.new(
         template_file_path: 'au_ps_specific_section_validation_test.rb.erb',
         output_file_path: "#{test_id}.rb",
         attributes: build_attributes
-      ).generate
+      )
+      test_file_generator.generate
+      test_file_generator.test_file_summary
     end
 
     private
@@ -94,14 +96,15 @@ class Generator
     # @param metadata [#composition_sections] Object holding the composition_sections array.
     def initialize(metadata)
       @metadata = metadata
+      @test_entities = []
     end
 
     # Generates the group and its test entity files.
     #
     # @return [void]
     def generate
-      generate_group
       generate_test_entities
+      generate_group
     end
 
     private
@@ -110,7 +113,21 @@ class Generator
     #
     # @return [void]
     def generate_group
-      # Generate the sections validation group
+      TestFileGenerator.new(
+        template_file_path: 'generic_group.rb.erb',
+        output_file_path: 'au_ps_sections_validation_group.rb',
+        attributes: build_group_attributes
+      ).generate
+    end
+
+    def build_group_attributes
+      {
+        group_class_name: 'AUPSSectionsValidationGroup',
+        group_title: 'AU PS Sections Validation',
+        group_description: 'Verify that an AU PS Sections are valid.',
+        group_id: 'au_ps_sections_validation_group',
+        tests: @test_entities
+      }
     end
 
     # Iterates all sections and generates their validation test files.
@@ -118,7 +135,7 @@ class Generator
     # @return [void]
     def generate_test_entities
       @metadata.composition_sections.each do |section|
-        SectionTestData.new(section).generate
+        @test_entities << SectionTestData.new(section).generate
       end
     end
   end
