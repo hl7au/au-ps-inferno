@@ -17,6 +17,7 @@ class Generator
       @composition_sections = []
       @composition_mandatory_ms_elements = []
       @composition_optional_ms_elements = []
+      @profiles = []
     end
 
     # Generates composition section metadata from IG resources (in-memory only).
@@ -26,6 +27,7 @@ class Generator
       generate_metadata_for_composition
       extract_required_ms_elements
       extract_optional_ms_elements
+      extract_profiles
     end
 
     # Builds composition metadata and writes it to a YAML file.
@@ -37,11 +39,31 @@ class Generator
       File.write(file_path, YAML.dump(
                               { composition_sections: @composition_sections,
                                 composition_mandatory_ms_elements: @composition_mandatory_ms_elements,
-                                composition_optional_ms_elements: @composition_optional_ms_elements }
+                                composition_optional_ms_elements: @composition_optional_ms_elements,
+                                profiles: @profiles }
                             ))
     end
 
     private
+
+    def extract_profiles
+      @profiles = main_profiles.map do |profile|
+        {
+          url: profile.url.to_s,
+          name: profile.name,
+          title: profile.title
+        }
+      end
+    end
+
+    def main_profiles
+      # Main profile in context of the IG is AUPS-related profiles.
+      @ig_resources.filter do |resource|
+        next unless resource.resourceType == 'StructureDefinition'
+
+        resource.url.to_s.include?('http://hl7.org.au/fhir/ps/StructureDefinition/')
+      end
+    end
 
     # Populates @composition_optional_ms_elements with mustSupport elements where min is 0.
     # @return [void]
