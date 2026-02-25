@@ -8,6 +8,9 @@ class Generator
   #
   # Extracts Composition StructureDefinition sections and their entry constraints
   # (profiles, cardinality, mustSupport, section codes) and serializes them to YAML.
+  # Output hash keys: +composition_sections+, +composition_mandatory_ms_elements+,
+  # +composition_optional_ms_elements+, +profiles+.
+  #
   # @see Generator::IGResourcesExtractor for loading IG resources
   # rubocop:disable Metrics/ClassLength
   class MetadataManager
@@ -48,6 +51,8 @@ class Generator
 
     private
 
+    # Populates @profiles with AU PS StructureDefinitions (url, name, title, required).
+    # @return [void]
     def extract_profiles
       @profiles = main_profiles.map do |profile|
         {
@@ -59,12 +64,16 @@ class Generator
       end
     end
 
+    # @param profile [FHIR::StructureDefinition] AU PS StructureDefinition
+    # @return [Boolean] true if the profile URL is in {Generator::Constants::REQUIRED_PROFILES}
     def profile_required?(profile)
       REQUIRED_PROFILES.include?(profile.url.to_s)
     end
 
+    # StructureDefinitions from the IG whose URL is an AU PS profile
+    # (http://hl7.org.au/fhir/ps/StructureDefinition/...).
+    # @return [Array<FHIR::StructureDefinition>]
     def main_profiles
-      # Main profile in context of the IG is AUPS-related profiles.
       @ig_resources.filter do |resource|
         next unless resource.resourceType == 'StructureDefinition'
 
