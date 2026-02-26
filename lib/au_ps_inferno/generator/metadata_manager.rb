@@ -396,6 +396,18 @@ class Generator
         { expression: element, label: element }
       end
     end
+
+    def au_ps_profiles_mapping_required
+      @profiles.filter do |profile|
+        profile[:required]
+      end.each_with_object({}) { |profile, hash| hash[profile[:url]] = profile[:name] }
+    end
+
+    def au_ps_profiles_mapping_other
+      @profiles.filter do |profile|
+        !profile[:required]
+      end.each_with_object({}) { |profile, hash| hash[profile[:url]] = profile[:name] }
+    end
   end
   # rubocop:enable Metrics/ClassLength
 end

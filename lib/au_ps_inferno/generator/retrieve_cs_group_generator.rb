@@ -83,7 +83,7 @@ class Generator
     def generate_one_test(spec)
       file_name = "#{spec[:file_base]}.rb"
       test_id = versioned_test_id(spec[:id_base])
-      config = test_file_config(spec, file_name, test_id)
+      config = test_file_config(spec, file_name, test_id, @metadata)
       config[:output_base] = @output_base if @output_base
       TestFileGenerator.new(config).generate
       { file_name: file_name, test_id: test_id }
@@ -97,23 +97,25 @@ class Generator
       @version_suffix.empty? ? class_base : "#{class_base}#{@version_suffix}"
     end
 
-    def test_file_config(spec, file_name, test_id)
+    def test_file_config(spec, file_name, test_id, metadata)
       template = spec[:custom_template] || 'retrieve_bundle_test.rb.erb'
       {
         template_file_path: template,
         output_file_path: file_name,
-        attributes: test_file_attributes(spec, file_name, test_id)
+        attributes: test_file_attributes(spec, file_name, test_id, metadata)
       }
     end
 
-    def test_file_attributes(spec, file_name, test_id)
+    def test_file_attributes(spec, file_name, test_id, metadata)
       {
         file_name: file_name, test_id: test_id,
         test_class_name: versioned_test_class_name(spec[:class_base]),
         test_title: spec[:title], test_description: spec[:description],
         base_class_require: spec[:base_class_require],
         base_class_name: spec[:base_class_name],
-        description_comment: spec[:description_comment], run_code: spec[:run_code]
+        description_comment: spec[:description_comment], run_code: spec[:run_code],
+        au_ps_profiles_mapping_required: metadata.au_ps_profiles_mapping_required,
+        au_ps_profiles_mapping_other: metadata.au_ps_profiles_mapping_other
       }
     end
 

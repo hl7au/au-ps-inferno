@@ -25,12 +25,12 @@ module AUPSTestKit
     run do
       skip_if scratch[:capability_statement].blank?, 'No CapabilityStatement resource provided'
       check_profiles_status(
-        Constants::AU_PS_PROFILES_MAPPING_REQUIRED,
+        <%= au_ps_profiles_mapping_required %>,
         'For each of the following AU PS profiles indicate if it is referenced as a supported profile'
       )
 
       check_profiles_status(
-        Constants::AU_PS_PROFILES_MAPPING_OTHER,
+        <%= au_ps_profiles_mapping_other %>,
         'List any other AU PS profiles referenced as supported profile'
       )
     end

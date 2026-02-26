@@ -25,12 +25,12 @@ module AUPSTestKit
     run do
       skip_if scratch[:capability_statement].blank?, 'No CapabilityStatement resource provided'
       check_profiles_status(
-        Constants::AU_PS_PROFILES_MAPPING_REQUIRED,
+        {"http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-allergyintolerance"=>"AUPSAllergyIntolerance", "http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-bundle"=>"AUPSBundle", "http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-composition"=>"AUPSComposition", "http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-condition"=>"AUPSCondition", "http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medicationrequest"=>"AUPSMedicationRequest", "http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medicationstatement"=>"AUPSMedicationStatement", "http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-patient"=>"AUPSPatient"},
         'For each of the following AU PS profiles indicate if it is referenced as a supported profile'
       )
 
       check_profiles_status(
-        Constants::AU_PS_PROFILES_MAPPING_OTHER,
+        {"http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-diagnosticresult-path"=>"AUPSPathologyResult", "http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-encounter"=>"AUPSEncounter", "http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-immunization"=>"AUPSImmunization", "http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medication"=>"AUPSMedication", "http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-organization"=>"AUPSOrganization", "http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-practitioner"=>"AUPSPractitioner", "http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-practitionerrole"=>"AUPSPractitionerRole", "http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-procedure"=>"AUPSProcedure", "http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-relatedperson"=>"AUPSRelatedPerson", "http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-smokingstatus"=>"AUPSSmokingStatus"},
         'List any other AU PS profiles referenced as supported profile'
       )
     end
