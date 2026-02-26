@@ -4,6 +4,7 @@ require_relative 'ig_resources_extractor'
 require_relative 'metadata_manager'
 require_relative 'retrieve_bundle_group_generator'
 require_relative 'summary_bundle_group_generator'
+require_relative 'validation_group_generator'
 require_relative 'sections_validation_group_generator'
 require_relative 'test_file_generator'
 require_relative 'version_suffix'
@@ -46,27 +47,22 @@ class Generator
   def generate
     @resources_manager.extract
     save_metadata_to_version_folder
-    retrieve_gen = RetrieveBundleGroupGenerator.new(@version_suffix, @suite_version)
-    retrieve_gen.generate
-    summary_gen = SummaryBundleGroupGenerator.new(@version_suffix, @suite_version)
-    summary_gen.generate
+    group_infos = run_bundle_and_validation_generators
     section_gen = SectionsValidationGroupGenerator.new(@metadata, @version_suffix, @suite_version)
     section_gen.generate
-    generate_suite(suite_groups(retrieve_gen, summary_gen, section_gen))
+    generate_suite(group_infos + [section_gen.suite_group_info])
   end
 
   private
 
-  # @param retrieve_gen [RetrieveBundleGroupGenerator]
-  # @param summary_gen [SummaryBundleGroupGenerator]
-  # @param section_gen [SectionsValidationGroupGenerator]
+  # Runs retrieve, summary, and validation group generators; returns their suite_group_info hashes.
   # @return [Array<Hash>] suite_group_info hashes for suite template
-  def suite_groups(retrieve_gen, summary_gen, section_gen)
-    [
-      retrieve_gen.suite_group_info,
-      summary_gen.suite_group_info,
-      section_gen.suite_group_info
-    ]
+  def run_bundle_and_validation_generators
+    [RetrieveBundleGroupGenerator, SummaryBundleGroupGenerator, ValidationGroupGenerator].map do |gen_class|
+      gen = gen_class.new(@version_suffix, @suite_version)
+      gen.generate
+      gen.suite_group_info
+    end
   end
 
   def save_metadata_to_version_folder
