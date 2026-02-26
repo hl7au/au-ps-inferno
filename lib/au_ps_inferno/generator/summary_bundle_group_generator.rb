@@ -120,17 +120,17 @@ class Generator
     def run_code(spec, metadata)
       case spec[:file_base]
       when 'au_ps_summary_bundle_composition_mandatory_sections'
-        "read_composition_sections_info(#{metadata.required_sections_data_codes})"
+        "read_composition_sections_info(#{metadata.required_sections_data_codes}, #{metadata.sections_codes_mapping})"
       when 'au_ps_summary_bundle_composition_recommended_sections'
-        "read_composition_sections_info(#{metadata.recommended_sections_data_codes})"
+        "read_composition_sections_info(#{metadata.recommended_sections_data_codes}, #{metadata.sections_codes_mapping})"
       when 'au_ps_summary_bundle_composition_optional_sections'
-        "read_composition_sections_info(#{metadata.optional_sections_data_codes})"
+        "read_composition_sections_info(#{metadata.optional_sections_data_codes}, #{metadata.sections_codes_mapping})"
       when 'au_ps_summary_bundle_has_must_support_elements'
         'bundle_mandatory_ms_elements_info'
       when 'au_ps_summary_bundle_composition_must_support_elements'
         "composition_mandatory_ms_elements_info(#{metadata.optional_ms_elements}, #{metadata.mandatory_ms_elements})"
       when 'au_ps_summary_bundle_composition_other_sections'
-        "check_other_sections(#{metadata.all_sections_data_codes})"
+        "check_other_sections(#{metadata.all_sections_data_codes}, #{metadata.sections_codes_mapping})"
       else
         spec[:run_code]
       end

@@ -14,13 +14,13 @@ module AUPSTestKit
     include ValidatorHelpers
     include SectionTestModule
 
-    def check_other_sections(all_sections_data_codes)
+    def check_other_sections(all_sections_data_codes, sections_codes_mapping)
       check_bundle_exists_in_scratch
       composition_resource = BundleDecorator.new(scratch_bundle.to_hash).composition_resource
       other_section_codes = composition_resource.section_codes - all_sections_data_codes
       info 'No other sections found' if other_section_codes.empty?
       other_section_codes.each do |section_code|
-        check_composition_section_code(section_code, composition_resource)
+        check_composition_section_code(section_code, composition_resource, sections_codes_mapping)
       end
     end
 
@@ -99,10 +99,11 @@ module AUPSTestKit
       assert !errors_found, "Resource does not conform to the profile #{profile_with_version}"
     end
 
-    def read_composition_sections_info(sections_array_codes)
+    def read_composition_sections_info(sections_array_codes, sections_codes_mapping)
       check_bundle_exists_in_scratch
       sections_array_codes.each do |section_code|
-        check_composition_section_code(section_code, BundleDecorator.new(scratch_bundle.to_hash).composition_resource)
+        check_composition_section_code(section_code, BundleDecorator.new(scratch_bundle.to_hash).composition_resource,
+                                       sections_codes_mapping)
       end
     end
   end

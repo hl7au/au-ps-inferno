@@ -12,9 +12,9 @@ module CompositionUtils
     skip_if scratch_bundle.blank?, 'No Bundle resource provided'
   end
 
-  def check_composition_section_code(section_code, composition_resource)
+  def check_composition_section_code(section_code, composition_resource, sections_codes_mapping)
     section = composition_resource.section_by_code(section_code)
-    return if section_is_nil?(section, section_code)
+    return if section_is_nil?(section, section_code, sections_codes_mapping)
 
     section_references_are_empty?(section, section_code)
     sections_info = group_section_output(section.entry_references.map do |ref|
@@ -37,15 +37,11 @@ module CompositionUtils
     section_entities.keys.map { |section_entity| "#{section_entity} x#{section_entities[section_entity]}" }
   end
 
-  def section_is_nil?(section, section_code)
+  def section_is_nil?(section, section_code, sections_codes_mapping)
     return false unless section.nil?
 
-    warning "Section #{sections_codes[section_code]} (#{section_code}) not found in Composition resource"
+    warning "Section #{sections_codes_mapping[section_code]} (#{section_code}) not found in Composition resource"
     true
-  end
-
-  def sections_codes
-    Constants::SECTIONS_CODES_MAPPING
   end
 
   def section_references_are_empty?(section, section_code)

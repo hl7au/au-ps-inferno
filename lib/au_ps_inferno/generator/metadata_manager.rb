@@ -149,6 +149,10 @@ class Generator
       REQUIRED_PROFILES.include?(profile.url.to_s)
     end
 
+    def sections_codes_mapping
+      @composition_sections.each_with_object({}) { |section, hash| hash[section[:code]] = section[:short] }
+    end
+
     # StructureDefinitions from the IG whose URL is an AU PS profile
     # (http://hl7.org.au/fhir/ps/StructureDefinition/...)
     #
