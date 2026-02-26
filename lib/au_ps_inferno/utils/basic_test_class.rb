@@ -32,10 +32,10 @@ module AUPSTestKit
 
     def mandatory_ms_elements_info
       [
-        "**identifier**: #{boolean_to_humanized_string(identifier_info)}",
-        "**type**: #{boolean_to_humanized_string(type_info)}",
-        "**timestamp**: #{boolean_to_humanized_string(timestamp_info)}",
-        "**All entry exists fullUrl**: #{boolean_to_humanized_string(all_entries_have_full_url_info)}"
+        "**identifier**: #{boolean_to_humanized_string(identifier_info?)}",
+        "**type**: #{boolean_to_humanized_string(type_info?)}",
+        "**timestamp**: #{boolean_to_humanized_string(timestamp_info?)}",
+        "**All entry exists fullUrl**: #{boolean_to_humanized_string(all_entries_have_full_url_info?)}"
       ].join("\n\n")
     end
 

@@ -61,17 +61,21 @@ class Generator
   def generate_suite(groups)
     return if @suite_version.empty?
 
+    config = suite_config(groups)
+    Generator::TestFileGenerator.new(config).generate
+  end
+
+  def suite_config(groups)
     suite_output_base = File.expand_path(File.join('lib', 'au_ps_inferno', @suite_version))
-    config = {
+    {
       template_file_path: 'suite.rb.erb',
       output_file_path: 'au_ps_suite.rb',
       output_base: suite_output_base,
-      attributes: {
-        groups: groups,
-        version_suffix: @version_suffix,
-        suite_version: @suite_version
-      }
+      attributes: suite_attributes(groups)
     }
-    Generator::TestFileGenerator.new(config).generate
+  end
+
+  def suite_attributes(groups)
+    { groups: groups, version_suffix: @version_suffix, suite_version: @suite_version }
   end
 end

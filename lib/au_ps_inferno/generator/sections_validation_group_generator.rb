@@ -27,12 +27,16 @@ class Generator
     #
     # @param section_data [Hash] Hash with keys:
     #   :short, :definition, :min, :max, :required, :mustSupport, :code, :entries
-    # @param version_suffix [String] Optional version suffix for class names and ids (e.g. "100preview")
+    # @param version_suffix [String] Optional version suffix (e.g. "100preview")
     def initialize(section_data, metadata, version_suffix = '')
-      @id = section_data[:id]
-      @short = section_data[:short]
       @version_suffix = version_suffix.to_s
       @metadata = metadata
+      assign_section_attributes(section_data)
+    end
+
+    def assign_section_attributes(section_data)
+      @id = section_data[:id]
+      @short = section_data[:short]
       @definition = section_data[:definition]
       @min = section_data[:min]
       @max = section_data[:max]
@@ -44,7 +48,7 @@ class Generator
 
     # Generates a section-specific validation test file using the TestFileGenerator.
     #
-    # @param output_base [String, nil] Optional base path for output (e.g. lib/au_ps_inferno/1.0.0-preview/au_ps_sections_validation_group).
+    # @param output_base [String, nil] Optional base path for output
     # @return [void]
     def generate(output_base = nil)
       config = {
@@ -132,11 +136,15 @@ class Generator
     #
     # @return [Hash] with :file_path (relative to suite dir) and :attributes => { :group_id => String }
     def suite_group_info
-      group_id = @version_suffix.empty? ? 'au_ps_sections_validation_group' : "au_ps_sections_validation_group_#{@version_suffix}"
+      group_id = versioned_group_id
       {
         file_path: "#{GROUP_NAME}/#{GROUP_NAME}.rb",
         attributes: { group_id: group_id }
       }
+    end
+
+    def versioned_group_id
+      @version_suffix.empty? ? GROUP_NAME : "#{GROUP_NAME}_#{@version_suffix}"
     end
 
     private
@@ -155,15 +163,18 @@ class Generator
     end
 
     def build_group_attributes
-      group_class = @version_suffix.empty? ? 'AUPSSectionsValidationGroup' : "AUPSSectionsValidationGroup#{@version_suffix}"
-      group_id = @version_suffix.empty? ? 'au_ps_sections_validation_group' : "au_ps_sections_validation_group_#{@version_suffix}"
       {
-        group_class_name: group_class,
+        group_class_name: versioned_group_class,
         group_title: 'AU PS Sections Validation',
         group_description: 'Verify that an AU PS Sections are valid.',
-        group_id: group_id,
+        group_id: versioned_group_id,
         tests: @test_entities
       }
+    end
+
+    def versioned_group_class
+      base = 'AUPSSectionsValidationGroup'
+      @version_suffix.empty? ? base : "#{base}#{@version_suffix}"
     end
 
     # Iterates all sections and generates their validation test files.
@@ -178,7 +189,7 @@ class Generator
     def build_output_base
       return nil if @suite_version.empty?
 
-      # Path relative to project root when running from Rake (e.g. lib/au_ps_inferno/0.5.0-preview/au_ps_sections_validation_group)
+      # Path relative to project root when running from Rake
       File.expand_path(File.join('lib', 'au_ps_inferno', @suite_version, GROUP_NAME))
     end
   end

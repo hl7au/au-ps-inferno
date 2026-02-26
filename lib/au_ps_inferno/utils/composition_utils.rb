@@ -38,7 +38,7 @@ module CompositionUtils
   end
 
   def section_is_nil?(section, section_code)
-    return unless section.nil?
+    return false unless section.nil?
 
     warning "Section #{sections_codes[section_code]} (#{section_code}) not found in Composition resource"
     true
@@ -49,10 +49,10 @@ module CompositionUtils
   end
 
   def section_references_are_empty?(section, section_code)
-    return unless section.present?
+    return false unless section.present?
 
     section_references = section.entry_references
-    return unless section_references.empty?
+    return false unless section_references.empty?
 
     empty_reason_str = section.empty_reason_str
     if empty_reason_str.present?
@@ -72,22 +72,22 @@ module CompositionUtils
     "**#{humanized_name}**: #{boolean_value}"
   end
 
-  def all_entries_have_full_url_info
+  def all_entries_have_full_url_info?
     entry_full_url_count = resolve_path(scratch_bundle, 'entry.fullUrl').length
     entries_count = resolve_path(scratch_bundle, 'entry').length
 
     entry_full_url_count == entries_count
   end
 
-  def timestamp_info
+  def timestamp_info?
     resolve_path(scratch_bundle, 'timestamp').first.present?
   end
 
-  def type_info
+  def type_info?
     resolve_path(scratch_bundle, 'type').first.present?
   end
 
-  def identifier_info
+  def identifier_info?
     resolve_path(scratch_bundle, 'identifier').first.present?
   end
 

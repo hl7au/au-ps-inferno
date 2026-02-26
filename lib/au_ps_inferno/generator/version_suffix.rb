@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# Namespace for generator helpers (version/suffix parsing). Used by Generator in generator.rb.
 class Generator
   # Derives the suite version folder name from an IG package path.
   # Example: "lib/au_ps_inferno/igs/1.0.0-preview.tgz" -> "1.0.0-preview"
@@ -21,17 +22,17 @@ class Generator
   def self.version_suffix(version)
     return '' if version.nil? || version.to_s.strip.empty?
 
-    base = version.to_s.strip
-    base = File.basename(base, '.tgz')
-    base = File.basename(base, '.tar.gz')
-    base = File.basename(base, '.tar')
-
-    numeric_part = base.split('-').first || ''
-    prerelease_part = base.include?('-') ? base.split('-', 2).last : ''
-
-    numeric_suffix = numeric_part.gsub(/\D/, '')
-    prerelease_suffix = prerelease_part.gsub(/[^a-zA-Z0-9]/, '')
-
+    base = strip_archive_extension(version.to_s.strip)
+    numeric_suffix = base.split('-').first.to_s.gsub(/\D/, '')
+    prerelease_suffix = prerelease_part(base).gsub(/[^a-zA-Z0-9]/, '')
     [numeric_suffix, prerelease_suffix].reject(&:empty?).join
+  end
+
+  def self.strip_archive_extension(path)
+    File.basename(File.basename(File.basename(path, '.tgz'), '.tar.gz'), '.tar')
+  end
+
+  def self.prerelease_part(base)
+    base.include?('-') ? base.split('-', 2).last : ''
   end
 end
