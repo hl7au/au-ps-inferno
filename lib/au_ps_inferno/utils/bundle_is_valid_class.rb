@@ -1,0 +1,31 @@
+# frozen_string_literal: true
+
+require_relative 'basic_test_class'
+
+module AUPSTestKit
+  # The Bundle resource is valid against the AU PS Bundle profile
+  class BundleIsValidClass < BasicTest
+    id :bundle_is_valid_class_test
+    input :bundle_resource,
+          optional: true,
+          description: 'If you want to check existing Bundle resource',
+          type: 'textarea'
+
+    def skip_test?
+      bundle_resource.blank?
+    end
+
+    def read_and_save_data
+      info 'Validate provided Bundle resource'
+      resource = FHIR.from_contents(bundle_resource)
+      scratch[:bundle_ips_resource] = resource
+      info "Bundle resource saved to scratch: #{scratch_bundle}"
+    end
+
+    run do
+      skip_if skip_test?, 'No Bundle resource provided'
+      read_and_save_data
+      validate_ips_bundle
+    end
+  end
+end
