@@ -3,7 +3,7 @@ AllCops:
   Exclude:
     - 'spec/spec_helper.rb'
     - 'lib/au_ps_inferno/0.5.0-preview/**/*'
-    - 'lib/au_ps_inferno/1.0.0-preview/**/*'
+    - 'lib/au_ps_inferno/1.0.0-ballot/**/*'
     - 'aidbox_config.rb'
 
 Metrics/ModuleLength:
