@@ -27,8 +27,11 @@ class Generator
     #
     # @param section_data [Hash] Hash with keys:
     #   :short, :definition, :min, :max, :required, :mustSupport, :code, :entries
-    def initialize(section_data)
+    # @param version_suffix [String] Optional version suffix for class names and ids (e.g. "100preview")
+    def initialize(section_data, version_suffix = '')
+      @id = section_data[:id]
       @short = section_data[:short]
+      @version_suffix = version_suffix.to_s
       @definition = section_data[:definition]
       @min = section_data[:min]
       @max = section_data[:max]
@@ -58,12 +61,17 @@ class Generator
     # @return [Hash] Hash of template attributes for file generation.
     def build_attributes
       {
-        test_class_name: "AUPSSections#{humanized_name.gsub(' ', '')}Validation",
+        test_class_name: versioned_test_class_name,
         section_name: humanized_name,
         test_id: test_id,
         optional: @min.zero?,
         section_id: @id
       }
+    end
+
+    def versioned_test_class_name
+      base = "AUPSSections#{humanized_name.gsub(' ', '')}Validation"
+      @version_suffix.empty? ? base : "#{base}#{@version_suffix}"
     end
 
     # Returns a human-friendly section name for use in output and test classes.
@@ -84,7 +92,8 @@ class Generator
     #
     # @return [String] Full test ID.
     def test_id
-      "au_ps_sections_#{test_id_custom}_validation"
+      base = "au_ps_sections_#{test_id_custom}_validation"
+      @version_suffix.empty? ? base : "#{base}_#{@version_suffix}"
     end
   end
 
@@ -94,8 +103,10 @@ class Generator
     # Initializes the group generator with metadata.
     #
     # @param metadata [#composition_sections] Object holding the composition_sections array.
-    def initialize(metadata)
+    # @param version_suffix [String] Optional version suffix for class names and ids (e.g. "100preview")
+    def initialize(metadata, version_suffix = '')
       @metadata = metadata
+      @version_suffix = version_suffix.to_s
       @test_entities = []
     end
 
@@ -121,11 +132,13 @@ class Generator
     end
 
     def build_group_attributes
+      group_class = @version_suffix.empty? ? 'AUPSSectionsValidationGroup' : "AUPSSectionsValidationGroup#{@version_suffix}"
+      group_id = @version_suffix.empty? ? 'au_ps_sections_validation_group' : "au_ps_sections_validation_group_#{@version_suffix}"
       {
-        group_class_name: 'AUPSSectionsValidationGroup',
+        group_class_name: group_class,
         group_title: 'AU PS Sections Validation',
         group_description: 'Verify that an AU PS Sections are valid.',
-        group_id: 'au_ps_sections_validation_group',
+        group_id: group_id,
         tests: @test_entities
       }
     end
@@ -135,7 +148,7 @@ class Generator
     # @return [void]
     def generate_test_entities
       @metadata.composition_sections.each do |section|
-        @test_entities << SectionTestData.new(section).generate
+        @test_entities << SectionTestData.new(section, @version_suffix).generate
       end
     end
   end

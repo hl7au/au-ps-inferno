@@ -11,13 +11,13 @@ require_relative './au_ps_summary_bundle_composition_other_sections'
 
 module AUPSTestKit
   # Generate AU Patient Summary using IPS $summary operation and verify response is valid AU PS Bundle
-  class AUPSSummaryBundleGroup < Inferno::TestGroup
+  class AUPSSummaryBundleGroup050preview < Inferno::TestGroup
     extend Constants
 
     title 'Generate AU PS using IPS $summary validation tests'
     description 'Generate AU Patient Summary using IPS $summary operation and verify response is valid ' \
       'AU PS Bundle'
-    id :au_ps_summary_bundle_group
+    id :au_ps_summary_bundle_group_050preview
 
     fhir_client do
       url :url
@@ -27,12 +27,12 @@ module AUPSTestKit
 
     run_as_group
 
-    test from: :au_ps_summary_valid_bundle
-    test from: :au_ps_summary_bundle_has_must_support_elements
-    test from: :au_ps_summary_bundle_composition_must_support_elements
-    test from: :au_ps_summary_bundle_composition_mandatory_sections
-    test from: :au_ps_summary_bundle_composition_recommended_sections
-    test from: :au_ps_summary_bundle_composition_optional_sections
-    test from: :au_ps_summary_bundle_composition_other_sections
+    test from: :au_ps_summary_valid_bundle_050preview
+    test from: :au_ps_summary_bundle_has_must_support_elements_050preview
+    test from: :au_ps_summary_bundle_composition_must_support_elements_050preview
+    test from: :au_ps_summary_bundle_composition_mandatory_sections_050preview
+    test from: :au_ps_summary_bundle_composition_recommended_sections_050preview
+    test from: :au_ps_summary_bundle_composition_optional_sections_050preview
+    test from: :au_ps_summary_bundle_composition_other_sections_050preview
   end
 end

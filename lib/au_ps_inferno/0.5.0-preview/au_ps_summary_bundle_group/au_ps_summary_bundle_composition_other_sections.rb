@@ -4,10 +4,10 @@ require_relative '../../utils/basic_test_class'
 
 module AUPSTestKit
   # AU PS Composition Other Sections
-  class AUPSSummaryBundleCompositionOtherSection < BasicTest
+  class AUPSSummaryBundleCompositionOtherSection050preview < BasicTest
     title 'Composition contains other sections with entry references'
     description 'Displays information about other sections'
-    id :au_ps_summary_bundle_composition_other_sections
+    id :au_ps_summary_bundle_composition_other_sections_050preview
 
     run do
       check_other_sections

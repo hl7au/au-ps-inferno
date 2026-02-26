@@ -4,11 +4,11 @@ require_relative '../../utils/basic_test_class'
 
 module AUPSTestKit
   # Checks that the server responds successfully to a $docref operation
-  class DocrefOperationSuccess < BasicTest
+  class DocrefOperationSuccess050preview < BasicTest
     title 'Server responds successfully to a $docref operation'
     description 'This test creates a $docref operation request for a patient.  Note that this currently does' \
       'not request an IPS bundle specifically therefore does not validate the content.'
-    id :au_ps_docref_operation_success
+    id :au_ps_docref_operation_success_050preview
     optional
 
     input :patient_id

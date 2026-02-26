@@ -4,12 +4,12 @@ require_relative '../../utils/basic_test_class'
 
 module AUPSTestKit
   # The optional sections populated in the Composition resource.
-  class AUPSSectionsSocialHistoryValidation < BasicTest
+  class AUPSSectionsSocialHistoryValidation050preview < BasicTest
     title 'Validate SOCIAL HISTORY NOTE Section References and Resources'
     description 'Validates that the SOCIAL HISTORY NOTE section in the Composition resource contains valid ' \
                 'references that resolve to expected resource types in the bundle, and that each referenced ' \
                 'resource conforms to its specified FHIR profile(s).'
-    id :au_ps_sections_social_history_validation
+    id :au_ps_sections_social_history_validation_050preview
     optional true
 
     input :bundle_resource,

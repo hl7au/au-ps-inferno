@@ -19,26 +19,26 @@ require_relative './au_ps_sections_vital_signs_validation'
 
 module AUPSTestKit
   # Verify that the AU PS Sections are valid
-  class AUPSSectionsValidationGroup < Inferno::TestGroup
+  class AUPSSectionsValidationGroup050preview < Inferno::TestGroup
     title 'AU PS Sections Validation'
     description 'Verify that an AU PS Sections are valid.'
-    id :au_ps_sections_validation_group
+    id :au_ps_sections_validation_group_050preview
 
-    test from: :au_ps_sections_problems_validation
-    test from: :au_ps_sections_allergies_validation
-    test from: :au_ps_sections_medications_validation
-    test from: :au_ps_sections_immunizations_validation
-    test from: :au_ps_sections_results_validation
-    test from: :au_ps_sections_procedures_validation
-    test from: :au_ps_sections_medical_devices_validation
-    test from: :au_ps_sections_advance_directives_validation
-    test from: :au_ps_sections_alerts_validation
-    test from: :au_ps_sections_functional_status_validation
-    test from: :au_ps_sections_past_problems_validation
-    test from: :au_ps_sections_pregnancy_validation
-    test from: :au_ps_sections_patient_story_validation
-    test from: :au_ps_sections_plan_of_care_validation
-    test from: :au_ps_sections_social_history_validation
-    test from: :au_ps_sections_vital_signs_validation
+    test from: :au_ps_sections_problems_validation_050preview
+    test from: :au_ps_sections_allergies_validation_050preview
+    test from: :au_ps_sections_medications_validation_050preview
+    test from: :au_ps_sections_immunizations_validation_050preview
+    test from: :au_ps_sections_results_validation_050preview
+    test from: :au_ps_sections_procedures_validation_050preview
+    test from: :au_ps_sections_medical_devices_validation_050preview
+    test from: :au_ps_sections_advance_directives_validation_050preview
+    test from: :au_ps_sections_alerts_validation_050preview
+    test from: :au_ps_sections_functional_status_validation_050preview
+    test from: :au_ps_sections_past_problems_validation_050preview
+    test from: :au_ps_sections_pregnancy_validation_050preview
+    test from: :au_ps_sections_patient_story_validation_050preview
+    test from: :au_ps_sections_plan_of_care_validation_050preview
+    test from: :au_ps_sections_social_history_validation_050preview
+    test from: :au_ps_sections_vital_signs_validation_050preview
   end
 end

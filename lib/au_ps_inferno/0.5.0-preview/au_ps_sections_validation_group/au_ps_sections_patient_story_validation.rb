@@ -4,13 +4,13 @@ require_relative '../../utils/basic_test_class'
 
 module AUPSTestKit
   # The optional sections populated in the Composition resource.
-  class AUPSSectionsPatientStoryValidation < BasicTest
+  class AUPSSectionsPatientStoryValidation050preview < BasicTest
     title 'Validate PATIENT GOALS PREFERENCES AND PRIORITIES FOR CARE EXPERIENCE Section References and Resources'
     description 'Validates that the PATIENT GOALS PREFERENCES AND PRIORITIES FOR CARE EXPERIENCE section ' \
                 'in the Composition resource contains valid references that resolve to expected resource ' \
                 'types in the bundle, and that each referenced resource conforms to its specified FHIR ' \
                 'profile(s).'
-    id :au_ps_sections_patient_story_validation
+    id :au_ps_sections_patient_story_validation_050preview
     optional true
 
     input :bundle_resource,

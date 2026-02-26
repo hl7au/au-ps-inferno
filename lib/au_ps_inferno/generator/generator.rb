@@ -3,6 +3,7 @@
 require_relative 'ig_resources_extractor'
 require_relative 'metadata_manager'
 require_relative 'sections_validation_group_generator'
+require_relative 'version_suffix'
 
 # Generator for test suites targeting AU PS and IPS implementation guides.
 #
@@ -26,6 +27,7 @@ class Generator
   #   (such as StructureDefinition, SearchParameter, etc.) to supplement those in the package.
   def initialize(ig_path, additional_resources_path: nil)
     @ig_path = ig_path
+    @version_suffix = Generator.version_suffix(File.basename(ig_path))
     @resources_manager = IGResourcesExtractor.new(
       ig_path,
       additional_resources_path: additional_resources_path
@@ -39,6 +41,6 @@ class Generator
   def generate
     @resources_manager.extract
     @metadata.save_to_file('metadata.yaml')
-    SectionsValidationGroupGenerator.new(@metadata).generate
+    SectionsValidationGroupGenerator.new(@metadata, @version_suffix).generate
   end
 end

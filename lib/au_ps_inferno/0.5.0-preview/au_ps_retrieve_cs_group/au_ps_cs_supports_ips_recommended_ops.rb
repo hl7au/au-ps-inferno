@@ -4,10 +4,10 @@ require_relative '../../utils/basic_test_class'
 
 module AUPSTestKit
   # IPS recommended operations referenced as supported in CapabilityStatement
-  class AUPSCSSupportsIPSRecommendedOPS < BasicTest
+  class AUPSCSSupportsIPSRecommendedOPS050preview < BasicTest
     title 'CapabilityStatement supports IPS Recommended Operations'
     description 'IPS recommended operations referenced as supported in CapabilityStatement'
-    id :au_ps_cs_supports_ips_recommended_ops
+    id :au_ps_cs_supports_ips_recommended_ops_050preview
 
     run do
       skip_if url.blank?, 'No FHIR server URL provided'

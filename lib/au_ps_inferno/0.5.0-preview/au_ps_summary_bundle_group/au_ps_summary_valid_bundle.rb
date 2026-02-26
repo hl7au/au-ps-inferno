@@ -7,8 +7,8 @@ require_relative '../../utils/basic_test_class'
 
 module AUPSTestKit
   # The Bundle resource is valid against the AU PS Bundle profile
-  class AUPSSummaryValidBundle < BasicTest
-    id :au_ps_summary_valid_bundle
+  class AUPSSummaryValidBundle050preview < BasicTest
+    id :au_ps_summary_valid_bundle_050preview
     title 'Server generates AU Patient Summary using IPS $summary operation'
     description 'Generate AU Patient Summary using IPS $summary operation and verify response is valid ' \
       'AU PS Bundle'

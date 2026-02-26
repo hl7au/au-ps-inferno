@@ -4,12 +4,12 @@ require_relative '../../utils/basic_test_class'
 
 module AUPSTestKit
   # The optional sections populated in the Composition resource.
-  class AUPSSectionsMedicalDevicesValidation < BasicTest
+  class AUPSSectionsMedicalDevicesValidation050preview < BasicTest
     title 'Validate HISTORY OF MEDICAL DEVICE USE Section References and Resources'
     description 'Validates that the HISTORY OF MEDICAL DEVICE USE section in the Composition resource ' \
                 'contains valid references that resolve to expected resource types in the bundle, and that ' \
                 'each referenced resource conforms to its specified FHIR profile(s).'
-    id :au_ps_sections_medical_devices_validation
+    id :au_ps_sections_medical_devices_validation_050preview
     optional true
 
     input :bundle_resource,

@@ -4,12 +4,12 @@ require_relative '../../utils/basic_test_class'
 
 module AUPSTestKit
   # The optional sections populated in the Composition resource.
-  class AUPSSectionsImmunizationValidation < BasicTest
+  class AUPSSectionsImmunizationValidation050preview < BasicTest
     title 'Validate HISTORY OF IMMUNIZATION NOTE Section References and Resources'
     description 'Validates that the HISTORY OF IMMUNIZATION NOTE section in the Composition resource ' \
                 'contains valid references that resolve to expected resource types in the bundle, and that ' \
                 'each referenced resource conforms to its specified FHIR profile(s).'
-    id :au_ps_sections_immunizations_validation
+    id :au_ps_sections_immunizations_validation_050preview
     optional true
 
     input :bundle_resource,

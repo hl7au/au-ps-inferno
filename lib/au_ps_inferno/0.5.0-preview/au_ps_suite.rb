@@ -8,8 +8,8 @@ require_relative './au_ps_sections_validation_group/au_ps_sections_validation_gr
 
 module AUPSTestKit
   # The test suite for the AU PS Inferno profile.
-  class Suite < Inferno::TestSuite
-    id :au_ps_suite
+  class Suite050preview < Inferno::TestSuite
+    id :au_ps_suite_050preview
     title 'AU PS Inferno'
     description 'This suite includes $summary operation tests.'
 
@@ -21,10 +21,10 @@ module AUPSTestKit
       end
     end
 
-    group from: :au_ps_validation_group
-    group from: :au_ps_retrieve_cs_group
-    group from: :au_ps_retrieve_bundle_group
-    group from: :au_ps_summary_bundle_group
-    group from: :au_ps_sections_validation_group
+    group from: :au_ps_validation_group_050preview
+    group from: :au_ps_retrieve_cs_group_050preview
+    group from: :au_ps_retrieve_bundle_group_050preview
+    group from: :au_ps_summary_bundle_group_050preview
+    group from: :au_ps_sections_validation_group_050preview
   end
 end

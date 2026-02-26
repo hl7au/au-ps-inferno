@@ -4,8 +4,8 @@ require_relative '../../utils/basic_test_with_url'
 
 module AUPSTestKit
   # Verify CapabilityStatement resource is valid
-  class AUPSCSIsValid < BasicTestWithURL
-    id :au_ps_cs_is_valid
+  class AUPSCSIsValid050preview < BasicTestWithURL
+    id :au_ps_cs_is_valid_050preview
     title 'CapabilityStatement is valid'
     description 'Verify CapabilityStatement resource is valid'
 
