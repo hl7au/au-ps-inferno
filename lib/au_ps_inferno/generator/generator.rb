@@ -3,6 +3,7 @@
 require_relative 'ig_resources_extractor'
 require_relative 'metadata_manager'
 require_relative 'sections_validation_group_generator'
+require_relative 'test_file_generator'
 require_relative 'version_suffix'
 
 # Generator for test suites targeting AU PS and IPS implementation guides.
@@ -36,12 +37,34 @@ class Generator
     @metadata = MetadataManager.new(@resources_manager.ig_resources)
   end
 
-  # Runs the generator: extracts IG resources, writes metadata, and generates section validation groups.
+  # Runs the generator: extracts IG resources, writes metadata, generates section validation groups,
+  # and generates the suite file with references to all groups.
   #
   # @return [void]
   def generate
     @resources_manager.extract
     @metadata.save_to_file('metadata.yaml')
-    SectionsValidationGroupGenerator.new(@metadata, @version_suffix, @suite_version).generate
+    group_generator = SectionsValidationGroupGenerator.new(@metadata, @version_suffix, @suite_version)
+    group_generator.generate
+    generate_suite([group_generator.suite_group_info])
+  end
+
+  private
+
+  def generate_suite(groups)
+    return if @suite_version.empty?
+
+    suite_output_base = File.expand_path(File.join('lib', 'au_ps_inferno', @suite_version))
+    config = {
+      template_file_path: 'suite.rb.erb',
+      output_file_path: 'au_ps_suite.rb',
+      output_base: suite_output_base,
+      attributes: {
+        groups: groups,
+        version_suffix: @version_suffix,
+        suite_version: @suite_version
+      }
+    }
+    Generator::TestFileGenerator.new(config).generate
   end
 end

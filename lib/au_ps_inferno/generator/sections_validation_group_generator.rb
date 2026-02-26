@@ -127,6 +127,17 @@ class Generator
       generate_group
     end
 
+    # Returns a hash describing this group for suite generation (require path and group_id).
+    #
+    # @return [Hash] with :file_path (relative to suite dir) and :attributes => { :group_id => String }
+    def suite_group_info
+      group_id = @version_suffix.empty? ? 'au_ps_sections_validation_group' : "au_ps_sections_validation_group_#{@version_suffix}"
+      {
+        file_path: "#{GROUP_NAME}/#{GROUP_NAME}.rb",
+        attributes: { group_id: group_id }
+      }
+    end
+
     private
 
     # Stub for generating the overall sections validation group.

@@ -37,3 +37,11 @@ tests:
 
 rubocop:
 	$(compose) $(inferno) rubocop
+
+local_generate:
+	bundle exec rake generator:generate
+
+local_rubocop:
+	rubocop . -A
+
+dev_restart: stop down local_generate setup up

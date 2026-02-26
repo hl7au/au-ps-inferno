@@ -36,7 +36,7 @@ class Generator
     def test_file_summary
       {
         file_path: output_file_path,
-        attribtes: @attributes
+        attributes: @attributes
       }
     end
 
