@@ -3,6 +3,7 @@
 require_relative 'ig_resources_extractor'
 require_relative 'metadata_manager'
 require_relative 'retrieve_bundle_group_generator'
+require_relative 'summary_bundle_group_generator'
 require_relative 'sections_validation_group_generator'
 require_relative 'test_file_generator'
 require_relative 'version_suffix'
@@ -38,21 +39,35 @@ class Generator
     @metadata = MetadataManager.new(@resources_manager.ig_resources)
   end
 
-  # Runs the generator: extracts IG resources, writes metadata, generates section validation groups,
-  # generates retrieve bundle group, and generates the suite file with references to all groups.
+  # Runs the generator: extracts IG resources, writes metadata, generates bundle and section groups,
+  # and generates the suite file.
   #
   # @return [void]
   def generate
     @resources_manager.extract
     save_metadata_to_version_folder
-    retrieve_bundle_group_generator = RetrieveBundleGroupGenerator.new(@version_suffix, @suite_version)
-    retrieve_bundle_group_generator.generate
-    section_group_generator = SectionsValidationGroupGenerator.new(@metadata, @version_suffix, @suite_version)
-    section_group_generator.generate
-    generate_suite([retrieve_bundle_group_generator.suite_group_info, section_group_generator.suite_group_info])
+    retrieve_gen = RetrieveBundleGroupGenerator.new(@version_suffix, @suite_version)
+    retrieve_gen.generate
+    summary_gen = SummaryBundleGroupGenerator.new(@version_suffix, @suite_version)
+    summary_gen.generate
+    section_gen = SectionsValidationGroupGenerator.new(@metadata, @version_suffix, @suite_version)
+    section_gen.generate
+    generate_suite(suite_groups(retrieve_gen, summary_gen, section_gen))
   end
 
   private
+
+  # @param retrieve_gen [RetrieveBundleGroupGenerator]
+  # @param summary_gen [SummaryBundleGroupGenerator]
+  # @param section_gen [SectionsValidationGroupGenerator]
+  # @return [Array<Hash>] suite_group_info hashes for suite template
+  def suite_groups(retrieve_gen, summary_gen, section_gen)
+    [
+      retrieve_gen.suite_group_info,
+      summary_gen.suite_group_info,
+      section_gen.suite_group_info
+    ]
+  end
 
   def save_metadata_to_version_folder
     return if @suite_version.empty?

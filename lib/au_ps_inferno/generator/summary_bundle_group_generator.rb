@@ -1,18 +1,21 @@
 # frozen_string_literal: true
 
-require_relative 'retrieve_bundle_group_tests'
+require_relative 'summary_bundle_group_tests'
 require_relative 'test_file_generator'
 
 class Generator
-  # Generates the au_ps_retrieve_bundle_group and its test files for a given version.
-  # Uses the 0.5.0-preview structure: one valid-bundle test (RetrieveBundleTestClass) plus
-  # six BasicTest tests (must-support, composition sections).
-  class RetrieveBundleGroupGenerator
-    GROUP_NAME = 'au_ps_retrieve_bundle_group'
-    GROUP_TITLE = 'Retrieve AU PS Bundle validation tests'
-    GROUP_DESCRIPTION = 'Retrieve document Bundle using Bundle read interaction or other HTTP GET request and ' \
-                        'verify response is valid AU PS Bundle'
+  # Generates the au_ps_summary_bundle_group and its test files for a given version.
+  #
+  # One valid-bundle test (SummaryValidBundleClass) plus six BasicTest tests (must-support,
+  # composition sections). Uses summary_bundle_group.rb.erb and retrieve_bundle_test.rb.erb.
+  class SummaryBundleGroupGenerator
+    GROUP_NAME = 'au_ps_summary_bundle_group'
+    GROUP_TITLE = 'Generate AU PS using IPS $summary validation tests'
+    GROUP_DESCRIPTION = 'Generate AU Patient Summary using IPS $summary operation and verify response is valid ' \
+                        'AU PS Bundle'
 
+    # @param version_suffix [String] Short version suffix (e.g. '100preview')
+    # @param suite_version [String] Suite version folder (e.g. '1.0.0-preview')
     def initialize(version_suffix = '', suite_version = '')
       @version_suffix = version_suffix.to_s
       @suite_version = suite_version.to_s
@@ -20,11 +23,15 @@ class Generator
       @test_entities = []
     end
 
+    # Generates the group file and all test files under the version folder.
+    # @return [void]
     def generate
       generate_test_entities
       generate_group
     end
 
+    # Returns suite group info for inclusion in the suite template.
+    # @return [Hash] { file_path:, attributes: { group_id: } }
     def suite_group_info
       {
         file_path: "#{GROUP_NAME}/#{GROUP_NAME}.rb",
@@ -39,14 +46,14 @@ class Generator
     end
 
     def versioned_group_class
-      base = 'AUPSRetrieveBundleGroup'
+      base = 'AUPSSummaryBundleGroup'
       @version_suffix.empty? ? base : "#{base}#{@version_suffix}"
     end
 
     def generate_group
       config = {
-        template_file_path: 'retrieve_bundle_group.rb.erb',
-        output_file_path: 'au_ps_retrieve_bundle_group.rb',
+        template_file_path: 'summary_bundle_group.rb.erb',
+        output_file_path: 'au_ps_summary_bundle_group.rb',
         attributes: group_attributes
       }
       config[:output_base] = @output_base if @output_base
@@ -59,14 +66,14 @@ class Generator
         group_title: GROUP_TITLE,
         group_description: GROUP_DESCRIPTION,
         group_id: versioned_group_id,
-        group_class_comment: 'Retrieve document Bundle using Bundle read interaction or other HTTP GET request ' \
-                             'and verify response is valid AU PS Bundle',
+        group_class_comment: 'Generate AU Patient Summary using IPS $summary operation and verify response is ' \
+                             'valid AU PS Bundle',
         tests: @test_entities
       }
     end
 
     def generate_test_entities
-      RetrieveBundleGroupTests::TESTS.each do |spec|
+      SummaryBundleGroupTests::TESTS.each do |spec|
         entity = generate_one_test(spec)
         @test_entities << entity
       end

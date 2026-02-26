@@ -14,6 +14,12 @@ module AUPSTestKit
     description '<%= group_description %>'
     id :<%= group_id %>
 
+    fhir_client do
+      url :url
+      oauth_credentials :credentials
+      headers(header_name.present? && header_value.present? ? { header_name => header_value } : {})
+    end
+
     run_as_group
 
     <% tests.each do |test| %>
