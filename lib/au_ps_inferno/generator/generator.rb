@@ -43,13 +43,20 @@ class Generator
   # @return [void]
   def generate
     @resources_manager.extract
-    @metadata.save_to_file('metadata.yaml')
+    save_metadata_to_version_folder
     group_generator = SectionsValidationGroupGenerator.new(@metadata, @version_suffix, @suite_version)
     group_generator.generate
     generate_suite([group_generator.suite_group_info])
   end
 
   private
+
+  def save_metadata_to_version_folder
+    return if @suite_version.empty?
+
+    metadata_path = File.join(File.expand_path(File.join('lib', 'au_ps_inferno', @suite_version)), 'metadata.yaml')
+    @metadata.save_to_file(metadata_path)
+  end
 
   def generate_suite(groups)
     return if @suite_version.empty?
