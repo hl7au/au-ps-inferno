@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'fileutils'
 require 'yaml'
 require_relative 'constants'
 
@@ -61,6 +62,7 @@ class Generator
     # @return [void]
     def save_to_file(file_path)
       initiate_build
+      FileUtils.mkdir_p(File.dirname(file_path))
       File.write(file_path, YAML.dump(
                               {
                                 composition_sections: @composition_sections,
