@@ -11,7 +11,7 @@ module AUPSTestKit
 
     
     run do
-      read_composition_mandatory_sections_info
+      read_composition_sections_info(["11450-4", "48765-2", "10160-0"])
     end
     
   end

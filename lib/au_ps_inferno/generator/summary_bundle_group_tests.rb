@@ -32,7 +32,7 @@ class Generator
         base_class_require: '../../utils/basic_test_class',
         base_class_name: 'BasicTest',
         description_comment: 'The Must Support elements populated in the Bundle resource.',
-        run_code: 'bundle_mandatory_ms_elements_info'
+        run_code: nil
       },
       {
         file_base: 'au_ps_summary_bundle_composition_must_support_elements',
@@ -46,7 +46,7 @@ class Generator
         base_class_require: '../../utils/basic_test_class',
         base_class_name: 'BasicTest',
         description_comment: 'The Must Support elements populated in the Composition resource.',
-        run_code: 'composition_mandatory_ms_elements_info'
+        run_code: nil
       },
       {
         file_base: 'au_ps_summary_bundle_composition_mandatory_sections',
@@ -59,7 +59,7 @@ class Generator
         base_class_require: '../../utils/basic_test_class',
         base_class_name: 'BasicTest',
         description_comment: 'The mandatory sections populated in the Composition resource.',
-        run_code: 'read_composition_mandatory_sections_info'
+        run_code: nil
       },
       {
         file_base: 'au_ps_summary_bundle_composition_recommended_sections',
@@ -70,7 +70,7 @@ class Generator
         base_class_require: '../../utils/basic_test_class',
         base_class_name: 'BasicTest',
         description_comment: 'The recommended sections populated in the Composition resource.',
-        run_code: 'read_composition_recommended_sections_info'
+        run_code: nil
       },
       {
         file_base: 'au_ps_summary_bundle_composition_optional_sections',
@@ -81,7 +81,7 @@ class Generator
         base_class_require: '../../utils/basic_test_class',
         base_class_name: 'BasicTest',
         description_comment: 'The optional sections populated in the Composition resource.',
-        run_code: 'read_composition_optional_sections_info'
+        run_code: nil
       },
       {
         file_base: 'au_ps_summary_bundle_composition_other_sections',
@@ -92,7 +92,7 @@ class Generator
         base_class_require: '../../utils/basic_test_class',
         base_class_name: 'BasicTest',
         description_comment: 'AU PS Composition Other Sections',
-        run_code: 'check_other_sections'
+        run_code: nil
       }
     ].freeze
   end
