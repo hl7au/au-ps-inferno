@@ -59,7 +59,7 @@ module CompositionUtils
   end
 
   def boolean_to_humanized_string(boolean_value)
-    boolean_value ? 'Yes' : 'No'
+    boolean_value ? '✅ Passed' : '❌ Failed'
   end
 
   def execute_statistics(resource, path_expression, humanized_name)

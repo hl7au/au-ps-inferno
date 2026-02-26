@@ -32,7 +32,7 @@ class Generator
                      'resource types included in the Bundle.',
         base_class_require: '../../utils/basic_test_class',
         base_class_name: 'BasicTest',
-        description_comment: 'The Must Support elements populated in the Bundle resource.',
+        description_comment: 'Verify the Must Support elements are correctly populated in the AU PS Bundle resource.',
         run_code: 'bundle_mandatory_ms_elements_info'
       },
       {
