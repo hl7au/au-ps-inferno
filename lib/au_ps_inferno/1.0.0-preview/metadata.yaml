@@ -431,3 +431,37 @@
   :name: AUPSSmokingStatus
   :title: AU PS Smoking Status
   :required: false
+:resources_filters:
+- :resource_profile: Observation|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-diagnosticresult-path
+  :filters:
+  - path: category.coding.code
+    value: laboratory
+- :resource_profile: Observation|http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-results-radiology-uv-ips
+  :filters:
+  - path: category.coding.code
+    value: imaging
+- :resource_profile: Observation|http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-pregnancy-status-uv-ips
+  :filters:
+  - path: code.coding.code
+    value: 82810-3
+- :resource_profile: Observation|http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-pregnancy-outcome-uv-ips
+  :filters:
+  - path: code.coding.code
+    value:
+    - 11636-8
+    - 11637-6
+    - 11638-4
+    - 11639-2
+    - 11640-0
+    - 11612-9
+    - 11613-7
+    - 11614-5
+    - 33065-4
+- :resource_profile: Observation|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-smokingstatus
+  :filters:
+  - path: code.coding.code
+    value: '1747861000168109'
+- :resource_profile: Observation|http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-alcoholuse-uv-ips
+  :filters:
+  - path: code.coding.code
+    value: 74013-4

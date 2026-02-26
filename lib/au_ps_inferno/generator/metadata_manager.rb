@@ -28,6 +28,7 @@ class Generator
       @composition_mandatory_ms_elements = []
       @composition_optional_ms_elements = []
       @profiles = []
+      @resources_filters = {}
     end
 
     # Generates composition section metadata from IG resources (in-memory only).
@@ -39,6 +40,16 @@ class Generator
       extract_required_ms_elements
       extract_optional_ms_elements
       extract_profiles
+      extract_resource_filters
+    end
+
+    def extract_resource_filters
+      @resources_filters = RESOURCES_FILTERS_MAPPING.map do |resource_profile, filters|
+        {
+          resource_profile: resource_profile,
+          filters: filters
+        }
+      end
     end
 
     # Builds composition metadata and writes it to a YAML file.
@@ -55,7 +66,8 @@ class Generator
                                 composition_sections: @composition_sections,
                                 composition_mandatory_ms_elements: @composition_mandatory_ms_elements,
                                 composition_optional_ms_elements: @composition_optional_ms_elements,
-                                profiles: @profiles
+                                profiles: @profiles,
+                                resources_filters: @resources_filters
                               }
                             ))
     end
