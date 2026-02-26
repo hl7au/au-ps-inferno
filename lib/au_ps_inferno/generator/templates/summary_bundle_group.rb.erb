@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require_relative '../../utils/constants'
 <% tests.each do |test| %>
 require_relative './<%= test[:file_name].sub(/\.rb$/, '') %>'
 <% end %>
@@ -8,8 +7,6 @@ require_relative './<%= test[:file_name].sub(/\.rb$/, '') %>'
 module AUPSTestKit
   # <%= group_class_comment %>
   class <%= group_class_name %> < Inferno::TestGroup
-    extend Constants
-
     title '<%= group_title %>'
     description '<%= group_description %>'
     id :<%= group_id %>

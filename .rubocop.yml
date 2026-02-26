@@ -1,14 +1,10 @@
 AllCops:
   NewCops: enable
   Exclude:
-    - 'spec/spec_helper.rb'
-    - 'lib/au_ps_inferno/0.5.0-preview/**/*'
-    - 'lib/au_ps_inferno/1.0.0-ballot/**/*'
-    - 'aidbox_config.rb'
-
-Metrics/ModuleLength:
-  Exclude:
-    - 'lib/au_ps_inferno/utils/constants.rb'
+    - "spec/spec_helper.rb"
+    - "lib/au_ps_inferno/0.5.0-preview/**/*"
+    - "lib/au_ps_inferno/1.0.0-ballot/**/*"
+    - "aidbox_config.rb"
 
 Gemspec/DevelopmentDependencies:
   Enabled: false

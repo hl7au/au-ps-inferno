@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require_relative 'constants'
 require_relative 'bundle_decorator'
 require_relative 'composition_utils'
 require_relative 'validator_helpers'
@@ -9,7 +8,6 @@ require_relative 'section_test_module'
 module AUPSTestKit
   # A base class for all tests to decrease code duplication
   class BasicTest < Inferno::Test
-    extend Constants
     include CompositionUtils
     include ValidatorHelpers
     include SectionTestModule

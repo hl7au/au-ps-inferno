@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require_relative '../../utils/constants'
 
 require_relative './au_ps_cs_is_valid_test'
 
@@ -12,8 +11,6 @@ require_relative './au_ps_cs_supports_au_ps_profiles'
 module AUPSTestKit
   # Tests for CapabilityStatement resource
   class AUPSRetrieveCSGroup100ballot < Inferno::TestGroup
-    extend Constants
-
     title 'Retrieve Capability Statement Tests'
     description 'Verify server provides valid Capability Statement and reports supported AU PS profiles and IPS recommended operations'
     id :au_ps_retrieve_cs_group_100ballot

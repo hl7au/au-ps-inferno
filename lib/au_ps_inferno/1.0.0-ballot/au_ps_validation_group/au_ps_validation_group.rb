@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require_relative '../../utils/constants'
 
 require_relative './au_ps_bundle_is_valid_test'
 
@@ -20,8 +19,6 @@ require_relative './au_ps_composition_other_sections'
 module AUPSTestKit
   # Verify that the AU PS Bundle is valid
   class AUPSValidationGroup100ballot < Inferno::TestGroup
-    extend Constants
-
     title 'AU PS Bundle Validation'
     description 'Verify that an AU PS Bundle is valid and contains required must support elements.'
     id :au_ps_validation_group_100ballot
