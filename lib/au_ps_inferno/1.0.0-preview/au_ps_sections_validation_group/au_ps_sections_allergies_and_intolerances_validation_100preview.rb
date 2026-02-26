@@ -30,7 +30,7 @@ module AUPSTestKit
     run do
       skip_if skip_test?, 'No Bundle resource provided'
       read_and_save_data
-      validate_section_resources('Composition.section:sectionAllergies')
+      validate_section_resources({"code"=>"48765-2", "display"=>"Patient Summary Allergies and Intolerances Section", "resources"=>{"AllergyIntolerance|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-allergyintolerance"=>{"requirements"=>[]}}})
     end
   end
 end

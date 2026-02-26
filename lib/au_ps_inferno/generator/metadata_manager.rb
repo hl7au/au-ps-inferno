@@ -72,7 +72,25 @@ class Generator
                             ))
     end
 
-    private
+    def normalize_section_data(section_id)
+      section_data = @composition_sections.find { |section| section[:id] == section_id }
+      return section_data if section_data.nil?
+
+      resources = {}
+      section_data[:entries].each do |entry|
+        entry[:profiles].each do |profile|
+          filter_for_profile = @resources_filters.find { |filter| filter[:resource_profile] == profile }
+          requirements = filter_for_profile ? filter_for_profile[:filters] : []
+          resources[profile] = { 'requirements' => requirements }
+        end
+      end
+
+      {
+        'code' => section_data[:code],
+        'display' => section_data[:short],
+        'resources' => resources
+      }
+    end
 
     # Populates @profiles with AU PS StructureDefinitions (url, name, title, required).
     #

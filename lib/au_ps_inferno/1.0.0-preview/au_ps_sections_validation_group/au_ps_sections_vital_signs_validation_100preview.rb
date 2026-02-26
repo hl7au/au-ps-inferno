@@ -30,7 +30,7 @@ module AUPSTestKit
     run do
       skip_if skip_test?, 'No Bundle resource provided'
       read_and_save_data
-      validate_section_resources('Composition.section:sectionVitalSigns')
+      validate_section_resources({"code"=>"8716-3", "display"=>"Patient Summary Vital Signs Section", "resources"=>{"Observation|http://hl7.org/fhir/StructureDefinition/vitalsigns"=>{"requirements"=>[]}}})
     end
   end
 end

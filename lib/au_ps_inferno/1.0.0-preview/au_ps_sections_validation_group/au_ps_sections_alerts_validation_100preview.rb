@@ -30,7 +30,7 @@ module AUPSTestKit
     run do
       skip_if skip_test?, 'No Bundle resource provided'
       read_and_save_data
-      validate_section_resources('Composition.section:sectionAlerts')
+      validate_section_resources({"code"=>"104605-1", "display"=>"Patient Summary Alerts Section", "resources"=>{"Flag|http://hl7.org/fhir/uv/ips/StructureDefinition/Flag-alert-uv-ips"=>{"requirements"=>[]}}})
     end
   end
 end

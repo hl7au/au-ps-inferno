@@ -30,7 +30,7 @@ module AUPSTestKit
     run do
       skip_if skip_test?, 'No Bundle resource provided'
       read_and_save_data
-      validate_section_resources('Composition.section:sectionProceduresHx')
+      validate_section_resources({"code"=>"47519-4", "display"=>"Patient Summary History of Procedures Section", "resources"=>{"Procedure|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-procedure"=>{"requirements"=>[]}}})
     end
   end
 end

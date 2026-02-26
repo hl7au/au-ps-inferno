@@ -28,10 +28,11 @@ class Generator
     # @param section_data [Hash] Hash with keys:
     #   :short, :definition, :min, :max, :required, :mustSupport, :code, :entries
     # @param version_suffix [String] Optional version suffix for class names and ids (e.g. "100preview")
-    def initialize(section_data, version_suffix = '')
+    def initialize(section_data, metadata, version_suffix = '')
       @id = section_data[:id]
       @short = section_data[:short]
       @version_suffix = version_suffix.to_s
+      @metadata = metadata
       @definition = section_data[:definition]
       @min = section_data[:min]
       @max = section_data[:max]
@@ -68,7 +69,7 @@ class Generator
         section_name: humanized_name,
         test_id: test_id,
         optional: @min.zero?,
-        section_id: @id
+        section_id: @metadata.normalize_section_data(@id)
       }
     end
 
@@ -170,7 +171,7 @@ class Generator
     # @return [void]
     def generate_test_entities
       @metadata.composition_sections.each do |section|
-        @test_entities << SectionTestData.new(section, @version_suffix).generate(@output_base)
+        @test_entities << SectionTestData.new(section, @metadata, @version_suffix).generate(@output_base)
       end
     end
 

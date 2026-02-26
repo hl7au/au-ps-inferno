@@ -30,7 +30,7 @@ module AUPSTestKit
     run do
       skip_if skip_test?, 'No Bundle resource provided'
       read_and_save_data
-      validate_section_resources('Composition.section:sectionPatientStory')
+      validate_section_resources({"code"=>"81338-6", "display"=>"Patient Summary Patient Story Section", "resources"=>{}})
     end
   end
 end

@@ -30,7 +30,7 @@ module AUPSTestKit
     run do
       skip_if skip_test?, 'No Bundle resource provided'
       read_and_save_data
-      validate_section_resources('Composition.section:sectionSocialHistory')
+      validate_section_resources({"code"=>"29762-2", "display"=>"Patient Summary Social History Section", "resources"=>{"Observation|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-smokingstatus"=>{"requirements"=>[{"path"=>"code.coding.code", "value"=>"1747861000168109"}]}, "Observation|http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-alcoholuse-uv-ips"=>{"requirements"=>[{"path"=>"code.coding.code", "value"=>"74013-4"}]}}})
     end
   end
 end

@@ -30,7 +30,7 @@ module AUPSTestKit
     run do
       skip_if skip_test?, 'No Bundle resource provided'
       read_and_save_data
-      validate_section_resources('Composition.section:sectionPregnancyHx')
+      validate_section_resources({"code"=>"10162-6", "display"=>"Patient Summary History of Pregnancy Section", "resources"=>{"Observation|http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-pregnancy-status-uv-ips"=>{"requirements"=>[{"path"=>"code.coding.code", "value"=>"82810-3"}]}, "Observation|http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-pregnancy-outcome-uv-ips"=>{"requirements"=>[{"path"=>"code.coding.code", "value"=>["11636-8", "11637-6", "11638-4", "11639-2", "11640-0", "11612-9", "11613-7", "11614-5", "33065-4"]}]}}})
     end
   end
 end

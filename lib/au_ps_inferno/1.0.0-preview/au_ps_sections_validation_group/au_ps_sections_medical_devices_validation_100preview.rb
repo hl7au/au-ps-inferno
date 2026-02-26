@@ -30,7 +30,7 @@ module AUPSTestKit
     run do
       skip_if skip_test?, 'No Bundle resource provided'
       read_and_save_data
-      validate_section_resources('Composition.section:sectionMedicalDevices')
+      validate_section_resources({"code"=>"46264-8", "display"=>"Patient Summary Medical Devices Section", "resources"=>{"DeviceUseStatement|http://hl7.org/fhir/uv/ips/StructureDefinition/DeviceUseStatement-uv-ips"=>{"requirements"=>[]}}})
     end
   end
 end

@@ -30,7 +30,7 @@ module AUPSTestKit
     run do
       skip_if skip_test?, 'No Bundle resource provided'
       read_and_save_data
-      validate_section_resources('Composition.section:sectionResults')
+      validate_section_resources({"code"=>"30954-2", "display"=>"Patient Summary Results Section", "resources"=>{"Observation|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-diagnosticresult-path"=>{"requirements"=>[{"path"=>"category.coding.code", "value"=>"laboratory"}]}, "Observation|http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-results-radiology-uv-ips"=>{"requirements"=>[{"path"=>"category.coding.code", "value"=>"imaging"}]}, "DiagnosticReport|http://hl7.org/fhir/uv/ips/StructureDefinition/DiagnosticReport-uv-ips"=>{"requirements"=>[]}}})
     end
   end
 end

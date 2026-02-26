@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
+
 require_relative './au_ps_sections_validation_group/au_ps_sections_validation_group'
+
 
 module AUPSTestKit
   # The test suite for the AU PS Inferno profile.
@@ -17,6 +19,8 @@ module AUPSTestKit
       end
     end
 
+    
     group from: :au_ps_sections_validation_group_100preview
+    
   end
 end
