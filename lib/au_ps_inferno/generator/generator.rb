@@ -3,6 +3,7 @@
 require_relative 'ig_resources_extractor'
 require_relative 'metadata_manager'
 require_relative 'retrieve_bundle_group_generator'
+require_relative 'retrieve_cs_group_generator'
 require_relative 'summary_bundle_group_generator'
 require_relative 'validation_group_generator'
 require_relative 'sections_validation_group_generator'
@@ -55,10 +56,13 @@ class Generator
 
   private
 
-  # Runs retrieve, summary, and validation group generators; returns their suite_group_info hashes.
+  # Runs retrieve bundle, retrieve CS, summary, and validation group generators; returns suite_group_info.
   # @return [Array<Hash>] suite_group_info hashes for suite template
   def run_bundle_and_validation_generators
-    [RetrieveBundleGroupGenerator, SummaryBundleGroupGenerator, ValidationGroupGenerator].map do |gen_class|
+    [
+      RetrieveBundleGroupGenerator, RetrieveCSGroupGenerator,
+      SummaryBundleGroupGenerator, ValidationGroupGenerator
+    ].map do |gen_class|
       gen = gen_class.new(@version_suffix, @suite_version)
       gen.generate
       gen.suite_group_info
