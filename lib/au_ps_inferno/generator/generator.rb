@@ -2,6 +2,7 @@
 
 require_relative 'ig_resources_extractor'
 require_relative 'metadata_manager'
+require_relative 'retrieve_bundle_group_generator'
 require_relative 'sections_validation_group_generator'
 require_relative 'test_file_generator'
 require_relative 'version_suffix'
@@ -38,15 +39,17 @@ class Generator
   end
 
   # Runs the generator: extracts IG resources, writes metadata, generates section validation groups,
-  # and generates the suite file with references to all groups.
+  # generates retrieve bundle group, and generates the suite file with references to all groups.
   #
   # @return [void]
   def generate
     @resources_manager.extract
     save_metadata_to_version_folder
-    group_generator = SectionsValidationGroupGenerator.new(@metadata, @version_suffix, @suite_version)
-    group_generator.generate
-    generate_suite([group_generator.suite_group_info])
+    retrieve_bundle_group_generator = RetrieveBundleGroupGenerator.new(@version_suffix, @suite_version)
+    retrieve_bundle_group_generator.generate
+    section_group_generator = SectionsValidationGroupGenerator.new(@metadata, @version_suffix, @suite_version)
+    section_group_generator.generate
+    generate_suite([retrieve_bundle_group_generator.suite_group_info, section_group_generator.suite_group_info])
   end
 
   private
