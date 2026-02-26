@@ -11,7 +11,7 @@ module AUPSTestKit
 
     
     run do
-      read_composition_recommended_sections_info
+      read_composition_sections_info(["11369-6", "30954-2", "47519-4", "46264-8"])
     end
     
   end

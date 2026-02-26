@@ -13,10 +13,11 @@ class Generator
     GROUP_DESCRIPTION = 'Retrieve document Bundle using Bundle read interaction or other HTTP GET request and ' \
                         'verify response is valid AU PS Bundle'
 
-    def initialize(version_suffix = '', suite_version = '')
+    def initialize(metadata, version_suffix = '', suite_version = '')
       @version_suffix = version_suffix.to_s
       @suite_version = suite_version.to_s
       @output_base = build_output_base
+      @metadata = metadata
       @test_entities = []
     end
 

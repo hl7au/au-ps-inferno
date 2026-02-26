@@ -63,7 +63,7 @@ class Generator
       RetrieveBundleGroupGenerator, RetrieveCSGroupGenerator,
       SummaryBundleGroupGenerator, ValidationGroupGenerator
     ].map do |gen_class|
-      gen = gen_class.new(@version_suffix, @suite_version)
+      gen = gen_class.new(@metadata, @version_suffix, @suite_version)
       gen.generate
       gen.suite_group_info
     end

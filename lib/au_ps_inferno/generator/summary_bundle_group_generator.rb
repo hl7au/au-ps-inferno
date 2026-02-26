@@ -16,10 +16,11 @@ class Generator
 
     # @param version_suffix [String] Short version suffix (e.g. '100preview')
     # @param suite_version [String] Suite version folder (e.g. '1.0.0-preview')
-    def initialize(version_suffix = '', suite_version = '')
+    def initialize(metadata, version_suffix = '', suite_version = '')
       @version_suffix = version_suffix.to_s
       @suite_version = suite_version.to_s
       @output_base = build_output_base
+      @metadata = metadata
       @test_entities = []
     end
 

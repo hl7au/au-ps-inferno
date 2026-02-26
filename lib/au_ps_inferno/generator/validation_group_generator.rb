@@ -16,10 +16,11 @@ class Generator
 
     # @param version_suffix [String] Short version suffix (e.g. '100preview')
     # @param suite_version [String] Suite version folder (e.g. '1.0.0-preview')
-    def initialize(version_suffix = '', suite_version = '')
+    def initialize(metadata, version_suffix = '', suite_version = '')
       @version_suffix = version_suffix.to_s
       @suite_version = suite_version.to_s
       @output_base = build_output_base
+      @metadata = metadata
       @test_entities = []
     end
 
@@ -73,15 +74,15 @@ class Generator
 
     def generate_test_entities
       ValidationGroupTests::TESTS.each do |spec|
-        entity = generate_one_test(spec)
+        entity = generate_one_test(spec, @metadata)
         @test_entities << entity
       end
     end
 
-    def generate_one_test(spec)
+    def generate_one_test(spec, metadata)
       file_name = "#{spec[:file_base]}.rb"
       test_id = versioned_test_id(spec[:id_base])
-      config = test_file_config(spec, file_name, test_id)
+      config = test_file_config(spec, file_name, test_id, metadata)
       config[:output_base] = @output_base if @output_base
       TestFileGenerator.new(config).generate
       { file_name: file_name, test_id: test_id }
@@ -95,23 +96,41 @@ class Generator
       @version_suffix.empty? ? class_base : "#{class_base}#{@version_suffix}"
     end
 
-    def test_file_config(spec, file_name, test_id)
+    def test_file_config(spec, file_name, test_id, metadata)
       {
         template_file_path: 'retrieve_bundle_test.rb.erb',
         output_file_path: file_name,
-        attributes: test_file_attributes(spec, file_name, test_id)
+        attributes: test_file_attributes(spec, file_name, test_id, metadata)
       }
     end
 
-    def test_file_attributes(spec, file_name, test_id)
+    def test_file_attributes(spec, file_name, test_id, metadata)
       {
         file_name: file_name, test_id: test_id,
         test_class_name: versioned_test_class_name(spec[:class_base]),
         test_title: spec[:title], test_description: spec[:description],
         base_class_require: spec[:base_class_require],
         base_class_name: spec[:base_class_name],
-        description_comment: spec[:description_comment], run_code: spec[:run_code]
+        description_comment: spec[:description_comment],
+        run_code: run_code(spec, metadata)
       }
+    end
+
+    def run_code(spec, metadata)
+      case spec[:file_base]
+      when 'au_ps_composition_mandatory_sections'
+        "read_composition_sections_info(#{metadata.required_sections_data_codes})"
+      when 'au_ps_composition_recommended_sections'
+        "read_composition_sections_info(#{metadata.recommended_sections_data_codes})"
+      when 'au_ps_composition_optional_sections'
+        "read_composition_sections_info(#{metadata.optional_sections_data_codes})"
+      when 'au_ps_bundle_has_must_support_elements'
+        'bundle_mandatory_ms_elements_info'
+      when 'au_ps_composition_must_support_elements'
+        'composition_mandatory_ms_elements_info'
+      when 'au_ps_composition_other_sections'
+        "check_other_sections(#{metadata.all_sections_data_codes})"
+      end
     end
 
     def build_output_base

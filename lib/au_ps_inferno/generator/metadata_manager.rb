@@ -87,6 +87,30 @@ class Generator
       }
     end
 
+    def all_sections_data_codes
+      required_sections_data_codes + recommended_sections_data_codes + optional_sections_data_codes
+    end
+
+    def required_sections_data_codes
+      %w[11450-4 48765-2 10160-0].freeze
+      # filter_sections_data_by_min(1).map { |section| section[:code] } || []
+    end
+
+    def optional_sections_data_codes
+      %w[42348-3 104605-1 47420-5 11348-0 10162-6 81338-6 18776-5 29762-2 8716-3].freeze
+      # filter_sections_data_by_min(0).map { |section| section[:code] } || []
+    end
+
+    def recommended_sections_data_codes
+      %w[11369-6 30954-2 47519-4 46264-8].freeze
+    end
+
+    def filter_sections_data_by_min(min)
+      @composition_sections.filter do |section|
+        section[:min] == min
+      end
+    end
+
     def build_section_resources(section_data)
       resources = {}
       section_data[:entries].each do |entry|

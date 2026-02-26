@@ -14,10 +14,10 @@ module AUPSTestKit
     include ValidatorHelpers
     include SectionTestModule
 
-    def check_other_sections
+    def check_other_sections(all_sections_data_codes)
       check_bundle_exists_in_scratch
       composition_resource = BundleDecorator.new(scratch_bundle.to_hash).composition_resource
-      other_section_codes = composition_resource.section_codes - Constants::ALL_SECTIONS
+      other_section_codes = composition_resource.section_codes - all_sections_data_codes
       info 'No other sections found' if other_section_codes.empty?
       other_section_codes.each do |section_code|
         check_composition_section_code(section_code, composition_resource)
