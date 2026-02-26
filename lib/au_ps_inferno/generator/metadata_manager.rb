@@ -63,15 +63,17 @@ class Generator
     def save_to_file(file_path)
       initiate_build
       FileUtils.mkdir_p(File.dirname(file_path))
-      File.write(file_path, YAML.dump(
-                              {
-                                composition_sections: @composition_sections,
-                                composition_mandatory_ms_elements: @composition_mandatory_ms_elements,
-                                composition_optional_ms_elements: @composition_optional_ms_elements,
-                                profiles: @profiles,
-                                resources_filters: @resources_filters
-                              }
-                            ))
+      File.write(file_path, YAML.dump(metadata_to_dump))
+    end
+
+    def metadata_to_dump
+      {
+        composition_sections: @composition_sections,
+        composition_mandatory_ms_elements: @composition_mandatory_ms_elements,
+        composition_optional_ms_elements: @composition_optional_ms_elements,
+        profiles: @profiles,
+        resources_filters: @resources_filters
+      }
     end
 
     def normalize_section_data(section_id)
