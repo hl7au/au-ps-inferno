@@ -106,17 +106,17 @@ module CompositionUtils
     boolean_to_humanized_string(sections_count == selected_by_expression_count)
   end
 
-  def composition_mandatory_ms_elements_info
+  def composition_mandatory_ms_elements_info(optional_ms_elements, mandatory_ms_elements)
     check_bundle_exists_in_scratch
-    info "**List of Mandatory Must Support elements populated**:\n\n#{composition_mandatory_elements_info}"
-    optional_elements = Constants::OPTIONAL_MS_ELEMENTS.map do |element|
+    info "**List of Mandatory Must Support elements populated**:\n\n#{composition_mandatory_elements_info(mandatory_ms_elements)}"
+    optional_elements = optional_ms_elements.map do |element|
       execute_statistics(composition_resource, element[:expression], element[:label])
     end.join("\n\n")
     info "**List of Optional Must Support elements populated**:\n\n#{optional_elements}"
   end
 
-  def composition_mandatory_elements_info
-    mandatory_elements = Constants::MANDATORY_MS_ELEMENTS.map do |element|
+  def composition_mandatory_elements_info(mandatory_ms_elements)
+    mandatory_elements = mandatory_ms_elements.map do |element|
       execute_statistics(composition_resource, element[:expression], element[:label])
     end
     mandatory_elements.push(composition_section_title_info)

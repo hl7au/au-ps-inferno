@@ -380,6 +380,18 @@ class Generator
         "#{sd.type}|#{profile_url}"
       end
     end
+
+    def optional_ms_elements
+      @composition_optional_ms_elements.map do |element|
+        { expression: element, label: element }
+      end
+    end
+
+    def mandatory_ms_elements
+      @composition_mandatory_ms_elements.map do |element|
+        { expression: element, label: element }
+      end
+    end
   end
   # rubocop:enable Metrics/ClassLength
 end
