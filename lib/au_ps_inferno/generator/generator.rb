@@ -27,6 +27,7 @@ class Generator
   #   (such as StructureDefinition, SearchParameter, etc.) to supplement those in the package.
   def initialize(ig_path, additional_resources_path: nil)
     @ig_path = ig_path
+    @suite_version = Generator.suite_version_from_ig_path(ig_path)
     @version_suffix = Generator.version_suffix(File.basename(ig_path))
     @resources_manager = IGResourcesExtractor.new(
       ig_path,
@@ -41,6 +42,6 @@ class Generator
   def generate
     @resources_manager.extract
     @metadata.save_to_file('metadata.yaml')
-    SectionsValidationGroupGenerator.new(@metadata, @version_suffix).generate
+    SectionsValidationGroupGenerator.new(@metadata, @version_suffix, @suite_version).generate
   end
 end

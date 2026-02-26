@@ -43,13 +43,16 @@ class Generator
 
     # Generates a section-specific validation test file using the TestFileGenerator.
     #
+    # @param output_base [String, nil] Optional base path for output (e.g. lib/au_ps_inferno/1.0.0-preview/au_ps_sections_validation_group).
     # @return [void]
-    def generate
-      test_file_generator = TestFileGenerator.new(
+    def generate(output_base = nil)
+      config = {
         template_file_path: 'au_ps_specific_section_validation_test.rb.erb',
         output_file_path: "#{test_id}.rb",
         attributes: build_attributes
-      )
+      }
+      config[:output_base] = output_base if output_base
+      test_file_generator = TestFileGenerator.new(config)
       test_file_generator.generate
       test_file_generator.test_file_summary
     end
@@ -100,14 +103,20 @@ class Generator
   # Generates a validation group and corresponding test entities
   # for AU Patient Summary Composition sections.
   class SectionsValidationGroupGenerator
+    GROUP_NAME = 'au_ps_sections_validation_group'
+
     # Initializes the group generator with metadata.
     #
     # @param metadata [#composition_sections] Object holding the composition_sections array.
     # @param version_suffix [String] Optional version suffix for class names and ids (e.g. "100preview")
-    def initialize(metadata, version_suffix = '')
+    # @param suite_version [String] Suite version for output path (e.g. "0.5.0-preview").
+    #   Output is written to lib/au_ps_inferno/{suite_version}/{group_name}/.
+    def initialize(metadata, version_suffix = '', suite_version = '')
       @metadata = metadata
       @version_suffix = version_suffix.to_s
+      @suite_version = suite_version.to_s
       @test_entities = []
+      @output_base = build_output_base
     end
 
     # Generates the group and its test entity files.
@@ -124,11 +133,13 @@ class Generator
     #
     # @return [void]
     def generate_group
-      TestFileGenerator.new(
+      config = {
         template_file_path: 'generic_group.rb.erb',
         output_file_path: 'au_ps_sections_validation_group.rb',
         attributes: build_group_attributes
-      ).generate
+      }
+      config[:output_base] = @output_base if @output_base
+      TestFileGenerator.new(config).generate
     end
 
     def build_group_attributes
@@ -148,8 +159,15 @@ class Generator
     # @return [void]
     def generate_test_entities
       @metadata.composition_sections.each do |section|
-        @test_entities << SectionTestData.new(section, @version_suffix).generate
+        @test_entities << SectionTestData.new(section, @version_suffix).generate(@output_base)
       end
+    end
+
+    def build_output_base
+      return nil if @suite_version.empty?
+
+      # Path relative to project root when running from Rake (e.g. lib/au_ps_inferno/0.5.0-preview/au_ps_sections_validation_group)
+      File.expand_path(File.join('lib', 'au_ps_inferno', @suite_version, GROUP_NAME))
     end
   end
 end
