@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
 
-require_relative './au_ps_retrieve_bundle_group/au_ps_retrieve_bundle_group'
+require_relative './au_ps_validation_group/au_ps_validation_group'
 
 require_relative './au_ps_retrieve_cs_group/au_ps_retrieve_cs_group'
 
-require_relative './au_ps_summary_bundle_group/au_ps_summary_bundle_group'
+require_relative './au_ps_retrieve_bundle_group/au_ps_retrieve_bundle_group'
 
-require_relative './au_ps_validation_group/au_ps_validation_group'
+require_relative './au_ps_summary_bundle_group/au_ps_summary_bundle_group'
 
 require_relative './au_ps_sections_validation_group/au_ps_sections_validation_group'
 
@@ -28,13 +28,13 @@ module AUPSTestKit
     end
 
     
-    group from: :au_ps_retrieve_bundle_group_100ballot
+    group from: :au_ps_validation_group_100ballot
     
     group from: :au_ps_retrieve_cs_group_100ballot
     
-    group from: :au_ps_summary_bundle_group_100ballot
+    group from: :au_ps_retrieve_bundle_group_100ballot
     
-    group from: :au_ps_validation_group_100ballot
+    group from: :au_ps_summary_bundle_group_100ballot
     
     group from: :au_ps_sections_validation_group_100ballot
     

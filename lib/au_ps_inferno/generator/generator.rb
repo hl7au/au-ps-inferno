@@ -60,8 +60,10 @@ class Generator
   # @return [Array<Hash>] suite_group_info hashes for suite template
   def run_bundle_and_validation_generators
     [
-      RetrieveBundleGroupGenerator, RetrieveCSGroupGenerator,
-      SummaryBundleGroupGenerator, ValidationGroupGenerator
+      ValidationGroupGenerator,
+      RetrieveCSGroupGenerator,
+      RetrieveBundleGroupGenerator,
+      SummaryBundleGroupGenerator
     ].map do |gen_class|
       gen = gen_class.new(@metadata, @version_suffix, @suite_version)
       gen.generate
