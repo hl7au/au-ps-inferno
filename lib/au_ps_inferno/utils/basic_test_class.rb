@@ -51,18 +51,6 @@ module AUPSTestKit
       )
     end
 
-    def read_composition_mandatory_sections_info
-      read_composition_sections_info(Constants::MANDATORY_SECTIONS)
-    end
-
-    def read_composition_optional_sections_info
-      read_composition_sections_info(Constants::OPTIONAL_SECTIONS)
-    end
-
-    def read_composition_recommended_sections_info
-      read_composition_sections_info(Constants::RECOMMENDED_SECTIONS)
-    end
-
     def operation_defined?(operations, op_def_url, names_arr, scratch_key)
       operation_defined = operations.any? do |operation|
         operation.definition == op_def_url || names_arr.include?(operation.name.downcase)
