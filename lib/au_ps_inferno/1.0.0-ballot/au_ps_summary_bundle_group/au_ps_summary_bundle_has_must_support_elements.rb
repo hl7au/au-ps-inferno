@@ -5,8 +5,8 @@ require_relative '../../utils/basic_test_class'
 module AUPSTestKit
   # Verify the Must Support elements are correctly populated in the AU PS Bundle resource.
   class AUPSSummaryBundleHasMUSTSUPPORTElements100ballot < BasicTest
-    title 'Bundle has mandatory must-support elements'
-    description 'Checks that the Bundle resource contains mandatory must-support elements (identifier, type, timestamp) and that all entries have a fullUrl. Also provides information about the resource types included in the Bundle.'
+    title 'AU PS Bundle has Must Support elements  (Must Have)'
+    description 'Verify the Must Support elements are correctly populated in the AU PS Bundle resource.'
     id :au_ps_summary_bundle_has_must_support_elements_100ballot
 
     

@@ -13,10 +13,8 @@ class Generator
         file_base: 'au_ps_bundle_is_valid_test',
         class_base: 'AUPSBundleIsValidTest',
         id_base: 'au_ps_bundle_is_valid_test',
-        title: 'AU PS Bundle is valid',
-        description: 'Validates that a Bundle resource conforms to the AU PS Bundle profile ' \
-                     '(http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-bundle). The test accepts a ' \
-                     'pre-existing Bundle resource to validate directly.',
+        title: 'AU PS Bundle is valid (MUST HAVE)',
+        description: 'The Bundle resource is valid against the AU PS Bundle profile',
         base_class_require: '../../utils/bundle_is_valid_class',
         base_class_name: 'BundleIsValidClass',
         description_comment: 'The Bundle resource is valid against the AU PS Bundle profile',
@@ -26,10 +24,8 @@ class Generator
         file_base: 'au_ps_bundle_has_must_support_elements',
         class_base: 'AUPSBundleHasMUSTSUPPORTElements',
         id_base: 'au_ps_bundle_has_must_support_elements',
-        title: 'Bundle has mandatory must-support elements',
-        description: 'Checks that the Bundle resource contains mandatory must-support elements (identifier, ' \
-                     'type, timestamp) and that all entries have a fullUrl. Also provides information about the ' \
-                     'resource types included in the Bundle.',
+        title: 'AU PS Bundle has Must Support elements  (Must Have)',
+        description: 'Verify the Must Support elements are correctly populated in the AU PS Bundle resource.',
         base_class_require: '../../utils/basic_test_class',
         base_class_name: 'BasicTest',
         description_comment: 'Verify the Must Support elements are correctly populated in the AU PS Bundle resource.',

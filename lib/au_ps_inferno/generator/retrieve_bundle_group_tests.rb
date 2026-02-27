@@ -21,10 +21,8 @@ class Generator
         file_base: 'au_ps_retrieve_bundle_has_must_support_elements',
         class_base: 'AUPSRetrieveBundleHasMUSTSUPPORTElements',
         id_base: 'au_ps_retrieve_bundle_has_must_support_elements',
-        title: 'Bundle has mandatory must-support elements',
-        description: 'Checks that the Bundle resource contains mandatory must-support elements (identifier, ' \
-                     'type, timestamp) and that all entries have a fullUrl. Also provides information about the ' \
-                     'resource types included in the Bundle.',
+        title: 'AU PS Bundle has Must Support elements  (Must Have)',
+        description: 'Verify the Must Support elements are correctly populated in the AU PS Bundle resource.',
         base_class_require: '../../utils/basic_test_class',
         base_class_name: 'BasicTest',
         description_comment: 'Verify the Must Support elements are correctly populated in the AU PS Bundle resource.',
