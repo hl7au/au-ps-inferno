@@ -106,16 +106,28 @@ module CompositionUtils
     optional_ms_elements,
     mandatory_ms_elements,
     optional_ms_sub_elements,
-    mandatory_ms_sub_elements
+    mandatory_ms_sub_elements,
+    mandatory_ms_slices,
+    optional_ms_slices
   )
     check_bundle_exists_in_scratch
     check_mandatory_ms_elements(mandatory_ms_elements)
     check_optional_ms_elements(optional_ms_elements)
     check_mandatory_ms_sub_elements(mandatory_ms_sub_elements)
     check_optional_ms_sub_elements(optional_ms_sub_elements)
+    check_mandatory_ms_slices(mandatory_ms_slices)
+    check_optional_ms_slices(optional_ms_slices)
 
     mandatory_ms_elements_passed = all_elements_passed?(mandatory_ms_elements + mandatory_ms_sub_elements)
     assert mandatory_ms_elements_passed, 'Mandatory Must Support elements are not populated'
+  end
+
+  def check_mandatory_ms_slices(mandatory_ms_slices)
+    info_block('Mandatory Must Support slices SHALL be correctly populated if a value is known', mandatory_ms_slices)
+  end
+
+  def check_optional_ms_slices(optional_ms_slices)
+    info_block('Optional Must Support slices SHALL be correctly populated if a value is known', optional_ms_slices)
   end
 
   def info_block(title, elements)

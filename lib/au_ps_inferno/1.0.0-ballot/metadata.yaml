@@ -352,7 +352,6 @@
 :composition_optional_ms_elements:
 - attester
 - custodian
-- event
 - identifier
 - section
 :composition_optional_ms_sub_elements:
@@ -361,6 +360,13 @@
 - event.period
 - section.emptyReason
 - section.entry
+:composition_mandatory_ms_slices: []
+:composition_optional_ms_slices:
+- :path: event
+  :sliceName: careProvisioningEvent
+  :min: 0
+  :max: '1'
+  :mustSupport: true
 :profiles:
 - :url: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-allergyintolerance
   :name: AUPSAllergyIntolerance

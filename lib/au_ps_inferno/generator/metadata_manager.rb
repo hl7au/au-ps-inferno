@@ -30,6 +30,8 @@ class Generator
       @composition_mandatory_ms_sub_elements = []
       @composition_optional_ms_elements = []
       @composition_optional_ms_sub_elements = []
+      @composition_mandatory_ms_slices = []
+      @composition_optional_ms_slices = []
       @profiles = []
       @resources_filters = {}
     end
@@ -75,6 +77,8 @@ class Generator
         composition_mandatory_ms_sub_elements: @composition_mandatory_ms_sub_elements,
         composition_optional_ms_elements: @composition_optional_ms_elements,
         composition_optional_ms_sub_elements: @composition_optional_ms_sub_elements,
+        composition_mandatory_ms_slices: @composition_mandatory_ms_slices,
+        composition_optional_ms_slices: @composition_optional_ms_slices,
         profiles: @profiles,
         resources_filters: @resources_filters
       }
@@ -89,6 +93,25 @@ class Generator
         'display' => section_data[:short],
         'resources' => build_section_resources(section_data)
       }
+    end
+
+    def normalize_slice_data(slice)
+      {
+        path: slice[:path],
+        label: "#{slice[:path]} (#{slice[:sliceName]})"
+      }
+    end
+
+    def optional_ms_slices
+      @composition_optional_ms_slices.map do |slice|
+        normalize_slice_data(slice)
+      end
+    end
+
+    def mandatory_ms_slices
+      @composition_mandatory_ms_slices.map do |slice|
+        normalize_slice_data(slice)
+      end
     end
 
     def all_sections_data_codes
@@ -176,13 +199,18 @@ class Generator
       extract_ms_elements_by_predicate(->(element) { element.min.zero? })
     end
 
+    def path_is_not_slice?(path)
+      !composition_mandatory_ms_slices_paths.include?(path) && !composition_optional_ms_slices_paths.include?(path)
+    end
+
     def extract_optional_ms_elements
       @composition_optional_ms_elements = extract_optional_all_ms_elements.filter do |path|
-        !path.include?('.')
+        path_is_not_slice?(path) && !path.include?('.')
       end
       @composition_optional_ms_sub_elements = extract_optional_all_ms_elements.filter do |path|
-        path.include?('.')
+        path_is_not_slice?(path) && path.include?('.')
       end
+      @composition_optional_ms_slices = composition_optional_ms_slices
     end
 
     # Populates @composition_mandatory_ms_elements with mustSupport elements where min > 0.
@@ -194,11 +222,12 @@ class Generator
 
     def extract_required_ms_elements
       @composition_mandatory_ms_elements = extract_required_all_ms_elements.filter do |path|
-        !path.include?('.')
+        path_is_not_slice?(path) && !path.include?('.')
       end
       @composition_mandatory_ms_sub_elements = extract_required_all_ms_elements.filter do |path|
-        path.include?('.')
+        path_is_not_slice?(path) && path.include?('.')
       end
+      @composition_mandatory_ms_slices = composition_mandatory_ms_slices
     end
 
     # Filters Composition mustSupport elements (no slices) by predicate and returns path suffixes.
@@ -225,6 +254,45 @@ class Generator
       elements.filter do |element|
         element.mustSupport == true && !element.base.path.include?(':') && element.base.path.include?('Composition.')
       end
+    end
+
+    def composition_mandatory_ms_slices
+      composition_extract_slices.filter { |slice| slice[:mustSupport] == true && slice[:min].positive? }
+    end
+
+    def composition_mandatory_ms_slices_paths
+      composition_mandatory_ms_slices.map { |slice| slice[:path] }
+    end
+
+    def composition_optional_ms_slices
+      composition_extract_slices.filter { |slice| slice[:mustSupport] == true && slice[:min].zero? }
+    end
+
+    def composition_optional_ms_slices_paths
+      composition_optional_ms_slices.map { |slice| slice[:path] }
+    end
+
+    def composition_extract_slices
+      composition_structure_definition = get_structure_definition_by_type('Composition')
+      return [] if composition_structure_definition.nil?
+
+      elements = composition_structure_definition.snapshot.element
+      filtered_elements = elements.filter { |element| element_is_slice?(element) }
+      filtered_elements.map { |element| build_metadata_for_slice(element) }
+    end
+
+    def build_metadata_for_slice(element)
+      {
+        path: element.path.gsub('Composition.', ''),
+        sliceName: element.sliceName,
+        min: element.min,
+        max: element.max,
+        mustSupport: element.mustSupport
+      }
+    end
+
+    def element_is_slice?(element)
+      element.id.include?(':') && element&.sliceName && !element.path.include?('section') && !element.path.include?('extension')
     end
 
     # Returns IG resources whose resourceType matches the given type.
