@@ -20,6 +20,11 @@ class Generator
 
     include Constants
 
+    REQUIRED_SECTIONS_CODES = %w[11450-4 48765-2 10160-0].freeze
+    RECOMMENDED_SECTIONS_CODES = %w[11369-6 30954-2 47519-4 46264-8].freeze
+    OPTIONAL_SECTIONS_CODES = %w[42348-3 104605-1 47420-5 11348-0 10162-6 81338-6 18776-5 29762-2 8716-3].freeze
+    ALL_SECTIONS_CODES = REQUIRED_SECTIONS_CODES + RECOMMENDED_SECTIONS_CODES + OPTIONAL_SECTIONS_CODES.freeze
+
     # Initializes a MetadataManager for the given IG resources.
     #
     # @param ig_resources [Array<FHIR::Model>] Parsed IG resources (e.g. from IGResourcesExtractor#ig_resources)
@@ -115,21 +120,25 @@ class Generator
     end
 
     def all_sections_data_codes
-      required_sections_data_codes + recommended_sections_data_codes + optional_sections_data_codes
+      ALL_SECTIONS_CODES
     end
 
     def required_sections_data_codes
-      %w[11450-4 48765-2 10160-0].freeze
-      # filter_sections_data_by_min(1).map { |section| section[:code] } || []
+      composition_sections.filter do |section|
+        REQUIRED_SECTIONS_CODES.include?(section[:code])
+      end
     end
 
     def optional_sections_data_codes
-      %w[42348-3 104605-1 47420-5 11348-0 10162-6 81338-6 18776-5 29762-2 8716-3].freeze
-      # filter_sections_data_by_min(0).map { |section| section[:code] } || []
+      composition_sections.filter do |section|
+        OPTIONAL_SECTIONS_CODES.include?(section[:code])
+      end
     end
 
     def recommended_sections_data_codes
-      %w[11369-6 30954-2 47519-4 46264-8].freeze
+      composition_sections.filter do |section|
+        RECOMMENDED_SECTIONS_CODES.include?(section[:code])
+      end
     end
 
     def filter_sections_data_by_min(min)

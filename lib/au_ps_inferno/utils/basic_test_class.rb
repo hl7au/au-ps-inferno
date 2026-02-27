@@ -99,12 +99,55 @@ module AUPSTestKit
       assert !errors_found, "Resource does not conform to the profile #{profile_with_version}"
     end
 
-    def read_composition_sections_info(sections_array_codes, sections_codes_mapping)
-      check_bundle_exists_in_scratch
+    def read_composition_sections_info(sections_data, mandatory_ms_elements)
+      sections_array_codes = sections_data.map { |section| section[:code] }
+      required = sections_data.first[:required]
+      bundle_exists = check_bundle_exists_in_scratch
+      all_sections = all_sections_present_in_bundle?(sections_array_codes, scratch_bundle)
+      elements_populated = all_mandatory_ms_elements_populated_in_sections?(
+        sections_array_codes, scratch_bundle, mandatory_ms_elements
+      )
+      population_correct = profile_population_is_correct?(sections_data, scratch_bundle)
+      info "Bundle exists: #{bundle_exists}, all sections present: #{all_sections}, all mandatory MS elements populated: #{elements_populated}, profile population correct: #{population_correct}, required: #{required}"
+      # ------ First message -------
+      # A info message with sections and all MS elements populated or not
+      # ------ Second message -------
+      # A info message with a list of section and all resourceType/profile of the entries or emptyReason if present
+    end
+
+    def all_sections_present_in_bundle?(sections_array_codes, bundle)
+      existing_section_codes = BundleDecorator.new(bundle.to_hash).composition_resource.section_codes
+      sections_array_codes.all? { |section_code| existing_section_codes.include?(section_code) }
+    end
+
+    def all_mandatory_ms_elements_populated_in_sections?(sections_array_codes, bundle, mandatory_ms_elements)
       sections_array_codes.each do |section_code|
-        check_composition_section_code(section_code, BundleDecorator.new(scratch_bundle.to_hash).composition_resource,
-                                       sections_codes_mapping)
+        section = BundleDecorator.new(bundle.to_hash).composition_resource.section_by_code(section_code)
+        return false unless section.present?
+
+        mandatory_ms_elements.map do |element|
+          resolve_path(section, element[:expression]).first.present?
+        end.all?
       end
+    end
+
+    def profile_population_is_correct?(sections_data, bundle)
+      sections_data.map do |section_data|
+        section = BundleDecorator.new(bundle.to_hash).composition_resource.section_by_code(section_data[:code])
+        return false unless section.present?
+
+        section_data[:entries].map do |entry|
+          entry[:profiles].map do |profile|
+            profile_population_is_correct_for_section?(section, profile, bundle)
+          end
+        end.all?
+      end.all?
+    end
+
+    def profile_population_is_correct_for_section?(section, profile, bundle)
+      section.entry_references.map do |reference|
+        BundleDecorator.new(bundle.to_hash).resource_by_reference(reference).meta.profile.include?(profile)
+      end.all?
     end
   end
 end
