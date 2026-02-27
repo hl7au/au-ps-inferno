@@ -35,14 +35,11 @@ class Generator
         file_base: 'au_ps_composition_must_support_elements',
         class_base: 'AUPSCompositionMUSTSUPPORTElements',
         id_base: 'au_ps_composition_must_support_elements',
-        title: 'Composition has must-support elements',
-        description: 'Checks that the Composition resource contains mandatory must-support elements ' \
-                     '(status, type, subject.reference, date, author, title, section.title, section.text) and ' \
-                     'provides information about optional must-support elements ' \
-                     '(text, identifier, attester, custodian, event).',
+        title: 'AU PS Composition Must Support Elements (Must Have)',
+        description: 'Verify the Must Support elements are correctly populated in the AU PS Composition resource.',
         base_class_require: '../../utils/basic_test_class',
         base_class_name: 'BasicTest',
-        description_comment: 'The Must Support elements populated in the Composition resource.',
+        description_comment: 'Verify the Must Support elements are correctly populated in the AU PS Composition resource.',
         run_code: 'composition_mandatory_ms_elements_info'
       },
       {

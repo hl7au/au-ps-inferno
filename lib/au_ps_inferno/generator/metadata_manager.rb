@@ -27,7 +27,9 @@ class Generator
       @ig_resources = ig_resources
       @composition_sections = []
       @composition_mandatory_ms_elements = []
+      @composition_mandatory_ms_sub_elements = []
       @composition_optional_ms_elements = []
+      @composition_optional_ms_sub_elements = []
       @profiles = []
       @resources_filters = {}
     end
@@ -70,7 +72,9 @@ class Generator
       {
         composition_sections: @composition_sections,
         composition_mandatory_ms_elements: @composition_mandatory_ms_elements,
+        composition_mandatory_ms_sub_elements: @composition_mandatory_ms_sub_elements,
         composition_optional_ms_elements: @composition_optional_ms_elements,
+        composition_optional_ms_sub_elements: @composition_optional_ms_sub_elements,
         profiles: @profiles,
         resources_filters: @resources_filters
       }
@@ -168,15 +172,33 @@ class Generator
     # Populates @composition_optional_ms_elements with mustSupport elements where min is 0.
     #
     # @return [void]
+    def extract_optional_all_ms_elements
+      extract_ms_elements_by_predicate(->(element) { element.min.zero? })
+    end
+
     def extract_optional_ms_elements
-      @composition_optional_ms_elements = extract_ms_elements_by_predicate(->(element) { element.min.zero? })
+      @composition_optional_ms_elements = extract_optional_all_ms_elements.filter do |path|
+        !path.include?('.')
+      end
+      @composition_optional_ms_sub_elements = extract_optional_all_ms_elements.filter do |path|
+        path.include?('.')
+      end
     end
 
     # Populates @composition_mandatory_ms_elements with mustSupport elements where min > 0.
     #
     # @return [void]
+    def extract_required_all_ms_elements
+      extract_ms_elements_by_predicate(->(element) { element.min.positive? })
+    end
+
     def extract_required_ms_elements
-      @composition_mandatory_ms_elements = extract_ms_elements_by_predicate(->(element) { element.min.positive? })
+      @composition_mandatory_ms_elements = extract_required_all_ms_elements.filter do |path|
+        !path.include?('.')
+      end
+      @composition_mandatory_ms_sub_elements = extract_required_all_ms_elements.filter do |path|
+        path.include?('.')
+      end
     end
 
     # Filters Composition mustSupport elements (no slices) by predicate and returns path suffixes.
@@ -385,16 +407,24 @@ class Generator
       end
     end
 
+    def normalize_path_to_hash(path)
+      { expression: path, label: path }
+    end
+
     def optional_ms_elements
-      @composition_optional_ms_elements.map do |element|
-        { expression: element, label: element }
-      end
+      @composition_optional_ms_elements.map { |element| normalize_path_to_hash(element) }
+    end
+
+    def optional_ms_sub_elements
+      @composition_optional_ms_sub_elements.map { |element| normalize_path_to_hash(element) }
     end
 
     def mandatory_ms_elements
-      @composition_mandatory_ms_elements.map do |element|
-        { expression: element, label: element }
-      end
+      @composition_mandatory_ms_elements.map { |element| normalize_path_to_hash(element) }
+    end
+
+    def mandatory_ms_sub_elements
+      @composition_mandatory_ms_sub_elements.map { |element| normalize_path_to_hash(element) }
     end
 
     def au_ps_profiles_mapping_required

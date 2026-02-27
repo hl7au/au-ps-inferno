@@ -127,7 +127,7 @@ class Generator
       when 'au_ps_bundle_has_must_support_elements'
         'bundle_mandatory_ms_elements_info'
       when 'au_ps_composition_must_support_elements'
-        "composition_mandatory_ms_elements_info(#{metadata.optional_ms_elements}, #{metadata.mandatory_ms_elements})"
+        "composition_mandatory_ms_elements_info(#{metadata.optional_ms_elements}, #{metadata.mandatory_ms_elements}, #{metadata.optional_ms_sub_elements}, #{metadata.mandatory_ms_sub_elements})"
       when 'au_ps_composition_other_sections'
         "check_other_sections(#{metadata.all_sections_data_codes}, #{metadata.sections_codes_mapping})"
       end
