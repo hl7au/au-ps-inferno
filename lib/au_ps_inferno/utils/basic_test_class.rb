@@ -100,6 +100,7 @@ module AUPSTestKit
     end
 
     def read_composition_sections_info(sections_data, _normalized_sections_data)
+      mandatory_ms_elements = sections_data.first[:ms_elements]
       sections_array_codes = sections_data.map { |section| section[:code] }
       required = sections_data.first[:required]
       bundle_exists = check_bundle_exists_in_scratch
@@ -111,8 +112,32 @@ module AUPSTestKit
       info "Bundle exists: #{bundle_exists}, all sections present: #{all_sections}, all mandatory MS elements populated: #{elements_populated}, profile population correct: #{population_correct}, required: #{required}"
       # ------ First message -------
       # A info message with sections and all MS elements populated or not
+      info_sections_ms_elements(sections_data)
       # ------ Second message -------
+      # sections_data.each do |section|
+      #   section_data = normalized_sections_data.find { |s| s[:code] == section[:code] }
+      #   validate_section_resources(section_data)
+      # end
       # A info message with a list of section and all resourceType/profile of the entries or emptyReason if present
+    end
+
+    def info_sections_ms_elements(sections_data)
+      bundle_resource = BundleDecorator.new(scratch_bundle.to_hash)
+      composition_resource = bundle_resource.composition_resource
+      main_title = '**List Must Support elements populated or missing**'
+      result = []
+      sections_data.each do |section|
+        section_resource = composition_resource.section_by_code(section[:code])
+        return false unless section_resource.present?
+
+        title = "**#{section[:short]}(#{section[:code]})**"
+        result << title
+        section[:ms_elements].each do |element|
+          result << "**#{element[:expression]}**: #{boolean_to_humanized_string(resolve_path(section_resource,
+                                                                                             element[:expression]).first.present?)}"
+        end
+      end
+      info [main_title, result.join("\n\n")].join("\n\n")
     end
 
     def all_sections_present_in_bundle?(sections_array_codes, bundle)
