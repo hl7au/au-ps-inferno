@@ -8,6 +8,17 @@
   :max: '1'
   :required: true
   :mustSupport: true
+  :ms_elements:
+  - :expression: title
+    :min: 1
+  - :expression: code
+    :min: 1
+  - :expression: text
+    :min: 1
+  - :expression: entry
+    :min: 0
+  - :expression: emptyReason
+    :min: 0
   :code: 11450-4
   :entries:
   - :id: Composition.section:sectionProblems.entry:problem
@@ -29,6 +40,17 @@
   :max: '1'
   :required: true
   :mustSupport: true
+  :ms_elements:
+  - :expression: title
+    :min: 1
+  - :expression: code
+    :min: 1
+  - :expression: text
+    :min: 1
+  - :expression: entry
+    :min: 0
+  - :expression: emptyReason
+    :min: 0
   :code: 48765-2
   :entries:
   - :id: Composition.section:sectionAllergies.entry:allergyOrIntolerance
@@ -54,6 +76,17 @@
   :max: '1'
   :required: true
   :mustSupport: true
+  :ms_elements:
+  - :expression: title
+    :min: 1
+  - :expression: code
+    :min: 1
+  - :expression: text
+    :min: 1
+  - :expression: entry
+    :min: 0
+  - :expression: emptyReason
+    :min: 0
   :code: 10160-0
   :entries:
   - :id: Composition.section:sectionMedications.entry:medicationStatementOrRequest
@@ -74,6 +107,17 @@
   :max: '1'
   :required: false
   :mustSupport: true
+  :ms_elements:
+  - :expression: title
+    :min: 1
+  - :expression: code
+    :min: 1
+  - :expression: text
+    :min: 1
+  - :expression: entry
+    :min: 0
+  - :expression: emptyReason
+    :min: 0
   :code: 11369-6
   :entries:
   - :id: Composition.section:sectionImmunizations.entry:immunization
@@ -93,6 +137,17 @@
   :max: '1'
   :required: false
   :mustSupport: true
+  :ms_elements:
+  - :expression: title
+    :min: 1
+  - :expression: code
+    :min: 1
+  - :expression: text
+    :min: 1
+  - :expression: entry
+    :min: 0
+  - :expression: emptyReason
+    :min: 0
   :code: 30954-2
   :entries:
   - :id: Composition.section:sectionResults.entry:results-observation-laboratory-pathology
@@ -127,6 +182,17 @@
   :max: '1'
   :required: false
   :mustSupport: true
+  :ms_elements:
+  - :expression: title
+    :min: 1
+  - :expression: code
+    :min: 1
+  - :expression: text
+    :min: 1
+  - :expression: entry
+    :min: 0
+  - :expression: emptyReason
+    :min: 0
   :code: 47519-4
   :entries:
   - :id: Composition.section:sectionProceduresHx.entry:procedure
@@ -143,6 +209,17 @@
   :max: '1'
   :required: false
   :mustSupport: true
+  :ms_elements:
+  - :expression: title
+    :min: 1
+  - :expression: code
+    :min: 1
+  - :expression: text
+    :min: 1
+  - :expression: entry
+    :min: 0
+  - :expression: emptyReason
+    :min: 0
   :code: 46264-8
   :entries:
   - :id: Composition.section:sectionMedicalDevices.entry:deviceStatement
@@ -159,6 +236,17 @@
   :max: '1'
   :required: false
   :mustSupport: true
+  :ms_elements:
+  - :expression: title
+    :min: 1
+  - :expression: code
+    :min: 1
+  - :expression: text
+    :min: 1
+  - :expression: entry
+    :min: 0
+  - :expression: emptyReason
+    :min: 0
   :code: 42348-3
   :entries:
   - :id: Composition.section:sectionAdvanceDirectives.entry:advanceDirectivesConsent
@@ -177,6 +265,17 @@
   :max: '1'
   :required: false
   :mustSupport: true
+  :ms_elements:
+  - :expression: title
+    :min: 1
+  - :expression: code
+    :min: 1
+  - :expression: text
+    :min: 1
+  - :expression: entry
+    :min: 0
+  - :expression: emptyReason
+    :min: 0
   :code: 104605-1
   :entries:
   - :id: Composition.section:sectionAlerts.entry:alertsFlag
@@ -196,6 +295,17 @@
   :max: '1'
   :required: false
   :mustSupport: true
+  :ms_elements:
+  - :expression: title
+    :min: 1
+  - :expression: code
+    :min: 1
+  - :expression: text
+    :min: 1
+  - :expression: entry
+    :min: 0
+  - :expression: emptyReason
+    :min: 0
   :code: 47420-5
   :entries:
   - :id: Composition.section:sectionFunctionalStatus.entry:disability
@@ -220,6 +330,17 @@
   :max: '1'
   :required: false
   :mustSupport: true
+  :ms_elements:
+  - :expression: title
+    :min: 1
+  - :expression: code
+    :min: 1
+  - :expression: text
+    :min: 1
+  - :expression: entry
+    :min: 0
+  - :expression: emptyReason
+    :min: 0
   :code: 11348-0
   :entries:
   - :id: Composition.section:sectionPastProblems.entry:pastProblem
@@ -237,6 +358,17 @@
   :max: '1'
   :required: false
   :mustSupport: true
+  :ms_elements:
+  - :expression: title
+    :min: 1
+  - :expression: code
+    :min: 1
+  - :expression: text
+    :min: 1
+  - :expression: entry
+    :min: 0
+  - :expression: emptyReason
+    :min: 0
   :code: 10162-6
   :entries:
   - :id: Composition.section:sectionPregnancyHx.entry:pregnancyStatus
@@ -262,6 +394,17 @@
   :max: '1'
   :required: false
   :mustSupport: true
+  :ms_elements:
+  - :expression: title
+    :min: 1
+  - :expression: code
+    :min: 1
+  - :expression: text
+    :min: 1
+  - :expression: entry
+    :min: 0
+  - :expression: emptyReason
+    :min: 0
   :code: 81338-6
   :entries: []
 - :id: Composition.section:sectionPlanOfCare
@@ -273,6 +416,17 @@
   :max: '1'
   :required: false
   :mustSupport: true
+  :ms_elements:
+  - :expression: title
+    :min: 1
+  - :expression: code
+    :min: 1
+  - :expression: text
+    :min: 1
+  - :expression: entry
+    :min: 0
+  - :expression: emptyReason
+    :min: 0
   :code: 18776-5
   :entries:
   - :id: Composition.section:sectionPlanOfCare.entry:carePlan
@@ -298,6 +452,17 @@
   :max: '1'
   :required: false
   :mustSupport: true
+  :ms_elements:
+  - :expression: title
+    :min: 1
+  - :expression: code
+    :min: 1
+  - :expression: text
+    :min: 1
+  - :expression: entry
+    :min: 0
+  - :expression: emptyReason
+    :min: 0
   :code: 29762-2
   :entries:
   - :id: Composition.section:sectionSocialHistory.entry:smokingTobaccoUse
@@ -326,6 +491,17 @@
   :max: '1'
   :required: false
   :mustSupport: true
+  :ms_elements:
+  - :expression: title
+    :min: 1
+  - :expression: code
+    :min: 1
+  - :expression: text
+    :min: 1
+  - :expression: entry
+    :min: 0
+  - :expression: emptyReason
+    :min: 0
   :code: 8716-3
   :entries:
   - :id: Composition.section:sectionVitalSigns.entry:vitalSign
@@ -438,19 +614,19 @@
   :required: false
 :resources_filters:
 - :resource_profile: Observation|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-diagnosticresult-path
-  :filters:
+  :filters: &1
   - path: category.coding.code
     value: laboratory
 - :resource_profile: Observation|http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-results-radiology-uv-ips
-  :filters:
+  :filters: &2
   - path: category.coding.code
     value: imaging
 - :resource_profile: Observation|http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-pregnancy-status-uv-ips
-  :filters:
+  :filters: &3
   - path: code.coding.code
     value: 82810-3
 - :resource_profile: Observation|http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-pregnancy-outcome-uv-ips
-  :filters:
+  :filters: &4
   - path: code.coding.code
     value:
     - 11636-8
@@ -463,10 +639,103 @@
     - 11614-5
     - 33065-4
 - :resource_profile: Observation|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-smokingstatus
-  :filters:
+  :filters: &5
   - path: code.coding.code
     value: '1747861000168109'
 - :resource_profile: Observation|http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-alcoholuse-uv-ips
-  :filters:
+  :filters: &6
   - path: code.coding.code
     value: 74013-4
+:normalized_sections_data:
+- code: 11450-4
+  display: Patient Summary Problems Section
+  resources:
+    Condition|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-condition:
+      requirements: []
+- code: 48765-2
+  display: Patient Summary Allergies and Intolerances Section
+  resources:
+    AllergyIntolerance|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-allergyintolerance:
+      requirements: []
+- code: 10160-0
+  display: Patient Summary Medication Summary Section
+  resources:
+    MedicationStatement|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medicationstatement:
+      requirements: []
+    MedicationRequest|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medicationrequest:
+      requirements: []
+- code: 11369-6
+  display: Patient Summary Immunizations Section
+  resources:
+    Immunization|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-immunization:
+      requirements: []
+- code: 30954-2
+  display: Patient Summary Results Section
+  resources:
+    Observation|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-diagnosticresult-path:
+      requirements: *1
+    Observation|http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-results-radiology-uv-ips:
+      requirements: *2
+    DiagnosticReport|http://hl7.org/fhir/uv/ips/StructureDefinition/DiagnosticReport-uv-ips:
+      requirements: []
+- code: 47519-4
+  display: Patient Summary History of Procedures Section
+  resources:
+    Procedure|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-procedure:
+      requirements: []
+- code: 46264-8
+  display: Patient Summary Medical Devices Section
+  resources:
+    DeviceUseStatement|http://hl7.org/fhir/uv/ips/StructureDefinition/DeviceUseStatement-uv-ips:
+      requirements: []
+- code: 42348-3
+  display: Patient Summary Advance Directives Section
+  resources:
+    Consent|http://hl7.org/fhir/StructureDefinition/Consent:
+      requirements: []
+- code: 104605-1
+  display: Patient Summary Alerts Section
+  resources:
+    Flag|http://hl7.org/fhir/uv/ips/StructureDefinition/Flag-alert-uv-ips:
+      requirements: []
+- code: 47420-5
+  display: Patient Summary Functional Status Section
+  resources:
+    Condition|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-condition:
+      requirements: []
+    ClinicalImpression|http://hl7.org/fhir/StructureDefinition/ClinicalImpression:
+      requirements: []
+- code: 11348-0
+  display: Patient Summary History of Past Illness Section
+  resources:
+    Condition|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-condition:
+      requirements: []
+- code: 10162-6
+  display: Patient Summary History of Pregnancy Section
+  resources:
+    Observation|http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-pregnancy-status-uv-ips:
+      requirements: *3
+    Observation|http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-pregnancy-outcome-uv-ips:
+      requirements: *4
+- code: 81338-6
+  display: Patient Summary Patient Story Section
+  resources: {}
+- code: 18776-5
+  display: Patient Summary Plan of Care Section
+  resources:
+    CarePlan|http://hl7.org/fhir/StructureDefinition/CarePlan:
+      requirements: []
+    ImmunizationRecommendation|http://hl7.org/fhir/StructureDefinition/ImmunizationRecommendation:
+      requirements: []
+- code: 29762-2
+  display: Patient Summary Social History Section
+  resources:
+    Observation|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-smokingstatus:
+      requirements: *5
+    Observation|http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-alcoholuse-uv-ips:
+      requirements: *6
+- code: 8716-3
+  display: Patient Summary Vital Signs Section
+  resources:
+    Observation|http://hl7.org/fhir/StructureDefinition/vitalsigns:
+      requirements: []

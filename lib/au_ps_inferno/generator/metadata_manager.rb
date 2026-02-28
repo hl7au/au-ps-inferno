@@ -39,6 +39,7 @@ class Generator
       @composition_optional_ms_slices = []
       @profiles = []
       @resources_filters = {}
+      @normalized_sections_data = []
     end
 
     # Generates composition section metadata from IG resources (in-memory only).
@@ -51,6 +52,17 @@ class Generator
       extract_optional_ms_elements
       extract_profiles
       extract_resource_filters
+      normalize_sections_data
+    end
+
+    def return_normalized_sections_data
+      @normalized_sections_data
+    end
+
+    def normalize_sections_data
+      @normalized_sections_data = @composition_sections.map do |section|
+        normalize_section_data(section[:id])
+      end
     end
 
     def extract_resource_filters
@@ -85,9 +97,12 @@ class Generator
         composition_mandatory_ms_slices: @composition_mandatory_ms_slices,
         composition_optional_ms_slices: @composition_optional_ms_slices,
         profiles: @profiles,
-        resources_filters: @resources_filters
+        resources_filters: @resources_filters,
+        normalized_sections_data: @normalized_sections_data
       }
     end
+
+    attr_reader :normalized_sections_data
 
     def normalize_section_data(section_id)
       section_data = @composition_sections.find { |section| section[:id] == section_id }
@@ -121,6 +136,20 @@ class Generator
 
     def all_sections_data_codes
       ALL_SECTIONS_CODES
+    end
+
+    def composition_ms_sections_elements
+      filtered_elements = composition_extract_ms_elements_without_slices.filter do |element|
+        element&.path&.include?('Composition.section.')
+      end
+      filtered_elements.map do |element|
+        path = element.path.gsub('Composition.section.', '')
+        min = element.min
+        {
+          expression: path,
+          min: min
+        }
+      end.uniq
     end
 
     def required_sections_data_codes
@@ -418,7 +447,8 @@ class Generator
         min: section.min,
         max: section.max,
         required: section.min.positive?,
-        mustSupport: section.mustSupport || false
+        mustSupport: section.mustSupport || false,
+        ms_elements: composition_ms_sections_elements
       }
     end
 

@@ -99,7 +99,7 @@ module AUPSTestKit
       assert !errors_found, "Resource does not conform to the profile #{profile_with_version}"
     end
 
-    def read_composition_sections_info(sections_data, mandatory_ms_elements)
+    def read_composition_sections_info(sections_data, _normalized_sections_data)
       sections_array_codes = sections_data.map { |section| section[:code] }
       required = sections_data.first[:required]
       bundle_exists = check_bundle_exists_in_scratch
