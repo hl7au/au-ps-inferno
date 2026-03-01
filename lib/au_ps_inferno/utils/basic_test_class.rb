@@ -129,6 +129,7 @@ module AUPSTestKit
           existing_resource = section_test_entity.get_resource_by_reference(ref)
           existing_resource_profiles = existing_resource.meta&.profile
           next unless existing_resource.present?
+          next unless existing_resource.nil?
 
           entity_can_present = existing_resource_profiles.any? { |profile| valid_profiles.include?(profile) }
 
@@ -188,8 +189,14 @@ module AUPSTestKit
     end
 
     def profile_population_is_correct_for_section?(section, profile, bundle)
+      bundle_resource = BundleDecorator.new(bundle.to_hash)
       section.entry_references.map do |reference|
-        BundleDecorator.new(bundle.to_hash).resource_by_reference(reference).meta.profile.include?(profile)
+        resource = bundle_resource.resource_by_reference(reference)
+        next unless resource.present?
+        next unless resource.meta.present?
+        next unless resource.meta.profile.present?
+
+        resource.meta.profile.include?(profile)
       end.all?
     end
 
