@@ -5,7 +5,7 @@ require_relative '../../utils/basic_test_class'
 module AUPSTestKit
   # The optional sections populated in the Composition resource.
   class AUPSRetrieveBundleCompositionOptionalSection100ballot < BasicTest
-    title 'Composition contains optional sections with entry references'
+    title 'AU PS Composition Optional Sections (Must Have)'
     description 'Displays information about optional sections'
     id :au_ps_retrieve_bundle_composition_optional_sections_100ballot
 

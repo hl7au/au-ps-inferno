@@ -5,7 +5,7 @@ require_relative '../../utils/basic_test_class'
 module AUPSTestKit
   # AU PS Composition Other Sections
   class AUPSSummaryBundleCompositionOtherSection100ballot < BasicTest
-    title 'Composition contains other sections with entry references'
+    title 'AU PS Composition Undefined Sections (Must Have)'
     description 'Displays information about other sections'
     id :au_ps_summary_bundle_composition_other_sections_100ballot
 
