@@ -99,7 +99,8 @@ module AUPSTestKit
       assert !errors_found, "Resource does not conform to the profile #{profile_with_version}"
     end
 
-    def read_composition_sections_info(sections_data, _normalized_sections_data)
+    def read_composition_sections_info(sections_data, normalized_sections_data)
+      info "normalized_sections_data: #{normalized_sections_data}"
       mandatory_ms_elements = sections_data.first[:ms_elements]
       sections_array_codes = sections_data.map { |section| section[:code] }
       required = sections_data.first[:required]
@@ -114,25 +115,29 @@ module AUPSTestKit
       # A info message with sections and all MS elements populated or not
       info_sections_ms_elements(sections_data)
       # ------ Second message -------
-      # sections_data.each do |section|
-      #   section_data = normalized_sections_data.find { |s| s[:code] == section[:code] }
-      #   validate_section_resources(section_data)
-      # end
-      # A info message with a list of section and all resourceType/profile of the entries or emptyReason if present
+      title = 'List any entry resources by type & profile (follow reference) or emptyReason coding when populated'
+      result = []
+      sections_data.each do |section_data|
+        section_title = "**#{section_data[:short]}(#{section_data[:code]})**"
+        result << section_title
+        filtered_section_data = normalized_sections_data.find { |s| s['code'] == section_data[:code] }
+        result << validate_section_resources(filtered_section_data)
+      end
+      info [title, result.join("\n\n")].join("\n\n")
     end
 
-    def info_sections_ms_elements(sections_data)
+    def info_sections_ms_elements(sections_configs)
       bundle_resource = BundleDecorator.new(scratch_bundle.to_hash)
       composition_resource = bundle_resource.composition_resource
       main_title = '**List Must Support elements populated or missing**'
       result = []
-      sections_data.each do |section|
-        section_resource = composition_resource.section_by_code(section[:code])
-        return false unless section_resource.present?
+      sections_configs.each do |section_config|
+        section_resource = composition_resource.section_by_code(section_config[:code])
+        next unless section_resource.present?
 
-        title = "**#{section[:short]}(#{section[:code]})**"
+        title = "**#{section_config[:short]}(#{section_config[:code]})**"
         result << title
-        section[:ms_elements].each do |element|
+        section_config[:ms_elements].each do |element|
           result << "**#{element[:expression]}**: #{boolean_to_humanized_string(resolve_path(section_resource,
                                                                                              element[:expression]).first.present?)}"
         end
