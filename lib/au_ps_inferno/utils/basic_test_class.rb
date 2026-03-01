@@ -100,7 +100,6 @@ module AUPSTestKit
     end
 
     def read_composition_sections_info(sections_data, normalized_sections_data)
-      info "normalized_sections_data: #{normalized_sections_data}"
       mandatory_ms_elements = sections_data.first[:ms_elements]
       sections_array_codes = sections_data.map { |section| section[:code] }
       required = sections_data.first[:required]
@@ -111,17 +110,31 @@ module AUPSTestKit
       )
       population_correct = profile_population_is_correct?(sections_data, scratch_bundle)
       info "Bundle exists: #{bundle_exists}, all sections present: #{all_sections}, all mandatory MS elements populated: #{elements_populated}, profile population correct: #{population_correct}, required: #{required}"
-      # ------ First message -------
-      # A info message with sections and all MS elements populated or not
       info_sections_ms_elements(sections_data)
-      # ------ Second message -------
-      title = 'List any entry resources by type & profile (follow reference) or emptyReason coding when populated'
+      info_entry_resources_by_type_and_profile(sections_data, normalized_sections_data)
+    end
+
+    def info_entry_resources_by_type_and_profile(sections_data, normalized_sections_data)
+      title = '## List any entry resources by type & profile (follow reference) or emptyReason coding when populated'
       result = []
       sections_data.each do |section_data|
-        section_title = "**#{section_data[:short]}(#{section_data[:code]})**"
+        valid_profiles = section_data[:entries].map do |entry|
+          entry[:profiles]
+        end.flatten.map { |profile| profile.split('|').last }.uniq
+        section_title = "### #{section_data[:short]}(#{section_data[:code]})"
         result << section_title
         filtered_section_data = normalized_sections_data.find { |s| s['code'] == section_data[:code] }
-        result << validate_section_resources(filtered_section_data)
+        section_test_entity = SectionTestClass.new(filtered_section_data, scratch_bundle)
+        section_test_entity.references.each do |ref|
+          existing_resource = section_test_entity.get_resource_by_reference(ref)
+          existing_resource_profiles = existing_resource.meta&.profile
+          next unless existing_resource.present?
+
+          entity_can_present = existing_resource_profiles.any? { |profile| valid_profiles.include?(profile) }
+
+          result << " #{boolean_to_humanized_string(entity_can_present)} **#{ref}**: #{existing_resource.resourceType} (#{existing_resource.meta.profile.join(', ')})"
+        end
+        # result << validate_section_resources(filtered_section_data)
       end
       info [title, result.join("\n\n")].join("\n\n")
     end
@@ -129,13 +142,13 @@ module AUPSTestKit
     def info_sections_ms_elements(sections_configs)
       bundle_resource = BundleDecorator.new(scratch_bundle.to_hash)
       composition_resource = bundle_resource.composition_resource
-      main_title = '**List Must Support elements populated or missing**'
+      main_title = '## List Must Support elements populated or missing'
       result = []
       sections_configs.each do |section_config|
         section_resource = composition_resource.section_by_code(section_config[:code])
         next unless section_resource.present?
 
-        title = "**#{section_config[:short]}(#{section_config[:code]})**"
+        title = "### #{section_config[:short]}(#{section_config[:code]})"
         result << title
         section_config[:ms_elements].each do |element|
           result << "**#{element[:expression]}**: #{boolean_to_humanized_string(resolve_path(section_resource,
@@ -178,6 +191,13 @@ module AUPSTestKit
       section.entry_references.map do |reference|
         BundleDecorator.new(bundle.to_hash).resource_by_reference(reference).meta.profile.include?(profile)
       end.all?
+    end
+
+    def get_resource_by_ref_and_check_profile(ref, profile, bundle)
+      resource = BundleDecorator.new(bundle.to_hash).resource_by_reference(ref)
+      return false unless resource.present?
+
+      resource.meta.profile.include?(profile)
     end
   end
 end
