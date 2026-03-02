@@ -1,0 +1,21 @@
+# frozen_string_literal: true
+
+require_relative '../../utils/basic_test_class'
+<% imports.each do |import| %>
+require_relative '<%= import %>'
+<% end %>
+
+module AUPSTestKit
+  # Automatically generated primitive test for <%= title %>
+  class <%= class_name %> < BasicTest
+    title '<%= title %>'
+    description '<%= description %>'
+    id :<%= id %>
+
+    run do
+      <% commands.each do |command| %>
+      <%= command %>
+      <% end %>
+    end
+  end
+end

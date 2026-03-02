@@ -39,6 +39,7 @@ rubocop:
 	$(compose) $(inferno) rubocop
 
 local_generate:
+	rm -rf lib/au_ps_inferno/1.0.0-ballot
 	bundle exec rake generator:generate
 
 local_rubocop:

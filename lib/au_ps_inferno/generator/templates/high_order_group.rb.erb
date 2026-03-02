@@ -1,0 +1,18 @@
+# frozen_string_literal: true
+
+<% groups.each do |group| %>
+require_relative '<%= group[:path] %>'
+<% end %>
+
+module AUPSTestKit
+  # Automatically generated high order group for <%= title %>
+  class <%= class_name %> < Inferno::TestGroup
+    title '<%= title %>'
+    description '<%= description %>'
+    id :<%= id %>
+
+    <% groups.each do |group| %>
+    group from: :<%= group[:id] %>
+    <% end %>
+  end
+end
