@@ -8,7 +8,7 @@ module AUPSTestKit
   class CompositionOptionalSectionsGenericBundleGroup < Inferno::TestGroup
     title 'Composition Optional Sections'
     description 'Displays information about Composition Optional Sections in the Composition resource.'
-    id :composition_optional_sections_generic_bundle_group
+    id :generate_bundle_using_ips_summary_validation_composition_optional_sections_generic_bundle_group
 
     
   end

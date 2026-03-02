@@ -32,7 +32,7 @@ class Generator
 
     def result_information
       {
-        path: @output_file_path,
+        path: @output_file_path.split('.rb').first.split('/').last(2).join('/'),
         id: @id
       }
     end

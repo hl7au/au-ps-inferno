@@ -8,7 +8,7 @@ module AUPSTestKit
   class BundleHasMustSupportElementsGenericBundleGroup < Inferno::TestGroup
     title 'Bundle has Must Support elements'
     description 'Displays information about Bundle has Must Support elements in the Composition resource.'
-    id :bundle_has_must_support_elements_generic_bundle_group
+    id :retrieve_bundle_validation_bundle_has_must_support_elements_generic_bundle_group
 
     
   end

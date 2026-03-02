@@ -8,7 +8,7 @@ module AUPSTestKit
   class CompositionRecommendedSectionsGenericBundleGroup < Inferno::TestGroup
     title 'Composition Recommended Sections'
     description 'Displays information about Composition Recommended Sections in the Composition resource.'
-    id :composition_recommended_sections_generic_bundle_group
+    id :bundle_validation_composition_recommended_sections_generic_bundle_group
 
     
   end

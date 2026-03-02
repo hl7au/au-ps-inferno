@@ -95,31 +95,38 @@ class Generator
     ig_version.gsub('-', '').gsub('.', '')
   end
 
-  def new_generate
-    @resources_manager.extract
-    save_metadata_to_version_folder
+  def generate_primitive_group(generic_bundle_group, high_order_group_id, high_order_group_file_name)
+    generic_bundle_group_file_name = "#{build_id(generic_bundle_group)}_generic_bundle_group"
+    generic_bundle_group_config = {
+      class_name: "#{build_class_name(generic_bundle_group)}GenericBundleGroup",
+      title: generic_bundle_group,
+      description: "Displays information about #{generic_bundle_group} in the Composition resource.",
+      id: :"#{high_order_group_id}_#{build_id(generic_bundle_group)}_generic_bundle_group",
+      output_file_path: "#{PATH_BASE}/#{@suite_version}/#{high_order_group_file_name}/#{generic_bundle_group_file_name}/#{generic_bundle_group_file_name}.rb"
+    }
+    PrimitiveGroup.new(generic_bundle_group_config).generate
+  end
+
+  def generate_high_order_group(high_order_group)
+    high_order_group_id = :"#{build_id(high_order_group)}"
+    high_order_group_file_name = "#{build_id(high_order_group)}_high_order_group"
+    generic_bundle_groups = GENERIC_BUNDLE_GROUPS.map do |generic_bundle_group|
+      generate_primitive_group(generic_bundle_group, high_order_group_id, high_order_group_file_name)
+    end
+    high_order_group_config = {
+      class_name: "#{build_class_name(high_order_group)}HighOrderGroup",
+      title: high_order_group,
+      description: "Displays information about #{high_order_group} in the Composition resource.",
+      id: high_order_group_id,
+      groups: generic_bundle_groups,
+      output_file_path: "#{PATH_BASE}/#{@suite_version}/#{high_order_group_file_name}/#{high_order_group_file_name}.rb"
+    }
+    HighOrderGroup.new(high_order_group_config).generate
+  end
+
+  def generate_primitive_suite
     high_order_groups = HIGH_ORDER_GROUPS.map do |high_order_group|
-      high_order_group_file_name = "#{build_id(high_order_group)}_high_order_group"
-      generic_bundle_groups = GENERIC_BUNDLE_GROUPS.map do |generic_bundle_group|
-        generic_bundle_group_file_name = "#{build_id(generic_bundle_group)}_generic_bundle_group"
-        generic_bundle_group_config = {
-          class_name: "#{build_class_name(generic_bundle_group)}GenericBundleGroup",
-          title: generic_bundle_group,
-          description: "Displays information about #{generic_bundle_group} in the Composition resource.",
-          id: :"#{build_id(generic_bundle_group)}_generic_bundle_group",
-          output_file_path: "#{PATH_BASE}/#{@suite_version}/#{high_order_group_file_name}/#{generic_bundle_group_file_name}/#{generic_bundle_group_file_name}.rb"
-        }
-        PrimitiveGroup.new(generic_bundle_group_config).generate
-      end
-      high_order_group_config = {
-        class_name: "#{build_class_name(high_order_group)}HighOrderGroup",
-        title: high_order_group,
-        description: "Displays information about #{high_order_group} in the Composition resource.",
-        id: :"#{build_id(high_order_group)}",
-        groups: generic_bundle_groups,
-        output_file_path: "#{PATH_BASE}/#{@suite_version}/#{high_order_group_file_name}/#{high_order_group_file_name}.rb"
-      }
-      HighOrderGroup.new(high_order_group_config).generate
+      generate_high_order_group(high_order_group)
     end
     ig_suite_version = ig_version_to_suite_version(@suite_version)
     suite_config = {
@@ -132,46 +139,12 @@ class Generator
       output_file_path: "#{PATH_BASE}/#{@suite_version}/#{ig_suite_version}_suite.rb"
     }
     SuitePrimitive.new(suite_config).generate
-    # test_config = {
-    #   class_name: 'AUPSRetrieveBundleCompositionMandatorySection100ballot',
-    #   title: 'AU PS Composition Mandatory Sections (Must Have)',
-    #   description: 'Displays information about mandatory sections (Allergies and Intolerances, Medication Summary, Problem List) in the Composition resource, including the entry references within each section.',
-    #   id: :au_ps_retrieve_bundle_composition_mandatory_sections_100ballot,
-    #   commands: ['Hello,', 'World!'],
-    #   imports: %w[import1 import2],
-    #   output_file_path: "#{PATH_BASE}/au_ps_retrieve_bundle_composition_mandatory_sections_100ballot.rb"
-    # }
-    # test_1 = PrimitiveTest.new(test_config).generate
-    # tests = [test_1]
-    # group_config = {
-    #   class_name: 'AUPSRetrieveBundleCompositionMandatorySection100ballotGroup',
-    #   title: 'AU PS Composition Mandatory Sections (Must Have)',
-    #   description: 'Displays information about mandatory sections (Allergies and Intolerances, Medication Summary, Problem List) in the Composition resource, including the entry references within each section.',
-    #   id: :au_ps_retrieve_bundle_composition_mandatory_sections_100ballot_group,
-    #   tests: tests,
-    #   output_file_path: "#{PATH_BASE}/au_ps_retrieve_bundle_composition_mandatory_sections_100ballot_group.rb"
-    # }
-    # group_1 = PrimitiveGroup.new(group_config).generate
-    # groups = [group_1]
-    # high_order_group_config = {
-    #   class_name: 'AUPSRetrieveBundleCompositionMandatorySection100ballotHighOrderGroup',
-    #   title: 'AU PS Composition Mandatory Sections (Must Have)',
-    #   description: 'Displays information about mandatory sections (Allergies and Intolerances, Medication Summary, Problem List) in the Composition resource, including the entry references within each section.',
-    #   id: :au_ps_retrieve_bundle_composition_mandatory_sections_100ballot_high_order_group,
-    #   groups: groups,
-    #   output_file_path: "#{PATH_BASE}/au_ps_retrieve_bundle_composition_mandatory_sections_100ballot_high_order_group.rb"
-    # }
-    # high_order_group = HighOrderGroup.new(high_order_group_config).generate
-    # suite_config = {
-    #   class_name: 'AUPSRetrieveBundleCompositionMandatorySection100ballotSuite',
-    #   title: 'AU PS Composition Mandatory Sections (Must Have)',
-    #   description: 'Displays information about mandatory sections (Allergies and Intolerances, Medication Summary, Problem List) in the Composition resource, including the entry references within each section.',
-    #   id: :au_ps_retrieve_bundle_composition_mandatory_sections_100ballot_suite,
-    #   groups: [high_order_group],
-    #   suite_version: '1.0.0-ballot',
-    #   output_file_path: "#{PATH_BASE}/au_ps_retrieve_bundle_composition_mandatory_sections_100ballot_suite.rb"
-    # }
-    # SuitePrimitive.new(suite_config).generate
+  end
+
+  def new_generate
+    @resources_manager.extract
+    save_metadata_to_version_folder
+    generate_primitive_suite
   end
 
   # Runs retrieve bundle, retrieve CS, summary, and validation group generators; returns suite_group_info.

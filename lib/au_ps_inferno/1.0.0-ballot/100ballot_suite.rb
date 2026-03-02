@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
+
 require_relative 'bundle_validation_high_order_group/bundle_validation_high_order_group'
-require_relative '1.0.0-ballot/bundle_validation_high_order_group/bundle_validation_high_order_group'
 
-require_relative 'lib/au_ps_inferno/1.0.0-ballot/retrieve_bundle_validation_high_order_group/retrieve_bundle_validation_high_order_group.rb'
+require_relative 'retrieve_bundle_validation_high_order_group/retrieve_bundle_validation_high_order_group'
 
-require_relative 'lib/au_ps_inferno/1.0.0-ballot/generate_bundle_using_ips_summary_validation_high_order_group/generate_bundle_using_ips_summary_validation_high_order_group.rb'
+require_relative 'generate_bundle_using_ips_summary_validation_high_order_group/generate_bundle_using_ips_summary_validation_high_order_group'
 
 
 module AUPSTestKit

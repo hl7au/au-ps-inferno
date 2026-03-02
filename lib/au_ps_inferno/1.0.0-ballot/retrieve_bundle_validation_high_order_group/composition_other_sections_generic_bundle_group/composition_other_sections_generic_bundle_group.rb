@@ -8,7 +8,7 @@ module AUPSTestKit
   class CompositionOtherSectionsGenericBundleGroup < Inferno::TestGroup
     title 'Composition Other Sections'
     description 'Displays information about Composition Other Sections in the Composition resource.'
-    id :composition_other_sections_generic_bundle_group
+    id :retrieve_bundle_validation_composition_other_sections_generic_bundle_group
 
     
   end

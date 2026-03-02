@@ -1,17 +1,17 @@
 # frozen_string_literal: true
 
 
-require_relative 'lib/au_ps_inferno/1.0.0-ballot/generate_bundle_using_ips_summary_validation_high_order_group/bundle_has_must_support_elements_generic_bundle_group/bundle_has_must_support_elements_generic_bundle_group.rb'
+require_relative 'bundle_has_must_support_elements_generic_bundle_group/bundle_has_must_support_elements_generic_bundle_group'
 
-require_relative 'lib/au_ps_inferno/1.0.0-ballot/generate_bundle_using_ips_summary_validation_high_order_group/composition_must_support_elements_generic_bundle_group/composition_must_support_elements_generic_bundle_group.rb'
+require_relative 'composition_must_support_elements_generic_bundle_group/composition_must_support_elements_generic_bundle_group'
 
-require_relative 'lib/au_ps_inferno/1.0.0-ballot/generate_bundle_using_ips_summary_validation_high_order_group/composition_mandatory_sections_generic_bundle_group/composition_mandatory_sections_generic_bundle_group.rb'
+require_relative 'composition_mandatory_sections_generic_bundle_group/composition_mandatory_sections_generic_bundle_group'
 
-require_relative 'lib/au_ps_inferno/1.0.0-ballot/generate_bundle_using_ips_summary_validation_high_order_group/composition_recommended_sections_generic_bundle_group/composition_recommended_sections_generic_bundle_group.rb'
+require_relative 'composition_recommended_sections_generic_bundle_group/composition_recommended_sections_generic_bundle_group'
 
-require_relative 'lib/au_ps_inferno/1.0.0-ballot/generate_bundle_using_ips_summary_validation_high_order_group/composition_optional_sections_generic_bundle_group/composition_optional_sections_generic_bundle_group.rb'
+require_relative 'composition_optional_sections_generic_bundle_group/composition_optional_sections_generic_bundle_group'
 
-require_relative 'lib/au_ps_inferno/1.0.0-ballot/generate_bundle_using_ips_summary_validation_high_order_group/composition_other_sections_generic_bundle_group/composition_other_sections_generic_bundle_group.rb'
+require_relative 'composition_other_sections_generic_bundle_group/composition_other_sections_generic_bundle_group'
 
 
 module AUPSTestKit
@@ -22,17 +22,17 @@ module AUPSTestKit
     id :generate_bundle_using_ips_summary_validation
 
     
-    group from: :bundle_has_must_support_elements_generic_bundle_group
+    group from: :generate_bundle_using_ips_summary_validation_bundle_has_must_support_elements_generic_bundle_group
     
-    group from: :composition_must_support_elements_generic_bundle_group
+    group from: :generate_bundle_using_ips_summary_validation_composition_must_support_elements_generic_bundle_group
     
-    group from: :composition_mandatory_sections_generic_bundle_group
+    group from: :generate_bundle_using_ips_summary_validation_composition_mandatory_sections_generic_bundle_group
     
-    group from: :composition_recommended_sections_generic_bundle_group
+    group from: :generate_bundle_using_ips_summary_validation_composition_recommended_sections_generic_bundle_group
     
-    group from: :composition_optional_sections_generic_bundle_group
+    group from: :generate_bundle_using_ips_summary_validation_composition_optional_sections_generic_bundle_group
     
-    group from: :composition_other_sections_generic_bundle_group
+    group from: :generate_bundle_using_ips_summary_validation_composition_other_sections_generic_bundle_group
     
   end
 end

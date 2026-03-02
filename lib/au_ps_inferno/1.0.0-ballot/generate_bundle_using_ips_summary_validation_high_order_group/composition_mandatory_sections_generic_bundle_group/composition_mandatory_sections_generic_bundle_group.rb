@@ -8,7 +8,7 @@ module AUPSTestKit
   class CompositionMandatorySectionsGenericBundleGroup < Inferno::TestGroup
     title 'Composition Mandatory Sections'
     description 'Displays information about Composition Mandatory Sections in the Composition resource.'
-    id :composition_mandatory_sections_generic_bundle_group
+    id :generate_bundle_using_ips_summary_validation_composition_mandatory_sections_generic_bundle_group
 
     
   end
