@@ -125,16 +125,15 @@ module AUPSTestKit
         result << section_title
         filtered_section_data = normalized_sections_data.find { |s| s['code'] == section_data[:code] }
         section_test_entity = SectionTestClass.new(filtered_section_data, scratch_bundle)
-        section_test_entity.references.each do |ref|
+        (section_test_entity.references || []).each do |ref|
           existing_resource = section_test_entity.get_resource_by_reference(ref)
-          existing_resource_profiles = existing_resource.meta&.profile
           next unless existing_resource.present?
-          next unless existing_resource.nil?
 
+          existing_resource_profiles = existing_resource.meta&.profile || []
           entity_can_present = existing_resource_profiles.any? { |profile| valid_profiles.include?(profile) }
-
-          result << " #{boolean_to_humanized_string(entity_can_present)} **#{ref}**: #{existing_resource.resourceType} (#{existing_resource.meta.profile.join(', ')})"
+          result << " #{boolean_to_humanized_string(entity_can_present)} **#{ref}**: #{existing_resource.resourceType} (#{existing_resource_profiles.join(', ')})"
         end
+        info "result: #{result}"
         # result << validate_section_resources(filtered_section_data)
       end
       info [title, result.join("\n\n")].join("\n\n")
