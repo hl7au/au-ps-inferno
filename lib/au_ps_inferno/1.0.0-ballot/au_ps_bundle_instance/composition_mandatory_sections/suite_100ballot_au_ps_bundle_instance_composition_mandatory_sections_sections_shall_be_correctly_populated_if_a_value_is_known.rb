@@ -13,6 +13,8 @@ module AUPSTestKit
     
     run do
       
+      validate_populated_sections_in_bundle(["11450-4", "48765-2", "10160-0"], ["title", "code", "text"])
+      
     end
     
   end
