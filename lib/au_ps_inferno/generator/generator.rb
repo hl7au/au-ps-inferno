@@ -109,7 +109,7 @@ class Generator
           name: 'Bundle Validation',
           tests: [
             {
-              name: 'Bundle is valid against AU PS Bundle profile'
+              name: 'Retrieved Bundle is valid against AU PS Bundle profile'
             }
           ]
         },
@@ -182,7 +182,7 @@ class Generator
           name: 'Bundle Validation',
           tests: [
             {
-              name: 'Bundle is valid against AU PS Bundle profile'
+              name: 'Generated Bundle is valid against AU PS Bundle profile'
             }
           ]
         },
@@ -361,7 +361,9 @@ class Generator
                       'Sections SHOULD be correctly populated if a value is known',
                       'Sections MAY be correctly populated if a value is known',
                       'Sections MAY be populated',
-                      'Sections SHALL be capable of populating section.entry with the referenced profiles, and SHOULD correctly populate section.entry if a value is known']
+                      'Sections SHALL be capable of populating section.entry with the referenced profiles, and SHOULD correctly populate section.entry if a value is known',
+                      'Generated Bundle is valid against AU PS Bundle profile',
+                      'Retrieved Bundle is valid against AU PS Bundle profile']
     test_id = "#{group_id}_#{build_id(test[:name])}"
     test_config = {
       class_name: "#{group_class_name}#{build_class_name(test[:name])}",
@@ -371,9 +373,17 @@ class Generator
     }
     if specific_tests.include?(test[:name])
       case test[:name]
+      when 'Generated Bundle is valid against AU PS Bundle profile'
+        test_config[:base_class_name] = 'SummaryValidBundleClass'
+        test_config[:imports] = ['../../../utils/summary_valid_bundle_class']
+        test_config[:ignore_commands] = true
       when 'Bundle is valid against AU PS Bundle profile'
         test_config[:base_class_name] = 'BundleIsValidClass'
         test_config[:imports] = ['../../../utils/bundle_is_valid_class']
+        test_config[:ignore_commands] = true
+      when 'Retrieved Bundle is valid against AU PS Bundle profile'
+        test_config[:base_class_name] = 'RetrieveBundleTestClass'
+        test_config[:imports] = ['../../../utils/retrieve_bundle_test_class']
         test_config[:ignore_commands] = true
       when 'Must Support elements SHALL be populated when an element value is known and allowed to share'
         test_config[:commands] = [

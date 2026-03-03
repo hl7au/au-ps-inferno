@@ -2,7 +2,7 @@
 
 
 
-require_relative 'bundle_validation/suite_100ballot_retrieve_bundle_validation_bundle_validation_bundle_is_valid_against_au_ps_bundle_profile'
+require_relative 'bundle_validation/suite_100ballot_retrieve_bundle_validation_bundle_validation_retrieved_bundle_is_valid_against_au_ps_bundle_profile'
 
 
 module AUPSTestKit
@@ -13,7 +13,7 @@ module AUPSTestKit
     id :suite_100ballot_retrieve_bundle_validation_bundle_validation
 
     
-    test from: :suite_100ballot_retrieve_bundle_validation_bundle_validation_bundle_is_valid_against_au_ps_bundle_profile
+    test from: :suite_100ballot_retrieve_bundle_validation_bundle_validation_retrieved_bundle_is_valid_against_au_ps_bundle_profile
     
   end
 end
