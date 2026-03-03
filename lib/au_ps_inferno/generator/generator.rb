@@ -2,6 +2,9 @@
 
 require_relative 'ig_resources_extractor'
 require_relative 'metadata_manager'
+require_relative 'naming'
+require_relative 'suite_structure'
+require_relative 'test_config_registry'
 require_relative 'retrieve_cs_group_generator'
 require_relative 'sections_validation_group_generator'
 require_relative 'test_file_generator'
@@ -25,235 +28,13 @@ require_relative 'suite_primitive'
 #   generator.generate
 class Generator
   PATH_BASE = 'lib/au_ps_inferno'
-  HIGH_ORDER_GROUPS = [
-    {
-      name: 'AU PS Bundle Instance',
-      groups: [
-        {
-          name: 'Bundle Validation',
-          tests: [
-            {
-              name: 'Bundle is valid against AU PS Bundle profile'
-            }
-          ]
-        },
-        {
-          name: 'Bundle has Must Support elements',
-          tests: [
-            {
-              name: 'Must Support elements SHALL be populated when an element value is known and allowed to share'
-            }
-          ]
-        },
-        {
-          name: 'Composition Must Support elements',
-          tests: [
-            {
-              name: 'Mandatory Must Support element SHALL be able to be populated if a value is known and allowed to share'
-            },
-            {
-              name: 'Optional Must Support elements SHALL be correctly populated if a value is known'
-            },
-            {
-              name: 'Must Support sub-elements of a complex element SHALL be correctly populated if a value is known'
-            },
-            {
-              name: 'Optional Must Support slices SHALL be populated if a value is known'
-            }
-          ]
-        },
-        {
-          name: 'Composition Mandatory Sections',
-          tests: [
-            {
-              name: 'Sections SHALL be correctly populated if a value is known'
-            },
-            {
-              name: 'Sections SHALL be capable of populating section.entry with the referenced profiles, and SHOULD correctly populate section.entry if a value is known'
-            }
-          ]
-        },
-        {
-          name: 'Composition Recommended Sections',
-          tests: [
-            {
-              name: 'Sections SHOULD be correctly populated if a value is known'
-            }
-          ]
-        },
-        {
-          name: 'Composition Optional Sections',
-          tests: [
-            {
-              name: 'Sections MAY be correctly populated if a value is known'
-            }
-          ]
-        },
-        {
-          name: 'Composition Undefined Sections',
-          tests: [
-            {
-              name: 'Sections MAY be populated'
-            }
-          ]
-        }
-      ]
-    },
-    {
-      name: 'Retrieve Bundle validation',
-      groups: [
-        {
-          name: 'Bundle Validation',
-          tests: [
-            {
-              name: 'Retrieved Bundle is valid against AU PS Bundle profile'
-            }
-          ]
-        },
-        {
-          name: 'Bundle has Must Support elements',
-          tests: [
-            {
-              name: 'Must Support elements SHALL be populated when an element value is known and allowed to share'
-            }
-          ]
-        },
-        {
-          name: 'Composition Must Support elements',
-          tests: [
-            {
-              name: 'Mandatory Must Support element SHALL be able to be populated if a value is known and allowed to share'
-            },
-            {
-              name: 'Optional Must Support elements SHALL be correctly populated if a value is known'
-            },
-            {
-              name: 'Must Support sub-elements of a complex element SHALL be correctly populated if a value is known'
-            },
-            {
-              name: 'Optional Must Support slices SHALL be populated if a value is known'
-            }
-          ]
-        },
-        {
-          name: 'Composition Mandatory Sections',
-          tests: [
-            {
-              name: 'Sections SHALL be correctly populated if a value is known'
-            },
-            {
-              name: 'Sections SHALL be capable of populating section.entry with the referenced profiles, and SHOULD correctly populate section.entry if a value is known'
-            }
-          ]
-        },
-        {
-          name: 'Composition Recommended Sections',
-          tests: [
-            {
-              name: 'Sections SHOULD be correctly populated if a value is known'
-            }
-          ]
-        },
-        {
-          name: 'Composition Optional Sections',
-          tests: [
-            {
-              name: 'Sections MAY be correctly populated if a value is known'
-            }
-          ]
-        },
-        {
-          name: 'Composition Undefined Sections',
-          tests: [
-            {
-              name: 'Sections MAY be populated'
-            }
-          ]
-        }
-      ]
-    },
-    {
-      name: 'Generate Bundle using IPS $summary validation',
-      groups: [
-        {
-          name: 'Bundle Validation',
-          tests: [
-            {
-              name: 'Generated Bundle is valid against AU PS Bundle profile'
-            }
-          ]
-        },
-        {
-          name: 'Bundle has Must Support elements',
-          tests: [
-            {
-              name: 'Must Support elements SHALL be populated when an element value is known and allowed to share'
-            }
-          ]
-        },
-        {
-          name: 'Composition Must Support elements',
-          tests: [
-            {
-              name: 'Mandatory Must Support element SHALL be able to be populated if a value is known and allowed to share'
-            },
-            {
-              name: 'Optional Must Support elements SHALL be correctly populated if a value is known'
-            },
-            {
-              name: 'Must Support sub-elements of a complex element SHALL be correctly populated if a value is known'
-            },
-            {
-              name: 'Optional Must Support slices SHALL be populated if a value is known'
-            }
-          ]
-        },
-        {
-          name: 'Composition Mandatory Sections',
-          tests: [
-            {
-              name: 'Sections SHALL be correctly populated if a value is known'
-            },
-            {
-              name: 'Sections SHALL be capable of populating section.entry with the referenced profiles, and SHOULD correctly populate section.entry if a value is known'
-            }
-          ]
-        },
-        {
-          name: 'Composition Recommended Sections',
-          tests: [
-            {
-              name: 'Sections SHOULD be correctly populated if a value is known'
-            }
-          ]
-        },
-        {
-          name: 'Composition Optional Sections',
-          tests: [
-            {
-              name: 'Sections MAY be correctly populated if a value is known'
-            }
-          ]
-        },
-        {
-          name: 'Composition Undefined Sections',
-          tests: [
-            {
-              name: 'Sections MAY be populated'
-            }
-          ]
-        }
-      ]
-    }
-  ].freeze
-  GENERIC_BUNDLE_GROUPS = [
-    'Bundle has Must Support elements',
-    'Composition Must Support elements',
-    'Composition Mandatory Sections',
-    'Composition Recommended Sections',
-    'Composition Optional Sections',
-    'Composition Other Sections'
-  ].freeze
+
+  include Naming
+
+  # High-order groups are built from SuiteStructure (single source of truth).
+  # See SuiteStructure and TestConfigRegistry for adding new groups or test types.
+  HIGH_ORDER_GROUPS = SuiteStructure.expand_high_order_groups.freeze
+
   # Constructs a new Generator.
   #
   # @param ig_path [String]
@@ -281,23 +62,6 @@ class Generator
   end
 
   private
-
-  def camel_case(string)
-    string.split.map(&:capitalize).join
-  end
-
-  def remove_special_characters(string)
-    special_characters = ['$', '.', ',', '(', ')', '-']
-    string.gsub(Regexp.union(special_characters), '')
-  end
-
-  def build_class_name(string)
-    camel_case(remove_special_characters(string)).gsub(' ', '')
-  end
-
-  def build_id(string)
-    remove_special_characters(string.gsub(' ', '_')).downcase
-  end
 
   def ig_version_to_suite_version(ig_version)
     ig_version.gsub('-', '').gsub('.', '')
@@ -342,19 +106,6 @@ class Generator
   end
 
   def generate_primitive_test(group_class_name, group_id, group_file_name, high_order_group_file_name, test)
-    specific_tests = ['Bundle is valid against AU PS Bundle profile',
-                      'Must Support elements SHALL be populated when an element value is known and allowed to share',
-                      'Mandatory Must Support element SHALL be able to be populated if a value is known and allowed to share',
-                      'Optional Must Support elements SHALL be correctly populated if a value is known',
-                      'Must Support sub-elements of a complex element SHALL be correctly populated if a value is known',
-                      'Optional Must Support slices SHALL be populated if a value is known',
-                      'Sections SHALL be correctly populated if a value is known',
-                      'Sections SHOULD be correctly populated if a value is known',
-                      'Sections MAY be correctly populated if a value is known',
-                      'Sections MAY be populated',
-                      'Sections SHALL be capable of populating section.entry with the referenced profiles, and SHOULD correctly populate section.entry if a value is known',
-                      'Generated Bundle is valid against AU PS Bundle profile',
-                      'Retrieved Bundle is valid against AU PS Bundle profile']
     test_id = "#{group_id}_#{build_id(test[:name])}"
     test_config = {
       class_name: "#{group_class_name}#{build_class_name(test[:name])}",
@@ -362,92 +113,8 @@ class Generator
       id: test_id,
       output_file_path: versioned_path(high_order_group_file_name, group_file_name, filename: "#{test_id}.rb")
     }
-    if specific_tests.include?(test[:name])
-      case test[:name]
-      when 'Generated Bundle is valid against AU PS Bundle profile'
-        test_config[:base_class_name] = 'SummaryValidBundleClass'
-        test_config[:imports] = ['../../../utils/summary_valid_bundle_class']
-        test_config[:ignore_commands] = true
-      when 'Bundle is valid against AU PS Bundle profile'
-        test_config[:base_class_name] = 'BundleIsValidClass'
-        test_config[:imports] = ['../../../utils/bundle_is_valid_class']
-        test_config[:ignore_commands] = true
-      when 'Retrieved Bundle is valid against AU PS Bundle profile'
-        test_config[:base_class_name] = 'RetrieveBundleTestClass'
-        test_config[:imports] = ['../../../utils/retrieve_bundle_test_class']
-        test_config[:ignore_commands] = true
-      when 'Must Support elements SHALL be populated when an element value is known and allowed to share'
-        test_config[:commands] = [
-          'bundle_mandatory_ms_elements_info'
-        ]
-      when 'Mandatory Must Support element SHALL be able to be populated if a value is known and allowed to share'
-        test_config[:commands] = [
-          "validate_populated_elements_in_composition(#{@metadata.composition_mandatory_ms_elements})"
-        ]
-      when 'Optional Must Support elements SHALL be correctly populated if a value is known'
-        test_config[:commands] = [
-          "validate_populated_elements_in_composition(#{@metadata.composition_optional_ms_elements})"
-        ]
-        test_config[:optional] = true
-      when 'Must Support sub-elements of a complex element SHALL be correctly populated if a value is known'
-        test_config[:commands] = [
-          "validate_populated_elements_in_composition(#{@metadata.composition_optional_ms_sub_elements})"
-        ]
-        test_config[:optional] = true
-      when 'Optional Must Support slices SHALL be populated if a value is known'
-        test_config[:commands] = [
-          "validate_populated_slices_in_composition(#{@metadata.composition_optional_ms_slices})"
-        ]
-        test_config[:optional] = true
-      when 'Sections SHALL be correctly populated if a value is known'
-        section_codes = @metadata.required_sections_data_codes.map do |section|
-          section[:code]
-        end
-        elements = @metadata.composition_sections.first[:ms_elements].filter do |element|
-          element[:min].positive?
-        end.map { |element| element[:expression] }
-        test_config[:commands] = [
-          "validate_populated_sections_in_bundle(#{section_codes}, #{elements})"
-        ]
-      when 'Sections SHOULD be correctly populated if a value is known'
-        section_codes = @metadata.recommended_sections_data_codes.map do |section|
-          section[:code]
-        end
-        elements = @metadata.composition_sections.first[:ms_elements].filter do |element|
-          element[:min].positive?
-        end.map { |element| element[:expression] }
-        test_config[:commands] = [
-          "validate_populated_sections_in_bundle(#{section_codes}, #{elements})"
-        ]
-        test_config[:optional] = true
-      when 'Sections MAY be correctly populated if a value is known'
-        section_codes = @metadata.optional_sections_data_codes.map do |section|
-          section[:code]
-        end
-        elements = @metadata.composition_sections.first[:ms_elements].filter do |element|
-          element[:min].positive?
-        end.map { |element| element[:expression] }
-        test_config[:commands] = [
-          "validate_populated_sections_in_bundle(#{section_codes}, #{elements})"
-        ]
-        test_config[:optional] = true
-      when 'Sections MAY be populated'
-        section_codes = @metadata.all_sections_data_codes
-        elements = @metadata.composition_sections.first[:ms_elements].filter do |element|
-          element[:min].positive?
-        end.map { |element| element[:expression] }
-        test_config[:commands] = [
-          "validate_populated_undefined_sections_in_bundle(#{section_codes}, #{elements})"
-        ]
-        test_config[:optional] = true
-      when 'Sections SHALL be capable of populating section.entry with the referenced profiles, and SHOULD correctly populate section.entry if a value is known'
-        sections_data = @metadata.composition_sections.filter do |section|
-          section[:required] == true && section[:mustSupport] == true
-        end
-        test_config[:commands] = [
-          "read_composition_sections_info(#{sections_data}, #{@metadata.return_normalized_sections_data})"
-        ]
-      end
+    if TestConfigRegistry.registered?(test[:name])
+      test_config.merge!(TestConfigRegistry.config_for(test[:name], @metadata))
     end
     PrimitiveTest.new(test_config).generate
   end
