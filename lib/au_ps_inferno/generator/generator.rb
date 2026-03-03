@@ -221,9 +221,14 @@ class Generator
       id: test_id,
       output_file_path: versioned_path(high_order_group_file_name, group_file_name, filename: "#{test_id}.rb")
     }
-    test_config[:base_class_name] = 'BundleIsValidClass' if specific_tests.include?(test[:name])
-    test_config[:imports] = ['../../../utils/bundle_is_valid_class'] if specific_tests.include?(test[:name])
-    test_config[:ignore_commands] = true if specific_tests.include?(test[:name])
+    if specific_tests.include?(test[:name])
+      case test[:name]
+      when 'Bundle is valid against AU PS Bundle profile'
+        test_config[:base_class_name] = 'BundleIsValidClass'
+        test_config[:imports] = ['../../../utils/bundle_is_valid_class']
+        test_config[:ignore_commands] = true
+      end
+    end
     PrimitiveTest.new(test_config).generate
   end
 
