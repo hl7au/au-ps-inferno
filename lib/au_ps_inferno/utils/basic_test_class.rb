@@ -253,6 +253,18 @@ module AUPSTestKit
              'Some of the slices are not populated. See the list of populated slices in messages tab.'
     end
 
+    def validate_populated_undefined_sections_in_bundle(sections_code_to_filter, elements_array)
+      skip_if scratch_bundle.blank?, 'No Bundle resource provided'
+
+      bundle_resource = BundleDecorator.new(scratch_bundle.to_hash)
+      sections_to_validate = bundle_resource.composition_resource.section_codes.filter do |section_code|
+        sections_code_to_filter.include?(section_code)
+      end
+
+      skip_if sections_to_validate.blank?, 'No sections to validate'
+      validate_populated_sections_in_bundle(sections_to_validate, elements_array)
+    end
+
     def validate_populated_sections_in_bundle(section_codes_array, elements_array)
       return false unless scratch_bundle.present?
 

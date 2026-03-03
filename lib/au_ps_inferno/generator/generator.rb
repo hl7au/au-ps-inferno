@@ -221,7 +221,8 @@ class Generator
                       'Optional Must Support slices SHALL be populated if a value is known',
                       'Sections SHALL be correctly populated if a value is known',
                       'Sections SHOULD be correctly populated if a value is known',
-                      'Sections MAY be correctly populated if a value is known']
+                      'Sections MAY be correctly populated if a value is known',
+                      'Sections MAY be populated']
     test_id = "#{group_id}_#{build_id(test[:name])}"
     test_config = {
       class_name: "#{group_class_name}#{build_class_name(test[:name])}",
@@ -288,6 +289,15 @@ class Generator
         end.map { |element| element[:expression] }
         test_config[:commands] = [
           "validate_populated_sections_in_bundle(#{section_codes}, #{elements})"
+        ]
+        test_config[:optional] = true
+      when 'Sections MAY be populated'
+        section_codes = @metadata.all_sections_data_codes
+        elements = @metadata.composition_sections.first[:ms_elements].filter do |element|
+          element[:min].positive?
+        end.map { |element| element[:expression] }
+        test_config[:commands] = [
+          "validate_populated_undefined_sections_in_bundle(#{section_codes}, #{elements})"
         ]
         test_config[:optional] = true
       end
