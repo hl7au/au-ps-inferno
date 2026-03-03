@@ -61,10 +61,10 @@ class Generator
           name: 'Composition Mandatory Sections',
           tests: [
             {
-              name: 'Mandatory section SHALL be correctly populated if a value is known (one for each mandatory section)'
+              name: 'Sections SHALL be correctly populated if a value is known'
             },
             {
-              name: 'Mandatory section SHALL be capable of populating section.entry with the referenced profiles, and SHOULD correctly populate section.entry if a value is known (one for each mandatory section).'
+              name: 'Sections SHALL be capable of populating section.entry with the referenced profiles, and SHOULD correctly populate section.entry if a value is known'
             }
           ]
         },
@@ -72,7 +72,7 @@ class Generator
           name: 'Composition Recommended Sections',
           tests: [
             {
-              name: 'Recommended sections SHOULD be correctly populated if a value is known (one for each recommended section)'
+              name: 'Sections SHOULD be correctly populated if a value is known'
             }
           ]
         },
@@ -80,7 +80,7 @@ class Generator
           name: 'Composition Optional Sections',
           tests: [
             {
-              name: 'Optional section MAY be correctly populated if a value is known (one for each optional section) '
+              name: 'Sections MAY be correctly populated if a value is known'
             }
           ]
         },
@@ -88,7 +88,7 @@ class Generator
           name: 'Composition Undefined Sections',
           tests: [
             {
-              name: 'Undefined sections MAY be populated if a value is known (one for each undefined section)'
+              name: 'Sections MAY be populated'
             }
           ]
         }
@@ -190,26 +190,27 @@ class Generator
     file_name = generic_id
     high_order_group_id = :"#{high_order_group_id}_#{generic_id}"
     high_order_group_class_name = "#{high_order_class_name}#{build_class_name(generic_bundle_group[:name])}"
-    # generic_bundle_group[:tests].map do |test|
-    #   generate_primitive_test(high_order_group_class_name, high_order_group_id, file_name, test)
-    # end
+    tests = generic_bundle_group[:tests].map do |test|
+      generate_primitive_test(high_order_group_class_name, high_order_group_id, file_name, high_order_group_file_name,
+                              test)
+    end
     {
       class_name: high_order_group_class_name,
       title: generic_bundle_group[:name],
       description: group_description(generic_bundle_group[:name]),
       id: high_order_group_id,
-      output_file_path: versioned_path(high_order_group_file_name, file_name, filename: "#{file_name}.rb")
-      # tests: tests
+      output_file_path: versioned_path(high_order_group_file_name, filename: "#{file_name}.rb"),
+      tests: tests
     }
   end
 
-  def generate_primitive_test(group_class_name, group_id, group_file_name, test)
+  def generate_primitive_test(group_class_name, group_id, group_file_name, high_order_group_file_name, test)
     test_id = "#{group_id}_#{build_id(test[:name])}"
     test_config = {
       class_name: "#{group_class_name}#{build_class_name(test[:name])}",
       title: test[:name],
       id: test_id,
-      output_file_path: versioned_path(group_file_name, test_id, filename: "#{test_id}.rb")
+      output_file_path: versioned_path(high_order_group_file_name, group_file_name, filename: "#{test_id}.rb")
     }
     PrimitiveTest.new(test_config).generate
   end
