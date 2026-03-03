@@ -10,6 +10,7 @@ module AUPSTestKit
     description ''
     id :suite_100ballot_au_ps_bundle_instance_bundle_has_must_support_elements_must_support_elements_shall_be_populated_when_an_element_value_is_known_and_allowed_to_share
     
+    
     run do
       
       bundle_mandatory_ms_elements_info

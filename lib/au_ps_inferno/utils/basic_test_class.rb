@@ -207,9 +207,9 @@ module AUPSTestKit
     end
 
     def populated_paths_info(resource, elements_array)
-      title = '## List populated elements'
+      title = '## List of populated elements'
       result = elements_array.map do |element|
-        "**#{element}**: #{boolean_to_humanized_string(resolve_path(resource, element).first.present?)}"
+        "#{boolean_to_existent_string(resolve_path(resource, element).first.present?)}: **#{element}**"
       end
       [title, result.join("\n\n")].join("\n\n")
     end
@@ -237,7 +237,8 @@ module AUPSTestKit
       return false unless composition_resource.present?
 
       info populated_paths_info(composition_resource, elements_array)
-      all_paths_are_populated?(composition_resource, elements_array)
+      assert all_paths_are_populated?(composition_resource, elements_array),
+             'Some of the elements are not populated. See the list of populated elements in messages tab.'
     end
 
     def validate_populated_slices_in_composition(slices_array)
@@ -248,7 +249,8 @@ module AUPSTestKit
 
       slices_paths = slices_array.map { |slice| slice[:path] }
       info populated_paths_info(composition_resource, slices_paths)
-      all_paths_are_populated?(composition_resource, slices_paths)
+      assert all_paths_are_populated?(composition_resource, slices_paths),
+             'Some of the slices are not populated. See the list of populated slices in messages tab.'
     end
   end
 end

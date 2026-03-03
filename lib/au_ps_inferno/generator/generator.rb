@@ -244,14 +244,17 @@ class Generator
         test_config[:commands] = [
           "validate_populated_elements_in_composition(#{@metadata.composition_optional_ms_elements})"
         ]
+        test_config[:optional] = true
       when 'Must Support sub-elements of a complex element SHALL be correctly populated if a value is known'
         test_config[:commands] = [
           "validate_populated_elements_in_composition(#{@metadata.composition_optional_ms_sub_elements})"
         ]
+        test_config[:optional] = true
       when 'Optional Must Support slices SHALL be populated if a value is known'
         test_config[:commands] = [
           "validate_populated_slices_in_composition(#{@metadata.composition_optional_ms_slices})"
         ]
+        test_config[:optional] = true
       end
     end
     PrimitiveTest.new(test_config).generate

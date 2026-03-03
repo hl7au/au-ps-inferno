@@ -62,6 +62,10 @@ module CompositionUtils
     boolean_value ? '✅ Passed' : '❌ Failed'
   end
 
+  def boolean_to_existent_string(boolean_value)
+    boolean_value ? '🟢 Populated' : '🟠 Missing'
+  end
+
   def execute_statistics(resource, path_expression, humanized_name)
     data_value = resolve_path(resource, path_expression).first.present?
     boolean_value = boolean_to_humanized_string(data_value)

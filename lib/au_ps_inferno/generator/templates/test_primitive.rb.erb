@@ -11,6 +11,9 @@ module AUPSTestKit
     title '<%= title %>'
     description '<%= description %>'
     id :<%= id %>
+    <% if optional %>
+    optional
+    <% end %>
     <% if !ignore_commands %>
     run do
       <% commands.each do |command| %>
