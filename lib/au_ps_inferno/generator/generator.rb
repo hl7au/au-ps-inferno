@@ -61,7 +61,7 @@ class Generator
               name: 'Must Support sub-elements of a complex element SHALL be correctly populated if a value is known'
             },
             {
-              name: 'Optional Must Support careProvisioningEvent slice SHALL be populated if a value is known'
+              name: 'Optional Must Support slices SHALL be populated if a value is known'
             }
           ]
         },
