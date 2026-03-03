@@ -104,11 +104,149 @@ class Generator
     },
     {
       name: 'Retrieve Bundle validation',
-      groups: []
+      groups: [
+        {
+          name: 'Bundle Validation',
+          tests: [
+            {
+              name: 'Bundle is valid against AU PS Bundle profile'
+            }
+          ]
+        },
+        {
+          name: 'Bundle has Must Support elements',
+          tests: [
+            {
+              name: 'Must Support elements SHALL be populated when an element value is known and allowed to share'
+            }
+          ]
+        },
+        {
+          name: 'Composition Must Support elements',
+          tests: [
+            {
+              name: 'Mandatory Must Support element SHALL be able to be populated if a value is known and allowed to share'
+            },
+            {
+              name: 'Optional Must Support elements SHALL be correctly populated if a value is known'
+            },
+            {
+              name: 'Must Support sub-elements of a complex element SHALL be correctly populated if a value is known'
+            },
+            {
+              name: 'Optional Must Support slices SHALL be populated if a value is known'
+            }
+          ]
+        },
+        {
+          name: 'Composition Mandatory Sections',
+          tests: [
+            {
+              name: 'Sections SHALL be correctly populated if a value is known'
+            },
+            {
+              name: 'Sections SHALL be capable of populating section.entry with the referenced profiles, and SHOULD correctly populate section.entry if a value is known'
+            }
+          ]
+        },
+        {
+          name: 'Composition Recommended Sections',
+          tests: [
+            {
+              name: 'Sections SHOULD be correctly populated if a value is known'
+            }
+          ]
+        },
+        {
+          name: 'Composition Optional Sections',
+          tests: [
+            {
+              name: 'Sections MAY be correctly populated if a value is known'
+            }
+          ]
+        },
+        {
+          name: 'Composition Undefined Sections',
+          tests: [
+            {
+              name: 'Sections MAY be populated'
+            }
+          ]
+        }
+      ]
     },
     {
       name: 'Generate Bundle using IPS $summary validation',
-      groups: []
+      groups: [
+        {
+          name: 'Bundle Validation',
+          tests: [
+            {
+              name: 'Bundle is valid against AU PS Bundle profile'
+            }
+          ]
+        },
+        {
+          name: 'Bundle has Must Support elements',
+          tests: [
+            {
+              name: 'Must Support elements SHALL be populated when an element value is known and allowed to share'
+            }
+          ]
+        },
+        {
+          name: 'Composition Must Support elements',
+          tests: [
+            {
+              name: 'Mandatory Must Support element SHALL be able to be populated if a value is known and allowed to share'
+            },
+            {
+              name: 'Optional Must Support elements SHALL be correctly populated if a value is known'
+            },
+            {
+              name: 'Must Support sub-elements of a complex element SHALL be correctly populated if a value is known'
+            },
+            {
+              name: 'Optional Must Support slices SHALL be populated if a value is known'
+            }
+          ]
+        },
+        {
+          name: 'Composition Mandatory Sections',
+          tests: [
+            {
+              name: 'Sections SHALL be correctly populated if a value is known'
+            },
+            {
+              name: 'Sections SHALL be capable of populating section.entry with the referenced profiles, and SHOULD correctly populate section.entry if a value is known'
+            }
+          ]
+        },
+        {
+          name: 'Composition Recommended Sections',
+          tests: [
+            {
+              name: 'Sections SHOULD be correctly populated if a value is known'
+            }
+          ]
+        },
+        {
+          name: 'Composition Optional Sections',
+          tests: [
+            {
+              name: 'Sections MAY be correctly populated if a value is known'
+            }
+          ]
+        },
+        {
+          name: 'Composition Undefined Sections',
+          tests: [
+            {
+              name: 'Sections MAY be populated'
+            }
+          ]
+        }
+      ]
     }
   ].freeze
   GENERIC_BUNDLE_GROUPS = [
