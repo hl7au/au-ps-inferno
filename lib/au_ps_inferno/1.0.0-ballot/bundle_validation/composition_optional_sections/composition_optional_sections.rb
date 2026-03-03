@@ -5,10 +5,10 @@
 
 module AUPSTestKit
   # Automatically generated primitive group for Composition Optional Sections
-  class CompositionOptionalSectionsGenericBundleGroup < Inferno::TestGroup
+  class AUPSSuite100ballotBundleValidationCompositionOptionalSections < Inferno::TestGroup
     title 'Composition Optional Sections'
     description 'Displays information about Composition Optional Sections in the Composition resource.'
-    id :bundle_validation_composition_optional_sections_generic_bundle_group
+    id :suite_100ballot_bundle_validation_composition_optional_sections
 
     
   end

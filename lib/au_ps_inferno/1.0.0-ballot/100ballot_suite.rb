@@ -1,16 +1,16 @@
 # frozen_string_literal: true
 
 
-require_relative 'bundle_validation_high_order_group/bundle_validation_high_order_group'
+require_relative 'bundle_validation/bundle_validation'
 
-require_relative 'retrieve_bundle_validation_high_order_group/retrieve_bundle_validation_high_order_group'
+require_relative 'retrieve_bundle_validation/retrieve_bundle_validation'
 
-require_relative 'generate_bundle_using_ips_summary_validation_high_order_group/generate_bundle_using_ips_summary_validation_high_order_group'
+require_relative 'generate_bundle_using_ips_summary_validation/generate_bundle_using_ips_summary_validation'
 
 
 module AUPSTestKit
   # Automatically generated suite for 1.0.0-ballot
-  class Suite100ballot < Inferno::TestSuite
+  class AUPSSuite100ballot < Inferno::TestSuite
     id :suite_100ballot
     title '1.0.0-ballot'
     description 'Suite for 1.0.0-ballot'
@@ -24,11 +24,11 @@ module AUPSTestKit
     end
 
     
-    group from: :bundle_validation
+    group from: :suite_100ballot_bundle_validation
     
-    group from: :retrieve_bundle_validation
+    group from: :suite_100ballot_retrieve_bundle_validation
     
-    group from: :generate_bundle_using_ips_summary_validation
+    group from: :suite_100ballot_generate_bundle_using_ips_summary_validation
     
   end
 end

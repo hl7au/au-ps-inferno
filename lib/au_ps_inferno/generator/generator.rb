@@ -29,9 +29,79 @@ require_relative 'suite_primitive'
 class Generator
   PATH_BASE = 'lib/au_ps_inferno'
   HIGH_ORDER_GROUPS = [
-    'Bundle validation',
-    'Retrieve Bundle validation',
-    'Generate Bundle using IPS $summary validation'
+    {
+      name: 'Bundle validation',
+      groups: [
+        {
+          name: 'Bundle has Must Support elements',
+          tests: [
+            {
+              name: 'Must Support elements SHALL be populated when an element value is known and allowed to share'
+            }
+          ]
+        },
+        {
+          name: 'Composition Must Support elements',
+          tests: [
+            {
+              name: 'Mandatory Must Support element SHALL be able to be populated if a value is known and allowed to share'
+            },
+            {
+              name: 'Optional Must Support elements SHALL be correctly populated if a value is known '
+            },
+            {
+              name: 'Must Support sub-elements of a complex element SHALL be correctly populated if a value is known'
+            },
+            {
+              name: 'Optional Must Support careProvisioningEvent slice SHALL be populated if a value is known'
+            }
+          ]
+        },
+        {
+          name: 'Composition Mandatory Sections',
+          tests: [
+            {
+              name: 'Mandatory section SHALL be correctly populated if a value is known (one for each mandatory section)'
+            },
+            {
+              name: 'Mandatory section SHALL be capable of populating section.entry with the referenced profiles, and SHOULD correctly populate section.entry if a value is known (one for each mandatory section).'
+            }
+          ]
+        },
+        {
+          name: 'Composition Recommended Sections',
+          tests: [
+            {
+              name: 'Recommended sections SHOULD be correctly populated if a value is known (one for each recommended section)'
+            }
+          ]
+        },
+        {
+          name: 'Composition Optional Sections',
+          tests: [
+            {
+              name: 'Optional section MAY be correctly populated if a value is known (one for each optional section) '
+            }
+          ]
+        },
+        {
+          name: 'Composition Undefined Sections',
+          tests: [
+            {
+              name: 'Undefined sections MAY be populated if a value is known (one for each undefined section)'
+            }
+          ]
+        }
+      ]
+    },
+    {
+      name: 'Retrieve Bundle validation',
+      groups: []
+    },
+    {
+      name: 'Generate Bundle using IPS $summary validation',
+      groups: []
+    }
   ].freeze
   GENERIC_BUNDLE_GROUPS = [
     'Bundle has Must Support elements',
@@ -80,7 +150,8 @@ class Generator
   end
 
   def remove_special_characters(string)
-    string.gsub('$', '')
+    special_characters = ['$', '.', ',', '(', ')']
+    string.gsub(Regexp.union(special_characters), '')
   end
 
   def build_class_name(string)
@@ -95,50 +166,100 @@ class Generator
     ig_version.gsub('-', '').gsub('.', '')
   end
 
-  def generate_primitive_group(generic_bundle_group, high_order_group_id, high_order_group_file_name)
-    generic_bundle_group_file_name = "#{build_id(generic_bundle_group)}_generic_bundle_group"
-    generic_bundle_group_config = {
-      class_name: "#{build_class_name(generic_bundle_group)}GenericBundleGroup",
-      title: generic_bundle_group,
-      description: "Displays information about #{generic_bundle_group} in the Composition resource.",
-      id: :"#{high_order_group_id}_#{build_id(generic_bundle_group)}_generic_bundle_group",
-      output_file_path: "#{PATH_BASE}/#{@suite_version}/#{high_order_group_file_name}/#{generic_bundle_group_file_name}/#{generic_bundle_group_file_name}.rb"
-    }
-    PrimitiveGroup.new(generic_bundle_group_config).generate
+  # Builds a path under PATH_BASE/suite_version. Pass segments and optional filename (with .rb).
+  def versioned_path(*segments, filename: nil)
+    parts = [PATH_BASE, @suite_version, *segments]
+    parts << filename if filename
+    File.join(*parts)
   end
 
-  def generate_high_order_group(high_order_group)
-    high_order_group_id = :"#{build_id(high_order_group)}"
-    high_order_group_file_name = "#{build_id(high_order_group)}_high_order_group"
-    generic_bundle_groups = GENERIC_BUNDLE_GROUPS.map do |generic_bundle_group|
-      generate_primitive_group(generic_bundle_group, high_order_group_id, high_order_group_file_name)
+  def group_description(name)
+    "Displays information about #{name} in the Composition resource."
+  end
+
+  def generate_primitive_group(generic_bundle_group, high_order_class_name, high_order_group_id,
+                               high_order_group_file_name)
+    config = primitive_group_config(generic_bundle_group, high_order_class_name, high_order_group_id,
+                                    high_order_group_file_name)
+    PrimitiveGroup.new(config).generate
+  end
+
+  def primitive_group_config(generic_bundle_group, high_order_class_name, high_order_group_id,
+                             high_order_group_file_name)
+    generic_id = build_id(generic_bundle_group[:name])
+    file_name = generic_id
+    high_order_group_id = :"#{high_order_group_id}_#{generic_id}"
+    high_order_group_class_name = "#{high_order_class_name}#{build_class_name(generic_bundle_group[:name])}"
+    # generic_bundle_group[:tests].map do |test|
+    #   generate_primitive_test(high_order_group_class_name, high_order_group_id, file_name, test)
+    # end
+    {
+      class_name: high_order_group_class_name,
+      title: generic_bundle_group[:name],
+      description: group_description(generic_bundle_group[:name]),
+      id: high_order_group_id,
+      output_file_path: versioned_path(high_order_group_file_name, file_name, filename: "#{file_name}.rb")
+      # tests: tests
+    }
+  end
+
+  def generate_primitive_test(group_class_name, group_id, group_file_name, test)
+    test_id = "#{group_id}_#{build_id(test[:name])}"
+    test_config = {
+      class_name: "#{group_class_name}#{build_class_name(test[:name])}",
+      title: test[:name],
+      id: test_id,
+      output_file_path: versioned_path(group_file_name, test_id, filename: "#{test_id}.rb")
+    }
+    PrimitiveTest.new(test_config).generate
+  end
+
+  def generate_high_order_group(high_order_group, suite_class_name, suite_id)
+    high_order_group_id = :"#{suite_id}_#{build_id(high_order_group[:name])}"
+    high_order_group_file_name = build_id(high_order_group[:name]).to_s
+    high_order_class_name = "#{suite_class_name}#{build_class_name(high_order_group[:name])}"
+    generic_bundle_groups = high_order_group[:groups].map do |generic_bundle_group|
+      generate_primitive_group(generic_bundle_group, high_order_class_name, high_order_group_id,
+                               high_order_group_file_name)
     end
-    high_order_group_config = {
-      class_name: "#{build_class_name(high_order_group)}HighOrderGroup",
-      title: high_order_group,
-      description: "Displays information about #{high_order_group} in the Composition resource.",
+    config = high_order_group_config(high_order_group, high_order_class_name, high_order_group_id, high_order_group_file_name,
+                                     generic_bundle_groups)
+    HighOrderGroup.new(config).generate
+  end
+
+  def high_order_group_config(high_order_group, high_order_class_name, high_order_group_id, high_order_group_file_name,
+                              generic_bundle_groups)
+    {
+      class_name: high_order_class_name,
+      title: high_order_group[:name],
+      description: group_description(high_order_group[:name]),
       id: high_order_group_id,
       groups: generic_bundle_groups,
-      output_file_path: "#{PATH_BASE}/#{@suite_version}/#{high_order_group_file_name}/#{high_order_group_file_name}.rb"
+      output_file_path: versioned_path(high_order_group_file_name, filename: "#{high_order_group_file_name}.rb")
     }
-    HighOrderGroup.new(high_order_group_config).generate
   end
 
   def generate_primitive_suite
-    high_order_groups = HIGH_ORDER_GROUPS.map do |high_order_group|
-      generate_high_order_group(high_order_group)
-    end
     ig_suite_version = ig_version_to_suite_version(@suite_version)
-    suite_config = {
+    suite_class_name = "AUPSSuite#{build_class_name(ig_suite_version)}"
+    suite_id = :"suite_#{build_id(ig_suite_version)}"
+    high_order_groups = HIGH_ORDER_GROUPS.map do |high_order_group|
+      generate_high_order_group(high_order_group, suite_class_name, suite_id)
+    end
+    config = suite_primitive_config(suite_class_name, suite_id, ig_suite_version, high_order_groups)
+    SuitePrimitive.new(config).generate
+  end
+
+  def suite_primitive_config(suite_class_name, suite_id, ig_suite_version, high_order_groups)
+    {
       suite_version: ig_suite_version,
-      class_name: "Suite#{build_class_name(ig_suite_version)}",
+      class_name: suite_class_name,
       title: @suite_version,
       description: "Suite for #{@suite_version}",
-      id: :"suite_#{build_id(ig_suite_version)}",
+      id: suite_id,
       groups: high_order_groups,
-      output_file_path: "#{PATH_BASE}/#{@suite_version}/#{ig_suite_version}_suite.rb"
+      output_file_path: versioned_path("#{ig_suite_version}_suite.rb")
     }
-    SuitePrimitive.new(suite_config).generate
   end
 
   def new_generate
