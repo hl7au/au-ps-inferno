@@ -4,10 +4,10 @@ require_relative '../../utils/basic_test_class'
 require_relative '../../utils/capability_statement_decorator'
 
 module AUPSTestKit
-  # AU PS Profiles referenced as supported in CapabilityStatement
+  # Verifies that the CapabilityStatement declares support for the required AU PS profiles.
   class AUPSCSSupportsAUPSProfiles100ballot < BasicTest
     title 'CapabilityStatement supports AU PS Profiles'
-    description 'AU PS Profiles referenced as supported in CapabilityStatement'
+    description 'Verifies that the CapabilityStatement declares support for the required AU PS profiles.'
     id :au_ps_cs_supports_au_ps_profiles_100ballot
 
     def check_profiles_status(profiles_mapping, general_message)

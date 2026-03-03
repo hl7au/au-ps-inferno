@@ -15,7 +15,7 @@ module AUPSTestKit
   # Automatically generated primitive group for Composition Must Support elements
   class AUPSSuite100ballotAuPsBundleInstanceCompositionMustSupportElements < Inferno::TestGroup
     title 'Composition Must Support elements'
-    description 'Displays information about Composition Must Support elements in the Composition resource.'
+    description 'Verifies that Composition Must Support elements (mandatory, optional, sub-elements, slices) are correctly populated when data is known.'
     id :suite_100ballot_au_ps_bundle_instance_composition_must_support_elements
 
     

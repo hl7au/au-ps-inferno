@@ -38,7 +38,7 @@ module AUPSTestKit
   # Automatically generated test group for AU PS Sections Validation
   class AUPSSectionsValidationGroup100ballot < Inferno::TestGroup
     title 'AU PS Sections Validation'
-    description 'Verify that an AU PS Sections are valid.'
+    description 'Validates that each AU PS composition section is present and references conformant resources.'
     id :au_ps_sections_validation_group_100ballot
 
     

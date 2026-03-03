@@ -1,0 +1,23 @@
+# frozen_string_literal: true
+
+
+
+require_relative 'composition_mandatory_sections/suite_100ballot_retrieved_bundle_composition_mandatory_sections_sections_shall_be_correctly_populated_if_a_value_is_known'
+
+require_relative 'composition_mandatory_sections/suite_100ballot_retrieved_bundle_composition_mandatory_sections_sections_shall_be_capable_of_populating_sectionentry_with_the_referenced_profiles_and_should_correctly_populate_sectionentry_if_a_value_is_known'
+
+
+module AUPSTestKit
+  # Automatically generated primitive group for Composition Mandatory Sections
+  class AUPSSuite100ballotRetrievedBundleCompositionMandatorySections < Inferno::TestGroup
+    title 'Composition Mandatory Sections'
+    description 'Verifies that mandatory sections are present and section.entry references conform to the required profiles.'
+    id :suite_100ballot_retrieved_bundle_composition_mandatory_sections
+
+    
+    test from: :suite_100ballot_retrieved_bundle_composition_mandatory_sections_sections_shall_be_correctly_populated_if_a_value_is_known
+    
+    test from: :suite_100ballot_retrieved_bundle_composition_mandatory_sections_sections_shall_be_capable_of_populating_sectionentry_with_the_referenced_profiles_and_should_correctly_populate_sectionentry_if_a_value_is_known
+    
+  end
+end

@@ -1,0 +1,31 @@
+# frozen_string_literal: true
+
+
+
+require_relative 'composition_must_support_elements/suite_100ballot_retrieved_bundle_composition_must_support_elements_mandatory_must_support_element_shall_be_able_to_be_populated_if_a_value_is_known_and_allowed_to_share'
+
+require_relative 'composition_must_support_elements/suite_100ballot_retrieved_bundle_composition_must_support_elements_optional_must_support_elements_shall_be_correctly_populated_if_a_value_is_known'
+
+require_relative 'composition_must_support_elements/suite_100ballot_retrieved_bundle_composition_must_support_elements_must_support_subelements_of_a_complex_element_shall_be_correctly_populated_if_a_value_is_known'
+
+require_relative 'composition_must_support_elements/suite_100ballot_retrieved_bundle_composition_must_support_elements_optional_must_support_slices_shall_be_populated_if_a_value_is_known'
+
+
+module AUPSTestKit
+  # Automatically generated primitive group for Composition Must Support elements
+  class AUPSSuite100ballotRetrievedBundleCompositionMustSupportElements < Inferno::TestGroup
+    title 'Composition Must Support elements'
+    description 'Verifies that Composition Must Support elements (mandatory, optional, sub-elements, slices) are correctly populated when data is known.'
+    id :suite_100ballot_retrieved_bundle_composition_must_support_elements
+
+    
+    test from: :suite_100ballot_retrieved_bundle_composition_must_support_elements_mandatory_must_support_element_shall_be_able_to_be_populated_if_a_value_is_known_and_allowed_to_share
+    
+    test from: :suite_100ballot_retrieved_bundle_composition_must_support_elements_optional_must_support_elements_shall_be_correctly_populated_if_a_value_is_known
+    
+    test from: :suite_100ballot_retrieved_bundle_composition_must_support_elements_must_support_subelements_of_a_complex_element_shall_be_correctly_populated_if_a_value_is_known
+    
+    test from: :suite_100ballot_retrieved_bundle_composition_must_support_elements_optional_must_support_slices_shall_be_populated_if_a_value_is_known
+    
+  end
+end

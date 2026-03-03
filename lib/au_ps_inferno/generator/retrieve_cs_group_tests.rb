@@ -13,7 +13,7 @@ class Generator
         class_base: 'AUPSCSIsValid',
         id_base: 'au_ps_cs_is_valid',
         title: 'CapabilityStatement is valid',
-        description: 'Verify CapabilityStatement resource is valid',
+        description: 'Verifies that the server returns a valid CapabilityStatement resource.',
         base_class_require: '../../utils/basic_test_with_url',
         base_class_name: 'BasicTestWithURL',
         description_comment: 'Verify CapabilityStatement resource is valid',
@@ -27,10 +27,10 @@ class Generator
         class_base: 'AUPSCSSupportsIPSRecommendedOPS',
         id_base: 'au_ps_cs_supports_ips_recommended_ops',
         title: 'CapabilityStatement supports IPS Recommended Operations',
-        description: 'IPS recommended operations referenced as supported in CapabilityStatement',
+        description: 'Verifies that the CapabilityStatement declares support for IPS recommended operations (e.g. $summary, $docref).',
         base_class_require: '../../utils/basic_test_class',
         base_class_name: 'BasicTest',
-        description_comment: 'IPS recommended operations referenced as supported in CapabilityStatement',
+        description_comment: 'Verifies that the CapabilityStatement declares support for IPS recommended operations.',
         run_code: "skip_if url.blank?, 'No FHIR server URL provided'\n      summary_op_defined?\n      " \
                   "operation_defined?(operations, 'http://hl7.org/fhir/uv/ipa/OperationDefinition/docref', " \
                   "%w[docref],\n                         :docref_op_defined)"
@@ -40,10 +40,10 @@ class Generator
         class_base: 'AUPSCSSupportsAUPSProfiles',
         id_base: 'au_ps_cs_supports_au_ps_profiles',
         title: 'CapabilityStatement supports AU PS Profiles',
-        description: 'AU PS Profiles referenced as supported in CapabilityStatement',
+        description: 'Verifies that the CapabilityStatement declares support for the required AU PS profiles.',
         base_class_require: '../../utils/basic_test_class',
         base_class_name: 'BasicTest',
-        description_comment: 'AU PS Profiles referenced as supported in CapabilityStatement',
+        description_comment: 'Verifies that the CapabilityStatement declares support for the required AU PS profiles.',
         run_code: nil,
         custom_template: 'cs_supports_au_ps_profiles_test.rb.erb'
       }

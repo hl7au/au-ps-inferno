@@ -75,7 +75,7 @@ class Generator
   end
 
   def group_description(name)
-    "Displays information about #{name} in the Composition resource."
+    "Validates #{name}."
   end
 
   def generate_primitive_group(generic_bundle_group, high_order_class_name, high_order_group_id,
@@ -98,7 +98,7 @@ class Generator
     {
       class_name: high_order_group_class_name,
       title: generic_bundle_group[:name],
-      description: group_description(generic_bundle_group[:name]),
+      description: generic_bundle_group[:description] || group_description(generic_bundle_group[:name]),
       id: high_order_group_id,
       output_file_path: versioned_path(high_order_group_file_name, filename: "#{file_name}.rb"),
       tests: tests
@@ -116,6 +116,7 @@ class Generator
     if TestConfigRegistry.registered?(test[:name])
       test_config.merge!(TestConfigRegistry.config_for(test[:name], @metadata))
     end
+    test_config[:description] ||= "Verifies that the resource meets the requirement: #{test[:name]}"
     PrimitiveTest.new(test_config).generate
   end
 
@@ -139,7 +140,7 @@ class Generator
     {
       class_name: high_order_class_name,
       title: high_order_group[:name],
-      description: group_description(high_order_group[:name]),
+      description: high_order_group[:description] || group_description(high_order_group[:name]),
       id: high_order_group_id,
       groups: groups_with_relative_path,
       output_file_path: versioned_path(high_order_group_file_name, filename: "#{high_order_group_file_name}.rb")
@@ -191,8 +192,8 @@ class Generator
     {
       suite_version: ig_suite_version,
       class_name: suite_class_name,
-      title: @suite_version,
-      description: "Suite for #{@suite_version}",
+      title: "AU PS #{@suite_version} Test Suite",
+      description: "Validates AU PS (Australian Primary Care and Shared Health) bundles, compositions, sections, and server CapabilityStatement support for the #{@suite_version} implementation guide.",
       id: suite_id,
       groups: high_order_groups,
       output_file_path: versioned_path("#{ig_suite_version}_suite.rb")

@@ -7,7 +7,7 @@ module AUPSTestKit
   # Automatically generated primitive test for Sections SHALL be correctly populated if a value is known
   class AUPSSuite100ballotAuPsBundleInstanceCompositionMandatorySectionsSectionsShallBeCorrectlyPopulatedIfAValueIsKnown < BasicTest
     title 'Sections SHALL be correctly populated if a value is known'
-    description ''
+    description 'Verifies that mandatory sections are correctly populated when data is known.'
     id :suite_100ballot_au_ps_bundle_instance_composition_mandatory_sections_sections_shall_be_correctly_populated_if_a_value_is_known
     
     

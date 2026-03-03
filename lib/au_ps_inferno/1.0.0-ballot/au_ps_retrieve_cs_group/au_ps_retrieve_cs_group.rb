@@ -11,8 +11,8 @@ require_relative './au_ps_cs_supports_au_ps_profiles'
 module AUPSTestKit
   # Tests for CapabilityStatement resource
   class AUPSRetrieveCSGroup100ballot < Inferno::TestGroup
-    title 'Retrieve Capability Statement Tests'
-    description 'Verify server provides valid Capability Statement and reports supported AU PS profiles and IPS recommended operations'
+    title 'Retrieve Capability Statement'
+    description 'Verifies that the server exposes a valid CapabilityStatement and declares support for AU PS profiles and IPS recommended operations.'
     id :au_ps_retrieve_cs_group_100ballot
 
     input :url,

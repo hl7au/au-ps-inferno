@@ -3,10 +3,10 @@
 require_relative '../../utils/basic_test_class'
 
 module AUPSTestKit
-  # IPS recommended operations referenced as supported in CapabilityStatement
+  # Verifies that the CapabilityStatement declares support for IPS recommended operations.
   class AUPSCSSupportsIPSRecommendedOPS100ballot < BasicTest
     title 'CapabilityStatement supports IPS Recommended Operations'
-    description 'IPS recommended operations referenced as supported in CapabilityStatement'
+    description 'Verifies that the CapabilityStatement declares support for IPS recommended operations (e.g. $summary, $docref).'
     id :au_ps_cs_supports_ips_recommended_ops_100ballot
 
     

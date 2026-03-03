@@ -14,21 +14,24 @@ class Generator
     # can supply its own title (e.g. "Bundle is valid...", "Retrieved Bundle is valid...", "Generated Bundle is valid...").
     BUNDLE_VALIDATION_PLACEHOLDER = :bundle_validation_placeholder
 
-    # Shared group definitions: name and list of test names (or BUNDLE_VALIDATION_PLACEHOLDER).
+    # Shared group definitions: name, description, and list of test names (or BUNDLE_VALIDATION_PLACEHOLDER).
     # Used by all high-order groups that validate bundles; only the bundle validation test title varies.
     SHARED_GROUP_DEFINITIONS = [
       {
         name: 'Bundle Validation',
+        description: 'Validates that the bundle conforms to the AU PS Bundle profile.',
         tests: [BUNDLE_VALIDATION_PLACEHOLDER]
       },
       {
-        name: 'Bundle has Must Support elements',
+        name: 'Bundle Must Support elements',
+        description: 'Verifies that Must Support elements at the bundle level are populated when data is available.',
         tests: [
           { name: 'Must Support elements SHALL be populated when an element value is known and allowed to share' }
         ]
       },
       {
         name: 'Composition Must Support elements',
+        description: 'Verifies that Composition Must Support elements (mandatory, optional, sub-elements, slices) are correctly populated when data is known.',
         tests: [
           { name: 'Mandatory Must Support element SHALL be able to be populated if a value is known and allowed to share' },
           { name: 'Optional Must Support elements SHALL be correctly populated if a value is known' },
@@ -38,6 +41,7 @@ class Generator
       },
       {
         name: 'Composition Mandatory Sections',
+        description: 'Verifies that mandatory sections are present and section.entry references conform to the required profiles.',
         tests: [
           { name: 'Sections SHALL be correctly populated if a value is known' },
           { name: 'Sections SHALL be capable of populating section.entry with the referenced profiles, and SHOULD correctly populate section.entry if a value is known' }
@@ -45,43 +49,49 @@ class Generator
       },
       {
         name: 'Composition Recommended Sections',
+        description: 'Verifies that recommended (SHOULD) sections are correctly populated when data is known.',
         tests: [
           { name: 'Sections SHOULD be correctly populated if a value is known' }
         ]
       },
       {
         name: 'Composition Optional Sections',
+        description: 'Verifies that optional (MAY) sections are correctly populated when data is known.',
         tests: [
           { name: 'Sections MAY be correctly populated if a value is known' }
         ]
       },
       {
         name: 'Composition Undefined Sections',
+        description: 'Verifies that sections not defined in the profile may be populated without violating conformance.',
         tests: [
           { name: 'Sections MAY be populated' }
         ]
       }
     ].freeze
 
-    # High-order group configs: display name and the title for the bundle validation test in "Bundle Validation" group.
+    # High-order group configs: display name, description, and the title for the bundle validation test in "Bundle Validation" group.
     HIGH_ORDER_GROUP_CONFIGS = [
       {
         name: 'AU PS Bundle Instance',
+        description: 'Validates a static AU PS bundle instance for profile conformance, Must Support elements, and composition sections.',
         bundle_validation_title: 'Bundle is valid against AU PS Bundle profile'
       },
       {
-        name: 'Retrieve Bundle validation',
+        name: 'Retrieved Bundle',
+        description: 'Validates an AU PS bundle retrieved from the server for profile conformance, Must Support elements, and composition sections.',
         bundle_validation_title: 'Retrieved Bundle is valid against AU PS Bundle profile'
       },
       {
-        name: 'Generate Bundle using IPS $summary validation',
+        name: 'Generated Bundle (IPS $summary)',
+        description: 'Validates an AU PS bundle generated via the IPS $summary operation for profile conformance, Must Support elements, and composition sections.',
         bundle_validation_title: 'Generated Bundle is valid against AU PS Bundle profile'
       }
     ].freeze
 
-    # Builds the full HIGH_ORDER_GROUPS structure expected by Generator (array of hashes with :name and :groups).
+    # Builds the full HIGH_ORDER_GROUPS structure expected by Generator (array of hashes with :name, :description, :groups).
     #
-    # @return [Array<Hash>] same shape as the former Generator::HIGH_ORDER_GROUPS
+    # @return [Array<Hash>] same shape as the former Generator::HIGH_ORDER_GROUPS with :description added
     def self.expand_high_order_groups
       HIGH_ORDER_GROUP_CONFIGS.map do |config|
         groups = SHARED_GROUP_DEFINITIONS.map do |group_def|
@@ -92,9 +102,9 @@ class Generator
               t
             end
           end
-          { name: group_def[:name], tests: tests }
+          { name: group_def[:name], description: group_def[:description], tests: tests }
         end
-        { name: config[:name], groups: groups }
+        { name: config[:name], description: config[:description], groups: groups }
       end
     end
   end

@@ -9,7 +9,7 @@ module AUPSTestKit
   # Automatically generated primitive group for Composition Undefined Sections
   class AUPSSuite100ballotAuPsBundleInstanceCompositionUndefinedSections < Inferno::TestGroup
     title 'Composition Undefined Sections'
-    description 'Displays information about Composition Undefined Sections in the Composition resource.'
+    description 'Verifies that sections not defined in the profile may be populated without violating conformance.'
     id :suite_100ballot_au_ps_bundle_instance_composition_undefined_sections
 
     

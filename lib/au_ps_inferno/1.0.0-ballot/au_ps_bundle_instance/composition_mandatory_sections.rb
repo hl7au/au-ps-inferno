@@ -11,7 +11,7 @@ module AUPSTestKit
   # Automatically generated primitive group for Composition Mandatory Sections
   class AUPSSuite100ballotAuPsBundleInstanceCompositionMandatorySections < Inferno::TestGroup
     title 'Composition Mandatory Sections'
-    description 'Displays information about Composition Mandatory Sections in the Composition resource.'
+    description 'Verifies that mandatory sections are present and section.entry references conform to the required profiles.'
     id :suite_100ballot_au_ps_bundle_instance_composition_mandatory_sections
 
     

@@ -9,7 +9,7 @@ module AUPSTestKit
   # Automatically generated primitive test for Bundle is valid against AU PS Bundle profile
   class AUPSSuite100ballotAuPsBundleInstanceBundleValidationBundleIsValidAgainstAuPsBundleProfile < BundleIsValidClass
     title 'Bundle is valid against AU PS Bundle profile'
-    description ''
+    description 'Verifies that the bundle conforms to the AU PS Bundle profile.'
     id :suite_100ballot_au_ps_bundle_instance_bundle_validation_bundle_is_valid_against_au_ps_bundle_profile
     
     

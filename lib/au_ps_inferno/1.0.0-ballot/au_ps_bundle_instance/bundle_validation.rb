@@ -9,7 +9,7 @@ module AUPSTestKit
   # Automatically generated primitive group for Bundle Validation
   class AUPSSuite100ballotAuPsBundleInstanceBundleValidation < Inferno::TestGroup
     title 'Bundle Validation'
-    description 'Displays information about Bundle Validation in the Composition resource.'
+    description 'Validates that the bundle conforms to the AU PS Bundle profile.'
     id :suite_100ballot_au_ps_bundle_instance_bundle_validation
 
     

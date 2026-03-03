@@ -166,7 +166,7 @@ class Generator
       {
         group_class_name: versioned_group_class,
         group_title: 'AU PS Sections Validation',
-        group_description: 'Verify that an AU PS Sections are valid.',
+        group_description: 'Validates that each AU PS composition section is present and references conformant resources.',
         group_id: versioned_group_id,
         tests: @test_entities
       }

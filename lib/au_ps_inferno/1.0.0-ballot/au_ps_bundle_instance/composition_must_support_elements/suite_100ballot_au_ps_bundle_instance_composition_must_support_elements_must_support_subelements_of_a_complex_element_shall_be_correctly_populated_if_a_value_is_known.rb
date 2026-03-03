@@ -7,7 +7,7 @@ module AUPSTestKit
   # Automatically generated primitive test for Must Support sub-elements of a complex element SHALL be correctly populated if a value is known
   class AUPSSuite100ballotAuPsBundleInstanceCompositionMustSupportElementsMustSupportSubelementsOfAComplexElementShallBeCorrectlyPopulatedIfAValueIsKnown < BasicTest
     title 'Must Support sub-elements of a complex element SHALL be correctly populated if a value is known'
-    description ''
+    description 'Verifies that Must Support sub-elements of complex elements are correctly populated when data is known.'
     id :suite_100ballot_au_ps_bundle_instance_composition_must_support_elements_must_support_subelements_of_a_complex_element_shall_be_correctly_populated_if_a_value_is_known
     
     optional

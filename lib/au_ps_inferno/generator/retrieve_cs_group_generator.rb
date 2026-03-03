@@ -11,9 +11,8 @@ class Generator
   # retrieve_bundle_test.rb.erb or cs_supports_au_ps_profiles_test.rb.erb.
   class RetrieveCSGroupGenerator
     GROUP_NAME = 'au_ps_retrieve_cs_group'
-    GROUP_TITLE = 'Retrieve Capability Statement Tests'
-    GROUP_DESCRIPTION = 'Verify server provides valid Capability Statement and reports supported AU PS ' \
-                        'profiles and IPS recommended operations'
+    GROUP_TITLE = 'Retrieve Capability Statement'
+    GROUP_DESCRIPTION = 'Verifies that the server exposes a valid CapabilityStatement and declares support for AU PS profiles and IPS recommended operations.'
 
     # @param version_suffix [String] Short version suffix (e.g. '100preview')
     # @param suite_version [String] Suite version folder (e.g. '1.0.0-preview')

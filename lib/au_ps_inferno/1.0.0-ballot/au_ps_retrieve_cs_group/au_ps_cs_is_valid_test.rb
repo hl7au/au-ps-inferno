@@ -6,7 +6,7 @@ module AUPSTestKit
   # Verify CapabilityStatement resource is valid
   class AUPSCSIsValid100ballot < BasicTestWithURL
     title 'CapabilityStatement is valid'
-    description 'Verify CapabilityStatement resource is valid'
+    description 'Verifies that the server returns a valid CapabilityStatement resource.'
     id :au_ps_cs_is_valid_100ballot
 
     
