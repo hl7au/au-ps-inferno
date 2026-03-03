@@ -91,14 +91,6 @@ module CompositionUtils
     resolve_path(scratch_bundle, 'identifier').first.present?
   end
 
-  def composition_section_title_info
-    "**section.title**: #{check_section_element_completeness('section.title')}"
-  end
-
-  def composition_section_text_info
-    "**section.text**: #{check_section_element_completeness('section.text')}"
-  end
-
   def check_section_element_completeness(path_expression)
     sections_count = resolve_path(composition_resource, path_expression).length
     selected_by_expression_count = resolve_path(composition_resource, path_expression).length

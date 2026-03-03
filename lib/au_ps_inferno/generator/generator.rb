@@ -2,10 +2,7 @@
 
 require_relative 'ig_resources_extractor'
 require_relative 'metadata_manager'
-require_relative 'retrieve_bundle_group_generator'
 require_relative 'retrieve_cs_group_generator'
-require_relative 'summary_bundle_group_generator'
-require_relative 'validation_group_generator'
 require_relative 'sections_validation_group_generator'
 require_relative 'test_file_generator'
 require_relative 'version_suffix'
@@ -281,12 +278,6 @@ class Generator
   # @return [void]
   def generate
     new_generate
-    # @resources_manager.extract
-    # save_metadata_to_version_folder
-    # group_infos = run_bundle_and_validation_generators
-    # section_gen = SectionsValidationGroupGenerator.new(@metadata, @version_suffix, @suite_version)
-    # section_gen.generate
-    # generate_suite(group_infos + [section_gen.suite_group_info])
   end
 
   private
@@ -547,46 +538,10 @@ class Generator
     generate_primitive_suite
   end
 
-  # Runs retrieve bundle, retrieve CS, summary, and validation group generators; returns suite_group_info.
-  # @return [Array<Hash>] suite_group_info hashes for suite template
-  def run_bundle_and_validation_generators
-    [
-      ValidationGroupGenerator,
-      RetrieveCSGroupGenerator,
-      RetrieveBundleGroupGenerator,
-      SummaryBundleGroupGenerator
-    ].map do |gen_class|
-      gen = gen_class.new(@metadata, @version_suffix, @suite_version)
-      gen.generate
-      gen.suite_group_info
-    end
-  end
-
   def save_metadata_to_version_folder
     return if @suite_version.empty?
 
     metadata_path = File.join(File.expand_path(File.join('lib', 'au_ps_inferno', @suite_version)), 'metadata.yaml')
     @metadata.save_to_file(metadata_path)
-  end
-
-  def generate_suite(groups)
-    return if @suite_version.empty?
-
-    config = suite_config(groups)
-    Generator::TestFileGenerator.new(config).generate
-  end
-
-  def suite_config(groups)
-    suite_output_base = File.expand_path(File.join('lib', 'au_ps_inferno', @suite_version))
-    {
-      template_file_path: 'suite.rb.erb',
-      output_file_path: 'au_ps_suite.rb',
-      output_base: suite_output_base,
-      attributes: suite_attributes(groups)
-    }
-  end
-
-  def suite_attributes(groups)
-    { groups: groups, version_suffix: @version_suffix, suite_version: @suite_version }
   end
 end
