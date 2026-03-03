@@ -219,7 +219,9 @@ class Generator
                       'Optional Must Support elements SHALL be correctly populated if a value is known',
                       'Must Support sub-elements of a complex element SHALL be correctly populated if a value is known',
                       'Optional Must Support slices SHALL be populated if a value is known',
-                      'Sections SHALL be correctly populated if a value is known']
+                      'Sections SHALL be correctly populated if a value is known',
+                      'Sections SHOULD be correctly populated if a value is known',
+                      'Sections MAY be correctly populated if a value is known']
     test_id = "#{group_id}_#{build_id(test[:name])}"
     test_config = {
       class_name: "#{group_class_name}#{build_class_name(test[:name])}",
@@ -266,6 +268,28 @@ class Generator
         test_config[:commands] = [
           "validate_populated_sections_in_bundle(#{section_codes}, #{elements})"
         ]
+      when 'Sections SHOULD be correctly populated if a value is known'
+        section_codes = @metadata.recommended_sections_data_codes.map do |section|
+          section[:code]
+        end
+        elements = @metadata.composition_sections.first[:ms_elements].filter do |element|
+          element[:min].positive?
+        end.map { |element| element[:expression] }
+        test_config[:commands] = [
+          "validate_populated_sections_in_bundle(#{section_codes}, #{elements})"
+        ]
+        test_config[:optional] = true
+      when 'Sections MAY be correctly populated if a value is known'
+        section_codes = @metadata.optional_sections_data_codes.map do |section|
+          section[:code]
+        end
+        elements = @metadata.composition_sections.first[:ms_elements].filter do |element|
+          element[:min].positive?
+        end.map { |element| element[:expression] }
+        test_config[:commands] = [
+          "validate_populated_sections_in_bundle(#{section_codes}, #{elements})"
+        ]
+        test_config[:optional] = true
       end
     end
     PrimitiveTest.new(test_config).generate

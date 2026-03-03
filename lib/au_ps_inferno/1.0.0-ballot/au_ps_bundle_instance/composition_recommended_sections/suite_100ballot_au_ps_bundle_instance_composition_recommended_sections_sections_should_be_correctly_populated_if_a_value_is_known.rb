@@ -10,8 +10,12 @@ module AUPSTestKit
     description ''
     id :suite_100ballot_au_ps_bundle_instance_composition_recommended_sections_sections_should_be_correctly_populated_if_a_value_is_known
     
+    optional
+    
     
     run do
+      
+      validate_populated_sections_in_bundle(["11369-6", "30954-2", "47519-4", "46264-8"], ["title", "code", "text"])
       
     end
     

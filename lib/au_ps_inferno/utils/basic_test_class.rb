@@ -256,16 +256,21 @@ module AUPSTestKit
     def validate_populated_sections_in_bundle(section_codes_array, elements_array)
       return false unless scratch_bundle.present?
 
-      info validate_populated_sections_in_bundle_info(section_codes_array, elements_array)
-      bundle_resource = BundleDecorator.new(scratch_bundle.to_hash)
-      validation_result = section_codes_array.each do |section_code|
-        section = bundle_resource.composition_resource.section_by_code(section_code)
-        return false unless section.present?
+      validation_message = validate_populated_sections_in_bundle_info(section_codes_array, elements_array)
+      if validation_message == false
+        skip 'No sections to validate'
+      else
+        info validation_message
+        bundle_resource = BundleDecorator.new(scratch_bundle.to_hash)
+        validation_result = section_codes_array.each do |section_code|
+          section = bundle_resource.composition_resource.section_by_code(section_code)
+          return false unless section.present?
 
-        all_paths_are_populated?(section, elements_array)
-      end.all?
-      assert validation_result,
-             'Some of the sections are not populated. See the list of populated sections in messages tab.'
+          all_paths_are_populated?(section, elements_array)
+        end.all?
+        assert validation_result,
+               'Some of the sections are not populated. See the list of populated sections in messages tab.'
+      end
     end
 
     def validate_populated_sections_in_bundle_info(section_codes_array, elements_array)
