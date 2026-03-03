@@ -496,7 +496,8 @@ class Generator
       generate_high_order_group(high_order_group, suite_class_name, suite_id)
     end
     sections_group = generate_sections_validation_group
-    all_groups = high_order_groups + (sections_group ? [sections_group] : [])
+    retrieve_cs_group = generate_retrieve_cs_group
+    all_groups = high_order_groups + [sections_group, retrieve_cs_group].compact
     config = suite_primitive_config(suite_class_name, suite_id, ig_suite_version, all_groups)
     SuitePrimitive.new(config).generate
   end
@@ -508,7 +509,20 @@ class Generator
 
     section_gen = SectionsValidationGroupGenerator.new(@metadata, @version_suffix, @suite_version)
     section_gen.generate
-    info = section_gen.suite_group_info
+    suite_group_info_to_path_id(section_gen.suite_group_info)
+  end
+
+  # Runs RetrieveCSGroupGenerator and returns suite group info in the same shape as
+  # high-order groups ({ path:, id: }) for inclusion in the suite, or nil if suite_version is empty.
+  def generate_retrieve_cs_group
+    return nil if @suite_version.empty?
+
+    gen = RetrieveCSGroupGenerator.new(@metadata, @version_suffix, @suite_version)
+    gen.generate
+    suite_group_info_to_path_id(gen.suite_group_info)
+  end
+
+  def suite_group_info_to_path_id(info)
     {
       path: info[:file_path].sub(/\.rb$/, ''),
       id: info[:attributes][:group_id].to_sym

@@ -9,6 +9,8 @@ require_relative 'generate_bundle_using_ips_summary_validation/generate_bundle_u
 
 require_relative 'au_ps_sections_validation_group/au_ps_sections_validation_group'
 
+require_relative 'au_ps_retrieve_cs_group/au_ps_retrieve_cs_group'
+
 
 module AUPSTestKit
   # Automatically generated suite for 1.0.0-ballot
@@ -33,6 +35,8 @@ module AUPSTestKit
     group from: :suite_100ballot_generate_bundle_using_ips_summary_validation
     
     group from: :au_ps_sections_validation_group_100ballot
+    
+    group from: :au_ps_retrieve_cs_group_100ballot
     
   end
 end
