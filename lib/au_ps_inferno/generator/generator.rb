@@ -495,8 +495,24 @@ class Generator
     high_order_groups = HIGH_ORDER_GROUPS.map do |high_order_group|
       generate_high_order_group(high_order_group, suite_class_name, suite_id)
     end
-    config = suite_primitive_config(suite_class_name, suite_id, ig_suite_version, high_order_groups)
+    sections_group = generate_sections_validation_group
+    all_groups = high_order_groups + (sections_group ? [sections_group] : [])
+    config = suite_primitive_config(suite_class_name, suite_id, ig_suite_version, all_groups)
     SuitePrimitive.new(config).generate
+  end
+
+  # Runs SectionsValidationGroupGenerator and returns suite group info in the same shape as
+  # high-order groups ({ path:, id: }) for inclusion in the suite, or nil if suite_version is empty.
+  def generate_sections_validation_group
+    return nil if @suite_version.empty?
+
+    section_gen = SectionsValidationGroupGenerator.new(@metadata, @version_suffix, @suite_version)
+    section_gen.generate
+    info = section_gen.suite_group_info
+    {
+      path: info[:file_path].sub(/\.rb$/, ''),
+      id: info[:attributes][:group_id].to_sym
+    }
   end
 
   def suite_primitive_config(suite_class_name, suite_id, ig_suite_version, high_order_groups)
