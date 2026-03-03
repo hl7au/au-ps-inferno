@@ -55,7 +55,7 @@ class Generator
               name: 'Mandatory Must Support element SHALL be able to be populated if a value is known and allowed to share'
             },
             {
-              name: 'Optional Must Support elements SHALL be correctly populated if a value is known '
+              name: 'Optional Must Support elements SHALL be correctly populated if a value is known'
             },
             {
               name: 'Must Support sub-elements of a complex element SHALL be correctly populated if a value is known'
@@ -213,7 +213,11 @@ class Generator
   end
 
   def generate_primitive_test(group_class_name, group_id, group_file_name, high_order_group_file_name, test)
-    specific_tests = ['Bundle is valid against AU PS Bundle profile']
+    specific_tests = ['Bundle is valid against AU PS Bundle profile',
+                      'Must Support elements SHALL be populated when an element value is known and allowed to share',
+                      'Mandatory Must Support element SHALL be able to be populated if a value is known and allowed to share',
+                      'Optional Must Support elements SHALL be correctly populated if a value is known',
+                      'Must Support sub-elements of a complex element SHALL be correctly populated if a value is known']
     test_id = "#{group_id}_#{build_id(test[:name])}"
     test_config = {
       class_name: "#{group_class_name}#{build_class_name(test[:name])}",
@@ -227,6 +231,22 @@ class Generator
         test_config[:base_class_name] = 'BundleIsValidClass'
         test_config[:imports] = ['../../../utils/bundle_is_valid_class']
         test_config[:ignore_commands] = true
+      when 'Must Support elements SHALL be populated when an element value is known and allowed to share'
+        test_config[:commands] = [
+          'bundle_mandatory_ms_elements_info'
+        ]
+      when 'Mandatory Must Support element SHALL be able to be populated if a value is known and allowed to share'
+        test_config[:commands] = [
+          "validate_populated_elements_in_composition(#{@metadata.composition_mandatory_ms_elements})"
+        ]
+      when 'Optional Must Support elements SHALL be correctly populated if a value is known'
+        test_config[:commands] = [
+          "validate_populated_elements_in_composition(#{@metadata.composition_optional_ms_elements})"
+        ]
+      when 'Must Support sub-elements of a complex element SHALL be correctly populated if a value is known'
+        test_config[:commands] = [
+          "validate_populated_elements_in_composition(#{@metadata.composition_optional_ms_sub_elements})"
+        ]
       end
     end
     PrimitiveTest.new(test_config).generate

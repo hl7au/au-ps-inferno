@@ -102,7 +102,8 @@ class Generator
       }
     end
 
-    attr_reader :normalized_sections_data
+    attr_reader :normalized_sections_data, :composition_mandatory_ms_elements, :composition_optional_ms_elements,
+                :composition_mandatory_ms_sub_elements, :composition_optional_ms_sub_elements, :composition_optional_ms_slices
 
     def normalize_section_data(section_id)
       section_data = @composition_sections.find { |section| section[:id] == section_id }

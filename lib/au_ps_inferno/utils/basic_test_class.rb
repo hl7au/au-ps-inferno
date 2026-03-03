@@ -205,5 +205,39 @@ module AUPSTestKit
 
       resource.meta.profile.include?(profile)
     end
+
+    def populated_paths_info(resource, elements_array)
+      title = '## List populated elements'
+      result = elements_array.map do |element|
+        "**#{element}**: #{boolean_to_humanized_string(resolve_path(resource, element).first.present?)}"
+      end
+      [title, result.join("\n\n")].join("\n\n")
+    end
+
+    def all_paths_are_populated?(resource, elements_array)
+      elements_array.map do |element|
+        resolve_path(resource, element).first.present?
+      end.all?
+    end
+
+    def validate_populated_elements_in_resource(fhirpath_to_get_resource, elements_array)
+      return false unless scratch_bundle.present?
+
+      resource = resolve_path(scratch_bundle, fhirpath_to_get_resource).first
+      return false unless resource.present?
+
+      info populated_paths_info(resource, elements_array)
+      all_paths_are_populated?(resource, elements_array)
+    end
+
+    def validate_populated_elements_in_composition(elements_array)
+      return false unless scratch_bundle.present?
+
+      composition_resource = BundleDecorator.new(scratch_bundle.to_hash).composition_resource
+      return false unless composition_resource.present?
+
+      info populated_paths_info(composition_resource, elements_array)
+      all_paths_are_populated?(composition_resource, elements_array)
+    end
   end
 end

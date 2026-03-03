@@ -12,6 +12,8 @@ module AUPSTestKit
     
     run do
       
+      bundle_mandatory_ms_elements_info
+      
     end
     
   end
