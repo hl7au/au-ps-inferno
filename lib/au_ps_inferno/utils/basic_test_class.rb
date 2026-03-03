@@ -100,28 +100,20 @@ module AUPSTestKit
     end
 
     def read_composition_sections_info(sections_data, normalized_sections_data)
-      mandatory_ms_elements = sections_data.first[:ms_elements]
-      sections_array_codes = sections_data.map { |section| section[:code] }
-      required = sections_data.first[:required]
-      bundle_exists = check_bundle_exists_in_scratch
-      all_sections = all_sections_present_in_bundle?(sections_array_codes, scratch_bundle)
-      elements_populated = all_mandatory_ms_elements_populated_in_sections?(
-        sections_array_codes, scratch_bundle, mandatory_ms_elements
-      )
       population_correct = profile_population_is_correct?(sections_data, scratch_bundle)
-      info "Bundle exists: #{bundle_exists}, all sections present: #{all_sections}, all mandatory MS elements populated: #{elements_populated}, profile population correct: #{population_correct}, required: #{required}"
-      info_sections_ms_elements(sections_data)
+      assert population_correct,
+             'Some of the sections are not populated correctly. See the list of populated sections in messages tab.'
       info_entry_resources_by_type_and_profile(sections_data, normalized_sections_data)
     end
 
     def info_entry_resources_by_type_and_profile(sections_data, normalized_sections_data)
-      title = '## List any entry resources by type & profile (follow reference) or emptyReason coding when populated'
+      title = '## List any entry resources by type & profile'
       result = []
       sections_data.each do |section_data|
         valid_profiles = section_data[:entries].map do |entry|
           entry[:profiles]
         end.flatten.map { |profile| profile.split('|').last }.uniq
-        section_title = "### #{section_data[:short]}(#{section_data[:code]})"
+        section_title = "### #{section_data[:short]} (#{section_data[:code]})"
         result << section_title
         filtered_section_data = normalized_sections_data.find { |s| s['code'] == section_data[:code] }
         section_test_entity = SectionTestClass.new(filtered_section_data, scratch_bundle)
@@ -133,8 +125,6 @@ module AUPSTestKit
           entity_can_present = existing_resource_profiles.any? { |profile| valid_profiles.include?(profile) }
           result << " #{boolean_to_humanized_string(entity_can_present)} **#{ref}**: #{existing_resource.resourceType} (#{existing_resource_profiles.join(', ')})"
         end
-        info "result: #{result}"
-        # result << validate_section_resources(filtered_section_data)
       end
       info [title, result.join("\n\n")].join("\n\n")
     end

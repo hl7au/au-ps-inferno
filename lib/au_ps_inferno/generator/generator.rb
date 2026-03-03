@@ -222,7 +222,8 @@ class Generator
                       'Sections SHALL be correctly populated if a value is known',
                       'Sections SHOULD be correctly populated if a value is known',
                       'Sections MAY be correctly populated if a value is known',
-                      'Sections MAY be populated']
+                      'Sections MAY be populated',
+                      'Sections SHALL be capable of populating section.entry with the referenced profiles, and SHOULD correctly populate section.entry if a value is known']
     test_id = "#{group_id}_#{build_id(test[:name])}"
     test_config = {
       class_name: "#{group_class_name}#{build_class_name(test[:name])}",
@@ -300,6 +301,13 @@ class Generator
           "validate_populated_undefined_sections_in_bundle(#{section_codes}, #{elements})"
         ]
         test_config[:optional] = true
+      when 'Sections SHALL be capable of populating section.entry with the referenced profiles, and SHOULD correctly populate section.entry if a value is known'
+        sections_data = @metadata.composition_sections.filter do |section|
+          section[:required] == true && section[:mustSupport] == true
+        end
+        test_config[:commands] = [
+          "read_composition_sections_info(#{sections_data}, #{@metadata.return_normalized_sections_data})"
+        ]
       end
     end
     PrimitiveTest.new(test_config).generate
