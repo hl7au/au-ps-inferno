@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 
-require_relative 'bundle_validation/bundle_validation'
+require_relative 'au_ps_bundle_instance/au_ps_bundle_instance'
 
 require_relative 'retrieve_bundle_validation/retrieve_bundle_validation'
 
@@ -24,7 +24,7 @@ module AUPSTestKit
     end
 
     
-    group from: :suite_100ballot_bundle_validation
+    group from: :suite_100ballot_au_ps_bundle_instance
     
     group from: :suite_100ballot_retrieve_bundle_validation
     

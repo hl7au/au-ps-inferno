@@ -30,8 +30,16 @@ class Generator
   PATH_BASE = 'lib/au_ps_inferno'
   HIGH_ORDER_GROUPS = [
     {
-      name: 'Bundle validation',
+      name: 'AU PS Bundle Instance',
       groups: [
+        {
+          name: 'Bundle Validation',
+          tests: [
+            {
+              name: 'Bundle is valid against AU PS Bundle profile'
+            }
+          ]
+        },
         {
           name: 'Bundle has Must Support elements',
           tests: [
