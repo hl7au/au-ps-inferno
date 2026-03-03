@@ -239,5 +239,16 @@ module AUPSTestKit
       info populated_paths_info(composition_resource, elements_array)
       all_paths_are_populated?(composition_resource, elements_array)
     end
+
+    def validate_populated_slices_in_composition(slices_array)
+      return false unless scratch_bundle.present?
+
+      composition_resource = BundleDecorator.new(scratch_bundle.to_hash).composition_resource
+      return false unless composition_resource.present?
+
+      slices_paths = slices_array.map { |slice| slice[:path] }
+      info populated_paths_info(composition_resource, slices_paths)
+      all_paths_are_populated?(composition_resource, slices_paths)
+    end
   end
 end

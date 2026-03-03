@@ -12,6 +12,8 @@ module AUPSTestKit
     
     run do
       
+      validate_populated_slices_in_composition([{:path=>"event", :sliceName=>"careProvisioningEvent", :min=>0, :max=>"1", :mustSupport=>true}])
+      
     end
     
   end

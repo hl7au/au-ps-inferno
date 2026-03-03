@@ -217,7 +217,8 @@ class Generator
                       'Must Support elements SHALL be populated when an element value is known and allowed to share',
                       'Mandatory Must Support element SHALL be able to be populated if a value is known and allowed to share',
                       'Optional Must Support elements SHALL be correctly populated if a value is known',
-                      'Must Support sub-elements of a complex element SHALL be correctly populated if a value is known']
+                      'Must Support sub-elements of a complex element SHALL be correctly populated if a value is known',
+                      'Optional Must Support slices SHALL be populated if a value is known']
     test_id = "#{group_id}_#{build_id(test[:name])}"
     test_config = {
       class_name: "#{group_class_name}#{build_class_name(test[:name])}",
@@ -246,6 +247,10 @@ class Generator
       when 'Must Support sub-elements of a complex element SHALL be correctly populated if a value is known'
         test_config[:commands] = [
           "validate_populated_elements_in_composition(#{@metadata.composition_optional_ms_sub_elements})"
+        ]
+      when 'Optional Must Support slices SHALL be populated if a value is known'
+        test_config[:commands] = [
+          "validate_populated_slices_in_composition(#{@metadata.composition_optional_ms_slices})"
         ]
       end
     end
