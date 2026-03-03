@@ -1,17 +1,17 @@
 # frozen_string_literal: true
 
 
-require_relative 'bundle_validation/bundle_has_must_support_elements'
+require_relative 'bundle_has_must_support_elements'
 
-require_relative 'bundle_validation/composition_must_support_elements'
+require_relative 'composition_must_support_elements'
 
-require_relative 'bundle_validation/composition_mandatory_sections'
+require_relative 'composition_mandatory_sections'
 
-require_relative 'bundle_validation/composition_recommended_sections'
+require_relative 'composition_recommended_sections'
 
-require_relative 'bundle_validation/composition_optional_sections'
+require_relative 'composition_optional_sections'
 
-require_relative 'bundle_validation/composition_undefined_sections'
+require_relative 'composition_undefined_sections'
 
 
 module AUPSTestKit

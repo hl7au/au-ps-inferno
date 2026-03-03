@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative '../../utils/basic_test_class'
+require_relative '../../../utils/basic_test_class'
 
 
 module AUPSTestKit

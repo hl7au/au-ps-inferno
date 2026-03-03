@@ -150,7 +150,7 @@ class Generator
   end
 
   def remove_special_characters(string)
-    special_characters = ['$', '.', ',', '(', ')']
+    special_characters = ['$', '.', ',', '(', ')', '-']
     string.gsub(Regexp.union(special_characters), '')
   end
 
@@ -230,12 +230,14 @@ class Generator
 
   def high_order_group_config(high_order_group, high_order_class_name, high_order_group_id, high_order_group_file_name,
                               generic_bundle_groups)
+    # Path for require_relative must be relative to the high-order group file's directory
+    groups_with_relative_path = generic_bundle_groups.map { |g| g.merge(path: g[:path].split('/').last) }
     {
       class_name: high_order_class_name,
       title: high_order_group[:name],
       description: group_description(high_order_group[:name]),
       id: high_order_group_id,
-      groups: generic_bundle_groups,
+      groups: groups_with_relative_path,
       output_file_path: versioned_path(high_order_group_file_name, filename: "#{high_order_group_file_name}.rb")
     }
   end
