@@ -8,7 +8,8 @@ class Generator
   # Config is: template_file_path, output_file_path, optional output_base, and attributes.
   # All template files should be in the templates folder.
   class PrimitiveTest
-    attr_reader :class_name, :base_class_name, :title, :description, :id, :commands, :output_file_path, :imports
+    attr_reader :class_name, :base_class_name, :title, :description, :id, :commands, :output_file_path, :imports,
+                :ignore_commands
 
     def initialize(config)
       @class_name = config[:class_name]
@@ -19,6 +20,7 @@ class Generator
       @commands = config[:commands] || []
       @output_file_path = config[:output_file_path]
       @imports = config[:imports] || []
+      @ignore_commands = config[:ignore_commands] || false
     end
 
     def generate

@@ -11,11 +11,12 @@ module AUPSTestKit
     title '<%= title %>'
     description '<%= description %>'
     id :<%= id %>
-
+    <% if !ignore_commands %>
     run do
       <% commands.each do |command| %>
       <%= command %>
       <% end %>
     end
+    <% end %>
   end
 end
