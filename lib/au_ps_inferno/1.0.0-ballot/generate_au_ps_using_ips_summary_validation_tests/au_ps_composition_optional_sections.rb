@@ -2,7 +2,7 @@
 
 
 
-require_relative 'au_ps_composition_optional_sections/suite_100ballot_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_optional_sections_sections_may_be_correctly_populated_if_a_value_is_known'
+require_relative 'au_ps_composition_optional_sections/suite_100ballot_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_optional_sections_sections_may_populated'
 
 
 module AUPSTestKit
@@ -19,7 +19,7 @@ module AUPSTestKit
     
 
     
-    test from: :suite_100ballot_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_optional_sections_sections_may_be_correctly_populated_if_a_value_is_known
+    test from: :suite_100ballot_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_optional_sections_sections_may_populated
     
   end
 end

@@ -2,7 +2,7 @@
 
 
 
-require_relative 'au_ps_composition_recommended_sections/suite_100ballot_retrieve_au_ps_bundle_validation_tests_au_ps_composition_recommended_sections_sections_should_be_correctly_populated_if_a_value_is_known'
+require_relative 'au_ps_composition_recommended_sections/suite_100ballot_retrieve_au_ps_bundle_validation_tests_au_ps_composition_recommended_sections_sections_should_populated'
 
 
 module AUPSTestKit
@@ -19,7 +19,7 @@ module AUPSTestKit
     
 
     
-    test from: :suite_100ballot_retrieve_au_ps_bundle_validation_tests_au_ps_composition_recommended_sections_sections_should_be_correctly_populated_if_a_value_is_known
+    test from: :suite_100ballot_retrieve_au_ps_bundle_validation_tests_au_ps_composition_recommended_sections_sections_should_populated
     
   end
 end

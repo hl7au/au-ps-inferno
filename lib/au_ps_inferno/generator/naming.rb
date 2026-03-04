@@ -24,10 +24,11 @@ class Generator
         camel_case(remove_special_characters(string)).gsub(' ', '')
       end
 
-      # @param string [String] human-readable name
+      # @param string [String, Symbol] human-readable name or test type id (symbol); Symbol converted via .to_s
       # @return [String] snake_case id (lowercase, underscores, no special chars)
       def build_id(string)
-        remove_special_characters(string.gsub(' ', '_')).downcase
+        s = string.to_s
+        remove_special_characters(s.include?(' ') ? s.gsub(' ', '_') : s).downcase
       end
     end
 

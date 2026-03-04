@@ -2,7 +2,7 @@
 
 
 
-require_relative 'au_ps_bundle_must_support_conformance/suite_100ballot_generate_au_ps_using_ips_summary_validation_tests_au_ps_bundle_must_support_conformance_must_support_elements_shall_be_populated_when_an_element_value_is_known_and_allowed_to_share'
+require_relative 'au_ps_bundle_must_support_conformance/suite_100ballot_generate_au_ps_using_ips_summary_validation_tests_au_ps_bundle_must_support_conformance_bundle_must_support_populated'
 
 
 module AUPSTestKit
@@ -17,7 +17,7 @@ module AUPSTestKit
     
 
     
-    test from: :suite_100ballot_generate_au_ps_using_ips_summary_validation_tests_au_ps_bundle_must_support_conformance_must_support_elements_shall_be_populated_when_an_element_value_is_known_and_allowed_to_share
+    test from: :suite_100ballot_generate_au_ps_using_ips_summary_validation_tests_au_ps_bundle_must_support_conformance_bundle_must_support_populated
     
   end
 end

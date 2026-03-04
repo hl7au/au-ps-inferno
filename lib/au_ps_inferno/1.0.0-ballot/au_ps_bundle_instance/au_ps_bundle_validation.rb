@@ -2,7 +2,7 @@
 
 
 
-require_relative 'au_ps_bundle_validation/suite_100ballot_au_ps_bundle_instance_au_ps_bundle_validation_au_ps_bundle_must_support_elements_are_correctly_populated'
+require_relative 'au_ps_bundle_validation/suite_100ballot_au_ps_bundle_instance_au_ps_bundle_validation_bundle_valid'
 
 
 module AUPSTestKit
@@ -17,7 +17,7 @@ module AUPSTestKit
     
 
     
-    test from: :suite_100ballot_au_ps_bundle_instance_au_ps_bundle_validation_au_ps_bundle_must_support_elements_are_correctly_populated
+    test from: :suite_100ballot_au_ps_bundle_instance_au_ps_bundle_validation_bundle_valid
     
   end
 end

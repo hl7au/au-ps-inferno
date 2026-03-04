@@ -109,17 +109,38 @@ class Generator
   end
 
   def generate_primitive_test(group_class_name, group_id, group_file_name, high_order_group_file_name, test)
-    test_id = "#{group_id}_#{build_id(test[:name])}"
+    test_type_id = test[:id]
+    unless test_type_id == :bundle_valid || TestConfigRegistry.registered?(test_type_id)
+      raise "Unknown test type id: #{test_type_id.inspect}. Add it to TestConfigRegistry."
+    end
+
+    resolved_title = test[:title]
+    resolved_description = test[:description]
+    if test_type_id != :bundle_valid
+      registry_config = TestConfigRegistry.config_for(test_type_id, @metadata)
+      resolved_title ||= registry_config[:title]
+      resolved_description ||= registry_config[:description]
+    end
+    raise "Bundle validation test requires bundle_validation_title in high-order config." if test_type_id == :bundle_valid && resolved_title.nil?
+    resolved_description ||= "Verifies that the resource meets the requirement: #{resolved_title}"
+
+    test_id = "#{group_id}_#{build_id(test_type_id)}"
     test_config = {
-      class_name: "#{group_class_name}#{build_class_name(test[:name])}",
-      title: test[:name],
+      class_name: "#{group_class_name}#{build_class_name(resolved_title)}",
+      title: resolved_title,
+      description: resolved_description,
       id: test_id,
       output_file_path: versioned_path(high_order_group_file_name, group_file_name, filename: "#{test_id}.rb")
     }
-    if TestConfigRegistry.registered?(test[:name])
-      test_config.merge!(TestConfigRegistry.config_for(test[:name], @metadata))
+    if test_type_id == :bundle_valid
+      test_config[:base_class_name] = test[:base_class_name]
+      test_config[:imports] = test[:imports]
+      test_config[:ignore_commands] = test[:ignore_commands]
+    elsif TestConfigRegistry.registered?(test_type_id)
+      test_config.merge!(TestConfigRegistry.config_for(test_type_id, @metadata))
+      test_config[:title] = resolved_title
+      test_config[:description] = resolved_description
     end
-    test_config[:description] ||= "Verifies that the resource meets the requirement: #{test[:name]}"
     PrimitiveTest.new(test_config).generate
   end
 
