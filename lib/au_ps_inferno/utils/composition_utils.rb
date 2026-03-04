@@ -131,13 +131,13 @@ module CompositionUtils
   end
 
   def check_mandatory_ms_elements(mandatory_ms_elements)
-    info_block('Mandatory Must Support element SHALL be able to be populated if a value is known and allowed to share',
+    info_block('Mandatory Must Support elements are correctly populated',
                mandatory_ms_elements)
   end
 
   def check_optional_ms_elements(optional_ms_elements)
     info_block(
-      'Optional Must Support elements SHALL be correctly populated if a value is known', optional_ms_elements
+      'Optional Must Support elements are correctly populated', optional_ms_elements
     )
   end
 

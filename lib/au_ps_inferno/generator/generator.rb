@@ -121,7 +121,10 @@ class Generator
       resolved_title ||= registry_config[:title]
       resolved_description ||= registry_config[:description]
     end
-    raise "Bundle validation test requires bundle_validation_title in high-order config." if test_type_id == :bundle_valid && resolved_title.nil?
+    if test_type_id == :bundle_valid && resolved_title.nil?
+      raise 'Bundle validation test requires bundle_validation_title in high-order config.'
+    end
+
     resolved_description ||= "Verifies that the resource meets the requirement: #{resolved_title}"
 
     test_id = "#{group_id}_#{build_id(test_type_id)}"

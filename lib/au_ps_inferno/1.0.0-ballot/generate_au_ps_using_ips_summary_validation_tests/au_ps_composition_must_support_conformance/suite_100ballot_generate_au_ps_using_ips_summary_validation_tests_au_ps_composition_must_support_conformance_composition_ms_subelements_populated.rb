@@ -4,9 +4,9 @@ require_relative '../../../utils/basic_test_class'
 
 
 module AUPSTestKit
-  # Automatically generated primitive test for Must Support sub-elements of a complex element SHALL be correctly populated if a value is known
-  class AUPSSuite100ballotGenerateAuPsUsingIpsSummaryValidationTestsAuPsCompositionMustSupportConformanceMustSupportSubelementsOfAComplexElementShallBeCorrectlyPopulatedIfAValueIsKnown < BasicTest
-    title 'Must Support sub-elements of a complex element SHALL be correctly populated if a value is known'
+  # Automatically generated primitive test for Must Support sub-elements of a complex element are correctly populated
+  class AUPSSuite100ballotGenerateAuPsUsingIpsSummaryValidationTestsAuPsCompositionMustSupportConformanceMustSupportSubelementsOfAComplexElementAreCorrectlyPopulated < BasicTest
+    title 'Must Support sub-elements of a complex element are correctly populated'
     description 'Verifies that Must Support sub-elements of complex elements are correctly populated when data is known.'
     id :suite_100ballot_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_must_support_conformance_composition_ms_subelements_populated
     

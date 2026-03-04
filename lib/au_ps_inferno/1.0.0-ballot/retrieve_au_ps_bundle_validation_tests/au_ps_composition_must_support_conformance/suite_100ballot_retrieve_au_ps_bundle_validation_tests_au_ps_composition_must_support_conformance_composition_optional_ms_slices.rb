@@ -4,9 +4,9 @@ require_relative '../../../utils/basic_test_class'
 
 
 module AUPSTestKit
-  # Automatically generated primitive test for Optional Must Support slices SHALL be populated if a value is known
-  class AUPSSuite100ballotRetrieveAuPsBundleValidationTestsAuPsCompositionMustSupportConformanceOptionalMustSupportSlicesShallBePopulatedIfAValueIsKnown < BasicTest
-    title 'Optional Must Support slices SHALL be populated if a value is known'
+  # Automatically generated primitive test for Must Support slices are correctly populated
+  class AUPSSuite100ballotRetrieveAuPsBundleValidationTestsAuPsCompositionMustSupportConformanceMustSupportSlicesAreCorrectlyPopulated < BasicTest
+    title 'Must Support slices are correctly populated'
     description 'Verifies that optional Must Support slices are populated when data is known.'
     id :suite_100ballot_retrieve_au_ps_bundle_validation_tests_au_ps_composition_must_support_conformance_composition_optional_ms_slices
     
