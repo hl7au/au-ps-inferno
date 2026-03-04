@@ -13,6 +13,10 @@ module AUPSTestKit
     title 'Composition Mandatory Sections'
     description 'Verifies that mandatory sections are present and section.entry references conform to the required profiles.'
     id :suite_100ballot_retrieved_bundle_composition_mandatory_sections
+    
+    
+    run_as_group
+    
 
     
     test from: :suite_100ballot_retrieved_bundle_composition_mandatory_sections_sections_shall_be_correctly_populated_if_a_value_is_known

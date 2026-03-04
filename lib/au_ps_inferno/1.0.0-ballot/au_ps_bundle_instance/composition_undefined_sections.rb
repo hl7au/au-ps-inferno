@@ -11,6 +11,12 @@ module AUPSTestKit
     title 'Composition Undefined Sections'
     description 'Verifies that sections not defined in the profile may be populated without violating conformance.'
     id :suite_100ballot_au_ps_bundle_instance_composition_undefined_sections
+    
+    optional
+    
+    
+    run_as_group
+    
 
     
     test from: :suite_100ballot_au_ps_bundle_instance_composition_undefined_sections_sections_may_be_populated

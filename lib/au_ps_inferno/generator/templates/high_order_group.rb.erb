@@ -10,6 +10,12 @@ module AUPSTestKit
     title '<%= title %>'
     description '<%= description %>'
     id :<%= id %>
+    <% if optional %>
+    optional
+    <% end %>
+    <% if run_as_group %>
+    run_as_group
+    <% end %>
 
     <% groups.each do |group| %>
     group from: :<%= group[:id] %>

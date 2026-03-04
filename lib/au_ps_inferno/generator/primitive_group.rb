@@ -7,7 +7,7 @@ class Generator
   # Primitive group generator. Use config to generate the group file.
   # All template files should be in the templates folder.
   class PrimitiveGroup
-    attr_reader :class_name, :title, :description, :id, :tests, :output_file_path, :imports
+    attr_reader :class_name, :title, :description, :id, :tests, :output_file_path, :imports, :optional, :run_as_group
 
     def initialize(config)
       @class_name = config[:class_name]
@@ -17,6 +17,8 @@ class Generator
       @tests = config[:tests] || []
       @output_file_path = config[:output_file_path]
       @imports = config[:imports] || []
+      @optional = config[:optional]
+      @run_as_group = config[:run_as_group]
     end
 
     def generate

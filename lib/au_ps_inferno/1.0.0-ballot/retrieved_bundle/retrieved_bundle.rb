@@ -22,6 +22,10 @@ module AUPSTestKit
     title 'Retrieved Bundle'
     description 'Validates an AU PS bundle retrieved from the server for profile conformance, Must Support elements, and composition sections.'
     id :suite_100ballot_retrieved_bundle
+    
+    
+    run_as_group
+    
 
     
     group from: :suite_100ballot_retrieved_bundle_bundle_validation

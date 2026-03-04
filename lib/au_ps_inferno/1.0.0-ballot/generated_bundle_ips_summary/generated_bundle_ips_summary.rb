@@ -22,6 +22,10 @@ module AUPSTestKit
     title 'Generated Bundle (IPS $summary)'
     description 'Validates an AU PS bundle generated via the IPS $summary operation for profile conformance, Must Support elements, and composition sections.'
     id :suite_100ballot_generated_bundle_ips_summary
+    
+    
+    run_as_group
+    
 
     
     group from: :suite_100ballot_generated_bundle_ips_summary_bundle_validation

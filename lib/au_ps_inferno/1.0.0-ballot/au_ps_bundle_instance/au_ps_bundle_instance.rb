@@ -22,6 +22,10 @@ module AUPSTestKit
     title 'AU PS Bundle Instance'
     description 'Validates a static AU PS bundle instance for profile conformance, Must Support elements, and composition sections.'
     id :suite_100ballot_au_ps_bundle_instance
+    
+    
+    run_as_group
+    
 
     
     group from: :suite_100ballot_au_ps_bundle_instance_bundle_validation

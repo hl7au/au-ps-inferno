@@ -95,7 +95,7 @@ class Generator
       generate_primitive_test(high_order_group_class_name, high_order_group_id, file_name, high_order_group_file_name,
                               test)
     end
-    {
+    config = {
       class_name: high_order_group_class_name,
       title: generic_bundle_group[:name],
       description: generic_bundle_group[:description] || group_description(generic_bundle_group[:name]),
@@ -103,6 +103,9 @@ class Generator
       output_file_path: versioned_path(high_order_group_file_name, filename: "#{file_name}.rb"),
       tests: tests
     }
+    config[:optional] = generic_bundle_group[:optional] if generic_bundle_group.key?(:optional)
+    config[:run_as_group] = generic_bundle_group[:run_as_group] if generic_bundle_group.key?(:run_as_group)
+    config
   end
 
   def generate_primitive_test(group_class_name, group_id, group_file_name, high_order_group_file_name, test)
@@ -137,7 +140,7 @@ class Generator
                               generic_bundle_groups)
     # Path for require_relative must be relative to the high-order group file's directory
     groups_with_relative_path = generic_bundle_groups.map { |g| g.merge(path: g[:path].split('/').last) }
-    {
+    config = {
       class_name: high_order_class_name,
       title: high_order_group[:name],
       description: high_order_group[:description] || group_description(high_order_group[:name]),
@@ -145,6 +148,9 @@ class Generator
       groups: groups_with_relative_path,
       output_file_path: versioned_path(high_order_group_file_name, filename: "#{high_order_group_file_name}.rb")
     }
+    config[:optional] = high_order_group[:optional] if high_order_group.key?(:optional)
+    config[:run_as_group] = high_order_group[:run_as_group] if high_order_group.key?(:run_as_group)
+    config
   end
 
   def generate_primitive_suite

@@ -11,6 +11,10 @@ module AUPSTestKit
     title 'Bundle Must Support elements'
     description 'Verifies that Must Support elements at the bundle level are populated when data is available.'
     id :suite_100ballot_generated_bundle_ips_summary_bundle_must_support_elements
+    
+    
+    run_as_group
+    
 
     
     test from: :suite_100ballot_generated_bundle_ips_summary_bundle_must_support_elements_must_support_elements_shall_be_populated_when_an_element_value_is_known_and_allowed_to_share
