@@ -3,9 +3,9 @@
 
 require_relative 'au_ps_bundle_instance/au_ps_bundle_instance'
 
-require_relative 'retrieved_bundle/retrieved_bundle'
+require_relative 'retrieve_au_ps_bundle_validation_tests/retrieve_au_ps_bundle_validation_tests'
 
-require_relative 'generated_bundle_ips_summary/generated_bundle_ips_summary'
+require_relative 'generate_au_ps_using_ips_summary_validation_tests/generate_au_ps_using_ips_summary_validation_tests'
 
 require_relative 'au_ps_sections_validation_group/au_ps_sections_validation_group'
 
@@ -30,9 +30,9 @@ module AUPSTestKit
     
     group from: :suite_100ballot_au_ps_bundle_instance
     
-    group from: :suite_100ballot_retrieved_bundle
+    group from: :suite_100ballot_retrieve_au_ps_bundle_validation_tests
     
-    group from: :suite_100ballot_generated_bundle_ips_summary
+    group from: :suite_100ballot_generate_au_ps_using_ips_summary_validation_tests
     
     group from: :au_ps_sections_validation_group_100ballot
     

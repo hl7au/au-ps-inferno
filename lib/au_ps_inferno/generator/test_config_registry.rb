@@ -41,7 +41,7 @@ class Generator
       private_class_method :section_codes_and_elements
 
       REGISTRY = {
-        'Bundle is valid against AU PS Bundle profile' => {
+        'AU PS Bundle Must Support elements are correctly populated' => {
           description: 'Verifies that the bundle conforms to the AU PS Bundle profile.',
           base_class_name: 'BundleIsValidClass',
           imports: ['../../../utils/bundle_is_valid_class'],

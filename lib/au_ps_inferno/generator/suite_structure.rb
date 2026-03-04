@@ -19,13 +19,13 @@ class Generator
     # Used by all high-order groups that validate bundles; only the bundle validation test title varies.
     SHARED_GROUP_DEFINITIONS = [
       {
-        name: 'Bundle Validation',
+        name: 'AU PS Bundle Validation',
         description: 'Validates that the bundle conforms to the AU PS Bundle profile.',
         tests: [BUNDLE_VALIDATION_PLACEHOLDER],
         run_as_group: true
       },
       {
-        name: 'Bundle Must Support elements',
+        name: 'AU PS Bundle Must Support Conformance',
         description: 'Verifies that Must Support elements at the bundle level are populated when data is available.',
         tests: [
           { name: 'Must Support elements SHALL be populated when an element value is known and allowed to share' }
@@ -33,7 +33,7 @@ class Generator
         run_as_group: true
       },
       {
-        name: 'Composition Must Support elements',
+        name: 'AU PS Composition Must Support Conformance',
         description: 'Verifies that Composition Must Support elements (mandatory, optional, sub-elements, slices) are correctly populated when data is known.',
         tests: [
           { name: 'Mandatory Must Support element SHALL be able to be populated if a value is known and allowed to share' },
@@ -44,7 +44,7 @@ class Generator
         run_as_group: true
       },
       {
-        name: 'Composition Mandatory Sections',
+        name: 'AU PS Composition Mandatory Sections',
         description: 'Verifies that mandatory sections are present and section.entry references conform to the required profiles.',
         tests: [
           { name: 'Sections SHALL be correctly populated if a value is known' },
@@ -53,7 +53,7 @@ class Generator
         run_as_group: true
       },
       {
-        name: 'Composition Recommended Sections',
+        name: 'AU PS Composition Recommended Sections',
         description: 'Verifies that recommended (SHOULD) sections are correctly populated when data is known.',
         tests: [
           { name: 'Sections SHOULD be correctly populated if a value is known' }
@@ -62,8 +62,8 @@ class Generator
         run_as_group: true
       },
       {
-        name: 'Composition Optional Sections',
-        description: 'Verifies that optional (MAY) sections are correctly populated when data is known.',
+        name: 'AU PS Composition Optional Sections',
+        description: 'Verify the optional sections are correctly populated in the AU PS Composition',
         tests: [
           { name: 'Sections MAY be correctly populated if a value is known' }
         ],
@@ -71,8 +71,8 @@ class Generator
         run_as_group: true
       },
       {
-        name: 'Composition Undefined Sections',
-        description: 'Verifies that sections not defined in the profile may be populated without violating conformance.',
+        name: 'AU PS Composition Undefined Sections',
+        description: 'Verify the undefined sections are correctly populated in the AU PS Composition resource.',
         tests: [
           { name: 'Sections MAY be populated' }
         ],
@@ -87,18 +87,18 @@ class Generator
       {
         name: 'AU PS Bundle Instance',
         description: 'Validates a static AU PS bundle instance for profile conformance, Must Support elements, and composition sections.',
-        bundle_validation_title: 'Bundle is valid against AU PS Bundle profile',
+        bundle_validation_title: 'AU PS Bundle Must Support elements are correctly populated',
         run_as_group: true
       },
       {
-        name: 'Retrieved Bundle',
-        description: 'Validates an AU PS bundle retrieved from the server for profile conformance, Must Support elements, and composition sections.',
+        name: 'Retrieve AU PS Bundle validation tests',
+        description: 'Retrieve document Bundle using Bundle read interaction or other HTTP GET request and verify response is valid AU PS Bundle',
         bundle_validation_title: 'Retrieved Bundle is valid against AU PS Bundle profile',
         run_as_group: true
       },
       {
-        name: 'Generated Bundle (IPS $summary)',
-        description: 'Validates an AU PS bundle generated via the IPS $summary operation for profile conformance, Must Support elements, and composition sections.',
+        name: 'Generate AU PS using IPS $summary validation tests',
+        description: 'Generate AU Patient Summary using IPS $summary operation and verify response is valid AU PS Bundle',
         bundle_validation_title: 'Generated Bundle is valid against AU PS Bundle profile',
         run_as_group: true
       }
