@@ -25,7 +25,9 @@ module AUPSTestKit
     def bundle_mandatory_ms_elements_info
       check_bundle_exists_in_scratch
       passed = [identifier_info?, type_info?, timestamp_info?, all_entries_have_full_url_info?].all?
-      info "**Must Support elements SHALL be populated when an element value is known and allowed to share**:\n\n#{mandatory_ms_elements_info}"
+      message_type = passed ? 'info' : 'error'
+      add_message(message_type,
+                  "**List mandatory Must Support elements populated and missing**:\n\n#{mandatory_ms_elements_info}")
       info "**List any entry resources by type (and meta.profile if exists)**:\n\n#{entry_resources_info}"
       assert passed, 'Mandatory Must Support elements are not populated'
     end
