@@ -58,7 +58,7 @@ class Generator
           title: 'Optional Must Support elements are correctly populated',
           description: 'Optional Must Support elements SHALL be correctly populated if a value is known',
           commands_builder: lambda { |m|
-            { commands: ["validate_populated_elements_in_composition(#{m.composition_optional_ms_elements})"] }
+            { commands: ["validate_populated_elements_in_composition(#{m.composition_optional_ms_elements}, required: false)"] }
           },
           optional: true
         },

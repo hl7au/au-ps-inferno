@@ -222,14 +222,23 @@ module AUPSTestKit
       all_paths_are_populated?(resource, elements_array)
     end
 
-    def validate_populated_elements_in_composition(elements_array)
+    def validate_populated_elements_in_composition(elements_array, required: true)
       return false unless scratch_bundle.present?
 
       composition_resource = BundleDecorator.new(scratch_bundle.to_hash).composition_resource
       return false unless composition_resource.present?
 
-      info populated_paths_info(composition_resource, elements_array)
-      assert all_paths_are_populated?(composition_resource, elements_array),
+      result = all_paths_are_populated?(composition_resource, elements_array)
+      message_type = if result
+                       'info'
+                     else
+                       required ? 'error' : 'warning'
+                     end
+      add_message(message_type, populated_paths_info(composition_resource, elements_array))
+
+      return unless required
+
+      assert result,
              'Some of the elements are not populated. See the list of populated elements in messages tab.'
     end
 
