@@ -102,10 +102,80 @@ module AUPSTestKit
     end
 
     def read_composition_sections_info(sections_data, normalized_sections_data)
-      population_correct = profile_population_is_correct?(sections_data, scratch_bundle)
-      assert population_correct,
+      check_bundle_exists_in_scratch
+      composition = BundleDecorator.new(scratch_bundle.to_hash).composition_resource
+      has_error = false
+
+      sections_data.each do |section_data|
+        section = composition.section_by_code(section_data[:code])
+        expected_profile_urls = section_data[:entries].flat_map do |e|
+          (e[:profiles] || []).map do |p|
+            p.to_s.include?('|') ? p.to_s.split('|').last : p
+          end
+        end.uniq
+
+        if section.blank?
+          body = section_entry_list_or_empty_reason(section_data, nil, normalized_sections_data)
+          add_message('error',
+                      "#{section_data[:short]} (#{section_data[:code]})\n\n#{body}")
+          has_error = true
+          next
+        end
+
+        empty_reason_populated = section.empty_reason_str.present?
+        refs = section.entry_references
+        has_entries = refs.any?
+
+        bundle_resource = BundleDecorator.new(scratch_bundle.to_hash)
+        all_entries_correct_profile = refs.all? do |ref|
+          resource = bundle_resource.resource_by_reference(ref)
+          next false unless resource.present?
+
+          (resource.meta&.profile || []).any? { |prof| expected_profile_urls.include?(prof) }
+        end
+        any_entry_incorrect_profile = has_entries && !all_entries_correct_profile
+
+        body = section_entry_list_or_empty_reason(section_data, section, normalized_sections_data)
+
+        if any_entry_incorrect_profile
+          add_message('error',
+                      "#{section_data[:short]} (#{section_data[:code]})\n\n#{body}")
+          has_error = true
+        elsif empty_reason_populated && !has_entries
+          add_message('warning',
+                      "#{section_data[:short]} (#{section_data[:code]})\n\n#{body}")
+        elsif has_entries && all_entries_correct_profile
+          add_message('info',
+                      "#{section_data[:short]} (#{section_data[:code]})\n\n#{body}")
+        else
+          add_message('error',
+                      "#{section_data[:short]} (#{section_data[:code]}) - section has no entries and no emptyReason\n\n#{body}")
+          has_error = true
+        end
+      end
+
+      assert !has_error,
              'Some of the sections are not populated correctly. See the list of populated sections in messages tab.'
-      info_entry_resources_by_type_and_profile(sections_data, normalized_sections_data)
+    end
+
+    def section_entry_list_or_empty_reason(_section_data, section, _normalized_sections_data)
+      return 'List of entry resources by type & profile: (section missing)' if section.blank?
+
+      if section.entry_references.empty?
+        return section.empty_reason_str.present? ? "emptyReason: #{section.empty_reason_str}" : 'No entries; no emptyReason.'
+      end
+
+      bundle_resource = BundleDecorator.new(scratch_bundle.to_hash)
+      lines = section.entry_references.map do |ref|
+        resource = bundle_resource.resource_by_reference(ref)
+        if resource.present?
+          profiles = (resource.meta&.profile || []).join(', ')
+          "**#{ref}**: #{resource.resourceType} (#{profiles})"
+        else
+          "**#{ref}**: (resource not found)"
+        end
+      end
+      lines.join("\n\n").to_s
     end
 
     def info_entry_resources_by_type_and_profile(sections_data, normalized_sections_data)
