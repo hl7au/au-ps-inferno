@@ -296,6 +296,8 @@ module AUPSTestKit
       return false unless composition_resource.present?
 
       slices_array.each do |slice|
+        # TODO: event check is temporary hardcoded
+        event = composition_resource.event_by_code('PCPR')
         required_ms_sub_elements = slice[:mandatory_ms_sub_elements].map { |element| "#{slice[:path]}.#{element}" }
         optional_ms_sub_elements = slice[:optional_ms_sub_elements].map { |element| "#{slice[:path]}.#{element}" }
 
@@ -311,6 +313,11 @@ module AUPSTestKit
         end
 
         if optional_populated == false
+          add_message('warning', message_data)
+          next
+        end
+
+        if event.nil?
           add_message('warning', message_data)
           next
         end
