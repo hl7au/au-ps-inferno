@@ -6,8 +6,8 @@ require_relative '../../../utils/basic_test_class'
 module AUPSTestKit
   # Automatically generated primitive test for Must Support elements SHALL be populated when an element value is known and allowed to share
   class AUPSSuite100ballotGenerateAuPsUsingIpsSummaryValidationTestsAuPsBundleMustSupportConformanceMustSupportElementsShallBePopulatedWhenAnElementValueIsKnownAndAllowedToShare < BasicTest
-    title 'Must Support elements SHALL be populated when an element value is known and allowed to share'
-    description 'Verifies that bundle-level Must Support elements are populated when data is available and shareable.'
+    title 'AU PS Bundle Must Support elements are correctly populated'
+    description 'Must Support elements SHALL be populated when an element value is known and allowed to share.'
     id :suite_100ballot_generate_au_ps_using_ips_summary_validation_tests_au_ps_bundle_must_support_conformance_bundle_must_support_populated
     
     

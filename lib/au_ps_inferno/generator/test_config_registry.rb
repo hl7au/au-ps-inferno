@@ -43,8 +43,8 @@ class Generator
 
       REGISTRY = {
         bundle_must_support_populated: {
-          title: 'Must Support elements SHALL be populated when an element value is known and allowed to share',
-          description: 'Verifies that bundle-level Must Support elements are populated when data is available and shareable.',
+          title: 'AU PS Bundle Must Support elements are correctly populated',
+          description: 'Must Support elements SHALL be populated when an element value is known and allowed to share.',
           commands: ['bundle_mandatory_ms_elements_info']
         },
         composition_mandatory_ms_populated: {
