@@ -5,6 +5,15 @@ AllCops:
     - "lib/au_ps_inferno/0.5.0-preview/**/*"
     - "lib/au_ps_inferno/1.0.0-ballot/**/*"
     - "aidbox_config.rb"
-
+    - "lib/au_ps_inferno/utils/basic_test_class.rb"
+    - "lib/au_ps_inferno/utils/composition_utils.rb"
+    - "lib/au_ps_inferno/generator/test_config_registry.rb"
+    - "lib/au_ps_inferno/generator/suite_structure.rb"
+    - "lib/au_ps_inferno/utils/composition_decorator.rb"
+    - "lib/au_ps_inferno/generator/sections_validation_group_generator.rb"
+    - "lib/au_ps_inferno/generator/retrieve_cs_group_generator.rb"
+    - "lib/au_ps_inferno/generator/metadata_manager.rb"
+    - "lib/au_ps_inferno/generator/generator.rb"
+    - "lib/au_ps_inferno/generator/retrieve_cs_group_tests.rb"
 Gemspec/DevelopmentDependencies:
   Enabled: false
