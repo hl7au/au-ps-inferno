@@ -112,9 +112,9 @@ module AUPSTestKit
       title = '## List any entry resources by type & profile'
       result = []
       sections_data.each do |section_data|
-        valid_profiles = section_data[:entries].map do |entry|
+        valid_resource_types = section_data[:entries].map do |entry|
           entry[:profiles]
-        end.flatten.map { |profile| profile.split('|').last }.uniq
+        end.flatten.map { |profile| profile.split('|').first }.uniq
         section_title = "### #{section_data[:short]} (#{section_data[:code]})"
         result << section_title
         filtered_section_data = normalized_sections_data.find { |s| s['code'] == section_data[:code] }
@@ -124,7 +124,8 @@ module AUPSTestKit
           next unless existing_resource.present?
 
           existing_resource_profiles = existing_resource.meta&.profile || []
-          entity_can_present = existing_resource_profiles.any? { |profile| valid_profiles.include?(profile) }
+
+          entity_can_present = valid_resource_types.include?(existing_resource.resourceType)
           result << " #{boolean_to_humanized_string(entity_can_present)} **#{ref}**: #{existing_resource.resourceType} (#{existing_resource_profiles.join(', ')})"
         end
       end
@@ -173,21 +174,17 @@ module AUPSTestKit
 
         section_data[:entries].map do |entry|
           entry[:profiles].map do |profile|
-            profile_population_is_correct_for_section?(section, profile, bundle)
+            profile_population_is_correct_for_section?(section, profile.split('|').first, bundle)
           end
         end.all?
       end.all?
     end
 
-    def profile_population_is_correct_for_section?(section, profile, bundle)
+    def profile_population_is_correct_for_section?(section, resource_type, bundle)
       bundle_resource = BundleDecorator.new(bundle.to_hash)
       section.entry_references.map do |reference|
         resource = bundle_resource.resource_by_reference(reference)
-        next unless resource.present?
-        next unless resource.meta.present?
-        next unless resource.meta.profile.present?
-
-        resource.meta.profile.include?(profile)
+        resource.resourceType == resource_type
       end.all?
     end
 
