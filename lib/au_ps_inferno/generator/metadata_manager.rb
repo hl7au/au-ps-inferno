@@ -300,6 +300,16 @@ class Generator
       end
     end
 
+    def all_ms_elements_related_to_slice(slice)
+      composition_structure_definition = get_structure_definition_by_type('Composition')
+      return [] if composition_structure_definition.nil?
+
+      elements = composition_structure_definition.snapshot.element
+      elements.filter do |element|
+        element.mustSupport == true && !element.path.include?(':') && element.path.include?('Composition.') && element.path.include?(slice)
+      end
+    end
+
     def composition_mandatory_ms_slices
       composition_extract_slices.filter { |slice| slice[:mustSupport] == true && slice[:min].positive? }
     end
@@ -326,12 +336,21 @@ class Generator
     end
 
     def build_metadata_for_slice(element)
+      all_ms_elements_related_to_slice_data = all_ms_elements_related_to_slice(element.path)
+      mandatory_ms_sub_elements = all_ms_elements_related_to_slice_data.filter do |el|
+        el.min.zero?
+      end.map { |el| el.path.gsub(element.path, '').gsub('.', '') }.filter { |el| el != '' }
+      optional_ms_sub_elements = all_ms_elements_related_to_slice_data.filter do |el|
+        el.min.positive?
+      end.map { |el| el.path.gsub(element.path, '').gsub('.', '') }.filter { |el| el != '' }
       {
         path: element.path.gsub('Composition.', ''),
         sliceName: element.sliceName,
         min: element.min,
         max: element.max,
-        mustSupport: element.mustSupport
+        mustSupport: element.mustSupport,
+        mandatory_ms_sub_elements: mandatory_ms_sub_elements,
+        optional_ms_sub_elements: optional_ms_sub_elements
       }
     end
 

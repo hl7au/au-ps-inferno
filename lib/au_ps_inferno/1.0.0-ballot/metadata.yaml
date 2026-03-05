@@ -538,6 +538,10 @@
   :min: 0
   :max: '1'
   :mustSupport: true
+  :mandatory_ms_sub_elements:
+  - period
+  :optional_ms_sub_elements:
+  - code
 :profiles:
 - :url: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-allergyintolerance
   :name: AUPSAllergyIntolerance

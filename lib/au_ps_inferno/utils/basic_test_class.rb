@@ -289,15 +289,36 @@ module AUPSTestKit
     end
 
     def validate_populated_slices_in_composition(slices_array)
+      passed = true
       return false unless scratch_bundle.present?
 
       composition_resource = BundleDecorator.new(scratch_bundle.to_hash).composition_resource
       return false unless composition_resource.present?
 
-      slices_paths = slices_array.map { |slice| slice[:path] }
-      info populated_paths_info(composition_resource, slices_paths)
-      assert all_paths_are_populated?(composition_resource, slices_paths),
-             'Some of the slices are not populated. See the list of populated slices in messages tab.'
+      slices_array.each do |slice|
+        required_ms_sub_elements = slice[:mandatory_ms_sub_elements].map { |element| "#{slice[:path]}.#{element}" }
+        optional_ms_sub_elements = slice[:optional_ms_sub_elements].map { |element| "#{slice[:path]}.#{element}" }
+
+        required_populated = all_paths_are_populated?(composition_resource, required_ms_sub_elements)
+        optional_populated = all_paths_are_populated?(composition_resource, optional_ms_sub_elements)
+
+        message_data = populated_paths_info(composition_resource, required_ms_sub_elements + optional_ms_sub_elements)
+
+        if required_populated == false
+          add_message('error', message_data)
+          passed = false
+          next
+        end
+
+        if optional_populated == false
+          add_message('warning', message_data)
+          next
+        end
+
+        add_message('info', message_data)
+      end
+
+      assert passed, 'Some of the slices are not populated. See the list of populated slices in messages tab.'
     end
 
     def validate_populated_undefined_sections_in_bundle(sections_code_to_filter, elements_array)
