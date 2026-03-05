@@ -6,10 +6,10 @@ require_relative '../../../utils/bundle_is_valid_class'
 
 
 module AUPSTestKit
-  # Automatically generated primitive test for AU PS Bundle Must Support elements are correctly populated
-  class AUPSSuite100ballotAuPsBundleInstanceAuPsBundleValidationAuPsBundleMustSupportElementsAreCorrectlyPopulated < BundleIsValidClass
-    title 'AU PS Bundle Must Support elements are correctly populated'
-    description 'Verifies that the bundle conforms to the AU PS Bundle profile.'
+  # Automatically generated primitive test for AU PS Bundle is valid against AU PS Bundle profile
+  class AUPSSuite100ballotAuPsBundleInstanceAuPsBundleValidationAuPsBundleIsValidAgainstAuPsBundleProfile < BundleIsValidClass
+    title 'AU PS Bundle is valid against AU PS Bundle profile'
+    description 'The Bundle resource is valid against the AU PS Bundle profile using FHIR validator'
     id :suite_100ballot_au_ps_bundle_instance_au_ps_bundle_validation_bundle_valid
     
     
