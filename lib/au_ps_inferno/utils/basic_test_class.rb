@@ -222,6 +222,52 @@ module AUPSTestKit
       all_paths_are_populated?(resource, elements_array)
     end
 
+    def validate_populated_sub_elements_in_composition(mandatory_ms, optional_ms)
+      return false unless scratch_bundle.present?
+
+      composition_resource = BundleDecorator.new(scratch_bundle.to_hash).composition_resource
+      return false unless composition_resource.present?
+
+      mandatory_ms_result = all_paths_are_populated?(composition_resource, mandatory_ms)
+      optional_ms_result = all_paths_are_populated?(composition_resource, optional_ms)
+      skip_the_test = mandatory_ms_result == false && optional_ms_result == false
+
+      # Error: when any mandatory Must Support sub-elements are missing (i.e. subject.reference and attester.mode).
+      # Warning: when any optional Must Support sub-elements are missing (i.e. attester.time and attester.party)
+      # Info: when all optional Must Support sub-elements are populated
+      # One message for each complex element with Must Support sub-elements, i.e. subject and attester
+      # Include list of Must Support sub-elements populated and missing.
+
+      all_elements = mandatory_ms + optional_ms
+      grouped_elements = all_elements.group_by { |element| element.split('.').first }
+      grouped_elements.each_value do |sub_elements|
+        message_types = []
+        sub_elements.each do |sub_element|
+          sub_element_result = resolve_path(composition_resource, sub_element).first.present?
+          sub_element_mandatory = mandatory_ms.include?(sub_element)
+          message_types << if sub_element_result
+                             'info'
+                           else
+                             sub_element_mandatory ? 'error' : 'warning'
+                           end
+        end
+        uniq_message_types = message_types.uniq
+        if uniq_message_types.include?('error')
+          add_message('error', populated_paths_info(composition_resource, sub_elements))
+          next
+        end
+        if uniq_message_types.include?('warning')
+          add_message('warning', populated_paths_info(composition_resource, sub_elements))
+          next
+        end
+        add_message('info', populated_paths_info(composition_resource, sub_elements))
+      end
+
+      skip_if skip_the_test, 'No Must Support sub-elements to validate'
+      assert mandatory_ms_result,
+             'Some of the mandatory Must Support sub-elements are not populated. See the list of populated sub-elements in messages tab.'
+    end
+
     def validate_populated_elements_in_composition(elements_array, required: true)
       return false unless scratch_bundle.present?
 

@@ -521,21 +521,16 @@
 - type
 :composition_mandatory_ms_sub_elements:
 - attester.mode
-- event.code
-- section.code
-- section.text
-- section.title
+- subject.reference
 :composition_optional_ms_elements:
 - attester
 - custodian
 - identifier
 - section
+- text
 :composition_optional_ms_sub_elements:
 - attester.party
 - attester.time
-- event.period
-- section.emptyReason
-- section.entry
 :composition_mandatory_ms_slices: []
 :composition_optional_ms_slices:
 - :path: event

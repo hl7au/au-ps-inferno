@@ -66,7 +66,7 @@ class Generator
           title: 'Must Support sub-elements of a complex element are correctly populated',
           description: 'Must Support sub-elements of a complex element SHALL be correctly populated if a value is known',
           commands_builder: lambda { |m|
-            { commands: ["validate_populated_elements_in_composition(#{m.composition_optional_ms_sub_elements})"] }
+            { commands: ["validate_populated_sub_elements_in_composition(#{m.composition_mandatory_ms_sub_elements}, #{m.composition_optional_ms_sub_elements})"] }
           },
           optional: true
         },

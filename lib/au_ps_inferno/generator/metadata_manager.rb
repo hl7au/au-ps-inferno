@@ -24,6 +24,8 @@ class Generator
     RECOMMENDED_SECTIONS_CODES = %w[11369-6 30954-2 47519-4 46264-8].freeze
     OPTIONAL_SECTIONS_CODES = %w[42348-3 104605-1 47420-5 11348-0 10162-6 81338-6 18776-5 29762-2 8716-3].freeze
     ALL_SECTIONS_CODES = REQUIRED_SECTIONS_CODES + RECOMMENDED_SECTIONS_CODES + OPTIONAL_SECTIONS_CODES.freeze
+    SUB_ELEMENTS_TO_SKIP = %w[event.period event.code section.emptyReason section.entry section.code section.text
+                              section.title meta.profile].freeze
 
     # Initializes a MetadataManager for the given IG resources.
     #
@@ -247,7 +249,7 @@ class Generator
         path_is_not_slice?(path) && !path.include?('.')
       end
       @composition_optional_ms_sub_elements = extract_optional_all_ms_elements.filter do |path|
-        path_is_not_slice?(path) && path.include?('.')
+        path_is_not_slice?(path) && path.include?('.') && !SUB_ELEMENTS_TO_SKIP.include?(path)
       end
       @composition_optional_ms_slices = composition_optional_ms_slices
     end
@@ -264,25 +266,28 @@ class Generator
         path_is_not_slice?(path) && !path.include?('.')
       end
       @composition_mandatory_ms_sub_elements = extract_required_all_ms_elements.filter do |path|
-        path_is_not_slice?(path) && path.include?('.')
+        path_is_not_slice?(path) && path.include?('.') && !SUB_ELEMENTS_TO_SKIP.include?(path)
       end
       @composition_mandatory_ms_slices = composition_mandatory_ms_slices
     end
 
     # Filters Composition mustSupport elements (no slices) by predicate and returns path suffixes.
+    # Uses element.path so suffixes are relative to Composition (e.g. subject.reference), not the base type.
     #
     # @param predicate [Proc] Called with each element; keeps element when truthy (e.g. min.zero?, min.positive?)
-    # @return [Array<String>] Sorted unique paths with "Composition." prefix removed (e.g. +section.title+)
+    # @return [Array<String>] Sorted unique paths with "Composition." prefix removed (e.g. +subject.reference+)
     def extract_ms_elements_by_predicate(predicate)
       elements = composition_extract_ms_elements_without_slices.filter do |element|
         predicate.call(element)
       end
       elements.map do |element|
-        element.base.path.gsub('Composition.', '')
+        element.path.gsub('Composition.', '')
       end.uniq.sort
     end
 
     # Returns Composition snapshot elements that are mustSupport, non-sliced, and under Composition.
+    # Uses element.path (profile path) not element.base.path, so inherited sub-elements like
+    # Composition.subject.reference are included (base.path would be Reference.reference).
     #
     # @return [Array<FHIR::Element>] Snapshot elements; empty if no Composition StructureDefinition
     def composition_extract_ms_elements_without_slices
@@ -291,7 +296,7 @@ class Generator
 
       elements = composition_structure_definition.snapshot.element
       elements.filter do |element|
-        element.mustSupport == true && !element.base.path.include?(':') && element.base.path.include?('Composition.')
+        element.mustSupport == true && !element.path.include?(':') && element.path.include?('Composition.')
       end
     end
 

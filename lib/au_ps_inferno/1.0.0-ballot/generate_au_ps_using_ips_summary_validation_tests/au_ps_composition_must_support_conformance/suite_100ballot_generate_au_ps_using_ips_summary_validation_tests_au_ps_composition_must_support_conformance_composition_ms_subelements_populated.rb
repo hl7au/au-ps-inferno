@@ -15,7 +15,7 @@ module AUPSTestKit
     
     run do
       
-      validate_populated_elements_in_composition(["attester.party", "attester.time", "event.period", "section.emptyReason", "section.entry"])
+      validate_populated_sub_elements_in_composition(["attester.mode", "subject.reference"], ["attester.party", "attester.time"])
       
     end
     
