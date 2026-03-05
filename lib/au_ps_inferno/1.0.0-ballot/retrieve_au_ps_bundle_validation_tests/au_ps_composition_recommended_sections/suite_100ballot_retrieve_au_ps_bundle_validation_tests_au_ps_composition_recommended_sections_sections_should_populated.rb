@@ -4,10 +4,10 @@ require_relative '../../../utils/basic_test_class'
 
 
 module AUPSTestKit
-  # Automatically generated primitive test for Sections SHOULD be correctly populated if a value is known
-  class AUPSSuite100ballotRetrieveAuPsBundleValidationTestsAuPsCompositionRecommendedSectionsSectionsShouldBeCorrectlyPopulatedIfAValueIsKnown < BasicTest
-    title 'Sections SHOULD be correctly populated if a value is known'
-    description 'Verifies that recommended sections are correctly populated when data is known.'
+  # Automatically generated primitive test for AU PS Composition recommended sections are correctly populated
+  class AUPSSuite100ballotRetrieveAuPsBundleValidationTestsAuPsCompositionRecommendedSectionsAuPsCompositionRecommendedSectionsAreCorrectlyPopulated < BasicTest
+    title 'AU PS Composition recommended sections are correctly populated'
+    description 'Recommended sections SHOULD be correctly populated if a value is known'
     id :suite_100ballot_retrieve_au_ps_bundle_validation_tests_au_ps_composition_recommended_sections_sections_should_populated
     
     optional

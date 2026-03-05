@@ -11,7 +11,7 @@ module AUPSTestKit
   # Automatically generated primitive group for AU PS Composition Mandatory Sections
   class AUPSSuite100ballotGenerateAuPsUsingIpsSummaryValidationTestsAuPsCompositionMandatorySections < Inferno::TestGroup
     title 'AU PS Composition Mandatory Sections'
-    description 'Verifies that mandatory sections are present and section.entry references conform to the required profiles.'
+    description 'Verify the mandatory sections are correctly populated in the AU PS Composition resource'
     id :suite_100ballot_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_mandatory_sections
     
     

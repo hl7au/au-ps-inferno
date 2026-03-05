@@ -49,14 +49,14 @@ class Generator
         },
         composition_mandatory_ms_populated: {
           title: 'Mandatory Must Support elements are correctly populated',
-          description: 'Verifies that mandatory Must Support elements in the Composition can be populated when data is known and shareable.',
+          description: 'Mandatory Must Support element SHALL be able to be populated if a value is known and allowed to share.',
           commands_builder: lambda { |m|
             { commands: ["validate_populated_elements_in_composition(#{m.composition_mandatory_ms_elements})"] }
           }
         },
         composition_optional_ms_populated: {
           title: 'Optional Must Support elements are correctly populated',
-          description: 'Verifies that optional Must Support elements in the Composition are correctly populated when data is known.',
+          description: 'Optional Must Support elements SHALL be correctly populated if a value is known',
           commands_builder: lambda { |m|
             { commands: ["validate_populated_elements_in_composition(#{m.composition_optional_ms_elements})"] }
           },
@@ -64,7 +64,7 @@ class Generator
         },
         composition_ms_subelements_populated: {
           title: 'Must Support sub-elements of a complex element are correctly populated',
-          description: 'Verifies that Must Support sub-elements of complex elements are correctly populated when data is known.',
+          description: 'Must Support sub-elements of a complex element SHALL be correctly populated if a value is known',
           commands_builder: lambda { |m|
             { commands: ["validate_populated_elements_in_composition(#{m.composition_optional_ms_sub_elements})"] }
           },
@@ -72,23 +72,23 @@ class Generator
         },
         composition_optional_ms_slices: {
           title: 'Must Support slices are correctly populated',
-          description: 'Verifies that optional Must Support slices are populated when data is known.',
+          description: 'Must Support slice careProvisioningEvent SHALL be populated if a value is known.',
           commands_builder: lambda { |m|
             { commands: ["validate_populated_slices_in_composition(#{m.composition_optional_ms_slices})"] }
           },
           optional: true
         },
         sections_shall_populated: {
-          title: 'Sections SHALL be correctly populated if a value is known',
-          description: 'Verifies that mandatory sections are correctly populated when data is known.',
+          title: 'AU PS Composition Mandatory Sections are correctly populated',
+          description: 'Mandatory section SHALL be correctly populated if a value is known',
           commands_builder: lambda { |m|
             section_codes, elements = section_codes_and_elements(m, :required_sections_data_codes)
             { commands: ["validate_populated_sections_in_bundle(#{section_codes}, #{elements})"] }
           }
         },
         sections_should_populated: {
-          title: 'Sections SHOULD be correctly populated if a value is known',
-          description: 'Verifies that recommended sections are correctly populated when data is known.',
+          title: 'AU PS Composition recommended sections are correctly populated',
+          description: 'Recommended sections SHOULD be correctly populated if a value is known',
           commands_builder: lambda { |m|
             section_codes, elements = section_codes_and_elements(m, :recommended_sections_data_codes)
             { commands: ["validate_populated_sections_in_bundle(#{section_codes}, #{elements})"] }
@@ -96,8 +96,8 @@ class Generator
           optional: true
         },
         sections_may_populated: {
-          title: 'Sections MAY be correctly populated if a value is known',
-          description: 'Verifies that optional sections are correctly populated when data is known.',
+          title: 'AU PS Composition optional sections are correctly populated',
+          description: 'Optional section MAY be correctly populated if a value is known',
           commands_builder: lambda { |m|
             section_codes, elements = section_codes_and_elements(m, :optional_sections_data_codes)
             { commands: ["validate_populated_sections_in_bundle(#{section_codes}, #{elements})"] }
@@ -105,8 +105,8 @@ class Generator
           optional: true
         },
         sections_may_undefined: {
-          title: 'Sections MAY be populated',
-          description: 'Verifies that undefined sections may be populated without violating conformance.',
+          title: 'Undefined sections are correctly populated',
+          description: 'Undefined sections MAY be populated if a value is known',
           commands_builder: lambda { |m|
             section_codes = m.all_sections_data_codes
             elements = m.composition_sections.first[:ms_elements].filter do |el|
@@ -117,8 +117,8 @@ class Generator
           optional: true
         },
         sections_entry_profiles: {
-          title: 'Sections SHALL be capable of populating section.entry with the referenced profiles, and SHOULD correctly populate section.entry if a value is known',
-          description: 'Verifies that mandatory sections can reference the required profiles in section.entry and that entries are populated when data is known.',
+          title: 'AU PS Composition Mandatory Sections capable of populating referenced profiles',
+          description: 'Mandatory section SHALL be capable of populating section.entry with the referenced profiles and SHOULD correctly populate section.entry if a value is known.',
           commands_builder: lambda { |m|
             sections_data = m.composition_sections.filter { |s| s[:required] == true && s[:mustSupport] == true }
             { commands: ["read_composition_sections_info(#{sections_data}, #{m.return_normalized_sections_data})"] }

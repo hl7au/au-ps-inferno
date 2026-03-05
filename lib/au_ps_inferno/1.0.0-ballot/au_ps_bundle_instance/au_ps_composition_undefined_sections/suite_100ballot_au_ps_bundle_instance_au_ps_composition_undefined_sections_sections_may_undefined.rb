@@ -4,10 +4,10 @@ require_relative '../../../utils/basic_test_class'
 
 
 module AUPSTestKit
-  # Automatically generated primitive test for Sections MAY be populated
-  class AUPSSuite100ballotAuPsBundleInstanceAuPsCompositionUndefinedSectionsSectionsMayBePopulated < BasicTest
-    title 'Sections MAY be populated'
-    description 'Verifies that undefined sections may be populated without violating conformance.'
+  # Automatically generated primitive test for Undefined sections are correctly populated
+  class AUPSSuite100ballotAuPsBundleInstanceAuPsCompositionUndefinedSectionsUndefinedSectionsAreCorrectlyPopulated < BasicTest
+    title 'Undefined sections are correctly populated'
+    description 'Undefined sections MAY be populated if a value is known'
     id :suite_100ballot_au_ps_bundle_instance_au_ps_composition_undefined_sections_sections_may_undefined
     
     optional

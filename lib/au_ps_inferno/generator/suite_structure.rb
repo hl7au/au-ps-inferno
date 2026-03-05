@@ -45,7 +45,7 @@ class Generator
       },
       {
         name: 'AU PS Composition Mandatory Sections',
-        description: 'Verifies that mandatory sections are present and section.entry references conform to the required profiles.',
+        description: 'Verify the mandatory sections are correctly populated in the AU PS Composition resource',
         tests: [
           { id: :sections_shall_populated },
           { id: :sections_entry_profiles }
@@ -54,7 +54,7 @@ class Generator
       },
       {
         name: 'AU PS Composition Recommended Sections',
-        description: 'Verifies that recommended (SHOULD) sections are correctly populated when data is known.',
+        description: 'Verify the recommended sections are correctly populated in the Composition resource',
         tests: [
           { id: :sections_should_populated }
         ],
@@ -63,7 +63,7 @@ class Generator
       },
       {
         name: 'AU PS Composition Optional Sections',
-        description: 'Verify the optional sections are correctly populated in the AU PS Composition',
+        description: 'Verify the optional sections are correctly populated in the AU PS Composition resource',
         tests: [
           { id: :sections_may_populated }
         ],

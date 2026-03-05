@@ -9,7 +9,7 @@ module AUPSTestKit
   # Automatically generated primitive group for AU PS Composition Recommended Sections
   class AUPSSuite100ballotGenerateAuPsUsingIpsSummaryValidationTestsAuPsCompositionRecommendedSections < Inferno::TestGroup
     title 'AU PS Composition Recommended Sections'
-    description 'Verifies that recommended (SHOULD) sections are correctly populated when data is known.'
+    description 'Verify the recommended sections are correctly populated in the Composition resource'
     id :suite_100ballot_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_recommended_sections
     
     optional
