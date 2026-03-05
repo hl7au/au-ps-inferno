@@ -400,7 +400,7 @@ module AUPSTestKit
 
       bundle_resource = BundleDecorator.new(scratch_bundle.to_hash)
       sections_to_validate = bundle_resource.composition_resource.section_codes.filter do |section_code|
-        sections_code_to_filter.include?(section_code)
+        !sections_code_to_filter.include?(section_code)
       end
 
       skip_if sections_to_validate.blank?, 'No sections to validate'
@@ -443,6 +443,36 @@ module AUPSTestKit
         "**#{element}**: #{boolean_to_existent_string(resolve_path(section, element).first.present?)}"
       end.join("\n\n")
       [title, 'List of Must Support elements populated or missing:', elements_list].join("\n\n")
+    end
+
+    def mixed_validate_populated_sections_in_bundle(section_codes_array, elements_array)
+      skip_if scratch_bundle.blank?, 'No Bundle resource provided'
+      skip_if section_codes_array.blank?, 'No sections to validate'
+
+      bundle_resource = BundleDecorator.new(scratch_bundle.to_hash)
+      composition = bundle_resource.composition_resource
+      has_error = false
+
+      section_codes_array.each do |section_code|
+        section = composition.section_by_code(section_code)
+        if section.blank?
+          add_message('error', "For section missing: #{section_code}")
+          has_error = true
+          next
+        end
+        section_message_body = section_ms_elements_message(section, elements_array)
+        all_populated = all_paths_are_populated?(section, elements_array)
+        if all_populated
+          add_message('info', "Section correctly populated\n\n#{section_message_body}")
+        else
+          add_message('error',
+                      "For section with any mandatory Must Support element in section missing (i.e. title, code, text)\n\n#{section_message_body}")
+          has_error = true
+        end
+      end
+
+      assert !has_error,
+             'Some of the sections are not populated. See the list of populated sections in messages tab.'
     end
   end
 end
