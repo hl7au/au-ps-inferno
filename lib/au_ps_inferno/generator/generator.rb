@@ -186,8 +186,10 @@ class Generator
     end
     # sections_group = generate_sections_validation_group
     retrieve_cs_group = generate_retrieve_cs_group
-    all_groups = high_order_groups + [retrieve_cs_group].compact
-    config = suite_primitive_config(suite_class_name, suite_id, ig_suite_version, all_groups)
+    # all_groups = high_order_groups + [retrieve_cs_group].compact
+    # retrieve_cs_group should be second in the all_groups array
+    high_order_groups.insert(1, retrieve_cs_group) if retrieve_cs_group
+    config = suite_primitive_config(suite_class_name, suite_id, ig_suite_version, high_order_groups)
     SuitePrimitive.new(config).generate
   end
 

@@ -3,11 +3,11 @@
 
 require_relative 'au_ps_bundle_instance/au_ps_bundle_instance'
 
+require_relative 'au_ps_retrieve_cs_group/au_ps_retrieve_cs_group'
+
 require_relative 'retrieve_au_ps_bundle_validation_tests/retrieve_au_ps_bundle_validation_tests'
 
 require_relative 'generate_au_ps_using_ips_summary_validation_tests/generate_au_ps_using_ips_summary_validation_tests'
-
-require_relative 'au_ps_retrieve_cs_group/au_ps_retrieve_cs_group'
 
 
 module AUPSTestKit
@@ -28,11 +28,11 @@ module AUPSTestKit
     
     group from: :suite_100ballot_au_ps_bundle_instance
     
+    group from: :au_ps_retrieve_cs_group_100ballot
+    
     group from: :suite_100ballot_retrieve_au_ps_bundle_validation_tests
     
     group from: :suite_100ballot_generate_au_ps_using_ips_summary_validation_tests
-    
-    group from: :au_ps_retrieve_cs_group_100ballot
     
   end
 end

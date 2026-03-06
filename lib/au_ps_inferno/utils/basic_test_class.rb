@@ -418,7 +418,7 @@ module AUPSTestKit
       section_codes_array.each do |section_code|
         section = composition.section_by_code(section_code)
         if section.blank?
-          add_message('error', "For section missing: #{section_code}")
+          add_message('error', "#{section_code} (section missing)")
           has_error = true
           next
         end
@@ -456,7 +456,7 @@ module AUPSTestKit
       section_codes_array.each do |section_code|
         section = composition.section_by_code(section_code)
         if section.blank?
-          add_message('error', "For section missing: #{section_code}")
+          add_message('error', "#{section_code} (section missing)")
           has_error = true
           next
         end
