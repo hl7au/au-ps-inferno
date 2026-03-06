@@ -577,12 +577,12 @@ class Generator
     end
 
     def build_metadata_for_subject
-      structure_definition_data = get_structure_definition_by_profile("http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-patient") 
+      structure_definition_data = get_structure_definition_by_profile('http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-patient')
       structure_definition_resource = StructureDefinitionDecorator.new(structure_definition_data.to_hash)
       {
         entities: {
           resource_type: 'Patient',
-          profile: "http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-patient",
+          profile: 'http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-patient',
           elements: get_elements_from_structure_definition(structure_definition_resource)
         }
       }
@@ -601,11 +601,11 @@ class Generator
     def build_metadata_for_attester
       # attester.party: AU PS Patient | RelatedPerson | Practitioner | PractitionerRole | Organization (no Device)
       profiles = [
-        "Patient|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-patient",
-        "RelatedPerson|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-relatedperson",
-        "Practitioner|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-practitioner",
-        "PractitionerRole|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-practitionerrole",
-        "Organization|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-organization"
+        'Patient|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-patient',
+        'RelatedPerson|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-relatedperson',
+        'Practitioner|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-practitioner',
+        'PractitionerRole|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-practitionerrole',
+        'Organization|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-organization'
       ]
       profiles.map do |profile|
         sd = get_structure_definition_by_profile(profile.split('|')[1])
@@ -620,12 +620,12 @@ class Generator
     def build_metadata_for_author
       # AU PS Practitioner, AU PS PractitionerRole, AU PS Patient, AU PS RelatedPerson, AU PS Organization profiles or Device resource
       profiles = [
-        "Practitioner|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-practitioner",
-        "PractitionerRole|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-practitionerrole",
-        "Patient|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-patient",
-        "RelatedPerson|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-relatedperson",
-        "Organization|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-organization",
-        "Device|http://hl7.org/fhir/uv/ips/StructureDefinition/Device-uv-ips"
+        'Practitioner|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-practitioner',
+        'PractitionerRole|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-practitionerrole',
+        'Patient|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-patient',
+        'RelatedPerson|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-relatedperson',
+        'Organization|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-organization',
+        'Device|http://hl7.org/fhir/uv/ips/StructureDefinition/Device-uv-ips'
       ]
       profiles.map do |profile|
         sd = get_structure_definition_by_profile(profile.split('|')[1])
