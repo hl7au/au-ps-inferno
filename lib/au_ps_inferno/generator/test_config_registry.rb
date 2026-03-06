@@ -138,6 +138,11 @@ class Generator
           title: 'Must Support identifier slices SHALL be populated if a value is known',
           description: 'Must Support identifier slices SHALL be populated if a value is known (i.e. ihi, dva, medicare).',
           commands: ['test_subject_ms_identifier_slices']
+        },
+        author_ms_elements: {
+          title: 'Must Support elements SHALL be populated if a value is known',
+          description: 'Must Support elements SHALL be populated if a value is known',
+          commands: ['test_composition_author_ms_elements']
         }
       }.freeze
     end

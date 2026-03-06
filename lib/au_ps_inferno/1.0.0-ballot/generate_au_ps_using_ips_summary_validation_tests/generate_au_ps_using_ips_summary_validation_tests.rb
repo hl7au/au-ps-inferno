@@ -17,6 +17,8 @@ require_relative 'au_ps_composition_undefined_sections'
 
 require_relative 'au_ps_composition_subject'
 
+require_relative 'au_ps_composition_author'
+
 
 module AUPSTestKit
   # Automatically generated high order group for Generate AU PS using IPS $summary validation tests
@@ -45,6 +47,8 @@ module AUPSTestKit
     group from: :suite_100ballot_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_undefined_sections
     
     group from: :suite_100ballot_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_subject
+    
+    group from: :suite_100ballot_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_author
     
   end
 end

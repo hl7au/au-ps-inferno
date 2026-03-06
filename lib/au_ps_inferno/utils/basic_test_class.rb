@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'yaml'
 require_relative 'bundle_decorator'
 require_relative 'composition_utils'
 require_relative 'validator_helpers'
@@ -600,6 +601,91 @@ module AUPSTestKit
       bundle_resource.resource_by_reference(subject.reference)
     end
 
+    def resource_type(resource)
+      return nil unless resource.present?
+
+      resource.respond_to?(:resourceType) ? resource.resourceType : resource['resourceType']
+    end
+
+    def author_resource
+      return nil unless scratch_bundle.present?
+
+      bundle_resource = BundleDecorator.new(scratch_bundle.to_hash)
+      composition_resource = bundle_resource.composition_resource
+      return nil unless composition_resource.present?
+
+      author_ref = composition_resource.respond_to?(:author) && composition_resource.author.present? ? composition_resource.author.first : nil
+      return nil unless author_ref.present?
+
+      ref_str = author_ref.respond_to?(:reference) ? author_ref.reference : author_ref['reference']
+      return nil if ref_str.blank?
+
+      bundle_resource.resource_by_reference(ref_str)
+    end
+
+    def composition_author_metadata
+      path = File.expand_path('../1.0.0-ballot/metadata.yaml', __dir__)
+      return [] unless File.file?(path)
+
+      data = YAML.safe_load(File.read(path), permitted_classes: [Symbol], aliases: true)
+      sections = data&.dig('composition_sections') || data&.dig(:composition_sections) || []
+      first_section = sections.first
+      return [] unless first_section.present?
+
+      author_key = first_section.key?('author') ? 'author' : :author
+      first_section[author_key] || []
+    end
+
+    # Returns author MS elements for the given resource type: complex elements only (no slices, no sub-elements).
+    # Each element has :expression and :min; :expression has no "." and :id has no ":".
+    def author_complex_ms_elements_for_type(author_metadata, resource_type)
+      author_entry = author_metadata.find do |entry|
+        type = entry['resource_type'] || entry[:resource_type]
+        type.to_s == resource_type.to_s
+      end
+      return [] unless author_entry.present?
+
+      elements = author_entry['elements'] || author_entry[:elements] || []
+      elements.filter do |el|
+        expr = (el['expression'] || el[:expression]).to_s
+        id_str = (el['id'] || el[:id]).to_s
+        !expr.include?('.') && !id_str.include?(':')
+      end
+    end
+
+    def validate_author_ms_elements(resource, author_config_elements)
+      return unless resource.present? && author_config_elements.present?
+
+      expressions = author_config_elements.map { |el| el['expression'] || el[:expression] }.compact
+      mandatory = author_config_elements.select { |el| ((el['min'] || el[:min]) || 0).positive? }.map { |el| el['expression'] || el[:expression] }
+      optional = author_config_elements.reject { |el| ((el['min'] || el[:min]) || 0).positive? }.map { |el| el['expression'] || el[:expression] }
+
+      mandatory_populated = mandatory.all? { |path| resolve_path(resource, path).first.present? }
+      optional_populated = optional.all? { |path| resolve_path(resource, path).first.present? }
+
+      message_type = if !mandatory_populated
+                      'error'
+                    elsif !optional_populated
+                      'warning'
+                    else
+                      'info'
+                    end
+
+      resource_type_str = resource.respond_to?(:resourceType) ? resource.resourceType : resource['resourceType']
+      profiles = resource.respond_to?(:meta) && resource.meta&.profile.present? ? resource.meta.profile : (resource.dig('meta', 'profile') || [])
+      profile_str = profiles.is_a?(Array) ? profiles.join(', ') : profiles.to_s
+
+      list_lines = expressions.map do |expr|
+        populated = resolve_path(resource, expr).first.present?
+        "#{boolean_to_existent_string(populated)}: **#{expr}**"
+      end
+
+      add_message(message_type,
+                  "Must Support elements correctly populated\n\n**Referenced author**: #{resource_type_str}#{profile_str.present? ? " — #{profile_str}" : ''}\n\n## List of Must Support elements (complex) populated or missing\n\n#{list_lines.join("\n\n")}")
+
+      assert mandatory_populated, 'When any mandatory Must Support element is missing. See the list in messages tab.'
+    end
+
     def get_extension_value_by_url(resouce, url)
       result = resouce&.extension&.find { |ext| ext.url == url }
 
@@ -661,6 +747,22 @@ module AUPSTestKit
       skip_if resource.blank?, 'No subject (Patient) resource to validate for identifier slices'
 
       validate_ms_identifier_slices_in_resource(resource, PATIENT_MS_IDENTIFIER_SLICES)
+    end
+
+    def test_composition_author_ms_elements
+      check_bundle_exists_in_scratch
+      resource = author_resource
+      skip_if resource.blank?, 'No author reference found on Composition'
+      skip_if resource_type(resource) == 'Device', 'Referenced author entry is type of Device; skip Must Support validation'
+
+      author_meta = composition_author_metadata
+      skip_if author_meta.blank?, 'No author metadata available'
+
+      resource_type_str = resource_type(resource)
+      complex_elements = author_complex_ms_elements_for_type(author_meta, resource_type_str)
+      skip_if complex_elements.blank?, "No complex Must Support elements defined for author type #{resource_type_str}"
+
+      validate_author_ms_elements(resource, complex_elements)
     end
 
     def test_subject_ms_elements

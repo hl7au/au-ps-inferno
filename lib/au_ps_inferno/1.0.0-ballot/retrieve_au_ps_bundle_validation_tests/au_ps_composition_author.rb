@@ -1,0 +1,25 @@
+# frozen_string_literal: true
+
+
+
+require_relative 'au_ps_composition_author/suite_100ballot_retrieve_au_ps_bundle_validation_tests_au_ps_composition_author_author_ms_elements'
+
+
+module AUPSTestKit
+  # Automatically generated primitive group for AU PS Composition Author
+  class AUPSSuite100ballotRetrieveAuPsBundleValidationTestsAuPsCompositionAuthor < Inferno::TestGroup
+    title 'AU PS Composition Author'
+    description 'Verify the referenced author is a correctly populated AU PS Practitioner, AU PS PractitionerRole, AU PS Patient, AU PS RelatedPerson, AU PS Organization profiles or Device resource.'
+    id :suite_100ballot_retrieve_au_ps_bundle_validation_tests_au_ps_composition_author
+    
+    optional
+    
+    
+    run_as_group
+    
+
+    
+    test from: :suite_100ballot_retrieve_au_ps_bundle_validation_tests_au_ps_composition_author_author_ms_elements
+    
+  end
+end
