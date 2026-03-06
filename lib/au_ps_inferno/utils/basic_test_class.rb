@@ -12,6 +12,14 @@ module AUPSTestKit
     include ValidatorHelpers
     include SectionTestModule
 
+    # AU PS Patient Must Support sub-elements: validate when parent (name, telecom, communication) is populated.
+    # communication.language is mandatory when communication is present; all others optional.
+    PATIENT_MS_SUBELEMENT_GROUPS = [
+      { parent: 'name', mandatory: [], optional: %w[name.use name.text name.family name.given] },
+      { parent: 'telecom', mandatory: [], optional: %w[telecom.system telecom.value telecom.use] },
+      { parent: 'communication', mandatory: ['communication.language'], optional: ['communication.preferred'] }
+    ].freeze
+
     def check_other_sections(all_sections_data_codes, sections_codes_mapping)
       check_bundle_exists_in_scratch
       composition_resource = BundleDecorator.new(scratch_bundle.to_hash).composition_resource
@@ -341,6 +349,51 @@ module AUPSTestKit
              'Some of the mandatory Must Support sub-elements are not populated. See the list of populated sub-elements in messages tab.'
     end
 
+    # Validates Must Support sub-elements only when the parent element is populated.
+    # One message per complex element (error when any mandatory MS sub-element missing, warning when optional missing, info when all present).
+    # Pass: all messages are info or warning. Fail: any message is error.
+    #
+    # @param resource [Hash, FHIR::Model] The resource to validate (e.g. Patient)
+    # @param parent_groups [Array<Hash>] Each hash has :parent (String), :mandatory (Array<String>), :optional (Array<String>)
+    # @return [Boolean] false if resource blank or no parent populated; true when validation ran (assert handles pass/fail)
+    def validate_populated_sub_elements_when_parent_populated(resource, parent_groups)
+      return false unless resource.present?
+
+      any_parent_populated = false
+      parent_groups.each do |group|
+        parent_path = group[:parent]
+        mandatory = group[:mandatory] || []
+        optional = group[:optional] || []
+        next unless resolve_path(resource, parent_path).first.present?
+
+        any_parent_populated = true
+        sub_elements = mandatory + optional
+        message_types = sub_elements.map do |sub_element|
+          sub_element_result = resolve_path(resource, sub_element).first.present?
+          sub_element_mandatory = mandatory.include?(sub_element)
+          sub_element_result ? 'info' : (sub_element_mandatory ? 'error' : 'warning')
+        end
+        uniq_message_types = message_types.uniq
+        message_type = if uniq_message_types.include?('error')
+                         'error'
+                       elsif uniq_message_types.include?('warning')
+                         'warning'
+                       else
+                         'info'
+                       end
+        add_message(message_type, populated_paths_info(resource, sub_elements))
+      end
+
+      skip_if !any_parent_populated, 'No complex element with Must Support sub-elements is populated'
+      mandatory_result = parent_groups.all? do |group|
+        next true unless resolve_path(resource, group[:parent]).first.present?
+
+        (group[:mandatory] || []).all? { |el| resolve_path(resource, el).first.present? }
+      end
+      assert mandatory_result,
+             'When a mandatory Must Support sub-element is missing but the parent exists. See the list in messages tab.'
+    end
+
     def validate_populated_elements_in_composition(elements_array, required: true)
       return false unless scratch_bundle.present?
 
@@ -505,6 +558,13 @@ module AUPSTestKit
       result = resouce&.extension&.find { |ext| ext.url == url }
 
       return result.value if result.present?
+    end
+
+    def test_subject_ms_subelements_when_parent_populated
+      resource = subject_resource
+      return false unless resource.present?
+
+      validate_populated_sub_elements_when_parent_populated(resource, PATIENT_MS_SUBELEMENT_GROUPS)
     end
 
     def test_subject_ms_elements

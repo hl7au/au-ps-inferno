@@ -128,6 +128,11 @@ class Generator
           title: 'Must Support elements SHALL be populated if a value is known',
           description: 'Must Support elements SHALL be populated if a value is known',
           commands: ['test_subject_ms_elements']
+        },
+        subject_ms_subelements_populated: {
+          title: 'Must Support sub-element SHALL be populated if a value is known and the parent is populated',
+          description: 'Must Support sub-element SHALL be populated if a value is known and the parent is populated',
+          commands: ['test_subject_ms_subelements_when_parent_populated']
         }
       }.freeze
     end
