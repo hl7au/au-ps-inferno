@@ -21,6 +21,8 @@ require_relative 'au_ps_composition_author'
 
 require_relative 'au_ps_composition_custodian'
 
+require_relative 'au_ps_composition_attester'
+
 
 module AUPSTestKit
   # Automatically generated high order group for Generate AU PS using IPS $summary validation tests
@@ -53,6 +55,8 @@ module AUPSTestKit
     group from: :suite_100ballot_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_author
     
     group from: :suite_100ballot_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_custodian
+    
+    group from: :suite_100ballot_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_attester
     
   end
 end

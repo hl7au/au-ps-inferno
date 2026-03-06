@@ -477,7 +477,8 @@ class Generator
         ms_elements: composition_ms_sections_elements,
         subject: build_metadata_for_subject,
         author: build_metadata_for_author,
-        custodian: build_metadata_for_custodian
+        custodian: build_metadata_for_custodian,
+        attester: build_metadata_for_attester
       }
     end
 
@@ -595,6 +596,25 @@ class Generator
         profile: 'http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-organization',
         elements: get_elements_from_structure_definition_for_author(sd)
       }
+    end
+
+    def build_metadata_for_attester
+      # attester.party: AU PS Patient | RelatedPerson | Practitioner | PractitionerRole | Organization (no Device)
+      profiles = [
+        "Patient|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-patient",
+        "RelatedPerson|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-relatedperson",
+        "Practitioner|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-practitioner",
+        "PractitionerRole|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-practitionerrole",
+        "Organization|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-organization"
+      ]
+      profiles.map do |profile|
+        sd = get_structure_definition_by_profile(profile.split('|')[1])
+        {
+          resource_type: sd.type,
+          profile: profile.split('|')[1],
+          elements: get_elements_from_structure_definition_for_author(sd)
+        }
+      end
     end
 
     def build_metadata_for_author

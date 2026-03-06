@@ -168,6 +168,21 @@ class Generator
           title: 'Must Support identifier slices SHALL be populated if a value is known',
           description: 'Must Support identifier slices SHALL be populated if a value is known',
           commands: ['test_composition_custodian_ms_identifier_slices']
+        },
+        attester_party_ms_elements: {
+          title: 'Must Support elements SHALL be populated if a value is known',
+          description: 'Must Support elements SHALL be populated if a value is known',
+          commands: ['test_composition_attester_party_ms_elements']
+        },
+        attester_party_ms_subelements: {
+          title: 'Must Support sub-element SHALL be populated if a value is known',
+          description: 'Must Support sub-element SHALL be populated if a value is known',
+          commands: ['test_composition_attester_party_ms_subelements']
+        },
+        attester_party_ms_identifier_slices: {
+          title: 'Must Support identifier slices SHALL be populated if a value is known',
+          description: 'Must Support identifier slices SHALL be populated if a value is known',
+          commands: ['test_composition_attester_party_ms_identifier_slices']
         }
       }.freeze
     end

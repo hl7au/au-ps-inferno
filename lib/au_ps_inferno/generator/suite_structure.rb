@@ -109,6 +109,16 @@ class Generator
           { id: :custodian_ms_identifier_slices }
         ],
         run_as_group: true
+      },
+      {
+        name: 'AU PS Composition Attester',
+        description: 'Verify the referenced attester.party is a correctly populated AU PS Patient, RelatedPerson, Practitioner, PractitionerRole, or Organization resource.',
+        tests: [
+          { id: :attester_party_ms_elements },
+          { id: :attester_party_ms_subelements },
+          { id: :attester_party_ms_identifier_slices }
+        ],
+        run_as_group: true
       }
     ].freeze
 
