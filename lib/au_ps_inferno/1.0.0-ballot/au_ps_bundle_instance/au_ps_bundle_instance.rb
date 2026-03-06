@@ -19,6 +19,8 @@ require_relative 'au_ps_composition_subject'
 
 require_relative 'au_ps_composition_author'
 
+require_relative 'au_ps_composition_custodian'
+
 
 module AUPSTestKit
   # Automatically generated high order group for AU PS Bundle Instance
@@ -49,6 +51,8 @@ module AUPSTestKit
     group from: :suite_100ballot_au_ps_bundle_instance_au_ps_composition_subject
     
     group from: :suite_100ballot_au_ps_bundle_instance_au_ps_composition_author
+    
+    group from: :suite_100ballot_au_ps_bundle_instance_au_ps_composition_custodian
     
   end
 end

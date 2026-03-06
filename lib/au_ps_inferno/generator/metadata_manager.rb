@@ -476,7 +476,8 @@ class Generator
         mustSupport: section.mustSupport || false,
         ms_elements: composition_ms_sections_elements,
         subject: build_metadata_for_subject,
-        author: build_metadata_for_author
+        author: build_metadata_for_author,
+        custodian: build_metadata_for_custodian
       }
     end
 
@@ -583,6 +584,16 @@ class Generator
           profile: "http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-patient",
           elements: get_elements_from_structure_definition(structure_definition_resource)
         }
+      }
+    end
+
+    def build_metadata_for_custodian
+      # Custodian is only AU PS Organization
+      sd = get_structure_definition_by_profile('http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-organization')
+      {
+        resource_type: sd.type,
+        profile: 'http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-organization',
+        elements: get_elements_from_structure_definition_for_author(sd)
       }
     end
 

@@ -99,6 +99,16 @@ class Generator
         ],
         optional: true,
         run_as_group: true
+      },
+      {
+        name: 'AU PS Composition Custodian',
+        description: 'Verify the referenced custodian is a correctly populated AU PS Organization resource.',
+        tests: [
+          { id: :custodian_ms_elements },
+          { id: :custodian_ms_subelements },
+          { id: :custodian_ms_identifier_slices }
+        ],
+        run_as_group: true
       }
     ].freeze
 

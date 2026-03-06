@@ -153,6 +153,21 @@ class Generator
           title: 'Must Support identifier slices SHALL be populated if a value is known',
           description: 'Must Support identifier slices SHALL be populated if a value is known',
           commands: ['test_composition_author_ms_identifier_slices']
+        },
+        custodian_ms_elements: {
+          title: 'Must Support element SHALL be populated if a value is known',
+          description: 'Must Support element SHALL be populated if a value is known',
+          commands: ['test_composition_custodian_ms_elements']
+        },
+        custodian_ms_subelements: {
+          title: 'Must Support sub-element SHALL be populated if a value is known',
+          description: 'Must Support sub-element SHALL be populated if a value is known',
+          commands: ['test_composition_custodian_ms_subelements']
+        },
+        custodian_ms_identifier_slices: {
+          title: 'Must Support identifier slices SHALL be populated if a value is known',
+          description: 'Must Support identifier slices SHALL be populated if a value is known',
+          commands: ['test_composition_custodian_ms_identifier_slices']
         }
       }.freeze
     end
