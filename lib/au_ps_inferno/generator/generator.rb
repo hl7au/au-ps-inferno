@@ -184,9 +184,9 @@ class Generator
     high_order_groups = HIGH_ORDER_GROUPS.map do |high_order_group|
       generate_high_order_group(high_order_group, suite_class_name, suite_id)
     end
-    sections_group = generate_sections_validation_group
+    # sections_group = generate_sections_validation_group
     retrieve_cs_group = generate_retrieve_cs_group
-    all_groups = high_order_groups + [sections_group, retrieve_cs_group].compact
+    all_groups = high_order_groups + [retrieve_cs_group].compact
     config = suite_primitive_config(suite_class_name, suite_id, ig_suite_version, all_groups)
     SuitePrimitive.new(config).generate
   end

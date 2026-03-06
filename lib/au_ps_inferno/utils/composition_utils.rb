@@ -58,17 +58,17 @@ module CompositionUtils
     end
   end
 
-  def boolean_to_humanized_string(boolean_value)
+  def boolean_to_existent_string(boolean_value)
     boolean_value ? '✅ Passed' : '❌ Failed'
   end
 
   def boolean_to_existent_string(boolean_value)
-    boolean_value ? '🟢 Populated' : '🟠 Missing'
+    boolean_value ? '✅ Populated' : '❌ Missing'
   end
 
   def execute_statistics(resource, path_expression, humanized_name)
     data_value = resolve_path(resource, path_expression).first.present?
-    boolean_value = boolean_to_humanized_string(data_value)
+    boolean_value = boolean_to_existent_string(data_value)
     "**#{humanized_name}**: #{boolean_value}"
   end
 
@@ -95,7 +95,7 @@ module CompositionUtils
     sections_count = resolve_path(composition_resource, path_expression).length
     selected_by_expression_count = resolve_path(composition_resource, path_expression).length
 
-    boolean_to_humanized_string(sections_count == selected_by_expression_count)
+    boolean_to_existent_string(sections_count == selected_by_expression_count)
   end
 
   def composition_mandatory_ms_elements_info(

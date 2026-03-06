@@ -34,10 +34,10 @@ module AUPSTestKit
 
     def mandatory_ms_elements_info
       [
-        "**identifier**: #{boolean_to_humanized_string(identifier_info?)}",
-        "**type**: #{boolean_to_humanized_string(type_info?)}",
-        "**timestamp**: #{boolean_to_humanized_string(timestamp_info?)}",
-        "**All entry exists fullUrl**: #{boolean_to_humanized_string(all_entries_have_full_url_info?)}"
+        "**identifier**: #{boolean_to_existent_string(identifier_info?)}",
+        "**type**: #{boolean_to_existent_string(type_info?)}",
+        "**timestamp**: #{boolean_to_existent_string(timestamp_info?)}",
+        "**All entry exists fullUrl**: #{boolean_to_existent_string(all_entries_have_full_url_info?)}"
       ].join("\n\n")
     end
 
@@ -60,7 +60,7 @@ module AUPSTestKit
 
       message_base = 'Server CapabilityStatement declares support for operation with operation definition'
 
-      info "#{message_base} #{op_def_url}: #{boolean_to_humanized_string(operation_defined)}"
+      info "#{message_base} #{op_def_url}: #{boolean_to_existent_string(operation_defined)}"
 
       scratch[scratch_key] = operation_defined
     end
@@ -196,7 +196,7 @@ module AUPSTestKit
           existing_resource_profiles = existing_resource.meta&.profile || []
 
           entity_can_present = valid_resource_types.include?(existing_resource.resourceType)
-          result << " #{boolean_to_humanized_string(entity_can_present)} **#{ref}**: #{existing_resource.resourceType} (#{existing_resource_profiles.join(', ')})"
+          result << " #{boolean_to_existent_string(entity_can_present)} **#{ref}**: #{existing_resource.resourceType} (#{existing_resource_profiles.join(', ')})"
         end
       end
       info [title, result.join("\n\n")].join("\n\n")
@@ -214,7 +214,7 @@ module AUPSTestKit
         title = "### #{section_config[:short]}(#{section_config[:code]})"
         result << title
         section_config[:ms_elements].each do |element|
-          result << "**#{element[:expression]}**: #{boolean_to_humanized_string(resolve_path(section_resource,
+          result << "**#{element[:expression]}**: #{boolean_to_existent_string(resolve_path(section_resource,
                                                                                              element[:expression]).first.present?)}"
         end
       end
