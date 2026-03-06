@@ -6,6 +6,8 @@ require_relative 'au_ps_composition_author/suite_100ballot_generate_au_ps_using_
 
 require_relative 'au_ps_composition_author/suite_100ballot_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_author_author_ms_subelements'
 
+require_relative 'au_ps_composition_author/suite_100ballot_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_author_author_ms_identifier_slices'
+
 
 module AUPSTestKit
   # Automatically generated primitive group for AU PS Composition Author
@@ -24,6 +26,8 @@ module AUPSTestKit
     test from: :suite_100ballot_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_author_author_ms_elements
     
     test from: :suite_100ballot_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_author_author_ms_subelements
+    
+    test from: :suite_100ballot_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_author_author_ms_identifier_slices
     
   end
 end

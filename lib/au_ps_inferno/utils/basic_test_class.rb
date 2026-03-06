@@ -27,6 +27,26 @@ module AUPSTestKit
       { name: 'DVA', system: 'http://ns.electronichealth.net.au/id/dva' },
       { name: 'MEDICARE', system: 'http://ns.electronichealth.net.au/id/medicare-number' }
     ].freeze
+    ORGANIZATION_MS_IDENTIFIER_SLICES = [
+      { name: 'ABN', system: 'http://hl7.org.au/id/abn' },
+      { name: 'HPIO', system: 'http://ns.electronichealth.net.au/id/hi/hpio/1.0' }
+    ].freeze
+    PRACTITIONER_ROLE_MS_IDENTIFIER_SLICES = [
+      { name: 'MEDICARE PROVIDER', system: 'http://ns.electronichealth.net.au/id/medicare-provider-number' }
+    ].freeze
+    PRACTITIONER_MS_IDENTIFIER_SLICES = [
+      { name: 'HPII', system: 'http://ns.electronichealth.net.au/id/hi/hpii/1.0' }
+    ].freeze
+
+    # Author resource type -> Must Support identifier slices (empty for Device, RelatedPerson).
+    AUTHOR_MS_IDENTIFIER_SLICES_BY_TYPE = {
+      'Practitioner' => PRACTITIONER_MS_IDENTIFIER_SLICES,
+      'PractitionerRole' => PRACTITIONER_ROLE_MS_IDENTIFIER_SLICES,
+      'Patient' => PATIENT_MS_IDENTIFIER_SLICES,
+      'Organization' => ORGANIZATION_MS_IDENTIFIER_SLICES,
+      'RelatedPerson' => [],
+      'Device' => []
+    }.freeze
 
     def check_other_sections(all_sections_data_codes, sections_codes_mapping)
       check_bundle_exists_in_scratch
@@ -439,6 +459,32 @@ module AUPSTestKit
         end
       end
       add_message(message_type2, "At least one Must Support identifier slices is populated\n\n## List of Must Support identifier slices populated or missing (system when populated)\n\n#{lines2.join("\n\n")}")
+    end
+
+    # Validates author Must Support identifier slices. One message: warning when any missing, info when all populated.
+    # Includes author resource type and profiles; lists slices with type and system when populated.
+    def validate_author_ms_identifier_slices(resource, slices, resource_type_str, profile_str)
+      return unless resource.present? && slices.present?
+
+      identifiers = identifiers_from_resource(resource) || []
+      slice_results = slices.map do |slice|
+        ident = find_identifier_by_system(identifiers, slice[:system])
+        { slice: slice, identifier: ident }
+      end
+
+      author_header = "**Referenced author**: #{resource_type_str}#{profile_str.present? ? " — #{profile_str}" : ''}"
+      lines = slice_results.map do |r|
+        if r[:identifier].present?
+          type_str = identifier_type_display(r[:identifier])
+          "✅ Populated: **#{r[:slice][:name]}** — system: #{r[:slice][:system]}#{type_str}"
+        else
+          "❌ Missing: **#{r[:slice][:name]}**"
+        end
+      end
+      all_populated = slice_results.all? { |r| r[:identifier].present? }
+      message_type = all_populated ? 'info' : 'warning'
+      add_message(message_type,
+                  "Must support identifier slices correctly populated\n\n#{author_header}\n\n## List of Must Support identifier slices populated or missing (type and system when populated)\n\n#{lines.join("\n\n")}")
     end
 
     def validate_populated_elements_in_composition(elements_array, required: true)
@@ -871,6 +917,20 @@ module AUPSTestKit
 
       rtype_str, profile_str = author_resource_type_and_profiles(resource)
       validate_author_ms_subelements(resource, parent_groups, rtype_str, profile_str)
+    end
+
+    def test_composition_author_ms_identifier_slices
+      check_bundle_exists_in_scratch
+      resource = author_resource
+      skip_if resource.blank?, 'No author reference found on Composition'
+      skip_if resource_type(resource) == 'Device', 'Referenced author resource type is Device'
+
+      resource_type_str = resource_type(resource)
+      slices = AUTHOR_MS_IDENTIFIER_SLICES_BY_TYPE[resource_type_str] || []
+      skip_if slices.blank?, 'No Must Support identifier slices are defined for the referenced author type (e.g. AU PS RelatedPerson)'
+
+      rtype_str, profile_str = author_resource_type_and_profiles(resource)
+      validate_author_ms_identifier_slices(resource, slices, rtype_str, profile_str)
     end
 
     def test_subject_ms_elements

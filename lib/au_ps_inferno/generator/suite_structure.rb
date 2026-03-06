@@ -94,7 +94,8 @@ class Generator
         description: 'Verify the referenced author is a correctly populated AU PS Practitioner, AU PS PractitionerRole, AU PS Patient, AU PS RelatedPerson, AU PS Organization profiles or Device resource.',
         tests: [
           { id: :author_ms_elements },
-          { id: :author_ms_subelements }
+          { id: :author_ms_subelements },
+          { id: :author_ms_identifier_slices }
         ],
         optional: true,
         run_as_group: true

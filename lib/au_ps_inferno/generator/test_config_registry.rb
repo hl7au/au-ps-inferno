@@ -148,6 +148,11 @@ class Generator
           title: 'Must Support sub-elements SHALL be populated if a value is known',
           description: 'Must Support sub-elements SHALL be populated if a value is known',
           commands: ['test_composition_author_ms_subelements']
+        },
+        author_ms_identifier_slices: {
+          title: 'Must Support identifier slices SHALL be populated if a value is known',
+          description: 'Must Support identifier slices SHALL be populated if a value is known',
+          commands: ['test_composition_author_ms_identifier_slices']
         }
       }.freeze
     end
