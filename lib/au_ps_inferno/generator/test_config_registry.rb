@@ -133,6 +133,11 @@ class Generator
           title: 'Must Support sub-element SHALL be populated if a value is known and the parent is populated',
           description: 'Must Support sub-element SHALL be populated if a value is known and the parent is populated',
           commands: ['test_subject_ms_subelements_when_parent_populated']
+        },
+        subject_ms_identifier_slices: {
+          title: 'Must Support identifier slices SHALL be populated if a value is known',
+          description: 'Must Support identifier slices SHALL be populated if a value is known (i.e. ihi, dva, medicare).',
+          commands: ['test_subject_ms_identifier_slices']
         }
       }.freeze
     end

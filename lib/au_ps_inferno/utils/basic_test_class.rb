@@ -20,6 +20,13 @@ module AUPSTestKit
       { parent: 'communication', mandatory: ['communication.language'], optional: ['communication.preferred'] }
     ].freeze
 
+    # AU PS Patient Must Support identifier slices (optional). System URLs for IHI, DVA, Medicare.
+    PATIENT_MS_IDENTIFIER_SLICES = [
+      { name: 'IHI', system: 'http://ns.electronichealth.net.au/id/hi/ihi/1.0' },
+      { name: 'DVA', system: 'http://ns.electronichealth.net.au/id/dva' },
+      { name: 'MEDICARE', system: 'http://ns.electronichealth.net.au/id/medicare-number' }
+    ].freeze
+
     def check_other_sections(all_sections_data_codes, sections_codes_mapping)
       check_bundle_exists_in_scratch
       composition_resource = BundleDecorator.new(scratch_bundle.to_hash).composition_resource
@@ -394,6 +401,45 @@ module AUPSTestKit
              'When a mandatory Must Support sub-element is missing but the parent exists. See the list in messages tab.'
     end
 
+    # Validates Must Support identifier slices (IHI, DVA, Medicare) on a resource (e.g. Patient).
+    # Two messages: (1) Must support identifier slices correctly populated; (2) At least one slice populated.
+    # Pass: all messages info or warning. No error level used.
+    #
+    # @param resource [Hash, FHIR::Model] The resource with identifier array (e.g. Patient)
+    # @param slices [Array<Hash>] Each hash has :name (String) and :system (String URL)
+    def validate_ms_identifier_slices_in_resource(resource, slices)
+      return unless resource.present?
+
+      identifiers = identifiers_from_resource(resource) || []
+      slice_results = slices.map do |slice|
+        ident = find_identifier_by_system(identifiers, slice[:system])
+        { slice: slice, identifier: ident }
+      end
+
+      lines1 = slice_results.map do |r|
+        if r[:identifier].present?
+          type_str = identifier_type_display(r[:identifier])
+          "✅ Populated: **#{r[:slice][:name]}** — system: #{r[:slice][:system]}#{type_str}"
+        else
+          "❌ Missing: **#{r[:slice][:name]}**"
+        end
+      end
+      all_populated = slice_results.all? { |r| r[:identifier].present? }
+      message_type1 = all_populated ? 'info' : 'warning'
+      add_message(message_type1, "Must support identifier slices correctly populated\n\n## List of Must Support identifier slices populated or missing\n\n#{lines1.join("\n\n")}")
+
+      at_least_one = slice_results.any? { |r| r[:identifier].present? }
+      message_type2 = at_least_one ? 'info' : 'warning'
+      lines2 = slice_results.map do |r|
+        if r[:identifier].present?
+          "✅ Populated: **#{r[:slice][:name]}** — system: #{r[:slice][:system]}"
+        else
+          "❌ Missing: **#{r[:slice][:name]}**"
+        end
+      end
+      add_message(message_type2, "At least one Must Support identifier slices is populated\n\n## List of Must Support identifier slices populated or missing (system when populated)\n\n#{lines2.join("\n\n")}")
+    end
+
     def validate_populated_elements_in_composition(elements_array, required: true)
       return false unless scratch_bundle.present?
 
@@ -560,11 +606,61 @@ module AUPSTestKit
       return result.value if result.present?
     end
 
+    def identifiers_from_resource(resource)
+      return nil unless resource.present?
+
+      if resource.respond_to?(:identifier)
+        resource.identifier
+      elsif resource.is_a?(Hash)
+        resource['identifier']
+      else
+        nil
+      end
+    end
+
+    def identifier_system(ident)
+      return nil unless ident.present?
+
+      ident.respond_to?(:system) ? ident.system : ident['system']
+    end
+
+    def find_identifier_by_system(identifiers, system_url)
+      return nil if identifiers.blank? || system_url.blank?
+
+      identifiers.find { |ident| identifier_system(ident).to_s.strip == system_url.to_s.strip }
+    end
+
+    def identifier_type_display(ident)
+      return '' unless ident.present?
+
+      type_val = ident.respond_to?(:type) ? ident.type : ident['type']
+      return '' if type_val.blank?
+
+      if type_val.respond_to?(:coding) && type_val.coding.present?
+        c = type_val.coding.first
+        display = c.respond_to?(:display) ? c.display : c['display']
+        code = c.respond_to?(:code) ? c.code : c['code']
+        ", type: #{display.presence || code.presence || '—'}"
+      elsif type_val.is_a?(Hash) && type_val['coding'].present?
+        c = type_val['coding'].first
+        ", type: #{c['display'].presence || c['code'].presence || '—'}"
+      else
+        ''
+      end
+    end
+
     def test_subject_ms_subelements_when_parent_populated
       resource = subject_resource
       return false unless resource.present?
 
       validate_populated_sub_elements_when_parent_populated(resource, PATIENT_MS_SUBELEMENT_GROUPS)
+    end
+
+    def test_subject_ms_identifier_slices
+      resource = subject_resource
+      skip_if resource.blank?, 'No subject (Patient) resource to validate for identifier slices'
+
+      validate_ms_identifier_slices_in_resource(resource, PATIENT_MS_IDENTIFIER_SLICES)
     end
 
     def test_subject_ms_elements

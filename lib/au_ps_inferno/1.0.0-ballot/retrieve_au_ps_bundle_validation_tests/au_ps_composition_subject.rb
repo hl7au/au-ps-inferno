@@ -6,6 +6,8 @@ require_relative 'au_ps_composition_subject/suite_100ballot_retrieve_au_ps_bundl
 
 require_relative 'au_ps_composition_subject/suite_100ballot_retrieve_au_ps_bundle_validation_tests_au_ps_composition_subject_subject_ms_subelements_populated'
 
+require_relative 'au_ps_composition_subject/suite_100ballot_retrieve_au_ps_bundle_validation_tests_au_ps_composition_subject_subject_ms_identifier_slices'
+
 
 module AUPSTestKit
   # Automatically generated primitive group for AU PS Composition Subject
@@ -22,6 +24,8 @@ module AUPSTestKit
     test from: :suite_100ballot_retrieve_au_ps_bundle_validation_tests_au_ps_composition_subject_subject_ms_elements
     
     test from: :suite_100ballot_retrieve_au_ps_bundle_validation_tests_au_ps_composition_subject_subject_ms_subelements_populated
+    
+    test from: :suite_100ballot_retrieve_au_ps_bundle_validation_tests_au_ps_composition_subject_subject_ms_identifier_slices
     
   end
 end

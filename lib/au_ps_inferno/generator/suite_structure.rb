@@ -84,7 +84,8 @@ class Generator
         description: 'Verify the referenced subject is a correctly populated AU PS Patient resource.',
         tests: [
           { id: :subject_ms_elements },
-          { id: :subject_ms_subelements_populated }
+          { id: :subject_ms_subelements_populated },
+          { id: :subject_ms_identifier_slices }
         ],
         run_as_group: true
       }
