@@ -3,6 +3,7 @@
 require 'fileutils'
 require 'yaml'
 require_relative 'constants'
+require_relative '../../au_ps_inferno/utils/structure_definition_decorator'
 
 class Generator
   # Builds and persists metadata for Composition sections from IG resources.
@@ -473,7 +474,8 @@ class Generator
         max: section.max,
         required: section.min.positive?,
         mustSupport: section.mustSupport || false,
-        ms_elements: composition_ms_sections_elements
+        ms_elements: composition_ms_sections_elements,
+        subject: build_metadata_for_subject
       }
     end
 
@@ -569,6 +571,29 @@ class Generator
       @profiles.filter do |profile|
         !profile[:required]
       end.each_with_object({}) { |profile, hash| hash[profile[:url]] = profile[:name] }
+    end
+
+    def build_metadata_for_subject
+      structure_definition_data = get_structure_definition_by_profile("http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-patient") 
+      structure_definition_resource = StructureDefinitionDecorator.new(structure_definition_data.to_hash)
+      {
+        entities: {
+          resource_type: 'Patient',
+          profile: "http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-patient",
+          elements: get_elements_from_structure_definition(structure_definition_resource)
+        }
+      }
+    end
+
+    def get_elements_from_structure_definition(structure_definition_data)
+      elements = structure_definition_data.simple_elements(include_str: 'Patient.')
+      elements.map do |element|
+        {
+          id: element.id,
+          expression: element.path.gsub('Patient.', ''),
+          min: element.min
+        }
+      end.uniq
     end
   end
   # rubocop:enable Metrics/ClassLength

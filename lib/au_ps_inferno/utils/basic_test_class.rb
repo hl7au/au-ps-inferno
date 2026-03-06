@@ -273,6 +273,12 @@ module AUPSTestKit
       [title, result.join("\n\n")].join("\n\n")
     end
 
+    def populated_paths_info_raw(resource, elements_array)
+      elements_array.map do |element|
+        "#{boolean_to_existent_string(resolve_path(resource, element).first.present?)}: **#{element}**"
+      end 
+    end
+
     def all_paths_are_populated?(resource, elements_array)
       elements_array.map do |element|
         resolve_path(resource, element).first.present?
@@ -473,6 +479,73 @@ module AUPSTestKit
 
       assert !has_error,
              'Some of the sections are not populated. See the list of populated sections in messages tab.'
+    end
+
+    def calculate_message_level(failed: false, warning: false, info: false)
+      return 'error' if failed
+      return 'warning' if warning
+      return 'info' if info
+      'info'
+    end
+
+    def subject_resource
+      return false unless scratch_bundle.present?
+
+      bundle_resource = BundleDecorator.new(scratch_bundle.to_hash)
+      composition_resource = bundle_resource.composition_resource
+      return false unless composition_resource.present?
+
+      subject = composition_resource.subject
+      return false unless subject.present?
+
+      bundle_resource.resource_by_reference(subject.reference)
+    end
+
+    def get_extension_value_by_url(resouce, url)
+      result = resouce&.extension&.find { |ext| ext.url == url }
+
+      return result.value if result.present?
+    end
+
+    def test_subject_ms_elements
+      mandatory_ms_primitives = ['identifier', 'name', 'gender', 'birthDate']
+      optional_ms_primitives = ['telecom', 'address', 'communication', 'generalPractitioner']
+      optional_ms_slices = ['indigenousStatus', 'genderIdentity', 'individualPronouns']
+      optional_ms_slices_messages = []
+
+      resource = subject_resource
+      return false unless resource.present?
+
+      mandatory_ms_primitives_result = all_paths_are_populated?(resource, mandatory_ms_primitives)
+      optional_ms_primitives_result = all_paths_are_populated?(resource, optional_ms_primitives)
+      optional_ms_slices_result = optional_ms_slices.map do |slice|
+        extension_url = case slice
+                        when 'indigenousStatus'
+                          'http://hl7.org.au/fhir/StructureDefinition/indigenous-status'
+                        when 'genderIdentity'
+                          'http://hl7.org/fhir/StructureDefinition/individual-genderIdentity'
+                        when 'individualPronouns'
+                          'http://hl7.org/fhir/StructureDefinition/individual-pronouns'
+                        end
+
+        result = get_extension_value_by_url(resource, extension_url).present?
+        optional_ms_slices_messages << "#{boolean_to_existent_string(result)}: **#{slice}**"
+        result
+      end.all?
+      optional_result = optional_ms_primitives_result && optional_ms_slices_result
+
+      info_to_print = populated_paths_info_raw(resource, mandatory_ms_primitives + optional_ms_primitives) + optional_ms_slices_messages
+
+      add_message(
+        calculate_message_level(
+          failed: !mandatory_ms_primitives_result,
+          warning: optional_result, 
+          info: mandatory_ms_primitives_result && optional_result 
+        ),
+        info_to_print.join("\n\n")
+      )
+
+      assert mandatory_ms_primitives_result, 'Some of the mandatory Must Support elements are not populated. See the list of populated primitives in messages tab.'
     end
   end
 end

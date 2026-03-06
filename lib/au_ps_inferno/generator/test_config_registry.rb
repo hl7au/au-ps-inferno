@@ -123,6 +123,11 @@ class Generator
             sections_data = m.composition_sections.filter { |s| s[:required] == true && s[:mustSupport] == true }
             { commands: ["read_composition_sections_info(#{sections_data}, #{m.return_normalized_sections_data})"] }
           }
+        },
+        subject_ms_elements: {
+          title: 'Must Support elements SHALL be populated if a value is known',
+          description: 'Must Support elements SHALL be populated if a value is known',
+          commands: ['test_subject_ms_elements']
         }
       }.freeze
     end

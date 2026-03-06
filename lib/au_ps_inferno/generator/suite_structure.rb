@@ -78,6 +78,14 @@ class Generator
         ],
         optional: true,
         run_as_group: true
+      },
+      {
+        name: 'AU PS Composition Subject',
+        description: 'Verify the referenced subject is a correctly populated AU PS Patient resource.',
+        tests: [
+          { id: :subject_ms_elements }
+        ],
+        run_as_group: true
       }
     ].freeze
 
