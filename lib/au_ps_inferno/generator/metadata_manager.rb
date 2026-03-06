@@ -475,7 +475,8 @@ class Generator
         required: section.min.positive?,
         mustSupport: section.mustSupport || false,
         ms_elements: composition_ms_sections_elements,
-        subject: build_metadata_for_subject
+        subject: build_metadata_for_subject,
+        author: build_metadata_for_author
       }
     end
 
@@ -583,6 +584,38 @@ class Generator
           elements: get_elements_from_structure_definition(structure_definition_resource)
         }
       }
+    end
+
+    def build_metadata_for_author
+      # AU PS Practitioner, AU PS PractitionerRole, AU PS Patient, AU PS RelatedPerson, AU PS Organization profiles or Device resource
+      profiles = [
+        "Practitioner|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-practitioner",
+        "PractitionerRole|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-practitionerrole",
+        "Patient|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-patient",
+        "RelatedPerson|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-relatedperson",
+        "Organization|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-organization",
+        "Device|http://hl7.org/fhir/uv/ips/StructureDefinition/Device-uv-ips"
+      ]
+      profiles.map do |profile|
+        sd = get_structure_definition_by_profile(profile.split('|')[1])
+        {
+          resource_type: sd.type,
+          profile: profile.split('|')[1],
+          elements: get_elements_from_structure_definition_for_author(sd)
+        }
+      end
+    end
+
+    def get_elements_from_structure_definition_for_author(sd_data)
+      structure_definition_data = StructureDefinitionDecorator.new(sd_data.to_hash)
+      elements = structure_definition_data.simple_elements(include_str: "#{sd_data.type}.")
+      elements.map do |element|
+        {
+          id: element.id,
+          expression: element.path.gsub("#{sd_data.type}.", ''),
+          min: element.min
+        }
+      end.uniq
     end
 
     def get_elements_from_structure_definition(structure_definition_data)

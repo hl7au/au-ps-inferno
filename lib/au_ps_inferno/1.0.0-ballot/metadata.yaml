@@ -93,6 +93,202 @@
       - :id: Patient.generalPractitioner
         :expression: generalPractitioner
         :min: 0
+  :author:
+  - :resource_type: Practitioner
+    :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-practitioner
+    :elements:
+    - :id: Practitioner.identifier
+      :expression: identifier
+      :min: 0
+    - :id: Practitioner.identifier:hpii
+      :expression: identifier
+      :min: 0
+    - :id: Practitioner.name
+      :expression: name
+      :min: 1
+    - :id: Practitioner.name.family
+      :expression: name.family
+      :min: 1
+    - :id: Practitioner.name.given
+      :expression: name.given
+      :min: 0
+    - :id: Practitioner.telecom
+      :expression: telecom
+      :min: 0
+    - :id: Practitioner.address
+      :expression: address
+      :min: 0
+  - :resource_type: PractitionerRole
+    :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-practitionerrole
+    :elements:
+    - :id: PractitionerRole.identifier
+      :expression: identifier
+      :min: 0
+    - :id: PractitionerRole.identifier:medicareProvider
+      :expression: identifier
+      :min: 0
+    - :id: PractitionerRole.practitioner
+      :expression: practitioner
+      :min: 1
+    - :id: PractitionerRole.organization
+      :expression: organization
+      :min: 0
+    - :id: PractitionerRole.code
+      :expression: code
+      :min: 0
+    - :id: PractitionerRole.specialty
+      :expression: specialty
+      :min: 0
+    - :id: PractitionerRole.telecom
+      :expression: telecom
+      :min: 0
+    - :id: PractitionerRole.telecom.system
+      :expression: telecom.system
+      :min: 0
+    - :id: PractitionerRole.telecom.value
+      :expression: telecom.value
+      :min: 0
+  - :resource_type: Patient
+    :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-patient
+    :elements:
+    - :id: Patient.extension:indigenousStatus
+      :expression: extension
+      :min: 0
+    - :id: Patient.extension:genderIdentity
+      :expression: extension
+      :min: 0
+    - :id: Patient.extension:individualPronouns
+      :expression: extension
+      :min: 0
+    - :id: Patient.identifier
+      :expression: identifier
+      :min: 1
+    - :id: Patient.identifier:ihi
+      :expression: identifier
+      :min: 0
+    - :id: Patient.identifier:medicare
+      :expression: identifier
+      :min: 0
+    - :id: Patient.identifier:dva
+      :expression: identifier
+      :min: 0
+    - :id: Patient.name
+      :expression: name
+      :min: 1
+    - :id: Patient.name.use
+      :expression: name.use
+      :min: 0
+    - :id: Patient.name.text
+      :expression: name.text
+      :min: 0
+    - :id: Patient.name.family
+      :expression: name.family
+      :min: 0
+    - :id: Patient.name.given
+      :expression: name.given
+      :min: 0
+    - :id: Patient.telecom
+      :expression: telecom
+      :min: 0
+    - :id: Patient.telecom.system
+      :expression: telecom.system
+      :min: 0
+    - :id: Patient.telecom.value
+      :expression: telecom.value
+      :min: 0
+    - :id: Patient.telecom.use
+      :expression: telecom.use
+      :min: 0
+    - :id: Patient.gender
+      :expression: gender
+      :min: 1
+    - :id: Patient.birthDate
+      :expression: birthDate
+      :min: 1
+    - :id: Patient.address
+      :expression: address
+      :min: 0
+    - :id: Patient.communication
+      :expression: communication
+      :min: 0
+    - :id: Patient.communication.language
+      :expression: communication.language
+      :min: 1
+    - :id: Patient.communication.preferred
+      :expression: communication.preferred
+      :min: 0
+    - :id: Patient.generalPractitioner
+      :expression: generalPractitioner
+      :min: 0
+  - :resource_type: RelatedPerson
+    :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-relatedperson
+    :elements:
+    - :id: RelatedPerson.patient
+      :expression: patient
+      :min: 1
+    - :id: RelatedPerson.patient.reference
+      :expression: patient.reference
+      :min: 1
+    - :id: RelatedPerson.relationship
+      :expression: relationship
+      :min: 0
+    - :id: RelatedPerson.name
+      :expression: name
+      :min: 0
+    - :id: RelatedPerson.name.use
+      :expression: name.use
+      :min: 0
+    - :id: RelatedPerson.name.text
+      :expression: name.text
+      :min: 0
+    - :id: RelatedPerson.name.family
+      :expression: name.family
+      :min: 0
+    - :id: RelatedPerson.name.given
+      :expression: name.given
+      :min: 0
+    - :id: RelatedPerson.telecom
+      :expression: telecom
+      :min: 0
+    - :id: RelatedPerson.address
+      :expression: address
+      :min: 0
+  - :resource_type: Organization
+    :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-organization
+    :elements:
+    - :id: Organization.identifier
+      :expression: identifier
+      :min: 0
+    - :id: Organization.identifier:hpio
+      :expression: identifier
+      :min: 0
+    - :id: Organization.identifier:abn
+      :expression: identifier
+      :min: 0
+    - :id: Organization.type
+      :expression: type
+      :min: 0
+    - :id: Organization.name
+      :expression: name
+      :min: 1
+    - :id: Organization.telecom
+      :expression: telecom
+      :min: 0
+    - :id: Organization.telecom.system
+      :expression: telecom.system
+      :min: 0
+    - :id: Organization.telecom.value
+      :expression: telecom.value
+      :min: 0
+    - :id: Organization.address
+      :expression: address
+      :min: 0
+  - :resource_type: Device
+    :profile: http://hl7.org/fhir/uv/ips/StructureDefinition/Device-uv-ips
+    :elements:
+    - :id: Device.type
+      :expression: type
+      :min: 0
   :code: 11450-4
   :entries:
   - :id: Composition.section:sectionProblems.entry:problem
@@ -199,6 +395,202 @@
       - :id: Patient.generalPractitioner
         :expression: generalPractitioner
         :min: 0
+  :author:
+  - :resource_type: Practitioner
+    :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-practitioner
+    :elements:
+    - :id: Practitioner.identifier
+      :expression: identifier
+      :min: 0
+    - :id: Practitioner.identifier:hpii
+      :expression: identifier
+      :min: 0
+    - :id: Practitioner.name
+      :expression: name
+      :min: 1
+    - :id: Practitioner.name.family
+      :expression: name.family
+      :min: 1
+    - :id: Practitioner.name.given
+      :expression: name.given
+      :min: 0
+    - :id: Practitioner.telecom
+      :expression: telecom
+      :min: 0
+    - :id: Practitioner.address
+      :expression: address
+      :min: 0
+  - :resource_type: PractitionerRole
+    :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-practitionerrole
+    :elements:
+    - :id: PractitionerRole.identifier
+      :expression: identifier
+      :min: 0
+    - :id: PractitionerRole.identifier:medicareProvider
+      :expression: identifier
+      :min: 0
+    - :id: PractitionerRole.practitioner
+      :expression: practitioner
+      :min: 1
+    - :id: PractitionerRole.organization
+      :expression: organization
+      :min: 0
+    - :id: PractitionerRole.code
+      :expression: code
+      :min: 0
+    - :id: PractitionerRole.specialty
+      :expression: specialty
+      :min: 0
+    - :id: PractitionerRole.telecom
+      :expression: telecom
+      :min: 0
+    - :id: PractitionerRole.telecom.system
+      :expression: telecom.system
+      :min: 0
+    - :id: PractitionerRole.telecom.value
+      :expression: telecom.value
+      :min: 0
+  - :resource_type: Patient
+    :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-patient
+    :elements:
+    - :id: Patient.extension:indigenousStatus
+      :expression: extension
+      :min: 0
+    - :id: Patient.extension:genderIdentity
+      :expression: extension
+      :min: 0
+    - :id: Patient.extension:individualPronouns
+      :expression: extension
+      :min: 0
+    - :id: Patient.identifier
+      :expression: identifier
+      :min: 1
+    - :id: Patient.identifier:ihi
+      :expression: identifier
+      :min: 0
+    - :id: Patient.identifier:medicare
+      :expression: identifier
+      :min: 0
+    - :id: Patient.identifier:dva
+      :expression: identifier
+      :min: 0
+    - :id: Patient.name
+      :expression: name
+      :min: 1
+    - :id: Patient.name.use
+      :expression: name.use
+      :min: 0
+    - :id: Patient.name.text
+      :expression: name.text
+      :min: 0
+    - :id: Patient.name.family
+      :expression: name.family
+      :min: 0
+    - :id: Patient.name.given
+      :expression: name.given
+      :min: 0
+    - :id: Patient.telecom
+      :expression: telecom
+      :min: 0
+    - :id: Patient.telecom.system
+      :expression: telecom.system
+      :min: 0
+    - :id: Patient.telecom.value
+      :expression: telecom.value
+      :min: 0
+    - :id: Patient.telecom.use
+      :expression: telecom.use
+      :min: 0
+    - :id: Patient.gender
+      :expression: gender
+      :min: 1
+    - :id: Patient.birthDate
+      :expression: birthDate
+      :min: 1
+    - :id: Patient.address
+      :expression: address
+      :min: 0
+    - :id: Patient.communication
+      :expression: communication
+      :min: 0
+    - :id: Patient.communication.language
+      :expression: communication.language
+      :min: 1
+    - :id: Patient.communication.preferred
+      :expression: communication.preferred
+      :min: 0
+    - :id: Patient.generalPractitioner
+      :expression: generalPractitioner
+      :min: 0
+  - :resource_type: RelatedPerson
+    :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-relatedperson
+    :elements:
+    - :id: RelatedPerson.patient
+      :expression: patient
+      :min: 1
+    - :id: RelatedPerson.patient.reference
+      :expression: patient.reference
+      :min: 1
+    - :id: RelatedPerson.relationship
+      :expression: relationship
+      :min: 0
+    - :id: RelatedPerson.name
+      :expression: name
+      :min: 0
+    - :id: RelatedPerson.name.use
+      :expression: name.use
+      :min: 0
+    - :id: RelatedPerson.name.text
+      :expression: name.text
+      :min: 0
+    - :id: RelatedPerson.name.family
+      :expression: name.family
+      :min: 0
+    - :id: RelatedPerson.name.given
+      :expression: name.given
+      :min: 0
+    - :id: RelatedPerson.telecom
+      :expression: telecom
+      :min: 0
+    - :id: RelatedPerson.address
+      :expression: address
+      :min: 0
+  - :resource_type: Organization
+    :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-organization
+    :elements:
+    - :id: Organization.identifier
+      :expression: identifier
+      :min: 0
+    - :id: Organization.identifier:hpio
+      :expression: identifier
+      :min: 0
+    - :id: Organization.identifier:abn
+      :expression: identifier
+      :min: 0
+    - :id: Organization.type
+      :expression: type
+      :min: 0
+    - :id: Organization.name
+      :expression: name
+      :min: 1
+    - :id: Organization.telecom
+      :expression: telecom
+      :min: 0
+    - :id: Organization.telecom.system
+      :expression: telecom.system
+      :min: 0
+    - :id: Organization.telecom.value
+      :expression: telecom.value
+      :min: 0
+    - :id: Organization.address
+      :expression: address
+      :min: 0
+  - :resource_type: Device
+    :profile: http://hl7.org/fhir/uv/ips/StructureDefinition/Device-uv-ips
+    :elements:
+    - :id: Device.type
+      :expression: type
+      :min: 0
   :code: 48765-2
   :entries:
   - :id: Composition.section:sectionAllergies.entry:allergyOrIntolerance
@@ -309,6 +701,202 @@
       - :id: Patient.generalPractitioner
         :expression: generalPractitioner
         :min: 0
+  :author:
+  - :resource_type: Practitioner
+    :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-practitioner
+    :elements:
+    - :id: Practitioner.identifier
+      :expression: identifier
+      :min: 0
+    - :id: Practitioner.identifier:hpii
+      :expression: identifier
+      :min: 0
+    - :id: Practitioner.name
+      :expression: name
+      :min: 1
+    - :id: Practitioner.name.family
+      :expression: name.family
+      :min: 1
+    - :id: Practitioner.name.given
+      :expression: name.given
+      :min: 0
+    - :id: Practitioner.telecom
+      :expression: telecom
+      :min: 0
+    - :id: Practitioner.address
+      :expression: address
+      :min: 0
+  - :resource_type: PractitionerRole
+    :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-practitionerrole
+    :elements:
+    - :id: PractitionerRole.identifier
+      :expression: identifier
+      :min: 0
+    - :id: PractitionerRole.identifier:medicareProvider
+      :expression: identifier
+      :min: 0
+    - :id: PractitionerRole.practitioner
+      :expression: practitioner
+      :min: 1
+    - :id: PractitionerRole.organization
+      :expression: organization
+      :min: 0
+    - :id: PractitionerRole.code
+      :expression: code
+      :min: 0
+    - :id: PractitionerRole.specialty
+      :expression: specialty
+      :min: 0
+    - :id: PractitionerRole.telecom
+      :expression: telecom
+      :min: 0
+    - :id: PractitionerRole.telecom.system
+      :expression: telecom.system
+      :min: 0
+    - :id: PractitionerRole.telecom.value
+      :expression: telecom.value
+      :min: 0
+  - :resource_type: Patient
+    :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-patient
+    :elements:
+    - :id: Patient.extension:indigenousStatus
+      :expression: extension
+      :min: 0
+    - :id: Patient.extension:genderIdentity
+      :expression: extension
+      :min: 0
+    - :id: Patient.extension:individualPronouns
+      :expression: extension
+      :min: 0
+    - :id: Patient.identifier
+      :expression: identifier
+      :min: 1
+    - :id: Patient.identifier:ihi
+      :expression: identifier
+      :min: 0
+    - :id: Patient.identifier:medicare
+      :expression: identifier
+      :min: 0
+    - :id: Patient.identifier:dva
+      :expression: identifier
+      :min: 0
+    - :id: Patient.name
+      :expression: name
+      :min: 1
+    - :id: Patient.name.use
+      :expression: name.use
+      :min: 0
+    - :id: Patient.name.text
+      :expression: name.text
+      :min: 0
+    - :id: Patient.name.family
+      :expression: name.family
+      :min: 0
+    - :id: Patient.name.given
+      :expression: name.given
+      :min: 0
+    - :id: Patient.telecom
+      :expression: telecom
+      :min: 0
+    - :id: Patient.telecom.system
+      :expression: telecom.system
+      :min: 0
+    - :id: Patient.telecom.value
+      :expression: telecom.value
+      :min: 0
+    - :id: Patient.telecom.use
+      :expression: telecom.use
+      :min: 0
+    - :id: Patient.gender
+      :expression: gender
+      :min: 1
+    - :id: Patient.birthDate
+      :expression: birthDate
+      :min: 1
+    - :id: Patient.address
+      :expression: address
+      :min: 0
+    - :id: Patient.communication
+      :expression: communication
+      :min: 0
+    - :id: Patient.communication.language
+      :expression: communication.language
+      :min: 1
+    - :id: Patient.communication.preferred
+      :expression: communication.preferred
+      :min: 0
+    - :id: Patient.generalPractitioner
+      :expression: generalPractitioner
+      :min: 0
+  - :resource_type: RelatedPerson
+    :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-relatedperson
+    :elements:
+    - :id: RelatedPerson.patient
+      :expression: patient
+      :min: 1
+    - :id: RelatedPerson.patient.reference
+      :expression: patient.reference
+      :min: 1
+    - :id: RelatedPerson.relationship
+      :expression: relationship
+      :min: 0
+    - :id: RelatedPerson.name
+      :expression: name
+      :min: 0
+    - :id: RelatedPerson.name.use
+      :expression: name.use
+      :min: 0
+    - :id: RelatedPerson.name.text
+      :expression: name.text
+      :min: 0
+    - :id: RelatedPerson.name.family
+      :expression: name.family
+      :min: 0
+    - :id: RelatedPerson.name.given
+      :expression: name.given
+      :min: 0
+    - :id: RelatedPerson.telecom
+      :expression: telecom
+      :min: 0
+    - :id: RelatedPerson.address
+      :expression: address
+      :min: 0
+  - :resource_type: Organization
+    :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-organization
+    :elements:
+    - :id: Organization.identifier
+      :expression: identifier
+      :min: 0
+    - :id: Organization.identifier:hpio
+      :expression: identifier
+      :min: 0
+    - :id: Organization.identifier:abn
+      :expression: identifier
+      :min: 0
+    - :id: Organization.type
+      :expression: type
+      :min: 0
+    - :id: Organization.name
+      :expression: name
+      :min: 1
+    - :id: Organization.telecom
+      :expression: telecom
+      :min: 0
+    - :id: Organization.telecom.system
+      :expression: telecom.system
+      :min: 0
+    - :id: Organization.telecom.value
+      :expression: telecom.value
+      :min: 0
+    - :id: Organization.address
+      :expression: address
+      :min: 0
+  - :resource_type: Device
+    :profile: http://hl7.org/fhir/uv/ips/StructureDefinition/Device-uv-ips
+    :elements:
+    - :id: Device.type
+      :expression: type
+      :min: 0
   :code: 10160-0
   :entries:
   - :id: Composition.section:sectionMedications.entry:medicationStatementOrRequest
@@ -414,6 +1002,202 @@
       - :id: Patient.generalPractitioner
         :expression: generalPractitioner
         :min: 0
+  :author:
+  - :resource_type: Practitioner
+    :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-practitioner
+    :elements:
+    - :id: Practitioner.identifier
+      :expression: identifier
+      :min: 0
+    - :id: Practitioner.identifier:hpii
+      :expression: identifier
+      :min: 0
+    - :id: Practitioner.name
+      :expression: name
+      :min: 1
+    - :id: Practitioner.name.family
+      :expression: name.family
+      :min: 1
+    - :id: Practitioner.name.given
+      :expression: name.given
+      :min: 0
+    - :id: Practitioner.telecom
+      :expression: telecom
+      :min: 0
+    - :id: Practitioner.address
+      :expression: address
+      :min: 0
+  - :resource_type: PractitionerRole
+    :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-practitionerrole
+    :elements:
+    - :id: PractitionerRole.identifier
+      :expression: identifier
+      :min: 0
+    - :id: PractitionerRole.identifier:medicareProvider
+      :expression: identifier
+      :min: 0
+    - :id: PractitionerRole.practitioner
+      :expression: practitioner
+      :min: 1
+    - :id: PractitionerRole.organization
+      :expression: organization
+      :min: 0
+    - :id: PractitionerRole.code
+      :expression: code
+      :min: 0
+    - :id: PractitionerRole.specialty
+      :expression: specialty
+      :min: 0
+    - :id: PractitionerRole.telecom
+      :expression: telecom
+      :min: 0
+    - :id: PractitionerRole.telecom.system
+      :expression: telecom.system
+      :min: 0
+    - :id: PractitionerRole.telecom.value
+      :expression: telecom.value
+      :min: 0
+  - :resource_type: Patient
+    :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-patient
+    :elements:
+    - :id: Patient.extension:indigenousStatus
+      :expression: extension
+      :min: 0
+    - :id: Patient.extension:genderIdentity
+      :expression: extension
+      :min: 0
+    - :id: Patient.extension:individualPronouns
+      :expression: extension
+      :min: 0
+    - :id: Patient.identifier
+      :expression: identifier
+      :min: 1
+    - :id: Patient.identifier:ihi
+      :expression: identifier
+      :min: 0
+    - :id: Patient.identifier:medicare
+      :expression: identifier
+      :min: 0
+    - :id: Patient.identifier:dva
+      :expression: identifier
+      :min: 0
+    - :id: Patient.name
+      :expression: name
+      :min: 1
+    - :id: Patient.name.use
+      :expression: name.use
+      :min: 0
+    - :id: Patient.name.text
+      :expression: name.text
+      :min: 0
+    - :id: Patient.name.family
+      :expression: name.family
+      :min: 0
+    - :id: Patient.name.given
+      :expression: name.given
+      :min: 0
+    - :id: Patient.telecom
+      :expression: telecom
+      :min: 0
+    - :id: Patient.telecom.system
+      :expression: telecom.system
+      :min: 0
+    - :id: Patient.telecom.value
+      :expression: telecom.value
+      :min: 0
+    - :id: Patient.telecom.use
+      :expression: telecom.use
+      :min: 0
+    - :id: Patient.gender
+      :expression: gender
+      :min: 1
+    - :id: Patient.birthDate
+      :expression: birthDate
+      :min: 1
+    - :id: Patient.address
+      :expression: address
+      :min: 0
+    - :id: Patient.communication
+      :expression: communication
+      :min: 0
+    - :id: Patient.communication.language
+      :expression: communication.language
+      :min: 1
+    - :id: Patient.communication.preferred
+      :expression: communication.preferred
+      :min: 0
+    - :id: Patient.generalPractitioner
+      :expression: generalPractitioner
+      :min: 0
+  - :resource_type: RelatedPerson
+    :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-relatedperson
+    :elements:
+    - :id: RelatedPerson.patient
+      :expression: patient
+      :min: 1
+    - :id: RelatedPerson.patient.reference
+      :expression: patient.reference
+      :min: 1
+    - :id: RelatedPerson.relationship
+      :expression: relationship
+      :min: 0
+    - :id: RelatedPerson.name
+      :expression: name
+      :min: 0
+    - :id: RelatedPerson.name.use
+      :expression: name.use
+      :min: 0
+    - :id: RelatedPerson.name.text
+      :expression: name.text
+      :min: 0
+    - :id: RelatedPerson.name.family
+      :expression: name.family
+      :min: 0
+    - :id: RelatedPerson.name.given
+      :expression: name.given
+      :min: 0
+    - :id: RelatedPerson.telecom
+      :expression: telecom
+      :min: 0
+    - :id: RelatedPerson.address
+      :expression: address
+      :min: 0
+  - :resource_type: Organization
+    :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-organization
+    :elements:
+    - :id: Organization.identifier
+      :expression: identifier
+      :min: 0
+    - :id: Organization.identifier:hpio
+      :expression: identifier
+      :min: 0
+    - :id: Organization.identifier:abn
+      :expression: identifier
+      :min: 0
+    - :id: Organization.type
+      :expression: type
+      :min: 0
+    - :id: Organization.name
+      :expression: name
+      :min: 1
+    - :id: Organization.telecom
+      :expression: telecom
+      :min: 0
+    - :id: Organization.telecom.system
+      :expression: telecom.system
+      :min: 0
+    - :id: Organization.telecom.value
+      :expression: telecom.value
+      :min: 0
+    - :id: Organization.address
+      :expression: address
+      :min: 0
+  - :resource_type: Device
+    :profile: http://hl7.org/fhir/uv/ips/StructureDefinition/Device-uv-ips
+    :elements:
+    - :id: Device.type
+      :expression: type
+      :min: 0
   :code: 11369-6
   :entries:
   - :id: Composition.section:sectionImmunizations.entry:immunization
@@ -518,6 +1302,202 @@
       - :id: Patient.generalPractitioner
         :expression: generalPractitioner
         :min: 0
+  :author:
+  - :resource_type: Practitioner
+    :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-practitioner
+    :elements:
+    - :id: Practitioner.identifier
+      :expression: identifier
+      :min: 0
+    - :id: Practitioner.identifier:hpii
+      :expression: identifier
+      :min: 0
+    - :id: Practitioner.name
+      :expression: name
+      :min: 1
+    - :id: Practitioner.name.family
+      :expression: name.family
+      :min: 1
+    - :id: Practitioner.name.given
+      :expression: name.given
+      :min: 0
+    - :id: Practitioner.telecom
+      :expression: telecom
+      :min: 0
+    - :id: Practitioner.address
+      :expression: address
+      :min: 0
+  - :resource_type: PractitionerRole
+    :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-practitionerrole
+    :elements:
+    - :id: PractitionerRole.identifier
+      :expression: identifier
+      :min: 0
+    - :id: PractitionerRole.identifier:medicareProvider
+      :expression: identifier
+      :min: 0
+    - :id: PractitionerRole.practitioner
+      :expression: practitioner
+      :min: 1
+    - :id: PractitionerRole.organization
+      :expression: organization
+      :min: 0
+    - :id: PractitionerRole.code
+      :expression: code
+      :min: 0
+    - :id: PractitionerRole.specialty
+      :expression: specialty
+      :min: 0
+    - :id: PractitionerRole.telecom
+      :expression: telecom
+      :min: 0
+    - :id: PractitionerRole.telecom.system
+      :expression: telecom.system
+      :min: 0
+    - :id: PractitionerRole.telecom.value
+      :expression: telecom.value
+      :min: 0
+  - :resource_type: Patient
+    :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-patient
+    :elements:
+    - :id: Patient.extension:indigenousStatus
+      :expression: extension
+      :min: 0
+    - :id: Patient.extension:genderIdentity
+      :expression: extension
+      :min: 0
+    - :id: Patient.extension:individualPronouns
+      :expression: extension
+      :min: 0
+    - :id: Patient.identifier
+      :expression: identifier
+      :min: 1
+    - :id: Patient.identifier:ihi
+      :expression: identifier
+      :min: 0
+    - :id: Patient.identifier:medicare
+      :expression: identifier
+      :min: 0
+    - :id: Patient.identifier:dva
+      :expression: identifier
+      :min: 0
+    - :id: Patient.name
+      :expression: name
+      :min: 1
+    - :id: Patient.name.use
+      :expression: name.use
+      :min: 0
+    - :id: Patient.name.text
+      :expression: name.text
+      :min: 0
+    - :id: Patient.name.family
+      :expression: name.family
+      :min: 0
+    - :id: Patient.name.given
+      :expression: name.given
+      :min: 0
+    - :id: Patient.telecom
+      :expression: telecom
+      :min: 0
+    - :id: Patient.telecom.system
+      :expression: telecom.system
+      :min: 0
+    - :id: Patient.telecom.value
+      :expression: telecom.value
+      :min: 0
+    - :id: Patient.telecom.use
+      :expression: telecom.use
+      :min: 0
+    - :id: Patient.gender
+      :expression: gender
+      :min: 1
+    - :id: Patient.birthDate
+      :expression: birthDate
+      :min: 1
+    - :id: Patient.address
+      :expression: address
+      :min: 0
+    - :id: Patient.communication
+      :expression: communication
+      :min: 0
+    - :id: Patient.communication.language
+      :expression: communication.language
+      :min: 1
+    - :id: Patient.communication.preferred
+      :expression: communication.preferred
+      :min: 0
+    - :id: Patient.generalPractitioner
+      :expression: generalPractitioner
+      :min: 0
+  - :resource_type: RelatedPerson
+    :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-relatedperson
+    :elements:
+    - :id: RelatedPerson.patient
+      :expression: patient
+      :min: 1
+    - :id: RelatedPerson.patient.reference
+      :expression: patient.reference
+      :min: 1
+    - :id: RelatedPerson.relationship
+      :expression: relationship
+      :min: 0
+    - :id: RelatedPerson.name
+      :expression: name
+      :min: 0
+    - :id: RelatedPerson.name.use
+      :expression: name.use
+      :min: 0
+    - :id: RelatedPerson.name.text
+      :expression: name.text
+      :min: 0
+    - :id: RelatedPerson.name.family
+      :expression: name.family
+      :min: 0
+    - :id: RelatedPerson.name.given
+      :expression: name.given
+      :min: 0
+    - :id: RelatedPerson.telecom
+      :expression: telecom
+      :min: 0
+    - :id: RelatedPerson.address
+      :expression: address
+      :min: 0
+  - :resource_type: Organization
+    :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-organization
+    :elements:
+    - :id: Organization.identifier
+      :expression: identifier
+      :min: 0
+    - :id: Organization.identifier:hpio
+      :expression: identifier
+      :min: 0
+    - :id: Organization.identifier:abn
+      :expression: identifier
+      :min: 0
+    - :id: Organization.type
+      :expression: type
+      :min: 0
+    - :id: Organization.name
+      :expression: name
+      :min: 1
+    - :id: Organization.telecom
+      :expression: telecom
+      :min: 0
+    - :id: Organization.telecom.system
+      :expression: telecom.system
+      :min: 0
+    - :id: Organization.telecom.value
+      :expression: telecom.value
+      :min: 0
+    - :id: Organization.address
+      :expression: address
+      :min: 0
+  - :resource_type: Device
+    :profile: http://hl7.org/fhir/uv/ips/StructureDefinition/Device-uv-ips
+    :elements:
+    - :id: Device.type
+      :expression: type
+      :min: 0
   :code: 30954-2
   :entries:
   - :id: Composition.section:sectionResults.entry:results-observation-laboratory-pathology
@@ -637,6 +1617,202 @@
       - :id: Patient.generalPractitioner
         :expression: generalPractitioner
         :min: 0
+  :author:
+  - :resource_type: Practitioner
+    :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-practitioner
+    :elements:
+    - :id: Practitioner.identifier
+      :expression: identifier
+      :min: 0
+    - :id: Practitioner.identifier:hpii
+      :expression: identifier
+      :min: 0
+    - :id: Practitioner.name
+      :expression: name
+      :min: 1
+    - :id: Practitioner.name.family
+      :expression: name.family
+      :min: 1
+    - :id: Practitioner.name.given
+      :expression: name.given
+      :min: 0
+    - :id: Practitioner.telecom
+      :expression: telecom
+      :min: 0
+    - :id: Practitioner.address
+      :expression: address
+      :min: 0
+  - :resource_type: PractitionerRole
+    :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-practitionerrole
+    :elements:
+    - :id: PractitionerRole.identifier
+      :expression: identifier
+      :min: 0
+    - :id: PractitionerRole.identifier:medicareProvider
+      :expression: identifier
+      :min: 0
+    - :id: PractitionerRole.practitioner
+      :expression: practitioner
+      :min: 1
+    - :id: PractitionerRole.organization
+      :expression: organization
+      :min: 0
+    - :id: PractitionerRole.code
+      :expression: code
+      :min: 0
+    - :id: PractitionerRole.specialty
+      :expression: specialty
+      :min: 0
+    - :id: PractitionerRole.telecom
+      :expression: telecom
+      :min: 0
+    - :id: PractitionerRole.telecom.system
+      :expression: telecom.system
+      :min: 0
+    - :id: PractitionerRole.telecom.value
+      :expression: telecom.value
+      :min: 0
+  - :resource_type: Patient
+    :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-patient
+    :elements:
+    - :id: Patient.extension:indigenousStatus
+      :expression: extension
+      :min: 0
+    - :id: Patient.extension:genderIdentity
+      :expression: extension
+      :min: 0
+    - :id: Patient.extension:individualPronouns
+      :expression: extension
+      :min: 0
+    - :id: Patient.identifier
+      :expression: identifier
+      :min: 1
+    - :id: Patient.identifier:ihi
+      :expression: identifier
+      :min: 0
+    - :id: Patient.identifier:medicare
+      :expression: identifier
+      :min: 0
+    - :id: Patient.identifier:dva
+      :expression: identifier
+      :min: 0
+    - :id: Patient.name
+      :expression: name
+      :min: 1
+    - :id: Patient.name.use
+      :expression: name.use
+      :min: 0
+    - :id: Patient.name.text
+      :expression: name.text
+      :min: 0
+    - :id: Patient.name.family
+      :expression: name.family
+      :min: 0
+    - :id: Patient.name.given
+      :expression: name.given
+      :min: 0
+    - :id: Patient.telecom
+      :expression: telecom
+      :min: 0
+    - :id: Patient.telecom.system
+      :expression: telecom.system
+      :min: 0
+    - :id: Patient.telecom.value
+      :expression: telecom.value
+      :min: 0
+    - :id: Patient.telecom.use
+      :expression: telecom.use
+      :min: 0
+    - :id: Patient.gender
+      :expression: gender
+      :min: 1
+    - :id: Patient.birthDate
+      :expression: birthDate
+      :min: 1
+    - :id: Patient.address
+      :expression: address
+      :min: 0
+    - :id: Patient.communication
+      :expression: communication
+      :min: 0
+    - :id: Patient.communication.language
+      :expression: communication.language
+      :min: 1
+    - :id: Patient.communication.preferred
+      :expression: communication.preferred
+      :min: 0
+    - :id: Patient.generalPractitioner
+      :expression: generalPractitioner
+      :min: 0
+  - :resource_type: RelatedPerson
+    :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-relatedperson
+    :elements:
+    - :id: RelatedPerson.patient
+      :expression: patient
+      :min: 1
+    - :id: RelatedPerson.patient.reference
+      :expression: patient.reference
+      :min: 1
+    - :id: RelatedPerson.relationship
+      :expression: relationship
+      :min: 0
+    - :id: RelatedPerson.name
+      :expression: name
+      :min: 0
+    - :id: RelatedPerson.name.use
+      :expression: name.use
+      :min: 0
+    - :id: RelatedPerson.name.text
+      :expression: name.text
+      :min: 0
+    - :id: RelatedPerson.name.family
+      :expression: name.family
+      :min: 0
+    - :id: RelatedPerson.name.given
+      :expression: name.given
+      :min: 0
+    - :id: RelatedPerson.telecom
+      :expression: telecom
+      :min: 0
+    - :id: RelatedPerson.address
+      :expression: address
+      :min: 0
+  - :resource_type: Organization
+    :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-organization
+    :elements:
+    - :id: Organization.identifier
+      :expression: identifier
+      :min: 0
+    - :id: Organization.identifier:hpio
+      :expression: identifier
+      :min: 0
+    - :id: Organization.identifier:abn
+      :expression: identifier
+      :min: 0
+    - :id: Organization.type
+      :expression: type
+      :min: 0
+    - :id: Organization.name
+      :expression: name
+      :min: 1
+    - :id: Organization.telecom
+      :expression: telecom
+      :min: 0
+    - :id: Organization.telecom.system
+      :expression: telecom.system
+      :min: 0
+    - :id: Organization.telecom.value
+      :expression: telecom.value
+      :min: 0
+    - :id: Organization.address
+      :expression: address
+      :min: 0
+  - :resource_type: Device
+    :profile: http://hl7.org/fhir/uv/ips/StructureDefinition/Device-uv-ips
+    :elements:
+    - :id: Device.type
+      :expression: type
+      :min: 0
   :code: 47519-4
   :entries:
   - :id: Composition.section:sectionProceduresHx.entry:procedure
@@ -738,6 +1914,202 @@
       - :id: Patient.generalPractitioner
         :expression: generalPractitioner
         :min: 0
+  :author:
+  - :resource_type: Practitioner
+    :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-practitioner
+    :elements:
+    - :id: Practitioner.identifier
+      :expression: identifier
+      :min: 0
+    - :id: Practitioner.identifier:hpii
+      :expression: identifier
+      :min: 0
+    - :id: Practitioner.name
+      :expression: name
+      :min: 1
+    - :id: Practitioner.name.family
+      :expression: name.family
+      :min: 1
+    - :id: Practitioner.name.given
+      :expression: name.given
+      :min: 0
+    - :id: Practitioner.telecom
+      :expression: telecom
+      :min: 0
+    - :id: Practitioner.address
+      :expression: address
+      :min: 0
+  - :resource_type: PractitionerRole
+    :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-practitionerrole
+    :elements:
+    - :id: PractitionerRole.identifier
+      :expression: identifier
+      :min: 0
+    - :id: PractitionerRole.identifier:medicareProvider
+      :expression: identifier
+      :min: 0
+    - :id: PractitionerRole.practitioner
+      :expression: practitioner
+      :min: 1
+    - :id: PractitionerRole.organization
+      :expression: organization
+      :min: 0
+    - :id: PractitionerRole.code
+      :expression: code
+      :min: 0
+    - :id: PractitionerRole.specialty
+      :expression: specialty
+      :min: 0
+    - :id: PractitionerRole.telecom
+      :expression: telecom
+      :min: 0
+    - :id: PractitionerRole.telecom.system
+      :expression: telecom.system
+      :min: 0
+    - :id: PractitionerRole.telecom.value
+      :expression: telecom.value
+      :min: 0
+  - :resource_type: Patient
+    :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-patient
+    :elements:
+    - :id: Patient.extension:indigenousStatus
+      :expression: extension
+      :min: 0
+    - :id: Patient.extension:genderIdentity
+      :expression: extension
+      :min: 0
+    - :id: Patient.extension:individualPronouns
+      :expression: extension
+      :min: 0
+    - :id: Patient.identifier
+      :expression: identifier
+      :min: 1
+    - :id: Patient.identifier:ihi
+      :expression: identifier
+      :min: 0
+    - :id: Patient.identifier:medicare
+      :expression: identifier
+      :min: 0
+    - :id: Patient.identifier:dva
+      :expression: identifier
+      :min: 0
+    - :id: Patient.name
+      :expression: name
+      :min: 1
+    - :id: Patient.name.use
+      :expression: name.use
+      :min: 0
+    - :id: Patient.name.text
+      :expression: name.text
+      :min: 0
+    - :id: Patient.name.family
+      :expression: name.family
+      :min: 0
+    - :id: Patient.name.given
+      :expression: name.given
+      :min: 0
+    - :id: Patient.telecom
+      :expression: telecom
+      :min: 0
+    - :id: Patient.telecom.system
+      :expression: telecom.system
+      :min: 0
+    - :id: Patient.telecom.value
+      :expression: telecom.value
+      :min: 0
+    - :id: Patient.telecom.use
+      :expression: telecom.use
+      :min: 0
+    - :id: Patient.gender
+      :expression: gender
+      :min: 1
+    - :id: Patient.birthDate
+      :expression: birthDate
+      :min: 1
+    - :id: Patient.address
+      :expression: address
+      :min: 0
+    - :id: Patient.communication
+      :expression: communication
+      :min: 0
+    - :id: Patient.communication.language
+      :expression: communication.language
+      :min: 1
+    - :id: Patient.communication.preferred
+      :expression: communication.preferred
+      :min: 0
+    - :id: Patient.generalPractitioner
+      :expression: generalPractitioner
+      :min: 0
+  - :resource_type: RelatedPerson
+    :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-relatedperson
+    :elements:
+    - :id: RelatedPerson.patient
+      :expression: patient
+      :min: 1
+    - :id: RelatedPerson.patient.reference
+      :expression: patient.reference
+      :min: 1
+    - :id: RelatedPerson.relationship
+      :expression: relationship
+      :min: 0
+    - :id: RelatedPerson.name
+      :expression: name
+      :min: 0
+    - :id: RelatedPerson.name.use
+      :expression: name.use
+      :min: 0
+    - :id: RelatedPerson.name.text
+      :expression: name.text
+      :min: 0
+    - :id: RelatedPerson.name.family
+      :expression: name.family
+      :min: 0
+    - :id: RelatedPerson.name.given
+      :expression: name.given
+      :min: 0
+    - :id: RelatedPerson.telecom
+      :expression: telecom
+      :min: 0
+    - :id: RelatedPerson.address
+      :expression: address
+      :min: 0
+  - :resource_type: Organization
+    :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-organization
+    :elements:
+    - :id: Organization.identifier
+      :expression: identifier
+      :min: 0
+    - :id: Organization.identifier:hpio
+      :expression: identifier
+      :min: 0
+    - :id: Organization.identifier:abn
+      :expression: identifier
+      :min: 0
+    - :id: Organization.type
+      :expression: type
+      :min: 0
+    - :id: Organization.name
+      :expression: name
+      :min: 1
+    - :id: Organization.telecom
+      :expression: telecom
+      :min: 0
+    - :id: Organization.telecom.system
+      :expression: telecom.system
+      :min: 0
+    - :id: Organization.telecom.value
+      :expression: telecom.value
+      :min: 0
+    - :id: Organization.address
+      :expression: address
+      :min: 0
+  - :resource_type: Device
+    :profile: http://hl7.org/fhir/uv/ips/StructureDefinition/Device-uv-ips
+    :elements:
+    - :id: Device.type
+      :expression: type
+      :min: 0
   :code: 46264-8
   :entries:
   - :id: Composition.section:sectionMedicalDevices.entry:deviceStatement
@@ -839,6 +2211,202 @@
       - :id: Patient.generalPractitioner
         :expression: generalPractitioner
         :min: 0
+  :author:
+  - :resource_type: Practitioner
+    :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-practitioner
+    :elements:
+    - :id: Practitioner.identifier
+      :expression: identifier
+      :min: 0
+    - :id: Practitioner.identifier:hpii
+      :expression: identifier
+      :min: 0
+    - :id: Practitioner.name
+      :expression: name
+      :min: 1
+    - :id: Practitioner.name.family
+      :expression: name.family
+      :min: 1
+    - :id: Practitioner.name.given
+      :expression: name.given
+      :min: 0
+    - :id: Practitioner.telecom
+      :expression: telecom
+      :min: 0
+    - :id: Practitioner.address
+      :expression: address
+      :min: 0
+  - :resource_type: PractitionerRole
+    :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-practitionerrole
+    :elements:
+    - :id: PractitionerRole.identifier
+      :expression: identifier
+      :min: 0
+    - :id: PractitionerRole.identifier:medicareProvider
+      :expression: identifier
+      :min: 0
+    - :id: PractitionerRole.practitioner
+      :expression: practitioner
+      :min: 1
+    - :id: PractitionerRole.organization
+      :expression: organization
+      :min: 0
+    - :id: PractitionerRole.code
+      :expression: code
+      :min: 0
+    - :id: PractitionerRole.specialty
+      :expression: specialty
+      :min: 0
+    - :id: PractitionerRole.telecom
+      :expression: telecom
+      :min: 0
+    - :id: PractitionerRole.telecom.system
+      :expression: telecom.system
+      :min: 0
+    - :id: PractitionerRole.telecom.value
+      :expression: telecom.value
+      :min: 0
+  - :resource_type: Patient
+    :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-patient
+    :elements:
+    - :id: Patient.extension:indigenousStatus
+      :expression: extension
+      :min: 0
+    - :id: Patient.extension:genderIdentity
+      :expression: extension
+      :min: 0
+    - :id: Patient.extension:individualPronouns
+      :expression: extension
+      :min: 0
+    - :id: Patient.identifier
+      :expression: identifier
+      :min: 1
+    - :id: Patient.identifier:ihi
+      :expression: identifier
+      :min: 0
+    - :id: Patient.identifier:medicare
+      :expression: identifier
+      :min: 0
+    - :id: Patient.identifier:dva
+      :expression: identifier
+      :min: 0
+    - :id: Patient.name
+      :expression: name
+      :min: 1
+    - :id: Patient.name.use
+      :expression: name.use
+      :min: 0
+    - :id: Patient.name.text
+      :expression: name.text
+      :min: 0
+    - :id: Patient.name.family
+      :expression: name.family
+      :min: 0
+    - :id: Patient.name.given
+      :expression: name.given
+      :min: 0
+    - :id: Patient.telecom
+      :expression: telecom
+      :min: 0
+    - :id: Patient.telecom.system
+      :expression: telecom.system
+      :min: 0
+    - :id: Patient.telecom.value
+      :expression: telecom.value
+      :min: 0
+    - :id: Patient.telecom.use
+      :expression: telecom.use
+      :min: 0
+    - :id: Patient.gender
+      :expression: gender
+      :min: 1
+    - :id: Patient.birthDate
+      :expression: birthDate
+      :min: 1
+    - :id: Patient.address
+      :expression: address
+      :min: 0
+    - :id: Patient.communication
+      :expression: communication
+      :min: 0
+    - :id: Patient.communication.language
+      :expression: communication.language
+      :min: 1
+    - :id: Patient.communication.preferred
+      :expression: communication.preferred
+      :min: 0
+    - :id: Patient.generalPractitioner
+      :expression: generalPractitioner
+      :min: 0
+  - :resource_type: RelatedPerson
+    :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-relatedperson
+    :elements:
+    - :id: RelatedPerson.patient
+      :expression: patient
+      :min: 1
+    - :id: RelatedPerson.patient.reference
+      :expression: patient.reference
+      :min: 1
+    - :id: RelatedPerson.relationship
+      :expression: relationship
+      :min: 0
+    - :id: RelatedPerson.name
+      :expression: name
+      :min: 0
+    - :id: RelatedPerson.name.use
+      :expression: name.use
+      :min: 0
+    - :id: RelatedPerson.name.text
+      :expression: name.text
+      :min: 0
+    - :id: RelatedPerson.name.family
+      :expression: name.family
+      :min: 0
+    - :id: RelatedPerson.name.given
+      :expression: name.given
+      :min: 0
+    - :id: RelatedPerson.telecom
+      :expression: telecom
+      :min: 0
+    - :id: RelatedPerson.address
+      :expression: address
+      :min: 0
+  - :resource_type: Organization
+    :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-organization
+    :elements:
+    - :id: Organization.identifier
+      :expression: identifier
+      :min: 0
+    - :id: Organization.identifier:hpio
+      :expression: identifier
+      :min: 0
+    - :id: Organization.identifier:abn
+      :expression: identifier
+      :min: 0
+    - :id: Organization.type
+      :expression: type
+      :min: 0
+    - :id: Organization.name
+      :expression: name
+      :min: 1
+    - :id: Organization.telecom
+      :expression: telecom
+      :min: 0
+    - :id: Organization.telecom.system
+      :expression: telecom.system
+      :min: 0
+    - :id: Organization.telecom.value
+      :expression: telecom.value
+      :min: 0
+    - :id: Organization.address
+      :expression: address
+      :min: 0
+  - :resource_type: Device
+    :profile: http://hl7.org/fhir/uv/ips/StructureDefinition/Device-uv-ips
+    :elements:
+    - :id: Device.type
+      :expression: type
+      :min: 0
   :code: 42348-3
   :entries:
   - :id: Composition.section:sectionAdvanceDirectives.entry:advanceDirectivesConsent
@@ -942,6 +2510,202 @@
       - :id: Patient.generalPractitioner
         :expression: generalPractitioner
         :min: 0
+  :author:
+  - :resource_type: Practitioner
+    :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-practitioner
+    :elements:
+    - :id: Practitioner.identifier
+      :expression: identifier
+      :min: 0
+    - :id: Practitioner.identifier:hpii
+      :expression: identifier
+      :min: 0
+    - :id: Practitioner.name
+      :expression: name
+      :min: 1
+    - :id: Practitioner.name.family
+      :expression: name.family
+      :min: 1
+    - :id: Practitioner.name.given
+      :expression: name.given
+      :min: 0
+    - :id: Practitioner.telecom
+      :expression: telecom
+      :min: 0
+    - :id: Practitioner.address
+      :expression: address
+      :min: 0
+  - :resource_type: PractitionerRole
+    :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-practitionerrole
+    :elements:
+    - :id: PractitionerRole.identifier
+      :expression: identifier
+      :min: 0
+    - :id: PractitionerRole.identifier:medicareProvider
+      :expression: identifier
+      :min: 0
+    - :id: PractitionerRole.practitioner
+      :expression: practitioner
+      :min: 1
+    - :id: PractitionerRole.organization
+      :expression: organization
+      :min: 0
+    - :id: PractitionerRole.code
+      :expression: code
+      :min: 0
+    - :id: PractitionerRole.specialty
+      :expression: specialty
+      :min: 0
+    - :id: PractitionerRole.telecom
+      :expression: telecom
+      :min: 0
+    - :id: PractitionerRole.telecom.system
+      :expression: telecom.system
+      :min: 0
+    - :id: PractitionerRole.telecom.value
+      :expression: telecom.value
+      :min: 0
+  - :resource_type: Patient
+    :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-patient
+    :elements:
+    - :id: Patient.extension:indigenousStatus
+      :expression: extension
+      :min: 0
+    - :id: Patient.extension:genderIdentity
+      :expression: extension
+      :min: 0
+    - :id: Patient.extension:individualPronouns
+      :expression: extension
+      :min: 0
+    - :id: Patient.identifier
+      :expression: identifier
+      :min: 1
+    - :id: Patient.identifier:ihi
+      :expression: identifier
+      :min: 0
+    - :id: Patient.identifier:medicare
+      :expression: identifier
+      :min: 0
+    - :id: Patient.identifier:dva
+      :expression: identifier
+      :min: 0
+    - :id: Patient.name
+      :expression: name
+      :min: 1
+    - :id: Patient.name.use
+      :expression: name.use
+      :min: 0
+    - :id: Patient.name.text
+      :expression: name.text
+      :min: 0
+    - :id: Patient.name.family
+      :expression: name.family
+      :min: 0
+    - :id: Patient.name.given
+      :expression: name.given
+      :min: 0
+    - :id: Patient.telecom
+      :expression: telecom
+      :min: 0
+    - :id: Patient.telecom.system
+      :expression: telecom.system
+      :min: 0
+    - :id: Patient.telecom.value
+      :expression: telecom.value
+      :min: 0
+    - :id: Patient.telecom.use
+      :expression: telecom.use
+      :min: 0
+    - :id: Patient.gender
+      :expression: gender
+      :min: 1
+    - :id: Patient.birthDate
+      :expression: birthDate
+      :min: 1
+    - :id: Patient.address
+      :expression: address
+      :min: 0
+    - :id: Patient.communication
+      :expression: communication
+      :min: 0
+    - :id: Patient.communication.language
+      :expression: communication.language
+      :min: 1
+    - :id: Patient.communication.preferred
+      :expression: communication.preferred
+      :min: 0
+    - :id: Patient.generalPractitioner
+      :expression: generalPractitioner
+      :min: 0
+  - :resource_type: RelatedPerson
+    :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-relatedperson
+    :elements:
+    - :id: RelatedPerson.patient
+      :expression: patient
+      :min: 1
+    - :id: RelatedPerson.patient.reference
+      :expression: patient.reference
+      :min: 1
+    - :id: RelatedPerson.relationship
+      :expression: relationship
+      :min: 0
+    - :id: RelatedPerson.name
+      :expression: name
+      :min: 0
+    - :id: RelatedPerson.name.use
+      :expression: name.use
+      :min: 0
+    - :id: RelatedPerson.name.text
+      :expression: name.text
+      :min: 0
+    - :id: RelatedPerson.name.family
+      :expression: name.family
+      :min: 0
+    - :id: RelatedPerson.name.given
+      :expression: name.given
+      :min: 0
+    - :id: RelatedPerson.telecom
+      :expression: telecom
+      :min: 0
+    - :id: RelatedPerson.address
+      :expression: address
+      :min: 0
+  - :resource_type: Organization
+    :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-organization
+    :elements:
+    - :id: Organization.identifier
+      :expression: identifier
+      :min: 0
+    - :id: Organization.identifier:hpio
+      :expression: identifier
+      :min: 0
+    - :id: Organization.identifier:abn
+      :expression: identifier
+      :min: 0
+    - :id: Organization.type
+      :expression: type
+      :min: 0
+    - :id: Organization.name
+      :expression: name
+      :min: 1
+    - :id: Organization.telecom
+      :expression: telecom
+      :min: 0
+    - :id: Organization.telecom.system
+      :expression: telecom.system
+      :min: 0
+    - :id: Organization.telecom.value
+      :expression: telecom.value
+      :min: 0
+    - :id: Organization.address
+      :expression: address
+      :min: 0
+  - :resource_type: Device
+    :profile: http://hl7.org/fhir/uv/ips/StructureDefinition/Device-uv-ips
+    :elements:
+    - :id: Device.type
+      :expression: type
+      :min: 0
   :code: 104605-1
   :entries:
   - :id: Composition.section:sectionAlerts.entry:alertsFlag
@@ -1046,6 +2810,202 @@
       - :id: Patient.generalPractitioner
         :expression: generalPractitioner
         :min: 0
+  :author:
+  - :resource_type: Practitioner
+    :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-practitioner
+    :elements:
+    - :id: Practitioner.identifier
+      :expression: identifier
+      :min: 0
+    - :id: Practitioner.identifier:hpii
+      :expression: identifier
+      :min: 0
+    - :id: Practitioner.name
+      :expression: name
+      :min: 1
+    - :id: Practitioner.name.family
+      :expression: name.family
+      :min: 1
+    - :id: Practitioner.name.given
+      :expression: name.given
+      :min: 0
+    - :id: Practitioner.telecom
+      :expression: telecom
+      :min: 0
+    - :id: Practitioner.address
+      :expression: address
+      :min: 0
+  - :resource_type: PractitionerRole
+    :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-practitionerrole
+    :elements:
+    - :id: PractitionerRole.identifier
+      :expression: identifier
+      :min: 0
+    - :id: PractitionerRole.identifier:medicareProvider
+      :expression: identifier
+      :min: 0
+    - :id: PractitionerRole.practitioner
+      :expression: practitioner
+      :min: 1
+    - :id: PractitionerRole.organization
+      :expression: organization
+      :min: 0
+    - :id: PractitionerRole.code
+      :expression: code
+      :min: 0
+    - :id: PractitionerRole.specialty
+      :expression: specialty
+      :min: 0
+    - :id: PractitionerRole.telecom
+      :expression: telecom
+      :min: 0
+    - :id: PractitionerRole.telecom.system
+      :expression: telecom.system
+      :min: 0
+    - :id: PractitionerRole.telecom.value
+      :expression: telecom.value
+      :min: 0
+  - :resource_type: Patient
+    :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-patient
+    :elements:
+    - :id: Patient.extension:indigenousStatus
+      :expression: extension
+      :min: 0
+    - :id: Patient.extension:genderIdentity
+      :expression: extension
+      :min: 0
+    - :id: Patient.extension:individualPronouns
+      :expression: extension
+      :min: 0
+    - :id: Patient.identifier
+      :expression: identifier
+      :min: 1
+    - :id: Patient.identifier:ihi
+      :expression: identifier
+      :min: 0
+    - :id: Patient.identifier:medicare
+      :expression: identifier
+      :min: 0
+    - :id: Patient.identifier:dva
+      :expression: identifier
+      :min: 0
+    - :id: Patient.name
+      :expression: name
+      :min: 1
+    - :id: Patient.name.use
+      :expression: name.use
+      :min: 0
+    - :id: Patient.name.text
+      :expression: name.text
+      :min: 0
+    - :id: Patient.name.family
+      :expression: name.family
+      :min: 0
+    - :id: Patient.name.given
+      :expression: name.given
+      :min: 0
+    - :id: Patient.telecom
+      :expression: telecom
+      :min: 0
+    - :id: Patient.telecom.system
+      :expression: telecom.system
+      :min: 0
+    - :id: Patient.telecom.value
+      :expression: telecom.value
+      :min: 0
+    - :id: Patient.telecom.use
+      :expression: telecom.use
+      :min: 0
+    - :id: Patient.gender
+      :expression: gender
+      :min: 1
+    - :id: Patient.birthDate
+      :expression: birthDate
+      :min: 1
+    - :id: Patient.address
+      :expression: address
+      :min: 0
+    - :id: Patient.communication
+      :expression: communication
+      :min: 0
+    - :id: Patient.communication.language
+      :expression: communication.language
+      :min: 1
+    - :id: Patient.communication.preferred
+      :expression: communication.preferred
+      :min: 0
+    - :id: Patient.generalPractitioner
+      :expression: generalPractitioner
+      :min: 0
+  - :resource_type: RelatedPerson
+    :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-relatedperson
+    :elements:
+    - :id: RelatedPerson.patient
+      :expression: patient
+      :min: 1
+    - :id: RelatedPerson.patient.reference
+      :expression: patient.reference
+      :min: 1
+    - :id: RelatedPerson.relationship
+      :expression: relationship
+      :min: 0
+    - :id: RelatedPerson.name
+      :expression: name
+      :min: 0
+    - :id: RelatedPerson.name.use
+      :expression: name.use
+      :min: 0
+    - :id: RelatedPerson.name.text
+      :expression: name.text
+      :min: 0
+    - :id: RelatedPerson.name.family
+      :expression: name.family
+      :min: 0
+    - :id: RelatedPerson.name.given
+      :expression: name.given
+      :min: 0
+    - :id: RelatedPerson.telecom
+      :expression: telecom
+      :min: 0
+    - :id: RelatedPerson.address
+      :expression: address
+      :min: 0
+  - :resource_type: Organization
+    :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-organization
+    :elements:
+    - :id: Organization.identifier
+      :expression: identifier
+      :min: 0
+    - :id: Organization.identifier:hpio
+      :expression: identifier
+      :min: 0
+    - :id: Organization.identifier:abn
+      :expression: identifier
+      :min: 0
+    - :id: Organization.type
+      :expression: type
+      :min: 0
+    - :id: Organization.name
+      :expression: name
+      :min: 1
+    - :id: Organization.telecom
+      :expression: telecom
+      :min: 0
+    - :id: Organization.telecom.system
+      :expression: telecom.system
+      :min: 0
+    - :id: Organization.telecom.value
+      :expression: telecom.value
+      :min: 0
+    - :id: Organization.address
+      :expression: address
+      :min: 0
+  - :resource_type: Device
+    :profile: http://hl7.org/fhir/uv/ips/StructureDefinition/Device-uv-ips
+    :elements:
+    - :id: Device.type
+      :expression: type
+      :min: 0
   :code: 47420-5
   :entries:
   - :id: Composition.section:sectionFunctionalStatus.entry:disability
@@ -1155,6 +3115,202 @@
       - :id: Patient.generalPractitioner
         :expression: generalPractitioner
         :min: 0
+  :author:
+  - :resource_type: Practitioner
+    :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-practitioner
+    :elements:
+    - :id: Practitioner.identifier
+      :expression: identifier
+      :min: 0
+    - :id: Practitioner.identifier:hpii
+      :expression: identifier
+      :min: 0
+    - :id: Practitioner.name
+      :expression: name
+      :min: 1
+    - :id: Practitioner.name.family
+      :expression: name.family
+      :min: 1
+    - :id: Practitioner.name.given
+      :expression: name.given
+      :min: 0
+    - :id: Practitioner.telecom
+      :expression: telecom
+      :min: 0
+    - :id: Practitioner.address
+      :expression: address
+      :min: 0
+  - :resource_type: PractitionerRole
+    :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-practitionerrole
+    :elements:
+    - :id: PractitionerRole.identifier
+      :expression: identifier
+      :min: 0
+    - :id: PractitionerRole.identifier:medicareProvider
+      :expression: identifier
+      :min: 0
+    - :id: PractitionerRole.practitioner
+      :expression: practitioner
+      :min: 1
+    - :id: PractitionerRole.organization
+      :expression: organization
+      :min: 0
+    - :id: PractitionerRole.code
+      :expression: code
+      :min: 0
+    - :id: PractitionerRole.specialty
+      :expression: specialty
+      :min: 0
+    - :id: PractitionerRole.telecom
+      :expression: telecom
+      :min: 0
+    - :id: PractitionerRole.telecom.system
+      :expression: telecom.system
+      :min: 0
+    - :id: PractitionerRole.telecom.value
+      :expression: telecom.value
+      :min: 0
+  - :resource_type: Patient
+    :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-patient
+    :elements:
+    - :id: Patient.extension:indigenousStatus
+      :expression: extension
+      :min: 0
+    - :id: Patient.extension:genderIdentity
+      :expression: extension
+      :min: 0
+    - :id: Patient.extension:individualPronouns
+      :expression: extension
+      :min: 0
+    - :id: Patient.identifier
+      :expression: identifier
+      :min: 1
+    - :id: Patient.identifier:ihi
+      :expression: identifier
+      :min: 0
+    - :id: Patient.identifier:medicare
+      :expression: identifier
+      :min: 0
+    - :id: Patient.identifier:dva
+      :expression: identifier
+      :min: 0
+    - :id: Patient.name
+      :expression: name
+      :min: 1
+    - :id: Patient.name.use
+      :expression: name.use
+      :min: 0
+    - :id: Patient.name.text
+      :expression: name.text
+      :min: 0
+    - :id: Patient.name.family
+      :expression: name.family
+      :min: 0
+    - :id: Patient.name.given
+      :expression: name.given
+      :min: 0
+    - :id: Patient.telecom
+      :expression: telecom
+      :min: 0
+    - :id: Patient.telecom.system
+      :expression: telecom.system
+      :min: 0
+    - :id: Patient.telecom.value
+      :expression: telecom.value
+      :min: 0
+    - :id: Patient.telecom.use
+      :expression: telecom.use
+      :min: 0
+    - :id: Patient.gender
+      :expression: gender
+      :min: 1
+    - :id: Patient.birthDate
+      :expression: birthDate
+      :min: 1
+    - :id: Patient.address
+      :expression: address
+      :min: 0
+    - :id: Patient.communication
+      :expression: communication
+      :min: 0
+    - :id: Patient.communication.language
+      :expression: communication.language
+      :min: 1
+    - :id: Patient.communication.preferred
+      :expression: communication.preferred
+      :min: 0
+    - :id: Patient.generalPractitioner
+      :expression: generalPractitioner
+      :min: 0
+  - :resource_type: RelatedPerson
+    :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-relatedperson
+    :elements:
+    - :id: RelatedPerson.patient
+      :expression: patient
+      :min: 1
+    - :id: RelatedPerson.patient.reference
+      :expression: patient.reference
+      :min: 1
+    - :id: RelatedPerson.relationship
+      :expression: relationship
+      :min: 0
+    - :id: RelatedPerson.name
+      :expression: name
+      :min: 0
+    - :id: RelatedPerson.name.use
+      :expression: name.use
+      :min: 0
+    - :id: RelatedPerson.name.text
+      :expression: name.text
+      :min: 0
+    - :id: RelatedPerson.name.family
+      :expression: name.family
+      :min: 0
+    - :id: RelatedPerson.name.given
+      :expression: name.given
+      :min: 0
+    - :id: RelatedPerson.telecom
+      :expression: telecom
+      :min: 0
+    - :id: RelatedPerson.address
+      :expression: address
+      :min: 0
+  - :resource_type: Organization
+    :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-organization
+    :elements:
+    - :id: Organization.identifier
+      :expression: identifier
+      :min: 0
+    - :id: Organization.identifier:hpio
+      :expression: identifier
+      :min: 0
+    - :id: Organization.identifier:abn
+      :expression: identifier
+      :min: 0
+    - :id: Organization.type
+      :expression: type
+      :min: 0
+    - :id: Organization.name
+      :expression: name
+      :min: 1
+    - :id: Organization.telecom
+      :expression: telecom
+      :min: 0
+    - :id: Organization.telecom.system
+      :expression: telecom.system
+      :min: 0
+    - :id: Organization.telecom.value
+      :expression: telecom.value
+      :min: 0
+    - :id: Organization.address
+      :expression: address
+      :min: 0
+  - :resource_type: Device
+    :profile: http://hl7.org/fhir/uv/ips/StructureDefinition/Device-uv-ips
+    :elements:
+    - :id: Device.type
+      :expression: type
+      :min: 0
   :code: 11348-0
   :entries:
   - :id: Composition.section:sectionPastProblems.entry:pastProblem
@@ -1257,6 +3413,202 @@
       - :id: Patient.generalPractitioner
         :expression: generalPractitioner
         :min: 0
+  :author:
+  - :resource_type: Practitioner
+    :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-practitioner
+    :elements:
+    - :id: Practitioner.identifier
+      :expression: identifier
+      :min: 0
+    - :id: Practitioner.identifier:hpii
+      :expression: identifier
+      :min: 0
+    - :id: Practitioner.name
+      :expression: name
+      :min: 1
+    - :id: Practitioner.name.family
+      :expression: name.family
+      :min: 1
+    - :id: Practitioner.name.given
+      :expression: name.given
+      :min: 0
+    - :id: Practitioner.telecom
+      :expression: telecom
+      :min: 0
+    - :id: Practitioner.address
+      :expression: address
+      :min: 0
+  - :resource_type: PractitionerRole
+    :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-practitionerrole
+    :elements:
+    - :id: PractitionerRole.identifier
+      :expression: identifier
+      :min: 0
+    - :id: PractitionerRole.identifier:medicareProvider
+      :expression: identifier
+      :min: 0
+    - :id: PractitionerRole.practitioner
+      :expression: practitioner
+      :min: 1
+    - :id: PractitionerRole.organization
+      :expression: organization
+      :min: 0
+    - :id: PractitionerRole.code
+      :expression: code
+      :min: 0
+    - :id: PractitionerRole.specialty
+      :expression: specialty
+      :min: 0
+    - :id: PractitionerRole.telecom
+      :expression: telecom
+      :min: 0
+    - :id: PractitionerRole.telecom.system
+      :expression: telecom.system
+      :min: 0
+    - :id: PractitionerRole.telecom.value
+      :expression: telecom.value
+      :min: 0
+  - :resource_type: Patient
+    :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-patient
+    :elements:
+    - :id: Patient.extension:indigenousStatus
+      :expression: extension
+      :min: 0
+    - :id: Patient.extension:genderIdentity
+      :expression: extension
+      :min: 0
+    - :id: Patient.extension:individualPronouns
+      :expression: extension
+      :min: 0
+    - :id: Patient.identifier
+      :expression: identifier
+      :min: 1
+    - :id: Patient.identifier:ihi
+      :expression: identifier
+      :min: 0
+    - :id: Patient.identifier:medicare
+      :expression: identifier
+      :min: 0
+    - :id: Patient.identifier:dva
+      :expression: identifier
+      :min: 0
+    - :id: Patient.name
+      :expression: name
+      :min: 1
+    - :id: Patient.name.use
+      :expression: name.use
+      :min: 0
+    - :id: Patient.name.text
+      :expression: name.text
+      :min: 0
+    - :id: Patient.name.family
+      :expression: name.family
+      :min: 0
+    - :id: Patient.name.given
+      :expression: name.given
+      :min: 0
+    - :id: Patient.telecom
+      :expression: telecom
+      :min: 0
+    - :id: Patient.telecom.system
+      :expression: telecom.system
+      :min: 0
+    - :id: Patient.telecom.value
+      :expression: telecom.value
+      :min: 0
+    - :id: Patient.telecom.use
+      :expression: telecom.use
+      :min: 0
+    - :id: Patient.gender
+      :expression: gender
+      :min: 1
+    - :id: Patient.birthDate
+      :expression: birthDate
+      :min: 1
+    - :id: Patient.address
+      :expression: address
+      :min: 0
+    - :id: Patient.communication
+      :expression: communication
+      :min: 0
+    - :id: Patient.communication.language
+      :expression: communication.language
+      :min: 1
+    - :id: Patient.communication.preferred
+      :expression: communication.preferred
+      :min: 0
+    - :id: Patient.generalPractitioner
+      :expression: generalPractitioner
+      :min: 0
+  - :resource_type: RelatedPerson
+    :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-relatedperson
+    :elements:
+    - :id: RelatedPerson.patient
+      :expression: patient
+      :min: 1
+    - :id: RelatedPerson.patient.reference
+      :expression: patient.reference
+      :min: 1
+    - :id: RelatedPerson.relationship
+      :expression: relationship
+      :min: 0
+    - :id: RelatedPerson.name
+      :expression: name
+      :min: 0
+    - :id: RelatedPerson.name.use
+      :expression: name.use
+      :min: 0
+    - :id: RelatedPerson.name.text
+      :expression: name.text
+      :min: 0
+    - :id: RelatedPerson.name.family
+      :expression: name.family
+      :min: 0
+    - :id: RelatedPerson.name.given
+      :expression: name.given
+      :min: 0
+    - :id: RelatedPerson.telecom
+      :expression: telecom
+      :min: 0
+    - :id: RelatedPerson.address
+      :expression: address
+      :min: 0
+  - :resource_type: Organization
+    :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-organization
+    :elements:
+    - :id: Organization.identifier
+      :expression: identifier
+      :min: 0
+    - :id: Organization.identifier:hpio
+      :expression: identifier
+      :min: 0
+    - :id: Organization.identifier:abn
+      :expression: identifier
+      :min: 0
+    - :id: Organization.type
+      :expression: type
+      :min: 0
+    - :id: Organization.name
+      :expression: name
+      :min: 1
+    - :id: Organization.telecom
+      :expression: telecom
+      :min: 0
+    - :id: Organization.telecom.system
+      :expression: telecom.system
+      :min: 0
+    - :id: Organization.telecom.value
+      :expression: telecom.value
+      :min: 0
+    - :id: Organization.address
+      :expression: address
+      :min: 0
+  - :resource_type: Device
+    :profile: http://hl7.org/fhir/uv/ips/StructureDefinition/Device-uv-ips
+    :elements:
+    - :id: Device.type
+      :expression: type
+      :min: 0
   :code: 10162-6
   :entries:
   - :id: Composition.section:sectionPregnancyHx.entry:pregnancyStatus
@@ -1367,6 +3719,202 @@
       - :id: Patient.generalPractitioner
         :expression: generalPractitioner
         :min: 0
+  :author:
+  - :resource_type: Practitioner
+    :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-practitioner
+    :elements:
+    - :id: Practitioner.identifier
+      :expression: identifier
+      :min: 0
+    - :id: Practitioner.identifier:hpii
+      :expression: identifier
+      :min: 0
+    - :id: Practitioner.name
+      :expression: name
+      :min: 1
+    - :id: Practitioner.name.family
+      :expression: name.family
+      :min: 1
+    - :id: Practitioner.name.given
+      :expression: name.given
+      :min: 0
+    - :id: Practitioner.telecom
+      :expression: telecom
+      :min: 0
+    - :id: Practitioner.address
+      :expression: address
+      :min: 0
+  - :resource_type: PractitionerRole
+    :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-practitionerrole
+    :elements:
+    - :id: PractitionerRole.identifier
+      :expression: identifier
+      :min: 0
+    - :id: PractitionerRole.identifier:medicareProvider
+      :expression: identifier
+      :min: 0
+    - :id: PractitionerRole.practitioner
+      :expression: practitioner
+      :min: 1
+    - :id: PractitionerRole.organization
+      :expression: organization
+      :min: 0
+    - :id: PractitionerRole.code
+      :expression: code
+      :min: 0
+    - :id: PractitionerRole.specialty
+      :expression: specialty
+      :min: 0
+    - :id: PractitionerRole.telecom
+      :expression: telecom
+      :min: 0
+    - :id: PractitionerRole.telecom.system
+      :expression: telecom.system
+      :min: 0
+    - :id: PractitionerRole.telecom.value
+      :expression: telecom.value
+      :min: 0
+  - :resource_type: Patient
+    :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-patient
+    :elements:
+    - :id: Patient.extension:indigenousStatus
+      :expression: extension
+      :min: 0
+    - :id: Patient.extension:genderIdentity
+      :expression: extension
+      :min: 0
+    - :id: Patient.extension:individualPronouns
+      :expression: extension
+      :min: 0
+    - :id: Patient.identifier
+      :expression: identifier
+      :min: 1
+    - :id: Patient.identifier:ihi
+      :expression: identifier
+      :min: 0
+    - :id: Patient.identifier:medicare
+      :expression: identifier
+      :min: 0
+    - :id: Patient.identifier:dva
+      :expression: identifier
+      :min: 0
+    - :id: Patient.name
+      :expression: name
+      :min: 1
+    - :id: Patient.name.use
+      :expression: name.use
+      :min: 0
+    - :id: Patient.name.text
+      :expression: name.text
+      :min: 0
+    - :id: Patient.name.family
+      :expression: name.family
+      :min: 0
+    - :id: Patient.name.given
+      :expression: name.given
+      :min: 0
+    - :id: Patient.telecom
+      :expression: telecom
+      :min: 0
+    - :id: Patient.telecom.system
+      :expression: telecom.system
+      :min: 0
+    - :id: Patient.telecom.value
+      :expression: telecom.value
+      :min: 0
+    - :id: Patient.telecom.use
+      :expression: telecom.use
+      :min: 0
+    - :id: Patient.gender
+      :expression: gender
+      :min: 1
+    - :id: Patient.birthDate
+      :expression: birthDate
+      :min: 1
+    - :id: Patient.address
+      :expression: address
+      :min: 0
+    - :id: Patient.communication
+      :expression: communication
+      :min: 0
+    - :id: Patient.communication.language
+      :expression: communication.language
+      :min: 1
+    - :id: Patient.communication.preferred
+      :expression: communication.preferred
+      :min: 0
+    - :id: Patient.generalPractitioner
+      :expression: generalPractitioner
+      :min: 0
+  - :resource_type: RelatedPerson
+    :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-relatedperson
+    :elements:
+    - :id: RelatedPerson.patient
+      :expression: patient
+      :min: 1
+    - :id: RelatedPerson.patient.reference
+      :expression: patient.reference
+      :min: 1
+    - :id: RelatedPerson.relationship
+      :expression: relationship
+      :min: 0
+    - :id: RelatedPerson.name
+      :expression: name
+      :min: 0
+    - :id: RelatedPerson.name.use
+      :expression: name.use
+      :min: 0
+    - :id: RelatedPerson.name.text
+      :expression: name.text
+      :min: 0
+    - :id: RelatedPerson.name.family
+      :expression: name.family
+      :min: 0
+    - :id: RelatedPerson.name.given
+      :expression: name.given
+      :min: 0
+    - :id: RelatedPerson.telecom
+      :expression: telecom
+      :min: 0
+    - :id: RelatedPerson.address
+      :expression: address
+      :min: 0
+  - :resource_type: Organization
+    :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-organization
+    :elements:
+    - :id: Organization.identifier
+      :expression: identifier
+      :min: 0
+    - :id: Organization.identifier:hpio
+      :expression: identifier
+      :min: 0
+    - :id: Organization.identifier:abn
+      :expression: identifier
+      :min: 0
+    - :id: Organization.type
+      :expression: type
+      :min: 0
+    - :id: Organization.name
+      :expression: name
+      :min: 1
+    - :id: Organization.telecom
+      :expression: telecom
+      :min: 0
+    - :id: Organization.telecom.system
+      :expression: telecom.system
+      :min: 0
+    - :id: Organization.telecom.value
+      :expression: telecom.value
+      :min: 0
+    - :id: Organization.address
+      :expression: address
+      :min: 0
+  - :resource_type: Device
+    :profile: http://hl7.org/fhir/uv/ips/StructureDefinition/Device-uv-ips
+    :elements:
+    - :id: Device.type
+      :expression: type
+      :min: 0
   :code: 81338-6
   :entries: []
 - :id: Composition.section:sectionPlanOfCare
@@ -1463,6 +4011,202 @@
       - :id: Patient.generalPractitioner
         :expression: generalPractitioner
         :min: 0
+  :author:
+  - :resource_type: Practitioner
+    :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-practitioner
+    :elements:
+    - :id: Practitioner.identifier
+      :expression: identifier
+      :min: 0
+    - :id: Practitioner.identifier:hpii
+      :expression: identifier
+      :min: 0
+    - :id: Practitioner.name
+      :expression: name
+      :min: 1
+    - :id: Practitioner.name.family
+      :expression: name.family
+      :min: 1
+    - :id: Practitioner.name.given
+      :expression: name.given
+      :min: 0
+    - :id: Practitioner.telecom
+      :expression: telecom
+      :min: 0
+    - :id: Practitioner.address
+      :expression: address
+      :min: 0
+  - :resource_type: PractitionerRole
+    :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-practitionerrole
+    :elements:
+    - :id: PractitionerRole.identifier
+      :expression: identifier
+      :min: 0
+    - :id: PractitionerRole.identifier:medicareProvider
+      :expression: identifier
+      :min: 0
+    - :id: PractitionerRole.practitioner
+      :expression: practitioner
+      :min: 1
+    - :id: PractitionerRole.organization
+      :expression: organization
+      :min: 0
+    - :id: PractitionerRole.code
+      :expression: code
+      :min: 0
+    - :id: PractitionerRole.specialty
+      :expression: specialty
+      :min: 0
+    - :id: PractitionerRole.telecom
+      :expression: telecom
+      :min: 0
+    - :id: PractitionerRole.telecom.system
+      :expression: telecom.system
+      :min: 0
+    - :id: PractitionerRole.telecom.value
+      :expression: telecom.value
+      :min: 0
+  - :resource_type: Patient
+    :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-patient
+    :elements:
+    - :id: Patient.extension:indigenousStatus
+      :expression: extension
+      :min: 0
+    - :id: Patient.extension:genderIdentity
+      :expression: extension
+      :min: 0
+    - :id: Patient.extension:individualPronouns
+      :expression: extension
+      :min: 0
+    - :id: Patient.identifier
+      :expression: identifier
+      :min: 1
+    - :id: Patient.identifier:ihi
+      :expression: identifier
+      :min: 0
+    - :id: Patient.identifier:medicare
+      :expression: identifier
+      :min: 0
+    - :id: Patient.identifier:dva
+      :expression: identifier
+      :min: 0
+    - :id: Patient.name
+      :expression: name
+      :min: 1
+    - :id: Patient.name.use
+      :expression: name.use
+      :min: 0
+    - :id: Patient.name.text
+      :expression: name.text
+      :min: 0
+    - :id: Patient.name.family
+      :expression: name.family
+      :min: 0
+    - :id: Patient.name.given
+      :expression: name.given
+      :min: 0
+    - :id: Patient.telecom
+      :expression: telecom
+      :min: 0
+    - :id: Patient.telecom.system
+      :expression: telecom.system
+      :min: 0
+    - :id: Patient.telecom.value
+      :expression: telecom.value
+      :min: 0
+    - :id: Patient.telecom.use
+      :expression: telecom.use
+      :min: 0
+    - :id: Patient.gender
+      :expression: gender
+      :min: 1
+    - :id: Patient.birthDate
+      :expression: birthDate
+      :min: 1
+    - :id: Patient.address
+      :expression: address
+      :min: 0
+    - :id: Patient.communication
+      :expression: communication
+      :min: 0
+    - :id: Patient.communication.language
+      :expression: communication.language
+      :min: 1
+    - :id: Patient.communication.preferred
+      :expression: communication.preferred
+      :min: 0
+    - :id: Patient.generalPractitioner
+      :expression: generalPractitioner
+      :min: 0
+  - :resource_type: RelatedPerson
+    :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-relatedperson
+    :elements:
+    - :id: RelatedPerson.patient
+      :expression: patient
+      :min: 1
+    - :id: RelatedPerson.patient.reference
+      :expression: patient.reference
+      :min: 1
+    - :id: RelatedPerson.relationship
+      :expression: relationship
+      :min: 0
+    - :id: RelatedPerson.name
+      :expression: name
+      :min: 0
+    - :id: RelatedPerson.name.use
+      :expression: name.use
+      :min: 0
+    - :id: RelatedPerson.name.text
+      :expression: name.text
+      :min: 0
+    - :id: RelatedPerson.name.family
+      :expression: name.family
+      :min: 0
+    - :id: RelatedPerson.name.given
+      :expression: name.given
+      :min: 0
+    - :id: RelatedPerson.telecom
+      :expression: telecom
+      :min: 0
+    - :id: RelatedPerson.address
+      :expression: address
+      :min: 0
+  - :resource_type: Organization
+    :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-organization
+    :elements:
+    - :id: Organization.identifier
+      :expression: identifier
+      :min: 0
+    - :id: Organization.identifier:hpio
+      :expression: identifier
+      :min: 0
+    - :id: Organization.identifier:abn
+      :expression: identifier
+      :min: 0
+    - :id: Organization.type
+      :expression: type
+      :min: 0
+    - :id: Organization.name
+      :expression: name
+      :min: 1
+    - :id: Organization.telecom
+      :expression: telecom
+      :min: 0
+    - :id: Organization.telecom.system
+      :expression: telecom.system
+      :min: 0
+    - :id: Organization.telecom.value
+      :expression: telecom.value
+      :min: 0
+    - :id: Organization.address
+      :expression: address
+      :min: 0
+  - :resource_type: Device
+    :profile: http://hl7.org/fhir/uv/ips/StructureDefinition/Device-uv-ips
+    :elements:
+    - :id: Device.type
+      :expression: type
+      :min: 0
   :code: 18776-5
   :entries:
   - :id: Composition.section:sectionPlanOfCare.entry:carePlan
@@ -1573,6 +4317,202 @@
       - :id: Patient.generalPractitioner
         :expression: generalPractitioner
         :min: 0
+  :author:
+  - :resource_type: Practitioner
+    :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-practitioner
+    :elements:
+    - :id: Practitioner.identifier
+      :expression: identifier
+      :min: 0
+    - :id: Practitioner.identifier:hpii
+      :expression: identifier
+      :min: 0
+    - :id: Practitioner.name
+      :expression: name
+      :min: 1
+    - :id: Practitioner.name.family
+      :expression: name.family
+      :min: 1
+    - :id: Practitioner.name.given
+      :expression: name.given
+      :min: 0
+    - :id: Practitioner.telecom
+      :expression: telecom
+      :min: 0
+    - :id: Practitioner.address
+      :expression: address
+      :min: 0
+  - :resource_type: PractitionerRole
+    :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-practitionerrole
+    :elements:
+    - :id: PractitionerRole.identifier
+      :expression: identifier
+      :min: 0
+    - :id: PractitionerRole.identifier:medicareProvider
+      :expression: identifier
+      :min: 0
+    - :id: PractitionerRole.practitioner
+      :expression: practitioner
+      :min: 1
+    - :id: PractitionerRole.organization
+      :expression: organization
+      :min: 0
+    - :id: PractitionerRole.code
+      :expression: code
+      :min: 0
+    - :id: PractitionerRole.specialty
+      :expression: specialty
+      :min: 0
+    - :id: PractitionerRole.telecom
+      :expression: telecom
+      :min: 0
+    - :id: PractitionerRole.telecom.system
+      :expression: telecom.system
+      :min: 0
+    - :id: PractitionerRole.telecom.value
+      :expression: telecom.value
+      :min: 0
+  - :resource_type: Patient
+    :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-patient
+    :elements:
+    - :id: Patient.extension:indigenousStatus
+      :expression: extension
+      :min: 0
+    - :id: Patient.extension:genderIdentity
+      :expression: extension
+      :min: 0
+    - :id: Patient.extension:individualPronouns
+      :expression: extension
+      :min: 0
+    - :id: Patient.identifier
+      :expression: identifier
+      :min: 1
+    - :id: Patient.identifier:ihi
+      :expression: identifier
+      :min: 0
+    - :id: Patient.identifier:medicare
+      :expression: identifier
+      :min: 0
+    - :id: Patient.identifier:dva
+      :expression: identifier
+      :min: 0
+    - :id: Patient.name
+      :expression: name
+      :min: 1
+    - :id: Patient.name.use
+      :expression: name.use
+      :min: 0
+    - :id: Patient.name.text
+      :expression: name.text
+      :min: 0
+    - :id: Patient.name.family
+      :expression: name.family
+      :min: 0
+    - :id: Patient.name.given
+      :expression: name.given
+      :min: 0
+    - :id: Patient.telecom
+      :expression: telecom
+      :min: 0
+    - :id: Patient.telecom.system
+      :expression: telecom.system
+      :min: 0
+    - :id: Patient.telecom.value
+      :expression: telecom.value
+      :min: 0
+    - :id: Patient.telecom.use
+      :expression: telecom.use
+      :min: 0
+    - :id: Patient.gender
+      :expression: gender
+      :min: 1
+    - :id: Patient.birthDate
+      :expression: birthDate
+      :min: 1
+    - :id: Patient.address
+      :expression: address
+      :min: 0
+    - :id: Patient.communication
+      :expression: communication
+      :min: 0
+    - :id: Patient.communication.language
+      :expression: communication.language
+      :min: 1
+    - :id: Patient.communication.preferred
+      :expression: communication.preferred
+      :min: 0
+    - :id: Patient.generalPractitioner
+      :expression: generalPractitioner
+      :min: 0
+  - :resource_type: RelatedPerson
+    :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-relatedperson
+    :elements:
+    - :id: RelatedPerson.patient
+      :expression: patient
+      :min: 1
+    - :id: RelatedPerson.patient.reference
+      :expression: patient.reference
+      :min: 1
+    - :id: RelatedPerson.relationship
+      :expression: relationship
+      :min: 0
+    - :id: RelatedPerson.name
+      :expression: name
+      :min: 0
+    - :id: RelatedPerson.name.use
+      :expression: name.use
+      :min: 0
+    - :id: RelatedPerson.name.text
+      :expression: name.text
+      :min: 0
+    - :id: RelatedPerson.name.family
+      :expression: name.family
+      :min: 0
+    - :id: RelatedPerson.name.given
+      :expression: name.given
+      :min: 0
+    - :id: RelatedPerson.telecom
+      :expression: telecom
+      :min: 0
+    - :id: RelatedPerson.address
+      :expression: address
+      :min: 0
+  - :resource_type: Organization
+    :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-organization
+    :elements:
+    - :id: Organization.identifier
+      :expression: identifier
+      :min: 0
+    - :id: Organization.identifier:hpio
+      :expression: identifier
+      :min: 0
+    - :id: Organization.identifier:abn
+      :expression: identifier
+      :min: 0
+    - :id: Organization.type
+      :expression: type
+      :min: 0
+    - :id: Organization.name
+      :expression: name
+      :min: 1
+    - :id: Organization.telecom
+      :expression: telecom
+      :min: 0
+    - :id: Organization.telecom.system
+      :expression: telecom.system
+      :min: 0
+    - :id: Organization.telecom.value
+      :expression: telecom.value
+      :min: 0
+    - :id: Organization.address
+      :expression: address
+      :min: 0
+  - :resource_type: Device
+    :profile: http://hl7.org/fhir/uv/ips/StructureDefinition/Device-uv-ips
+    :elements:
+    - :id: Device.type
+      :expression: type
+      :min: 0
   :code: 29762-2
   :entries:
   - :id: Composition.section:sectionSocialHistory.entry:smokingTobaccoUse
@@ -1686,6 +4626,202 @@
       - :id: Patient.generalPractitioner
         :expression: generalPractitioner
         :min: 0
+  :author:
+  - :resource_type: Practitioner
+    :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-practitioner
+    :elements:
+    - :id: Practitioner.identifier
+      :expression: identifier
+      :min: 0
+    - :id: Practitioner.identifier:hpii
+      :expression: identifier
+      :min: 0
+    - :id: Practitioner.name
+      :expression: name
+      :min: 1
+    - :id: Practitioner.name.family
+      :expression: name.family
+      :min: 1
+    - :id: Practitioner.name.given
+      :expression: name.given
+      :min: 0
+    - :id: Practitioner.telecom
+      :expression: telecom
+      :min: 0
+    - :id: Practitioner.address
+      :expression: address
+      :min: 0
+  - :resource_type: PractitionerRole
+    :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-practitionerrole
+    :elements:
+    - :id: PractitionerRole.identifier
+      :expression: identifier
+      :min: 0
+    - :id: PractitionerRole.identifier:medicareProvider
+      :expression: identifier
+      :min: 0
+    - :id: PractitionerRole.practitioner
+      :expression: practitioner
+      :min: 1
+    - :id: PractitionerRole.organization
+      :expression: organization
+      :min: 0
+    - :id: PractitionerRole.code
+      :expression: code
+      :min: 0
+    - :id: PractitionerRole.specialty
+      :expression: specialty
+      :min: 0
+    - :id: PractitionerRole.telecom
+      :expression: telecom
+      :min: 0
+    - :id: PractitionerRole.telecom.system
+      :expression: telecom.system
+      :min: 0
+    - :id: PractitionerRole.telecom.value
+      :expression: telecom.value
+      :min: 0
+  - :resource_type: Patient
+    :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-patient
+    :elements:
+    - :id: Patient.extension:indigenousStatus
+      :expression: extension
+      :min: 0
+    - :id: Patient.extension:genderIdentity
+      :expression: extension
+      :min: 0
+    - :id: Patient.extension:individualPronouns
+      :expression: extension
+      :min: 0
+    - :id: Patient.identifier
+      :expression: identifier
+      :min: 1
+    - :id: Patient.identifier:ihi
+      :expression: identifier
+      :min: 0
+    - :id: Patient.identifier:medicare
+      :expression: identifier
+      :min: 0
+    - :id: Patient.identifier:dva
+      :expression: identifier
+      :min: 0
+    - :id: Patient.name
+      :expression: name
+      :min: 1
+    - :id: Patient.name.use
+      :expression: name.use
+      :min: 0
+    - :id: Patient.name.text
+      :expression: name.text
+      :min: 0
+    - :id: Patient.name.family
+      :expression: name.family
+      :min: 0
+    - :id: Patient.name.given
+      :expression: name.given
+      :min: 0
+    - :id: Patient.telecom
+      :expression: telecom
+      :min: 0
+    - :id: Patient.telecom.system
+      :expression: telecom.system
+      :min: 0
+    - :id: Patient.telecom.value
+      :expression: telecom.value
+      :min: 0
+    - :id: Patient.telecom.use
+      :expression: telecom.use
+      :min: 0
+    - :id: Patient.gender
+      :expression: gender
+      :min: 1
+    - :id: Patient.birthDate
+      :expression: birthDate
+      :min: 1
+    - :id: Patient.address
+      :expression: address
+      :min: 0
+    - :id: Patient.communication
+      :expression: communication
+      :min: 0
+    - :id: Patient.communication.language
+      :expression: communication.language
+      :min: 1
+    - :id: Patient.communication.preferred
+      :expression: communication.preferred
+      :min: 0
+    - :id: Patient.generalPractitioner
+      :expression: generalPractitioner
+      :min: 0
+  - :resource_type: RelatedPerson
+    :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-relatedperson
+    :elements:
+    - :id: RelatedPerson.patient
+      :expression: patient
+      :min: 1
+    - :id: RelatedPerson.patient.reference
+      :expression: patient.reference
+      :min: 1
+    - :id: RelatedPerson.relationship
+      :expression: relationship
+      :min: 0
+    - :id: RelatedPerson.name
+      :expression: name
+      :min: 0
+    - :id: RelatedPerson.name.use
+      :expression: name.use
+      :min: 0
+    - :id: RelatedPerson.name.text
+      :expression: name.text
+      :min: 0
+    - :id: RelatedPerson.name.family
+      :expression: name.family
+      :min: 0
+    - :id: RelatedPerson.name.given
+      :expression: name.given
+      :min: 0
+    - :id: RelatedPerson.telecom
+      :expression: telecom
+      :min: 0
+    - :id: RelatedPerson.address
+      :expression: address
+      :min: 0
+  - :resource_type: Organization
+    :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-organization
+    :elements:
+    - :id: Organization.identifier
+      :expression: identifier
+      :min: 0
+    - :id: Organization.identifier:hpio
+      :expression: identifier
+      :min: 0
+    - :id: Organization.identifier:abn
+      :expression: identifier
+      :min: 0
+    - :id: Organization.type
+      :expression: type
+      :min: 0
+    - :id: Organization.name
+      :expression: name
+      :min: 1
+    - :id: Organization.telecom
+      :expression: telecom
+      :min: 0
+    - :id: Organization.telecom.system
+      :expression: telecom.system
+      :min: 0
+    - :id: Organization.telecom.value
+      :expression: telecom.value
+      :min: 0
+    - :id: Organization.address
+      :expression: address
+      :min: 0
+  - :resource_type: Device
+    :profile: http://hl7.org/fhir/uv/ips/StructureDefinition/Device-uv-ips
+    :elements:
+    - :id: Device.type
+      :expression: type
+      :min: 0
   :code: 8716-3
   :entries:
   - :id: Composition.section:sectionVitalSigns.entry:vitalSign
