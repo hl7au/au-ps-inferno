@@ -4,6 +4,8 @@
 
 require_relative 'au_ps_composition_author/suite_100ballot_au_ps_bundle_instance_au_ps_composition_author_author_ms_elements'
 
+require_relative 'au_ps_composition_author/suite_100ballot_au_ps_bundle_instance_au_ps_composition_author_author_ms_subelements'
+
 
 module AUPSTestKit
   # Automatically generated primitive group for AU PS Composition Author
@@ -20,6 +22,8 @@ module AUPSTestKit
 
     
     test from: :suite_100ballot_au_ps_bundle_instance_au_ps_composition_author_author_ms_elements
+    
+    test from: :suite_100ballot_au_ps_bundle_instance_au_ps_composition_author_author_ms_subelements
     
   end
 end

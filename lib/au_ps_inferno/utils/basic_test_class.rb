@@ -653,6 +653,97 @@ module AUPSTestKit
       end
     end
 
+    # Returns parent groups for author MS sub-elements: complex elements that have sub-elements (no slices).
+    # Each group has :parent, :mandatory (array of expression strings), :optional (array).
+    def author_ms_subelement_parent_groups(author_metadata, resource_type)
+      author_entry = author_metadata.find do |entry|
+        type = entry['resource_type'] || entry[:resource_type]
+        type.to_s == resource_type.to_s
+      end
+      return [] unless author_entry.present?
+
+      elements = author_entry['elements'] || author_entry[:elements] || []
+      sub_elements = elements.filter do |el|
+        expr = (el['expression'] || el[:expression]).to_s
+        id_str = (el['id'] || el[:id]).to_s
+        expr.include?('.') && !id_str.include?(':')
+      end
+      return [] if sub_elements.empty?
+
+      grouped = sub_elements.group_by { |el| (el['expression'] || el[:expression]).to_s.split('.').first }
+      grouped.map do |parent, els|
+        mandatory = els.select { |e| ((e['min'] || e[:min]) || 0).positive? }.map { |e| e['expression'] || e[:expression] }
+        optional = els.reject { |e| ((e['min'] || e[:min]) || 0).positive? }.map { |e| e['expression'] || e[:expression] }
+        { parent: parent, mandatory: mandatory, optional: optional }
+      end
+    end
+
+    def author_resource_type_and_profiles(resource)
+      return ['', ''] unless resource.present?
+
+      resource_type_str = resource.respond_to?(:resourceType) ? resource.resourceType : resource['resourceType']
+      profiles = resource_profiles(resource)
+      profile_str = profiles.is_a?(Array) ? profiles.join(', ') : profiles.to_s
+      [resource_type_str.to_s, profile_str.to_s]
+    end
+
+    def resource_profiles(resource)
+      return [] unless resource.present?
+
+      if resource.respond_to?(:meta) && resource.meta&.profile.present?
+        resource.meta.profile
+      elsif resource.is_a?(Hash)
+        resource.dig('meta', 'profile') || []
+      else
+        []
+      end
+    end
+
+    # Validates author Must Support sub-elements: one message per complex element (with MS sub-elements).
+    # warning when parent not populated; error/warning/info when parent populated depending on sub-elements.
+    def validate_author_ms_subelements(resource, parent_groups, resource_type_str, profile_str)
+      return unless resource.present?
+
+      author_header = "**Referenced author**: #{resource_type_str}#{profile_str.present? ? " — #{profile_str}" : ''}"
+
+      parent_groups.each do |group|
+        parent_path = group[:parent]
+        mandatory = group[:mandatory] || []
+        optional = group[:optional] || []
+        sub_elements = mandatory + optional
+
+        parent_populated = resolve_path(resource, parent_path).first.present?
+
+        if !parent_populated
+          add_message('warning',
+                      "Must Support sub-elements correctly populated\n\n#{author_header}\n\n**Complex element #{parent_path}** is not populated. Must Support sub-elements that would be validated: #{sub_elements.join(', ')}.")
+          next
+        end
+
+        message_type = sub_elements.map do |sub_element|
+          sub_element_result = resolve_path(resource, sub_element).first.present?
+          sub_element_mandatory = mandatory.include?(sub_element)
+          sub_element_result ? 'info' : (sub_element_mandatory ? 'error' : 'warning')
+        end.uniq
+
+        level = message_type.include?('error') ? 'error' : (message_type.include?('warning') ? 'warning' : 'info')
+        list_lines = sub_elements.map do |expr|
+          populated = resolve_path(resource, expr).first.present?
+          "#{boolean_to_existent_string(populated)}: **#{expr}**"
+        end
+        add_message(level,
+                    "Must Support sub-elements correctly populated\n\n#{author_header}\n\n## Complex element **#{parent_path}** — Must Support sub-elements populated or missing\n\n#{list_lines.join("\n\n")}")
+      end
+
+      mandatory_ok = parent_groups.all? do |group|
+        next true unless resolve_path(resource, group[:parent]).first.present?
+
+        (group[:mandatory] || []).all? { |el| resolve_path(resource, el).first.present? }
+      end
+      assert mandatory_ok,
+             'When parent exists and any mandatory Must Support sub-element is missing. See the list in messages tab.'
+    end
+
     def validate_author_ms_elements(resource, author_config_elements)
       return unless resource.present? && author_config_elements.present?
 
@@ -672,7 +763,7 @@ module AUPSTestKit
                     end
 
       resource_type_str = resource.respond_to?(:resourceType) ? resource.resourceType : resource['resourceType']
-      profiles = resource.respond_to?(:meta) && resource.meta&.profile.present? ? resource.meta.profile : (resource.dig('meta', 'profile') || [])
+      profiles = resource_profiles(resource)
       profile_str = profiles.is_a?(Array) ? profiles.join(', ') : profiles.to_s
 
       list_lines = expressions.map do |expr|
@@ -763,6 +854,23 @@ module AUPSTestKit
       skip_if complex_elements.blank?, "No complex Must Support elements defined for author type #{resource_type_str}"
 
       validate_author_ms_elements(resource, complex_elements)
+    end
+
+    def test_composition_author_ms_subelements
+      check_bundle_exists_in_scratch
+      resource = author_resource
+      skip_if resource.blank?, 'No author reference found on Composition'
+      skip_if resource_type(resource) == 'Device', 'Referenced author resource type is Device'
+
+      author_meta = composition_author_metadata
+      skip_if author_meta.blank?, 'No author metadata available'
+
+      resource_type_str = resource_type(resource)
+      parent_groups = author_ms_subelement_parent_groups(author_meta, resource_type_str)
+      skip_if parent_groups.blank?, "Referenced author resource type has no complex elements with Must Support sub-elements"
+
+      rtype_str, profile_str = author_resource_type_and_profiles(resource)
+      validate_author_ms_subelements(resource, parent_groups, rtype_str, profile_str)
     end
 
     def test_subject_ms_elements

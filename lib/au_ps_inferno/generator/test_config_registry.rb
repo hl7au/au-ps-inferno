@@ -143,6 +143,11 @@ class Generator
           title: 'Must Support elements SHALL be populated if a value is known',
           description: 'Must Support elements SHALL be populated if a value is known',
           commands: ['test_composition_author_ms_elements']
+        },
+        author_ms_subelements: {
+          title: 'Must Support sub-elements SHALL be populated if a value is known',
+          description: 'Must Support sub-elements SHALL be populated if a value is known',
+          commands: ['test_composition_author_ms_subelements']
         }
       }.freeze
     end
