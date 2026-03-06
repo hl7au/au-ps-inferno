@@ -708,43 +708,32 @@ module AUPSTestKit
       bundle_resource.resource_by_reference(ref_str)
     end
 
-    def composition_author_metadata
-      path = File.expand_path('../1.0.0-ballot/metadata.yaml', __dir__)
-      return [] unless File.file?(path)
-
-      data = YAML.safe_load(File.read(path), permitted_classes: [Symbol], aliases: true)
-      sections = data&.dig('composition_sections') || data&.dig(:composition_sections) || []
-      first_section = sections.first
-      return [] unless first_section.present?
-
-      author_key = first_section.key?('author') ? 'author' : :author
-      first_section[author_key] || []
-    end
-
-    def composition_attester_metadata
-      path = File.expand_path('../1.0.0-ballot/metadata.yaml', __dir__)
-      return [] unless File.file?(path)
-
-      data = YAML.safe_load(File.read(path), permitted_classes: [Symbol], aliases: true)
-      sections = data&.dig('composition_sections') || data&.dig(:composition_sections) || []
-      first_section = sections.first
-      return [] unless first_section.present?
-
-      attester_key = first_section.key?('attester') ? 'attester' : :attester
-      first_section[attester_key] || []
-    end
-
-    def composition_custodian_metadata
+    def load_metadata_yaml
       path = File.expand_path('../1.0.0-ballot/metadata.yaml', __dir__)
       return nil unless File.file?(path)
 
-      data = YAML.safe_load(File.read(path), permitted_classes: [Symbol], aliases: true)
-      sections = data&.dig('composition_sections') || data&.dig(:composition_sections) || []
-      first_section = sections.first
-      return nil unless first_section.present?
+      YAML.safe_load(File.read(path), permitted_classes: [Symbol], aliases: true)
+    end
 
-      custodian_key = first_section.key?('custodian') ? 'custodian' : :custodian
-      first_section[custodian_key]
+    def composition_author_metadata
+      data = load_metadata_yaml
+      return [] unless data.present?
+
+      data['author'] || data[:author] || []
+    end
+
+    def composition_attester_metadata
+      data = load_metadata_yaml
+      return [] unless data.present?
+
+      data['attester'] || data[:attester] || []
+    end
+
+    def composition_custodian_metadata
+      data = load_metadata_yaml
+      return nil unless data.present?
+
+      data['custodian'] || data[:custodian]
     end
 
     def custodian_complex_ms_elements(custodian_meta)

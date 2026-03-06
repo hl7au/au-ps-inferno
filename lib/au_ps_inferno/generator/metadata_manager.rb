@@ -93,6 +93,10 @@ class Generator
     def metadata_to_dump
       {
         composition_sections: @composition_sections,
+        subject: build_metadata_for_subject,
+        author: build_metadata_for_author,
+        custodian: build_metadata_for_custodian,
+        attester: build_metadata_for_attester,
         composition_mandatory_ms_elements: @composition_mandatory_ms_elements,
         composition_mandatory_ms_sub_elements: @composition_mandatory_ms_sub_elements,
         composition_optional_ms_elements: @composition_optional_ms_elements,
@@ -474,11 +478,7 @@ class Generator
         max: section.max,
         required: section.min.positive?,
         mustSupport: section.mustSupport || false,
-        ms_elements: composition_ms_sections_elements,
-        subject: build_metadata_for_subject,
-        author: build_metadata_for_author,
-        custodian: build_metadata_for_custodian,
-        attester: build_metadata_for_attester
+        ms_elements: composition_ms_sections_elements
       }
     end
 
