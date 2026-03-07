@@ -16,8 +16,6 @@ module AUPSTestKit
     description 'Verify the referenced author is a correctly populated AU PS Practitioner, AU PS PractitionerRole, AU PS Patient, AU PS RelatedPerson, AU PS Organization profiles or Device resource.'
     id :suite_100ballot_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_author
     
-    optional
-    
     
     run_as_group
     

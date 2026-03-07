@@ -18,7 +18,7 @@ module AUPSTestKit
     description 'Validates AU PS (Australian Primary Care and Shared Health) bundles, compositions, sections, and server CapabilityStatement support for the 1.0.0-ballot implementation guide.'
 
     fhir_resource_validator do
-      igs 'hl7.fhir.au.ps#1.0.0-ballot'
+      igs 'hl7.fhir.au.ps#100ballot'
 
       cli_context do
         txServer ENV.fetch('TX_SERVER_URL', 'https://tx.dev.hl7.org.au/fhir')

@@ -10,8 +10,6 @@ module AUPSTestKit
     description 'Optional Must Support elements SHALL be correctly populated if a value is known'
     id :suite_100ballot_au_ps_bundle_instance_au_ps_composition_must_support_conformance_composition_optional_ms_populated
     
-    optional
-    
     
     run do
       

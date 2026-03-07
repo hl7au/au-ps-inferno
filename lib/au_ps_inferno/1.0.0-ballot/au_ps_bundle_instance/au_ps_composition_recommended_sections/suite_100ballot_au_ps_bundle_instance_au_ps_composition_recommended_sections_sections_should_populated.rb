@@ -10,8 +10,6 @@ module AUPSTestKit
     description 'Recommended sections SHOULD be correctly populated if a value is known'
     id :suite_100ballot_au_ps_bundle_instance_au_ps_composition_recommended_sections_sections_should_populated
     
-    optional
-    
     
     run do
       

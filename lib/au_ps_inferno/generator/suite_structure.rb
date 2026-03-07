@@ -58,7 +58,6 @@ class Generator
         tests: [
           { id: :sections_should_populated }
         ],
-        optional: true,
         run_as_group: true
       },
       {
@@ -67,7 +66,6 @@ class Generator
         tests: [
           { id: :sections_may_populated }
         ],
-        optional: true,
         run_as_group: true
       },
       {
@@ -76,7 +74,6 @@ class Generator
         tests: [
           { id: :sections_may_undefined }
         ],
-        optional: true,
         run_as_group: true
       },
       {
@@ -97,7 +94,6 @@ class Generator
           { id: :author_ms_subelements },
           { id: :author_ms_identifier_slices }
         ],
-        optional: true,
         run_as_group: true
       },
       {

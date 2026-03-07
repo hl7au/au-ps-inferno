@@ -12,8 +12,6 @@ module AUPSTestKit
     description 'Verify the recommended sections are correctly populated in the Composition resource'
     id :suite_100ballot_au_ps_bundle_instance_au_ps_composition_recommended_sections
     
-    optional
-    
     
     run_as_group
     

@@ -59,24 +59,21 @@ class Generator
           description: 'Optional Must Support elements SHALL be correctly populated if a value is known',
           commands_builder: lambda { |m|
             { commands: ["validate_populated_elements_in_composition(#{m.composition_optional_ms_elements}, required: false)"] }
-          },
-          optional: true
+          }
         },
         composition_ms_subelements_populated: {
           title: 'Must Support sub-elements of a complex element are correctly populated',
           description: 'Must Support sub-elements of a complex element SHALL be correctly populated if a value is known',
           commands_builder: lambda { |m|
             { commands: ["validate_populated_sub_elements_in_composition(#{m.composition_mandatory_ms_sub_elements}, #{m.composition_optional_ms_sub_elements})"] }
-          },
-          optional: true
+          }
         },
         composition_optional_ms_slices: {
           title: 'Must Support slices are correctly populated',
           description: 'Must Support slice careProvisioningEvent SHALL be populated if a value is known.',
           commands_builder: lambda { |m|
             { commands: ["validate_populated_slices_in_composition(#{m.composition_optional_ms_slices})"] }
-          },
-          optional: true
+          }
         },
         sections_shall_populated: {
           title: 'AU PS Composition Mandatory Sections are correctly populated',
@@ -92,8 +89,7 @@ class Generator
           commands_builder: lambda { |m|
             section_codes, elements = section_codes_and_elements(m, :recommended_sections_data_codes)
             { commands: ["validate_populated_sections_in_bundle(#{section_codes}, #{elements})"] }
-          },
-          optional: true
+          }
         },
         sections_may_populated: {
           title: 'AU PS Composition optional sections are correctly populated',
@@ -101,8 +97,7 @@ class Generator
           commands_builder: lambda { |m|
             section_codes, elements = section_codes_and_elements(m, :optional_sections_data_codes)
             { commands: ["validate_populated_sections_in_bundle(#{section_codes}, #{elements})"] }
-          },
-          optional: true
+          }
         },
         sections_may_undefined: {
           title: 'Undefined sections are correctly populated',
@@ -113,8 +108,7 @@ class Generator
               el[:min].positive?
             end.map { |el| el[:expression] }
             { commands: ["validate_populated_undefined_sections_in_bundle(#{section_codes}, #{elements})"] }
-          },
-          optional: true
+          }
         },
         sections_entry_profiles: {
           title: 'AU PS Composition Mandatory Sections capable of populating referenced profiles',

@@ -10,8 +10,6 @@ module AUPSTestKit
     description 'Optional section MAY be correctly populated if a value is known'
     id :suite_100ballot_au_ps_bundle_instance_au_ps_composition_optional_sections_sections_may_populated
     
-    optional
-    
     
     run do
       
