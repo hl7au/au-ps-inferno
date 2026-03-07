@@ -562,10 +562,10 @@ module AUPSTestKit
       end
 
       skip_if sections_to_validate.blank?, 'No sections to validate'
-      validate_populated_sections_in_bundle(sections_to_validate, elements_array)
+      validate_populated_sections_in_bundle(sections_to_validate, elements_array, optional: true)
     end
 
-    def validate_populated_sections_in_bundle(section_codes_array, elements_array)
+    def validate_populated_sections_in_bundle(section_codes_array, elements_array, optional: false)
       skip_if scratch_bundle.blank?, 'No Bundle resource provided'
       skip_if section_codes_array.blank?, 'No sections to validate'
 
@@ -576,7 +576,7 @@ module AUPSTestKit
       section_codes_array.each do |section_code|
         section = composition.section_by_code(section_code)
         if section.blank?
-          add_message('error', "#{section_code} (section missing)")
+          add_message(optional ? 'warning' : 'error', "#{section_code} (section missing)")
           has_error = true
           next
         end
@@ -585,12 +585,13 @@ module AUPSTestKit
         if all_populated
           add_message('info', "Section correctly populated\n\n#{section_message_body}")
         else
-          add_message('error',
+          add_message(optional ? 'warning' : 'error',
                       "For section with any mandatory Must Support element in section missing (i.e. title, code, text)\n\n#{section_message_body}")
           has_error = true
         end
       end
 
+      return if optional
       assert !has_error,
              'Some of the sections are not populated. See the list of populated sections in messages tab.'
     end

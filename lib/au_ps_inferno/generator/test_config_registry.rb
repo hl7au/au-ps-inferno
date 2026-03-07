@@ -88,7 +88,7 @@ class Generator
           description: 'Recommended sections SHOULD be correctly populated if a value is known',
           commands_builder: lambda { |m|
             section_codes, elements = section_codes_and_elements(m, :recommended_sections_data_codes)
-            { commands: ["validate_populated_sections_in_bundle(#{section_codes}, #{elements})"] }
+            { commands: ["validate_populated_sections_in_bundle(#{section_codes}, #{elements}, optional: true)"] }
           }
         },
         sections_may_populated: {
@@ -96,7 +96,7 @@ class Generator
           description: 'Optional section MAY be correctly populated if a value is known',
           commands_builder: lambda { |m|
             section_codes, elements = section_codes_and_elements(m, :optional_sections_data_codes)
-            { commands: ["validate_populated_sections_in_bundle(#{section_codes}, #{elements})"] }
+            { commands: ["validate_populated_sections_in_bundle(#{section_codes}, #{elements}, optional: true)"] }
           }
         },
         sections_may_undefined: {
