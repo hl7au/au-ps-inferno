@@ -5,6 +5,7 @@ require_relative 'bundle_decorator'
 require_relative 'composition_utils'
 require_relative 'validator_helpers'
 require_relative 'section_test_module'
+require_relative 'section_names_mapping'
 
 module AUPSTestKit
   # A base class for all tests to decrease code duplication
@@ -12,6 +13,7 @@ module AUPSTestKit
     include CompositionUtils
     include ValidatorHelpers
     include SectionTestModule
+    include SectionNamesMapping
 
     # AU PS Patient Must Support sub-elements: validate when parent (name, telecom, communication) is populated.
     # communication.language is mandatory when communication is present; all others optional.
@@ -562,7 +564,7 @@ module AUPSTestKit
       end
 
       skip_if sections_to_validate.blank?, 'No sections to validate'
-      validate_populated_sections_in_bundle(sections_to_validate, elements_array)
+      validate_populated_sections_in_bundle(sections_to_validate, elements_array, optional: true)
     end
 
     def validate_populated_sections_in_bundle(section_codes_array, elements_array, optional: false)
@@ -585,7 +587,7 @@ module AUPSTestKit
         if all_populated
           add_message('info', "Section correctly populated\n\n#{section_message_body}")
         else
-          add_message(optional ? 'warning' : 'error',
+          add_message('error',
                       "For section with any mandatory Must Support element in section missing (i.e. title, code, text)\n\n#{section_message_body}")
           has_error = true
         end
@@ -615,7 +617,7 @@ module AUPSTestKit
       section_codes_array.each do |section_code|
         section = composition.section_by_code(section_code)
         if section.blank?
-          add_message('error', "#{section_code} (section missing)")
+          add_message('error', "#{get_section_name(section_code)} is missing")
           has_error = true
           next
         end
