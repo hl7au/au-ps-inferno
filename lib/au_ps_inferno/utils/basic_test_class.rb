@@ -339,9 +339,14 @@ module AUPSTestKit
       composition_resource = BundleDecorator.new(scratch_bundle.to_hash).composition_resource
       return false unless composition_resource.present?
 
-      mandatory_ms_result = all_paths_are_populated?(composition_resource, mandatory_ms)
-      optional_ms_result = all_paths_are_populated?(composition_resource, optional_ms)
-      skip_the_test = mandatory_ms_result == false && optional_ms_result == false
+      all_elements = mandatory_ms + optional_ms
+      grouped_elements = all_elements.group_by { |element| element.split('.').first }
+      any_parent_populated = grouped_elements.any? { |parent_path, _| resolve_path(composition_resource, parent_path).first.present? }
+      mandatory_ms_result = grouped_elements.all? do |parent_path, sub_elements|
+        next true unless resolve_path(composition_resource, parent_path).first.present?
+
+        (mandatory_ms & sub_elements).all? { |el| resolve_path(composition_resource, el).first.present? }
+      end
 
       # Error: when any mandatory Must Support sub-elements are missing (i.e. subject.reference and attester.mode).
       # Warning: when any optional Must Support sub-elements are missing (i.e. attester.time and attester.party)
@@ -349,9 +354,15 @@ module AUPSTestKit
       # One message for each complex element with Must Support sub-elements, i.e. subject and attester
       # Include list of Must Support sub-elements populated and missing.
 
-      all_elements = mandatory_ms + optional_ms
-      grouped_elements = all_elements.group_by { |element| element.split('.').first }
-      grouped_elements.each_value do |sub_elements|
+      grouped_elements.each do |parent_path, sub_elements|
+        parent_populated = resolve_path(composition_resource, parent_path).first.present?
+
+        unless parent_populated
+          add_message('warning',
+                      "Must Support sub-elements correctly populated\n\nComposition\n\n**Complex element #{parent_path}** is not populated. Must Support sub-elements that would be validated: #{sub_elements.join(', ')}.")
+          next
+        end
+
         message_types = []
         sub_elements.each do |sub_element|
           sub_element_result = resolve_path(composition_resource, sub_element).first.present?
@@ -374,7 +385,7 @@ module AUPSTestKit
         add_message('info', populated_paths_info(composition_resource, sub_elements))
       end
 
-      skip_if skip_the_test, 'No Must Support sub-elements to validate'
+      skip_if !any_parent_populated, 'No complex element with Must Support sub-elements is populated'
       assert mandatory_ms_result,
              'Some of the mandatory Must Support sub-elements are not populated. See the list of populated sub-elements in messages tab.'
     end
