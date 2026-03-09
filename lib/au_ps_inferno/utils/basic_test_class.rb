@@ -1205,7 +1205,7 @@ module AUPSTestKit
 
     def test_subject_ms_subelements_when_parent_populated
       resource = subject_resource
-      return false unless resource.present?
+      skip_if resource.blank?, 'No subject (Patient) resource to validate for Must Support sub-elements'
 
       validate_populated_sub_elements_when_parent_populated(resource, PATIENT_MS_SUBELEMENT_GROUPS)
     end
@@ -1358,7 +1358,7 @@ module AUPSTestKit
       optional_ms_slices_messages = []
 
       resource = subject_resource
-      return false unless resource.present?
+      skip_if resource.blank?, 'No subject (Patient) resource to validate for Must Support elements'
 
       mandatory_ms_primitives_result = all_paths_are_populated?(resource, mandatory_ms_primitives)
       optional_ms_primitives_result = all_paths_are_populated?(resource, optional_ms_primitives)
