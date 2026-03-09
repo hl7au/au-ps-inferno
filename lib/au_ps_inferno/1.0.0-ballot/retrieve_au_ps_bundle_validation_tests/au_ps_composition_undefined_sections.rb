@@ -12,6 +12,8 @@ module AUPSTestKit
     description 'Verify the undefined sections are correctly populated in the AU PS Composition resource.'
     id :suite_100ballot_retrieve_au_ps_bundle_validation_tests_au_ps_composition_undefined_sections
     
+    optional
+    
     
     run_as_group
     

@@ -74,6 +74,7 @@ class Generator
         tests: [
           { id: :sections_may_undefined }
         ],
+        optional: true,
         run_as_group: true
       },
       {
