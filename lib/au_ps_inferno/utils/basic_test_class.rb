@@ -562,7 +562,7 @@ module AUPSTestKit
       end
 
       skip_if sections_to_validate.blank?, 'No sections to validate'
-      validate_populated_sections_in_bundle(sections_to_validate, elements_array, optional: true)
+      validate_populated_sections_in_bundle(sections_to_validate, elements_array)
     end
 
     def validate_populated_sections_in_bundle(section_codes_array, elements_array, optional: false)
