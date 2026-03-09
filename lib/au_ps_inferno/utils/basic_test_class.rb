@@ -587,7 +587,7 @@ module AUPSTestKit
         if all_populated
           add_message('info', "Section correctly populated\n\n#{section_message_body}")
         else
-          add_message('error',
+          add_message(optional ? 'warning' : 'error',
                       "For section with any mandatory Must Support element in section missing (i.e. title, code, text)\n\n#{section_message_body}")
           has_error = true
         end
