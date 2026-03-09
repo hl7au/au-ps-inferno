@@ -543,15 +543,17 @@ module AUPSTestKit
         optional_populated = all_paths_are_populated?(composition_resource, optional_ms_sub_elements)
 
         message_data = populated_paths_info(composition_resource, required_ms_sub_elements + optional_ms_sub_elements)
+        slice_details_string = "event:careProvisioningEvent"
+        full_message_data = "#{message_data}\n\nSlice: **#{slice_details_string}**"
 
         if required_populated == false
-          add_message('error', message_data)
+          add_message('error', full_message_data)
           passed = false
           next
         end
 
         if optional_populated == false
-          add_message('warning', message_data)
+          add_message('warning', full_message_data)
           next
         end
 
@@ -560,7 +562,7 @@ module AUPSTestKit
           next
         end
 
-        add_message('info', message_data)
+        add_message('info', full_message_data)
       end
 
       assert passed, 'Some of the slices are not populated. See the list of populated slices in messages tab.'
