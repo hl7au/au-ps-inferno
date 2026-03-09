@@ -1384,7 +1384,7 @@ module AUPSTestKit
       add_message(
         calculate_message_level(
           failed: !mandatory_ms_primitives_result,
-          warning: optional_result,
+          warning: mandatory_ms_primitives_result && !optional_result,
           info: mandatory_ms_primitives_result && optional_result
         ),
         info_to_print.join("\n\n")
