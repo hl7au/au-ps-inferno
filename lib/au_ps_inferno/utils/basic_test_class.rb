@@ -573,28 +573,28 @@ module AUPSTestKit
 
       bundle_resource = BundleDecorator.new(scratch_bundle.to_hash)
       composition = bundle_resource.composition_resource
-      has_error = false
+      all_errors = [] 
 
       section_codes_array.each do |section_code|
         section = composition.section_by_code(section_code)
         if section.blank?
-          add_message(optional ? 'warning' : 'error', "#{section_code} (section missing)")
-          has_error = true
+          add_message(optional ? 'warning' : 'error', "#{get_section_name(section_code)} is missing")
+          all_errors << true unless optional
           next
-        end
-        section_message_body = section_ms_elements_message(section, elements_array)
-        all_populated = all_paths_are_populated?(section, elements_array)
-        if all_populated
-          add_message('info', "Section correctly populated\n\n#{section_message_body}")
         else
-          add_message(optional ? 'warning' : 'error',
-                      "For section with any mandatory Must Support element in section missing (i.e. title, code, text)\n\n#{section_message_body}")
-          has_error = true
+          section_message_body = section_ms_elements_message(section, elements_array)
+          all_populated = all_paths_are_populated?(section, elements_array)
+          if all_populated
+            add_message('info', "Section correctly populated\n\n#{section_message_body}")
+          else
+            add_message('error',
+                        "For section with any mandatory Must Support element in section missing (i.e. title, code, text)\n\n#{section_message_body}")
+            all_errors << true
+          end
         end
       end
 
-      return if optional
-      assert !has_error,
+      assert all_errors.empty?,
              'Some of the sections are not populated. See the list of populated sections in messages tab.'
     end
 
