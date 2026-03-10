@@ -31,6 +31,7 @@ class Generator
     # Initializes a MetadataManager for the given IG resources.
     #
     # @param ig_resources [Array<FHIR::Model>] Parsed IG resources (e.g. from IGResourcesExtractor#ig_resources)
+    # rubocop:disable Metrics/MethodLength
     def initialize(ig_resources)
       @ig_resources = ig_resources
       @composition_sections = []
@@ -44,6 +45,7 @@ class Generator
       @resources_filters = {}
       @normalized_sections_data = []
     end
+    # rubocop:enable Metrics/MethodLength
 
     # Generates composition section metadata from IG resources (in-memory only).
     # Populates the internal composition sections and related metadata used by {#save_to_file}.
@@ -91,12 +93,18 @@ class Generator
     end
 
     def metadata_to_dump
-      {
-        composition_sections: @composition_sections,
+      dump_composition_metadata.merge(
         subject: build_metadata_for_subject,
         author: build_metadata_for_author,
         custodian: build_metadata_for_custodian,
-        attester: build_metadata_for_attester,
+        attester: build_metadata_for_attester
+      )
+    end
+
+    # rubocop:disable Metrics/MethodLength
+    def dump_composition_metadata
+      {
+        composition_sections: @composition_sections,
         composition_mandatory_ms_elements: @composition_mandatory_ms_elements,
         composition_mandatory_ms_sub_elements: @composition_mandatory_ms_sub_elements,
         composition_optional_ms_elements: @composition_optional_ms_elements,
@@ -108,9 +116,10 @@ class Generator
         normalized_sections_data: @normalized_sections_data
       }
     end
+    # rubocop:enable Metrics/MethodLength
 
     attr_reader :normalized_sections_data, :composition_mandatory_ms_elements, :composition_optional_ms_elements,
-                :composition_mandatory_ms_sub_elements, :composition_optional_ms_sub_elements, :composition_optional_ms_slices, :all_sections_data_codes
+                :composition_mandatory_ms_sub_elements, :composition_optional_ms_sub_elements
 
     def normalize_section_data(section_id)
       section_data = @composition_sections.find { |section| section[:id] == section_id }
@@ -147,17 +156,10 @@ class Generator
     end
 
     def composition_ms_sections_elements
-      filtered_elements = composition_extract_ms_elements_without_slices.filter do |element|
-        element&.path&.include?('Composition.section.')
-      end
-      filtered_elements.map do |element|
-        path = element.path.gsub('Composition.section.', '')
-        min = element.min
-        {
-          expression: path,
-          min: min
-        }
-      end.uniq
+      composition_extract_ms_elements_without_slices
+        .filter { |el| el&.path&.include?('Composition.section.') }
+        .map { |el| { expression: el.path.gsub('Composition.section.', ''), min: el.min } }
+        .uniq
     end
 
     def required_sections_data_codes
@@ -311,7 +313,8 @@ class Generator
 
       elements = composition_structure_definition.snapshot.element
       elements.filter do |element|
-        element.mustSupport == true && !element.path.include?(':') && element.path.include?('Composition.') && element.path.include?(slice)
+        element.mustSupport == true && !element.path.include?(':') &&
+          element.path.include?('Composition.') && element.path.include?(slice)
       end
     end
 
@@ -340,27 +343,30 @@ class Generator
       filtered_elements.map { |element| build_metadata_for_slice(element) }
     end
 
+    # rubocop:disable Metrics/MethodLength
     def build_metadata_for_slice(element)
-      all_ms_elements_related_to_slice_data = all_ms_elements_related_to_slice(element.path)
-      mandatory_ms_sub_elements = all_ms_elements_related_to_slice_data.filter do |el|
-        el.min.zero?
-      end.map { |el| el.path.gsub(element.path, '').gsub('.', '') }.filter { |el| el != '' }
-      optional_ms_sub_elements = all_ms_elements_related_to_slice_data.filter do |el|
-        el.min.positive?
-      end.map { |el| el.path.gsub(element.path, '').gsub('.', '') }.filter { |el| el != '' }
+      slice_elements = all_ms_elements_related_to_slice(element.path)
+      mandatory = slice_path_suffixes(slice_elements, element.path) { |el| el.min.zero? }
+      optional = slice_path_suffixes(slice_elements, element.path) { |el| el.min.positive? }
       {
         path: element.path.gsub('Composition.', ''),
         sliceName: element.sliceName,
         min: element.min,
         max: element.max,
         mustSupport: element.mustSupport,
-        mandatory_ms_sub_elements: mandatory_ms_sub_elements,
-        optional_ms_sub_elements: optional_ms_sub_elements
+        mandatory_ms_sub_elements: mandatory,
+        optional_ms_sub_elements: optional
       }
+    end
+    # rubocop:enable Metrics/MethodLength
+
+    def slice_path_suffixes(elements, base_path, &predicate)
+      elements.filter(&predicate).map { |el| el.path.gsub(base_path, '').gsub('.', '') }.reject(&:empty?)
     end
 
     def element_is_slice?(element)
-      element.id.include?(':') && element&.sliceName && !element.path.include?('section') && !element.path.include?('extension')
+      element.id.include?(':') && element&.sliceName &&
+        !element.path.include?('section') && !element.path.include?('extension')
     end
 
     # Returns IG resources whose resourceType matches the given type.
@@ -565,15 +571,13 @@ class Generator
     end
 
     def au_ps_profiles_mapping_required
-      @profiles.filter do |profile|
-        profile[:required]
-      end.each_with_object({}) { |profile, hash| hash[profile[:url]] = profile[:name] }
+      required = @profiles.filter { |profile| profile[:required] }
+      required.each_with_object({}) { |profile, hash| hash[profile[:url]] = profile[:name] }
     end
 
     def au_ps_profiles_mapping_other
-      @profiles.filter do |profile|
-        !profile[:required]
-      end.each_with_object({}) { |profile, hash| hash[profile[:url]] = profile[:name] }
+      other = @profiles.filter { |profile| !profile[:required] }
+      other.each_with_object({}) { |profile, hash| hash[profile[:url]] = profile[:name] }
     end
 
     def build_metadata_for_subject
@@ -600,26 +604,19 @@ class Generator
 
     def build_metadata_for_attester
       # attester.party: AU PS Patient | RelatedPerson | Practitioner | PractitionerRole | Organization (no Device)
-      profiles = [
+      attester_profiles = [
         'Patient|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-patient',
         'RelatedPerson|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-relatedperson',
         'Practitioner|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-practitioner',
         'PractitionerRole|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-practitionerrole',
         'Organization|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-organization'
       ]
-      profiles.map do |profile|
-        sd = get_structure_definition_by_profile(profile.split('|')[1])
-        {
-          resource_type: sd.type,
-          profile: profile.split('|')[1],
-          elements: get_elements_from_structure_definition_for_author(sd)
-        }
-      end
+      build_metadata_for_profiles(attester_profiles)
     end
 
     def build_metadata_for_author
-      # AU PS Practitioner, AU PS PractitionerRole, AU PS Patient, AU PS RelatedPerson, AU PS Organization profiles or Device resource
-      profiles = [
+      # AU PS Practitioner, PractitionerRole, Patient, RelatedPerson, Organization or Device (IPS)
+      author_profiles = [
         'Practitioner|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-practitioner',
         'PractitionerRole|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-practitionerrole',
         'Patient|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-patient',
@@ -627,11 +624,16 @@ class Generator
         'Organization|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-organization',
         'Device|http://hl7.org/fhir/uv/ips/StructureDefinition/Device-uv-ips'
       ]
-      profiles.map do |profile|
-        sd = get_structure_definition_by_profile(profile.split('|')[1])
+      build_metadata_for_profiles(author_profiles)
+    end
+
+    def build_metadata_for_profiles(profile_list)
+      profile_list.map do |profile|
+        profile_url = profile.split('|')[1]
+        sd = get_structure_definition_by_profile(profile_url)
         {
           resource_type: sd.type,
-          profile: profile.split('|')[1],
+          profile: profile_url,
           elements: get_elements_from_structure_definition_for_author(sd)
         }
       end
