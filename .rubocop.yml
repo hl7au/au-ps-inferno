@@ -6,7 +6,6 @@ AllCops:
     - "lib/au_ps_inferno/1.0.0-ballot/**/*"
     - "aidbox_config.rb"
     - "lib/au_ps_inferno/utils/basic_test_class.rb"
-    - "lib/au_ps_inferno/utils/composition_utils.rb"
     - "lib/au_ps_inferno/generator/suite_structure.rb"
 Gemspec/DevelopmentDependencies:
   Enabled: false

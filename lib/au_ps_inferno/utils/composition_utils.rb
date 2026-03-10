@@ -3,6 +3,7 @@
 require_relative 'bundle_decorator'
 
 # Utilities for FHIR Composition resources
+# rubocop:disable Metrics/ModuleLength
 module CompositionUtils
   def scratch_bundle
     scratch[:bundle_ips_resource]
@@ -87,6 +88,7 @@ module CompositionUtils
     resolve_path(scratch_bundle, 'identifier').first.present?
   end
 
+  # rubocop:disable Metrics/ParameterLists
   def composition_mandatory_ms_elements_info(
     optional_ms_elements,
     mandatory_ms_elements,
@@ -106,6 +108,7 @@ module CompositionUtils
     mandatory_ms_elements_passed = all_elements_passed?(mandatory_ms_elements + mandatory_ms_sub_elements)
     assert mandatory_ms_elements_passed, 'Mandatory Must Support elements are not populated'
   end
+  # rubocop:enable Metrics/ParameterLists
 
   def check_mandatory_ms_slices(mandatory_ms_slices)
     info_block('Mandatory Must Support slices SHALL be correctly populated if a value is known', mandatory_ms_slices)
@@ -132,13 +135,17 @@ module CompositionUtils
 
   def check_mandatory_ms_sub_elements(mandatory_ms_sub_elements)
     info_block(
-      'Mandatory Must Support sub-elements of a complex element SHALL be correctly populated if a value is known', mandatory_ms_sub_elements
+      'Mandatory Must Support sub-elements of a complex element SHALL be correctly populated ' \
+      'if a value is known',
+      mandatory_ms_sub_elements
     )
   end
 
   def check_optional_ms_sub_elements(optional_ms_sub_elements)
     info_block(
-      'Optional Must Support sub-elements of a complex element SHALL be correctly populated if a value is known', optional_ms_sub_elements
+      'Optional Must Support sub-elements of a complex element SHALL be correctly populated ' \
+      'if a value is known',
+      optional_ms_sub_elements
     )
   end
 
@@ -161,3 +168,4 @@ module CompositionUtils
     BundleDecorator.new(scratch_bundle).composition_resource
   end
 end
+# rubocop:enable Metrics/ModuleLength
