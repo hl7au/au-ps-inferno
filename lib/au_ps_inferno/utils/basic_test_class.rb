@@ -319,9 +319,7 @@ module AUPSTestKit
     end
 
     def validate_populated_elements_in_composition(elements_array, required: true)
-      return false unless scratch_bundle.present?
-
-      composition_resource = BundleDecorator.new(scratch_bundle.to_hash).composition_resource
+      composition_resource = composition_resource_from_scratch
       return false unless composition_resource.present?
 
       result = all_paths_are_populated?(composition_resource, elements_array)
@@ -1098,6 +1096,10 @@ module AUPSTestKit
     def section_validation_add_message(section, elements_array)
       body = section_ms_elements_message(section, elements_array)
       all_populated = all_paths_are_populated?(section, elements_array)
+      section_validation_emit_message(body, all_populated)
+    end
+
+    def section_validation_emit_message(body, all_populated)
       if all_populated
         add_message('info', "Section correctly populated\n\n#{body}")
         nil
