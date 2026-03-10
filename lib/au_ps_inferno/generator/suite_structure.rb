@@ -105,7 +105,8 @@ class Generator
           { id: :custodian_ms_subelements },
           { id: :custodian_ms_identifier_slices }
         ],
-        run_as_group: true
+        run_as_group: true,
+        optional: true
       },
       {
         name: 'AU PS Composition Attester',
@@ -115,7 +116,8 @@ class Generator
           { id: :attester_party_ms_subelements },
           { id: :attester_party_ms_identifier_slices }
         ],
-        run_as_group: true
+        run_as_group: true,
+        optional: true
       }
     ].freeze
 

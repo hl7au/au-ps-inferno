@@ -102,7 +102,6 @@ class Generator
         sections_may_undefined: {
           title: 'Undefined sections are correctly populated',
           description: 'Undefined sections MAY be populated if a value is known',
-          optional: true,
           commands_builder: lambda { |m|
             section_codes = m.all_sections_data_codes
             elements = m.composition_sections.first[:ms_elements].filter do |el|
