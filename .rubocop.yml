@@ -12,6 +12,5 @@ AllCops:
     - "lib/au_ps_inferno/utils/composition_decorator.rb"
     - "lib/au_ps_inferno/generator/sections_validation_group_generator.rb"
     - "lib/au_ps_inferno/generator/retrieve_cs_group_generator.rb"
-    - "lib/au_ps_inferno/generator/generator.rb"
 Gemspec/DevelopmentDependencies:
   Enabled: false
