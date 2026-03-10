@@ -298,9 +298,10 @@ module AUPSTestKit
       add_message(identifier_slices_message_type(slice_results, :all),
                   "Must support identifier slices correctly populated\n\n## List of Must Support identifier slices " \
                   "populated or missing\n\n#{identifier_slice_lines_with_type(slice_results).join("\n\n")}")
+      lines_simple = identifier_slice_lines_simple(slice_results).join("\n\n")
       add_message(identifier_slices_message_type(slice_results, :any),
                   "At least one Must Support identifier slices is populated\n\n## List of Must Support identifier " \
-                  "slices populated or missing (system when populated)\n\n#{identifier_slice_lines_simple(slice_results).join("\n\n")}")
+                  "slices populated or missing (system when populated)\n\n#{lines_simple}")
     end
 
     # Validates author Must Support identifier slices. One message: warning when any missing, info when all populated.
@@ -567,9 +568,10 @@ module AUPSTestKit
       slice_results = identifier_slice_results(resource, slices)
       header = "**Referenced custodian**: #{resource_type_str}#{" — #{profile_str}" if profile_str.present?}"
       msg_type = identifier_slices_message_type(slice_results, :all)
+      lines = identifier_slice_lines_with_type(slice_results).join("\n\n")
       add_message(msg_type,
                   "Must support identifier slices correctly populated\n\n#{header}\n\n## List of Must Support " \
-                  "identifier slices populated or missing (type and system when populated)\n\n#{identifier_slice_lines_with_type(slice_results).join("\n\n")}")
+                  "identifier slices populated or missing (type and system when populated)\n\n#{lines}")
     end
 
     def validate_attester_party_ms_elements(resource, elements_config)
@@ -596,9 +598,10 @@ module AUPSTestKit
       slice_results = identifier_slice_results(resource, slices)
       header = "**Referenced attester.party**: #{resource_type_str}#{" — #{profile_str}" if profile_str.present?}"
       msg_type = identifier_slices_message_type(slice_results, :all)
+      lines = identifier_slice_lines_with_type(slice_results).join("\n\n")
       add_message(msg_type,
                   "Must support identifier slices correctly populated\n\n#{header}\n\n## List of Must Support " \
-                  "identifier slices populated or missing (type and system when populated)\n\n#{identifier_slice_lines_with_type(slice_results).join("\n\n")}")
+                  "identifier slices populated or missing (type and system when populated)\n\n#{lines}")
     end
 
     def validate_author_ms_elements(resource, author_config_elements)
@@ -864,8 +867,8 @@ module AUPSTestKit
     end
 
     def add_section_read_error_no_entries?(section_data, body)
-      add_message('error',
-                  "#{section_data[:short]} (#{section_data[:code]}) - section has no entries and no emptyReason\n\n#{body}")
+      msg = "#{section_data[:short]} (#{section_data[:code]}) - section has no entries and no emptyReason\n\n#{body}"
+      add_message('error', msg)
       true
     end
 
@@ -1099,8 +1102,9 @@ module AUPSTestKit
         add_message('info', "Section correctly populated\n\n#{body}")
         nil
       else
-        add_message('error',
-                    "For section with any mandatory Must Support element in section missing (i.e. title, code, text)\n\n#{body}")
+        err_msg = 'For section with any mandatory Must Support element in section missing ' \
+                  "(i.e. title, code, text)\n\n#{body}"
+        add_message('error', err_msg)
         true
       end
     end
