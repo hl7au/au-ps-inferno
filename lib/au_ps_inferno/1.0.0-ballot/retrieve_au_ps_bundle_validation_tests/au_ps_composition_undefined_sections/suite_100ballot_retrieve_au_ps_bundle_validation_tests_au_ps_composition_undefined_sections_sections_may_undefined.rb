@@ -10,8 +10,6 @@ module AUPSTestKit
     description 'Undefined sections MAY be populated if a value is known'
     id :suite_100ballot_retrieve_au_ps_bundle_validation_tests_au_ps_composition_undefined_sections_sections_may_undefined
     
-    optional
-    
     
     run do
       
