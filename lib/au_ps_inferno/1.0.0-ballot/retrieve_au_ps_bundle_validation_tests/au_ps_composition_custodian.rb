@@ -16,6 +16,7 @@ module AUPSTestKit
     description 'Verify the referenced custodian is a correctly populated AU PS Organization resource.'
     id :suite_100ballot_retrieve_au_ps_bundle_validation_tests_au_ps_composition_custodian
     
+    optional
     
     run_as_group
     

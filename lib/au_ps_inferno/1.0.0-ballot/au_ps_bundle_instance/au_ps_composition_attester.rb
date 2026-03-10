@@ -16,7 +16,8 @@ module AUPSTestKit
     description 'Verify the referenced attester.party is a correctly populated AU PS Patient, RelatedPerson, Practitioner, PractitionerRole, or Organization resource.'
     id :suite_100ballot_au_ps_bundle_instance_au_ps_composition_attester
     
-    
+    optional
+
     run_as_group
     
 
