@@ -151,7 +151,7 @@ module AUPSTestKit
       has_error = sections_data.any? do |section_data|
         section = composition.section_by_code(section_data[:code])
         body = section_entry_list_or_empty_reason(section_data, section, normalized_sections_data)
-        process_one_section_read(section_data, section, body, expected_profile_urls_for_section(section_data))
+        process_one_section_read?(section_data, section, body, expected_profile_urls_for_section(section_data))
       end
       assert !has_error,
              'Some of the sections are not populated correctly. See the list of populated sections in messages tab.'
@@ -222,7 +222,7 @@ module AUPSTestKit
       end.all?
     end
 
-    def get_resource_by_ref_and_check_profile(ref, profile, bundle)
+    def resource_by_ref_matches_profile?(ref, profile, bundle)
       resource = BundleDecorator.new(bundle.to_hash).resource_by_reference(ref)
       return false unless resource.present?
 
@@ -249,7 +249,7 @@ module AUPSTestKit
       end.all?
     end
 
-    def validate_populated_elements_in_resource(fhirpath_to_get_resource, elements_array)
+    def validate_populated_elements_in_resource?(fhirpath_to_get_resource, elements_array)
       return false unless scratch_bundle.present?
 
       resource = resolve_path(scratch_bundle, fhirpath_to_get_resource).first
@@ -266,11 +266,9 @@ module AUPSTestKit
       return false unless composition_resource.present?
 
       grouped = (mandatory_ms + optional_ms).group_by { |el| el.split('.').first }
-      any_parent = grouped.any? { |parent_path, _| resolve_path(composition_resource, parent_path).first.present? }
+      any_parent = grouped.any? { |p, _| resolve_path(composition_resource, p).first.present? }
       mandatory_ok = composition_sub_elements_mandatory_result(grouped, mandatory_ms, composition_resource)
-      grouped.each do |parent_path, sub_els|
-        add_message_for_composition_sub_group(composition_resource, parent_path, sub_els, mandatory_ms)
-      end
+      composition_run_sub_group_messages(composition_resource, grouped, mandatory_ms)
       skip_if !any_parent, 'No complex element with Must Support sub-elements is populated'
       assert mandatory_ok,
              'Some of the mandatory Must Support sub-elements are not populated. See the list in messages tab.'
@@ -337,10 +335,7 @@ module AUPSTestKit
                    (required ? 'error' : 'warning')
                  end
       add_message(msg_type, populated_paths_info(composition_resource, elements_array))
-      return unless required
-
-      assert result,
-             'Some of the elements are not populated. See the list of populated elements in messages tab.'
+      assert result, 'Some of the elements are not populated. See the list in messages tab.' if required
     end
 
     def validate_populated_slices_in_composition(slices_array)
@@ -349,7 +344,7 @@ module AUPSTestKit
       composition_resource = BundleDecorator.new(scratch_bundle.to_hash).composition_resource
       return false unless composition_resource.present?
 
-      passed = slices_array.all? { |slice| process_one_slice_validation(composition_resource, slice) }
+      passed = slices_array.all? { |slice| process_one_slice_validation?(composition_resource, slice) }
       assert passed, 'Some of the slices are not populated. See the list of populated slices in messages tab.'
     end
 
@@ -641,9 +636,9 @@ module AUPSTestKit
                    'error'
                  end
       header = referenced_resource_header(resource, 'author')
-      msg = ms_elements_populated_message(header, resource, mandatory + optional,
-                                          section_title: 'List of Must Support elements (complex) populated or missing')
-      add_message(msg_type, msg)
+      section_title = 'List of Must Support elements (complex) populated or missing'
+      add_message(msg_type,
+                  ms_elements_populated_message(header, resource, mandatory + optional, section_title: section_title))
       assert mandatory_ok, 'When any mandatory Must Support element is missing. See the list in messages tab.'
     end
 
@@ -841,12 +836,13 @@ module AUPSTestKit
       optional_slices = %w[indigenousStatus genderIdentity individualPronouns]
       mandatory_ok = all_paths_are_populated?(resource, mandatory_primitives)
       optional_ok = subject_optional_ms_result(resource, optional_primitives, optional_slices)
-      info_lines = populated_paths_info_raw(resource, mandatory_primitives + optional_primitives) +
-                   subject_optional_slice_messages(resource, optional_slices)
-      add_message(
-        calculate_message_level(failed: !mandatory_ok, warning: mandatory_ok && !optional_ok,
-                                info: mandatory_ok && optional_ok), info_lines.join("\n\n")
-      )
+      level = calculate_message_level(failed: !mandatory_ok, warning: mandatory_ok && !optional_ok,
+                                      info: mandatory_ok && optional_ok)
+      info_lines = populated_paths_info_raw(resource,
+                                            mandatory_primitives + optional_primitives) + subject_optional_slice_messages(
+                                              resource, optional_slices
+                                            )
+      add_message(level, info_lines.join("\n\n"))
       assert mandatory_ok,
              'Some of the mandatory Must Support elements are not populated. See the list in messages tab.'
     end
@@ -857,24 +853,24 @@ module AUPSTestKit
       end.uniq
     end
 
-    def process_one_section_read(section_data, section, body, expected_profile_urls)
+    def process_one_section_read?(section_data, section, body, expected_profile_urls)
       if section.blank?
         add_message('error', "#{section_data[:short]} (#{section_data[:code]})\n\n#{body}")
         return true
       end
-      section_read_add_message_for_populated(section_data, section, body, expected_profile_urls)
+      section_read_add_message_for_populated?(section_data, section, body, expected_profile_urls)
     end
 
-    def section_read_add_message_for_populated(section_data, section, body, expected_profile_urls)
+    def section_read_add_message_for_populated?(section_data, section, body, expected_profile_urls)
       refs = section.entry_references
       has_entries = refs.any?
       all_correct = refs_all_correct_profile?(refs, BundleDecorator.new(scratch_bundle.to_hash),
                                               expected_profile_urls)
-      return add_section_read_error(section_data, body) if has_entries && !all_correct
-      return add_section_read_warning(section_data, body) if section.empty_reason_str.present? && !has_entries
-      return add_section_read_info(section_data, body) if has_entries && all_correct
+      return add_section_read_error?(section_data, body) if has_entries && !all_correct
+      return add_section_read_warning?(section_data, body) if section.empty_reason_str.present? && !has_entries
+      return add_section_read_info?(section_data, body) if has_entries && all_correct
 
-      add_section_read_error_no_entries(section_data, body)
+      add_section_read_error_no_entries?(section_data, body)
     end
 
     def refs_all_correct_profile?(refs, bundle_resource, expected_profile_urls)
@@ -886,22 +882,22 @@ module AUPSTestKit
       end
     end
 
-    def add_section_read_error(section_data, body)
+    def add_section_read_error?(section_data, body)
       add_message('error', "#{section_data[:short]} (#{section_data[:code]})\n\n#{body}")
       true
     end
 
-    def add_section_read_warning(section_data, body)
+    def add_section_read_warning?(section_data, body)
       add_message('warning', "#{section_data[:short]} (#{section_data[:code]})\n\n#{body}")
       false
     end
 
-    def add_section_read_info(section_data, body)
+    def add_section_read_info?(section_data, body)
       add_message('info', "#{section_data[:short]} (#{section_data[:code]})\n\n#{body}")
       false
     end
 
-    def add_section_read_error_no_entries(section_data, body)
+    def add_section_read_error_no_entries?(section_data, body)
       add_message('error',
                   "#{section_data[:short]} (#{section_data[:code]}) - section has no entries and no emptyReason\n\n#{body}")
       true
@@ -962,6 +958,12 @@ module AUPSTestKit
         next true unless resolve_path(composition_resource, parent_path).first.present?
 
         (mandatory_ms & sub_elements).all? { |el| resolve_path(composition_resource, el).first.present? }
+      end
+    end
+
+    def composition_run_sub_group_messages(composition_resource, grouped, mandatory_ms)
+      grouped.each do |parent_path, sub_els|
+        add_message_for_composition_sub_group(composition_resource, parent_path, sub_els, mandatory_ms)
       end
     end
 
@@ -1068,23 +1070,23 @@ module AUPSTestKit
       end
     end
 
-    def process_one_slice_validation(composition_resource, slice)
+    def process_one_slice_validation?(composition_resource, slice)
       required_paths = slice[:mandatory_ms_sub_elements].map { |el| "#{slice[:path]}.#{el}" }
       optional_paths = slice[:optional_ms_sub_elements].map { |el| "#{slice[:path]}.#{el}" }
       all_paths = required_paths + optional_paths
       required_ok = all_paths_are_populated?(composition_resource, required_paths)
-      return slice_validation_add_error(all_paths, composition_resource) unless required_ok
+      return slice_validation_add_error?(all_paths, composition_resource) unless required_ok
 
-      slice_validation_add_optional_message(composition_resource, all_paths, optional_paths)
+      slice_validation_add_optional_message?(composition_resource, all_paths, optional_paths)
     end
 
-    def slice_validation_add_error(all_paths, composition_resource)
+    def slice_validation_add_error?(all_paths, composition_resource)
       msg = "#{populated_paths_info(composition_resource, all_paths)}\n\nSlice: **event:careProvisioningEvent**"
       add_message('error', msg)
       false
     end
 
-    def slice_validation_add_optional_message(composition_resource, all_paths, optional_paths)
+    def slice_validation_add_optional_message?(composition_resource, all_paths, optional_paths)
       optional_ok = all_paths_are_populated?(composition_resource, optional_paths)
       event = composition_resource.event_by_code('PCPR')
       full_msg = "#{populated_paths_info(composition_resource, all_paths)}\n\nSlice: **event:careProvisioningEvent**"
@@ -1135,12 +1137,12 @@ module AUPSTestKit
       composition.respond_to?(:custodian) && composition.custodian.present? ? composition.custodian : nil
     end
 
-    def metadata_subelement?(el)
-      (el['expression'] || el[:expression]).to_s.include?('.')
+    def metadata_subelement?(element)
+      (element['expression'] || element[:expression]).to_s.include?('.')
     end
 
-    def metadata_slice?(el)
-      (el['id'] || el[:id]).to_s.include?(':')
+    def metadata_slice?(element)
+      (element['id'] || element[:id]).to_s.include?(':')
     end
 
     def author_entry_for_type(author_metadata, resource_type)
