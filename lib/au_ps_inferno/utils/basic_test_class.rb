@@ -223,9 +223,8 @@ module AUPSTestKit
       title = '## List any entry resources by type & profile'
       result = []
       sections_data.each do |section_data|
-        valid_resource_types = section_data[:entries].map do |entry|
-          entry[:profiles]
-        end.flatten.map { |profile| profile.split('|').first }.uniq
+        profiles_flat = section_data[:entries].map { |entry| entry[:profiles] }.flatten
+        valid_resource_types = profiles_flat.map { |profile| profile.split('|').first }.uniq
         section_title = "### #{section_data[:short]} (#{section_data[:code]})"
         result << section_title
         filtered_section_data = normalized_sections_data.find { |s| s['code'] == section_data[:code] }
@@ -769,12 +768,10 @@ module AUPSTestKit
 
       grouped = sub_elements.group_by { |el| (el['expression'] || el[:expression]).to_s.split('.').first }
       grouped.map do |parent, els|
-        mandatory = els.select do |e|
-          ((e['min'] || e[:min]) || 0).positive?
-        end.map { |e| e['expression'] || e[:expression] }
-        optional = els.reject do |e|
-          ((e['min'] || e[:min]) || 0).positive?
-        end.map { |e| e['expression'] || e[:expression] }
+        mandatory_els = els.select { |e| ((e['min'] || e[:min]) || 0).positive? }
+        optional_els = els.reject { |e| ((e['min'] || e[:min]) || 0).positive? }
+        mandatory = mandatory_els.map { |e| e['expression'] || e[:expression] }
+        optional = optional_els.map { |e| e['expression'] || e[:expression] }
         { parent: parent, mandatory: mandatory, optional: optional }
       end
     end
@@ -815,12 +812,10 @@ module AUPSTestKit
 
       grouped = sub_elements.group_by { |el| (el['expression'] || el[:expression]).to_s.split('.').first }
       grouped.map do |parent, els|
-        mandatory = els.select do |e|
-          ((e['min'] || e[:min]) || 0).positive?
-        end.map { |e| e['expression'] || e[:expression] }
-        optional = els.reject do |e|
-          ((e['min'] || e[:min]) || 0).positive?
-        end.map { |e| e['expression'] || e[:expression] }
+        mandatory_els = els.select { |e| ((e['min'] || e[:min]) || 0).positive? }
+        optional_els = els.reject { |e| ((e['min'] || e[:min]) || 0).positive? }
+        mandatory = mandatory_els.map { |e| e['expression'] || e[:expression] }
+        optional = optional_els.map { |e| e['expression'] || e[:expression] }
         { parent: parent, mandatory: mandatory, optional: optional }
       end
     end
@@ -908,12 +903,10 @@ module AUPSTestKit
       return unless resource.present? && elements_config.present?
 
       expressions = elements_config.map { |el| el['expression'] || el[:expression] }.compact
-      mandatory = elements_config.select do |el|
-        ((el['min'] || el[:min]) || 0).positive?
-      end.map { |el| el['expression'] || el[:expression] }
-      optional = elements_config.reject do |el|
-        ((el['min'] || el[:min]) || 0).positive?
-      end.map { |el| el['expression'] || el[:expression] }
+      mandatory_els = elements_config.select { |el| ((el['min'] || el[:min]) || 0).positive? }
+      optional_els = elements_config.reject { |el| ((el['min'] || el[:min]) || 0).positive? }
+      mandatory = mandatory_els.map { |el| el['expression'] || el[:expression] }
+      optional = optional_els.map { |el| el['expression'] || el[:expression] }
 
       mandatory_populated = mandatory.all? { |path| resolve_path(resource, path).first.present? }
       optional_populated = optional.all? { |path| resolve_path(resource, path).first.present? }
@@ -1008,12 +1001,10 @@ module AUPSTestKit
       return unless resource.present? && elements_config.present?
 
       expressions = elements_config.map { |el| el['expression'] || el[:expression] }.compact
-      mandatory = elements_config.select do |el|
-        ((el['min'] || el[:min]) || 0).positive?
-      end.map { |el| el['expression'] || el[:expression] }
-      optional = elements_config.reject do |el|
-        ((el['min'] || el[:min]) || 0).positive?
-      end.map { |el| el['expression'] || el[:expression] }
+      mandatory_els = elements_config.select { |el| ((el['min'] || el[:min]) || 0).positive? }
+      optional_els = elements_config.reject { |el| ((el['min'] || el[:min]) || 0).positive? }
+      mandatory = mandatory_els.map { |el| el['expression'] || el[:expression] }
+      optional = optional_els.map { |el| el['expression'] || el[:expression] }
 
       mandatory_populated = mandatory.all? { |path| resolve_path(resource, path).first.present? }
       optional_populated = optional.all? { |path| resolve_path(resource, path).first.present? }
@@ -1123,12 +1114,10 @@ module AUPSTestKit
       return unless resource.present? && author_config_elements.present?
 
       expressions = author_config_elements.map { |el| el['expression'] || el[:expression] }.compact
-      mandatory = author_config_elements.select do |el|
-        ((el['min'] || el[:min]) || 0).positive?
-      end.map { |el| el['expression'] || el[:expression] }
-      optional = author_config_elements.reject do |el|
-        ((el['min'] || el[:min]) || 0).positive?
-      end.map { |el| el['expression'] || el[:expression] }
+      mandatory_els = author_config_elements.select { |el| ((el['min'] || el[:min]) || 0).positive? }
+      optional_els = author_config_elements.reject { |el| ((el['min'] || el[:min]) || 0).positive? }
+      mandatory = mandatory_els.map { |el| el['expression'] || el[:expression] }
+      optional = optional_els.map { |el| el['expression'] || el[:expression] }
 
       mandatory_populated = mandatory.all? { |path| resolve_path(resource, path).first.present? }
       optional_populated = optional.all? { |path| resolve_path(resource, path).first.present? }
