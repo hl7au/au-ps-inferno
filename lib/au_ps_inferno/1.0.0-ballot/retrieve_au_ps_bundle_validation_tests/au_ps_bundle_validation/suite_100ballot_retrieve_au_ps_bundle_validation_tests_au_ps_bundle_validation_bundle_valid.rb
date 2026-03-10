@@ -1,0 +1,17 @@
+# frozen_string_literal: true
+
+require_relative '../../../utils/basic_test_class'
+
+require_relative '../../../utils/retrieve_bundle_test_class'
+
+
+module AUPSTestKit
+  # Automatically generated primitive test for Retrieved Bundle is valid against AU PS Bundle profile
+  class AUPSSuite100ballotRetrieveAuPsBundleValidationTestsAuPsBundleValidationRetrievedBundleIsValidAgainstAuPsBundleProfile < RetrieveBundleTestClass
+    title 'Retrieved Bundle is valid against AU PS Bundle profile'
+    description 'Verifies that a bundle retrieved from the server conforms to the AU PS Bundle profile.'
+    id :suite_100ballot_retrieve_au_ps_bundle_validation_tests_au_ps_bundle_validation_bundle_valid
+    
+    
+  end
+end

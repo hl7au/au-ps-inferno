@@ -12,9 +12,9 @@ module CompositionUtils
     skip_if scratch_bundle.blank?, 'No Bundle resource provided'
   end
 
-  def check_composition_section_code(section_code, composition_resource)
+  def check_composition_section_code(section_code, composition_resource, sections_codes_mapping)
     section = composition_resource.section_by_code(section_code)
-    return if section_is_nil?(section, section_code)
+    return if section_is_nil?(section, section_code, sections_codes_mapping)
 
     section_references_are_empty?(section, section_code)
     sections_info = group_section_output(section.entry_references.map do |ref|
@@ -37,22 +37,18 @@ module CompositionUtils
     section_entities.keys.map { |section_entity| "#{section_entity} x#{section_entities[section_entity]}" }
   end
 
-  def section_is_nil?(section, section_code)
-    return unless section.nil?
+  def section_is_nil?(section, section_code, sections_codes_mapping)
+    return false unless section.nil?
 
-    warning "Section #{sections_codes[section_code]} (#{section_code}) not found in Composition resource"
+    warning "Section #{sections_codes_mapping[section_code]} (#{section_code}) not found in Composition resource"
     true
   end
 
-  def sections_codes
-    Constants::SECTIONS_CODES_MAPPING
-  end
-
   def section_references_are_empty?(section, section_code)
-    return unless section.present?
+    return false unless section.present?
 
     section_references = section.entry_references
-    return unless section_references.empty?
+    return false unless section_references.empty?
 
     empty_reason_str = section.empty_reason_str
     if empty_reason_str.present?
@@ -62,66 +58,114 @@ module CompositionUtils
     end
   end
 
-  def boolean_to_humanized_string(boolean_value)
-    boolean_value ? 'Yes' : 'No'
+  def boolean_to_existent_string(boolean_value)
+    boolean_value ? '✅ Passed' : '❌ Failed'
+  end
+
+  def boolean_to_existent_string(boolean_value)
+    boolean_value ? '✅ Populated' : '❌ Missing'
   end
 
   def execute_statistics(resource, path_expression, humanized_name)
     data_value = resolve_path(resource, path_expression).first.present?
-    boolean_value = boolean_to_humanized_string(data_value)
+    boolean_value = boolean_to_existent_string(data_value)
     "**#{humanized_name}**: #{boolean_value}"
   end
 
-  def all_entries_have_full_url_info
+  def all_entries_have_full_url_info?
     entry_full_url_count = resolve_path(scratch_bundle, 'entry.fullUrl').length
     entries_count = resolve_path(scratch_bundle, 'entry').length
 
     entry_full_url_count == entries_count
   end
 
-  def timestamp_info
+  def timestamp_info?
     resolve_path(scratch_bundle, 'timestamp').first.present?
   end
 
-  def type_info
+  def type_info?
     resolve_path(scratch_bundle, 'type').first.present?
   end
 
-  def identifier_info
+  def identifier_info?
     resolve_path(scratch_bundle, 'identifier').first.present?
-  end
-
-  def composition_section_title_info
-    "**section.title**: #{check_section_element_completeness('section.title')}"
-  end
-
-  def composition_section_text_info
-    "**section.text**: #{check_section_element_completeness('section.text')}"
   end
 
   def check_section_element_completeness(path_expression)
     sections_count = resolve_path(composition_resource, path_expression).length
     selected_by_expression_count = resolve_path(composition_resource, path_expression).length
 
-    boolean_to_humanized_string(sections_count == selected_by_expression_count)
+    boolean_to_existent_string(sections_count == selected_by_expression_count)
   end
 
-  def composition_mandatory_ms_elements_info
+  def composition_mandatory_ms_elements_info(
+    optional_ms_elements,
+    mandatory_ms_elements,
+    optional_ms_sub_elements,
+    mandatory_ms_sub_elements,
+    mandatory_ms_slices,
+    optional_ms_slices
+  )
     check_bundle_exists_in_scratch
-    info "**List of Mandatory Must Support elements populated**:\n\n#{composition_mandatory_elements_info}"
-    optional_elements = Constants::OPTIONAL_MS_ELEMENTS.map do |element|
+    check_mandatory_ms_elements(mandatory_ms_elements)
+    check_optional_ms_elements(optional_ms_elements)
+    check_mandatory_ms_sub_elements(mandatory_ms_sub_elements)
+    check_optional_ms_sub_elements(optional_ms_sub_elements)
+    check_mandatory_ms_slices(mandatory_ms_slices)
+    check_optional_ms_slices(optional_ms_slices)
+
+    mandatory_ms_elements_passed = all_elements_passed?(mandatory_ms_elements + mandatory_ms_sub_elements)
+    assert mandatory_ms_elements_passed, 'Mandatory Must Support elements are not populated'
+  end
+
+  def check_mandatory_ms_slices(mandatory_ms_slices)
+    info_block('Mandatory Must Support slices SHALL be correctly populated if a value is known', mandatory_ms_slices)
+  end
+
+  def check_optional_ms_slices(optional_ms_slices)
+    info_block('Optional Must Support slices SHALL be correctly populated if a value is known', optional_ms_slices)
+  end
+
+  def info_block(title, elements)
+    info "**#{title}**:\n\n#{composition_mandatory_elements_info(elements)}"
+  end
+
+  def check_mandatory_ms_elements(mandatory_ms_elements)
+    info_block('Mandatory Must Support elements are correctly populated',
+               mandatory_ms_elements)
+  end
+
+  def check_optional_ms_elements(optional_ms_elements)
+    info_block(
+      'Optional Must Support elements are correctly populated', optional_ms_elements
+    )
+  end
+
+  def check_mandatory_ms_sub_elements(mandatory_ms_sub_elements)
+    info_block(
+      'Mandatory Must Support sub-elements of a complex element SHALL be correctly populated if a value is known', mandatory_ms_sub_elements
+    )
+  end
+
+  def check_optional_ms_sub_elements(optional_ms_sub_elements)
+    info_block(
+      'Optional Must Support sub-elements of a complex element SHALL be correctly populated if a value is known', optional_ms_sub_elements
+    )
+  end
+
+  # Generic: renders pass/fail for each element (or sub-element) in the given list.
+  # Do not append section.title/section.text here; they are sub-elements and only
+  # appear when in the metadata list (e.g. composition_mandatory_ms_sub_elements).
+  def composition_mandatory_elements_info(mandatory_ms_elements)
+    mandatory_ms_elements.map do |element|
       execute_statistics(composition_resource, element[:expression], element[:label])
     end.join("\n\n")
-    info "**List of Optional Must Support elements populated**:\n\n#{optional_elements}"
   end
 
-  def composition_mandatory_elements_info
-    mandatory_elements = Constants::MANDATORY_MS_ELEMENTS.map do |element|
-      execute_statistics(composition_resource, element[:expression], element[:label])
-    end
-    mandatory_elements.push(composition_section_title_info)
-    mandatory_elements.push(composition_section_text_info)
-    mandatory_elements.join("\n\n")
+  def all_elements_passed?(elements)
+    elements.map do |element|
+      resolve_path(composition_resource, element[:expression]).first.present?
+    end.all?
   end
 
   def composition_resource

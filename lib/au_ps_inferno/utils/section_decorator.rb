@@ -14,6 +14,6 @@ class SectionDecorator < FHIR::Composition::Section
   end
 
   def code_display_str
-    "#{code.coding.first.display} (#{code.coding.first.code})"
+    "#{code.coding.first.display || title} (#{code.coding.first.code})"
   end
 end

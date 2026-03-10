@@ -1,0 +1,21 @@
+# frozen_string_literal: true
+
+require_relative '../../../utils/basic_test_class'
+
+
+module AUPSTestKit
+  # Automatically generated primitive test for Optional Must Support elements are correctly populated
+  class AUPSSuite100ballotRetrieveAuPsBundleValidationTestsAuPsCompositionMustSupportConformanceOptionalMustSupportElementsAreCorrectlyPopulated < BasicTest
+    title 'Optional Must Support elements are correctly populated'
+    description 'Optional Must Support elements SHALL be correctly populated if a value is known'
+    id :suite_100ballot_retrieve_au_ps_bundle_validation_tests_au_ps_composition_must_support_conformance_composition_optional_ms_populated
+    
+    
+    run do
+      
+      validate_populated_elements_in_composition(["attester", "custodian", "identifier", "section", "text"], required: false)
+      
+    end
+    
+  end
+end

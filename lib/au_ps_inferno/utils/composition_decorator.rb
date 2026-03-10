@@ -22,4 +22,13 @@ class CompositionDecorator < FHIR::Composition
 
     SectionDecorator.new(section_data.to_hash)
   end
+
+  def event_by_code(code)
+    return nil if event.nil?
+
+    filtered_event = event.find { |ev| ev.code&.first&.coding&.first&.code == code }
+    return nil if filtered_event.nil?
+
+    filtered_event
+  end
 end
