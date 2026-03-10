@@ -341,7 +341,9 @@ module AUPSTestKit
 
       all_elements = mandatory_ms + optional_ms
       grouped_elements = all_elements.group_by { |element| element.split('.').first }
-      any_parent_populated = grouped_elements.any? { |parent_path, _| resolve_path(composition_resource, parent_path).first.present? }
+      any_parent_populated = grouped_elements.any? do |parent_path, _|
+        resolve_path(composition_resource, parent_path).first.present?
+      end
       mandatory_ms_result = grouped_elements.all? do |parent_path, sub_elements|
         next true unless resolve_path(composition_resource, parent_path).first.present?
 
@@ -543,7 +545,7 @@ module AUPSTestKit
         optional_populated = all_paths_are_populated?(composition_resource, optional_ms_sub_elements)
 
         message_data = populated_paths_info(composition_resource, required_ms_sub_elements + optional_ms_sub_elements)
-        slice_details_string = "event:careProvisioningEvent"
+        slice_details_string = 'event:careProvisioningEvent'
         full_message_data = "#{message_data}\n\nSlice: **#{slice_details_string}**"
 
         if required_populated == false
@@ -586,7 +588,7 @@ module AUPSTestKit
 
       bundle_resource = BundleDecorator.new(scratch_bundle.to_hash)
       composition = bundle_resource.composition_resource
-      all_errors = [] 
+      all_errors = []
 
       section_codes_array.each do |section_code|
         section = composition.section_by_code(section_code)
