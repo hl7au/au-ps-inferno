@@ -7,7 +7,6 @@ AllCops:
     - "aidbox_config.rb"
     - "lib/au_ps_inferno/utils/basic_test_class.rb"
     - "lib/au_ps_inferno/utils/composition_utils.rb"
-    - "lib/au_ps_inferno/generator/test_config_registry.rb"
     - "lib/au_ps_inferno/generator/suite_structure.rb"
     - "lib/au_ps_inferno/utils/composition_decorator.rb"
     - "lib/au_ps_inferno/generator/sections_validation_group_generator.rb"

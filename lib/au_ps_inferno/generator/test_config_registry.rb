@@ -9,6 +9,7 @@ class Generator
   # Keys: Symbol test type id (e.g. :bundle_must_support_populated).
   # Values: hash with :title, :description, and optional :base_class_name, :imports, :ignore_commands,
   #         :optional, :commands, :commands_builder.
+  # rubocop:disable Metrics/ClassLength
   class TestConfigRegistry
     class << self
       # @param test_id [Symbol] test type id from SuiteStructure
@@ -27,16 +28,16 @@ class Generator
       end
 
       # @param test_id [Symbol] test type id
-      # @return [Boolean] whether this test type has an entry (use for config/title/description). :bundle_valid is not registered.
+      # @return [Boolean] whether this test type has an entry (use for config/title/description).
+      #   :bundle_valid is not registered.
       def registered?(test_id)
         REGISTRY.key?(test_id)
       end
 
       def self.section_codes_and_elements(metadata, codes_method)
         section_codes = metadata.public_send(codes_method).map { |s| s[:code] }
-        elements = metadata.composition_sections.first[:ms_elements].filter do |el|
-          el[:min].positive?
-        end.map { |el| el[:expression] }
+        mandatory_elements = metadata.composition_sections.first[:ms_elements].filter { |el| el[:min].positive? }
+        elements = mandatory_elements.map { |el| el[:expression] }
         [section_codes, elements]
       end
       private_class_method :section_codes_and_elements
@@ -49,7 +50,8 @@ class Generator
         },
         composition_mandatory_ms_populated: {
           title: 'Mandatory Must Support elements are correctly populated',
-          description: 'Mandatory Must Support element SHALL be able to be populated if a value is known and allowed to share.',
+          description: 'Mandatory Must Support element SHALL be able to be populated if a value is known ' \
+                       'and allowed to share.',
           commands_builder: lambda { |m|
             { commands: ["validate_populated_elements_in_composition(#{m.composition_mandatory_ms_elements})"] }
           }
@@ -58,14 +60,17 @@ class Generator
           title: 'Optional Must Support elements are correctly populated',
           description: 'Optional Must Support elements SHALL be correctly populated if a value is known',
           commands_builder: lambda { |m|
-            { commands: ["validate_populated_elements_in_composition(#{m.composition_optional_ms_elements}, required: false)"] }
+            cmd = "validate_populated_elements_in_composition(#{m.composition_optional_ms_elements}, required: false)"
+            { commands: [cmd] }
           }
         },
         composition_ms_subelements_populated: {
           title: 'Must Support sub-elements of a complex element are correctly populated',
-          description: 'Must Support sub-elements of a complex element SHALL be correctly populated if a value is known',
+          description: 'Must Support sub-elements of a complex element SHALL be correctly populated ' \
+                       'if a value is known',
           commands_builder: lambda { |m|
-            { commands: ["validate_populated_sub_elements_in_composition(#{m.composition_mandatory_ms_sub_elements}, #{m.composition_optional_ms_sub_elements})"] }
+            args = "#{m.composition_mandatory_ms_sub_elements}, #{m.composition_optional_ms_sub_elements}"
+            { commands: ["validate_populated_sub_elements_in_composition(#{args})"] }
           }
         },
         composition_optional_ms_slices: {
@@ -104,15 +109,15 @@ class Generator
           description: 'Undefined sections MAY be populated if a value is known',
           commands_builder: lambda { |m|
             section_codes = m.all_sections_data_codes
-            elements = m.composition_sections.first[:ms_elements].filter do |el|
-              el[:min].positive?
-            end.map { |el| el[:expression] }
+            mandatory_el = m.composition_sections.first[:ms_elements].filter { |el| el[:min].positive? }
+            elements = mandatory_el.map { |el| el[:expression] }
             { commands: ["validate_populated_undefined_sections_in_bundle(#{section_codes}, #{elements})"] }
           }
         },
         sections_entry_profiles: {
           title: 'AU PS Composition Mandatory Sections capable of populating referenced profiles',
-          description: 'Mandatory section SHALL be capable of populating section.entry with the referenced profiles and SHOULD correctly populate section.entry if a value is known.',
+          description: 'Mandatory section SHALL be capable of populating section.entry with the referenced ' \
+                       'profiles and SHOULD correctly populate section.entry if a value is known.',
           commands_builder: lambda { |m|
             sections_data = m.composition_sections.filter { |s| s[:required] == true && s[:mustSupport] == true }
             { commands: ["read_composition_sections_info(#{sections_data}, #{m.return_normalized_sections_data})"] }
@@ -130,7 +135,8 @@ class Generator
         },
         subject_ms_identifier_slices: {
           title: 'Must Support identifier slices SHALL be populated if a value is known',
-          description: 'Must Support identifier slices SHALL be populated if a value is known (i.e. ihi, dva, medicare).',
+          description: 'Must Support identifier slices SHALL be populated if a value is known ' \
+                       '(i.e. ihi, dva, medicare).',
           commands: ['test_subject_ms_identifier_slices']
         },
         author_ms_elements: {
@@ -181,4 +187,5 @@ class Generator
       }.freeze
     end
   end
+  # rubocop:enable Metrics/ClassLength
 end
