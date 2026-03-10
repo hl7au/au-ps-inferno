@@ -12,7 +12,8 @@ class Generator
   class RetrieveCSGroupGenerator
     GROUP_NAME = 'au_ps_retrieve_cs_group'
     GROUP_TITLE = 'Retrieve Capability Statement'
-    GROUP_DESCRIPTION = 'Verifies that the server exposes a valid CapabilityStatement and declares support for AU PS profiles and IPS recommended operations.'
+    GROUP_DESCRIPTION = 'Verifies that the server exposes a valid CapabilityStatement and declares support for ' \
+                        'AU PS profiles and IPS recommended operations.'
 
     # @param version_suffix [String] Short version suffix (e.g. '100preview')
     # @param suite_version [String] Suite version folder (e.g. '1.0.0-preview')
