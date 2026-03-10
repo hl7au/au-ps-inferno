@@ -50,6 +50,12 @@ module AUPSTestKit
       'Device' => []
     }.freeze
 
+    SUBJECT_OPTIONAL_SLICE_URLS = {
+      'indigenousStatus' => 'http://hl7.org.au/fhir/StructureDefinition/indigenous-status',
+      'genderIdentity' => 'http://hl7.org/fhir/StructureDefinition/individual-genderIdentity',
+      'individualPronouns' => 'http://hl7.org/fhir/StructureDefinition/individual-pronouns'
+    }.freeze
+
     def check_other_sections(all_sections_data_codes, sections_codes_mapping)
       check_bundle_exists_in_scratch
       composition_resource = BundleDecorator.new(scratch_bundle.to_hash).composition_resource
@@ -142,104 +148,28 @@ module AUPSTestKit
     def read_composition_sections_info(sections_data, normalized_sections_data)
       check_bundle_exists_in_scratch
       composition = BundleDecorator.new(scratch_bundle.to_hash).composition_resource
-      has_error = false
-
-      sections_data.each do |section_data|
+      has_error = sections_data.any? do |section_data|
         section = composition.section_by_code(section_data[:code])
-        expected_profile_urls = section_data[:entries].flat_map do |e|
-          (e[:profiles] || []).map do |p|
-            p.to_s.include?('|') ? p.to_s.split('|').last : p
-          end
-        end.uniq
-
-        if section.blank?
-          body = section_entry_list_or_empty_reason(section_data, nil, normalized_sections_data)
-          add_message('error',
-                      "#{section_data[:short]} (#{section_data[:code]})\n\n#{body}")
-          has_error = true
-          next
-        end
-
-        empty_reason_populated = section.empty_reason_str.present?
-        refs = section.entry_references
-        has_entries = refs.any?
-
-        bundle_resource = BundleDecorator.new(scratch_bundle.to_hash)
-        all_entries_correct_profile = refs.all? do |ref|
-          resource = bundle_resource.resource_by_reference(ref)
-          next false unless resource.present?
-
-          (resource.meta&.profile || []).any? { |prof| expected_profile_urls.include?(prof) }
-        end
-        any_entry_incorrect_profile = has_entries && !all_entries_correct_profile
-
         body = section_entry_list_or_empty_reason(section_data, section, normalized_sections_data)
-
-        if any_entry_incorrect_profile
-          add_message('error',
-                      "#{section_data[:short]} (#{section_data[:code]})\n\n#{body}")
-          has_error = true
-        elsif empty_reason_populated && !has_entries
-          add_message('warning',
-                      "#{section_data[:short]} (#{section_data[:code]})\n\n#{body}")
-        elsif has_entries && all_entries_correct_profile
-          add_message('info',
-                      "#{section_data[:short]} (#{section_data[:code]})\n\n#{body}")
-        else
-          err_msg = "#{section_data[:short]} (#{section_data[:code]}) - section has no entries and no emptyReason" \
-                    "\n\n#{body}"
-          add_message('error', err_msg)
-          has_error = true
-        end
+        process_one_section_read(section_data, section, body, expected_profile_urls_for_section(section_data))
       end
-
       assert !has_error,
              'Some of the sections are not populated correctly. See the list of populated sections in messages tab.'
     end
 
     def section_entry_list_or_empty_reason(_section_data, section, _normalized_sections_data)
       return 'List of entry resources by type & profile: (section missing)' if section.blank?
-
-      if section.entry_references.empty?
-        return "emptyReason: #{section.empty_reason_str}" if section.empty_reason_str.present?
-
-        return 'No entries; no emptyReason.'
-      end
+      return section_empty_reason_text(section) if section.entry_references.empty?
 
       bundle_resource = BundleDecorator.new(scratch_bundle.to_hash)
-      lines = section.entry_references.map do |ref|
-        resource = bundle_resource.resource_by_reference(ref)
-        if resource.present?
-          profiles = (resource.meta&.profile || []).join(', ')
-          "**#{ref}**: #{resource.resourceType} (#{profiles})"
-        else
-          "**#{ref}**: (resource not found)"
-        end
-      end
-      lines.join("\n\n").to_s
+      section_entry_lines(section.entry_references, bundle_resource).join("\n\n").to_s
     end
 
     def info_entry_resources_by_type_and_profile(sections_data, normalized_sections_data)
       title = '## List any entry resources by type & profile'
-      result = []
-      sections_data.each do |section_data|
-        profiles_flat = section_data[:entries].map { |entry| entry[:profiles] }.flatten
-        valid_resource_types = profiles_flat.map { |profile| profile.split('|').first }.uniq
-        section_title = "### #{section_data[:short]} (#{section_data[:code]})"
-        result << section_title
-        filtered_section_data = normalized_sections_data.find { |s| s['code'] == section_data[:code] }
-        section_test_entity = SectionTestClass.new(filtered_section_data, scratch_bundle)
-        (section_test_entity.references || []).each do |ref|
-          existing_resource = section_test_entity.get_resource_by_reference(ref)
-          next unless existing_resource.present?
-
-          existing_resource_profiles = existing_resource.meta&.profile || []
-
-          entity_can_present = valid_resource_types.include?(existing_resource.resourceType)
-          profile_list = existing_resource_profiles.join(', ')
-          prefix = " #{boolean_to_existent_string(entity_can_present)} **#{ref}**: "
-          result << "#{prefix}#{existing_resource.resourceType} (#{profile_list})"
-        end
+      result = sections_data.flat_map do |section_data|
+        valid_types = valid_resource_types_for_section(section_data)
+        build_info_entry_section_lines(section_data, normalized_sections_data, valid_types)
       end
       info [title, result.join("\n\n")].join("\n\n")
     end
@@ -248,18 +178,10 @@ module AUPSTestKit
       bundle_resource = BundleDecorator.new(scratch_bundle.to_hash)
       composition_resource = bundle_resource.composition_resource
       main_title = '## List Must Support elements populated or missing'
-      result = []
-      sections_configs.each do |section_config|
+      result = sections_configs.filter_map do |section_config|
         section_resource = composition_resource.section_by_code(section_config[:code])
-        next unless section_resource.present?
-
-        title = "### #{section_config[:short]}(#{section_config[:code]})"
-        result << title
-        section_config[:ms_elements].each do |element|
-          populated = resolve_path(section_resource, element[:expression]).first.present?
-          result << "**#{element[:expression]}**: #{boolean_to_existent_string(populated)}"
-        end
-      end
+        section_ms_elements_result(section_config, section_resource) if section_resource.present?
+      end.flatten
       info [main_title, result.join("\n\n")].join("\n\n")
     end
 
@@ -343,57 +265,14 @@ module AUPSTestKit
       composition_resource = BundleDecorator.new(scratch_bundle.to_hash).composition_resource
       return false unless composition_resource.present?
 
-      all_elements = mandatory_ms + optional_ms
-      grouped_elements = all_elements.group_by { |element| element.split('.').first }
-      any_parent_populated = grouped_elements.any? do |parent_path, _|
-        resolve_path(composition_resource, parent_path).first.present?
+      grouped = (mandatory_ms + optional_ms).group_by { |el| el.split('.').first }
+      any_parent = grouped.any? { |parent_path, _| resolve_path(composition_resource, parent_path).first.present? }
+      mandatory_ok = composition_sub_elements_mandatory_result(grouped, mandatory_ms, composition_resource)
+      grouped.each do |parent_path, sub_els|
+        add_message_for_composition_sub_group(composition_resource, parent_path, sub_els, mandatory_ms)
       end
-      mandatory_ms_result = grouped_elements.all? do |parent_path, sub_elements|
-        next true unless resolve_path(composition_resource, parent_path).first.present?
-
-        (mandatory_ms & sub_elements).all? { |el| resolve_path(composition_resource, el).first.present? }
-      end
-
-      # Error: when any mandatory Must Support sub-elements are missing (i.e. subject.reference and attester.mode).
-      # Warning: when any optional Must Support sub-elements are missing (i.e. attester.time and attester.party)
-      # Info: when all optional Must Support sub-elements are populated
-      # One message for each complex element with Must Support sub-elements, i.e. subject and attester
-      # Include list of Must Support sub-elements populated and missing.
-
-      grouped_elements.each do |parent_path, sub_elements|
-        parent_populated = resolve_path(composition_resource, parent_path).first.present?
-
-        unless parent_populated
-          msg = "Must Support sub-elements correctly populated\n\nComposition\n\n**Complex element #{parent_path}** " \
-                "is not populated. Must Support sub-elements that would be validated: #{sub_elements.join(', ')}."
-          add_message('warning', msg)
-          next
-        end
-
-        message_types = []
-        sub_elements.each do |sub_element|
-          sub_element_result = resolve_path(composition_resource, sub_element).first.present?
-          sub_element_mandatory = mandatory_ms.include?(sub_element)
-          message_types << if sub_element_result
-                             'info'
-                           else
-                             sub_element_mandatory ? 'error' : 'warning'
-                           end
-        end
-        uniq_message_types = message_types.uniq
-        if uniq_message_types.include?('error')
-          add_message('error', populated_paths_info(composition_resource, sub_elements))
-          next
-        end
-        if uniq_message_types.include?('warning')
-          add_message('warning', populated_paths_info(composition_resource, sub_elements))
-          next
-        end
-        add_message('info', populated_paths_info(composition_resource, sub_elements))
-      end
-
-      skip_if !any_parent_populated, 'No complex element with Must Support sub-elements is populated'
-      assert mandatory_ms_result,
+      skip_if !any_parent, 'No complex element with Must Support sub-elements is populated'
+      assert mandatory_ok,
              'Some of the mandatory Must Support sub-elements are not populated. See the list in messages tab.'
     end
 
@@ -407,42 +286,9 @@ module AUPSTestKit
     def validate_populated_sub_elements_when_parent_populated(resource, parent_groups)
       return false unless resource.present?
 
-      any_parent_populated = false
-      parent_groups.each do |group|
-        parent_path = group[:parent]
-        mandatory = group[:mandatory] || []
-        optional = group[:optional] || []
-        next unless resolve_path(resource, parent_path).first.present?
-
-        any_parent_populated = true
-        sub_elements = mandatory + optional
-        message_types = sub_elements.map do |sub_element|
-          sub_element_result = resolve_path(resource, sub_element).first.present?
-          sub_element_mandatory = mandatory.include?(sub_element)
-          if sub_element_result
-            'info'
-          else
-            (sub_element_mandatory ? 'error' : 'warning')
-          end
-        end
-        uniq_message_types = message_types.uniq
-        message_type = if uniq_message_types.include?('error')
-                         'error'
-                       elsif uniq_message_types.include?('warning')
-                         'warning'
-                       else
-                         'info'
-                       end
-        add_message(message_type, populated_paths_info(resource, sub_elements))
-      end
-
-      skip_if !any_parent_populated, 'No complex element with Must Support sub-elements is populated'
-      mandatory_result = parent_groups.all? do |group|
-        next true unless resolve_path(resource, group[:parent]).first.present?
-
-        (group[:mandatory] || []).all? { |el| resolve_path(resource, el).first.present? }
-      end
-      assert mandatory_result,
+      any_parent = process_parent_groups_sub_element_messages(resource, parent_groups)
+      skip_if !any_parent, 'No complex element with Must Support sub-elements is populated'
+      assert parent_groups_mandatory_result(resource, parent_groups),
              'When a mandatory Must Support sub-element is missing but the parent exists. See the list in messages tab.'
     end
 
@@ -455,38 +301,13 @@ module AUPSTestKit
     def validate_ms_identifier_slices_in_resource(resource, slices)
       return unless resource.present?
 
-      identifiers = identifiers_from_resource(resource) || []
-      slice_results = slices.map do |slice|
-        ident = find_identifier_by_system(identifiers, slice[:system])
-        { slice: slice, identifier: ident }
-      end
-
-      lines1 = slice_results.map do |r|
-        if r[:identifier].present?
-          type_str = identifier_type_display(r[:identifier])
-          "✅ Populated: **#{r[:slice][:name]}** — system: #{r[:slice][:system]}#{type_str}"
-        else
-          "❌ Missing: **#{r[:slice][:name]}**"
-        end
-      end
-      all_populated = slice_results.all? { |r| r[:identifier].present? }
-      message_type1 = all_populated ? 'info' : 'warning'
-      msg1 = "Must support identifier slices correctly populated\n\n## List of Must Support identifier slices " \
-             "populated or missing\n\n#{lines1.join("\n\n")}"
-      add_message(message_type1, msg1)
-
-      at_least_one = slice_results.any? { |r| r[:identifier].present? }
-      message_type2 = at_least_one ? 'info' : 'warning'
-      lines2 = slice_results.map do |r|
-        if r[:identifier].present?
-          "✅ Populated: **#{r[:slice][:name]}** — system: #{r[:slice][:system]}"
-        else
-          "❌ Missing: **#{r[:slice][:name]}**"
-        end
-      end
-      msg2 = "At least one Must Support identifier slices is populated\n\n## List of Must Support identifier slices " \
-             "populated or missing (system when populated)\n\n#{lines2.join("\n\n")}"
-      add_message(message_type2, msg2)
+      slice_results = identifier_slice_results(resource, slices)
+      add_message(identifier_slices_message_type(slice_results, :all),
+                  "Must support identifier slices correctly populated\n\n## List of Must Support identifier slices " \
+                  "populated or missing\n\n#{identifier_slice_lines_with_type(slice_results).join("\n\n")}")
+      add_message(identifier_slices_message_type(slice_results, :any),
+                  "At least one Must Support identifier slices is populated\n\n## List of Must Support identifier " \
+                  "slices populated or missing (system when populated)\n\n#{identifier_slice_lines_simple(slice_results).join("\n\n")}")
     end
 
     # Validates author Must Support identifier slices. One message: warning when any missing, info when all populated.
@@ -494,26 +315,13 @@ module AUPSTestKit
     def validate_author_ms_identifier_slices(resource, slices, resource_type_str, profile_str)
       return unless resource.present? && slices.present?
 
-      identifiers = identifiers_from_resource(resource) || []
-      slice_results = slices.map do |slice|
-        ident = find_identifier_by_system(identifiers, slice[:system])
-        { slice: slice, identifier: ident }
-      end
-
-      author_header = "**Referenced author**: #{resource_type_str}#{" — #{profile_str}" if profile_str.present?}"
-      lines = slice_results.map do |r|
-        if r[:identifier].present?
-          type_str = identifier_type_display(r[:identifier])
-          "✅ Populated: **#{r[:slice][:name]}** — system: #{r[:slice][:system]}#{type_str}"
-        else
-          "❌ Missing: **#{r[:slice][:name]}**"
-        end
-      end
-      all_populated = slice_results.all? { |r| r[:identifier].present? }
-      message_type = all_populated ? 'info' : 'warning'
-      msg = "Must support identifier slices correctly populated\n\n#{author_header}\n\n## List of Must Support " \
-            "identifier slices populated or missing (type and system when populated)\n\n#{lines.join("\n\n")}"
-      add_message(message_type, msg)
+      slice_results = identifier_slice_results(resource, slices)
+      header = "**Referenced author**: #{resource_type_str}#{" — #{profile_str}" if profile_str.present?}"
+      lines = identifier_slice_lines_with_type(slice_results)
+      msg_type = identifier_slices_message_type(slice_results, :all)
+      add_message(msg_type,
+                  "Must support identifier slices correctly populated\n\n#{header}\n\n## List of Must Support " \
+                  "identifier slices populated or missing (type and system when populated)\n\n#{lines.join("\n\n")}")
     end
 
     def validate_populated_elements_in_composition(elements_array, required: true)
@@ -523,13 +331,12 @@ module AUPSTestKit
       return false unless composition_resource.present?
 
       result = all_paths_are_populated?(composition_resource, elements_array)
-      message_type = if result
-                       'info'
-                     else
-                       required ? 'error' : 'warning'
-                     end
-      add_message(message_type, populated_paths_info(composition_resource, elements_array))
-
+      msg_type = if result
+                   'info'
+                 else
+                   (required ? 'error' : 'warning')
+                 end
+      add_message(msg_type, populated_paths_info(composition_resource, elements_array))
       return unless required
 
       assert result,
@@ -537,44 +344,12 @@ module AUPSTestKit
     end
 
     def validate_populated_slices_in_composition(slices_array)
-      passed = true
       return false unless scratch_bundle.present?
 
       composition_resource = BundleDecorator.new(scratch_bundle.to_hash).composition_resource
       return false unless composition_resource.present?
 
-      slices_array.each do |slice|
-        # TODO: event check is temporary hardcoded
-        event = composition_resource.event_by_code('PCPR')
-        required_ms_sub_elements = slice[:mandatory_ms_sub_elements].map { |element| "#{slice[:path]}.#{element}" }
-        optional_ms_sub_elements = slice[:optional_ms_sub_elements].map { |element| "#{slice[:path]}.#{element}" }
-
-        required_populated = all_paths_are_populated?(composition_resource, required_ms_sub_elements)
-        optional_populated = all_paths_are_populated?(composition_resource, optional_ms_sub_elements)
-
-        message_data = populated_paths_info(composition_resource, required_ms_sub_elements + optional_ms_sub_elements)
-        slice_details_string = 'event:careProvisioningEvent'
-        full_message_data = "#{message_data}\n\nSlice: **#{slice_details_string}**"
-
-        if required_populated == false
-          add_message('error', full_message_data)
-          passed = false
-          next
-        end
-
-        if optional_populated == false
-          add_message('warning', full_message_data)
-          next
-        end
-
-        if event.nil?
-          add_message('warning', message_data)
-          next
-        end
-
-        add_message('info', full_message_data)
-      end
-
+      passed = slices_array.all? { |slice| process_one_slice_validation(composition_resource, slice) }
       assert passed, 'Some of the slices are not populated. See the list of populated slices in messages tab.'
     end
 
@@ -596,28 +371,9 @@ module AUPSTestKit
 
       bundle_resource = BundleDecorator.new(scratch_bundle.to_hash)
       composition = bundle_resource.composition_resource
-      all_errors = []
-
-      section_codes_array.each do |section_code|
-        section = composition.section_by_code(section_code)
-        if section.blank?
-          add_message(optional ? 'warning' : 'error', "#{get_section_name(section_code)} is missing")
-          all_errors << true unless optional
-          next
-        else
-          section_message_body = section_ms_elements_message(section, elements_array)
-          all_populated = all_paths_are_populated?(section, elements_array)
-          if all_populated
-            add_message('info', "Section correctly populated\n\n#{section_message_body}")
-          else
-            err_msg = 'For section with any mandatory Must Support element in section missing ' \
-                      "(i.e. title, code, text)\n\n#{section_message_body}"
-            add_message('error', err_msg)
-            all_errors << true
-          end
-        end
-      end
-
+      all_errors = section_codes_array.map do |code|
+        process_one_section_validation(composition, code, elements_array, optional)
+      end.compact
       assert all_errors.empty?,
              'Some of the sections are not populated. See the list of populated sections in messages tab.'
     end
@@ -661,59 +417,42 @@ module AUPSTestKit
       return nil unless scratch_bundle.present?
 
       bundle_resource = BundleDecorator.new(scratch_bundle.to_hash)
-      composition_resource = bundle_resource.composition_resource
-      return nil unless composition_resource.present?
+      composition = bundle_resource.composition_resource
+      return nil unless composition.present?
 
-      author_ref = if composition_resource.respond_to?(:author) && composition_resource.author.present?
-                     composition_resource.author.first
-                   end
+      author_ref = composition_author_ref(composition)
       return nil unless author_ref.present?
 
       ref_str = author_ref.respond_to?(:reference) ? author_ref.reference : author_ref['reference']
-      return nil if ref_str.blank?
-
-      bundle_resource.resource_by_reference(ref_str)
+      ref_str.present? ? bundle_resource.resource_by_reference(ref_str) : nil
     end
 
     def attester_party_resource
       return nil unless scratch_bundle.present?
 
       bundle_resource = BundleDecorator.new(scratch_bundle.to_hash)
-      composition_resource = bundle_resource.composition_resource
-      return nil unless composition_resource.present?
+      composition = bundle_resource.composition_resource
+      return nil unless composition.present?
 
-      attesters = composition_resource.respond_to?(:attester) ? composition_resource.attester : nil
-      return nil if attesters.blank?
-
-      attester_with_party = attesters.find do |a|
-        party = a.respond_to?(:party) ? a.party : a['party']
-        party.present?
-      end
+      attester_with_party = composition_attester_with_party(composition)
       return nil unless attester_with_party.present?
 
-      party_ref = attester_with_party.respond_to?(:party) ? attester_with_party.party : attester_with_party['party']
-      ref_str = party_ref.respond_to?(:reference) ? party_ref.reference : party_ref['reference']
-      return nil if ref_str.blank?
-
-      bundle_resource.resource_by_reference(ref_str)
+      ref_str = party_ref_str(attester_with_party)
+      ref_str.present? ? bundle_resource.resource_by_reference(ref_str) : nil
     end
 
     def custodian_resource
       return nil unless scratch_bundle.present?
 
       bundle_resource = BundleDecorator.new(scratch_bundle.to_hash)
-      composition_resource = bundle_resource.composition_resource
-      return nil unless composition_resource.present?
+      composition = bundle_resource.composition_resource
+      return nil unless composition.present?
 
-      custodian_ref = if composition_resource.respond_to?(:custodian) && composition_resource.custodian.present?
-                        composition_resource.custodian
-                      end
+      custodian_ref = composition_custodian_ref(composition)
       return nil unless custodian_ref.present?
 
       ref_str = custodian_ref.respond_to?(:reference) ? custodian_ref.reference : custodian_ref['reference']
-      return nil if ref_str.blank?
-
-      bundle_resource.resource_by_reference(ref_str)
+      ref_str.present? ? bundle_resource.resource_by_reference(ref_str) : nil
     end
 
     def load_metadata_yaml
@@ -759,65 +498,33 @@ module AUPSTestKit
       return [] unless custodian_meta.present?
 
       elements = custodian_meta['elements'] || custodian_meta[:elements] || []
-      sub_elements = elements.filter do |el|
-        expr = (el['expression'] || el[:expression]).to_s
-        id_str = (el['id'] || el[:id]).to_s
-        expr.include?('.') && !id_str.include?(':')
-      end
-      return [] if sub_elements.empty?
+      sub_els = elements.filter { |el| metadata_subelement?(el) && !metadata_slice?(el) }
+      return [] if sub_els.empty?
 
-      grouped = sub_elements.group_by { |el| (el['expression'] || el[:expression]).to_s.split('.').first }
-      grouped.map do |parent, els|
-        mandatory_els = els.select { |e| ((e['min'] || e[:min]) || 0).positive? }
-        optional_els = els.reject { |e| ((e['min'] || e[:min]) || 0).positive? }
-        mandatory = mandatory_els.map { |e| e['expression'] || e[:expression] }
-        optional = optional_els.map { |e| e['expression'] || e[:expression] }
-        { parent: parent, mandatory: mandatory, optional: optional }
-      end
+      build_parent_groups_from_subelements(sub_els)
     end
 
     # Returns author MS elements for the given resource type: complex elements only (no slices, no sub-elements).
     # Each element has :expression and :min; :expression has no "." and :id has no ":".
     def author_complex_ms_elements_for_type(author_metadata, resource_type)
-      author_entry = author_metadata.find do |entry|
-        type = entry['resource_type'] || entry[:resource_type]
-        type.to_s == resource_type.to_s
-      end
+      author_entry = author_entry_for_type(author_metadata, resource_type)
       return [] unless author_entry.present?
 
       elements = author_entry['elements'] || author_entry[:elements] || []
-      elements.filter do |el|
-        expr = (el['expression'] || el[:expression]).to_s
-        id_str = (el['id'] || el[:id]).to_s
-        !expr.include?('.') && !id_str.include?(':')
-      end
+      elements.reject { |el| metadata_subelement?(el) || metadata_slice?(el) }
     end
 
     # Returns parent groups for author MS sub-elements: complex elements that have sub-elements (no slices).
     # Each group has :parent, :mandatory (array of expression strings), :optional (array).
     def author_ms_subelement_parent_groups(author_metadata, resource_type)
-      author_entry = author_metadata.find do |entry|
-        type = entry['resource_type'] || entry[:resource_type]
-        type.to_s == resource_type.to_s
-      end
+      author_entry = author_entry_for_type(author_metadata, resource_type)
       return [] unless author_entry.present?
 
       elements = author_entry['elements'] || author_entry[:elements] || []
-      sub_elements = elements.filter do |el|
-        expr = (el['expression'] || el[:expression]).to_s
-        id_str = (el['id'] || el[:id]).to_s
-        expr.include?('.') && !id_str.include?(':')
-      end
-      return [] if sub_elements.empty?
+      sub_els = elements.filter { |el| metadata_subelement?(el) }
+      return [] if sub_els.empty?
 
-      grouped = sub_elements.group_by { |el| (el['expression'] || el[:expression]).to_s.split('.').first }
-      grouped.map do |parent, els|
-        mandatory_els = els.select { |e| ((e['min'] || e[:min]) || 0).positive? }
-        optional_els = els.reject { |e| ((e['min'] || e[:min]) || 0).positive? }
-        mandatory = mandatory_els.map { |e| e['expression'] || e[:expression] }
-        optional = optional_els.map { |e| e['expression'] || e[:expression] }
-        { parent: parent, mandatory: mandatory, optional: optional }
-      end
+      build_parent_groups_from_subelements(sub_els)
     end
 
     def author_resource_type_and_profiles(resource)
@@ -846,306 +553,98 @@ module AUPSTestKit
     def validate_author_ms_subelements(resource, parent_groups, resource_type_str, profile_str)
       return unless resource.present?
 
-      author_header = "**Referenced author**: #{resource_type_str}#{" — #{profile_str}" if profile_str.present?}"
-
-      parent_groups.each do |group|
-        parent_path = group[:parent]
-        mandatory = group[:mandatory] || []
-        optional = group[:optional] || []
-        sub_elements = mandatory + optional
-
-        parent_populated = resolve_path(resource, parent_path).first.present?
-
-        unless parent_populated
-          sub_el_list = sub_elements.join(', ')
-          msg = "Must Support sub-elements correctly populated\n\n#{author_header}\n\n" \
-                "**Complex element #{parent_path}** is not populated. Must Support sub-elements that would be " \
-                "validated: #{sub_el_list}."
-          add_message('warning', msg)
-          next
-        end
-
-        message_type = sub_elements.map do |sub_element|
-          sub_element_result = resolve_path(resource, sub_element).first.present?
-          sub_element_mandatory = mandatory.include?(sub_element)
-          if sub_element_result
-            'info'
-          else
-            (sub_element_mandatory ? 'error' : 'warning')
-          end
-        end.uniq
-
-        level = if message_type.include?('error')
-                  'error'
-                else
-                  (message_type.include?('warning') ? 'warning' : 'info')
-                end
-        list_lines = sub_elements.map do |expr|
-          populated = resolve_path(resource, expr).first.present?
-          "#{boolean_to_existent_string(populated)}: **#{expr}**"
-        end
-        list_body = list_lines.join("\n\n")
-        msg = "Must Support sub-elements correctly populated\n\n#{author_header}\n\n" \
-              "## Complex element **#{parent_path}** — Must Support sub-elements populated or missing\n\n#{list_body}"
-        add_message(level, msg)
-      end
-
-      mandatory_ok = parent_groups.all? do |group|
-        next true unless resolve_path(resource, group[:parent]).first.present?
-
-        (group[:mandatory] || []).all? { |el| resolve_path(resource, el).first.present? }
-      end
-      assert mandatory_ok,
+      header = "**Referenced author**: #{resource_type_str}#{" — #{profile_str}" if profile_str.present?}"
+      parent_groups.each { |group| add_subelement_group_message(resource, group, header, use_error_level: true) }
+      assert parent_groups_mandatory_result(resource, parent_groups),
              'When parent exists and any mandatory Must Support sub-element is missing. See the list in messages tab.'
     end
 
     def validate_custodian_ms_elements(resource, elements_config)
       return unless resource.present? && elements_config.present?
 
-      expressions = elements_config.map { |el| el['expression'] || el[:expression] }.compact
-      mandatory_els = elements_config.select { |el| ((el['min'] || el[:min]) || 0).positive? }
-      optional_els = elements_config.reject { |el| ((el['min'] || el[:min]) || 0).positive? }
-      mandatory = mandatory_els.map { |el| el['expression'] || el[:expression] }
-      optional = optional_els.map { |el| el['expression'] || el[:expression] }
-
-      mandatory_populated = mandatory.all? { |path| resolve_path(resource, path).first.present? }
-      optional_populated = optional.all? { |path| resolve_path(resource, path).first.present? }
-
-      message_type = if !mandatory_populated
-                       'error'
-                     elsif !optional_populated
-                       'warning'
-                     else
-                       'info'
-                     end
-
-      rtype_str = resource.respond_to?(:resourceType) ? resource.resourceType : resource['resourceType']
-      profiles = resource_profiles(resource)
-      profile_str = profiles.is_a?(Array) ? profiles.join(', ') : profiles.to_s
-      custodian_header = "**Referenced custodian**: #{rtype_str}#{" — #{profile_str}" if profile_str.present?}"
-
-      list_lines = expressions.map do |expr|
-        populated = resolve_path(resource, expr).first.present?
-        "#{boolean_to_existent_string(populated)}: **#{expr}**"
-      end
-      msg = "Must Support elements correctly populated\n\n#{custodian_header}\n\n## List of Must Support elements " \
-            "populated or missing\n\n#{list_lines.join("\n\n")}"
-      add_message(message_type, msg)
-
-      assert mandatory_populated,
-             'When mandatory Must Support element is missing (e.g. name). See the list in messages tab.'
+      mandatory, optional = elements_config_mandatory_optional_paths(elements_config)
+      mandatory_ok = mandatory.all? { |path| resolve_path(resource, path).first.present? }
+      optional_ok = optional.all? { |path| resolve_path(resource, path).first.present? }
+      msg_type = if mandatory_ok
+                   optional_ok ? 'info' : 'warning'
+                 else
+                   'error'
+                 end
+      header = referenced_resource_header(resource, 'custodian')
+      add_message(msg_type, ms_elements_populated_message(header, resource, mandatory + optional))
+      assert mandatory_ok, 'When mandatory Must Support element is missing (e.g. name). See the list in messages tab.'
     end
 
     def validate_custodian_ms_subelements(resource, parent_groups, resource_type_str, profile_str)
       return unless resource.present?
 
-      custodian_header = "**Referenced custodian**: #{resource_type_str}#{" — #{profile_str}" if profile_str.present?}"
-
-      parent_groups.each do |group|
-        parent_path = group[:parent]
-        mandatory = group[:mandatory] || []
-        optional = group[:optional] || []
-        sub_elements = mandatory + optional
-
-        parent_populated = resolve_path(resource, parent_path).first.present?
-
-        unless parent_populated
-          sub_el_list = sub_elements.join(', ')
-          msg = "Must Support sub-elements correctly populated\n\n#{custodian_header}\n\n" \
-                "**Complex element #{parent_path}** is not populated. Must Support sub-elements that would be " \
-                "validated: #{sub_el_list}."
-          add_message('warning', msg)
-          next
-        end
-
-        # Custodian: only warning when any sub-element missing, info when all populated (no error level per spec)
-        all_populated = sub_elements.all? { |expr| resolve_path(resource, expr).first.present? }
-        level = all_populated ? 'info' : 'warning'
-        list_lines = sub_elements.map do |expr|
-          populated = resolve_path(resource, expr).first.present?
-          "#{boolean_to_existent_string(populated)}: **#{expr}**"
-        end
-        list_body = list_lines.join("\n\n")
-        msg = "Must Support sub-elements correctly populated\n\n#{custodian_header}\n\n" \
-              "## Complex element **#{parent_path}** — Must Support sub-elements populated or missing\n\n#{list_body}"
-        add_message(level, msg)
-      end
+      header = "**Referenced custodian**: #{resource_type_str}#{" — #{profile_str}" if profile_str.present?}"
+      parent_groups.each { |group| add_subelement_group_message(resource, group, header, use_error_level: false) }
     end
 
     def validate_custodian_ms_identifier_slices(resource, slices, resource_type_str, profile_str)
       return unless resource.present? && slices.present?
 
-      identifiers = identifiers_from_resource(resource) || []
-      slice_results = slices.map do |slice|
-        ident = find_identifier_by_system(identifiers, slice[:system])
-        { slice: slice, identifier: ident }
-      end
-
-      custodian_header = "**Referenced custodian**: #{resource_type_str}#{" — #{profile_str}" if profile_str.present?}"
-      lines = slice_results.map do |r|
-        if r[:identifier].present?
-          type_str = identifier_type_display(r[:identifier])
-          "✅ Populated: **#{r[:slice][:name]}** — system: #{r[:slice][:system]}#{type_str}"
-        else
-          "❌ Missing: **#{r[:slice][:name]}**"
-        end
-      end
-      all_populated = slice_results.all? { |r| r[:identifier].present? }
-      message_type = all_populated ? 'info' : 'warning'
-      msg = "Must support identifier slices correctly populated\n\n#{custodian_header}\n\n## List of Must Support " \
-            "identifier slices populated or missing (type and system when populated)\n\n#{lines.join("\n\n")}"
-      add_message(message_type, msg)
+      slice_results = identifier_slice_results(resource, slices)
+      header = "**Referenced custodian**: #{resource_type_str}#{" — #{profile_str}" if profile_str.present?}"
+      msg_type = identifier_slices_message_type(slice_results, :all)
+      add_message(msg_type,
+                  "Must support identifier slices correctly populated\n\n#{header}\n\n## List of Must Support " \
+                  "identifier slices populated or missing (type and system when populated)\n\n#{identifier_slice_lines_with_type(slice_results).join("\n\n")}")
     end
 
     def validate_attester_party_ms_elements(resource, elements_config)
       return unless resource.present? && elements_config.present?
 
-      expressions = elements_config.map { |el| el['expression'] || el[:expression] }.compact
-      mandatory_els = elements_config.select { |el| ((el['min'] || el[:min]) || 0).positive? }
-      optional_els = elements_config.reject { |el| ((el['min'] || el[:min]) || 0).positive? }
-      mandatory = mandatory_els.map { |el| el['expression'] || el[:expression] }
-      optional = optional_els.map { |el| el['expression'] || el[:expression] }
-
-      mandatory_populated = mandatory.all? { |path| resolve_path(resource, path).first.present? }
-      optional_populated = optional.all? { |path| resolve_path(resource, path).first.present? }
-
-      message_type = if !mandatory_populated
-                       'error'
-                     elsif !optional_populated
-                       'warning'
-                     else
-                       'info'
-                     end
-
-      rtype_str = resource.respond_to?(:resourceType) ? resource.resourceType : resource['resourceType']
-      profiles = resource_profiles(resource)
-      profile_str = profiles.is_a?(Array) ? profiles.join(', ') : profiles.to_s
-      header = "**Referenced attester.party**: #{rtype_str}#{" — #{profile_str}" if profile_str.present?}"
-
-      list_lines = expressions.map do |expr|
-        populated = resolve_path(resource, expr).first.present?
-        "#{boolean_to_existent_string(populated)}: **#{expr}**"
-      end
-      msg = "Must Support elements correctly populated\n\n#{header}\n\n## List of Must Support elements " \
-            "populated or missing\n\n#{list_lines.join("\n\n")}"
-      add_message(message_type, msg)
-
-      assert mandatory_populated, 'When any mandatory Must Support element is missing. See the list in messages tab.'
+      mandatory, optional = elements_config_mandatory_optional_paths(elements_config)
+      mandatory_ok = mandatory.all? { |path| resolve_path(resource, path).first.present? }
+      optional_ok = optional.all? { |path| resolve_path(resource, path).first.present? }
+      msg_type = if mandatory_ok
+                   optional_ok ? 'info' : 'warning'
+                 else
+                   'error'
+                 end
+      header = referenced_resource_header(resource, 'attester.party')
+      add_message(msg_type, ms_elements_populated_message(header, resource, mandatory + optional))
+      assert mandatory_ok, 'When any mandatory Must Support element is missing. See the list in messages tab.'
     end
 
     def validate_attester_party_ms_subelements(resource, parent_groups, resource_type_str, profile_str)
       return unless resource.present?
 
       header = "**Referenced attester.party**: #{resource_type_str}#{" — #{profile_str}" if profile_str.present?}"
-
-      parent_groups.each do |group|
-        parent_path = group[:parent]
-        mandatory = group[:mandatory] || []
-        optional = group[:optional] || []
-        sub_elements = mandatory + optional
-
-        parent_populated = resolve_path(resource, parent_path).first.present?
-
-        unless parent_populated
-          msg = "Must support sub-elements correctly populated\n\n#{header}\n\n**Complex element #{parent_path}** " \
-                "is not populated. Must Support sub-elements that would be validated: #{sub_elements.join(', ')}."
-          add_message('warning', msg)
-          next
-        end
-
-        message_types = sub_elements.map do |sub_element|
-          sub_element_result = resolve_path(resource, sub_element).first.present?
-          sub_element_mandatory = mandatory.include?(sub_element)
-          if sub_element_result
-            'info'
-          else
-            (sub_element_mandatory ? 'error' : 'warning')
-          end
-        end.uniq
-        level = if message_types.include?('error')
-                  'error'
-                else
-                  (message_types.include?('warning') ? 'warning' : 'info')
-                end
-        list_lines = sub_elements.map do |expr|
-          populated = resolve_path(resource, expr).first.present?
-          "#{boolean_to_existent_string(populated)}: **#{expr}**"
-        end
-        msg = "Must support sub-elements correctly populated\n\n#{header}\n\n## Complex element **#{parent_path}** — " \
-              "Must Support sub-elements populated or missing\n\n#{list_lines.join("\n\n")}"
-        add_message(level, msg)
-      end
-
-      mandatory_ok = parent_groups.all? do |g|
-        next true unless resolve_path(resource, g[:parent]).first.present?
-
-        (g[:mandatory] || []).all? { |el| resolve_path(resource, el).first.present? }
-      end
-      assert mandatory_ok,
+      parent_groups.each { |group| add_subelement_group_message(resource, group, header, use_error_level: true) }
+      assert parent_groups_mandatory_result(resource, parent_groups),
              'When parent exists and any mandatory Must Support sub-element is missing. See the list in messages tab.'
     end
 
     def validate_attester_party_ms_identifier_slices(resource, slices, resource_type_str, profile_str)
       return unless resource.present? && slices.present?
 
-      identifiers = identifiers_from_resource(resource) || []
-      slice_results = slices.map do |slice|
-        ident = find_identifier_by_system(identifiers, slice[:system])
-        { slice: slice, identifier: ident }
-      end
-
+      slice_results = identifier_slice_results(resource, slices)
       header = "**Referenced attester.party**: #{resource_type_str}#{" — #{profile_str}" if profile_str.present?}"
-      lines = slice_results.map do |r|
-        if r[:identifier].present?
-          type_str = identifier_type_display(r[:identifier])
-          "✅ Populated: **#{r[:slice][:name]}** — system: #{r[:slice][:system]}#{type_str}"
-        else
-          "❌ Missing: **#{r[:slice][:name]}**"
-        end
-      end
-      all_populated = slice_results.all? { |r| r[:identifier].present? }
-      message_type = all_populated ? 'info' : 'warning'
-      msg = "Must support identifier slices correctly populated\n\n#{header}\n\n## List of Must Support identifier " \
-            "slices populated or missing (type and system when populated)\n\n#{lines.join("\n\n")}"
-      add_message(message_type, msg)
+      msg_type = identifier_slices_message_type(slice_results, :all)
+      add_message(msg_type,
+                  "Must support identifier slices correctly populated\n\n#{header}\n\n## List of Must Support " \
+                  "identifier slices populated or missing (type and system when populated)\n\n#{identifier_slice_lines_with_type(slice_results).join("\n\n")}")
     end
 
     def validate_author_ms_elements(resource, author_config_elements)
       return unless resource.present? && author_config_elements.present?
 
-      expressions = author_config_elements.map { |el| el['expression'] || el[:expression] }.compact
-      mandatory_els = author_config_elements.select { |el| ((el['min'] || el[:min]) || 0).positive? }
-      optional_els = author_config_elements.reject { |el| ((el['min'] || el[:min]) || 0).positive? }
-      mandatory = mandatory_els.map { |el| el['expression'] || el[:expression] }
-      optional = optional_els.map { |el| el['expression'] || el[:expression] }
-
-      mandatory_populated = mandatory.all? { |path| resolve_path(resource, path).first.present? }
-      optional_populated = optional.all? { |path| resolve_path(resource, path).first.present? }
-
-      message_type = if !mandatory_populated
-                       'error'
-                     elsif !optional_populated
-                       'warning'
-                     else
-                       'info'
-                     end
-
-      resource_type_str = resource.respond_to?(:resourceType) ? resource.resourceType : resource['resourceType']
-      profiles = resource_profiles(resource)
-      profile_str = profiles.is_a?(Array) ? profiles.join(', ') : profiles.to_s
-
-      list_lines = expressions.map do |expr|
-        populated = resolve_path(resource, expr).first.present?
-        "#{boolean_to_existent_string(populated)}: **#{expr}**"
-      end
-
-      author_label = "**Referenced author**: #{resource_type_str}"
-      author_label += " — #{profile_str}" if profile_str.present?
-      msg = "Must Support elements correctly populated\n\n#{author_label}\n\n## List of Must Support elements " \
-            "(complex) populated or missing\n\n#{list_lines.join("\n\n")}"
-      add_message(message_type, msg)
-
-      assert mandatory_populated, 'When any mandatory Must Support element is missing. See the list in messages tab.'
+      mandatory, optional = elements_config_mandatory_optional_paths(author_config_elements)
+      mandatory_ok = mandatory.all? { |path| resolve_path(resource, path).first.present? }
+      optional_ok = optional.all? { |path| resolve_path(resource, path).first.present? }
+      msg_type = if mandatory_ok
+                   optional_ok ? 'info' : 'warning'
+                 else
+                   'error'
+                 end
+      header = referenced_resource_header(resource, 'author')
+      msg = ms_elements_populated_message(header, resource, mandatory + optional,
+                                          section_title: 'List of Must Support elements (complex) populated or missing')
+      add_message(msg_type, msg)
+      assert mandatory_ok, 'When any mandatory Must Support element is missing. See the list in messages tab.'
     end
 
     def get_extension_value_by_url(resouce, url)
@@ -1182,11 +681,13 @@ module AUPSTestKit
       type_val = ident.respond_to?(:type) ? ident.type : ident['type']
       return '' if type_val.blank?
 
+      identifier_type_display_from_coding(type_val)
+    end
+
+    def identifier_type_display_from_coding(type_val)
       if type_val.respond_to?(:coding) && type_val.coding.present?
         c = type_val.coding.first
-        display = c.respond_to?(:display) ? c.display : c['display']
-        code = c.respond_to?(:code) ? c.code : c['code']
-        ", type: #{display.presence || code.presence || '—'}"
+        ", type: #{(c.respond_to?(:display) ? c.display : c['display']).presence || (c.respond_to?(:code) ? c.code : c['code']).presence || '—'}"
       elsif type_val.is_a?(Hash) && type_val['coding'].present?
         c = type_val['coding'].first
         ", type: #{c['display'].presence || c['code'].presence || '—'}"
@@ -1215,14 +716,11 @@ module AUPSTestKit
       skip_if resource.blank?, 'No author reference found on Composition'
       skip_if resource_type(resource) == 'Device',
               'Referenced author entry is type of Device; skip Must Support validation'
-
       author_meta = composition_author_metadata
       skip_if author_meta.blank?, 'No author metadata available'
-
-      resource_type_str = resource_type(resource)
-      complex_elements = author_complex_ms_elements_for_type(author_meta, resource_type_str)
-      skip_if complex_elements.blank?, "No complex Must Support elements defined for author type #{resource_type_str}"
-
+      complex_elements = author_complex_ms_elements_for_type(author_meta, resource_type(resource))
+      skip_if complex_elements.blank?,
+              "No complex Must Support elements defined for author type #{resource_type(resource)}"
       validate_author_ms_elements(resource, complex_elements)
     end
 
@@ -1231,15 +729,11 @@ module AUPSTestKit
       resource = author_resource
       skip_if resource.blank?, 'No author reference found on Composition'
       skip_if resource_type(resource) == 'Device', 'Referenced author resource type is Device'
-
       author_meta = composition_author_metadata
       skip_if author_meta.blank?, 'No author metadata available'
-
-      resource_type_str = resource_type(resource)
-      parent_groups = author_ms_subelement_parent_groups(author_meta, resource_type_str)
+      parent_groups = author_ms_subelement_parent_groups(author_meta, resource_type(resource))
       skip_if parent_groups.blank?,
               'Referenced author resource type has no complex elements with Must Support sub-elements'
-
       rtype_str, profile_str = author_resource_type_and_profiles(resource)
       validate_author_ms_subelements(resource, parent_groups, rtype_str, profile_str)
     end
@@ -1317,15 +811,11 @@ module AUPSTestKit
       check_bundle_exists_in_scratch
       resource = attester_party_resource
       skip_if resource.blank?, 'Attester or attester.party is not populated'
-
       attester_meta = composition_attester_metadata
       skip_if attester_meta.blank?, 'No attester metadata available'
-
-      resource_type_str = resource_type(resource)
-      parent_groups = author_ms_subelement_parent_groups(attester_meta, resource_type_str)
+      parent_groups = author_ms_subelement_parent_groups(attester_meta, resource_type(resource))
       skip_if parent_groups.blank?,
               'Referenced attester.party resource type has no complex elements with Must Support sub-elements'
-
       rtype_str, profile_str = author_resource_type_and_profiles(resource)
       validate_attester_party_ms_subelements(resource, parent_groups, rtype_str, profile_str)
     end
@@ -1344,46 +834,399 @@ module AUPSTestKit
     end
 
     def test_subject_ms_elements
-      mandatory_ms_primitives = %w[identifier name gender birthDate]
-      optional_ms_primitives = %w[telecom address communication generalPractitioner]
-      optional_ms_slices = %w[indigenousStatus genderIdentity individualPronouns]
-      optional_ms_slices_messages = []
-
       resource = subject_resource
       skip_if resource.blank?, 'No subject (Patient) resource to validate for Must Support elements'
-
-      mandatory_ms_primitives_result = all_paths_are_populated?(resource, mandatory_ms_primitives)
-      optional_ms_primitives_result = all_paths_are_populated?(resource, optional_ms_primitives)
-      optional_ms_slices_result = optional_ms_slices.map do |slice|
-        extension_url = case slice
-                        when 'indigenousStatus'
-                          'http://hl7.org.au/fhir/StructureDefinition/indigenous-status'
-                        when 'genderIdentity'
-                          'http://hl7.org/fhir/StructureDefinition/individual-genderIdentity'
-                        when 'individualPronouns'
-                          'http://hl7.org/fhir/StructureDefinition/individual-pronouns'
-                        end
-
-        result = get_extension_value_by_url(resource, extension_url).present?
-        optional_ms_slices_messages << "#{boolean_to_existent_string(result)}: **#{slice}**"
-        result
-      end.all?
-      optional_result = optional_ms_primitives_result && optional_ms_slices_result
-
-      primitives_part = mandatory_ms_primitives + optional_ms_primitives
-      info_to_print = populated_paths_info_raw(resource, primitives_part) + optional_ms_slices_messages
-
+      mandatory_primitives = %w[identifier name gender birthDate]
+      optional_primitives = %w[telecom address communication generalPractitioner]
+      optional_slices = %w[indigenousStatus genderIdentity individualPronouns]
+      mandatory_ok = all_paths_are_populated?(resource, mandatory_primitives)
+      optional_ok = subject_optional_ms_result(resource, optional_primitives, optional_slices)
+      info_lines = populated_paths_info_raw(resource, mandatory_primitives + optional_primitives) +
+                   subject_optional_slice_messages(resource, optional_slices)
       add_message(
-        calculate_message_level(
-          failed: !mandatory_ms_primitives_result,
-          warning: mandatory_ms_primitives_result && !optional_result,
-          info: mandatory_ms_primitives_result && optional_result
-        ),
-        info_to_print.join("\n\n")
+        calculate_message_level(failed: !mandatory_ok, warning: mandatory_ok && !optional_ok,
+                                info: mandatory_ok && optional_ok), info_lines.join("\n\n")
       )
-
-      assert mandatory_ms_primitives_result,
+      assert mandatory_ok,
              'Some of the mandatory Must Support elements are not populated. See the list in messages tab.'
+    end
+
+    def expected_profile_urls_for_section(section_data)
+      section_data[:entries].flat_map do |e|
+        (e[:profiles] || []).map { |p| p.to_s.include?('|') ? p.to_s.split('|').last : p }
+      end.uniq
+    end
+
+    def process_one_section_read(section_data, section, body, expected_profile_urls)
+      if section.blank?
+        add_message('error', "#{section_data[:short]} (#{section_data[:code]})\n\n#{body}")
+        return true
+      end
+      section_read_add_message_for_populated(section_data, section, body, expected_profile_urls)
+    end
+
+    def section_read_add_message_for_populated(section_data, section, body, expected_profile_urls)
+      refs = section.entry_references
+      has_entries = refs.any?
+      all_correct = refs_all_correct_profile?(refs, BundleDecorator.new(scratch_bundle.to_hash),
+                                              expected_profile_urls)
+      return add_section_read_error(section_data, body) if has_entries && !all_correct
+      return add_section_read_warning(section_data, body) if section.empty_reason_str.present? && !has_entries
+      return add_section_read_info(section_data, body) if has_entries && all_correct
+
+      add_section_read_error_no_entries(section_data, body)
+    end
+
+    def refs_all_correct_profile?(refs, bundle_resource, expected_profile_urls)
+      refs.all? do |ref|
+        resource = bundle_resource.resource_by_reference(ref)
+        next false unless resource.present?
+
+        (resource.meta&.profile || []).any? { |prof| expected_profile_urls.include?(prof) }
+      end
+    end
+
+    def add_section_read_error(section_data, body)
+      add_message('error', "#{section_data[:short]} (#{section_data[:code]})\n\n#{body}")
+      true
+    end
+
+    def add_section_read_warning(section_data, body)
+      add_message('warning', "#{section_data[:short]} (#{section_data[:code]})\n\n#{body}")
+      false
+    end
+
+    def add_section_read_info(section_data, body)
+      add_message('info', "#{section_data[:short]} (#{section_data[:code]})\n\n#{body}")
+      false
+    end
+
+    def add_section_read_error_no_entries(section_data, body)
+      add_message('error',
+                  "#{section_data[:short]} (#{section_data[:code]}) - section has no entries and no emptyReason\n\n#{body}")
+      true
+    end
+
+    def section_empty_reason_text(section)
+      return "emptyReason: #{section.empty_reason_str}" if section.empty_reason_str.present?
+
+      'No entries; no emptyReason.'
+    end
+
+    def section_entry_lines(refs, bundle_resource)
+      refs.map do |ref|
+        resource = bundle_resource.resource_by_reference(ref)
+        if resource.present?
+          profiles = (resource.meta&.profile || []).join(', ')
+          "**#{ref}**: #{resource.resourceType} (#{profiles})"
+        else
+          "**#{ref}**: (resource not found)"
+        end
+      end
+    end
+
+    def valid_resource_types_for_section(section_data)
+      section_data[:entries].map { |entry| entry[:profiles] }.flatten
+                            .map { |profile| profile.split('|').first }.uniq
+    end
+
+    def build_info_entry_section_lines(section_data, normalized_sections_data, valid_types)
+      section_title = "### #{section_data[:short]} (#{section_data[:code]})"
+      filtered = normalized_sections_data.find { |s| s['code'] == section_data[:code] }
+      entity = SectionTestClass.new(filtered, scratch_bundle)
+      ref_lines = (entity.references || []).filter_map { |ref| info_entry_line_for_ref(entity, ref, valid_types) }
+      [section_title, *ref_lines]
+    end
+
+    def info_entry_line_for_ref(section_test_entity, ref, valid_types)
+      resource = section_test_entity.get_resource_by_reference(ref)
+      return nil unless resource.present?
+
+      can_present = valid_types.include?(resource.resourceType)
+      profiles = (resource.meta&.profile || []).join(', ')
+      " #{boolean_to_existent_string(can_present)} **#{ref}**: #{resource.resourceType} (#{profiles})"
+    end
+
+    def section_ms_elements_result(section_config, section_resource)
+      title = "### #{section_config[:short]}(#{section_config[:code]})"
+      result = [title]
+      section_config[:ms_elements].each do |element|
+        populated = resolve_path(section_resource, element[:expression]).first.present?
+        result << "**#{element[:expression]}**: #{boolean_to_existent_string(populated)}"
+      end
+      result
+    end
+
+    def composition_sub_elements_mandatory_result(grouped, mandatory_ms, composition_resource)
+      grouped.all? do |parent_path, sub_elements|
+        next true unless resolve_path(composition_resource, parent_path).first.present?
+
+        (mandatory_ms & sub_elements).all? { |el| resolve_path(composition_resource, el).first.present? }
+      end
+    end
+
+    def add_message_for_composition_sub_group(composition_resource, parent_path, sub_elements, mandatory_ms)
+      unless resolve_path(composition_resource, parent_path).first.present?
+        add_message('warning', composition_sub_group_unpopulated_msg(parent_path, sub_elements))
+        return
+      end
+      level = composition_sub_group_message_level(composition_resource, sub_elements, mandatory_ms)
+      add_message(level, populated_paths_info(composition_resource, sub_elements))
+    end
+
+    def composition_sub_group_unpopulated_msg(parent_path, sub_elements)
+      "Must Support sub-elements correctly populated\n\nComposition\n\n**Complex element #{parent_path}** " \
+        "is not populated. Must Support sub-elements that would be validated: #{sub_elements.join(', ')}."
+    end
+
+    def composition_sub_group_message_level(composition_resource, sub_elements, mandatory_ms)
+      types = sub_elements.map do |sub_el|
+        present = resolve_path(composition_resource, sub_el).first.present?
+        if mandatory_ms.include?(sub_el)
+          present ? 'info' : 'error'
+        else
+          (present ? 'info' : 'warning')
+        end
+      end.uniq
+      if types.include?('error')
+        'error'
+      else
+        (types.include?('warning') ? 'warning' : 'info')
+      end
+    end
+
+    def sub_elements_message_type(resource, sub_els, mandatory)
+      types = sub_els.map do |el|
+        if resolve_path(resource, el).first.present?
+          'info'
+        else
+          (mandatory.include?(el) ? 'error' : 'warning')
+        end
+      end.uniq
+      if types.include?('error')
+        'error'
+      else
+        (types.include?('warning') ? 'warning' : 'info')
+      end
+    end
+
+    def process_parent_groups_sub_element_messages(resource, parent_groups)
+      any = false
+      parent_groups.each do |group|
+        next unless resolve_path(resource, group[:parent]).first.present?
+
+        any = true
+        sub_els = (group[:mandatory] || []) + (group[:optional] || [])
+        add_message(sub_elements_message_type(resource, sub_els, group[:mandatory] || []),
+                    populated_paths_info(resource, sub_els))
+      end
+      any
+    end
+
+    def parent_groups_mandatory_result(resource, parent_groups)
+      parent_groups.all? do |group|
+        next true unless resolve_path(resource, group[:parent]).first.present?
+
+        (group[:mandatory] || []).all? { |el| resolve_path(resource, el).first.present? }
+      end
+    end
+
+    def identifier_slice_results(resource, slices)
+      identifiers = identifiers_from_resource(resource) || []
+      slices.map { |slice| { slice: slice, identifier: find_identifier_by_system(identifiers, slice[:system]) } }
+    end
+
+    def identifier_slices_message_type(slice_results, kind)
+      populated = slice_results.map { |r| r[:identifier].present? }
+      all_ok = populated.all?
+      any_ok = populated.any?
+      if kind == :all ? all_ok : any_ok
+        'info'
+      else
+        'warning'
+      end
+    end
+
+    def identifier_slice_lines_with_type(slice_results)
+      slice_results.map do |r|
+        if r[:identifier].present?
+          type_str = identifier_type_display(r[:identifier])
+          "✅ Populated: **#{r[:slice][:name]}** — system: #{r[:slice][:system]}#{type_str}"
+        else
+          "❌ Missing: **#{r[:slice][:name]}**"
+        end
+      end
+    end
+
+    def identifier_slice_lines_simple(slice_results)
+      slice_results.map do |r|
+        if r[:identifier].present?
+          "✅ Populated: **#{r[:slice][:name]}** — system: #{r[:slice][:system]}"
+        else
+          "❌ Missing: **#{r[:slice][:name]}**"
+        end
+      end
+    end
+
+    def process_one_slice_validation(composition_resource, slice)
+      required_paths = slice[:mandatory_ms_sub_elements].map { |el| "#{slice[:path]}.#{el}" }
+      optional_paths = slice[:optional_ms_sub_elements].map { |el| "#{slice[:path]}.#{el}" }
+      all_paths = required_paths + optional_paths
+      required_ok = all_paths_are_populated?(composition_resource, required_paths)
+      return slice_validation_add_error(all_paths, composition_resource) unless required_ok
+
+      slice_validation_add_optional_message(composition_resource, all_paths, optional_paths)
+    end
+
+    def slice_validation_add_error(all_paths, composition_resource)
+      msg = "#{populated_paths_info(composition_resource, all_paths)}\n\nSlice: **event:careProvisioningEvent**"
+      add_message('error', msg)
+      false
+    end
+
+    def slice_validation_add_optional_message(composition_resource, all_paths, optional_paths)
+      optional_ok = all_paths_are_populated?(composition_resource, optional_paths)
+      event = composition_resource.event_by_code('PCPR')
+      full_msg = "#{populated_paths_info(composition_resource, all_paths)}\n\nSlice: **event:careProvisioningEvent**"
+      add_message(optional_ok && event.present? ? 'info' : 'warning',
+                  optional_ok ? full_msg : populated_paths_info(composition_resource, all_paths))
+      true
+    end
+
+    def process_one_section_validation(composition, section_code, elements_array, optional)
+      section = composition.section_by_code(section_code)
+      if section.blank?
+        add_message(optional ? 'warning' : 'error', "#{get_section_name(section_code)} is missing")
+        return optional ? nil : true
+      end
+      section_validation_add_message(section, elements_array)
+    end
+
+    def section_validation_add_message(section, elements_array)
+      body = section_ms_elements_message(section, elements_array)
+      all_populated = all_paths_are_populated?(section, elements_array)
+      if all_populated
+        add_message('info', "Section correctly populated\n\n#{body}")
+        nil
+      else
+        add_message('error',
+                    "For section with any mandatory Must Support element in section missing (i.e. title, code, text)\n\n#{body}")
+        true
+      end
+    end
+
+    def composition_author_ref(composition)
+      composition.respond_to?(:author) && composition.author.present? ? composition.author.first : nil
+    end
+
+    def composition_attester_with_party(composition)
+      attesters = composition.respond_to?(:attester) ? composition.attester : nil
+      return nil if attesters.blank?
+
+      attesters.find { |a| (a.respond_to?(:party) ? a.party : a['party']).present? }
+    end
+
+    def party_ref_str(attester_with_party)
+      party_ref = attester_with_party.respond_to?(:party) ? attester_with_party.party : attester_with_party['party']
+      party_ref.respond_to?(:reference) ? party_ref.reference : party_ref['reference']
+    end
+
+    def composition_custodian_ref(composition)
+      composition.respond_to?(:custodian) && composition.custodian.present? ? composition.custodian : nil
+    end
+
+    def metadata_subelement?(el)
+      (el['expression'] || el[:expression]).to_s.include?('.')
+    end
+
+    def metadata_slice?(el)
+      (el['id'] || el[:id]).to_s.include?(':')
+    end
+
+    def author_entry_for_type(author_metadata, resource_type)
+      author_metadata.find do |entry|
+        (entry['resource_type'] || entry[:resource_type]).to_s == resource_type.to_s
+      end
+    end
+
+    def build_parent_groups_from_subelements(sub_els)
+      grouped = sub_els.group_by { |el| (el['expression'] || el[:expression]).to_s.split('.').first }
+      grouped.map do |parent, els|
+        mandatory_els = els.select { |e| ((e['min'] || e[:min]) || 0).positive? }
+        optional_els = els.reject { |e| ((e['min'] || e[:min]) || 0).positive? }
+        { parent: parent, mandatory: mandatory_els.map { |e| e['expression'] || e[:expression] },
+          optional: optional_els.map { |e| e['expression'] || e[:expression] } }
+      end
+    end
+
+    def add_subelement_group_message(resource, group, header, use_error_level: true)
+      parent_path = group[:parent]
+      sub_els = (group[:mandatory] || []) + (group[:optional] || [])
+      unless resolve_path(resource, parent_path).first.present?
+        add_subelement_group_unpopulated_message(header, parent_path, sub_els)
+        return
+      end
+      level = subelement_group_message_level(resource, group, sub_els, use_error_level)
+      add_message(level, subelement_group_populated_message(header, parent_path, resource, sub_els))
+    end
+
+    def add_subelement_group_unpopulated_message(header, parent_path, sub_els)
+      add_message('warning', "#{header}\n\n**Complex element #{parent_path}** is not populated. " \
+                             "Must Support sub-elements that would be validated: #{sub_els.join(', ')}.")
+    end
+
+    def subelement_group_message_level(resource, group, sub_els, use_error_level)
+      return sub_elements_message_type(resource, sub_els, group[:mandatory] || []) if use_error_level
+
+      sub_els.all? { |expr| resolve_path(resource, expr).first.present? } ? 'info' : 'warning'
+    end
+
+    def subelement_group_populated_message(header, parent_path, resource, sub_els)
+      list_body = sub_els.map do |expr|
+        "#{boolean_to_existent_string(resolve_path(resource, expr).first.present?)}: **#{expr}**"
+      end.join("\n\n")
+      "Must Support sub-elements correctly populated\n\n#{header}\n\n## Complex element **#{parent_path}** — " \
+        "Must Support sub-elements populated or missing\n\n#{list_body}"
+    end
+
+    def elements_config_mandatory_optional_paths(elements_config)
+      mandatory_els = elements_config.select { |el| ((el['min'] || el[:min]) || 0).positive? }
+      optional_els = elements_config.reject { |el| ((el['min'] || el[:min]) || 0).positive? }
+      [mandatory_els.map { |el| el['expression'] || el[:expression] }, optional_els.map do |el|
+        el['expression'] || el[:expression]
+      end]
+    end
+
+    def referenced_resource_header(resource, label)
+      rtype = resource.respond_to?(:resourceType) ? resource.resourceType : resource['resourceType']
+      profiles = resource_profiles(resource)
+      profile_str = profiles.is_a?(Array) ? profiles.join(', ') : profiles.to_s
+      "**Referenced #{label}**: #{rtype}#{" — #{profile_str}" if profile_str.present?}"
+    end
+
+    def ms_elements_populated_message(header, resource, expressions,
+                                      section_title: 'List of Must Support elements populated or missing')
+      lines = expressions.map do |expr|
+        "#{boolean_to_existent_string(resolve_path(resource, expr).first.present?)}: **#{expr}**"
+      end
+      "Must Support elements correctly populated\n\n#{header}\n\n## #{section_title}\n\n#{lines.join("\n\n")}"
+    end
+
+    def subject_optional_ms_result(resource, optional_primitives, optional_slices)
+      primitives_ok = all_paths_are_populated?(resource, optional_primitives)
+      slices_ok = optional_slices.all? do |slice|
+        url = SUBJECT_OPTIONAL_SLICE_URLS[slice]
+        url && get_extension_value_by_url(resource, url).present?
+      end
+      primitives_ok && slices_ok
+    end
+
+    def subject_optional_slice_messages(resource, optional_slices)
+      optional_slices.map do |slice|
+        url = SUBJECT_OPTIONAL_SLICE_URLS[slice]
+        result = url && get_extension_value_by_url(resource, url).present?
+        "#{boolean_to_existent_string(result)}: **#{slice}**"
+      end
     end
   end
 end
