@@ -260,17 +260,12 @@ module AUPSTestKit
     end
 
     def validate_populated_sub_elements_in_composition(mandatory_ms, optional_ms)
-      return false unless scratch_bundle.present?
+      setup = composition_sub_elements_setup(mandatory_ms, optional_ms)
+      return false unless setup
 
-      composition_resource = BundleDecorator.new(scratch_bundle.to_hash).composition_resource
-      return false unless composition_resource.present?
-
-      grouped = (mandatory_ms + optional_ms).group_by { |el| el.split('.').first }
-      any_parent = grouped.any? { |p, _| resolve_path(composition_resource, p).first.present? }
-      mandatory_ok = composition_sub_elements_mandatory_result(grouped, mandatory_ms, composition_resource)
-      composition_run_sub_group_messages(composition_resource, grouped, mandatory_ms)
-      skip_if !any_parent, 'No complex element with Must Support sub-elements is populated'
-      assert mandatory_ok,
+      composition_run_sub_group_messages(setup[:composition_resource], setup[:grouped], mandatory_ms)
+      skip_if !setup[:any_parent], 'No complex element with Must Support sub-elements is populated'
+      assert setup[:mandatory_ok],
              'Some of the mandatory Must Support sub-elements are not populated. See the list in messages tab.'
     end
 
@@ -553,16 +548,9 @@ module AUPSTestKit
     def validate_custodian_ms_elements(resource, elements_config)
       return unless resource.present? && elements_config.present?
 
-      mandatory, optional = elements_config_mandatory_optional_paths(elements_config)
-      mandatory_ok = mandatory.all? { |path| resolve_path(resource, path).first.present? }
-      optional_ok = optional.all? { |path| resolve_path(resource, path).first.present? }
-      msg_type = if mandatory_ok
-                   optional_ok ? 'info' : 'warning'
-                 else
-                   'error'
-                 end
+      mandatory_ok, msg_type, expressions = referenced_ms_elements_validation_parts(resource, elements_config)
       header = referenced_resource_header(resource, 'custodian')
-      add_message(msg_type, ms_elements_populated_message(header, resource, mandatory + optional))
+      add_message(msg_type, ms_elements_populated_message(header, resource, expressions))
       assert mandatory_ok, 'When mandatory Must Support element is missing (e.g. name). See the list in messages tab.'
     end
 
@@ -587,16 +575,9 @@ module AUPSTestKit
     def validate_attester_party_ms_elements(resource, elements_config)
       return unless resource.present? && elements_config.present?
 
-      mandatory, optional = elements_config_mandatory_optional_paths(elements_config)
-      mandatory_ok = mandatory.all? { |path| resolve_path(resource, path).first.present? }
-      optional_ok = optional.all? { |path| resolve_path(resource, path).first.present? }
-      msg_type = if mandatory_ok
-                   optional_ok ? 'info' : 'warning'
-                 else
-                   'error'
-                 end
+      mandatory_ok, msg_type, expressions = referenced_ms_elements_validation_parts(resource, elements_config)
       header = referenced_resource_header(resource, 'attester.party')
-      add_message(msg_type, ms_elements_populated_message(header, resource, mandatory + optional))
+      add_message(msg_type, ms_elements_populated_message(header, resource, expressions))
       assert mandatory_ok, 'When any mandatory Must Support element is missing. See the list in messages tab.'
     end
 
@@ -623,18 +604,10 @@ module AUPSTestKit
     def validate_author_ms_elements(resource, author_config_elements)
       return unless resource.present? && author_config_elements.present?
 
-      mandatory, optional = elements_config_mandatory_optional_paths(author_config_elements)
-      mandatory_ok = mandatory.all? { |path| resolve_path(resource, path).first.present? }
-      optional_ok = optional.all? { |path| resolve_path(resource, path).first.present? }
-      msg_type = if mandatory_ok
-                   optional_ok ? 'info' : 'warning'
-                 else
-                   'error'
-                 end
+      mandatory_ok, msg_type, expressions = referenced_ms_elements_validation_parts(resource, author_config_elements)
       header = referenced_resource_header(resource, 'author')
       section_title = 'List of Must Support elements (complex) populated or missing'
-      add_message(msg_type,
-                  ms_elements_populated_message(header, resource, mandatory + optional, section_title: section_title))
+      add_message(msg_type, ms_elements_populated_message(header, resource, expressions, section_title: section_title))
       assert mandatory_ok, 'When any mandatory Must Support element is missing. See the list in messages tab.'
     end
 
@@ -834,19 +807,9 @@ module AUPSTestKit
     def test_subject_ms_elements
       resource = subject_resource
       skip_if resource.blank?, 'No subject (Patient) resource to validate for Must Support elements'
-      mandatory_primitives = %w[identifier name gender birthDate]
-      optional_primitives = %w[telecom address communication generalPractitioner]
-      optional_slices = %w[indigenousStatus genderIdentity individualPronouns]
-      mandatory_ok = all_paths_are_populated?(resource, mandatory_primitives)
-      optional_ok = subject_optional_ms_result(resource, optional_primitives, optional_slices)
-      level = calculate_message_level(failed: !mandatory_ok, warning: mandatory_ok && !optional_ok,
-                                      info: mandatory_ok && optional_ok)
-      info_lines = populated_paths_info_raw(resource,
-                                            mandatory_primitives + optional_primitives) + subject_optional_slice_messages(
-                                              resource, optional_slices
-                                            )
-      add_message(level, info_lines.join("\n\n"))
-      assert mandatory_ok,
+      parts = subject_ms_elements_message_parts(resource)
+      add_message(parts[:level], parts[:info_lines].join("\n\n"))
+      assert parts[:mandatory_ok],
              'Some of the mandatory Must Support elements are not populated. See the list in messages tab.'
     end
 
@@ -954,6 +917,28 @@ module AUPSTestKit
         result << "**#{element[:expression]}**: #{boolean_to_existent_string(populated)}"
       end
       result
+    end
+
+    def composition_sub_elements_setup(mandatory_ms, optional_ms)
+      composition_resource = composition_resource_from_scratch
+      return nil unless composition_resource.present?
+
+      grouped = (mandatory_ms + optional_ms).group_by { |el| el.split('.').first }
+      any_parent, mandatory_ok = composition_sub_elements_group_result(composition_resource, grouped, mandatory_ms)
+      { composition_resource: composition_resource, grouped: grouped, any_parent: any_parent,
+        mandatory_ok: mandatory_ok }
+    end
+
+    def composition_resource_from_scratch
+      return nil unless scratch_bundle.present?
+
+      BundleDecorator.new(scratch_bundle.to_hash).composition_resource
+    end
+
+    def composition_sub_elements_group_result(composition_resource, grouped, mandatory_ms)
+      any_parent = grouped.any? { |p, _| resolve_path(composition_resource, p).first.present? }
+      mandatory_ok = composition_sub_elements_mandatory_result(grouped, mandatory_ms, composition_resource)
+      [any_parent, mandatory_ok]
     end
 
     def composition_sub_elements_mandatory_result(grouped, mandatory_ms, composition_resource)
@@ -1208,6 +1193,18 @@ module AUPSTestKit
         "Must Support sub-elements populated or missing\n\n#{list_body}"
     end
 
+    def referenced_ms_elements_validation_parts(resource, elements_config)
+      mandatory, optional = elements_config_mandatory_optional_paths(elements_config)
+      mandatory_ok = mandatory.all? { |path| resolve_path(resource, path).first.present? }
+      optional_ok = optional.all? { |path| resolve_path(resource, path).first.present? }
+      msg_type = if mandatory_ok
+                   optional_ok ? 'info' : 'warning'
+                 else
+                   'error'
+                 end
+      [mandatory_ok, msg_type, mandatory + optional]
+    end
+
     def elements_config_mandatory_optional_paths(elements_config)
       mandatory_els = elements_config.select { |el| element_min_positive?(el) }
       optional_els = elements_config.reject { |el| element_min_positive?(el) }
@@ -1227,6 +1224,19 @@ module AUPSTestKit
         "#{boolean_to_existent_string(resolve_path(resource, expr).first.present?)}: **#{expr}**"
       end
       "Must Support elements correctly populated\n\n#{header}\n\n## #{section_title}\n\n#{lines.join("\n\n")}"
+    end
+
+    def subject_ms_elements_message_parts(resource)
+      mandatory_primitives = %w[identifier name gender birthDate]
+      optional_primitives = %w[telecom address communication generalPractitioner]
+      optional_slices = %w[indigenousStatus genderIdentity individualPronouns]
+      mandatory_ok = all_paths_are_populated?(resource, mandatory_primitives)
+      optional_ok = subject_optional_ms_result(resource, optional_primitives, optional_slices)
+      level = calculate_message_level(failed: !mandatory_ok, warning: mandatory_ok && !optional_ok,
+                                      info: mandatory_ok && optional_ok)
+      info_lines = populated_paths_info_raw(resource, mandatory_primitives + optional_primitives) +
+                   subject_optional_slice_messages(resource, optional_slices)
+      { mandatory_ok: mandatory_ok, level: level, info_lines: info_lines }
     end
 
     def subject_optional_ms_result(resource, optional_primitives, optional_slices)
