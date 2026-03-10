@@ -186,8 +186,9 @@ module AUPSTestKit
           add_message('info',
                       "#{section_data[:short]} (#{section_data[:code]})\n\n#{body}")
         else
-          add_message('error',
-                      "#{section_data[:short]} (#{section_data[:code]}) - section has no entries and no emptyReason\n\n#{body}")
+          err_msg = "#{section_data[:short]} (#{section_data[:code]}) - section has no entries and no emptyReason" \
+                    "\n\n#{body}"
+          add_message('error', err_msg)
           has_error = true
         end
       end
@@ -200,7 +201,9 @@ module AUPSTestKit
       return 'List of entry resources by type & profile: (section missing)' if section.blank?
 
       if section.entry_references.empty?
-        return section.empty_reason_str.present? ? "emptyReason: #{section.empty_reason_str}" : 'No entries; no emptyReason.'
+        return "emptyReason: #{section.empty_reason_str}" if section.empty_reason_str.present?
+
+        return 'No entries; no emptyReason.'
       end
 
       bundle_resource = BundleDecorator.new(scratch_bundle.to_hash)
@@ -234,7 +237,9 @@ module AUPSTestKit
           existing_resource_profiles = existing_resource.meta&.profile || []
 
           entity_can_present = valid_resource_types.include?(existing_resource.resourceType)
-          result << " #{boolean_to_existent_string(entity_can_present)} **#{ref}**: #{existing_resource.resourceType} (#{existing_resource_profiles.join(', ')})"
+          profile_list = existing_resource_profiles.join(', ')
+          prefix = " #{boolean_to_existent_string(entity_can_present)} **#{ref}**: "
+          result << "#{prefix}#{existing_resource.resourceType} (#{profile_list})"
         end
       end
       info [title, result.join("\n\n")].join("\n\n")
@@ -252,8 +257,8 @@ module AUPSTestKit
         title = "### #{section_config[:short]}(#{section_config[:code]})"
         result << title
         section_config[:ms_elements].each do |element|
-          result << "**#{element[:expression]}**: #{boolean_to_existent_string(resolve_path(section_resource,
-                                                                                            element[:expression]).first.present?)}"
+          populated = resolve_path(section_resource, element[:expression]).first.present?
+          result << "**#{element[:expression]}**: #{boolean_to_existent_string(populated)}"
         end
       end
       info [main_title, result.join("\n\n")].join("\n\n")
@@ -360,8 +365,9 @@ module AUPSTestKit
         parent_populated = resolve_path(composition_resource, parent_path).first.present?
 
         unless parent_populated
-          add_message('warning',
-                      "Must Support sub-elements correctly populated\n\nComposition\n\n**Complex element #{parent_path}** is not populated. Must Support sub-elements that would be validated: #{sub_elements.join(', ')}.")
+          msg = "Must Support sub-elements correctly populated\n\nComposition\n\n**Complex element #{parent_path}** " \
+                "is not populated. Must Support sub-elements that would be validated: #{sub_elements.join(', ')}."
+          add_message('warning', msg)
           next
         end
 
@@ -389,16 +395,16 @@ module AUPSTestKit
 
       skip_if !any_parent_populated, 'No complex element with Must Support sub-elements is populated'
       assert mandatory_ms_result,
-             'Some of the mandatory Must Support sub-elements are not populated. See the list of populated sub-elements in messages tab.'
+             'Some of the mandatory Must Support sub-elements are not populated. See the list in messages tab.'
     end
 
     # Validates Must Support sub-elements only when the parent element is populated.
-    # One message per complex element (error when any mandatory MS sub-element missing, warning when optional missing, info when all present).
-    # Pass: all messages are info or warning. Fail: any message is error.
+    # One message per complex element (error when any mandatory MS sub-element missing,
+    # warning when optional missing, info when all present). Pass: all info or warning. Fail: any error.
     #
     # @param resource [Hash, FHIR::Model] The resource to validate (e.g. Patient)
-    # @param parent_groups [Array<Hash>] Each hash has :parent (String), :mandatory (Array<String>), :optional (Array<String>)
-    # @return [Boolean] false if resource blank or no parent populated; true when validation ran (assert handles pass/fail)
+    # @param parent_groups [Array<Hash>] Each hash has :parent (String), :mandatory, :optional (Array<String>)
+    # @return [Boolean] false if resource blank or no parent populated; true when validation ran
     def validate_populated_sub_elements_when_parent_populated(resource, parent_groups)
       return false unless resource.present?
 
@@ -466,8 +472,9 @@ module AUPSTestKit
       end
       all_populated = slice_results.all? { |r| r[:identifier].present? }
       message_type1 = all_populated ? 'info' : 'warning'
-      add_message(message_type1,
-                  "Must support identifier slices correctly populated\n\n## List of Must Support identifier slices populated or missing\n\n#{lines1.join("\n\n")}")
+      msg1 = "Must support identifier slices correctly populated\n\n## List of Must Support identifier slices " \
+             "populated or missing\n\n#{lines1.join("\n\n")}"
+      add_message(message_type1, msg1)
 
       at_least_one = slice_results.any? { |r| r[:identifier].present? }
       message_type2 = at_least_one ? 'info' : 'warning'
@@ -478,8 +485,9 @@ module AUPSTestKit
           "❌ Missing: **#{r[:slice][:name]}**"
         end
       end
-      add_message(message_type2,
-                  "At least one Must Support identifier slices is populated\n\n## List of Must Support identifier slices populated or missing (system when populated)\n\n#{lines2.join("\n\n")}")
+      msg2 = "At least one Must Support identifier slices is populated\n\n## List of Must Support identifier slices " \
+             "populated or missing (system when populated)\n\n#{lines2.join("\n\n")}"
+      add_message(message_type2, msg2)
     end
 
     # Validates author Must Support identifier slices. One message: warning when any missing, info when all populated.
@@ -504,8 +512,9 @@ module AUPSTestKit
       end
       all_populated = slice_results.all? { |r| r[:identifier].present? }
       message_type = all_populated ? 'info' : 'warning'
-      add_message(message_type,
-                  "Must support identifier slices correctly populated\n\n#{author_header}\n\n## List of Must Support identifier slices populated or missing (type and system when populated)\n\n#{lines.join("\n\n")}")
+      msg = "Must support identifier slices correctly populated\n\n#{author_header}\n\n## List of Must Support " \
+            "identifier slices populated or missing (type and system when populated)\n\n#{lines.join("\n\n")}"
+      add_message(message_type, msg)
     end
 
     def validate_populated_elements_in_composition(elements_array, required: true)
@@ -602,8 +611,9 @@ module AUPSTestKit
           if all_populated
             add_message('info', "Section correctly populated\n\n#{section_message_body}")
           else
-            add_message('error',
-                        "For section with any mandatory Must Support element in section missing (i.e. title, code, text)\n\n#{section_message_body}")
+            err_msg = 'For section with any mandatory Must Support element in section missing ' \
+                      "(i.e. title, code, text)\n\n#{section_message_body}"
+            add_message('error', err_msg)
             all_errors << true
           end
         end
@@ -655,7 +665,9 @@ module AUPSTestKit
       composition_resource = bundle_resource.composition_resource
       return nil unless composition_resource.present?
 
-      author_ref = composition_resource.respond_to?(:author) && composition_resource.author.present? ? composition_resource.author.first : nil
+      author_ref = if composition_resource.respond_to?(:author) && composition_resource.author.present?
+                     composition_resource.author.first
+                   end
       return nil unless author_ref.present?
 
       ref_str = author_ref.respond_to?(:reference) ? author_ref.reference : author_ref['reference']
@@ -694,7 +706,9 @@ module AUPSTestKit
       composition_resource = bundle_resource.composition_resource
       return nil unless composition_resource.present?
 
-      custodian_ref = composition_resource.respond_to?(:custodian) && composition_resource.custodian.present? ? composition_resource.custodian : nil
+      custodian_ref = if composition_resource.respond_to?(:custodian) && composition_resource.custodian.present?
+                        composition_resource.custodian
+                      end
       return nil unless custodian_ref.present?
 
       ref_str = custodian_ref.respond_to?(:reference) ? custodian_ref.reference : custodian_ref['reference']
@@ -848,8 +862,11 @@ module AUPSTestKit
         parent_populated = resolve_path(resource, parent_path).first.present?
 
         unless parent_populated
-          add_message('warning',
-                      "Must Support sub-elements correctly populated\n\n#{author_header}\n\n**Complex element #{parent_path}** is not populated. Must Support sub-elements that would be validated: #{sub_elements.join(', ')}.")
+          sub_el_list = sub_elements.join(', ')
+          msg = "Must Support sub-elements correctly populated\n\n#{author_header}\n\n" \
+                "**Complex element #{parent_path}** is not populated. Must Support sub-elements that would be " \
+                "validated: #{sub_el_list}."
+          add_message('warning', msg)
           next
         end
 
@@ -872,8 +889,10 @@ module AUPSTestKit
           populated = resolve_path(resource, expr).first.present?
           "#{boolean_to_existent_string(populated)}: **#{expr}**"
         end
-        add_message(level,
-                    "Must Support sub-elements correctly populated\n\n#{author_header}\n\n## Complex element **#{parent_path}** — Must Support sub-elements populated or missing\n\n#{list_lines.join("\n\n")}")
+        list_body = list_lines.join("\n\n")
+        msg = "Must Support sub-elements correctly populated\n\n#{author_header}\n\n" \
+              "## Complex element **#{parent_path}** — Must Support sub-elements populated or missing\n\n#{list_body}"
+        add_message(level, msg)
       end
 
       mandatory_ok = parent_groups.all? do |group|
@@ -916,8 +935,9 @@ module AUPSTestKit
         populated = resolve_path(resource, expr).first.present?
         "#{boolean_to_existent_string(populated)}: **#{expr}**"
       end
-      add_message(message_type,
-                  "Must Support elements correctly populated\n\n#{custodian_header}\n\n## List of Must Support elements populated or missing\n\n#{list_lines.join("\n\n")}")
+      msg = "Must Support elements correctly populated\n\n#{custodian_header}\n\n## List of Must Support elements " \
+            "populated or missing\n\n#{list_lines.join("\n\n")}"
+      add_message(message_type, msg)
 
       assert mandatory_populated,
              'When mandatory Must Support element is missing (e.g. name). See the list in messages tab.'
@@ -937,8 +957,11 @@ module AUPSTestKit
         parent_populated = resolve_path(resource, parent_path).first.present?
 
         unless parent_populated
-          add_message('warning',
-                      "Must Support sub-elements correctly populated\n\n#{custodian_header}\n\n**Complex element #{parent_path}** is not populated. Must Support sub-elements that would be validated: #{sub_elements.join(', ')}.")
+          sub_el_list = sub_elements.join(', ')
+          msg = "Must Support sub-elements correctly populated\n\n#{custodian_header}\n\n" \
+                "**Complex element #{parent_path}** is not populated. Must Support sub-elements that would be " \
+                "validated: #{sub_el_list}."
+          add_message('warning', msg)
           next
         end
 
@@ -949,8 +972,10 @@ module AUPSTestKit
           populated = resolve_path(resource, expr).first.present?
           "#{boolean_to_existent_string(populated)}: **#{expr}**"
         end
-        add_message(level,
-                    "Must Support sub-elements correctly populated\n\n#{custodian_header}\n\n## Complex element **#{parent_path}** — Must Support sub-elements populated or missing\n\n#{list_lines.join("\n\n")}")
+        list_body = list_lines.join("\n\n")
+        msg = "Must Support sub-elements correctly populated\n\n#{custodian_header}\n\n" \
+              "## Complex element **#{parent_path}** — Must Support sub-elements populated or missing\n\n#{list_body}"
+        add_message(level, msg)
       end
     end
 
@@ -974,8 +999,9 @@ module AUPSTestKit
       end
       all_populated = slice_results.all? { |r| r[:identifier].present? }
       message_type = all_populated ? 'info' : 'warning'
-      add_message(message_type,
-                  "Must support identifier slices correctly populated\n\n#{custodian_header}\n\n## List of Must Support identifier slices populated or missing (type and system when populated)\n\n#{lines.join("\n\n")}")
+      msg = "Must support identifier slices correctly populated\n\n#{custodian_header}\n\n## List of Must Support " \
+            "identifier slices populated or missing (type and system when populated)\n\n#{lines.join("\n\n")}"
+      add_message(message_type, msg)
     end
 
     def validate_attester_party_ms_elements(resource, elements_config)
@@ -1009,8 +1035,9 @@ module AUPSTestKit
         populated = resolve_path(resource, expr).first.present?
         "#{boolean_to_existent_string(populated)}: **#{expr}**"
       end
-      add_message(message_type,
-                  "Must Support elements correctly populated\n\n#{header}\n\n## List of Must Support elements populated or missing\n\n#{list_lines.join("\n\n")}")
+      msg = "Must Support elements correctly populated\n\n#{header}\n\n## List of Must Support elements " \
+            "populated or missing\n\n#{list_lines.join("\n\n")}"
+      add_message(message_type, msg)
 
       assert mandatory_populated, 'When any mandatory Must Support element is missing. See the list in messages tab.'
     end
@@ -1029,8 +1056,9 @@ module AUPSTestKit
         parent_populated = resolve_path(resource, parent_path).first.present?
 
         unless parent_populated
-          add_message('warning',
-                      "Must support sub-elements correctly populated\n\n#{header}\n\n**Complex element #{parent_path}** is not populated. Must Support sub-elements that would be validated: #{sub_elements.join(', ')}.")
+          msg = "Must support sub-elements correctly populated\n\n#{header}\n\n**Complex element #{parent_path}** " \
+                "is not populated. Must Support sub-elements that would be validated: #{sub_elements.join(', ')}."
+          add_message('warning', msg)
           next
         end
 
@@ -1052,8 +1080,9 @@ module AUPSTestKit
           populated = resolve_path(resource, expr).first.present?
           "#{boolean_to_existent_string(populated)}: **#{expr}**"
         end
-        add_message(level,
-                    "Must support sub-elements correctly populated\n\n#{header}\n\n## Complex element **#{parent_path}** — Must Support sub-elements populated or missing\n\n#{list_lines.join("\n\n")}")
+        msg = "Must support sub-elements correctly populated\n\n#{header}\n\n## Complex element **#{parent_path}** — " \
+              "Must Support sub-elements populated or missing\n\n#{list_lines.join("\n\n")}"
+        add_message(level, msg)
       end
 
       mandatory_ok = parent_groups.all? do |g|
@@ -1085,8 +1114,9 @@ module AUPSTestKit
       end
       all_populated = slice_results.all? { |r| r[:identifier].present? }
       message_type = all_populated ? 'info' : 'warning'
-      add_message(message_type,
-                  "Must support identifier slices correctly populated\n\n#{header}\n\n## List of Must Support identifier slices populated or missing (type and system when populated)\n\n#{lines.join("\n\n")}")
+      msg = "Must support identifier slices correctly populated\n\n#{header}\n\n## List of Must Support identifier " \
+            "slices populated or missing (type and system when populated)\n\n#{lines.join("\n\n")}"
+      add_message(message_type, msg)
     end
 
     def validate_author_ms_elements(resource, author_config_elements)
@@ -1120,10 +1150,11 @@ module AUPSTestKit
         "#{boolean_to_existent_string(populated)}: **#{expr}**"
       end
 
-      add_message(message_type,
-                  "Must Support elements correctly populated\n\n**Referenced author**: #{resource_type_str}#{if profile_str.present?
-                                                                                                               " — #{profile_str}"
-                                                                                                             end}\n\n## List of Must Support elements (complex) populated or missing\n\n#{list_lines.join("\n\n")}")
+      author_label = "**Referenced author**: #{resource_type_str}"
+      author_label += " — #{profile_str}" if profile_str.present?
+      msg = "Must Support elements correctly populated\n\n#{author_label}\n\n## List of Must Support elements " \
+            "(complex) populated or missing\n\n#{list_lines.join("\n\n")}"
+      add_message(message_type, msg)
 
       assert mandatory_populated, 'When any mandatory Must Support element is missing. See the list in messages tab.'
     end
@@ -1350,8 +1381,8 @@ module AUPSTestKit
       end.all?
       optional_result = optional_ms_primitives_result && optional_ms_slices_result
 
-      info_to_print = populated_paths_info_raw(resource,
-                                               mandatory_ms_primitives + optional_ms_primitives) + optional_ms_slices_messages
+      primitives_part = mandatory_ms_primitives + optional_ms_primitives
+      info_to_print = populated_paths_info_raw(resource, primitives_part) + optional_ms_slices_messages
 
       add_message(
         calculate_message_level(
@@ -1363,7 +1394,7 @@ module AUPSTestKit
       )
 
       assert mandatory_ms_primitives_result,
-             'Some of the mandatory Must Support elements are not populated. See the list of populated primitives in messages tab.'
+             'Some of the mandatory Must Support elements are not populated. See the list in messages tab.'
     end
   end
 end
