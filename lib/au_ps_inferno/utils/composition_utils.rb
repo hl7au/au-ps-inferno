@@ -59,10 +59,6 @@ module CompositionUtils
   end
 
   def boolean_to_existent_string(boolean_value)
-    boolean_value ? '✅ Passed' : '❌ Failed'
-  end
-
-  def boolean_to_existent_string(boolean_value)
     boolean_value ? '✅ Populated' : '❌ Missing'
   end
 
@@ -89,13 +85,6 @@ module CompositionUtils
 
   def identifier_info?
     resolve_path(scratch_bundle, 'identifier').first.present?
-  end
-
-  def check_section_element_completeness(path_expression)
-    sections_count = resolve_path(composition_resource, path_expression).length
-    selected_by_expression_count = resolve_path(composition_resource, path_expression).length
-
-    boolean_to_existent_string(sections_count == selected_by_expression_count)
   end
 
   def composition_mandatory_ms_elements_info(
