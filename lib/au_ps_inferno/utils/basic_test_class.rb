@@ -481,12 +481,8 @@ module AUPSTestKit
     def custodian_complex_ms_elements(custodian_meta)
       return [] unless custodian_meta.present?
 
-      elements = custodian_meta['elements'] || custodian_meta[:elements] || []
-      elements.filter do |el|
-        expr = (el['expression'] || el[:expression]).to_s
-        id_str = (el['id'] || el[:id]).to_s
-        !expr.include?('.') && !id_str.include?(':')
-      end
+      elements = metadata_elements(custodian_meta)
+      elements.reject { |el| metadata_subelement?(el) || metadata_slice?(el) }
     end
 
     def custodian_ms_subelement_parent_groups(custodian_meta)
@@ -680,15 +676,22 @@ module AUPSTestKit
     end
 
     def identifier_type_display_from_coding(type_val)
-      if type_val.respond_to?(:coding) && type_val.coding.present?
-        c = type_val.coding.first
-        ", type: #{(c.respond_to?(:display) ? c.display : c['display']).presence || (c.respond_to?(:code) ? c.code : c['code']).presence || '—'}"
-      elsif type_val.is_a?(Hash) && type_val['coding'].present?
-        c = type_val['coding'].first
-        ", type: #{c['display'].presence || c['code'].presence || '—'}"
-      else
-        ''
-      end
+      coding = coding_from_type_val(type_val)
+      return '' if coding.blank?
+
+      ", type: #{display_or_code_from_coding(coding)}"
+    end
+
+    def coding_from_type_val(type_val)
+      return type_val.coding.first if type_val.respond_to?(:coding) && type_val.coding.present?
+      return type_val['coding'].first if type_val.is_a?(Hash) && type_val['coding'].present?
+
+      nil
+    end
+
+    def display_or_code_from_coding(coding)
+      (coding.respond_to?(:display) ? coding.display : coding['display']).presence ||
+        (coding.respond_to?(:code) ? coding.code : coding['code']).presence || '—'
     end
 
     def test_subject_ms_subelements_when_parent_populated
@@ -1137,6 +1140,10 @@ module AUPSTestKit
       composition.respond_to?(:custodian) && composition.custodian.present? ? composition.custodian : nil
     end
 
+    def metadata_elements(meta)
+      meta['elements'] || meta[:elements] || []
+    end
+
     def metadata_subelement?(element)
       (element['expression'] || element[:expression]).to_s.include?('.')
     end
@@ -1152,13 +1159,23 @@ module AUPSTestKit
     end
 
     def build_parent_groups_from_subelements(sub_els)
-      grouped = sub_els.group_by { |el| (el['expression'] || el[:expression]).to_s.split('.').first }
-      grouped.map do |parent, els|
-        mandatory_els = els.select { |e| ((e['min'] || e[:min]) || 0).positive? }
-        optional_els = els.reject { |e| ((e['min'] || e[:min]) || 0).positive? }
-        { parent: parent, mandatory: mandatory_els.map { |e| e['expression'] || e[:expression] },
-          optional: optional_els.map { |e| e['expression'] || e[:expression] } }
-      end
+      grouped = sub_els.group_by { |el| element_expression(el).to_s.split('.').first }
+      grouped.map { |parent, els| build_one_parent_group(parent, els) }
+    end
+
+    def build_one_parent_group(parent, els)
+      mandatory_els = els.select { |e| element_min_positive?(e) }
+      optional_els = els.reject { |e| element_min_positive?(e) }
+      { parent: parent, mandatory: mandatory_els.map { |e| element_expression(e) },
+        optional: optional_els.map { |e| element_expression(e) } }
+    end
+
+    def element_expression(element)
+      element['expression'] || element[:expression]
+    end
+
+    def element_min_positive?(element)
+      ((element['min'] || element[:min]) || 0).positive?
     end
 
     def add_subelement_group_message(resource, group, header, use_error_level: true)
@@ -1192,11 +1209,9 @@ module AUPSTestKit
     end
 
     def elements_config_mandatory_optional_paths(elements_config)
-      mandatory_els = elements_config.select { |el| ((el['min'] || el[:min]) || 0).positive? }
-      optional_els = elements_config.reject { |el| ((el['min'] || el[:min]) || 0).positive? }
-      [mandatory_els.map { |el| el['expression'] || el[:expression] }, optional_els.map do |el|
-        el['expression'] || el[:expression]
-      end]
+      mandatory_els = elements_config.select { |el| element_min_positive?(el) }
+      optional_els = elements_config.reject { |el| element_min_positive?(el) }
+      [mandatory_els.map { |el| element_expression(el) }, optional_els.map { |el| element_expression(el) }]
     end
 
     def referenced_resource_header(resource, label)
