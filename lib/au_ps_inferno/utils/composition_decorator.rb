@@ -26,9 +26,15 @@ class CompositionDecorator < FHIR::Composition
   def event_by_code(code)
     return nil if event.nil?
 
-    filtered_event = event.find { |ev| ev.code&.first&.coding&.first&.code == code }
-    return nil if filtered_event.nil?
-
-    filtered_event
+    event.find { |evt| event_element_code(evt) == code }
   end
+
+  def event_element_code(event_element)
+    first_code = event_element.code&.first
+    return nil if first_code.nil?
+
+    first_coding = first_code.coding&.first
+    first_coding&.code
+  end
+  private :event_element_code
 end
