@@ -18,3 +18,4 @@
 /docs/yard
 .yardoc
 node_modules
+.env
