@@ -682,12 +682,17 @@ module AUPSTestKit
       validate_ms_identifier_slices_in_resource(resource, PATIENT_MS_IDENTIFIER_SLICES)
     end
 
-    def test_composition_author_ms_elements
-      check_bundle_exists_in_scratch
+    def return_author_resource
       resource = author_resource
       skip_if resource.blank?, 'No author reference found on Composition'
       skip_if resource_type(resource) == 'Device',
               'Referenced author entry is type of Device; skip Must Support validation'
+      resource
+    end
+
+    def test_composition_author_ms_elements
+      check_bundle_exists_in_scratch
+      resource = return_author_resource
       author_meta = composition_author_metadata
       skip_if author_meta.blank?, 'No author metadata available'
       complex_elements = author_complex_ms_elements_for_type(author_meta, resource_type(resource))
@@ -698,9 +703,7 @@ module AUPSTestKit
 
     def test_composition_author_ms_subelements
       check_bundle_exists_in_scratch
-      resource = author_resource
-      skip_if resource.blank?, 'No author reference found on Composition'
-      skip_if resource_type(resource) == 'Device', 'Referenced author resource type is Device'
+      resource = return_author_resource
       author_meta = composition_author_metadata
       skip_if author_meta.blank?, 'No author metadata available'
       parent_groups = author_ms_subelement_parent_groups(author_meta, resource_type(resource))
@@ -979,11 +982,7 @@ module AUPSTestKit
           (present ? 'info' : 'warning')
         end
       end.uniq
-      if types.include?('error')
-        'error'
-      else
-        (types.include?('warning') ? 'warning' : 'info')
-      end
+      return_message_level_by_types(types)
     end
 
     def sub_elements_message_type(resource, sub_els, mandatory)
@@ -994,6 +993,10 @@ module AUPSTestKit
           (mandatory.include?(el) ? 'error' : 'warning')
         end
       end.uniq
+      return_message_level_by_types(types)
+    end
+
+    def return_message_level_by_types(types)
       if types.include?('error')
         'error'
       else
