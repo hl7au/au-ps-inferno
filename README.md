@@ -1,5 +1,5 @@
 
-# AU IPS Inferno Test Kit 
+# AU PS Inferno Test Kit 
 
 This is an [Inferno](https://inferno-framework.github.io/inferno-core/) test kit for the [AU PS Implementation Guide](http://hl7.org.au/fhir/ps/)
 
