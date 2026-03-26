@@ -105,6 +105,7 @@ class Generator
           { id: :custodian_ms_subelements },
           { id: :custodian_ms_identifier_slices }
         ],
+        optional: true,
         run_as_group: true
       },
       {
@@ -115,6 +116,7 @@ class Generator
           { id: :attester_party_ms_subelements },
           { id: :attester_party_ms_identifier_slices }
         ],
+        optional: true,
         run_as_group: true
       }
     ].freeze
