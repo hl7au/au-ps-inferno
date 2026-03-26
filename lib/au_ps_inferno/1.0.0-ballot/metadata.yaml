@@ -1005,7 +1005,6 @@
 :composition_mandatory_ms_elements:
 - author
 - date
-- section
 - status
 - subject
 - title
@@ -1017,8 +1016,8 @@
 - attester
 - custodian
 - identifier
-- section
 - text
+- event
 :composition_optional_ms_sub_elements:
 - attester.party
 - attester.time

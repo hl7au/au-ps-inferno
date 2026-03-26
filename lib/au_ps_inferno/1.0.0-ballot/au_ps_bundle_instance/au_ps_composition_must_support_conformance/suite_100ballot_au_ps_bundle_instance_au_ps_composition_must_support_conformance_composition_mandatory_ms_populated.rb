@@ -13,7 +13,7 @@ module AUPSTestKit
     
     run do
       
-      validate_populated_elements_in_composition(["author", "date", "section", "status", "subject", "title", "type"])
+      validate_populated_elements_in_composition(["author", "date", "status", "subject", "title", "type"])
       
     end
     

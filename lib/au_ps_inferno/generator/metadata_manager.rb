@@ -251,8 +251,8 @@ class Generator
 
     def extract_optional_ms_elements
       @composition_optional_ms_elements = extract_optional_all_ms_elements.filter do |path|
-        path_is_not_slice?(path) && !path.include?('.')
-      end
+        path_is_not_slice?(path) && !path.include?('.') && path != 'section'
+      end + ['event']
       @composition_optional_ms_sub_elements = extract_optional_all_ms_elements.filter do |path|
         path_is_not_slice?(path) && path.include?('.') && !SUB_ELEMENTS_TO_SKIP.include?(path)
       end
@@ -268,7 +268,7 @@ class Generator
 
     def extract_required_ms_elements
       @composition_mandatory_ms_elements = extract_required_all_ms_elements.filter do |path|
-        path_is_not_slice?(path) && !path.include?('.')
+        path_is_not_slice?(path) && !path.include?('.') && path != 'section'
       end
       @composition_mandatory_ms_sub_elements = extract_required_all_ms_elements.filter do |path|
         path_is_not_slice?(path) && path.include?('.') && !SUB_ELEMENTS_TO_SKIP.include?(path)
