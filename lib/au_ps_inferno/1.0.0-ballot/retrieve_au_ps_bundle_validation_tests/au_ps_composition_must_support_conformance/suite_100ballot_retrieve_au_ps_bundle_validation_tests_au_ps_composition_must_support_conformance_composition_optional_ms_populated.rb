@@ -13,7 +13,7 @@ module AUPSTestKit
     
     run do
       
-      validate_populated_elements_in_composition(["attester", "custodian", "identifier", "section", "text"], required: false)
+      validate_populated_elements_in_composition(["attester", "custodian", "identifier", "text", "event"], required: false)
       
     end
     

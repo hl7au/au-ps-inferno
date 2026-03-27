@@ -1380,7 +1380,14 @@ module AUPSTestKit
 
       info_to_print = populated_paths_info_raw(resource,
                                                mandatory_ms_primitives + optional_ms_primitives) + optional_ms_slices_messages
-
+      info_to_print = info_to_print.map do |info|
+        element = info.split(':').last.strip.gsub('**', '')
+        if mandatory_ms_primitives.include?(element)
+          info + ' (Mandatory)'
+        else
+          info
+        end
+      end
       add_message(
         calculate_message_level(
           failed: !mandatory_ms_primitives_result,
