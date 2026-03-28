@@ -10,6 +10,7 @@ require_relative 'basic_test_contants_module'
 require_relative 'basic_test_attester_module'
 require_relative 'basic_test_subject_module'
 require_relative 'basic_test_author_module'
+require_relative 'basic_test_custodian_module'
 
 module AUPSTestKit
   # A base class for all tests to decrease code duplication
@@ -21,6 +22,7 @@ module AUPSTestKit
     include BasicTestConstants
     include BasicTestSubjectModule
     include BasicTestAuthorModule
+    include BasicTestCustodianModule
     include BasicTestAttesterModule
 
     def check_other_sections(all_sections_data_codes, sections_codes_mapping)
@@ -612,68 +614,11 @@ module AUPSTestKit
       resource.respond_to?(:resourceType) ? resource.resourceType : resource['resourceType']
     end
 
-    def custodian_resource
-      return nil unless scratch_bundle.present?
-
-      bundle_resource = BundleDecorator.new(scratch_bundle.to_hash)
-      composition_resource = bundle_resource.composition_resource
-      return nil unless composition_resource.present?
-
-      custodian_ref = composition_resource.respond_to?(:custodian) && composition_resource.custodian.present? ? composition_resource.custodian : nil
-      return nil unless custodian_ref.present?
-
-      ref_str = custodian_ref.respond_to?(:reference) ? custodian_ref.reference : custodian_ref['reference']
-      return nil if ref_str.blank?
-
-      bundle_resource.resource_by_reference(ref_str)
-    end
-
     def load_metadata_yaml
       path = File.expand_path('../1.0.0-ballot/metadata.yaml', __dir__)
       return nil unless File.file?(path)
 
       YAML.safe_load_file(path, permitted_classes: [Symbol], aliases: true)
-    end
-
-    def composition_custodian_metadata
-      data = load_metadata_yaml
-      return nil unless data.present?
-
-      data['custodian'] || data[:custodian]
-    end
-
-    def custodian_complex_ms_elements(custodian_meta)
-      return [] unless custodian_meta.present?
-
-      elements = custodian_meta['elements'] || custodian_meta[:elements] || []
-      elements.filter do |el|
-        expr = (el['expression'] || el[:expression]).to_s
-        id_str = (el['id'] || el[:id]).to_s
-        !expr.include?('.') && !id_str.include?(':')
-      end
-    end
-
-    def custodian_ms_subelement_parent_groups(custodian_meta)
-      return [] unless custodian_meta.present?
-
-      elements = custodian_meta['elements'] || custodian_meta[:elements] || []
-      sub_elements = elements.filter do |el|
-        expr = (el['expression'] || el[:expression]).to_s
-        id_str = (el['id'] || el[:id]).to_s
-        expr.include?('.') && !id_str.include?(':')
-      end
-      return [] if sub_elements.empty?
-
-      grouped = sub_elements.group_by { |el| (el['expression'] || el[:expression]).to_s.split('.').first }
-      grouped.map do |parent, els|
-        mandatory = els.select do |e|
-          ((e['min'] || e[:min]) || 0).positive?
-        end.map { |e| e['expression'] || e[:expression] }
-        optional = els.reject do |e|
-          ((e['min'] || e[:min]) || 0).positive?
-        end.map { |e| e['expression'] || e[:expression] }
-        { parent: parent, mandatory: mandatory, optional: optional }
-      end
     end
 
     def author_resource_type_and_profiles(resource)
@@ -695,92 +640,6 @@ module AUPSTestKit
       else
         []
       end
-    end
-
-    def validate_custodian_ms_elements(resource, elements_config)
-      return unless resource.present? && elements_config.present?
-
-      expressions = elements_config.map { |el| el['expression'] || el[:expression] }.compact
-      mandatory = elements_config.select do |el|
-        ((el['min'] || el[:min]) || 0).positive?
-      end.map { |el| el['expression'] || el[:expression] }
-      optional = elements_config.reject do |el|
-        ((el['min'] || el[:min]) || 0).positive?
-      end.map { |el| el['expression'] || el[:expression] }
-
-      mandatory_populated = mandatory.all? { |path| resolve_path(resource, path).first.present? }
-      optional_populated = optional.all? { |path| resolve_path(resource, path).first.present? }
-
-      list_lines = expressions.map do |expr|
-        populated = resolve_path(resource, expr).first.present?
-        "#{boolean_to_existent_string(populated)}: **#{expr}**"
-      end
-      add_message(
-        calculate_message_level(
-          failed: !mandatory_populated,
-          warning: mandatory_populated && !optional_populated,
-          info: mandatory_populated && optional_populated
-        ),
-        ms_elements_populated_message(resource, list_lines)
-      )
-
-      assert mandatory_populated,
-             'When mandatory Must Support element is missing (e.g. name). See the list in messages tab.'
-    end
-
-    def validate_custodian_ms_subelements(resource, parent_groups, resource_type_str, profile_str)
-      return unless resource.present?
-
-      custodian_header = "**Referenced custodian**: #{resource_type_str}#{" — #{profile_str}" if profile_str.present?}"
-
-      parent_groups.each do |group|
-        parent_path = group[:parent]
-        mandatory = group[:mandatory] || []
-        optional = group[:optional] || []
-        sub_elements = mandatory + optional
-
-        parent_populated = resolve_path(resource, parent_path).first.present?
-
-        unless parent_populated
-          add_message('warning',
-                      "Must Support sub-elements correctly populated\n\n#{custodian_header}\n\n**Complex element #{parent_path}** is not populated. Must Support sub-elements that would be validated: #{sub_elements.join(', ')}.")
-          next
-        end
-
-        # Custodian: only warning when any sub-element missing, info when all populated (no error level per spec)
-        all_populated = sub_elements.all? { |expr| resolve_path(resource, expr).first.present? }
-        level = all_populated ? 'info' : 'warning'
-        list_lines = sub_elements.map do |expr|
-          populated = resolve_path(resource, expr).first.present?
-          "#{boolean_to_existent_string(populated)}: **#{expr}**"
-        end
-        add_message(level,
-                    "Must Support sub-elements correctly populated\n\n#{custodian_header}\n\n## Complex element **#{parent_path}** — Must Support sub-elements populated or missing\n\n#{list_lines.join("\n\n")}")
-      end
-    end
-
-    def validate_custodian_ms_identifier_slices(resource, slices, resource_type_str, profile_str)
-      return unless resource.present? && slices.present?
-
-      identifiers = identifiers_from_resource(resource) || []
-      slice_results = slices.map do |slice|
-        ident = find_identifier_by_system(identifiers, slice[:system])
-        { slice: slice, identifier: ident }
-      end
-
-      custodian_header = "**Referenced custodian**: #{resource_type_str}#{" — #{profile_str}" if profile_str.present?}"
-      lines = slice_results.map do |r|
-        if r[:identifier].present?
-          type_str = identifier_type_display(r[:identifier])
-          "✅ Populated: **#{r[:slice][:name]}** — system: #{r[:slice][:system]}#{type_str}"
-        else
-          "❌ Missing: **#{r[:slice][:name]}**"
-        end
-      end
-      all_populated = slice_results.all? { |r| r[:identifier].present? }
-      message_type = all_populated ? 'info' : 'warning'
-      add_message(message_type,
-                  "Must support identifier slices correctly populated\n\n#{custodian_header}\n\n## List of Must Support identifier slices populated or missing (type and system when populated)\n\n#{lines.join("\n\n")}")
     end
 
     def ms_elements_populated_message(resource, list_lines)
@@ -853,44 +712,6 @@ module AUPSTestKit
       else
         ''
       end
-    end
-
-    def test_composition_custodian_ms_elements
-      check_bundle_exists_in_scratch
-      resource = custodian_resource
-      skip_if resource.blank?, 'Custodian is not populated'
-
-      custodian_meta = composition_custodian_metadata
-      skip_if custodian_meta.blank?, 'No custodian metadata available'
-
-      elements_config = custodian_complex_ms_elements(custodian_meta)
-      skip_if elements_config.blank?, 'No complex Must Support elements defined for custodian'
-
-      validate_custodian_ms_elements(resource, elements_config)
-    end
-
-    def test_composition_custodian_ms_subelements
-      check_bundle_exists_in_scratch
-      resource = custodian_resource
-      skip_if resource.blank?, 'Custodian is not populated'
-
-      custodian_meta = composition_custodian_metadata
-      skip_if custodian_meta.blank?, 'No custodian metadata available'
-
-      parent_groups = custodian_ms_subelement_parent_groups(custodian_meta)
-      skip_if parent_groups.blank?, 'No complex elements with Must Support sub-elements defined for custodian'
-
-      rtype_str, profile_str = author_resource_type_and_profiles(resource)
-      validate_custodian_ms_subelements(resource, parent_groups, rtype_str, profile_str)
-    end
-
-    def test_composition_custodian_ms_identifier_slices
-      check_bundle_exists_in_scratch
-      resource = custodian_resource
-      skip_if resource.blank?, 'Custodian is not populated'
-
-      rtype_str, profile_str = author_resource_type_and_profiles(resource)
-      validate_custodian_ms_identifier_slices(resource, ORGANIZATION_MS_IDENTIFIER_SLICES, rtype_str, profile_str)
     end
   end
 end
