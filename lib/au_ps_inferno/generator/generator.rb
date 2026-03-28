@@ -26,6 +26,8 @@ require_relative 'suite_primitive'
 # @example With extra folder containing additional FHIR resources (e.g. extra StructureDefinitions)
 #   generator = Generator.new('/path/to/ig', additional_resources_path: 'path/to/extra-ig-resources')
 #   generator.generate
+#
+# rubocop:disable Metrics/ClassLength -- orchestration class; primitive helpers kept private below
 class Generator
   PATH_BASE = 'lib/au_ps_inferno'
 
@@ -87,54 +89,111 @@ class Generator
 
   def primitive_group_config(generic_bundle_group, high_order_class_name, high_order_group_id,
                              high_order_group_file_name)
+    nested = nested_primitive_group_ids(generic_bundle_group, high_order_class_name, high_order_group_id)
+    tests = map_primitive_tests(generic_bundle_group, nested[:class_name], nested[:group_id], nested[:file_name],
+                                high_order_group_file_name)
+    build_primitive_group_hash(generic_bundle_group: generic_bundle_group, nested_class_name: nested[:class_name],
+                               nested_group_id: nested[:group_id], file_name: nested[:file_name],
+                               high_order_group_file_name: high_order_group_file_name, tests: tests)
+  end
+
+  def nested_primitive_group_ids(generic_bundle_group, high_order_class_name, high_order_group_id)
     generic_id = build_id(generic_bundle_group[:name])
-    file_name = generic_id
-    high_order_group_id = :"#{high_order_group_id}_#{generic_id}"
-    high_order_group_class_name = "#{high_order_class_name}#{build_class_name(generic_bundle_group[:name])}"
-    tests = generic_bundle_group[:tests].map do |test|
-      generate_primitive_test(high_order_group_class_name, high_order_group_id, file_name, high_order_group_file_name,
-                              test)
-    end
-    config = {
-      class_name: high_order_group_class_name,
-      title: generic_bundle_group[:name],
-      description: generic_bundle_group[:description] || group_description(generic_bundle_group[:name]),
-      id: high_order_group_id,
-      output_file_path: versioned_path(high_order_group_file_name, filename: "#{file_name}.rb"),
-      tests: tests
+    {
+      file_name: generic_id,
+      group_id: :"#{high_order_group_id}_#{generic_id}",
+      class_name: "#{high_order_class_name}#{build_class_name(generic_bundle_group[:name])}"
     }
+  end
+
+  def map_primitive_tests(generic_bundle_group, nested_class_name, nested_group_id, file_name,
+                          high_order_group_file_name)
+    generic_bundle_group[:tests].map do |test|
+      generate_primitive_test(nested_class_name, nested_group_id, file_name, high_order_group_file_name, test)
+    end
+  end
+
+  def build_primitive_group_hash(parts)
+    g = parts.fetch(:generic_bundle_group)
+    merge_optional_primitive_group_flags!(base_primitive_group_config(parts), g)
+  end
+
+  def base_primitive_group_config(parts)
+    g = parts.fetch(:generic_bundle_group)
+    ho_file, file_name = parts.values_at(:high_order_group_file_name, :file_name)
+    {
+      class_name: parts.fetch(:nested_class_name), title: g[:name],
+      description: g[:description] || group_description(g[:name]), id: parts.fetch(:nested_group_id),
+      output_file_path: versioned_path(ho_file, filename: "#{file_name}.rb"), tests: parts.fetch(:tests)
+    }
+  end
+
+  def merge_optional_primitive_group_flags!(config, generic_bundle_group)
     config[:optional] = generic_bundle_group[:optional] if generic_bundle_group.key?(:optional)
     config[:run_as_group] = generic_bundle_group[:run_as_group] if generic_bundle_group.key?(:run_as_group)
     config
   end
 
+  # rubocop:disable Metrics/MethodLength -- steps are clearer kept sequential
   def generate_primitive_test(group_class_name, group_id, group_file_name, high_order_group_file_name, test)
     test_type_id = test[:id]
-    unless test_type_id == :bundle_valid || TestConfigRegistry.registered?(test_type_id)
-      raise "Unknown test type id: #{test_type_id.inspect}. Add it to TestConfigRegistry."
-    end
+    validate_primitive_test_type!(test_type_id)
+    resolved_title, resolved_description = resolve_primitive_test_labels(test, test_type_id)
+    ensure_bundle_valid_has_title!(test_type_id, resolved_title)
+    resolved_description ||= primitive_test_fallback_description(resolved_title)
+    test_config = build_primitive_test_config(
+      group_class_name: group_class_name,
+      resolved_title: resolved_title,
+      resolved_description: resolved_description,
+      test_id: "#{group_id}_#{build_id(test_type_id)}",
+      high_order_group_file_name: high_order_group_file_name,
+      group_file_name: group_file_name
+    )
+    apply_primitive_test_type_config!(test_config, test, test_type_id, resolved_title, resolved_description)
+    PrimitiveTest.new(test_config).generate
+  end
+  # rubocop:enable Metrics/MethodLength
 
-    resolved_title = test[:title]
-    resolved_description = test[:description]
-    if test_type_id != :bundle_valid
-      registry_config = TestConfigRegistry.config_for(test_type_id, @metadata)
-      resolved_title ||= registry_config[:title]
-      resolved_description ||= registry_config[:description]
-    end
-    if test_type_id == :bundle_valid && resolved_title.nil?
-      raise 'Bundle validation test requires bundle_validation_title in high-order config.'
-    end
+  def validate_primitive_test_type!(test_type_id)
+    return if test_type_id == :bundle_valid
+    return if TestConfigRegistry.registered?(test_type_id)
 
-    resolved_description ||= "Verifies that the resource meets the requirement: #{resolved_title}"
+    raise "Unknown test type id: #{test_type_id.inspect}. Add it to TestConfigRegistry."
+  end
 
-    test_id = "#{group_id}_#{build_id(test_type_id)}"
-    test_config = {
-      class_name: "#{group_class_name}#{build_class_name(resolved_title)}",
-      title: resolved_title,
-      description: resolved_description,
+  def resolve_primitive_test_labels(test, test_type_id)
+    title = test[:title]
+    description = test[:description]
+    return [title, description] if test_type_id == :bundle_valid
+
+    registry_config = TestConfigRegistry.config_for(test_type_id, @metadata)
+    [title || registry_config[:title], description || registry_config[:description]]
+  end
+
+  def ensure_bundle_valid_has_title!(test_type_id, resolved_title)
+    return unless test_type_id == :bundle_valid && resolved_title.nil?
+
+    raise 'Bundle validation test requires bundle_validation_title in high-order config.'
+  end
+
+  def primitive_test_fallback_description(resolved_title)
+    "Verifies that the resource meets the requirement: #{resolved_title}"
+  end
+
+  def build_primitive_test_config(opts)
+    test_id = opts.fetch(:test_id)
+    {
+      class_name: "#{opts.fetch(:group_class_name)}#{build_class_name(opts.fetch(:resolved_title))}",
+      title: opts.fetch(:resolved_title),
+      description: opts.fetch(:resolved_description),
       id: test_id,
-      output_file_path: versioned_path(high_order_group_file_name, group_file_name, filename: "#{test_id}.rb")
+      output_file_path: versioned_path(
+        opts.fetch(:high_order_group_file_name), opts.fetch(:group_file_name), filename: "#{test_id}.rb"
+      )
     }
+  end
+
+  def apply_primitive_test_type_config!(test_config, test, test_type_id, resolved_title, resolved_description)
     if test_type_id == :bundle_valid
       test_config[:base_class_name] = test[:base_class_name]
       test_config[:imports] = test[:imports]
@@ -144,37 +203,45 @@ class Generator
       test_config[:title] = resolved_title
       test_config[:description] = resolved_description
     end
-    PrimitiveTest.new(test_config).generate
   end
 
   def generate_high_order_group(high_order_group, suite_class_name, suite_id)
-    high_order_group_id = :"#{suite_id}_#{build_id(high_order_group[:name])}"
-    high_order_group_file_name = build_id(high_order_group[:name]).to_s
+    ids = high_order_group_ids(high_order_group, suite_id)
     high_order_class_name = "#{suite_class_name}#{build_class_name(high_order_group[:name])}"
     generic_bundle_groups = high_order_group[:groups].map do |generic_bundle_group|
-      generate_primitive_group(generic_bundle_group, high_order_class_name, high_order_group_id,
-                               high_order_group_file_name)
+      generate_primitive_group(generic_bundle_group, high_order_class_name, ids[:group_id], ids[:file_base])
     end
-    config = high_order_group_config(high_order_group, high_order_class_name, high_order_group_id, high_order_group_file_name,
-                                     generic_bundle_groups)
+    config = high_order_group_config(high_order_group, high_order_class_name, ids, generic_bundle_groups)
     HighOrderGroup.new(config).generate
   end
 
-  def high_order_group_config(high_order_group, high_order_class_name, high_order_group_id, high_order_group_file_name,
-                              generic_bundle_groups)
+  def high_order_group_ids(high_order_group, suite_id)
+    file_base = build_id(high_order_group[:name]).to_s
+    { group_id: :"#{suite_id}_#{build_id(high_order_group[:name])}", file_base: file_base }
+  end
+
+  def high_order_group_config(high_order_group, high_order_class_name, ids, generic_bundle_groups)
+    path = ids.fetch(:file_base)
     # Path for require_relative must be relative to the high-order group file's directory
-    groups_with_relative_path = generic_bundle_groups.map { |g| g.merge(path: g[:path].split('/').last) }
     config = {
       class_name: high_order_class_name,
       title: high_order_group[:name],
       description: high_order_group[:description] || group_description(high_order_group[:name]),
-      id: high_order_group_id,
-      groups: groups_with_relative_path,
-      output_file_path: versioned_path(high_order_group_file_name, filename: "#{high_order_group_file_name}.rb")
+      id: ids.fetch(:group_id),
+      groups: high_order_groups_with_relative_paths(generic_bundle_groups),
+      output_file_path: versioned_path(path, filename: "#{path}.rb")
     }
+    merge_optional_high_order_flags!(config, high_order_group)
+  end
+
+  def merge_optional_high_order_flags!(config, high_order_group)
     config[:optional] = high_order_group[:optional] if high_order_group.key?(:optional)
     config[:run_as_group] = high_order_group[:run_as_group] if high_order_group.key?(:run_as_group)
     config
+  end
+
+  def high_order_groups_with_relative_paths(generic_bundle_groups)
+    generic_bundle_groups.map { |g| g.merge(path: g[:path].split('/').last) }
   end
 
   def generate_primitive_suite
@@ -225,11 +292,16 @@ class Generator
       suite_version: ig_suite_version,
       class_name: suite_class_name,
       title: "AU PS #{@suite_version} Test Suite",
-      description: "Validates AU PS (Australian Primary Care and Shared Health) bundles, compositions, sections, and server CapabilityStatement support for the #{@suite_version} implementation guide.",
+      description: suite_primitive_description,
       id: suite_id,
       groups: high_order_groups,
       output_file_path: versioned_path("#{ig_suite_version}_suite.rb")
     }
+  end
+
+  def suite_primitive_description
+    'Validates AU PS (Australian Primary Care and Shared Health) bundles, compositions, sections, and ' \
+      "server CapabilityStatement support for the #{@suite_version} implementation guide."
   end
 
   def new_generate
@@ -245,3 +317,4 @@ class Generator
     @metadata.save_to_file(metadata_path)
   end
 end
+# rubocop:enable Metrics/ClassLength
