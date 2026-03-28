@@ -8,6 +8,7 @@ require_relative 'section_test_module'
 require_relative 'section_names_mapping'
 require_relative 'basic_test_contants_module'
 require_relative 'basic_test_attester_module'
+require_relative 'basic_test_subject_module'
 
 module AUPSTestKit
   # A base class for all tests to decrease code duplication
@@ -17,6 +18,7 @@ module AUPSTestKit
     include SectionTestModule
     include SectionNamesMapping
     include BasicTestConstants
+    include BasicTestSubjectModule
     include BasicTestAttesterModule
 
     def check_other_sections(all_sections_data_codes, sections_codes_mapping)
@@ -628,19 +630,6 @@ module AUPSTestKit
       'info'
     end
 
-    def subject_resource
-      return false unless scratch_bundle.present?
-
-      bundle_resource = BundleDecorator.new(scratch_bundle.to_hash)
-      composition_resource = bundle_resource.composition_resource
-      return false unless composition_resource.present?
-
-      subject = composition_resource.subject
-      return false unless subject.present?
-
-      bundle_resource.resource_by_reference(subject.reference)
-    end
-
     def resource_type(resource)
       return nil unless resource.present?
 
@@ -1045,20 +1034,6 @@ module AUPSTestKit
       end
     end
 
-    def test_subject_ms_subelements_when_parent_populated
-      resource = subject_resource
-      skip_if resource.blank?, 'No subject (Patient) resource to validate for Must Support sub-elements'
-
-      validate_populated_sub_elements_when_parent_populated(resource, PATIENT_MS_SUBELEMENT_GROUPS)
-    end
-
-    def test_subject_ms_identifier_slices
-      resource = subject_resource
-      skip_if resource.blank?, 'No subject (Patient) resource to validate for identifier slices'
-
-      validate_ms_identifier_slices_in_resource(resource, PATIENT_MS_IDENTIFIER_SLICES)
-    end
-
     def test_composition_author_ms_elements
       check_bundle_exists_in_scratch
       resource = author_resource
@@ -1145,52 +1120,6 @@ module AUPSTestKit
 
       rtype_str, profile_str = author_resource_type_and_profiles(resource)
       validate_custodian_ms_identifier_slices(resource, ORGANIZATION_MS_IDENTIFIER_SLICES, rtype_str, profile_str)
-    end
-
-    def get_extension_url_by_slice_name(resource_type, slice_name)
-      return nil if resource_type.blank? || slice_name.blank?
-
-      SLICE_EXTENSIONS_BY_RESOURCE_TYPE[resource_type][slice_name]
-    end
-
-    def test_subject_ms_elements
-      optional_ms_slices_messages = []
-
-      resource = subject_resource
-      skip_if resource.blank?, 'No subject (Patient) resource to validate for Must Support elements'
-
-      mandatory_ms_primitives_result = all_paths_are_populated?(resource, SUBJECT_MANDATORY_MS_PRIMITIVES)
-      optional_ms_primitives_result = all_paths_are_populated?(resource, SUBJECT_OPTIONAL_MS_PRIMITIVES)
-      optional_ms_slices_result = SUBJECT_OPTIONAL_MS_SLICES.map do |slice|
-        extension_url = get_extension_url_by_slice_name(resource_type(resource), slice)
-
-        result = get_extension_value_by_url(resource, extension_url).present?
-        optional_ms_slices_messages << "#{boolean_to_existent_string(result)}: **#{slice}**"
-        result
-      end.all?
-      optional_result = optional_ms_primitives_result && optional_ms_slices_result
-
-      info_to_print = populated_paths_info_raw(resource,
-                                               SUBJECT_MANDATORY_MS_PRIMITIVES + SUBJECT_OPTIONAL_MS_PRIMITIVES) + optional_ms_slices_messages
-      info_to_print = info_to_print.map do |info|
-        element = info.split(':').last.strip.gsub('**', '')
-        if SUBJECT_MANDATORY_MS_PRIMITIVES.include?(element)
-          "#{info} (Mandatory)"
-        else
-          info
-        end
-      end
-      add_message(
-        calculate_message_level(
-          failed: !mandatory_ms_primitives_result,
-          warning: mandatory_ms_primitives_result && !optional_result,
-          info: mandatory_ms_primitives_result && optional_result
-        ),
-        ms_elements_populated_message(resource, info_to_print)
-      )
-
-      assert mandatory_ms_primitives_result,
-             'Some of the mandatory Must Support elements are not populated. See the list of populated primitives in messages tab.'
     end
   end
 end
