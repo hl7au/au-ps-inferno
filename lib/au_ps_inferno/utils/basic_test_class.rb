@@ -6,6 +6,7 @@ require_relative 'composition_utils'
 require_relative 'validator_helpers'
 require_relative 'section_test_module'
 require_relative 'section_names_mapping'
+require_relative 'basic_test_contants_module'
 
 module AUPSTestKit
   # A base class for all tests to decrease code duplication
@@ -14,45 +15,7 @@ module AUPSTestKit
     include ValidatorHelpers
     include SectionTestModule
     include SectionNamesMapping
-
-    SUBJECT_MANDATORY_MS_PRIMITIVES = %w[identifier name gender birthDate].freeze
-    SUBJECT_OPTIONAL_MS_PRIMITIVES = %w[telecom address communication generalPractitioner].freeze
-    SUBJECT_OPTIONAL_MS_SLICES = %w[indigenousStatus genderIdentity individualPronouns].freeze
-
-    # AU PS Patient Must Support sub-elements: validate when parent (name, telecom, communication) is populated.
-    # communication.language is mandatory when communication is present; all others optional.
-    PATIENT_MS_SUBELEMENT_GROUPS = [
-      { parent: 'name', mandatory: [], optional: %w[name.use name.text name.family name.given] },
-      { parent: 'telecom', mandatory: [], optional: %w[telecom.system telecom.value telecom.use] },
-      { parent: 'communication', mandatory: ['communication.language'], optional: ['communication.preferred'] }
-    ].freeze
-
-    # AU PS Patient Must Support identifier slices (optional). System URLs for IHI, DVA, Medicare.
-    PATIENT_MS_IDENTIFIER_SLICES = [
-      { name: 'IHI', system: 'http://ns.electronichealth.net.au/id/hi/ihi/1.0' },
-      { name: 'DVA', system: 'http://ns.electronichealth.net.au/id/dva' },
-      { name: 'MEDICARE', system: 'http://ns.electronichealth.net.au/id/medicare-number' }
-    ].freeze
-    ORGANIZATION_MS_IDENTIFIER_SLICES = [
-      { name: 'ABN', system: 'http://hl7.org.au/id/abn' },
-      { name: 'HPIO', system: 'http://ns.electronichealth.net.au/id/hi/hpio/1.0' }
-    ].freeze
-    PRACTITIONER_ROLE_MS_IDENTIFIER_SLICES = [
-      { name: 'MEDICARE PROVIDER', system: 'http://ns.electronichealth.net.au/id/medicare-provider-number' }
-    ].freeze
-    PRACTITIONER_MS_IDENTIFIER_SLICES = [
-      { name: 'HPII', system: 'http://ns.electronichealth.net.au/id/hi/hpii/1.0' }
-    ].freeze
-
-    # Author resource type -> Must Support identifier slices (empty for Device, RelatedPerson).
-    AUTHOR_MS_IDENTIFIER_SLICES_BY_TYPE = {
-      'Practitioner' => PRACTITIONER_MS_IDENTIFIER_SLICES,
-      'PractitionerRole' => PRACTITIONER_ROLE_MS_IDENTIFIER_SLICES,
-      'Patient' => PATIENT_MS_IDENTIFIER_SLICES,
-      'Organization' => ORGANIZATION_MS_IDENTIFIER_SLICES,
-      'RelatedPerson' => [],
-      'Device' => []
-    }.freeze
+    include BasicTestConstants
 
     def check_other_sections(all_sections_data_codes, sections_codes_mapping)
       check_bundle_exists_in_scratch
@@ -933,20 +896,18 @@ module AUPSTestKit
       mandatory_populated = mandatory.all? { |path| resolve_path(resource, path).first.present? }
       optional_populated = optional.all? { |path| resolve_path(resource, path).first.present? }
 
-      message_type = if !mandatory_populated
-                       'error'
-                     elsif !optional_populated
-                       'warning'
-                     else
-                       'info'
-                     end
-
       list_lines = expressions.map do |expr|
         populated = resolve_path(resource, expr).first.present?
         "#{boolean_to_existent_string(populated)}: **#{expr}**"
       end
-      add_message(message_type,
-                  ms_elements_populated_message(resource, list_lines))
+      add_message(
+        calculate_message_level(
+          failed: !mandatory_populated,
+          warning: mandatory_populated && !optional_populated,
+          info: mandatory_populated && optional_populated
+        ),
+        ms_elements_populated_message(resource, list_lines)
+      )
 
       assert mandatory_populated,
              'When mandatory Must Support element is missing (e.g. name). See the list in messages tab.'
@@ -1371,6 +1332,12 @@ module AUPSTestKit
       validate_attester_party_ms_identifier_slices(resource, slices, rtype_str, profile_str)
     end
 
+    def get_extension_url_by_slice_name(resource_type, slice_name)
+      return nil if resource_type.blank? || slice_name.blank?
+
+      SLICE_EXTENSIONS_BY_RESOURCE_TYPE[resource_type][slice_name]
+    end
+
     def test_subject_ms_elements
       optional_ms_slices_messages = []
 
@@ -1380,14 +1347,7 @@ module AUPSTestKit
       mandatory_ms_primitives_result = all_paths_are_populated?(resource, SUBJECT_MANDATORY_MS_PRIMITIVES)
       optional_ms_primitives_result = all_paths_are_populated?(resource, SUBJECT_OPTIONAL_MS_PRIMITIVES)
       optional_ms_slices_result = SUBJECT_OPTIONAL_MS_SLICES.map do |slice|
-        extension_url = case slice
-                        when 'indigenousStatus'
-                          'http://hl7.org.au/fhir/StructureDefinition/indigenous-status'
-                        when 'genderIdentity'
-                          'http://hl7.org/fhir/StructureDefinition/individual-genderIdentity'
-                        when 'individualPronouns'
-                          'http://hl7.org/fhir/StructureDefinition/individual-pronouns'
-                        end
+        extension_url = get_extension_url_by_slice_name(resource_type(resource), slice)
 
         result = get_extension_value_by_url(resource, extension_url).present?
         optional_ms_slices_messages << "#{boolean_to_existent_string(result)}: **#{slice}**"
