@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative 'basic_test_contants_module'
+require_relative '../basic_test_contants_module'
 
 module AUPSTestKit
   # Inferno tests for Composition.author Must Support.

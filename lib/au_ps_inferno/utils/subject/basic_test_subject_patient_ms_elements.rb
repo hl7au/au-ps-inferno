@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative 'basic_test_contants_module'
+require_relative '../basic_test_contants_module'
 
 module AUPSTestKit
   # Patient (subject) Must Support primitives and optional extension slices.

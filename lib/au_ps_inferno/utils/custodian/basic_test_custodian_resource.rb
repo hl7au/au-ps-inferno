@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative 'bundle_decorator'
+require_relative '../bundle_decorator'
 
 module AUPSTestKit
   # Resolves Composition.custodian reference from the scratch bundle.

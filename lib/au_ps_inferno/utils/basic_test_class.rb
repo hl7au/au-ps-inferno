@@ -7,10 +7,10 @@ require_relative 'validator_helpers'
 require_relative 'section_test_module'
 require_relative 'section_names_mapping'
 require_relative 'basic_test_contants_module'
-require_relative 'basic_test_attester_module'
-require_relative 'basic_test_subject_module'
-require_relative 'basic_test_author_module'
-require_relative 'basic_test_custodian_module'
+require_relative 'attester/basic_test_attester_module'
+require_relative 'subject/basic_test_subject_module'
+require_relative 'author/basic_test_author_module'
+require_relative 'custodian/basic_test_custodian_module'
 
 module AUPSTestKit
   # A base class for all tests to decrease code duplication
