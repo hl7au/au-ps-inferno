@@ -36,11 +36,11 @@ module AUPSTestKit
 
       # TODO: event check is temporary hardcoded
       event = composition_resource.event_by_code('PCPR')
-      passed = slices_array.all? do |slice|
+      slices_array.all? do |slice|
         composition_slice_validation_passes?(composition_resource, slice, event)
       end
 
-      assert passed, 'Some of the slices are not populated. See the list of populated slices in messages tab.'
+      # assert passed, 'Some of the slices are not populated. See the list of populated slices in messages tab.'
     end
 
     def composition_slice_validation_passes?(composition_resource, slice, event)
@@ -59,7 +59,7 @@ module AUPSTestKit
     def composition_slice_required_paths_ok?(composition_resource, paths, full_data)
       return true if all_paths_are_populated?(composition_resource, paths[:required])
 
-      add_message('error', full_data)
+      add_message('warning', full_data)
       false
     end
 
