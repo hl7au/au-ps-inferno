@@ -15,6 +15,10 @@ module AUPSTestKit
     include SectionTestModule
     include SectionNamesMapping
 
+    SUBJECT_MANDATORY_MS_PRIMITIVES = %w[identifier name gender birthDate].freeze
+    SUBJECT_OPTIONAL_MS_PRIMITIVES = %w[telecom address communication generalPractitioner].freeze
+    SUBJECT_OPTIONAL_MS_SLICES = %w[indigenousStatus genderIdentity individualPronouns].freeze
+
     # AU PS Patient Must Support sub-elements: validate when parent (name, telecom, communication) is populated.
     # communication.language is mandatory when communication is present; all others optional.
     PATIENT_MS_SUBELEMENT_GROUPS = [
@@ -1365,17 +1369,14 @@ module AUPSTestKit
     end
 
     def test_subject_ms_elements
-      mandatory_ms_primitives = %w[identifier name gender birthDate]
-      optional_ms_primitives = %w[telecom address communication generalPractitioner]
-      optional_ms_slices = %w[indigenousStatus genderIdentity individualPronouns]
       optional_ms_slices_messages = []
 
       resource = subject_resource
       skip_if resource.blank?, 'No subject (Patient) resource to validate for Must Support elements'
 
-      mandatory_ms_primitives_result = all_paths_are_populated?(resource, mandatory_ms_primitives)
-      optional_ms_primitives_result = all_paths_are_populated?(resource, optional_ms_primitives)
-      optional_ms_slices_result = optional_ms_slices.map do |slice|
+      mandatory_ms_primitives_result = all_paths_are_populated?(resource, SUBJECT_MANDATORY_MS_PRIMITIVES)
+      optional_ms_primitives_result = all_paths_are_populated?(resource, SUBJECT_OPTIONAL_MS_PRIMITIVES)
+      optional_ms_slices_result = SUBJECT_OPTIONAL_MS_SLICES.map do |slice|
         extension_url = case slice
                         when 'indigenousStatus'
                           'http://hl7.org.au/fhir/StructureDefinition/indigenous-status'
@@ -1392,10 +1393,10 @@ module AUPSTestKit
       optional_result = optional_ms_primitives_result && optional_ms_slices_result
 
       info_to_print = populated_paths_info_raw(resource,
-                                               mandatory_ms_primitives + optional_ms_primitives) + optional_ms_slices_messages
+                                               SUBJECT_MANDATORY_MS_PRIMITIVES + SUBJECT_OPTIONAL_MS_PRIMITIVES) + optional_ms_slices_messages
       info_to_print = info_to_print.map do |info|
         element = info.split(':').last.strip.gsub('**', '')
-        if mandatory_ms_primitives.include?(element)
+        if SUBJECT_MANDATORY_MS_PRIMITIVES.include?(element)
           info + ' (Mandatory)'
         else
           info
