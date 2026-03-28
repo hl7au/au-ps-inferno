@@ -935,17 +935,12 @@ module AUPSTestKit
                        'info'
                      end
 
-      rtype_str = resource.respond_to?(:resourceType) ? resource.resourceType : resource['resourceType']
-      profiles = resource_profiles(resource)
-      profile_str = profiles.is_a?(Array) ? profiles.join(', ') : profiles.to_s
-      custodian_header = "**Referenced custodian**: #{rtype_str}#{" — #{profile_str}" if profile_str.present?}"
-
       list_lines = expressions.map do |expr|
         populated = resolve_path(resource, expr).first.present?
         "#{boolean_to_existent_string(populated)}: **#{expr}**"
       end
       add_message(message_type,
-                  "Must Support elements correctly populated\n\n#{custodian_header}\n\n## List of Must Support elements populated or missing\n\n#{list_lines.join("\n\n")}")
+                  ms_elements_populated_message(resource, list_lines))
 
       assert mandatory_populated,
              'When mandatory Must Support element is missing (e.g. name). See the list in messages tab.'
@@ -1139,21 +1134,39 @@ module AUPSTestKit
                        'info'
                      end
 
-      resource_type_str = resource.respond_to?(:resourceType) ? resource.resourceType : resource['resourceType']
-      profiles = resource_profiles(resource)
-      profile_str = profiles.is_a?(Array) ? profiles.join(', ') : profiles.to_s
-
       list_lines = expressions.map do |expr|
         populated = resolve_path(resource, expr).first.present?
         "#{boolean_to_existent_string(populated)}: **#{expr}**"
       end
 
       add_message(message_type,
-                  "Must Support elements correctly populated\n\n**Referenced author**: #{resource_type_str}#{if profile_str.present?
-                                                                                                               " — #{profile_str}"
-                                                                                                             end}\n\n## List of Must Support elements (complex) populated or missing\n\n#{list_lines.join("\n\n")}")
+                  ms_elements_populated_message(resource, list_lines))
 
       assert mandatory_populated, 'When any mandatory Must Support element is missing. See the list in messages tab.'
+    end
+
+    def ms_elements_populated_message(resource, list_lines)
+      "#{ms_elements_populated_title}#{prepare_resource_type_and_profile_str(resource, 'author')}#{populated_elements_list(list_lines)}"
+    end
+
+    def ms_elements_populated_title
+      'Must Support elements correctly populated'
+    end
+
+    def prepare_resource_type_and_profile_str(resource, human_readable_name)
+      resource_type_str = resource.respond_to?(:resourceType) ? resource.resourceType : resource['resourceType']
+      profiles = resource_profiles(resource)
+      profile_str = (profiles.is_a?(Array) && profiles.length > 0) ? profiles.join(', ') : nil
+
+      result = [resource_type_str, profile_str].compact.join(' — ')
+
+      "\n\n**Referenced #{human_readable_name}**: #{result}"
+    end
+
+    def populated_elements_list(list_lines)
+      return '' if list_lines.blank?
+
+      "\n\n## List of Must Support elements (complex) populated or missing\n\n#{list_lines.join("\n\n")}"
     end
 
     def get_extension_value_by_url(resouce, url)
@@ -1394,7 +1407,7 @@ module AUPSTestKit
           warning: mandatory_ms_primitives_result && !optional_result,
           info: mandatory_ms_primitives_result && optional_result
         ),
-        info_to_print.join("\n\n")
+        ms_elements_populated_message(resource, info_to_print),
       )
 
       assert mandatory_ms_primitives_result,
