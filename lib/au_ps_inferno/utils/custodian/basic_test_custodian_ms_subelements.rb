@@ -21,7 +21,7 @@ module AUPSTestKit
     def validate_custodian_ms_subelements_for_group(resource, group, custodian_header)
       parent_path = group[:parent]
       sub_elements = custodian_group_sub_elements(group)
-      unless resolve_path(resource, parent_path).first.present?
+      unless resolve_path_with_dar(resource, parent_path).first.present?
         msg = custodian_subelement_parent_missing_message(custodian_header, parent_path, sub_elements)
         add_message('warning', msg)
         return
@@ -35,7 +35,7 @@ module AUPSTestKit
     end
 
     def custodian_add_subelement_populated_message(resource, custodian_header, parent_path, sub_elements)
-      all_populated = sub_elements.all? { |expr| resolve_path(resource, expr).first.present? }
+      all_populated = sub_elements.all? { |expr| resolve_path_with_dar(resource, expr).first.present? }
       level = all_populated ? 'info' : 'warning'
       list_lines = custodian_subelement_list_lines(resource, sub_elements)
       body = custodian_subelement_populated_message(custodian_header, parent_path, list_lines)
@@ -50,7 +50,7 @@ module AUPSTestKit
 
     def custodian_subelement_list_lines(resource, sub_elements)
       sub_elements.map do |expr|
-        populated = resolve_path(resource, expr).first.present?
+        populated = resolve_path_with_dar(resource, expr).first.present?
         "#{boolean_to_existent_string(populated)}: **#{expr}**"
       end
     end

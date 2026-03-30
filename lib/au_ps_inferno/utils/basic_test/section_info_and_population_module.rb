@@ -56,7 +56,7 @@ module AUPSTestKit
 
       title = "### #{section_config[:short]}(#{section_config[:code]})"
       element_lines = section_config[:ms_elements].map do |element|
-        present = resolve_path(section_resource, element[:expression]).first.present?
+        present = resolve_path_with_dar(section_resource, element[:expression]).first.present?
         "**#{element[:expression]}**: #{boolean_to_existent_string(present)}"
       end
       [title, *element_lines]
@@ -73,7 +73,7 @@ module AUPSTestKit
         return false unless section.present?
 
         mandatory_ms_elements.map do |element|
-          resolve_path(section, element[:expression]).first.present?
+          resolve_path_with_dar(section, element[:expression]).first.present?
         end.all?
       end
     end

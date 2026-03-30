@@ -62,7 +62,7 @@ module AUPSTestKit
     def section_ms_elements_message(section, elements_array)
       title = "### #{section.code_display_str}"
       elements_list = elements_array.map do |element|
-        "**#{element}**: #{boolean_to_existent_string(resolve_path(section, element).first.present?)}"
+        "**#{element}**: #{boolean_to_existent_string(resolve_path_with_dar(section, element).first.present?)}"
       end.join("\n\n")
       [title, 'List of Must Support elements populated or missing:', elements_list].join("\n\n")
     end

@@ -29,7 +29,7 @@ module AUPSTestKit
 
     def process_attester_party_subelement_group(resource, group, header)
       parent_path, mandatory, sub_elements = attester_party_subelement_group_fields(group)
-      unless resolve_path(resource, parent_path).first.present?
+      unless resolve_path_with_dar(resource, parent_path).first.present?
         warn_attester_party_subelement_parent_missing(header, parent_path, sub_elements)
         return
       end
@@ -73,7 +73,7 @@ module AUPSTestKit
 
     def attester_party_subelement_message_types(resource, sub_elements, mandatory)
       sub_elements.map do |sub_element|
-        present = resolve_path(resource, sub_element).first.present?
+        present = resolve_path_with_dar(resource, sub_element).first.present?
         next 'info' if present
 
         mandatory.include?(sub_element) ? 'error' : 'warning'
@@ -102,9 +102,9 @@ module AUPSTestKit
 
     def attester_party_mandatory_subelements_ok?(resource, parent_groups)
       parent_groups.all? do |g|
-        next true unless resolve_path(resource, g[:parent]).first.present?
+        next true unless resolve_path_with_dar(resource, g[:parent]).first.present?
 
-        (g[:mandatory] || []).all? { |el| resolve_path(resource, el).first.present? }
+        (g[:mandatory] || []).all? { |el| resolve_path_with_dar(resource, el).first.present? }
       end
     end
 

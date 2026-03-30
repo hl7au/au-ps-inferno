@@ -41,20 +41,20 @@ module AUPSTestKit
 
     def composition_any_subelement_parent_populated?(composition_resource, grouped_elements)
       grouped_elements.any? do |parent_path, _|
-        resolve_path(composition_resource, parent_path).first.present?
+        resolve_path_with_dar(composition_resource, parent_path).first.present?
       end
     end
 
     def composition_mandatory_subelements_ok?(composition_resource, grouped_elements, mandatory_ms)
       grouped_elements.all? do |parent_path, sub_elements|
-        next true unless resolve_path(composition_resource, parent_path).first.present?
+        next true unless resolve_path_with_dar(composition_resource, parent_path).first.present?
 
-        (mandatory_ms & sub_elements).all? { |el| resolve_path(composition_resource, el).first.present? }
+        (mandatory_ms & sub_elements).all? { |el| resolve_path_with_dar(composition_resource, el).first.present? }
       end
     end
 
     def add_composition_subelements_messages(composition_resource, parent_path, sub_elements, mandatory_ms)
-      unless resolve_path(composition_resource, parent_path).first.present?
+      unless resolve_path_with_dar(composition_resource, parent_path).first.present?
         add_message('warning', composition_subelement_parent_unpopulated_message(parent_path, sub_elements))
         return
       end
@@ -71,7 +71,7 @@ module AUPSTestKit
 
     def composition_subelements_worst_level(composition_resource, sub_elements, mandatory_ms)
       levels = sub_elements.map do |sub_element|
-        present = resolve_path(composition_resource, sub_element).first.present?
+        present = resolve_path_with_dar(composition_resource, sub_element).first.present?
         next 'info' if present
 
         mandatory_ms.include?(sub_element) ? 'error' : 'warning'
@@ -94,7 +94,7 @@ module AUPSTestKit
     def validate_populated_sub_elements_when_parent_populated(resource, parent_groups)
       return false unless resource.present?
 
-      any_parent = parent_groups.any? { |group| resolve_path(resource, group[:parent]).first.present? }
+      any_parent = parent_groups.any? { |group| resolve_path_with_dar(resource, group[:parent]).first.present? }
       parent_groups.each { |group| add_parent_group_subelement_message(resource, group) }
 
       skip_if !any_parent, 'No complex element with Must Support sub-elements is populated'
@@ -104,7 +104,7 @@ module AUPSTestKit
     end
 
     def add_parent_group_subelement_message(resource, group)
-      return unless resolve_path(resource, group[:parent]).first.present?
+      return unless resolve_path_with_dar(resource, group[:parent]).first.present?
 
       mandatory = group[:mandatory] || []
       optional = group[:optional] || []
@@ -115,15 +115,15 @@ module AUPSTestKit
 
     def parent_groups_mandatory_subelements_ok?(resource, parent_groups)
       parent_groups.all? do |group|
-        next true unless resolve_path(resource, group[:parent]).first.present?
+        next true unless resolve_path_with_dar(resource, group[:parent]).first.present?
 
-        (group[:mandatory] || []).all? { |el| resolve_path(resource, el).first.present? }
+        (group[:mandatory] || []).all? { |el| resolve_path_with_dar(resource, el).first.present? }
       end
     end
 
     def parent_group_subelement_message_type(resource, sub_elements, mandatory)
       types = sub_elements.map do |sub_element|
-        present = resolve_path(resource, sub_element).first.present?
+        present = resolve_path_with_dar(resource, sub_element).first.present?
         next 'info' if present
 
         mandatory.include?(sub_element) ? 'error' : 'warning'

@@ -23,14 +23,14 @@ module AUPSTestKit
 
     def author_ms_list_lines(resource, expressions)
       expressions.map do |expr|
-        populated = resolve_path(resource, expr).first.present?
+        populated = resolve_path_with_dar(resource, expr).first.present?
         "#{boolean_to_existent_string(populated)}: **#{expr}**"
       end
     end
 
     def author_add_author_ms_elements_messages(resource, expressions, mandatory, optional)
-      mandatory_populated = mandatory.all? { |path| resolve_path(resource, path).first.present? }
-      optional_populated = optional.all? { |path| resolve_path(resource, path).first.present? }
+      mandatory_populated = mandatory.all? { |path| resolve_path_with_dar(resource, path).first.present? }
+      optional_populated = optional.all? { |path| resolve_path_with_dar(resource, path).first.present? }
       add_message(author_ms_elements_message_type(mandatory_populated, optional_populated),
                   ms_elements_populated_message(resource, author_ms_list_lines(resource, expressions)))
       mandatory_populated

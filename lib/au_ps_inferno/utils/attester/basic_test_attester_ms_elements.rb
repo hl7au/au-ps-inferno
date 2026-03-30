@@ -56,8 +56,8 @@ module AUPSTestKit
     end
 
     def attester_party_ms_paths_populated_pair(resource, mandatory, optional)
-      mandatory_populated = mandatory.all? { |path| resolve_path(resource, path).first.present? }
-      optional_populated = optional.all? { |path| resolve_path(resource, path).first.present? }
+      mandatory_populated = mandatory.all? { |path| resolve_path_with_dar(resource, path).first.present? }
+      optional_populated = optional.all? { |path| resolve_path_with_dar(resource, path).first.present? }
       [mandatory_populated, optional_populated]
     end
 

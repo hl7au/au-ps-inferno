@@ -17,9 +17,9 @@ module SectionTestModule
   end
 
   def entry_resources_info
-    group_section_output(resolve_path(scratch_bundle, 'entry.resource').map do |resource|
-      resource_type = resolve_path(resource, 'resourceType').first
-      profiles = resolve_path(resource, 'meta.profile').sort
+    group_section_output(resolve_path_with_dar(scratch_bundle, 'entry.resource').map do |resource|
+      resource_type = resolve_path_with_dar(resource, 'resourceType').first
+      profiles = resolve_path_with_dar(resource, 'meta.profile').sort
       profiles.empty? ? resource_type : "#{resource_type} (#{profiles.join(', ')})"
     end).join("\n\n")
   end

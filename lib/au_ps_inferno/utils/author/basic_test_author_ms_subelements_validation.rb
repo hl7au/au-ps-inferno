@@ -15,9 +15,9 @@ module AUPSTestKit
 
     def assert_author_ms_subelements_mandatory_ok(resource, parent_groups)
       mandatory_ok = parent_groups.all? do |group|
-        next true unless resolve_path(resource, group[:parent]).first.present?
+        next true unless resolve_path_with_dar(resource, group[:parent]).first.present?
 
-        (group[:mandatory] || []).all? { |el| resolve_path(resource, el).first.present? }
+        (group[:mandatory] || []).all? { |el| resolve_path_with_dar(resource, el).first.present? }
       end
       assert mandatory_ok,
              'When parent exists and any mandatory Must Support sub-element is missing. See the list in messages tab.'
@@ -27,7 +27,7 @@ module AUPSTestKit
       parent_path = group[:parent]
       mandatory = group[:mandatory] || []
       sub_elements = mandatory + (group[:optional] || [])
-      unless resolve_path(resource, parent_path).first.present?
+      unless resolve_path_with_dar(resource, parent_path).first.present?
         add_message('warning', author_subelement_parent_missing_message(author_header, parent_path, sub_elements))
         return
       end
@@ -44,7 +44,7 @@ module AUPSTestKit
 
     def author_subelement_group_message_level(resource, sub_elements, mandatory)
       types = sub_elements.map do |sub_element|
-        present = resolve_path(resource, sub_element).first.present?
+        present = resolve_path_with_dar(resource, sub_element).first.present?
         next 'info' if present
 
         mandatory.include?(sub_element) ? 'error' : 'warning'
@@ -57,7 +57,7 @@ module AUPSTestKit
     def author_subelement_populated_message(author_header, parent_path, resource, sub_elements)
       heading = "## Complex element **#{parent_path}** — Must Support sub-elements populated or missing"
       lines = sub_elements.map do |expr|
-        populated = resolve_path(resource, expr).first.present?
+        populated = resolve_path_with_dar(resource, expr).first.present?
         "#{boolean_to_existent_string(populated)}: **#{expr}**"
       end
       ['Must Support sub-elements correctly populated', author_header, heading, lines.join("\n\n")].join("\n\n")

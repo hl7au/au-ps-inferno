@@ -75,7 +75,7 @@ module CompositionUtilsMsElements
 
   def all_elements_passed?(elements)
     elements.map do |element|
-      resolve_path(composition_resource, element[:expression]).first.present?
+      resolve_path_with_dar(composition_resource, element[:expression]).first.present?
     end.all?
   end
 

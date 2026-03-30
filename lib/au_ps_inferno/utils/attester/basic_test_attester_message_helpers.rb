@@ -11,7 +11,7 @@ module AUPSTestKit
 
     def attester_party_ms_element_list_lines(resource, expressions)
       expressions.map do |expr|
-        populated = resolve_path(resource, expr).first.present?
+        populated = resolve_path_with_dar(resource, expr).first.present?
         "#{boolean_to_existent_string(populated)}: **#{expr}**"
       end
     end

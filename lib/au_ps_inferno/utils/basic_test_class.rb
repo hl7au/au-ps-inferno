@@ -20,6 +20,7 @@ require_relative 'basic_test/composition_subelements_module'
 require_relative 'basic_test/ms_identifier_slices_module'
 require_relative 'basic_test/composition_elements_and_slices_module'
 require_relative 'basic_test/section_bundle_validation_module'
+require_relative 'basic_test/resolve_path_debug_module'
 
 module AUPSTestKit
   # A base class for all tests to decrease code duplication.
@@ -44,5 +45,6 @@ module AUPSTestKit
     include BasicTestMsIdentifierSlicesModule
     include BasicTestCompositionElementsAndSlicesModule
     include BasicTestSectionBundleValidationModule
+    include BasicTestResolvePathDebugModule
   end
 end
