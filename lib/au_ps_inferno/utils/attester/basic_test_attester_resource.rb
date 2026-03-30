@@ -8,7 +8,10 @@ module AUPSTestKit
     def attester_party_resource
       return nil unless scratch_bundle.present?
 
-      attester_party_resource_from_bundle(BundleDecorator.new(scratch_bundle.to_hash))
+      ref_str = attester_party_ref_from_bundle(BundleDecorator.new(scratch_bundle.to_hash))
+      return nil if ref_str.blank?
+
+      bundle_entity_resource_from_scratch(ref_str)
     end
 
     def composition_attester_metadata
@@ -39,7 +42,7 @@ module AUPSTestKit
       party_ref.respond_to?(:reference) ? party_ref.reference : party_ref['reference']
     end
 
-    def attester_party_resource_from_bundle(bundle_resource)
+    def attester_party_ref_from_bundle(bundle_resource)
       composition_resource = bundle_resource.composition_resource
       return nil unless composition_resource.present?
 
@@ -52,7 +55,7 @@ module AUPSTestKit
       ref_str = attester_party_reference_from_attester(attester_with_party)
       return nil if ref_str.blank?
 
-      bundle_resource.resource_by_reference(ref_str)
+      ref_str
     end
   end
 end

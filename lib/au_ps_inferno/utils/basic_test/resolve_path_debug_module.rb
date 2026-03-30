@@ -7,13 +7,6 @@ module AUPSTestKit
     DAR_EXTENSION_URL = 'http://hl7.org/fhir/StructureDefinition/data-absent-reason'
 
     def resolve_path_with_dar(resource, path)
-      if path == 'birthDate'
-        info 'START'
-        info "Scratch Bundle is: #{scratch_bundle.inspect}"
-        info "Resource is: #{resource.inspect}"
-        info "Path is: #{path}"
-        info 'END'
-      end
       result = eval_expression(resource, path)
       return result if result.length.positive?
 

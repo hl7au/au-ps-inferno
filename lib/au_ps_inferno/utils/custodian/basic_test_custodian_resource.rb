@@ -18,7 +18,7 @@ module AUPSTestKit
       ref_str = custodian_ref.respond_to?(:reference) ? custodian_ref.reference : custodian_ref['reference']
       return nil if ref_str.blank?
 
-      bundle_resource.resource_by_reference(ref_str)
+      bundle_entity_resource_from_scratch(ref_str)
     end
 
     private

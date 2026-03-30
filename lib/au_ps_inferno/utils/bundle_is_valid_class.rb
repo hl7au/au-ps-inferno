@@ -19,6 +19,7 @@ module AUPSTestKit
       info 'Validate provided Bundle resource'
       resource = FHIR.from_contents(bundle_resource)
       scratch[:bundle_ips_resource] = resource
+      save_bundle_entities_to_scratch(scratch_bundle)
       info "Bundle resource saved to scratch: #{scratch_bundle}"
     end
 

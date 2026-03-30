@@ -18,7 +18,7 @@ module AUPSTestKit
       ref_str = author_ref.respond_to?(:reference) ? author_ref.reference : author_ref['reference']
       return nil if ref_str.blank?
 
-      bundle_resource.resource_by_reference(ref_str)
+      bundle_entity_resource_from_scratch(ref_str)
     end
 
     private

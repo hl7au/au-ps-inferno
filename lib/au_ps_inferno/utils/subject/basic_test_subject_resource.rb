@@ -15,7 +15,7 @@ module AUPSTestKit
       subject = composition_resource.subject
       return false unless subject.present?
 
-      bundle_resource.resource_by_reference(subject.reference)
+      bundle_entity_resource_from_scratch(subject.reference)
     end
   end
 end

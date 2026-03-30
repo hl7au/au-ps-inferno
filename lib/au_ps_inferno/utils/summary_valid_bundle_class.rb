@@ -70,6 +70,7 @@ module AUPSTestKit
       assert_resource_type(:bundle)
       resource_from_request = FHIR.from_contents(response.response_body)
       scratch[:bundle_ips_resource] = resource_from_request
+      save_bundle_entities_to_scratch(scratch_bundle)
       info "Bundle resource saved to scratch: #{scratch_bundle}"
     end
 
