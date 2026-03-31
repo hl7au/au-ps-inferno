@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative '../../../utils/basic_test_class'
+require_relative '../../../utils/metadata_manager'
 <% imports.each do |import| %>
 require_relative '<%= import %>'
 <% end %>
@@ -14,6 +15,9 @@ module AUPSTestKit
     <% if optional %>
     optional
     <% end %>
+    def metadata_manager
+      @metadata_manager ||= MetadataManager.new(File.expand_path('../../../1.0.0-ballot/metadata.yaml', __dir__))
+    end
     <% if !ignore_commands %>
     run do
       <% commands.each do |command| %>
