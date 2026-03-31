@@ -25,19 +25,23 @@ module AUPSTestKit
 
     def read_composition_section_present_row_error?(section_data, section)
       bundle_resource = BundleDecorator.new(scratch_bundle.to_hash)
-      expected_urls = expected_profile_urls_from_section_entries(section_data)
+      expected_constraints = expected_entry_constraints_from_section_entries(section_data)
       refs = section.entry_references
-      all_match = section_entries_match_expected_profiles?(bundle_resource, refs, expected_urls)
+      mismatches = section_entries_mismatch_flags(bundle_resource, refs, expected_constraints)
       body = section_entry_list_or_empty_reason(section_data, section, nil)
-      flags = composition_section_row_flags(section, refs, all_match)
+      flags = composition_section_row_flags(section, refs, mismatches)
       read_composition_section_list_outcome?(section_data, body, flags)
     end
 
-    def composition_section_row_flags(section, refs, all_match)
+    def composition_section_row_flags(section, refs, mismatches)
+      has_entries = refs.any?
+      all_match = has_entries && !mismatches[:any_type_mismatch] && !mismatches[:any_profile_mismatch]
+
       {
-        any_wrong: refs.any? && !all_match,
+        any_type_wrong: has_entries && mismatches[:any_type_mismatch],
+        any_profile_wrong: has_entries && !mismatches[:any_type_mismatch] && mismatches[:any_profile_mismatch],
         empty_reason: section.empty_reason_str.present?,
-        has_entries: refs.any?,
+        has_entries: has_entries,
         all_match: all_match
       }
     end
@@ -48,20 +52,41 @@ module AUPSTestKit
       true
     end
 
-    def expected_profile_urls_from_section_entries(section_data)
-      section_data[:entries].flat_map do |e|
-        (e[:profiles] || []).map do |p|
-          p.to_s.include?('|') ? p.to_s.split('|').last : p
+    def expected_entry_constraints_from_section_entries(section_data)
+      expected_resource_types = []
+      expected_profile_urls = []
+
+      section_data[:entries].each do |entry|
+        (entry[:profiles] || []).each do |profile_data|
+          resource_type, profile_url = profile_data.to_s.split('|', 2)
+          expected_resource_types << resource_type if resource_type.present?
+          expected_profile_urls << profile_url if profile_url.present?
         end
-      end.uniq
+      end
+
+      {
+        resource_types: expected_resource_types.uniq,
+        profile_urls: expected_profile_urls.uniq
+      }
     end
 
-    def section_entries_match_expected_profiles?(bundle_resource, refs, expected_profile_urls)
-      refs.all? do |ref|
+    def section_entries_mismatch_flags(bundle_resource, refs, expected_constraints)
+      refs.each_with_object({ any_type_mismatch: false, any_profile_mismatch: false }) do |ref, flags|
         resource = bundle_resource.resource_by_reference(ref)
-        next false unless resource.present?
+        unless resource.present?
+          flags[:any_type_mismatch] = true
+          next
+        end
 
-        (resource.meta&.profile || []).any? { |prof| expected_profile_urls.include?(prof) }
+        unless expected_constraints[:resource_types].include?(resource.resourceType)
+          flags[:any_type_mismatch] = true
+          next
+        end
+
+        resource_profiles = resource.meta&.profile || []
+        next if resource_profiles.any? { |profile| expected_constraints[:profile_urls].include?(profile) }
+
+        flags[:any_profile_mismatch] = true
       end
     end
 
@@ -71,7 +96,8 @@ module AUPSTestKit
     end
 
     def composition_section_list_dispatch?(header, body, flags)
-      return composition_section_list_on_error?(header, body) if flags[:any_wrong]
+      return composition_section_list_on_error?(header, body) if flags[:any_type_wrong]
+      return composition_section_list_on_profile_warning?(header, body) if flags[:any_profile_wrong]
       return composition_section_list_on_warning_empty?(header, body) if flags[:empty_reason] && !flags[:has_entries]
       return composition_section_list_on_info_ok?(header, body) if flags[:has_entries] && flags[:all_match]
 
@@ -84,6 +110,11 @@ module AUPSTestKit
     end
 
     def composition_section_list_on_warning_empty?(header, body)
+      add_message('warning', "#{header}\n\n#{body}")
+      false
+    end
+
+    def composition_section_list_on_profile_warning?(header, body)
       add_message('warning', "#{header}\n\n#{body}")
       false
     end
