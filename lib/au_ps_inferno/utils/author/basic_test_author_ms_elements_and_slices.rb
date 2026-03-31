@@ -24,7 +24,10 @@ module AUPSTestKit
     def author_ms_list_lines(resource, expressions)
       expressions.map do |expr|
         populated = resolve_path_with_dar(resource, expr).first.present?
-        "#{boolean_to_existent_string(populated)}: **#{expr}**"
+        mandatory = metadata_manager.get_author_mandatory_elements_by_resource_type(
+          resource_type(resource)
+        ).include?(expr)
+        "#{boolean_to_existent_string(populated)}: **#{expr}**#{mandatory ? ' (Mandatory)' : ' (Optional)'}"
       end
     end
 

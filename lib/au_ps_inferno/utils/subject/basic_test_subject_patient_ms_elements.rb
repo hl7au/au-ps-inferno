@@ -60,10 +60,13 @@ module AUPSTestKit
       raw_lines = populated_paths_info_raw(resource, primitives) + slice_messages
       raw_lines.map do |info|
         element = info.split(':').last.strip.gsub('**', '')
-        if SUBJECT_MANDATORY_MS_PRIMITIVES.include?(element)
+        mandatory = metadata_manager.get_subject_mandatory_elements_by_resource_type(
+          resource_type(resource)
+        ).include?(element)
+        if mandatory
           "#{info} (Mandatory)"
         else
-          info
+          "#{info} (Optional)"
         end
       end
     end
