@@ -2,7 +2,7 @@
 
 module AUPSTestKit
   # Reading composition section rows: profile/entry matching and list outcomes.
-  module BasicTestCompositionSectionReadModule
+  module BasicTestCompositionSectionReadModule # rubocop:disable Metrics/ModuleLength
     private
 
     def read_composition_sections_info(sections_data, normalized_sections_data)
@@ -53,16 +53,8 @@ module AUPSTestKit
     end
 
     def expected_entry_constraints_from_section_entries(section_data)
-      expected_resource_types = []
-      expected_profile_urls = []
-
-      section_data[:entries].each do |entry|
-        (entry[:profiles] || []).each do |profile_data|
-          resource_type, profile_url = profile_data.to_s.split('|', 2)
-          expected_resource_types << resource_type if resource_type.present?
-          expected_profile_urls << profile_url if profile_url.present?
-        end
-      end
+      expected_resource_types, expected_profile_urls =
+        collect_expected_types_and_profiles(section_data[:entries])
 
       {
         resource_types: expected_resource_types.uniq,
@@ -70,24 +62,42 @@ module AUPSTestKit
       }
     end
 
+    def collect_expected_types_and_profiles(entries)
+      entries.each_with_object([[], []]) do |entry, (resource_types, profile_urls)|
+        (entry[:profiles] || []).each do |profile_data|
+          add_type_and_profile(profile_data, resource_types, profile_urls)
+        end
+      end
+    end
+
+    def add_type_and_profile(profile_data, resource_types, profile_urls)
+      resource_type, profile_url = profile_data.to_s.split('|', 2)
+      resource_types << resource_type if resource_type.present?
+      profile_urls << profile_url if profile_url.present?
+    end
+
     def section_entries_mismatch_flags(bundle_resource, refs, expected_constraints)
       refs.each_with_object({ any_type_mismatch: false, any_profile_mismatch: false }) do |ref, flags|
         resource = bundle_resource.resource_by_reference(ref)
-        unless resource.present?
+        if missing_or_wrong_type?(resource, expected_constraints)
           flags[:any_type_mismatch] = true
           next
         end
-
-        unless expected_constraints[:resource_types].include?(resource.resourceType)
-          flags[:any_type_mismatch] = true
-          next
-        end
-
-        resource_profiles = resource.meta&.profile || []
-        next if resource_profiles.any? { |profile| expected_constraints[:profile_urls].include?(profile) }
+        next if resource_has_expected_profile?(resource, expected_constraints)
 
         flags[:any_profile_mismatch] = true
       end
+    end
+
+    def missing_or_wrong_type?(resource, expected_constraints)
+      return true unless resource.present?
+
+      !expected_constraints[:resource_types].include?(resource.resourceType)
+    end
+
+    def resource_has_expected_profile?(resource, expected_constraints)
+      resource_profiles = resource.meta&.profile || []
+      resource_profiles.any? { |profile| expected_constraints[:profile_urls].include?(profile) }
     end
 
     def read_composition_section_list_outcome?(section_data, body, flags)
