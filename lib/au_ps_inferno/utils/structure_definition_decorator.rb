@@ -21,4 +21,8 @@ class StructureDefinitionDecorator < FHIR::StructureDefinition
     result = result.select { |element| element.path.include?(include_str.to_s) } unless include_str.nil?
     result
   end
+
+  def extension_slices
+    snapshot.element.filter { |element| element.id.include?(':') }
+  end
 end

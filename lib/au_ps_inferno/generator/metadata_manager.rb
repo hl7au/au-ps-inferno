@@ -656,8 +656,27 @@ class Generator
       {
         resource_type: sd.type,
         profile: url,
-        elements: get_elements_from_structure_definition_for_author(sd)
+        elements: get_elements_from_structure_definition_for_author(sd),
+        extension_slices: get_extension_slices_from_structure_definition(sd)
       }
+    end
+
+    def get_extension_slices_from_structure_definition(sd)
+      # Return mandatory MS extension slices
+      sd_decorator = StructureDefinitionDecorator.new(sd.to_hash)
+      extension_slices = sd_decorator.extension_slices
+      filtered_extension_slices = extension_slices.filter { |element| element.mustSupport == true }
+      filtered_extension_slices.map do |element|
+        puts "Element: #{element.to_hash}"
+        {
+          id: element.id,
+          expression: element.path.gsub("#{sd_decorator.type}.", ''),
+          label: element.sliceName,
+          min: element.min,
+          max: element.max,
+          profile: element&.type&.first&.profile&.first || ''
+        }
+      end.uniq
     end
 
     def get_elements_from_structure_definition_for_author(sd_data)
