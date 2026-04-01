@@ -102,7 +102,7 @@ class Generator
         subject_ms_subelements_populated: {
           title: 'Must Support sub-element SHALL be populated if a value is known and the parent is populated',
           description: 'Must Support sub-element SHALL be populated if a value is known and the parent is populated',
-          commands: ['test_subject_ms_subelements_when_parent_populated']
+          commands: ['ms_sub_elements_populated_message("subject")']
         },
         subject_ms_identifier_slices: {
           title: 'Must Support identifier slices SHALL be populated if a value is known',
@@ -118,7 +118,7 @@ class Generator
         author_ms_subelements: {
           title: 'Must Support sub-elements SHALL be populated if a value is known',
           description: 'Must Support sub-elements SHALL be populated if a value is known',
-          commands: ['test_composition_author_ms_subelements']
+          commands: ['ms_sub_elements_populated_message("author")']
         },
         author_ms_identifier_slices: {
           title: 'Must Support identifier slices SHALL be populated if a value is known',
@@ -133,7 +133,7 @@ class Generator
         custodian_ms_subelements: {
           title: 'Must Support sub-element SHALL be populated if a value is known',
           description: 'Must Support sub-element SHALL be populated if a value is known',
-          commands: ['test_composition_custodian_ms_subelements']
+          commands: ['ms_sub_elements_populated_message("custodian")']
         },
         custodian_ms_identifier_slices: {
           title: 'Must Support identifier slices SHALL be populated if a value is known',
@@ -148,7 +148,7 @@ class Generator
         attester_party_ms_subelements: {
           title: 'Must Support sub-element SHALL be populated if a value is known',
           description: 'Must Support sub-element SHALL be populated if a value is known',
-          commands: ['test_composition_attester_party_ms_subelements']
+          commands: ['ms_sub_elements_populated_message("attester")']
         },
         attester_party_ms_identifier_slices: {
           title: 'Must Support identifier slices SHALL be populated if a value is known',

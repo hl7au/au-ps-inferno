@@ -17,7 +17,7 @@ module AUPSTestKit
     
     run do
       
-      test_subject_ms_subelements_when_parent_populated
+      ms_sub_elements_populated_message("subject")
       
     end
     
