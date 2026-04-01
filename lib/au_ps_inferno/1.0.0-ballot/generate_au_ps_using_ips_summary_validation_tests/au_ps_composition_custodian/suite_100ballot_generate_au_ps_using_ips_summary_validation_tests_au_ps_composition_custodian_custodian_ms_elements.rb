@@ -17,7 +17,7 @@ module AUPSTestKit
     
     run do
       
-      test_composition_custodian_ms_elements
+      ms_elements_populated_message("custodian")
       
     end
     

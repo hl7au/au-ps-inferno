@@ -17,7 +17,7 @@ module AUPSTestKit
     
     run do
       
-      test_composition_attester_party_ms_elements
+      ms_elements_populated_message("attester")
       
     end
     

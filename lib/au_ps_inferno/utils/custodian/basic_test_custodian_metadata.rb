@@ -13,6 +13,7 @@ module AUPSTestKit
     def custodian_complex_ms_elements(custodian_meta)
       return [] unless custodian_meta.present?
 
+      custodian_meta = normalize_custodian_metadata_item(custodian_meta)
       elements = custodian_meta['elements'] || custodian_meta[:elements] || []
       elements.filter { |elem| custodian_ms_metadata_element_is_complex_flat?(elem) }
     end
@@ -20,12 +21,19 @@ module AUPSTestKit
     def custodian_ms_subelement_parent_groups(custodian_meta)
       return [] unless custodian_meta.present?
 
+      custodian_meta = normalize_custodian_metadata_item(custodian_meta)
       elements = custodian_meta['elements'] || custodian_meta[:elements] || []
       sub_elements = elements.filter { |elem| custodian_ms_metadata_element_is_subelement?(elem) }
       custodian_parent_groups_from_subelements(sub_elements)
     end
 
     private
+
+    def normalize_custodian_metadata_item(custodian_meta)
+      return custodian_meta.first || {} if custodian_meta.is_a?(Array)
+
+      custodian_meta
+    end
 
     def custodian_parent_groups_from_subelements(sub_elements)
       return [] if sub_elements.empty?

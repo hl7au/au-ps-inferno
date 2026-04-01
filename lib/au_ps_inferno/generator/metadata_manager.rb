@@ -45,6 +45,14 @@ class Generator
       'Device|http://hl7.org/fhir/uv/ips/StructureDefinition/Device-uv-ips'
     ].freeze
 
+    CUSTODIAN_PROFILE_REFS = [
+      'Organization|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-organization'
+    ].freeze
+
+    SUBJECT_PROFILE_REFS = [
+      'Patient|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-patient'
+    ].freeze
+
     # Initializes a MetadataManager for the given IG resources.
     #
     # @param ig_resources [Array<FHIR::Model>] Parsed IG resources (e.g. from IGResourcesExtractor#ig_resources)
@@ -618,36 +626,27 @@ class Generator
     end
 
     def build_metadata_for_subject
-      structure_definition_data = get_structure_definition_by_profile('http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-patient')
-      structure_definition_resource = StructureDefinitionDecorator.new(structure_definition_data.to_hash)
-      {
-        entities: {
-          resource_type: 'Patient',
-          profile: 'http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-patient',
-          elements: get_elements_from_structure_definition(structure_definition_resource)
-        }
-      }
+      SUBJECT_PROFILE_REFS.map { |profile| metadata_hash_for_profile_ref(profile) }
     end
 
     def build_metadata_for_custodian
       # Custodian is only AU PS Organization
-      sd = get_structure_definition_by_profile('http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-organization')
-      {
-        resource_type: sd.type,
-        profile: 'http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-organization',
-        elements: get_elements_from_structure_definition_for_author(sd)
-      }
+      build_metadata_for_mapping(CUSTODIAN_PROFILE_REFS)
     end
 
     def build_metadata_for_attester
       # attester.party: AU PS Patient | RelatedPerson | Practitioner | PractitionerRole | Organization (no Device)
-      ATTESTER_PROFILE_REFS.map { |profile| metadata_hash_for_profile_ref(profile) }
+      build_metadata_for_mapping(ATTESTER_PROFILE_REFS)
     end
 
     def build_metadata_for_author
       # AU PS Practitioner, AU PS PractitionerRole, AU PS Patient, AU PS RelatedPerson,
       # AU PS Organization profiles or Device resource
-      AUTHOR_PROFILE_REFS.map { |profile| metadata_hash_for_profile_ref(profile) }
+      build_metadata_for_mapping(AUTHOR_PROFILE_REFS)
+    end
+
+    def build_metadata_for_mapping(profile_refs)
+      profile_refs.map { |profile| metadata_hash_for_profile_ref(profile) }
     end
 
     def metadata_hash_for_profile_ref(profile)
@@ -656,47 +655,42 @@ class Generator
       {
         resource_type: sd.type,
         profile: url,
-        elements: get_elements_from_structure_definition_for_author(sd),
-        extension_slices: get_extension_slices_from_structure_definition(sd)
+        elements: get_elements_from_structure_definition(sd),
+        slices: get_extension_slices_from_structure_definition(sd)
       }
     end
 
-    def get_extension_slices_from_structure_definition(sd)
+    def get_extension_slices_from_structure_definition(sd_data)
       # Return mandatory MS extension slices
-      sd_decorator = StructureDefinitionDecorator.new(sd.to_hash)
+      sd_decorator = StructureDefinitionDecorator.new(sd_data.to_hash)
       extension_slices = sd_decorator.extension_slices
       filtered_extension_slices = extension_slices.filter { |element| element.mustSupport == true }
       filtered_extension_slices.map do |element|
-        puts "Element: #{element.to_hash}"
-        {
-          id: element.id,
-          expression: element.path.gsub("#{sd_decorator.type}.", ''),
-          label: element.sliceName,
-          min: element.min,
-          max: element.max,
-          profile: element&.type&.first&.profile&.first || ''
-        }
+        build_normalized_element_data(element, sd_decorator)
       end.uniq
     end
 
-    def get_elements_from_structure_definition_for_author(sd_data)
+    def build_normalized_element_data(element, sd_decorator)
+      first_element_type = element&.type&.first
+      profile = first_element_type&.profile&.first || ''
+      {
+        id: element.id,
+        expression: element.path.gsub("#{sd_decorator.type}.", ''),
+        label: element.sliceName,
+        min: element.min,
+        max: element.max,
+        profile: profile
+      }
+    end
+
+    def get_elements_from_structure_definition(sd_data)
       structure_definition_data = StructureDefinitionDecorator.new(sd_data.to_hash)
       elements = structure_definition_data.simple_elements(include_str: "#{sd_data.type}.")
-      elements.map do |element|
+      filtered_elements = elements.reject { |element| element.id.include?(':') }
+      filtered_elements.map do |element|
         {
           id: element.id,
           expression: element.path.gsub("#{sd_data.type}.", ''),
-          min: element.min
-        }
-      end.uniq
-    end
-
-    def get_elements_from_structure_definition(structure_definition_data)
-      elements = structure_definition_data.simple_elements(include_str: 'Patient.')
-      elements.map do |element|
-        {
-          id: element.id,
-          expression: element.path.gsub('Patient.', ''),
           min: element.min
         }
       end.uniq

@@ -97,7 +97,7 @@ class Generator
         subject_ms_elements: {
           title: 'Must Support elements SHALL be populated if a value is known',
           description: 'Must Support elements SHALL be populated if a value is known',
-          commands: ['test_subject_ms_elements']
+          commands: ['ms_elements_populated_message("subject")']
         },
         subject_ms_subelements_populated: {
           title: 'Must Support sub-element SHALL be populated if a value is known and the parent is populated',
@@ -113,7 +113,7 @@ class Generator
         author_ms_elements: {
           title: 'Must Support elements SHALL be populated if a value is known',
           description: 'Must Support elements SHALL be populated if a value is known',
-          commands: ['test_composition_author_ms_elements']
+          commands: ['ms_elements_populated_message("author")']
         },
         author_ms_subelements: {
           title: 'Must Support sub-elements SHALL be populated if a value is known',
@@ -128,7 +128,7 @@ class Generator
         custodian_ms_elements: {
           title: 'Must Support element SHALL be populated if a value is known',
           description: 'Must Support element SHALL be populated if a value is known',
-          commands: ['test_composition_custodian_ms_elements']
+          commands: ['ms_elements_populated_message("custodian")']
         },
         custodian_ms_subelements: {
           title: 'Must Support sub-element SHALL be populated if a value is known',
@@ -143,7 +143,7 @@ class Generator
         attester_party_ms_elements: {
           title: 'Must Support elements SHALL be populated if a value is known',
           description: 'Must Support elements SHALL be populated if a value is known',
-          commands: ['test_composition_attester_party_ms_elements']
+          commands: ['ms_elements_populated_message("attester")']
         },
         attester_party_ms_subelements: {
           title: 'Must Support sub-element SHALL be populated if a value is known',

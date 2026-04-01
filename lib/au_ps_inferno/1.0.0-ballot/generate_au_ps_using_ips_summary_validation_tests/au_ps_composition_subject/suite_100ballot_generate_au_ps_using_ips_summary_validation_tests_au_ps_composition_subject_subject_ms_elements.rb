@@ -17,7 +17,7 @@ module AUPSTestKit
     
     run do
       
-      test_subject_ms_elements
+      ms_elements_populated_message("subject")
       
     end
     

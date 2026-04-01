@@ -66,7 +66,7 @@ module AUPSTestKit
         if mandatory
           "#{info} (Mandatory)"
         else
-          "#{info} (Optional)"
+          info
         end
       end
     end
