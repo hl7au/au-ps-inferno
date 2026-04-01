@@ -58,17 +58,17 @@ module AUPSTestKit
     def subject_ms_elements_info_to_print(resource, slice_messages)
       primitives = SUBJECT_MANDATORY_MS_PRIMITIVES + SUBJECT_OPTIONAL_MS_PRIMITIVES
       raw_lines = populated_paths_info_raw(resource, primitives) + slice_messages
-      raw_lines.map do |info|
-        element = info.split(':').last.strip.gsub('**', '')
-        mandatory = metadata_manager.get_subject_mandatory_elements_by_resource_type(
-          resource_type(resource)
-        ).include?(element)
-        if mandatory
-          "#{info} (Mandatory)"
-        else
-          info
-        end
-      end
+      mandatory_elements = subject_mandatory_elements(resource)
+      raw_lines.map { |info| append_mandatory_tag(info, mandatory_elements) }
+    end
+
+    def subject_mandatory_elements(resource)
+      metadata_manager.get_subject_mandatory_elements_by_resource_type(resource_type(resource))
+    end
+
+    def append_mandatory_tag(info, mandatory_elements)
+      element = info.split(':').last.strip.delete('*')
+      mandatory_elements.include?(element) ? "#{info} (Mandatory)" : info
     end
 
     def subject_ms_elements_mandatory_assert_message
