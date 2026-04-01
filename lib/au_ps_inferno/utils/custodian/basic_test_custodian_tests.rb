@@ -7,17 +7,6 @@ module AUPSTestKit
   module BasicTestCustodianTests
     include BasicTestConstants
 
-    def test_composition_custodian_ms_elements
-      resource = composition_custodian_resource_for_ms_tests
-      custodian_meta = composition_custodian_metadata
-      skip_if custodian_meta.blank?, 'No custodian metadata available'
-
-      elements_config = custodian_complex_ms_elements(custodian_meta)
-      skip_if elements_config.blank?, 'No complex Must Support elements defined for custodian'
-
-      validate_custodian_ms_elements(resource, elements_config)
-    end
-
     def test_composition_custodian_ms_subelements
       resource = composition_custodian_resource_for_ms_tests
       custodian_meta = composition_custodian_metadata

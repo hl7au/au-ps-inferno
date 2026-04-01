@@ -4,8 +4,6 @@ module AUPSTestKit
   # Wraps Inferno's FHIRResourceNavigation#resolve_path to check simple elements for DAR extension presence.
   # Ex: birthDate DAR extension is _birthDate.extension.where(url='http://hl7.org/fhir/StructureDefinition/data-absent-reason').valueCode
   module BasicTestResolvePathDebugModule
-    DAR_EXTENSION_URL = 'http://hl7.org/fhir/StructureDefinition/data-absent-reason'
-
     def resolve_path_with_dar(resource, path)
       result = eval_expression(resource, path)
       return result if result.length.positive?
@@ -44,7 +42,6 @@ module AUPSTestKit
       target_identifier = result.find { |item| item.system == profile }
       return nil if target_identifier.nil?
 
-      info "Resolve identifier: #{target_identifier.inspect}"
       target_identifier.value
     end
 
@@ -62,8 +59,6 @@ module AUPSTestKit
       return nil if dar_path.nil?
 
       eval_expression(resource, dar_path)
-      # info resource.source_contents
-      # info scratch_bundle.source_contents
     end
 
     def modify_path_to_check_for_dar(path)

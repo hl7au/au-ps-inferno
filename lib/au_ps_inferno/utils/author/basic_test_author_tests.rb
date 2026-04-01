@@ -7,20 +7,6 @@ module AUPSTestKit
   module BasicTestAuthorTests
     include BasicTestConstants
 
-    def test_composition_author_ms_elements
-      resource = composition_author_resource_for_ms_tests(
-        'Referenced author entry is type of Device; skip Must Support validation'
-      )
-      author_meta = composition_author_metadata
-      skip_if author_meta.blank?, 'No author metadata available'
-
-      resource_type_str = resource_type(resource)
-      complex_elements = author_complex_ms_elements_for_type(author_meta, resource_type_str)
-      skip_if complex_elements.blank?, "No complex Must Support elements defined for author type #{resource_type_str}"
-
-      validate_author_ms_elements(resource, complex_elements)
-    end
-
     def test_composition_author_ms_subelements
       resource = composition_author_resource_for_ms_tests('Referenced author resource type is Device')
       author_meta = composition_author_metadata

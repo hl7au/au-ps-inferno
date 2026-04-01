@@ -14,22 +14,6 @@ module AUPSTestKit
       assert mandatory_populated, 'When any mandatory Must Support element is missing. See the list in messages tab.'
     end
 
-    def test_composition_attester_party_ms_elements
-      check_bundle_exists_in_scratch
-      resource = attester_party_resource
-      skip_if resource.blank?, 'Attester or attester.party is not populated'
-
-      attester_meta = composition_attester_metadata
-      skip_if attester_meta.blank?, 'No attester metadata available'
-
-      resource_type_str = resource_type(resource)
-      elements_config = author_complex_ms_elements_for_type(attester_meta, resource_type_str)
-      skip_if elements_config.blank?,
-              "No complex Must Support elements defined for attester.party type #{resource_type_str}"
-
-      validate_attester_party_ms_elements(resource, elements_config)
-    end
-
     private
 
     def attester_party_split_ms_elements_config(elements_config)

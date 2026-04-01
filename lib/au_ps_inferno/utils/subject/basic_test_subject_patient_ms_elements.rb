@@ -7,14 +7,6 @@ module AUPSTestKit
   module BasicTestSubjectPatientMsElements
     include BasicTestConstants
 
-    def test_subject_ms_elements
-      resource = subject_resource
-      skip_if resource.blank?, 'No subject (Patient) resource to validate for Must Support elements'
-
-      mandatory_ok, optional_ok, info_to_print = subject_ms_elements_evaluation(resource)
-      subject_ms_elements_add_message_and_assert(resource, mandatory_ok, optional_ok, info_to_print)
-    end
-
     private
 
     def subject_ms_elements_evaluation(resource)
