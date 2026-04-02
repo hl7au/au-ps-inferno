@@ -21,15 +21,5 @@ module AUPSTestKit
       rtype_str, profile_str = author_resource_type_and_profiles(resource)
       validate_author_ms_identifier_slices(resource, slices, rtype_str, profile_str)
     end
-
-    private
-
-    def composition_author_resource_for_ms_tests(device_skip_message)
-      check_bundle_exists_in_scratch
-      resource = author_resource
-      skip_if resource.blank?, 'No author reference found on Composition'
-      skip_if resource_type(resource) == 'Device', device_skip_message
-      resource
-    end
   end
 end

@@ -33,10 +33,5 @@ module AUPSTestKit
       operation_defined?(operations, 'http://hl7.org/fhir/uv/ips/OperationDefinition/summary',
                          %w[summary patient-summary], :summary_op_defined)
     end
-
-    def docref_op_defined?
-      operation_defined?(operations, 'http://hl7.org/fhir/uv/ipa/OperationDefinition/docref', %w[docref],
-                         :docref_op_defined)
-    end
   end
 end

@@ -66,25 +66,5 @@ module AUPSTestKit
       end.join("\n\n")
       [title, 'List of Must Support elements populated or missing:', elements_list].join("\n\n")
     end
-
-    def mixed_validate_populated_sections_in_bundle(section_codes_array, elements_array)
-      skip_if scratch_bundle.blank?, 'No Bundle resource provided'
-      skip_if section_codes_array.blank?, 'No sections to validate'
-
-      composition = BundleDecorator.new(scratch_bundle.to_hash).composition_resource
-      has_error = section_codes_array.any? do |section_code|
-        mixed_section_bundle_row_error?(composition, section_code, elements_array)
-      end
-
-      assert !has_error,
-             'Some of the sections are not populated. See the list of populated sections in messages tab.'
-    end
-
-    def mixed_section_bundle_row_error?(composition, section_code, elements_array)
-      section = composition.section_by_code(section_code)
-      return section_bundle_blank_outcome?(section_code, false) if section.blank?
-
-      section_bundle_ms_population_outcome?(section, elements_array)
-    end
   end
 end

@@ -21,13 +21,6 @@ module AUPSTestKit
       resource.respond_to?(:resourceType) ? resource.resourceType : resource['resourceType']
     end
 
-    def load_metadata_yaml
-      path = File.expand_path('../../1.0.0-ballot/metadata.yaml', __dir__)
-      return nil unless File.file?(path)
-
-      YAML.safe_load_file(path, permitted_classes: [Symbol], aliases: true)
-    end
-
     def author_resource_type_and_profiles(resource)
       return ['', ''] unless resource.present?
 
@@ -80,12 +73,6 @@ module AUPSTestKit
       return '' if list_lines.blank?
 
       "\n\n## List of Must Support elements (complex) populated or missing\n\n#{list_lines.join("\n\n")}"
-    end
-
-    def get_extension_value_by_url(resouce, url)
-      result = resouce&.extension&.find { |ext| ext.url == url }
-
-      result.value if result.present?
     end
 
     def identifiers_from_resource(resource)
