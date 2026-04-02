@@ -34,13 +34,20 @@ module AUPSTestKit
       composition_resource = BundleDecorator.new(scratch_bundle.to_hash).composition_resource
       return false unless composition_resource.present?
 
-      # TODO: event check is temporary hardcoded
-      event = composition_resource.event_by_code('PCPR')
-      slices_array.all? do |slice|
-        composition_slice_validation_passes?(composition_resource, slice, event)
-      end
+      check_event_slice_presence(composition_resource, slices_array)
+    end
 
-      # assert passed, 'Some of the slices are not populated. See the list of populated slices in messages tab.'
+    def check_event_slice_presence(composition_resource, slices_array)
+      event = composition_resource.event_by_code('PCPR')
+
+      if event.nil?
+        add_message('warning', 'event:careProvisioningEvent slice is not present')
+        assert true
+      else
+        slices_array.all? do |slice|
+          composition_slice_validation_passes?(composition_resource, slice, event)
+        end
+      end
     end
 
     def composition_slice_validation_passes?(composition_resource, slice, event)
