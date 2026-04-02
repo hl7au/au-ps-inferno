@@ -1,12 +1,10 @@
 # frozen_string_literal: true
 
 require_relative 'bundle_decorator'
-require_relative 'composition_utils/ms_elements'
 require_relative 'composition_utils/boolean_and_stats'
 
 # Utilities for FHIR Composition resources
 module CompositionUtils
-  include CompositionUtilsMsElements
   include CompositionUtilsBooleanAndStats
 
   def scratch_bundle

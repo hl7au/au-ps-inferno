@@ -30,11 +30,4 @@ module CompositionUtilsBooleanAndStats
   def identifier_info?
     resolve_path_with_dar(scratch_bundle, 'identifier').first.present?
   end
-
-  def check_section_element_completeness(path_expression)
-    sections_count = resolve_path_with_dar(composition_resource, path_expression).length
-    selected_by_expression_count = resolve_path_with_dar(composition_resource, path_expression).length
-
-    boolean_to_existent_string(sections_count == selected_by_expression_count)
-  end
 end

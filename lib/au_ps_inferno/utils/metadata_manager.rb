@@ -17,10 +17,6 @@ module AUPSTestKit
       metadata[:subject]
     end
 
-    def get_subject_mandatory_elements_by_resource_type(resource_type)
-      get_mandatory_elements_by_resource_type(subject_metadata, resource_type) || []
-    end
-
     def author_metadata
       metadata[:author]
     end
@@ -31,10 +27,6 @@ module AUPSTestKit
 
     def attester_metadata
       metadata[:attester]
-    end
-
-    def get_attester_mandatory_elements_by_resource_type(resource_type)
-      get_mandatory_elements_by_resource_type(attester_metadata, resource_type) || []
     end
 
     def entities_from_metadata_items(metadata_items)

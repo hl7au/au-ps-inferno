@@ -22,14 +22,6 @@ class SectionTestClass
     "#{@name} (#{@code})"
   end
 
-  def get_resource_by_reference(reference)
-    @bundle_resource.resource_by_reference(reference)
-  end
-
-  def resource_type_is_expected?(resource_type)
-    @target_resource_types.uniq.include?(resource_type)
-  end
-
   def section_data
     composition_r = @bundle_resource.composition_resource
     if composition_r.present?
@@ -37,11 +29,6 @@ class SectionTestClass
       return target_section if target_section.present?
     end
     nil
-  end
-
-  def find_requirements(resource_type_key)
-    resource_type_info = @target_resources_hash[resource_type_key]
-    resource_type_info.key?('requirements') ? resource_type_info['requirements'] : []
   end
 
   private
