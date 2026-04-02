@@ -6,12 +6,6 @@ module CompositionUtilsBooleanAndStats
     boolean_value ? '✅ Populated' : '❌ Missing'
   end
 
-  def execute_statistics(resource, path_expression, humanized_name)
-    data_value = resolve_path_with_dar(resource, path_expression).first.present?
-    boolean_value = boolean_to_existent_string(data_value)
-    "**#{humanized_name}**: #{boolean_value}"
-  end
-
   def all_entries_have_full_url_info?
     entry_full_url_count = resolve_path_with_dar(scratch_bundle, 'entry.fullUrl').length
     entries_count = resolve_path_with_dar(scratch_bundle, 'entry').length
