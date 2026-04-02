@@ -14,13 +14,6 @@ module AUPSTestKit
       bundle_entity_resource_from_scratch(ref_str)
     end
 
-    def composition_attester_metadata
-      data = load_metadata_yaml
-      return [] unless data.present?
-
-      data['attester'] || data[:attester] || []
-    end
-
     private
 
     def attester_composition_attesters(composition_resource)

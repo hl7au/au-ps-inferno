@@ -25,16 +25,8 @@ module AUPSTestKit
       metadata[:author]
     end
 
-    def get_author_mandatory_elements_by_resource_type(resource_type)
-      get_mandatory_elements_by_resource_type(author_metadata, resource_type) || []
-    end
-
     def custodian_metadata
       metadata[:custodian]
-    end
-
-    def get_custodian_mandatory_elements_by_resource_type(resource_type)
-      get_mandatory_elements_by_resource_type(custodian_metadata, resource_type) || []
     end
 
     def attester_metadata

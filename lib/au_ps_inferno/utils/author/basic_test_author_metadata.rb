@@ -10,14 +10,6 @@ module AUPSTestKit
       data['author'] || data[:author] || []
     end
 
-    def author_complex_ms_elements_for_type(author_metadata, resource_type)
-      author_entry = author_metadata_entry_for_resource_type(author_metadata, resource_type)
-      return [] unless author_entry.present?
-
-      elements = author_entry['elements'] || author_entry[:elements] || []
-      elements.filter { |elem| author_ms_metadata_element_is_complex_flat?(elem) }
-    end
-
     def author_ms_subelement_parent_groups(author_metadata, resource_type)
       author_entry = author_metadata_entry_for_resource_type(author_metadata, resource_type)
       return [] unless author_entry.present?
@@ -43,12 +35,6 @@ module AUPSTestKit
       author_metadata.find do |entry|
         (entry['resource_type'] || entry[:resource_type]).to_s == resource_type.to_s
       end
-    end
-
-    def author_ms_metadata_element_is_complex_flat?(elem)
-      expr = (elem['expression'] || elem[:expression]).to_s
-      id_str = (elem['id'] || elem[:id]).to_s
-      !expr.include?('.') && !id_str.include?(':')
     end
 
     def author_ms_metadata_element_is_subelement?(elem)

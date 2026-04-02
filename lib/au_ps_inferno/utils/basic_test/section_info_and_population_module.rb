@@ -62,22 +62,6 @@ module AUPSTestKit
       [title, *element_lines]
     end
 
-    def all_sections_present_in_bundle?(sections_array_codes, bundle)
-      existing_section_codes = BundleDecorator.new(bundle.to_hash).composition_resource.section_codes
-      sections_array_codes.all? { |section_code| existing_section_codes.include?(section_code) }
-    end
-
-    def all_mandatory_ms_elements_populated_in_sections?(sections_array_codes, bundle, mandatory_ms_elements)
-      sections_array_codes.each do |section_code|
-        section = BundleDecorator.new(bundle.to_hash).composition_resource.section_by_code(section_code)
-        return false unless section.present?
-
-        mandatory_ms_elements.map do |element|
-          resolve_path_with_dar(section, element[:expression]).first.present?
-        end.all?
-      end
-    end
-
     def profile_population_is_correct?(sections_data, bundle)
       sections_data.map do |section_data|
         section = BundleDecorator.new(bundle.to_hash).composition_resource.section_by_code(section_data[:code])

@@ -48,3 +48,6 @@ local_rubocop:
 local_generate_and_rubocop: local_generate local_rubocop
 
 dev_restart: stop down local_generate setup up
+
+check_unused_code:
+	ruby -rruby_parser -S debride lib/au_ps_inferno/
