@@ -28,7 +28,7 @@ class Generator
       # @return [String] snake_case id (lowercase, underscores, no special chars)
       def build_id(string)
         s = string.to_s
-        remove_special_characters(s.include?(' ') ? s.gsub(' ', '_') : s).downcase
+        remove_special_characters(s.include?(' ') ? s.tr(' ', '_') : s).downcase
       end
     end
 

@@ -386,8 +386,8 @@ class Generator
       }
     end
 
-    def slice_relative_sub_paths(related_elements, base_path, &min_pred)
-      picked = related_elements.filter { |el| min_pred.call(el.min) }
+    def slice_relative_sub_paths(related_elements, base_path)
+      picked = related_elements.filter { |el| yield(el.min) }
       paths = picked.map { |el| el.path.gsub(base_path, '').gsub('.', '') }
       paths.reject(&:empty?)
     end

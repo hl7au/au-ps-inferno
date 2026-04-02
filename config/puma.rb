@@ -1,4 +1,4 @@
 # frozen_string_literal: true
 
-environment ENV.fetch('APP_ENV', 'development')
-port ENV.fetch('INFERNO_PORT', 4567)
+environment ENV.fetch('APP_ENV') { 'development' }
+port ENV.fetch('INFERNO_PORT') { 4567 }

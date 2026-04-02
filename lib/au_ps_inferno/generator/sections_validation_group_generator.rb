@@ -89,7 +89,7 @@ class Generator
     #
     # @return [String] Custom section ID.
     def test_id_custom
-      @short.gsub('Patient Summary', '').gsub('Section', '').strip.gsub(' ', '_').downcase
+      @short.gsub('Patient Summary', '').gsub('Section', '').strip.tr(' ', '_').downcase
     end
 
     # Returns the full test ID for the file name and references.
