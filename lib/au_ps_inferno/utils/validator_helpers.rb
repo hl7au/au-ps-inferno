@@ -31,7 +31,7 @@ module ValidatorHelpers
   end
 
   def validator_url
-    ENV.fetch('FHIR_RESOURCE_VALIDATOR_URL') { nil }
+    ENV.fetch('FHIR_RESOURCE_VALIDATOR_URL', nil)
   end
 
   def response_valid?(version_data)

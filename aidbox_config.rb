@@ -26,10 +26,10 @@ class AidboxConfig
   end
 end
 
-login = ENV.fetch('AIDBOX_CLIENT_ID') { 'root' }
-password = ENV.fetch('AIDBOX_CLIENT_SECRET') { 'secret' }
+login = ENV.fetch('AIDBOX_CLIENT_ID', 'root')
+password = ENV.fetch('AIDBOX_CLIENT_SECRET', 'secret')
 authorization = "Basic #{Base64.strict_encode64("#{login}:#{password}")}"
-base_url = ENV.fetch('AIDBOX_BASE_URL') { 'http://localhost:3500' }
+base_url = ENV.fetch('AIDBOX_BASE_URL', 'http://localhost:3500')
 json_headers = { 'Content-Type' => 'application/json', 'Authorization' => authorization }
 
 configurer = AidboxConfig.new(base_url)
