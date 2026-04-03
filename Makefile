@@ -54,3 +54,9 @@ check_unused_code:
 
 coverage test_coverage:
 	COVERAGE=1 bundle exec rspec --format progress --format html --out coverage/index.html
+
+flog:
+	flog . -lib/au_ps_inferno/1.0.0-ballot -spec/
+
+flay:
+	flay
