@@ -39,6 +39,7 @@ GEM
       irb (~> 1.10)
       reline (>= 0.3.8)
     diff-lcs (1.5.1)
+    docile (1.4.1)
     domain_name (0.6.20240107)
     dotenv (2.8.1)
     dry-auto_inject (1.0.1)
@@ -183,7 +184,6 @@ GEM
     mime-types (3.5.2)
       mime-types-data (~> 3.2015)
     mime-types-data (3.2024.0507)
-    mini_portile2 (2.8.7)
     minitest (5.23.1)
     multi_json (1.15.0)
     multi_xml (0.7.1)
@@ -197,9 +197,6 @@ GEM
     mutex_m (0.3.0)
     netrc (0.11.0)
     nio4r (2.7.3)
-    nokogiri (1.16.5)
-      mini_portile2 (~> 2.8.2)
-      racc (~> 1.4)
     nokogiri (1.16.5-aarch64-linux)
       racc (~> 1.4)
     nokogiri (1.16.5-arm-linux)
@@ -292,8 +289,12 @@ GEM
       connection_pool (>= 2.3.0)
       rack (>= 2.2.4)
       redis-client (>= 0.19.0)
-    sqlite3 (1.7.3)
-      mini_portile2 (~> 2.8.0)
+    simplecov (0.22.0)
+      docile (~> 1.1)
+      simplecov-html (~> 0.11)
+      simplecov_json_formatter (~> 0.1)
+    simplecov-html (0.13.2)
+    simplecov_json_formatter (0.1.4)
     sqlite3 (1.7.3-aarch64-linux)
     sqlite3 (1.7.3-arm-linux)
     sqlite3 (1.7.3-arm64-darwin)
@@ -331,7 +332,6 @@ PLATFORMS
   aarch64-linux
   arm-linux
   arm64-darwin
-  ruby
   x86-linux
   x86_64-darwin
   x86_64-linux
@@ -344,6 +344,7 @@ DEPENDENCIES
   pg (~> 1.5)
   rspec (~> 3.10)
   rubocop (~> 1.71.2)
+  simplecov (~> 0.22)
   webmock (~> 3.11)
 
 RUBY VERSION

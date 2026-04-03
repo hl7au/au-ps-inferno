@@ -3,6 +3,14 @@
 begin
   require 'rspec/core/rake_task'
   RSpec::Core::RakeTask.new(:spec)
+  RSpec::Core::RakeTask.new(:'spec:validator_helpers') do |t|
+    t.pattern = 'spec/lib/au_ps_inferno/utils/validator_helpers_spec.rb'
+  end
+
+  desc 'Run specs that load the full Inferno app (requires compatible inferno_core gem resolution)'
+  RSpec::Core::RakeTask.new(:'spec:inferno') do |t|
+    t.rspec_opts = '--require spec_helper_inferno'
+  end
   task default: :spec
 rescue LoadError # rubocop:disable Lint/SuppressedException
 end
