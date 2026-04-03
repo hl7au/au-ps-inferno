@@ -6,7 +6,7 @@ compose = docker compose -f compose.aidbox.yaml
 endif
 inferno = run inferno
 
-.PHONY: pull build up stop down migrate setup run tests rubocop
+.PHONY: pull build up stop down migrate setup run tests rubocop coverage test_coverage
 
 pull:
 	$(compose) pull
@@ -51,3 +51,6 @@ dev_restart: stop down local_generate setup up
 
 check_unused_code:
 	ruby -rruby_parser -S debride lib/au_ps_inferno/
+
+coverage test_coverage:
+	COVERAGE=1 bundle exec rspec --format progress --format html --out coverage/index.html
