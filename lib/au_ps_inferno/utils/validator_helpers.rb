@@ -48,8 +48,10 @@ module ValidatorHelpers
       return warning "Invalid response from validator at #{validator_url}: #{version_data}"
     end
 
-    cache_versions(version_data[RESPONSE_VALIDATOR_KEY], version_data[RESPONSE_WRAPPER_KEY])
-    build_version_hash(version_data[RESPONSE_VALIDATOR_KEY], version_data[RESPONSE_WRAPPER_KEY])
+    validator = version_data[RESPONSE_VALIDATOR_KEY]
+    wrapper = version_data[RESPONSE_WRAPPER_KEY]
+    cache_versions(validator, wrapper)
+    build_version_hash(validator, wrapper)
   end
 
   def cache_versions(validator_version, validator_wrapper_version)

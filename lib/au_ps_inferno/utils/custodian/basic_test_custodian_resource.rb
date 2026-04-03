@@ -24,9 +24,12 @@ module AUPSTestKit
     private
 
     def first_composition_custodian_reference(composition_resource)
-      return nil unless composition_resource.respond_to?(:custodian) && composition_resource.custodian.present?
+      return nil unless composition_resource.respond_to?(:custodian)
 
-      composition_resource.custodian
+      custodian = composition_resource.custodian
+      return nil unless custodian.present?
+
+      custodian
     end
   end
 end

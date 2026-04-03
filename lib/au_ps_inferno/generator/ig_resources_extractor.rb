@@ -82,9 +82,10 @@ class Generator
     # @param entry [Gem::Package::TarReader::Entry]
     # @return [Boolean] true if entry is a JSON file and not an OpenAPI JSON
     def relevant_json_entry?(entry)
+      name = entry.full_name
       entry.file? &&
-        entry.full_name.end_with?('.json') &&
-        !entry.full_name.end_with?('.openapi.json')
+        name.end_with?('.json') &&
+        !name.end_with?('.openapi.json')
     end
 
     # Parses entry content as JSON and appends a FHIR resource to {#ig_resources} if valid.

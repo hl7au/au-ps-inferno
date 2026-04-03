@@ -69,7 +69,7 @@ module AUPSTestKit
 
     def read_and_save_data
       if url.present? && bundle_id.present?
-        get_bundle_resource_from_fhir_server(bundle_id) if url.present? && bundle_id.present?
+        get_bundle_resource_from_fhir_server(bundle_id)
       elsif bundle_url.present?
         get_bundle_resource_from_url(bundle_url)
       end

@@ -38,7 +38,7 @@ class BundleDecorator < FHIR::Bundle
       base_url = BundleEntryDecorator.new(composition_entry).full_url_base
       next if base_url.nil?
 
-      entr.fullUrl == base_url + entry_reference
+      entry_full_url == base_url + entry_reference
     end
   end
 

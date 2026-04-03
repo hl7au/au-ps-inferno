@@ -4,11 +4,12 @@
 class RichValidationMessage
   def initialize(rich_messages)
     @rich_messages = rich_messages
-    @title = calculate_title(rich_messages.first)
+    first = rich_messages.first
+    @title = calculate_title(first)
     @indexes = uniq_attribute_values(rich_messages, :idx)
     @entry_references = uniq_attribute_values(rich_messages, :ref)
     @resource_ids = uniq_attribute_values(rich_messages, :resource_id)
-    @message = rich_messages.first.message
+    @message = first.message
   end
 
   def to_s
@@ -28,8 +29,9 @@ class RichValidationMessage
   end
 
   def msg_line(title: nil, value: nil)
-    return nil if title.blank? && value.blank?
-    return nil if value.blank?
+    value_blank = value.blank?
+    return nil if title.blank? && value_blank
+    return nil if value_blank
 
     title.present? ? "**#{title}**: #{value}" : value
   end

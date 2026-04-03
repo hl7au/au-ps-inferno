@@ -39,17 +39,19 @@ module AUPSTestKit
 
     def process_elements(resource, target_metadata, state, messages)
       normalize_elements_from_metadata(target_metadata).each do |element|
+        min = element[:min]
         populated = resolve_path_with_dar(resource, element[:expression]).first.present?
-        update_population_state(state, :element, populated, element[:min])
-        messages << element_message_item_template(populated, element[:label], mandatory?(element[:min]))
+        update_population_state(state, :element, populated, min)
+        messages << element_message_item_template(populated, element[:label], mandatory?(min))
       end
     end
 
     def process_slices(resource, target_metadata, state, messages)
       normalize_slices_from_metadata(target_metadata).each do |slice|
+        min = slice[:min]
         populated = resolve_slice_populated?(resource, slice)
-        update_population_state(state, :slice, populated, slice[:min])
-        messages << element_message_item_template(populated, slice[:label], mandatory?(slice[:min]))
+        update_population_state(state, :slice, populated, min)
+        messages << element_message_item_template(populated, slice[:label], mandatory?(min))
       end
     end
 
@@ -79,10 +81,12 @@ module AUPSTestKit
     end
 
     def message_level(state)
+      mandatory_ok = mandatory_populated?(state)
+      optional_ok = optional_populated?(state)
       calculate_message_level(
-        failed: !mandatory_populated?(state),
-        warning: mandatory_populated?(state) && !optional_populated?(state),
-        info: mandatory_populated?(state) && optional_populated?(state)
+        failed: !mandatory_ok,
+        warning: mandatory_ok && !optional_ok,
+        info: mandatory_ok && optional_ok
       )
     end
 
@@ -103,11 +107,12 @@ module AUPSTestKit
     end
 
     def normalize_element(element)
+      expression = element[:expression]
       {
         id: element[:id],
-        expression: element[:expression],
+        expression: expression,
         min: element[:min],
-        label: element[:expression]
+        label: expression
       }
     end
 
@@ -191,9 +196,10 @@ module AUPSTestKit
 
     def sub_element_message_types(resource, sub_elements, state)
       sub_elements.map do |sub_element|
+        min = sub_element[:min]
         populated = sub_element_populated?(resource, sub_element)
-        update_population_state(state, sub_element[:type], populated, sub_element[:min])
-        sub_element_message_type(populated, sub_element[:min])
+        update_population_state(state, sub_element[:type], populated, min)
+        sub_element_message_type(populated, min)
       end
     end
 

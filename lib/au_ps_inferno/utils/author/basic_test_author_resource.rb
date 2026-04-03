@@ -24,9 +24,12 @@ module AUPSTestKit
     private
 
     def first_composition_author_reference(composition_resource)
-      return nil unless composition_resource.respond_to?(:author) && composition_resource.author.present?
+      return nil unless composition_resource.respond_to?(:author)
 
-      composition_resource.author.first
+      author = composition_resource.author
+      return nil unless author.present?
+
+      author.first
     end
   end
 end

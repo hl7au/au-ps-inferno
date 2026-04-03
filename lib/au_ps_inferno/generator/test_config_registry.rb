@@ -20,9 +20,11 @@ class Generator
         return {} if entry.nil?
 
         out = entry.except(:commands_builder)
-        if entry[:commands_builder]
-          built = entry[:commands_builder].call(metadata)
-          out[:commands] = built[:commands] if built[:commands]
+        builder = entry[:commands_builder]
+        if builder
+          built = builder.call(metadata)
+          commands = built[:commands]
+          out[:commands] = commands if commands
         end
         out
       end

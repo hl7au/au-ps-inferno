@@ -34,12 +34,15 @@ module AUPSTestKit
     end
 
     def composition_section_row_flags(section, refs, mismatches)
+      type_mismatch = mismatches[:any_type_mismatch]
+      profile_mismatch = mismatches[:any_profile_mismatch]
+      no_type_mismatch = !type_mismatch
       has_entries = refs.any?
-      all_match = has_entries && !mismatches[:any_type_mismatch] && !mismatches[:any_profile_mismatch]
+      all_match = has_entries && no_type_mismatch && !profile_mismatch
 
       {
-        any_type_wrong: has_entries && mismatches[:any_type_mismatch],
-        any_profile_wrong: has_entries && !mismatches[:any_type_mismatch] && mismatches[:any_profile_mismatch],
+        any_type_wrong: has_entries && type_mismatch,
+        any_profile_wrong: has_entries && no_type_mismatch && profile_mismatch,
         empty_reason: section.empty_reason_str.present?,
         has_entries: has_entries,
         all_match: all_match
@@ -106,10 +109,11 @@ module AUPSTestKit
     end
 
     def composition_section_list_dispatch?(header, body, flags)
+      has_entries = flags[:has_entries]
       return composition_section_list_on_error?(header, body) if flags[:any_type_wrong]
       return composition_section_list_on_profile_warning?(header, body) if flags[:any_profile_wrong]
-      return composition_section_list_on_warning_empty?(header, body) if flags[:empty_reason] && !flags[:has_entries]
-      return composition_section_list_on_info_ok?(header, body) if flags[:has_entries] && flags[:all_match]
+      return composition_section_list_on_warning_empty?(header, body) if flags[:empty_reason] && !has_entries
+      return composition_section_list_on_info_ok?(header, body) if has_entries && flags[:all_match]
 
       composition_section_list_on_no_entries_error?(header, body)
     end
@@ -141,16 +145,19 @@ module AUPSTestKit
 
     def section_entry_list_or_empty_reason(_section_data, section, _normalized_sections_data)
       return 'List of entry resources by type & profile: (section missing)' if section.blank?
-      return empty_section_entry_reason_line(section) if section.entry_references.empty?
+
+      entry_refs = section.entry_references
+      return empty_section_entry_reason_line(section) if entry_refs.empty?
 
       bundle_resource = BundleDecorator.new(scratch_bundle.to_hash)
-      lines = section.entry_references.map { |ref| section_entry_line_for_reference(bundle_resource, ref) }
+      lines = entry_refs.map { |ref| section_entry_line_for_reference(bundle_resource, ref) }
       lines.join("\n\n").to_s
     end
 
     def empty_section_entry_reason_line(section)
-      if section.empty_reason_str.present?
-        "emptyReason: #{section.empty_reason_str}"
+      empty_reason = section.empty_reason_str
+      if empty_reason.present?
+        "emptyReason: #{empty_reason}"
       else
         'No entries; no emptyReason.'
       end

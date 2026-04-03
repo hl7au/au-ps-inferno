@@ -167,9 +167,10 @@ class Generator
     end
 
     def normalize_slice_data(slice)
+      path = slice[:path]
       {
-        path: slice[:path],
-        label: "#{slice[:path]} (#{slice[:sliceName]})"
+        path: path,
+        label: "#{path} (#{slice[:sliceName]})"
       }
     end
 
@@ -275,12 +276,21 @@ class Generator
     end
 
     def extract_optional_ms_elements
-      @composition_optional_ms_elements = extract_optional_all_ms_elements.filter do |path|
-        path_is_not_slice?(path) && !path.include?('.') && path != 'section'
-      end + ['event']
-      @composition_optional_ms_sub_elements = extract_optional_all_ms_elements.filter do |path|
-        path_is_not_slice?(path) && path.include?('.') && !SUB_ELEMENTS_TO_SKIP.include?(path)
+      optional_paths = extract_optional_all_ms_elements
+      main_paths = []
+      sub_paths = []
+      optional_paths.each do |path|
+        next unless path_is_not_slice?(path)
+
+        dot_path = path.include?('.')
+        if !dot_path && path != 'section'
+          main_paths << path
+        elsif dot_path && !SUB_ELEMENTS_TO_SKIP.include?(path)
+          sub_paths << path
+        end
       end
+      @composition_optional_ms_elements = main_paths + ['event']
+      @composition_optional_ms_sub_elements = sub_paths
       @composition_optional_ms_slices = composition_optional_ms_slices
     end
 
@@ -292,12 +302,21 @@ class Generator
     end
 
     def extract_required_ms_elements
-      @composition_mandatory_ms_elements = extract_required_all_ms_elements.filter do |path|
-        path_is_not_slice?(path) && !path.include?('.') && path != 'section'
+      required_paths = extract_required_all_ms_elements
+      main_paths = []
+      sub_paths = []
+      required_paths.each do |path|
+        next unless path_is_not_slice?(path)
+
+        dot_path = path.include?('.')
+        if !dot_path && path != 'section'
+          main_paths << path
+        elsif dot_path && !SUB_ELEMENTS_TO_SKIP.include?(path)
+          sub_paths << path
+        end
       end
-      @composition_mandatory_ms_sub_elements = extract_required_all_ms_elements.filter do |path|
-        path_is_not_slice?(path) && path.include?('.') && !SUB_ELEMENTS_TO_SKIP.include?(path)
-      end
+      @composition_mandatory_ms_elements = main_paths
+      @composition_mandatory_ms_sub_elements = sub_paths
       @composition_mandatory_ms_slices = composition_mandatory_ms_slices
     end
 
@@ -329,7 +348,8 @@ class Generator
     end
 
     def ms_composition_path?(element)
-      element.mustSupport == true && !element.path.include?(':') && element.path.include?('Composition.')
+      path = element.path
+      element.mustSupport == true && !path.include?(':') && path.include?('Composition.')
     end
 
     def all_ms_elements_related_to_slice(slice)
@@ -368,8 +388,8 @@ class Generator
     end
 
     def build_metadata_for_slice(element)
-      related = all_ms_elements_related_to_slice(element.path)
       base = element.path
+      related = all_ms_elements_related_to_slice(base)
       slice_metadata_base(element).merge(
         mandatory_ms_sub_elements: slice_relative_sub_paths(related, base, &:zero?),
         optional_ms_sub_elements: slice_relative_sub_paths(related, base, &:positive?)
@@ -393,9 +413,10 @@ class Generator
     end
 
     def element_is_slice?(element)
+      path = element.path
       element.id.include?(':') && element&.sliceName &&
-        !element.path.include?('section') &&
-        !element.path.include?('extension')
+        !path.include?('section') &&
+        !path.include?('extension')
     end
 
     # Returns IG resources whose resourceType matches the given type.
@@ -491,11 +512,12 @@ class Generator
     # @return [Hash] Section metadata hash including keys:
     #   :id, :short, :definition, :min, :max, :required, :mustSupport, :code, :entries
     def build_section_data(section, elements)
+      section_id = section.id
       basic_section_data = build_basic_section_data(section)
       {
         **basic_section_data,
-        code: section_code(section.id, elements),
-        entries: get_section_entry_data(elements, section.id)
+        code: section_code(section_id, elements),
+        entries: get_section_entry_data(elements, section_id)
       }
     end
 
@@ -505,13 +527,14 @@ class Generator
     # @return [Hash] Basic section fields:
     #   :id, :short, :definition, :min, :max, :required, :mustSupport
     def build_basic_section_data(section)
+      min = section.min
       {
         id: section.id,
         short: section.short,
         definition: section.definition,
-        min: section.min,
+        min: min,
         max: section.max,
-        required: section.min.positive?,
+        required: min.positive?,
         mustSupport: section.mustSupport || false,
         ms_elements: composition_ms_sections_elements
       }
@@ -552,13 +575,15 @@ class Generator
     # @return [Hash] Entry metadata hash including keys:
     #   :id, :min, :max, :required, :mustSupport, :profiles
     def build_section_entry_data(entry)
+      entry_id = entry.id
+      entry_min = entry.min
       {
-        id: entry.id,
-        min: entry.min,
+        id: entry_id,
+        min: entry_min,
         max: entry.max,
-        required: entry.min.positive?,
+        required: entry_min.positive?,
         mustSupport: entry.mustSupport || false,
-        profiles: get_section_entry_profiles(entry.id, entry)
+        profiles: get_section_entry_profiles(entry_id, entry)
       }
     end
 
@@ -660,13 +685,16 @@ class Generator
     end
 
     def get_elements_from_structure_definition(sd_data)
+      sd_type = sd_data.type
       structure_definition_data = StructureDefinitionDecorator.new(sd_data.to_hash)
-      elements = structure_definition_data.simple_elements(include_str: "#{sd_data.type}.")
-      filtered_elements = elements.reject { |element| element.id.include?(':') }
-      filtered_elements.map do |element|
+      elements = structure_definition_data.simple_elements(include_str: "#{sd_type}.")
+      elements.filter_map do |element|
+        el_id = element.id
+        next if el_id.include?(':')
+
         {
-          id: element.id,
-          expression: element.path.gsub("#{sd_data.type}.", ''),
+          id: el_id,
+          expression: element.path.gsub("#{sd_type}.", ''),
           min: element.min
         }
       end.uniq

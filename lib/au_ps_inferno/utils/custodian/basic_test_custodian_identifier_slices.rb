@@ -31,11 +31,14 @@ module AUPSTestKit
     end
 
     def custodian_identifier_slice_line(result)
-      if result[:identifier].present?
-        type_str = identifier_type_display(result[:identifier])
-        "✅ Populated: **#{result[:slice][:name]}** — system: #{result[:slice][:system]}#{type_str}"
+      identifier = result[:identifier]
+      slice = result[:slice]
+      slice_name = slice[:name]
+      if identifier.present?
+        type_str = identifier_type_display(identifier)
+        "✅ Populated: **#{slice_name}** — system: #{slice[:system]}#{type_str}"
       else
-        "❌ Missing: **#{result[:slice][:name]}**"
+        "❌ Missing: **#{slice_name}**"
       end
     end
 

@@ -11,9 +11,9 @@ module AUPSTestKit
       check_bundle_exists_in_scratch
       resource = author_resource
       skip_if resource.blank?, 'No author reference found on Composition'
-      skip_if resource_type(resource) == 'Device', 'Referenced author resource type is Device'
 
       resource_type_str = resource_type(resource)
+      skip_if resource_type_str == 'Device', 'Referenced author resource type is Device'
       slices = AUTHOR_MS_IDENTIFIER_SLICES_BY_TYPE[resource_type_str] || []
       skip_if slices.blank?,
               'No Must Support identifier slices are defined for the referenced author type (e.g. AU PS RelatedPerson)'

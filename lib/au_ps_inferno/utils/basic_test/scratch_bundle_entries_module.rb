@@ -5,10 +5,11 @@ module AUPSTestKit
   module BasicTestScratchBundleEntriesModule
     def save_bundle_entities_to_scratch(bundle)
       scratch[:bundle_entities] = bundle.entry.map do |entry|
+        resource = entry.resource
         {
           full_url: entry.fullUrl,
-          resource_type: entry.resource.resourceType,
-          resource: entry.resource
+          resource_type: resource.resourceType,
+          resource: resource
         }
       end
     end
@@ -22,9 +23,10 @@ module AUPSTestKit
     end
 
     def bundle_entity_resource_from_scratch(full_url)
-      return nil if bundle_entity_from_scratch(full_url).nil?
+      entity = bundle_entity_from_scratch(full_url)
+      return nil if entity.nil?
 
-      bundle_entity_from_scratch(full_url)[:resource]
+      entity[:resource]
     end
   end
 end

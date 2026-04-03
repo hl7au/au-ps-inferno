@@ -69,8 +69,9 @@ class AidboxConfigStep
   end
 
   def hash_or_string_post_payload
-    return ['', false] if @body.is_a?(Hash) && @body.empty?
-    return [@body.to_json, false] if @body.is_a?(Hash)
+    body_hash = @body.is_a?(Hash)
+    return ['', false] if body_hash && @body.empty?
+    return [@body.to_json, false] if body_hash
 
     [@body.to_s, false]
   end

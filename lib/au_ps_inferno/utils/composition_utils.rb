@@ -18,12 +18,12 @@ module CompositionUtils
   def group_section_output(section_info_array)
     section_entities = {}
     section_info_array.each do |section_info|
-      if section_entities.keys.include?(section_info)
+      if section_entities.key?(section_info)
         section_entities[section_info] += 1
       else
         section_entities[section_info] = 1
       end
     end
-    section_entities.keys.map { |section_entity| "#{section_entity} x#{section_entities[section_entity]}" }
+    section_entities.map { |section_entity, count| "#{section_entity} x#{count}" }
   end
 end

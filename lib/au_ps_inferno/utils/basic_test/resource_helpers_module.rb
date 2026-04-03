@@ -33,9 +33,11 @@ module AUPSTestKit
     def resource_profiles(resource)
       return [] unless resource.present?
 
-      if resource.respond_to?(:meta) && resource.meta&.profile.present?
-        resource.meta.profile
-      elsif resource.is_a?(Hash)
+      if resource.respond_to?(:meta)
+        meta = resource.meta
+        return meta.profile if meta&.profile.present?
+      end
+      if resource.is_a?(Hash)
         resource.dig('meta', 'profile') || []
       else
         []
@@ -107,10 +109,23 @@ module AUPSTestKit
     end
 
     def coding_suffix_from_type_value(type_val)
-      return coding_display_suffix(type_val.coding.first) if type_val.respond_to?(:coding) && type_val.coding.present?
-      return coding_display_suffix_hash(type_val['coding'].first) if type_val.is_a?(Hash) && type_val['coding'].present?
+      if type_val.respond_to?(:coding)
+        suffix = first_coding_type_suffix(type_val.coding, hash_style: false)
+        return suffix if suffix
+      end
+      if type_val.is_a?(Hash)
+        suffix = first_coding_type_suffix(type_val['coding'], hash_style: true)
+        return suffix if suffix
+      end
 
       ''
+    end
+
+    def first_coding_type_suffix(coding, hash_style:)
+      return nil unless coding.present?
+
+      first_entry = coding.first
+      hash_style ? coding_display_suffix_hash(first_entry) : coding_display_suffix(first_entry)
     end
 
     def coding_display_suffix(coding)

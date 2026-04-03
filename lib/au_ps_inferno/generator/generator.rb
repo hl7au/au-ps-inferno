@@ -90,19 +90,23 @@ class Generator
   def primitive_group_config(generic_bundle_group, high_order_class_name, high_order_group_id,
                              high_order_group_file_name)
     nested = nested_primitive_group_ids(generic_bundle_group, high_order_class_name, high_order_group_id)
-    tests = map_primitive_tests(generic_bundle_group, nested[:class_name], nested[:group_id], nested[:file_name],
+    nested_class_name = nested[:class_name]
+    nested_group_id = nested[:group_id]
+    nested_file_name = nested[:file_name]
+    tests = map_primitive_tests(generic_bundle_group, nested_class_name, nested_group_id, nested_file_name,
                                 high_order_group_file_name)
-    build_primitive_group_hash(generic_bundle_group: generic_bundle_group, nested_class_name: nested[:class_name],
-                               nested_group_id: nested[:group_id], file_name: nested[:file_name],
+    build_primitive_group_hash(generic_bundle_group: generic_bundle_group, nested_class_name: nested_class_name,
+                               nested_group_id: nested_group_id, file_name: nested_file_name,
                                high_order_group_file_name: high_order_group_file_name, tests: tests)
   end
 
   def nested_primitive_group_ids(generic_bundle_group, high_order_class_name, high_order_group_id)
-    generic_id = build_id(generic_bundle_group[:name])
+    generic_name = generic_bundle_group[:name]
+    generic_id = build_id(generic_name)
     {
       file_name: generic_id,
       group_id: :"#{high_order_group_id}_#{generic_id}",
-      class_name: "#{high_order_class_name}#{build_class_name(generic_bundle_group[:name])}"
+      class_name: "#{high_order_class_name}#{build_class_name(generic_name)}"
     }
   end
 
@@ -121,9 +125,10 @@ class Generator
   def base_primitive_group_config(parts)
     g = parts.fetch(:generic_bundle_group)
     ho_file, file_name = parts.values_at(:high_order_group_file_name, :file_name)
+    group_name = g[:name]
     {
-      class_name: parts.fetch(:nested_class_name), title: g[:name],
-      description: g[:description] || group_description(g[:name]), id: parts.fetch(:nested_group_id),
+      class_name: parts.fetch(:nested_class_name), title: group_name,
+      description: g[:description] || group_description(group_name), id: parts.fetch(:nested_group_id),
       output_file_path: versioned_path(ho_file, filename: "#{file_name}.rb"), tests: parts.fetch(:tests)
     }
   end
@@ -182,9 +187,10 @@ class Generator
 
   def build_primitive_test_config(opts)
     test_id = opts.fetch(:test_id)
+    resolved_title = opts.fetch(:resolved_title)
     {
-      class_name: "#{opts.fetch(:group_class_name)}#{build_class_name(opts.fetch(:resolved_title))}",
-      title: opts.fetch(:resolved_title),
+      class_name: "#{opts.fetch(:group_class_name)}#{build_class_name(resolved_title)}",
+      title: resolved_title,
       description: opts.fetch(:resolved_description),
       id: test_id,
       output_file_path: versioned_path(
@@ -216,17 +222,20 @@ class Generator
   end
 
   def high_order_group_ids(high_order_group, suite_id)
-    file_base = build_id(high_order_group[:name]).to_s
-    { group_id: :"#{suite_id}_#{build_id(high_order_group[:name])}", file_base: file_base }
+    name = high_order_group[:name]
+    name_id = build_id(name)
+    file_base = name_id.to_s
+    { group_id: :"#{suite_id}_#{name_id}", file_base: file_base }
   end
 
   def high_order_group_config(high_order_group, high_order_class_name, ids, generic_bundle_groups)
     path = ids.fetch(:file_base)
+    ho_name = high_order_group[:name]
     # Path for require_relative must be relative to the high-order group file's directory
     config = {
       class_name: high_order_class_name,
-      title: high_order_group[:name],
-      description: high_order_group[:description] || group_description(high_order_group[:name]),
+      title: ho_name,
+      description: high_order_group[:description] || group_description(ho_name),
       id: ids.fetch(:group_id),
       groups: high_order_groups_with_relative_paths(generic_bundle_groups),
       output_file_path: versioned_path(path, filename: "#{path}.rb")
