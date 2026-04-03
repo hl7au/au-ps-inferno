@@ -25,7 +25,7 @@ module AUPSTestKit
     end
 
     def find_first_attester_with_party(attesters)
-      attesters.find { |a| attester_party_for_attester(a).present? }
+      attesters.find { |attester| attester_party_for_attester(attester).present? }
     end
 
     def attester_party_reference_from_attester(attester_with_party)

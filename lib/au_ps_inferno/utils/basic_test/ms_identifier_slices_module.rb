@@ -20,18 +20,18 @@ module AUPSTestKit
     end
 
     def add_ms_identifier_slices_populated_message(slice_results)
-      lines = slice_results.map { |r| ms_identifier_slice_line_with_type(r) }
+      lines = slice_results.map { |slice_result| ms_identifier_slice_line_with_type(slice_result) }
       heading = '## List of Must Support identifier slices populated or missing'
       body = ['Must support identifier slices correctly populated', heading, lines.join("\n\n")].join("\n\n")
-      add_message(slice_results.all? { |r| r[:identifier].present? } ? 'info' : 'warning', body)
+      add_message(slice_results.all? { |slice_result| slice_result[:identifier].present? } ? 'info' : 'warning', body)
     end
 
     def add_ms_identifier_slices_at_least_one_message(slice_results)
-      lines = slice_results.map { |r| ms_identifier_slice_line_system_only(r) }
+      lines = slice_results.map { |slice_result| ms_identifier_slice_line_system_only(slice_result) }
       heading = '## List of Must Support identifier slices populated or missing (system when populated)'
       intro = 'At least one Must Support identifier slices is populated'
       body = [intro, heading, lines.join("\n\n")].join("\n\n")
-      add_message(slice_results.any? { |r| r[:identifier].present? } ? 'info' : 'warning', body)
+      add_message(slice_results.any? { |slice_result| slice_result[:identifier].present? } ? 'info' : 'warning', body)
     end
 
     def build_ms_identifier_slice_results(identifiers, slices)

@@ -26,7 +26,7 @@ module AUPSTestKit
 
     def custodian_post_identifier_slices_message(custodian_header, slice_results)
       lines = slice_results.map { |result| custodian_identifier_slice_line(result) }
-      message_type = slice_results.all? { |r| r[:identifier].present? } ? 'info' : 'warning'
+      message_type = slice_results.all? { |slice_result| slice_result[:identifier].present? } ? 'info' : 'warning'
       add_message(message_type, custodian_identifier_slices_full_message(custodian_header, lines))
     end
 

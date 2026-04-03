@@ -118,17 +118,17 @@ class Generator
   end
 
   def build_primitive_group_hash(parts)
-    g = parts.fetch(:generic_bundle_group)
-    merge_optional_primitive_group_flags!(base_primitive_group_config(parts), g)
+    generic_bundle_group = parts.fetch(:generic_bundle_group)
+    merge_optional_primitive_group_flags!(base_primitive_group_config(parts), generic_bundle_group)
   end
 
   def base_primitive_group_config(parts)
-    g = parts.fetch(:generic_bundle_group)
+    generic_bundle_group = parts.fetch(:generic_bundle_group)
     ho_file, file_name = parts.values_at(:high_order_group_file_name, :file_name)
-    group_name = g[:name]
+    group_name = generic_bundle_group[:name]
     {
       class_name: parts.fetch(:nested_class_name), title: group_name,
-      description: g[:description] || group_description(group_name), id: parts.fetch(:nested_group_id),
+      description: generic_bundle_group[:description] || group_description(group_name), id: parts.fetch(:nested_group_id),
       output_file_path: versioned_path(ho_file, filename: "#{file_name}.rb"), tests: parts.fetch(:tests)
     }
   end
@@ -250,7 +250,9 @@ class Generator
   end
 
   def high_order_groups_with_relative_paths(generic_bundle_groups)
-    generic_bundle_groups.map { |g| g.merge(path: g[:path].split('/').last) }
+    generic_bundle_groups.map do |group|
+      group.merge(path: group[:path].split('/').last)
+    end
   end
 
   def generate_primitive_suite

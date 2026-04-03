@@ -16,16 +16,16 @@ class Generator
           title: 'Mandatory Must Support elements are correctly populated',
           description: 'Mandatory Must Support element SHALL be able to be populated if a value is known and ' \
                        'allowed to share.',
-          commands_builder: lambda { |m|
-            { commands: ["validate_populated_elements_in_composition(#{m.composition_mandatory_ms_elements})"] }
+          commands_builder: lambda { |metadata|
+            { commands: ["validate_populated_elements_in_composition(#{metadata.composition_mandatory_ms_elements})"] }
           }
         },
         composition_optional_ms_populated: {
           title: 'Optional Must Support elements are correctly populated',
           description: 'Optional Must Support elements SHALL be correctly populated if a value is known',
-          commands_builder: lambda { |m|
+          commands_builder: lambda { |metadata|
             cmd = 'validate_populated_elements_in_composition(' \
-                  "#{m.composition_optional_ms_elements}, required: false)"
+                  "#{metadata.composition_optional_ms_elements}, required: false)"
             { commands: [cmd] }
           }
         },
@@ -33,25 +33,25 @@ class Generator
           title: 'Must Support sub-elements of a complex element are correctly populated',
           description: 'Must Support sub-elements of a complex element SHALL be correctly populated if a value ' \
                        'is known',
-          commands_builder: lambda { |m|
+          commands_builder: lambda { |metadata|
             cmd = 'validate_populated_sub_elements_in_composition(' \
-                  "#{m.composition_mandatory_ms_sub_elements}, #{m.composition_optional_ms_sub_elements})"
+                  "#{metadata.composition_mandatory_ms_sub_elements}, #{metadata.composition_optional_ms_sub_elements})"
             { commands: [cmd] }
           }
         },
         composition_optional_ms_slices: {
           title: 'Must Support slices are correctly populated',
           description: 'Must Support slice careProvisioningEvent SHALL be populated if a value is known.',
-          commands_builder: lambda { |m|
-            { commands: ["validate_populated_slices_in_composition(#{m.composition_optional_ms_slices})"] }
+          commands_builder: lambda { |metadata|
+            { commands: ["validate_populated_slices_in_composition(#{metadata.composition_optional_ms_slices})"] }
           }
         },
         sections_shall_populated: {
           title: 'AU PS Composition Mandatory Sections are correctly populated',
           description: 'Mandatory section SHALL be correctly populated if a value is known',
-          commands_builder: lambda { |m|
+          commands_builder: lambda { |metadata|
             section_codes, elements = TestConfigRegistry.section_codes_and_elements(
-              m, :required_sections_data_codes
+              metadata, :required_sections_data_codes
             )
             { commands: ["validate_populated_sections_in_bundle(#{section_codes}, #{elements})"] }
           }
@@ -59,9 +59,9 @@ class Generator
         sections_should_populated: {
           title: 'AU PS Composition recommended sections are correctly populated',
           description: 'Recommended sections SHOULD be correctly populated if a value is known',
-          commands_builder: lambda { |m|
+          commands_builder: lambda { |metadata|
             section_codes, elements = TestConfigRegistry.section_codes_and_elements(
-              m, :recommended_sections_data_codes
+              metadata, :recommended_sections_data_codes
             )
             { commands: ["validate_populated_sections_in_bundle(#{section_codes}, #{elements}, optional: true)"] }
           }
@@ -69,9 +69,9 @@ class Generator
         sections_may_populated: {
           title: 'AU PS Composition optional sections are correctly populated',
           description: 'Optional section MAY be correctly populated if a value is known',
-          commands_builder: lambda { |m|
+          commands_builder: lambda { |metadata|
             section_codes, elements = TestConfigRegistry.section_codes_and_elements(
-              m, :optional_sections_data_codes
+              metadata, :optional_sections_data_codes
             )
             { commands: ["validate_populated_sections_in_bundle(#{section_codes}, #{elements}, optional: true)"] }
           }
@@ -79,9 +79,9 @@ class Generator
         sections_may_undefined: {
           title: 'Undefined sections are correctly populated',
           description: 'Undefined sections MAY be populated if a value is known',
-          commands_builder: lambda { |m|
-            section_codes = m.all_sections_data_codes
-            elements = TestConfigRegistry.mandatory_ms_expressions(m)
+          commands_builder: lambda { |metadata|
+            section_codes = metadata.all_sections_data_codes
+            elements = TestConfigRegistry.mandatory_ms_expressions(metadata)
             { commands: ["validate_populated_undefined_sections_in_bundle(#{section_codes}, #{elements})"] }
           }
         },
@@ -89,9 +89,11 @@ class Generator
           title: 'AU PS Composition Mandatory Sections capable of populating referenced profiles',
           description: 'Mandatory section SHALL be capable of populating section.entry with the referenced ' \
                        'profiles and SHOULD correctly populate section.entry if a value is known.',
-          commands_builder: lambda { |m|
-            sections_data = m.composition_sections.filter { |s| s[:required] == true && s[:mustSupport] == true }
-            { commands: ["read_composition_sections_info(#{sections_data}, #{m.return_normalized_sections_data})"] }
+          commands_builder: lambda { |metadata|
+            sections_data = metadata.composition_sections.filter do |section|
+              section[:required] == true && section[:mustSupport] == true
+            end
+            { commands: ["read_composition_sections_info(#{sections_data}, #{metadata.return_normalized_sections_data})"] }
           }
         },
         subject_ms_elements: {

@@ -9,8 +9,8 @@ module AUPSTestKit
       identifiers = identifiers_from_resource(resource) || []
       slice_results = attester_party_build_slice_results(slices, identifiers)
       header = attester_party_referenced_type_profile_header(resource_type_str, profile_str)
-      lines = slice_results.map { |r| attester_party_format_identifier_slice_line(r) }
-      message_type = slice_results.all? { |r| r[:identifier].present? } ? 'info' : 'warning'
+      lines = slice_results.map { |slice_result| attester_party_format_identifier_slice_line(slice_result) }
+      message_type = slice_results.all? { |slice_result| slice_result[:identifier].present? } ? 'info' : 'warning'
       add_message(message_type, attester_party_identifier_slices_full_message(header, lines))
     end
 

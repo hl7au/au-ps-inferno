@@ -226,8 +226,8 @@ class Generator
     end
 
     def requirements_for_profile(profile)
-      filter = @resources_filters.find { |f| f[:resource_profile] == profile }
-      filter ? filter[:filters] : []
+      resource_filter = @resources_filters.find { |candidate| candidate[:resource_profile] == profile }
+      resource_filter ? resource_filter[:filters] : []
     end
 
     # Populates @profiles with AU PS StructureDefinitions (url, name, title, required).
@@ -469,7 +469,7 @@ class Generator
     #
     # @return [Array<String>] Sorted list of URL strings
     def structure_definition_urls
-      get_resources_by_type('StructureDefinition').map { |r| r.url.to_s }.reject(&:empty?).sort
+      get_resources_by_type('StructureDefinition').map { |sd| sd.url.to_s }.reject(&:empty?).sort
     end
 
     # Builds the error message when a profile has no matching StructureDefinition.
@@ -595,7 +595,7 @@ class Generator
     # @raise [RuntimeError] when no StructureDefinition matches a targetProfile.
     #   See {#get_structure_definition_by_profile}.
     def get_section_entry_profiles(entry_id, element)
-      ref_types = element.type&.select { |t| t.code == 'Reference' } || []
+      ref_types = element.type&.select { |element_type| element_type.code == 'Reference' } || []
       profile_urls = ref_types.flat_map(&:targetProfile).to_a.compact
 
       profile_urls.map do |profile_url|

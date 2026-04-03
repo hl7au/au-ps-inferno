@@ -37,7 +37,7 @@ class Generator
       end
 
       def section_codes_and_elements(metadata, codes_method)
-        section_codes = metadata.public_send(codes_method).map { |s| s[:code] }
+        section_codes = metadata.public_send(codes_method).map { |section| section[:code] }
         elements = mandatory_ms_expressions(metadata)
         [section_codes, elements]
       end

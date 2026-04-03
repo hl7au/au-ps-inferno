@@ -32,7 +32,7 @@ class Generator
     end
 
     def self.build_shared_group(group_def, config)
-      tests = group_def[:tests].map { |t| map_test_item(t, config) }
+      tests = group_def[:tests].map { |test_item| map_test_item(test_item, config) }
       group = { name: group_def[:name], description: group_def[:description], tests: tests }
       group[:optional] = group_def[:optional] if group_def.key?(:optional)
       group[:run_as_group] = group_def[:run_as_group] if group_def.key?(:run_as_group)

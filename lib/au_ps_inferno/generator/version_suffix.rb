@@ -21,10 +21,10 @@ class Generator
   # @param version [String] Version string (e.g. from IG path basename "1.0.0-preview.tgz")
   # @return [String] Alphanumeric suffix suitable for Ruby class names and symbols
   def self.version_suffix(version)
-    v = version.to_s.strip
-    return '' if v.empty?
+    version_str = version.to_s.strip
+    return '' if version_str.empty?
 
-    base = strip_archive_extension(v)
+    base = strip_archive_extension(version_str)
     numeric_suffix = base.split('-').first.to_s.gsub(/\D/, '')
     prerelease_suffix = prerelease_part(base).gsub(/[^a-zA-Z0-9]/, '')
     [numeric_suffix, prerelease_suffix].reject(&:empty?).join

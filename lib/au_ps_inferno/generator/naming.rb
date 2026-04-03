@@ -27,8 +27,8 @@ class Generator
       # @param string [String, Symbol] human-readable name or test type id (symbol); Symbol converted via .to_s
       # @return [String] snake_case id (lowercase, underscores, no special chars)
       def build_id(string)
-        s = string.to_s
-        remove_special_characters(s.include?(' ') ? s.tr(' ', '_') : s).downcase
+        raw = string.to_s
+        remove_special_characters(raw.include?(' ') ? raw.tr(' ', '_') : raw).downcase
       end
     end
 
