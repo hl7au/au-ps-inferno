@@ -15,7 +15,7 @@ module AUPSTestKit
 
       resource_type_str = resource_type(resource)
       slices = AUTHOR_MS_IDENTIFIER_SLICES_BY_TYPE[resource_type_str] || []
-      skip_if slices.blank?,
+      omit_if slices.blank?,
               'No Must Support identifier slices are defined for the referenced author type (e.g. AU PS RelatedPerson)'
 
       # rtype_str, profile_str = author_resource_type_and_profiles(resource)

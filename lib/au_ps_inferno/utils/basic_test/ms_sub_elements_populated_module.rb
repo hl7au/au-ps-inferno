@@ -18,17 +18,13 @@ module AUPSTestKit
 
       state = default_population_state
       grouped_sub_elements = sub_elements_grouped_by_parent_path(target_metadata)
-      return warn_and_stop_when_no_sub_elements if grouped_sub_elements.blank?
+      omit_if grouped_sub_elements.blank?, 'No complex element with Must Support sub-elements is defined'
 
       add_sub_element_group_messages(container_type, resource, grouped_sub_elements, state)
       assert_sub_elements_mandatory_populated(state)
     end
 
     private
-
-    def warn_and_stop_when_no_sub_elements
-      add_message('warning', 'No complex element with Must Support sub-elements is defined')
-    end
 
     def add_sub_element_group_messages(container_type, resource, grouped_sub_elements, state)
       grouped_sub_elements.each do |parent_path, sub_elements|
