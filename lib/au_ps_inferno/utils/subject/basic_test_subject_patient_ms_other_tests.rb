@@ -8,10 +8,10 @@ module AUPSTestKit
     include BasicTestConstants
 
     def test_subject_ms_identifier_slices
-      resource = subject_resource
-      skip_if resource.blank?, 'No subject (Patient) resource to validate for identifier slices'
+      resource_is_poluated = raw_resource_type_is_valid('subject')
+      skip_if !resource_is_poluated[:valid?], resource_is_poluated[:msg]
 
-      validate_ms_identifier_slices_in_resource(resource, PATIENT_MS_IDENTIFIER_SLICES)
+      validate_ms_identifier_slices_in_resource(subject_resource, PATIENT_MS_IDENTIFIER_SLICES)
     end
   end
 end

@@ -38,15 +38,15 @@ module AUPSTestKit
     end
 
     def not_resolved_message(container_type)
-      "#{container_type} reference does not resolve"
+      "#{container_type.capitalize} reference does not resolve"
     end
 
     def invalid_resource_type_message(container_type, resource_type)
-      "#{container_type} reference resolves to a resource with invalid resource type: #{resource_type}"
+      "#{container_type.capitalize} reference resolves to a resource with invalid resource type: #{resource_type}"
     end
 
     def valid_resource_type_message(container_type, resource_type)
-      "#{container_type} reference resolves to a resource with valid resource type: #{resource_type}"
+      "#{container_type.capitalize} reference resolves to a resource with valid resource type: #{resource_type}"
     end
   end
 end
