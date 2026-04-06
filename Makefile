@@ -45,4 +45,6 @@ local_generate:
 local_rubocop:
 	rubocop . -A
 
+local_generate_and_rubocop: local_generate local_rubocop
+
 dev_restart: stop down local_generate setup up

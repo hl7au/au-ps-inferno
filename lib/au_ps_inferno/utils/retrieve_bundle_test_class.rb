@@ -59,6 +59,7 @@ module AUPSTestKit
       bundle_resource = FHIR.from_contents(response.body)
       assert bundle_resource.resourceType == 'Bundle', 'Resource have different type than Bundle'
       scratch[:bundle_ips_resource] = bundle_resource
+      save_bundle_entities_to_scratch(scratch_bundle)
       info "Bundle resource saved to scratch: #{scratch_bundle}"
     end
 

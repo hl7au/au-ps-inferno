@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative '../../../utils/basic_test_class'
+require_relative '../../../utils/metadata_manager'
 
 
 module AUPSTestKit
@@ -10,6 +11,9 @@ module AUPSTestKit
     description 'Must Support elements SHALL be populated when an element value is known and allowed to share.'
     id :suite_100ballot_retrieve_au_ps_bundle_validation_tests_au_ps_bundle_must_support_conformance_bundle_must_support_populated
     
+    def metadata_manager
+      @metadata_manager ||= MetadataManager.new(File.expand_path('../../../1.0.0-ballot/metadata.yaml', __dir__))
+    end
     
     run do
       

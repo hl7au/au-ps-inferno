@@ -13,11 +13,11 @@ class CompositionDecorator < FHIR::Composition
   end
 
   def section_codes
-    section.map { |sect| sect.code.coding.first.code }
+    section.map { |sect| section_first_code(sect) }.compact
   end
 
   def section_by_code(code)
-    section_data = section.find { |sect| sect.code.coding.first.code == code }
+    section_data = section.find { |sect| section_first_code(sect) == code }
     return nil if section_data.nil?
 
     SectionDecorator.new(section_data.to_hash)
@@ -26,9 +26,22 @@ class CompositionDecorator < FHIR::Composition
   def event_by_code(code)
     return nil if event.nil?
 
-    filtered_event = event.find { |ev| ev.code&.first&.coding&.first&.code == code }
-    return nil if filtered_event.nil?
+    event.find { |elem| event_element_code(elem) == code }
+  end
 
-    filtered_event
+  private
+
+  def event_element_code(event_elem)
+    cc = event_elem.code&.first
+    return nil if cc.nil?
+
+    cc.coding&.first&.code
+  end
+
+  def section_first_code(section)
+    cc = section.code
+    return nil if cc.nil?
+
+    cc.coding&.first&.code
   end
 end

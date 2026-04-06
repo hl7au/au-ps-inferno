@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative '../../../utils/basic_test_class'
+require_relative '../../../utils/metadata_manager'
 
 
 module AUPSTestKit
@@ -9,6 +10,10 @@ module AUPSTestKit
     title 'Undefined sections are correctly populated'
     description 'Undefined sections MAY be populated if a value is known'
     id :suite_100ballot_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_undefined_sections_sections_may_undefined
+    
+    def metadata_manager
+      @metadata_manager ||= MetadataManager.new(File.expand_path('../../../1.0.0-ballot/metadata.yaml', __dir__))
+    end
     
     run do
       

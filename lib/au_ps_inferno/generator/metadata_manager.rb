@@ -28,11 +28,40 @@ class Generator
     SUB_ELEMENTS_TO_SKIP = %w[event.period event.code section.emptyReason section.entry section.code section.text
                               section.title meta.profile].freeze
 
+    ATTESTER_PROFILE_REFS = [
+      'Patient|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-patient',
+      'RelatedPerson|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-relatedperson',
+      'Practitioner|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-practitioner',
+      'PractitionerRole|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-practitionerrole',
+      'Organization|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-organization'
+    ].freeze
+
+    AUTHOR_PROFILE_REFS = [
+      'Practitioner|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-practitioner',
+      'PractitionerRole|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-practitionerrole',
+      'Patient|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-patient',
+      'RelatedPerson|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-relatedperson',
+      'Organization|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-organization',
+      'Device|http://hl7.org/fhir/uv/ips/StructureDefinition/Device-uv-ips'
+    ].freeze
+
+    CUSTODIAN_PROFILE_REFS = [
+      'Organization|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-organization'
+    ].freeze
+
+    SUBJECT_PROFILE_REFS = [
+      'Patient|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-patient'
+    ].freeze
+
     # Initializes a MetadataManager for the given IG resources.
     #
     # @param ig_resources [Array<FHIR::Model>] Parsed IG resources (e.g. from IGResourcesExtractor#ig_resources)
     def initialize(ig_resources)
       @ig_resources = ig_resources
+      reset_composition_metadata_ivars!
+    end
+
+    def reset_composition_metadata_ivars!
       @composition_sections = []
       @composition_mandatory_ms_elements = []
       @composition_mandatory_ms_sub_elements = []
@@ -91,18 +120,32 @@ class Generator
     end
 
     def metadata_to_dump
+      metadata_dump_sections.merge(metadata_dump_ms_elements).merge(metadata_dump_tail)
+    end
+
+    def metadata_dump_sections
       {
         composition_sections: @composition_sections,
         subject: build_metadata_for_subject,
         author: build_metadata_for_author,
         custodian: build_metadata_for_custodian,
-        attester: build_metadata_for_attester,
+        attester: build_metadata_for_attester
+      }
+    end
+
+    def metadata_dump_ms_elements
+      {
         composition_mandatory_ms_elements: @composition_mandatory_ms_elements,
         composition_mandatory_ms_sub_elements: @composition_mandatory_ms_sub_elements,
         composition_optional_ms_elements: @composition_optional_ms_elements,
         composition_optional_ms_sub_elements: @composition_optional_ms_sub_elements,
         composition_mandatory_ms_slices: @composition_mandatory_ms_slices,
-        composition_optional_ms_slices: @composition_optional_ms_slices,
+        composition_optional_ms_slices: @composition_optional_ms_slices
+      }
+    end
+
+    def metadata_dump_tail
+      {
         profiles: @profiles,
         resources_filters: @resources_filters,
         normalized_sections_data: @normalized_sections_data
@@ -110,7 +153,7 @@ class Generator
     end
 
     attr_reader :normalized_sections_data, :composition_mandatory_ms_elements, :composition_optional_ms_elements,
-                :composition_mandatory_ms_sub_elements, :composition_optional_ms_sub_elements, :composition_optional_ms_slices, :all_sections_data_codes
+                :composition_mandatory_ms_sub_elements, :composition_optional_ms_sub_elements
 
     def normalize_section_data(section_id)
       section_data = @composition_sections.find { |section| section[:id] == section_id }
@@ -147,17 +190,15 @@ class Generator
     end
 
     def composition_ms_sections_elements
-      filtered_elements = composition_extract_ms_elements_without_slices.filter do |element|
+      filtered = composition_extract_ms_elements_without_slices.filter do |element|
         element&.path&.include?('Composition.section.')
       end
-      filtered_elements.map do |element|
-        path = element.path.gsub('Composition.section.', '')
-        min = element.min
-        {
-          expression: path,
-          min: min
-        }
-      end.uniq
+      filtered.map { |element| section_element_expression_min(element) }.uniq
+    end
+
+    def section_element_expression_min(element)
+      path = element.path.gsub('Composition.section.', '')
+      { expression: path, min: element.min }
     end
 
     def required_sections_data_codes
@@ -223,7 +264,7 @@ class Generator
     end
 
     def sections_codes_mapping
-      @composition_sections.each_with_object({}) { |section, hash| hash[section[:code]] = section[:short] }
+      @composition_sections.to_h { |section| [section[:code], section[:short]] }
     end
 
     # StructureDefinitions from the IG whose URL is an AU PS profile
@@ -251,8 +292,8 @@ class Generator
 
     def extract_optional_ms_elements
       @composition_optional_ms_elements = extract_optional_all_ms_elements.filter do |path|
-        path_is_not_slice?(path) && !path.include?('.')
-      end
+        path_is_not_slice?(path) && !path.include?('.') && path != 'section'
+      end + ['event']
       @composition_optional_ms_sub_elements = extract_optional_all_ms_elements.filter do |path|
         path_is_not_slice?(path) && path.include?('.') && !SUB_ELEMENTS_TO_SKIP.include?(path)
       end
@@ -268,7 +309,7 @@ class Generator
 
     def extract_required_ms_elements
       @composition_mandatory_ms_elements = extract_required_all_ms_elements.filter do |path|
-        path_is_not_slice?(path) && !path.include?('.')
+        path_is_not_slice?(path) && !path.include?('.') && path != 'section'
       end
       @composition_mandatory_ms_sub_elements = extract_required_all_ms_elements.filter do |path|
         path_is_not_slice?(path) && path.include?('.') && !SUB_ELEMENTS_TO_SKIP.include?(path)
@@ -300,9 +341,11 @@ class Generator
       return [] if composition_structure_definition.nil?
 
       elements = composition_structure_definition.snapshot.element
-      elements.filter do |element|
-        element.mustSupport == true && !element.path.include?(':') && element.path.include?('Composition.')
-      end
+      elements.filter { |element| ms_composition_path?(element) }
+    end
+
+    def ms_composition_path?(element)
+      element.mustSupport == true && !element.path.include?(':') && element.path.include?('Composition.')
     end
 
     def all_ms_elements_related_to_slice(slice)
@@ -311,7 +354,7 @@ class Generator
 
       elements = composition_structure_definition.snapshot.element
       elements.filter do |element|
-        element.mustSupport == true && !element.path.include?(':') && element.path.include?('Composition.') && element.path.include?(slice)
+        ms_composition_path?(element) && element.path.include?(slice)
       end
     end
 
@@ -341,26 +384,34 @@ class Generator
     end
 
     def build_metadata_for_slice(element)
-      all_ms_elements_related_to_slice_data = all_ms_elements_related_to_slice(element.path)
-      mandatory_ms_sub_elements = all_ms_elements_related_to_slice_data.filter do |el|
-        el.min.zero?
-      end.map { |el| el.path.gsub(element.path, '').gsub('.', '') }.filter { |el| el != '' }
-      optional_ms_sub_elements = all_ms_elements_related_to_slice_data.filter do |el|
-        el.min.positive?
-      end.map { |el| el.path.gsub(element.path, '').gsub('.', '') }.filter { |el| el != '' }
+      related = all_ms_elements_related_to_slice(element.path)
+      base = element.path
+      slice_metadata_base(element).merge(
+        mandatory_ms_sub_elements: slice_relative_sub_paths(related, base, &:zero?),
+        optional_ms_sub_elements: slice_relative_sub_paths(related, base, &:positive?)
+      )
+    end
+
+    def slice_metadata_base(element)
       {
         path: element.path.gsub('Composition.', ''),
         sliceName: element.sliceName,
         min: element.min,
         max: element.max,
-        mustSupport: element.mustSupport,
-        mandatory_ms_sub_elements: mandatory_ms_sub_elements,
-        optional_ms_sub_elements: optional_ms_sub_elements
+        mustSupport: element.mustSupport
       }
     end
 
+    def slice_relative_sub_paths(related_elements, base_path, &min_pred)
+      picked = related_elements.filter { |el| min_pred.call(el.min) }
+      paths = picked.map { |el| el.path.gsub(base_path, '').gsub('.', '') }
+      paths.reject(&:empty?)
+    end
+
     def element_is_slice?(element)
-      element.id.include?(':') && element&.sliceName && !element.path.include?('section') && !element.path.include?('extension')
+      element.id.include?(':') && element&.sliceName &&
+        !element.path.include?('section') &&
+        !element.path.include?('extension')
     end
 
     # Returns IG resources whose resourceType matches the given type.
@@ -565,82 +616,78 @@ class Generator
     end
 
     def au_ps_profiles_mapping_required
-      @profiles.filter do |profile|
-        profile[:required]
-      end.each_with_object({}) { |profile, hash| hash[profile[:url]] = profile[:name] }
+      required = @profiles.filter { |profile| profile[:required] }
+      required.to_h { |profile| [profile[:url], profile[:name]] }
     end
 
     def au_ps_profiles_mapping_other
-      @profiles.filter do |profile|
-        !profile[:required]
-      end.each_with_object({}) { |profile, hash| hash[profile[:url]] = profile[:name] }
+      other = @profiles.filter { |profile| !profile[:required] }
+      other.to_h { |profile| [profile[:url], profile[:name]] }
     end
 
     def build_metadata_for_subject
-      structure_definition_data = get_structure_definition_by_profile('http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-patient')
-      structure_definition_resource = StructureDefinitionDecorator.new(structure_definition_data.to_hash)
-      {
-        entities: {
-          resource_type: 'Patient',
-          profile: 'http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-patient',
-          elements: get_elements_from_structure_definition(structure_definition_resource)
-        }
-      }
+      SUBJECT_PROFILE_REFS.map { |profile| metadata_hash_for_profile_ref(profile) }
     end
 
     def build_metadata_for_custodian
       # Custodian is only AU PS Organization
-      sd = get_structure_definition_by_profile('http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-organization')
-      {
-        resource_type: sd.type,
-        profile: 'http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-organization',
-        elements: get_elements_from_structure_definition_for_author(sd)
-      }
+      build_metadata_for_mapping(CUSTODIAN_PROFILE_REFS)
     end
 
     def build_metadata_for_attester
       # attester.party: AU PS Patient | RelatedPerson | Practitioner | PractitionerRole | Organization (no Device)
-      profiles = [
-        'Patient|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-patient',
-        'RelatedPerson|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-relatedperson',
-        'Practitioner|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-practitioner',
-        'PractitionerRole|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-practitionerrole',
-        'Organization|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-organization'
-      ]
-      profiles.map do |profile|
-        sd = get_structure_definition_by_profile(profile.split('|')[1])
-        {
-          resource_type: sd.type,
-          profile: profile.split('|')[1],
-          elements: get_elements_from_structure_definition_for_author(sd)
-        }
-      end
+      build_metadata_for_mapping(ATTESTER_PROFILE_REFS)
     end
 
     def build_metadata_for_author
-      # AU PS Practitioner, AU PS PractitionerRole, AU PS Patient, AU PS RelatedPerson, AU PS Organization profiles or Device resource
-      profiles = [
-        'Practitioner|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-practitioner',
-        'PractitionerRole|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-practitionerrole',
-        'Patient|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-patient',
-        'RelatedPerson|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-relatedperson',
-        'Organization|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-organization',
-        'Device|http://hl7.org/fhir/uv/ips/StructureDefinition/Device-uv-ips'
-      ]
-      profiles.map do |profile|
-        sd = get_structure_definition_by_profile(profile.split('|')[1])
-        {
-          resource_type: sd.type,
-          profile: profile.split('|')[1],
-          elements: get_elements_from_structure_definition_for_author(sd)
-        }
-      end
+      # AU PS Practitioner, AU PS PractitionerRole, AU PS Patient, AU PS RelatedPerson,
+      # AU PS Organization profiles or Device resource
+      build_metadata_for_mapping(AUTHOR_PROFILE_REFS)
     end
 
-    def get_elements_from_structure_definition_for_author(sd_data)
+    def build_metadata_for_mapping(profile_refs)
+      profile_refs.map { |profile| metadata_hash_for_profile_ref(profile) }
+    end
+
+    def metadata_hash_for_profile_ref(profile)
+      url = profile.split('|')[1]
+      sd = get_structure_definition_by_profile(url)
+      {
+        resource_type: sd.type,
+        profile: url,
+        elements: get_elements_from_structure_definition(sd),
+        slices: get_extension_slices_from_structure_definition(sd)
+      }
+    end
+
+    def get_extension_slices_from_structure_definition(sd_data)
+      # Return mandatory MS extension slices
+      sd_decorator = StructureDefinitionDecorator.new(sd_data.to_hash)
+      extension_slices = sd_decorator.extension_slices
+      filtered_extension_slices = extension_slices.filter { |element| element.mustSupport == true }
+      filtered_extension_slices.map do |element|
+        build_normalized_element_data(element, sd_decorator)
+      end.uniq
+    end
+
+    def build_normalized_element_data(element, sd_decorator)
+      first_element_type = element&.type&.first
+      profile = first_element_type&.profile&.first || ''
+      {
+        id: element.id,
+        expression: element.path.gsub("#{sd_decorator.type}.", ''),
+        label: element.sliceName,
+        min: element.min,
+        max: element.max,
+        profile: profile
+      }
+    end
+
+    def get_elements_from_structure_definition(sd_data)
       structure_definition_data = StructureDefinitionDecorator.new(sd_data.to_hash)
       elements = structure_definition_data.simple_elements(include_str: "#{sd_data.type}.")
-      elements.map do |element|
+      filtered_elements = elements.reject { |element| element.id.include?(':') }
+      filtered_elements.map do |element|
         {
           id: element.id,
           expression: element.path.gsub("#{sd_data.type}.", ''),
@@ -649,16 +696,9 @@ class Generator
       end.uniq
     end
 
-    def get_elements_from_structure_definition(structure_definition_data)
-      elements = structure_definition_data.simple_elements(include_str: 'Patient.')
-      elements.map do |element|
-        {
-          id: element.id,
-          expression: element.path.gsub('Patient.', ''),
-          min: element.min
-        }
-      end.uniq
-    end
+    private :reset_composition_metadata_ivars!, :metadata_dump_sections, :metadata_dump_ms_elements,
+            :metadata_dump_tail, :section_element_expression_min, :slice_metadata_base,
+            :slice_relative_sub_paths, :ms_composition_path?, :metadata_hash_for_profile_ref
   end
   # rubocop:enable Metrics/ClassLength
 end

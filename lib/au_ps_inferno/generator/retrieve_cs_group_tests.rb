@@ -27,7 +27,8 @@ class Generator
         class_base: 'AUPSCSSupportsIPSRecommendedOPS',
         id_base: 'au_ps_cs_supports_ips_recommended_ops',
         title: 'CapabilityStatement supports IPS Recommended Operations',
-        description: 'Verifies that the CapabilityStatement declares support for IPS recommended operations (e.g. $summary, $docref).',
+        description: 'Verifies that the CapabilityStatement declares support for IPS recommended operations ' \
+                     '(e.g. $summary, $docref).',
         base_class_require: '../../utils/basic_test_class',
         base_class_name: 'BasicTest',
         description_comment: 'Verifies that the CapabilityStatement declares support for IPS recommended operations.',

@@ -1,10 +1,9 @@
 # frozen_string_literal: true
 
-require 'net/http'
-require 'json'
 require 'base64'
-require 'securerandom'
+require_relative 'aidbox_config_step'
 
+# Queues Aidbox HTTP configuration steps (JSON POST or file upload) and runs them in order.
 class AidboxConfig
   def initialize(base_url)
     @base_url = base_url
@@ -27,80 +26,34 @@ class AidboxConfig
   end
 end
 
-class AidboxConfigStep
-  def initialize(base_url, path, method, body, headers)
-    @base_url = base_url
-    @path = path
-    @method = method
-    @body = body
-    @headers = headers
-  end
-
-  def build_multipart_body(file_path, form_field, boundary)
-    filename = File.basename(file_path)
-    content = File.binread(file_path)
-    [
-      "--#{boundary}\r\n",
-      "Content-Disposition: form-data; name=\"#{form_field}\"; filename=\"#{filename}\"\r\n",
-      "Content-Type: application/octet-stream\r\n\r\n",
-      content,
-      "\r\n--#{boundary}--\r\n"
-    ].join
-  end
-
-  def post
-    uri = URI.parse(@base_url + @path)
-    request_headers = @headers.dup
-
-    body, multipart = if @body.is_a?(Hash) && @body[:__multipart_file]
-                        file_path = @body[:__multipart_file]
-                        form_field = @body[:__form_field] || 'file'
-                        boundary = "----RubyFormBoundary#{SecureRandom.hex(16)}"
-                        request_headers['Content-Type'] = "multipart/form-data; boundary=#{boundary}"
-                        [build_multipart_body(file_path, form_field, boundary), true]
-                      elsif @body.is_a?(Hash)
-                        @body.empty? ? ['', false] : [@body.to_json, false]
-                      else
-                        [@body.to_s, false]
-                      end
-
-    request = Net::HTTP::Post.new(uri, request_headers)
-    request.body = body
-    Net::HTTP.start(uri.hostname, uri.port) do |http|
-      puts "Attempting to POST #{uri}#{' (multipart/form-data)' if multipart} with headers #{request_headers.to_json}"
-      puts "(body size: #{body.bytesize} bytes)" if multipart
-      response = http.request(request)
-      puts response.body
-    end
-  end
-
-  def execute
-    case @method
-    when 'POST'
-      post
-    else
-      raise "Method #{@method} not supported"
-    end
-  end
-end
-
 login = ENV.fetch('AIDBOX_CLIENT_ID', 'root')
 password = ENV.fetch('AIDBOX_CLIENT_SECRET', 'secret')
 authorization = "Basic #{Base64.strict_encode64("#{login}:#{password}")}"
 base_url = ENV.fetch('AIDBOX_BASE_URL', 'http://localhost:3500')
+json_headers = { 'Content-Type' => 'application/json', 'Authorization' => authorization }
+
 configurer = AidboxConfig.new(base_url)
-configurer.add_step('/fhir/ValueSet', 'POST', File.read('./resources/ValueSet-australian-indigenous-status-1.json'),
-                    { 'Content-Type' => 'application/json', 'Authorization' => authorization })
 configurer.add_step('/fhir/ValueSet', 'POST',
-                    File.read('./resources/ValueSet-australian-immunisation-register-vaccine-1.json'), { 'Content-Type' => 'application/json', 'Authorization' => authorization })
-configurer.add_step('/fhir/ValueSet', 'POST', File.read('./resources/ValueSet-australian-medication-1.json'),
-                    { 'Content-Type' => 'application/json', 'Authorization' => authorization })
+                    File.read('./resources/ValueSet-australian-indigenous-status-1.json'),
+                    json_headers)
+configurer.add_step(
+  '/fhir/ValueSet', 'POST',
+  File.read('./resources/ValueSet-australian-immunisation-register-vaccine-1.json'),
+  json_headers
+)
+configurer.add_step('/fhir/ValueSet', 'POST',
+                    File.read('./resources/ValueSet-australian-medication-1.json'),
+                    json_headers)
 configurer.add_step('/fhir/ValueSet', 'POST', File.read('./resources/ValueSet-amt-vaccine-1.json'),
-                    { 'Content-Type' => 'application/json', 'Authorization' => authorization })
-configurer.add_step('/fhir/CodeSystem', 'POST',
-                    File.read('./resources/CodeSystem-australian-indigenous-status-1.json'), { 'Content-Type' => 'application/json', 'Authorization' => authorization })
+                    json_headers)
+configurer.add_step(
+  '/fhir/CodeSystem', 'POST',
+  File.read('./resources/CodeSystem-australian-indigenous-status-1.json'),
+  json_headers
+)
 configurer.add_step('/fhir/ValueSet', 'POST', File.read('./resources/ValueSet-ihi-status-1.json'),
-                    { 'Content-Type' => 'application/json', 'Authorization' => authorization })
-configurer.add_step('/fhir/ValueSet', 'POST', File.read('./resources/ValueSet-ihi-record-status-1.json'),
-                    { 'Content-Type' => 'application/json', 'Authorization' => authorization })
+                    json_headers)
+configurer.add_step('/fhir/ValueSet', 'POST',
+                    File.read('./resources/ValueSet-ihi-record-status-1.json'),
+                    json_headers)
 configurer.execute_all

@@ -7,7 +7,7 @@ module AUPSTestKit
       section_names_mapping.key?(code) ? "#{section_names_mapping[code]} (#{code})" : code
     end
 
-    def section_names_mapping
+    def section_names_mapping # rubocop:disable Metrics/MethodLength
       {
         '11450-4' => 'Patient Summary Problems Section',
         '48765-2' => 'Patient Summary Allergies and Intolerances Section',

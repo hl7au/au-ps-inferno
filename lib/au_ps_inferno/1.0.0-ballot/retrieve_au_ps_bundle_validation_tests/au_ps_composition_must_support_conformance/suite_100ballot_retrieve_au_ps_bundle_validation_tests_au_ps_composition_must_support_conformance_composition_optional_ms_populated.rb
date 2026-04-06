@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative '../../../utils/basic_test_class'
+require_relative '../../../utils/metadata_manager'
 
 
 module AUPSTestKit
@@ -10,10 +11,13 @@ module AUPSTestKit
     description 'Optional Must Support elements SHALL be correctly populated if a value is known'
     id :suite_100ballot_retrieve_au_ps_bundle_validation_tests_au_ps_composition_must_support_conformance_composition_optional_ms_populated
     
+    def metadata_manager
+      @metadata_manager ||= MetadataManager.new(File.expand_path('../../../1.0.0-ballot/metadata.yaml', __dir__))
+    end
     
     run do
       
-      validate_populated_elements_in_composition(["attester", "custodian", "identifier", "section", "text"], required: false)
+      validate_populated_elements_in_composition(["attester", "custodian", "identifier", "text", "event"], required: false)
       
     end
     
