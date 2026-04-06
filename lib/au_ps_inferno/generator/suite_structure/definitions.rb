@@ -85,6 +85,7 @@ class Generator
                      'AU PS PractitionerRole, AU PS Patient, AU PS RelatedPerson, AU PS Organization ' \
                      'profiles or Device resource.',
         tests: [
+          { id: :author_resource_type_is_valid },
           { id: :author_ms_elements },
           { id: :author_ms_subelements },
           { id: :author_ms_identifier_slices }
