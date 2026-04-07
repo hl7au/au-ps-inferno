@@ -80,57 +80,5 @@ module AUPSTestKit
 
       levels.include?('warning') ? 'warning' : 'info'
     end
-
-    # Validates Must Support sub-elements only when the parent element is populated.
-    # One message per complex element: error if any mandatory MS sub-element missing; warning if optional missing;
-    # info when all present.
-    # Pass: all messages are info or warning. Fail: any message is error.
-    #
-    # @param resource [Hash, FHIR::Model] The resource to validate (e.g. Patient)
-    # @param parent_groups [Array<Hash>] Each hash has :parent (String), :mandatory (Array<String>),
-    #   :optional (Array<String>)
-    # @return [Boolean] false if resource blank or no parent populated; true when validation ran
-    #   (assert handles pass/fail)
-    def validate_populated_sub_elements_when_parent_populated(resource, parent_groups)
-      return false unless resource.present?
-
-      any_parent = parent_groups.any? { |group| resolve_path_with_dar(resource, group[:parent]).first.present? }
-      parent_groups.each { |group| add_parent_group_subelement_message(resource, group) }
-
-      skip_if !any_parent, 'No complex element with Must Support sub-elements is populated'
-      sub_msg = 'When a mandatory Must Support sub-element is missing but the parent exists. ' \
-                'See the list in messages tab.'
-      assert parent_groups_mandatory_subelements_ok?(resource, parent_groups), sub_msg
-    end
-
-    def add_parent_group_subelement_message(resource, group)
-      return unless resolve_path_with_dar(resource, group[:parent]).first.present?
-
-      mandatory = group[:mandatory] || []
-      optional = group[:optional] || []
-      sub_elements = mandatory + optional
-      message_type = parent_group_subelement_message_type(resource, sub_elements, mandatory)
-      add_message(message_type, populated_paths_info(resource, sub_elements))
-    end
-
-    def parent_groups_mandatory_subelements_ok?(resource, parent_groups)
-      parent_groups.all? do |group|
-        next true unless resolve_path_with_dar(resource, group[:parent]).first.present?
-
-        (group[:mandatory] || []).all? { |el| resolve_path_with_dar(resource, el).first.present? }
-      end
-    end
-
-    def parent_group_subelement_message_type(resource, sub_elements, mandatory)
-      types = sub_elements.map do |sub_element|
-        present = resolve_path_with_dar(resource, sub_element).first.present?
-        next 'info' if present
-
-        mandatory.include?(sub_element) ? 'error' : 'warning'
-      end
-      return 'error' if types.include?('error')
-
-      types.include?('warning') ? 'warning' : 'info'
-    end
   end
 end

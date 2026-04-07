@@ -150,16 +150,8 @@ module AUPSTestKit
       extension_slices(metadata).map { |slice| normalize_slice(slice) }
     end
 
-    def normalize_sub_element_slices_from_metadata(metadata)
-      normalize_slices_from_metadata(metadata).map { |slice| slice.merge(type: :slice) }
-    end
-
-    def normalize_sub_elements_and_slices_from_metadata(metadata)
-      normalize_sub_elements_from_metadata(metadata)
-    end
-
     def sub_elements_grouped_by_parent_path(metadata)
-      normalize_sub_elements_and_slices_from_metadata(metadata)
+      normalize_sub_elements_from_metadata(metadata)
         .group_by { |item| item[:expression].to_s.split('.').first }
     end
 
