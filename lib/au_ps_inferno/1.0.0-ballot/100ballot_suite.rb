@@ -21,7 +21,7 @@ module AUPSTestKit
       igs 'hl7.fhir.au.ps#1.0.0-ballot'
 
       cli_context do
-        txServer ENV.fetch('TX_SERVER_URL', 'https://tx.dev.hl7.org.au/fhir')
+        txServer ENV.fetch('TX_SERVER_URL') { 'https://tx.dev.hl7.org.au/fhir' }
       end
     end
 

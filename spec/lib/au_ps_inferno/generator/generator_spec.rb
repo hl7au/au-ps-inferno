@@ -133,6 +133,18 @@ RSpec.describe Generator do
       expect(Generator::RetrieveCSGroupGenerator).not_to receive(:new)
       empty_gen.generate
     end
+
+    it 'passes normalized and package IG versions to suite primitive config' do
+      suite_primitive = instance_double(Generator::SuitePrimitive, generate: { path: 'x', id: :y })
+      expect(Generator::SuitePrimitive).to receive(:new).with(
+        hash_including(
+          suite_version: '100preview',
+          ig_package_version: '1.0.0-preview'
+        )
+      ).and_return(suite_primitive)
+
+      generator.generate
+    end
   end
 
   describe 'private helpers (via #send)' do

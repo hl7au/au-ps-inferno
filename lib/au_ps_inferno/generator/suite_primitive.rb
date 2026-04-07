@@ -7,7 +7,7 @@ class Generator
   # Suite primitive generator. Use config to generate the suite file.
   # All template files should be in the templates folder.
   class SuitePrimitive
-    attr_reader :class_name, :title, :description, :id, :groups, :output_file_path, :suite_version
+    attr_reader :class_name, :title, :description, :id, :groups, :output_file_path, :suite_version, :ig_package_version
 
     def initialize(config)
       @class_name = config[:class_name]
@@ -17,6 +17,7 @@ class Generator
       @groups = config[:groups] || []
       @output_file_path = config[:output_file_path]
       @suite_version = config[:suite_version]
+      @ig_package_version = config[:ig_package_version]
     end
 
     def generate
