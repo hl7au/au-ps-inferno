@@ -6,7 +6,7 @@ compose = docker compose -f compose.aidbox.yaml
 endif
 inferno = run inferno
 
-.PHONY: pull build up stop down migrate setup run tests rubocop
+.PHONY: pull build up stop down migrate setup run tests rubocop snapshot-tests snapshot-tests-update
 
 pull:
 	$(compose) pull
@@ -34,6 +34,12 @@ restart: stop down setup up
 
 tests:
 	$(compose) $(inferno) bundle exec rspec
+
+snapshot-tests:
+	$(compose) $(inferno) bundle exec rspec spec/integration/suite_100ballot_snapshots_spec.rb
+
+snapshot-tests-update:
+	$(compose) run -e UPDATE_SNAPSHOTS=1 inferno bundle exec rspec spec/integration/suite_100ballot_snapshots_spec.rb
 
 rubocop:
 	$(compose) $(inferno) rubocop
