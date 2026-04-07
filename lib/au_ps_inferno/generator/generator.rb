@@ -128,7 +128,8 @@ class Generator
     group_name = generic_bundle_group[:name]
     {
       class_name: parts.fetch(:nested_class_name), title: group_name,
-      description: generic_bundle_group[:description] || group_description(group_name), id: parts.fetch(:nested_group_id),
+      description: generic_bundle_group[:description] || group_description(group_name),
+      id: parts.fetch(:nested_group_id),
       output_file_path: versioned_path(ho_file, filename: "#{file_name}.rb"), tests: parts.fetch(:tests)
     }
   end
@@ -189,14 +190,21 @@ class Generator
     test_id = opts.fetch(:test_id)
     resolved_title = opts.fetch(:resolved_title)
     {
-      class_name: "#{opts.fetch(:group_class_name)}#{build_class_name(resolved_title)}",
+      class_name: primitive_test_class_name(opts.fetch(:group_class_name), resolved_title),
       title: resolved_title,
       description: opts.fetch(:resolved_description),
       id: test_id,
-      output_file_path: versioned_path(
-        opts.fetch(:high_order_group_file_name), opts.fetch(:group_file_name), filename: "#{test_id}.rb"
-      )
+      output_file_path: primitive_test_output_path(opts.fetch(:high_order_group_file_name),
+                                                   opts.fetch(:group_file_name), test_id)
     }
+  end
+
+  def primitive_test_class_name(group_class_name, resolved_title)
+    "#{group_class_name}#{build_class_name(resolved_title)}"
+  end
+
+  def primitive_test_output_path(high_order_group_file_name, group_file_name, test_id)
+    versioned_path(high_order_group_file_name, group_file_name, filename: "#{test_id}.rb")
   end
 
   def apply_primitive_test_type_config!(test_config, test, test_type_id, resolved_title, resolved_description)
@@ -230,17 +238,27 @@ class Generator
 
   def high_order_group_config(high_order_group, high_order_class_name, ids, generic_bundle_groups)
     path = ids.fetch(:file_base)
+    config = build_high_order_group_config_hash(
+      high_order_group, high_order_class_name, ids, generic_bundle_groups, path
+    )
+    merge_optional_high_order_flags!(config, high_order_group)
+  end
+
+  def build_high_order_group_config_hash(high_order_group, high_order_class_name, ids, generic_bundle_groups, path)
     ho_name = high_order_group[:name]
-    # Path for require_relative must be relative to the high-order group file's directory
-    config = {
+    {
       class_name: high_order_class_name,
       title: ho_name,
       description: high_order_group[:description] || group_description(ho_name),
       id: ids.fetch(:group_id),
       groups: high_order_groups_with_relative_paths(generic_bundle_groups),
-      output_file_path: versioned_path(path, filename: "#{path}.rb")
+      output_file_path: high_order_group_output_path(path)
     }
-    merge_optional_high_order_flags!(config, high_order_group)
+  end
+
+  # Path for require_relative must be relative to the high-order group file's directory.
+  def high_order_group_output_path(path)
+    versioned_path(path, filename: "#{path}.rb")
   end
 
   def merge_optional_high_order_flags!(config, high_order_group)

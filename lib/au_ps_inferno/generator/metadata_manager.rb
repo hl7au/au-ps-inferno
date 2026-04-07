@@ -276,19 +276,7 @@ class Generator
     end
 
     def extract_optional_ms_elements
-      optional_paths = extract_optional_all_ms_elements
-      main_paths = []
-      sub_paths = []
-      optional_paths.each do |path|
-        next unless path_is_not_slice?(path)
-
-        dot_path = path.include?('.')
-        if !dot_path && path != 'section'
-          main_paths << path
-        elsif dot_path && !SUB_ELEMENTS_TO_SKIP.include?(path)
-          sub_paths << path
-        end
-      end
+      main_paths, sub_paths = split_ms_paths(extract_optional_all_ms_elements)
       @composition_optional_ms_elements = main_paths + ['event']
       @composition_optional_ms_sub_elements = sub_paths
       @composition_optional_ms_slices = composition_optional_ms_slices
@@ -302,22 +290,30 @@ class Generator
     end
 
     def extract_required_ms_elements
-      required_paths = extract_required_all_ms_elements
-      main_paths = []
-      sub_paths = []
-      required_paths.each do |path|
-        next unless path_is_not_slice?(path)
-
-        dot_path = path.include?('.')
-        if !dot_path && path != 'section'
-          main_paths << path
-        elsif dot_path && !SUB_ELEMENTS_TO_SKIP.include?(path)
-          sub_paths << path
-        end
-      end
+      main_paths, sub_paths = split_ms_paths(extract_required_all_ms_elements)
       @composition_mandatory_ms_elements = main_paths
       @composition_mandatory_ms_sub_elements = sub_paths
       @composition_mandatory_ms_slices = composition_mandatory_ms_slices
+    end
+
+    def split_ms_paths(paths)
+      paths.each_with_object([[], []]) do |path, (main_paths, sub_paths)|
+        next unless path_is_not_slice?(path)
+
+        if main_ms_path?(path)
+          main_paths << path
+        elsif sub_ms_path?(path)
+          sub_paths << path
+        end
+      end
+    end
+
+    def main_ms_path?(path)
+      !path.include?('.') && path != 'section'
+    end
+
+    def sub_ms_path?(path)
+      path.include?('.') && !SUB_ELEMENTS_TO_SKIP.include?(path)
     end
 
     # Filters Composition mustSupport elements (no slices) by predicate and returns path suffixes.
@@ -527,14 +523,13 @@ class Generator
     # @return [Hash] Basic section fields:
     #   :id, :short, :definition, :min, :max, :required, :mustSupport
     def build_basic_section_data(section)
-      min = section.min
       {
         id: section.id,
         short: section.short,
         definition: section.definition,
-        min: min,
+        min: section.min,
         max: section.max,
-        required: min.positive?,
+        required: section.min.positive?,
         mustSupport: section.mustSupport || false,
         ms_elements: composition_ms_sections_elements
       }
@@ -689,15 +684,19 @@ class Generator
       structure_definition_data = StructureDefinitionDecorator.new(sd_data.to_hash)
       elements = structure_definition_data.simple_elements(include_str: "#{sd_type}.")
       elements.filter_map do |element|
-        el_id = element.id
-        next if el_id.include?(':')
-
-        {
-          id: el_id,
-          expression: element.path.gsub("#{sd_type}.", ''),
-          min: element.min
-        }
+        build_structure_definition_element_data(element, sd_type)
       end.uniq
+    end
+
+    def build_structure_definition_element_data(element, sd_type)
+      el_id = element.id
+      return nil if el_id.include?(':')
+
+      {
+        id: el_id,
+        expression: element.path.gsub("#{sd_type}.", ''),
+        min: element.min
+      }
     end
 
     private :reset_composition_metadata_ivars!, :metadata_dump_sections, :metadata_dump_ms_elements,

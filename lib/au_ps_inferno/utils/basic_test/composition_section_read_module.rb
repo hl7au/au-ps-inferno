@@ -36,17 +36,26 @@ module AUPSTestKit
     def composition_section_row_flags(section, refs, mismatches)
       type_mismatch = mismatches[:any_type_mismatch]
       profile_mismatch = mismatches[:any_profile_mismatch]
-      no_type_mismatch = !type_mismatch
       has_entries = refs.any?
-      all_match = has_entries && no_type_mismatch && !profile_mismatch
-
       {
-        any_type_wrong: has_entries && type_mismatch,
-        any_profile_wrong: has_entries && no_type_mismatch && profile_mismatch,
+        any_type_wrong: section_has_any_type_wrong?(has_entries, type_mismatch),
+        any_profile_wrong: section_has_any_profile_wrong?(has_entries, !type_mismatch, profile_mismatch),
         empty_reason: section.empty_reason_str.present?,
         has_entries: has_entries,
-        all_match: all_match
+        all_match: section_entries_all_match?(has_entries, !type_mismatch, profile_mismatch)
       }
+    end
+
+    def section_has_any_type_wrong?(has_entries, type_mismatch)
+      has_entries && type_mismatch
+    end
+
+    def section_has_any_profile_wrong?(has_entries, no_type_mismatch, profile_mismatch)
+      has_entries && no_type_mismatch && profile_mismatch
+    end
+
+    def section_entries_all_match?(has_entries, no_type_mismatch, profile_mismatch)
+      has_entries && no_type_mismatch && !profile_mismatch
     end
 
     def composition_section_missing?(section_data, normalized_sections_data)

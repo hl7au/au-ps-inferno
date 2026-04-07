@@ -93,7 +93,11 @@ class Generator
             sections_data = metadata.composition_sections.filter do |section|
               section[:required] == true && section[:mustSupport] == true
             end
-            { commands: ["read_composition_sections_info(#{sections_data}, #{metadata.return_normalized_sections_data})"] }
+            {
+              commands: [
+                "read_composition_sections_info(#{sections_data}, #{metadata.return_normalized_sections_data})"
+              ]
+            }
           }
         },
         subject_ms_elements: {
