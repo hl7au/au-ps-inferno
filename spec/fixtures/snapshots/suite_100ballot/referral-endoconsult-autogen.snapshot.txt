@@ -1,0 +1,117 @@
+Test Results:
+================================================================================
+AU PS 1.0.0-ballot Test Suite: X error
+AU PS 1.0.0-ballot Test Suite: X error
+1 AU PS Bundle Instance: * skip
+1 AU PS Bundle Instance: * skip
+1.1 AU PS Bundle Validation: * skip
+1.1.01 AU PS Bundle is valid against AU PS Bundle profile: * skip
+1.10 AU PS Composition Custodian: * skip
+1.10.01 Must Support element SHALL be populated if a value is known: * skip
+1.10.02 Must Support sub-element SHALL be populated if a value is known: * skip
+1.10.03 Must Support identifier slices SHALL be populated if a value is known: * skip
+1.11 AU PS Composition Attester: * skip
+1.11.01 Must Support elements SHALL be populated if a value is known: * skip
+1.11.02 Must Support sub-element SHALL be populated if a value is known: * skip
+1.11.03 Must Support identifier slices SHALL be populated if a value is known: * skip
+1.2 AU PS Bundle Must Support Conformance: * skip
+1.2.01 AU PS Bundle Must Support elements are correctly populated: * skip
+1.3 AU PS Composition Must Support Conformance: ✓ pass
+1.3.01 Mandatory Must Support elements are correctly populated: ✓ pass
+1.3.02 Optional Must Support elements are correctly populated: ✓ pass
+1.3.03 Must Support sub-elements of a complex element are correctly populated: ✓ pass
+1.3.04 Must Support slices are correctly populated: ✓ pass
+1.4 AU PS Composition Mandatory Sections: * skip
+1.4.01 AU PS Composition Mandatory Sections are correctly populated: * skip
+1.4.02 AU PS Composition Mandatory Sections capable of populating referenced profiles: * skip
+1.5 AU PS Composition Recommended Sections: * skip
+1.5.01 AU PS Composition recommended sections are correctly populated: * skip
+1.6 AU PS Composition Optional Sections: * skip
+1.6.01 AU PS Composition optional sections are correctly populated: * skip
+1.7 AU PS Composition Undefined Sections: * skip
+1.7.01 Undefined sections are correctly populated: * skip
+1.8 AU PS Composition Subject: * skip
+1.8.01 Must Support elements SHALL be populated if a value is known: * skip
+1.8.02 Must Support sub-element SHALL be populated if a value is known and the parent is populated: * skip
+1.8.03 Must Support identifier slices SHALL be populated if a value is known: * skip
+1.9 AU PS Composition Author: * skip
+1.9.01 Must Support elements SHALL be populated if a value is known: * skip
+1.9.02 Must Support sub-elements SHALL be populated if a value is known: * skip
+1.9.03 Must Support identifier slices SHALL be populated if a value is known: * skip
+2 Retrieve Capability Statement: * skip
+2.01 CapabilityStatement is valid: * skip
+2.02 CapabilityStatement supports IPS Recommended Operations: * skip
+2.03 CapabilityStatement supports AU PS Profiles: * skip
+3 Retrieve AU PS Bundle validation tests: X error
+3 Retrieve AU PS Bundle validation tests: X error
+3.1 AU PS Bundle Validation: X error
+3.1.01 Retrieved Bundle is valid against AU PS Bundle profile: X error
+3.10 AU PS Composition Custodian: ✓ pass
+3.10.01 Must Support element SHALL be populated if a value is known: ✓ pass
+3.10.02 Must Support sub-element SHALL be populated if a value is known: ✓ pass
+3.10.03 Must Support identifier slices SHALL be populated if a value is known: ✓ pass
+3.11 AU PS Composition Attester: * skip
+3.11.01 Must Support elements SHALL be populated if a value is known: * skip
+3.11.02 Must Support sub-element SHALL be populated if a value is known: * skip
+3.11.03 Must Support identifier slices SHALL be populated if a value is known: * skip
+3.2 AU PS Bundle Must Support Conformance: ✓ pass
+3.2.01 AU PS Bundle Must Support elements are correctly populated: ✓ pass
+3.3 AU PS Composition Must Support Conformance: ✓ pass
+3.3.01 Mandatory Must Support elements are correctly populated: ✓ pass
+3.3.02 Optional Must Support elements are correctly populated: ✓ pass
+3.3.03 Must Support sub-elements of a complex element are correctly populated: ✓ pass
+3.3.04 Must Support slices are correctly populated: ✓ pass
+3.4 AU PS Composition Mandatory Sections: ✓ pass
+3.4.01 AU PS Composition Mandatory Sections are correctly populated: ✓ pass
+3.4.02 AU PS Composition Mandatory Sections capable of populating referenced profiles: ✓ pass
+3.5 AU PS Composition Recommended Sections: ✓ pass
+3.5.01 AU PS Composition recommended sections are correctly populated: ✓ pass
+3.6 AU PS Composition Optional Sections: ✓ pass
+3.6.01 AU PS Composition optional sections are correctly populated: ✓ pass
+3.7 AU PS Composition Undefined Sections: * skip
+3.7.01 Undefined sections are correctly populated: * skip
+3.8 AU PS Composition Subject: ✓ pass
+3.8.01 Must Support elements SHALL be populated if a value is known: ✓ pass
+3.8.02 Must Support sub-element SHALL be populated if a value is known and the parent is populated: ✓ pass
+3.8.03 Must Support identifier slices SHALL be populated if a value is known: ✓ pass
+3.9 AU PS Composition Author: * skip
+3.9.01 Must Support elements SHALL be populated if a value is known: ✓ pass
+3.9.02 Must Support sub-elements SHALL be populated if a value is known: ✓ pass
+3.9.03 Must Support identifier slices SHALL be populated if a value is known: * skip
+4 Generate AU PS using IPS $summary validation tests: * skip
+4 Generate AU PS using IPS $summary validation tests: * skip
+4.1 AU PS Bundle Validation: * skip
+4.1.01 Generated Bundle is valid against AU PS Bundle profile: * skip
+4.10 AU PS Composition Custodian: ✓ pass
+4.10.01 Must Support element SHALL be populated if a value is known: ✓ pass
+4.10.02 Must Support sub-element SHALL be populated if a value is known: ✓ pass
+4.10.03 Must Support identifier slices SHALL be populated if a value is known: ✓ pass
+4.11 AU PS Composition Attester: * skip
+4.11.01 Must Support elements SHALL be populated if a value is known: * skip
+4.11.02 Must Support sub-element SHALL be populated if a value is known: * skip
+4.11.03 Must Support identifier slices SHALL be populated if a value is known: * skip
+4.2 AU PS Bundle Must Support Conformance: ✓ pass
+4.2.01 AU PS Bundle Must Support elements are correctly populated: ✓ pass
+4.3 AU PS Composition Must Support Conformance: ✓ pass
+4.3.01 Mandatory Must Support elements are correctly populated: ✓ pass
+4.3.02 Optional Must Support elements are correctly populated: ✓ pass
+4.3.03 Must Support sub-elements of a complex element are correctly populated: ✓ pass
+4.3.04 Must Support slices are correctly populated: ✓ pass
+4.4 AU PS Composition Mandatory Sections: ✓ pass
+4.4.01 AU PS Composition Mandatory Sections are correctly populated: ✓ pass
+4.4.02 AU PS Composition Mandatory Sections capable of populating referenced profiles: ✓ pass
+4.5 AU PS Composition Recommended Sections: ✓ pass
+4.5.01 AU PS Composition recommended sections are correctly populated: ✓ pass
+4.6 AU PS Composition Optional Sections: ✓ pass
+4.6.01 AU PS Composition optional sections are correctly populated: ✓ pass
+4.7 AU PS Composition Undefined Sections: * skip
+4.7.01 Undefined sections are correctly populated: * skip
+4.8 AU PS Composition Subject: ✓ pass
+4.8.01 Must Support elements SHALL be populated if a value is known: ✓ pass
+4.8.02 Must Support sub-element SHALL be populated if a value is known and the parent is populated: ✓ pass
+4.8.03 Must Support identifier slices SHALL be populated if a value is known: ✓ pass
+4.9 AU PS Composition Author: * skip
+4.9.01 Must Support elements SHALL be populated if a value is known: ✓ pass
+4.9.02 Must Support sub-elements SHALL be populated if a value is known: ✓ pass
+4.9.03 Must Support identifier slices SHALL be populated if a value is known: * skip
+================================================================================

@@ -1,8 +1,12 @@
 # frozen_string_literal: true
 
+require_relative '../basic_test_contants_module'
+
 module AUPSTestKit
   # Must Support identifier slice validation for Composition attester.party reference.
   module BasicTestAttesterIdentifierSlices
+    include BasicTestConstants
+
     def validate_attester_party_ms_identifier_slices(resource, slices, resource_type_str, profile_str)
       return unless resource.present? && slices.present?
 

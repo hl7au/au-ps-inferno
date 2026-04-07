@@ -2,6 +2,7 @@ AllCops:
   NewCops: enable
   Exclude:
     - "lib/au_ps_inferno/1.0.0-ballot/**/*"
+    - "spec/integration/suite_100ballot_snapshots_spec.rb"
 
 Gemspec/DevelopmentDependencies:
   Enabled: false
