@@ -72,6 +72,7 @@ class Generator
         name: 'AU PS Composition Subject',
         description: 'Verify the referenced subject is a correctly populated AU PS Patient resource.',
         tests: [
+          { id: :subject_resource_type_is_valid },
           { id: :subject_ms_elements },
           { id: :subject_ms_subelements_populated },
           { id: :subject_ms_identifier_slices }

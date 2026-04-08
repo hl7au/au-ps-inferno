@@ -94,6 +94,11 @@ class Generator
             { commands: ["read_composition_sections_info(#{sections_data}, #{m.return_normalized_sections_data})"] }
           }
         },
+        subject_resource_type_is_valid: {
+          title: 'Subject reference in the AU PS Composition SHALL resolve to a valid resource type (Patient).',
+          description: 'Subject reference in the AU PS Composition SHALL resolve to a valid resource type (Patient).',
+          commands: ['test_resource_type_is_valid?("subject")']
+        },
         subject_ms_elements: {
           title: 'Must Support elements SHALL be populated if a value is known',
           description: 'Must Support elements SHALL be populated if a value is known',
