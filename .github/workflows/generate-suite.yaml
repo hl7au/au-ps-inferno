@@ -1,0 +1,28 @@
+name: Generate Suite
+on: workflow_dispatch
+permissions:
+  contents: write
+  pull-requests: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    - name: Generate tests
+      run: make generate_and_fix
+    - name: Change ownership
+      run: sudo chown -R $USER:$USER .
+    - name: Create Pull Request
+      uses: peter-evans/create-pull-request@v6
+      id: cpr
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        delete-branch: true
+        commit-message: Merge new auto generated tests
+        title: Merge new auto generated tests
+        body: Merge new auto generated tests
+        labels: automated-pr
+        base: master
