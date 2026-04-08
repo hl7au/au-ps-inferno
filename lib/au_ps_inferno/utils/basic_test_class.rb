@@ -13,7 +13,6 @@ require_relative 'custodian/basic_test_custodian_module'
 require_relative 'basic_test/bundle_module'
 require_relative 'basic_test/capability_operations_module'
 require_relative 'basic_test/composition_section_read_module'
-require_relative 'basic_test/section_info_and_population_module'
 require_relative 'basic_test/paths_module'
 require_relative 'basic_test/resource_helpers_module'
 require_relative 'basic_test/composition_subelements_module'
@@ -41,7 +40,6 @@ module AUPSTestKit
     include BasicTestBundleModule
     include BasicTestCapabilityOperationsModule
     include BasicTestCompositionSectionReadModule
-    include BasicTestSectionInfoAndPopulationModule
     include BasicTestPathsModule
     include BasicTestResourceHelpersModule
     include BasicTestCompositionSubelementsModule

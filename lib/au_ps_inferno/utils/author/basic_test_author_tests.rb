@@ -7,20 +7,6 @@ module AUPSTestKit
   module BasicTestAuthorTests
     include BasicTestConstants
 
-    def test_composition_author_ms_subelements
-      resource = composition_author_resource_for_ms_tests('Referenced author resource type is Device')
-      author_meta = composition_author_metadata
-      skip_if author_meta.blank?, 'No author metadata available'
-
-      resource_type_str = resource_type(resource)
-      parent_groups = author_ms_subelement_parent_groups(author_meta, resource_type_str)
-      skip_if parent_groups.blank?,
-              'Referenced author resource type has no complex elements with Must Support sub-elements'
-
-      rtype_str, profile_str = author_resource_type_and_profiles(resource)
-      validate_author_ms_subelements(resource, parent_groups, rtype_str, profile_str)
-    end
-
     def test_composition_author_ms_identifier_slices
       check_bundle_exists_in_scratch
       resource = author_resource
@@ -34,16 +20,6 @@ module AUPSTestKit
 
       rtype_str, profile_str = author_resource_type_and_profiles(resource)
       validate_author_ms_identifier_slices(resource, slices, rtype_str, profile_str)
-    end
-
-    private
-
-    def composition_author_resource_for_ms_tests(device_skip_message)
-      check_bundle_exists_in_scratch
-      resource = author_resource
-      skip_if resource.blank?, 'No author reference found on Composition'
-      skip_if resource_type(resource) == 'Device', device_skip_message
-      resource
     end
   end
 end

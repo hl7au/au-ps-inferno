@@ -260,16 +260,6 @@ class Generator
     SuitePrimitive.new(config).generate
   end
 
-  # Runs SectionsValidationGroupGenerator and returns suite group info in the same shape as
-  # high-order groups ({ path:, id: }) for inclusion in the suite, or nil if suite_version is empty.
-  def generate_sections_validation_group
-    return nil if @suite_version.empty?
-
-    section_gen = SectionsValidationGroupGenerator.new(@metadata, @version_suffix, @suite_version)
-    section_gen.generate
-    suite_group_info_to_path_id(section_gen.suite_group_info)
-  end
-
   # Runs RetrieveCSGroupGenerator and returns suite group info in the same shape as
   # high-order groups ({ path:, id: }) for inclusion in the suite, or nil if suite_version is empty.
   def generate_retrieve_cs_group

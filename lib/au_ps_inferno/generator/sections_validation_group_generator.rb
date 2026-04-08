@@ -7,8 +7,6 @@ class Generator
   #
   # @attr_reader [Hash] group_data The data representing the section group.
   class SectionGroupData
-    attr_reader :group_data
-
     # Initializes a new SectionGroupData.
     #
     # @param group_data [Hash] Metadata about the section group.
@@ -21,8 +19,6 @@ class Generator
   #
   # @attr_reader [Hash] section_data The hash containing section data.
   class SectionTestData
-    attr_reader :section_data
-
     # Initializes a new SectionTestData.
     #
     # @param section_data [Hash] Hash with keys:

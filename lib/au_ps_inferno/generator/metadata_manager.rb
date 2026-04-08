@@ -166,25 +166,6 @@ class Generator
       }
     end
 
-    def normalize_slice_data(slice)
-      {
-        path: slice[:path],
-        label: "#{slice[:path]} (#{slice[:sliceName]})"
-      }
-    end
-
-    def optional_ms_slices
-      @composition_optional_ms_slices.map do |slice|
-        normalize_slice_data(slice)
-      end
-    end
-
-    def mandatory_ms_slices
-      @composition_mandatory_ms_slices.map do |slice|
-        normalize_slice_data(slice)
-      end
-    end
-
     def all_sections_data_codes
       ALL_SECTIONS_CODES
     end
@@ -216,12 +197,6 @@ class Generator
     def recommended_sections_data_codes
       composition_sections.filter do |section|
         RECOMMENDED_SECTIONS_CODES.include?(section[:code])
-      end
-    end
-
-    def filter_sections_data_by_min(min)
-      @composition_sections.filter do |section|
-        section[:min] == min
       end
     end
 
@@ -261,10 +236,6 @@ class Generator
     # @return [Boolean] true if the profile URL is in {Generator::Constants::REQUIRED_PROFILES}
     def profile_required?(profile)
       REQUIRED_PROFILES.include?(profile.url.to_s)
-    end
-
-    def sections_codes_mapping
-      @composition_sections.to_h { |section| [section[:code], section[:short]] }
     end
 
     # StructureDefinitions from the IG whose URL is an AU PS profile
@@ -599,16 +570,8 @@ class Generator
       { expression: path, label: path }
     end
 
-    def optional_ms_elements
-      @composition_optional_ms_elements.map { |element| normalize_path_to_hash(element) }
-    end
-
     def optional_ms_sub_elements
       @composition_optional_ms_sub_elements.map { |element| normalize_path_to_hash(element) }
-    end
-
-    def mandatory_ms_elements
-      @composition_mandatory_ms_elements.map { |element| normalize_path_to_hash(element) }
     end
 
     def mandatory_ms_sub_elements

@@ -3,16 +3,6 @@
 module AUPSTestKit
   # Bundle-level checks, mandatory MS list info, and IPS bundle profile validation.
   module BasicTestBundleModule
-    def check_other_sections(all_sections_data_codes, sections_codes_mapping)
-      check_bundle_exists_in_scratch
-      composition_resource = BundleDecorator.new(scratch_bundle.to_hash).composition_resource
-      other_section_codes = composition_resource.section_codes - all_sections_data_codes
-      info 'No other sections found' if other_section_codes.empty?
-      other_section_codes.each do |section_code|
-        check_composition_section_code(section_code, composition_resource, sections_codes_mapping)
-      end
-    end
-
     def bundle_mandatory_ms_elements_info
       check_bundle_exists_in_scratch
       passed = [identifier_info?, type_info?, timestamp_info?, all_entries_have_full_url_info?].all?

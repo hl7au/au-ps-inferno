@@ -23,17 +23,6 @@ class BundleDecorator < FHIR::Bundle
     entry.find { |entr| entr.resource.resourceType == 'Composition' }
   end
 
-  def resource_info_by_entry_full_url(entry_full_url)
-    entry_by_full_url = resolve_entry_reference(entry_full_url)
-    return "Entry with fullUrl #{entry_full_url} not found in Bundle" if entry_by_full_url.nil?
-
-    resource = entry_by_full_url.resource
-    profiles = (resource.meta&.profile || []).sort
-    profiles = profiles.length.positive? ? profiles.join(', ') : 'Without Profiles'
-
-    "#{resource.resourceType} (#{profiles})"
-  end
-
   def resource_by_reference(entry_reference)
     entry = resolve_entry_reference(entry_reference)
     entry&.resource

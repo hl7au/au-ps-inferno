@@ -2,26 +2,6 @@
 
 module AUPSTestKit
   module BasicTestConstants
-    SLICE_EXTENSIONS_BY_RESOURCE_TYPE = {
-      'Patient' => {
-        'indigenousStatus' => 'http://hl7.org.au/fhir/StructureDefinition/indigenous-status',
-        'genderIdentity' => 'http://hl7.org/fhir/StructureDefinition/individual-genderIdentity',
-        'individualPronouns' => 'http://hl7.org/fhir/StructureDefinition/individual-pronouns'
-      }
-    }.freeze
-
-    SUBJECT_MANDATORY_MS_PRIMITIVES = %w[identifier name gender birthDate].freeze
-    SUBJECT_OPTIONAL_MS_PRIMITIVES = %w[telecom address communication generalPractitioner].freeze
-    SUBJECT_OPTIONAL_MS_SLICES = %w[indigenousStatus genderIdentity individualPronouns].freeze
-
-    # AU PS Patient Must Support sub-elements: validate when parent (name, telecom, communication) is populated.
-    # communication.language is mandatory when communication is present; all others optional.
-    PATIENT_MS_SUBELEMENT_GROUPS = [
-      { parent: 'name', mandatory: [], optional: %w[name.use name.text name.family name.given] },
-      { parent: 'telecom', mandatory: [], optional: %w[telecom.system telecom.value telecom.use] },
-      { parent: 'communication', mandatory: ['communication.language'], optional: ['communication.preferred'] }
-    ].freeze
-
     # AU PS Patient Must Support identifier slices (optional). System URLs for IHI, DVA, Medicare.
     PATIENT_MS_IDENTIFIER_SLICES = [
       { name: 'IHI', system: 'http://ns.electronichealth.net.au/id/hi/ihi/1.0' },
