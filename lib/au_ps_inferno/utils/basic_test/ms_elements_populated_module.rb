@@ -14,6 +14,8 @@ module AUPSTestKit
       target_metadata = target_metadata_for_resource(container_type, resource)
       return unless target_metadata.present?
 
+      author_and_device_resource?(container_type, resource)
+
       state = default_population_state
       result_messages = base_result_messages(container_type, resource)
 
