@@ -44,13 +44,13 @@ snapshot-tests-update:
 rubocop:
 	$(compose) $(inferno) rubocop
 
-local_generate:
+generate:
 	rm -rf lib/au_ps_inferno/1.0.0-ballot
-	bundle exec rake generator:generate
+	$(compose) $(inferno) bundle exec rake generator:generate
 
-local_rubocop:
-	rubocop . -A
+rubocop_fix:
+	$(compose) $(inferno) bundle exec rubocop . -A
 
-local_generate_and_rubocop: local_generate local_rubocop
+generate_and_fix: build generate rubocop_fix
 
-dev_restart: stop down local_generate setup up
+dev_restart: stop down generate setup up

@@ -122,5 +122,10 @@ module AUPSTestKit
     def coding_display_suffix_hash(coding)
       ", type: #{coding['display'].presence || coding['code'].presence || '—'}"
     end
+
+    def guard_populated_resource(container_type)
+      resource_is_poluated = raw_resource_type_is_valid(container_type)
+      skip_if !resource_is_poluated[:valid?], resource_is_poluated[:msg]
+    end
   end
 end
