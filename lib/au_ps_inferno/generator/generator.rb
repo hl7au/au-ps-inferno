@@ -279,7 +279,8 @@ class Generator
 
   def suite_primitive_config(suite_class_name, suite_id, ig_suite_version, high_order_groups)
     {
-      suite_version: ig_suite_version,
+      # Keep full semantic version for validator package reference in suite template.
+      suite_version: @suite_version,
       class_name: suite_class_name,
       title: "AU PS #{@suite_version} Test Suite",
       description: suite_primitive_description,

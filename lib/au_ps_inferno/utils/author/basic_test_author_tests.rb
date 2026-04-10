@@ -11,10 +11,10 @@ module AUPSTestKit
       guard_populated_resource('author')
 
       resource = author_resource
+      author_and_device_resource?('author', resource)
       resource_type_str = resource_type(resource)
-      skip_if resource_type_str == 'Device', 'Referenced author resource type is Device'
       slices = AUTHOR_MS_IDENTIFIER_SLICES_BY_TYPE[resource_type_str] || []
-      skip_if slices.blank?,
+      omit_if slices.blank?,
               'No Must Support identifier slices are defined for the referenced author type (e.g. AU PS RelatedPerson)'
 
       # rtype_str, profile_str = author_resource_type_and_profiles(resource)

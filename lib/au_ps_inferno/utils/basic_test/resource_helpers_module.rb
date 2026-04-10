@@ -127,5 +127,11 @@ module AUPSTestKit
       resource_is_poluated = raw_resource_type_is_valid(container_type)
       skip_if !resource_is_poluated[:valid?], resource_is_poluated[:msg]
     end
+
+    def author_and_device_resource?(container_type, resource)
+      # TODO: This function should be more generic in the future.
+      is_author_and_device = container_type == 'author' && resource_type(resource) == 'Device'
+      omit_if is_author_and_device, 'Test is ommited because the author reference resolves to a Device resource'
+    end
   end
 end
