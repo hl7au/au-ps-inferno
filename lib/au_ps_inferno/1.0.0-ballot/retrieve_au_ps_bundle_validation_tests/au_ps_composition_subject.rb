@@ -2,6 +2,8 @@
 
 
 
+require_relative 'au_ps_composition_subject/suite_100ballot_retrieve_au_ps_bundle_validation_tests_au_ps_composition_subject_subject_resource_type_is_valid'
+
 require_relative 'au_ps_composition_subject/suite_100ballot_retrieve_au_ps_bundle_validation_tests_au_ps_composition_subject_subject_ms_elements'
 
 require_relative 'au_ps_composition_subject/suite_100ballot_retrieve_au_ps_bundle_validation_tests_au_ps_composition_subject_subject_ms_subelements_populated'
@@ -20,6 +22,8 @@ module AUPSTestKit
     run_as_group
     
 
+    
+    test from: :suite_100ballot_retrieve_au_ps_bundle_validation_tests_au_ps_composition_subject_subject_resource_type_is_valid
     
     test from: :suite_100ballot_retrieve_au_ps_bundle_validation_tests_au_ps_composition_subject_subject_ms_elements
     
