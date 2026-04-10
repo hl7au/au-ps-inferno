@@ -15,14 +15,21 @@ jobs:
       run: make generate_and_fix
     - name: Change ownership
       run: sudo chown -R $USER:$USER .
+    - name: Prepare PR metadata
+      shell: bash
+      run: |
+        DATE=$(date -u +%Y-%m-%d)
+        echo "PR_TITLE=Regenerate suite - ${DATE} #${GITHUB_RUN_NUMBER}" >> "$GITHUB_ENV"
+        echo "PR_BODY=Automated suite regeneration from workflow run #${GITHUB_RUN_NUMBER}: https://github.com/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}" >> "$GITHUB_ENV"
     - name: Create Pull Request
       uses: peter-evans/create-pull-request@v6
       id: cpr
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         delete-branch: true
-        commit-message: Merge new auto generated tests
-        title: Merge new auto generated tests
-        body: Merge new auto generated tests
+        branch: automated/suite-regen-${{ github.run_id }}
+        commit-message: ${{ env.PR_TITLE }}
+        title: ${{ env.PR_TITLE }}
+        body: ${{ env.PR_BODY }}
         labels: automated-pr
         base: master
