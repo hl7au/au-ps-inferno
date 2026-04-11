@@ -53,12 +53,17 @@ module AUPSTestKit
 
     def add_validation_errors_to_scratch
       existing_validation_errors = scratch[:validation_errors] || []
-      existing_validation_errors.concat(error_messages.map { |message| build_scratch_validation_error(message) })
-      scratch[:validation_errors] = existing_validation_errors.uniq
+      error_messages.each do |message|
+        existing_validation_errors << build_scratch_validation_error(message)
+      end
+      scratch[:validation_errors] = existing_validation_errors.compact.uniq
     end
 
     def build_scratch_validation_error(message)
-      idx = message[:message].match(/Bundle.entry\[(\d+)\]/)[1].to_i
+      match = message[:message].match(/Bundle.entry\[(\d+)\]/)
+      return nil if match.nil?
+
+      idx = match[1].to_i
       filtered_entry = scratch_bundle.entry[idx]
       resource = filtered_entry.resource
 

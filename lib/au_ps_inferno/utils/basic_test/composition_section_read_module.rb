@@ -5,7 +5,62 @@ module AUPSTestKit
   module BasicTestCompositionSectionReadModule # rubocop:disable Metrics/ModuleLength
     private
 
-    def read_composition_sections_info(sections_data, normalized_sections_data)
+    def read_composition_sections_info
+      check_bundle_exists_in_scratch
+      assert composition_sections_read_pass?, 'Some of the sections are not populated correctly.'
+    end
+
+    def composition_sections_read_pass?
+      validation_errors = scratch[:validation_errors] || []
+      bundle_resource = BundleDecorator.new(scratch_bundle.to_hash)
+      composition_resource = bundle_resource.composition_resource
+      is_passed = true
+      metadata_manager.required_ms_sections_metadata.each do |section_metadata|
+        is_passed &&= report_composition_section_read(section_metadata, composition_resource, bundle_resource,
+                                                      validation_errors)
+      end
+      is_passed
+    end
+
+    def report_composition_section_read(section_metadata, composition_resource, bundle_resource, validation_errors)
+      issues = read_composition_section_issues(section_metadata, composition_resource, bundle_resource,
+                                               validation_errors)
+      add_message(issues.empty? ? 'info' : 'error', "#{section_metadata[:code]}\n\n#{issues.join("\n\n")}")
+      issues.empty?
+    end
+
+    def read_composition_section_issues(section_metadata, composition_resource, bundle_resource, validation_errors)
+      section_code = section_metadata[:code]
+      section = composition_resource.section_by_code(section_code)
+      return ["No composition section found for code: #{section_code}"] if section.blank?
+
+      entries_resource_types = permitted_resource_types(section_metadata)
+      section.entry_references.flat_map do |ref|
+        composition_section_ref_read_issues(ref, bundle_resource, entries_resource_types, validation_errors)
+      end
+    end
+
+    def composition_section_ref_read_issues(ref, bundle_resource, entries_resource_types, validation_errors)
+      resource = bundle_resource.resource_by_reference(ref)
+      issues = []
+      issues << "Resource not found for reference: #{ref}" if resource.blank?
+      if resource.present? && !entries_resource_types.include?(resource.resourceType)
+        issues << "Resource type: #{resource.resourceType} is not in the list " \
+                  "of expected resource types: #{entries_resource_types}"
+      end
+      issues << "Validation error found for reference: #{ref}" if validation_errors.any? { |e| e[:full_url] == ref }
+      issues
+    end
+
+    def permitted_resource_types(section_metadata)
+      section_metadata[:entries].map do |entry|
+        entry[:profiles].map do |profile|
+          profile.split('|').first
+        end
+      end.flatten.uniq
+    end
+
+    def _read_composition_sections_info(sections_data, normalized_sections_data)
       check_bundle_exists_in_scratch
       composition = BundleDecorator.new(scratch_bundle.to_hash).composition_resource
       has_error = sections_data.any? do |section_data|
