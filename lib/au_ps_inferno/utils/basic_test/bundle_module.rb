@@ -43,7 +43,31 @@ module AUPSTestKit
 
       resource_is_valid?(resource: resource, profile_url: profile_with_version)
       errors_found = messages.any? { |message| message[:type] == 'error' }
+      add_validation_errors_to_scratch if errors_found
       assert !errors_found, "Resource does not conform to the profile #{profile_with_version}"
+    end
+
+    def error_messages
+      messages.select { |message| message[:type] == 'error' }
+    end
+
+    def add_validation_errors_to_scratch
+      existing_validation_errors = scratch[:validation_errors] || []
+      existing_validation_errors.concat(error_messages.map { |message| build_scratch_validation_error(message) })
+      scratch[:validation_errors] = existing_validation_errors.uniq
+    end
+
+    def build_scratch_validation_error(message)
+      idx = message[:message].match(/Bundle.entry\[(\d+)\]/)[1].to_i
+      filtered_entry = scratch_bundle.entry[idx]
+      resource = filtered_entry.resource
+
+      {
+        full_url: filtered_entry.fullUrl,
+        id: resource.id,
+        resource_type: resource.resourceType,
+        error_message: message[:message]
+      }
     end
   end
 end
