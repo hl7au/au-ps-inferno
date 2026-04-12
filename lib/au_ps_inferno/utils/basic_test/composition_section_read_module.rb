@@ -14,12 +14,10 @@ module AUPSTestKit
       validation_errors = scratch[:validation_errors] || []
       bundle_resource = BundleDecorator.new(scratch_bundle.to_hash)
       composition_resource = bundle_resource.composition_resource
-      is_passed = true
-      metadata_manager.required_ms_sections_metadata.each do |section_metadata|
-        is_passed &&= report_composition_section_read(section_metadata, composition_resource, bundle_resource,
-                                                      validation_errors)
+      section_results = metadata_manager.required_ms_sections_metadata.map do |section_metadata|
+        report_composition_section_read(section_metadata, composition_resource, bundle_resource, validation_errors)
       end
-      is_passed
+      section_results.all?
     end
 
     def report_composition_section_read(section_metadata, composition_resource, bundle_resource, validation_errors)
@@ -51,17 +49,29 @@ module AUPSTestKit
     def format_composition_section_entry_line(ref, bundle_resource, section_metadata)
       resource = bundle_resource.resource_by_reference(ref)
       index = bundle_resource.extract_entry_index(ref)
-      return "#{ref} -> ❌ Reference does not resolve" if resource.blank?
+      return composition_section_entry_line_unresolved(ref) if resource.blank?
       unless permitted_resource_types(section_metadata).include?(resource.resourceType)
-        return "entry[#{index}]: #{ref} -> ❌ Invalid resource type"
+        return composition_section_entry_line_bad_type(index, ref)
       end
 
-      validation_errors = scratch[:validation_errors] || []
-      errors = validation_errors.any? { |e| e[:full_url] == ref }
+      composition_section_entry_line_resolved(index, ref, resource)
+    end
 
+    def composition_section_entry_line_unresolved(ref)
+      "**#{ref}** -> ❌ Reference does not resolve"
+    end
+
+    def composition_section_entry_line_bad_type(index, ref)
+      "entry[#{index}]: **#{ref}** -> ❌ Invalid resource type"
+    end
+
+    def composition_section_entry_line_resolved(index, ref, resource)
+      validation_errors = scratch[:validation_errors] || []
+      has_val_error = validation_errors.any? { |e| e[:full_url] == ref }
       profiles = resource.meta&.profile || []
       suffix = profiles.any? ? "(meta.profile: #{profiles.join(', ')})" : '(no meta.profile)'
-      "entry[#{index}]: #{ref} -> #{resource.resourceType} #{suffix} #{'❌ Validation error' if errors}"
+      tail = has_val_error ? "#{suffix} ❌ Validation error" : suffix
+      "entry[#{index}]: **#{ref}** -> #{resource.resourceType} #{tail}"
     end
 
     def read_composition_section_issues(section_metadata, composition_resource, bundle_resource, validation_errors)
@@ -229,13 +239,13 @@ module AUPSTestKit
       true
     end
 
-    def section_entry_list_or_empty_reason(_section_data, section, _normalized_sections_data)
+    def section_entry_list_or_empty_reason(section_data, section, _normalized_sections_data)
       return 'List of entry resources by type & profile: (section missing)' if section.blank?
       return empty_section_entry_reason_line(section) if section.entry_references.empty?
 
       bundle_resource = BundleDecorator.new(scratch_bundle.to_hash)
-      section.entry_references.each_with_index.map do |ref, index|
-        format_composition_section_entry_line(index, ref, bundle_resource)
+      section.entry_references.map do |ref|
+        format_composition_section_entry_line(ref, bundle_resource, section_data)
       end.join("\n\n").to_s
     end
 
