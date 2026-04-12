@@ -15,12 +15,12 @@ module AUPSTestKit
       bundle_resource = BundleDecorator.new(scratch_bundle.to_hash)
       composition_resource = bundle_resource.composition_resource
       section_results = metadata_manager.required_ms_sections_metadata.map do |section_metadata|
-        report_composition_section_read(section_metadata, composition_resource, bundle_resource, validation_errors)
+        report_composition_section_read?(section_metadata, composition_resource, bundle_resource, validation_errors)
       end
       section_results.all?
     end
 
-    def report_composition_section_read(section_metadata, composition_resource, bundle_resource, validation_errors)
+    def report_composition_section_read?(section_metadata, composition_resource, bundle_resource, validation_errors)
       section_code = section_metadata[:code]
       section = composition_resource.section_by_code(section_code)
       issues = read_composition_section_issues(section_metadata, composition_resource, bundle_resource,

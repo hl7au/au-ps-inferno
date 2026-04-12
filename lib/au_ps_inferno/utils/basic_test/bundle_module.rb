@@ -63,8 +63,7 @@ module AUPSTestKit
       match = message[:message].match(/Bundle.entry\[(\d+)\]/)
       return nil if match.nil?
 
-      idx = match[1].to_i
-      filtered_entry = scratch_bundle.entry[idx]
+      filtered_entry = scratch_bundle.entry[match[1].to_i]
       resource = filtered_entry.resource
 
       {

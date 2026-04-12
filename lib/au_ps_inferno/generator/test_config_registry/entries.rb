@@ -89,10 +89,7 @@ class Generator
           title: 'AU PS Composition Mandatory Sections capable of populating referenced profiles',
           description: 'Mandatory section SHALL be capable of populating section.entry with the referenced ' \
                        'profiles and SHOULD correctly populate section.entry if a value is known.',
-          commands_builder: lambda { |m|
-            sections_data = m.composition_sections.filter { |s| s[:required] == true && s[:mustSupport] == true }
-            { commands: ["read_composition_sections_info(#{sections_data}, #{m.return_normalized_sections_data})"] }
-          }
+          commands: ['read_composition_sections_info']
         },
         subject_resource_type_is_valid: {
           title: 'Subject reference in the AU PS Composition SHALL resolve to a valid resource type (Patient).',
