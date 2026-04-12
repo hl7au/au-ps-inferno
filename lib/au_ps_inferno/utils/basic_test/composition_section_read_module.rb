@@ -56,9 +56,12 @@ module AUPSTestKit
         return "entry[#{index}]: #{ref} -> ❌ Invalid resource type"
       end
 
+      validation_errors = scratch[:validation_errors] || []
+      errors = validation_errors.any? { |e| e[:full_url] == ref }
+
       profiles = resource.meta&.profile || []
       suffix = profiles.any? ? "(meta.profile: #{profiles.join(', ')})" : '(no meta.profile)'
-      "entry[#{index}]: #{ref} -> #{resource.resourceType} #{suffix}"
+      "entry[#{index}]: #{ref} -> #{resource.resourceType} #{suffix} #{'❌ Validation error' if errors}"
     end
 
     def read_composition_section_issues(section_metadata, composition_resource, bundle_resource, validation_errors)
