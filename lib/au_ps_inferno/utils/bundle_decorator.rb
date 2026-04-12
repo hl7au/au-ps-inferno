@@ -28,6 +28,10 @@ class BundleDecorator < FHIR::Bundle
     entry&.resource
   end
 
+  def extract_entry_index(entry_reference)
+    entry&.index { |entr| entr.fullUrl == entry_reference }
+  end
+
   private
 
   def resolve_entry_reference_as_reference(entry_reference)

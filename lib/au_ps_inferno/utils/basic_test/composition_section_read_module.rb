@@ -27,32 +27,34 @@ module AUPSTestKit
       section = composition_resource.section_by_code(section_code)
       issues = read_composition_section_issues(section_metadata, composition_resource, bundle_resource,
                                                validation_errors)
-      text = composition_section_read_report_message(section_metadata, section, bundle_resource, section_code, issues)
+      text = composition_section_read_report_message(section_metadata, section, bundle_resource, section_code)
       add_message(issues.empty? ? 'info' : 'error', text)
       issues.empty?
     end
 
-    def composition_section_read_report_message(section_metadata, section, bundle_resource, section_code, issues)
+    def composition_section_read_report_message(section_metadata, section, bundle_resource, section_code)
       short = section_metadata[:short]
       header = short.present? ? "#{short} (#{section_code})" : section_code.to_s
-      body = composition_section_read_list_body(section, bundle_resource, section_code)
-      text = "#{header}\n\n#{body}"
-      text += "\n\n#{issues.join("\n\n")}" if section.present? && issues.any?
-      text
+      body = composition_section_read_list_body(section, bundle_resource, section_code, section_metadata)
+      "#{header}\n\n#{body}"
     end
 
-    def composition_section_read_list_body(section, bundle_resource, section_code)
+    def composition_section_read_list_body(section, bundle_resource, section_code, section_metadata)
       return "No composition section found for code: #{section_code}" if section.blank?
       return empty_section_entry_reason_line(section) if section.entry_references.empty?
 
-      section.entry_references.each_with_index.map do |ref, index|
-        format_composition_section_entry_line(index, ref, bundle_resource)
+      section.entry_references.each.map do |ref|
+        format_composition_section_entry_line(ref, bundle_resource, section_metadata)
       end.join("\n\n")
     end
 
-    def format_composition_section_entry_line(index, ref, bundle_resource)
+    def format_composition_section_entry_line(ref, bundle_resource, section_metadata)
       resource = bundle_resource.resource_by_reference(ref)
-      return "entry[#{index}]: #{ref} -> (resource not found)" if resource.blank?
+      index = bundle_resource.extract_entry_index(ref)
+      return "#{ref} -> ❌ Reference does not resolve" if resource.blank?
+      unless permitted_resource_types(section_metadata).include?(resource.resourceType)
+        return "entry[#{index}]: #{ref} -> ❌ Invalid resource type"
+      end
 
       profiles = resource.meta&.profile || []
       suffix = profiles.any? ? "(meta.profile: #{profiles.join(', ')})" : '(no meta.profile)'
