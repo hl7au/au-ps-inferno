@@ -23,10 +23,40 @@ module AUPSTestKit
     end
 
     def report_composition_section_read(section_metadata, composition_resource, bundle_resource, validation_errors)
+      section_code = section_metadata[:code]
+      section = composition_resource.section_by_code(section_code)
       issues = read_composition_section_issues(section_metadata, composition_resource, bundle_resource,
                                                validation_errors)
-      add_message(issues.empty? ? 'info' : 'error', "#{section_metadata[:code]}\n\n#{issues.join("\n\n")}")
+      text = composition_section_read_report_message(section_metadata, section, bundle_resource, section_code, issues)
+      add_message(issues.empty? ? 'info' : 'error', text)
       issues.empty?
+    end
+
+    def composition_section_read_report_message(section_metadata, section, bundle_resource, section_code, issues)
+      short = section_metadata[:short]
+      header = short.present? ? "#{short} (#{section_code})" : section_code.to_s
+      body = composition_section_read_list_body(section, bundle_resource, section_code)
+      text = "#{header}\n\n#{body}"
+      text += "\n\n#{issues.join("\n\n")}" if section.present? && issues.any?
+      text
+    end
+
+    def composition_section_read_list_body(section, bundle_resource, section_code)
+      return "No composition section found for code: #{section_code}" if section.blank?
+      return empty_section_entry_reason_line(section) if section.entry_references.empty?
+
+      section.entry_references.each_with_index.map do |ref, index|
+        format_composition_section_entry_line(index, ref, bundle_resource)
+      end.join("\n\n")
+    end
+
+    def format_composition_section_entry_line(index, ref, bundle_resource)
+      resource = bundle_resource.resource_by_reference(ref)
+      return "entry[#{index}]: #{ref} -> (resource not found)" if resource.blank?
+
+      profiles = resource.meta&.profile || []
+      suffix = profiles.any? ? "(meta.profile: #{profiles.join(', ')})" : '(no meta.profile)'
+      "entry[#{index}]: #{ref} -> #{resource.resourceType} #{suffix}"
     end
 
     def read_composition_section_issues(section_metadata, composition_resource, bundle_resource, validation_errors)
@@ -199,8 +229,9 @@ module AUPSTestKit
       return empty_section_entry_reason_line(section) if section.entry_references.empty?
 
       bundle_resource = BundleDecorator.new(scratch_bundle.to_hash)
-      lines = section.entry_references.map { |ref| section_entry_line_for_reference(bundle_resource, ref) }
-      lines.join("\n\n").to_s
+      section.entry_references.each_with_index.map do |ref, index|
+        format_composition_section_entry_line(index, ref, bundle_resource)
+      end.join("\n\n").to_s
     end
 
     def empty_section_entry_reason_line(section)
@@ -208,16 +239,6 @@ module AUPSTestKit
         "emptyReason: #{section.empty_reason_str}"
       else
         'No entries; no emptyReason.'
-      end
-    end
-
-    def section_entry_line_for_reference(bundle_resource, ref)
-      resource = bundle_resource.resource_by_reference(ref)
-      if resource.present?
-        profiles = (resource.meta&.profile || []).join(', ')
-        "**#{ref}**: #{resource.resourceType} (#{profiles})"
-      else
-        "**#{ref}**: (resource not found)"
       end
     end
   end
