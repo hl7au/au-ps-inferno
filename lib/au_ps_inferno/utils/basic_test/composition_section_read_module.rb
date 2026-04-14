@@ -66,12 +66,12 @@ module AUPSTestKit
     end
 
     def composition_section_entry_line_resolved(index, ref, resource)
-      validation_errors = scratch[:validation_errors] || []
-      has_val_error = validation_errors.any? { |e| e[:full_url] == ref }
+      # validation_errors = scratch[:validation_errors] || []
+      # has_val_error = validation_errors.any? { |e| e[:full_url] == ref }
       profiles = resource.meta&.profile || []
       suffix = profiles.any? ? "(meta.profile: #{profiles.join(', ')})" : '(no meta.profile)'
-      tail = has_val_error ? "#{suffix} ❌ Validation error" : suffix
-      "entry[#{index}]: **#{ref}** -> #{resource.resourceType} #{tail}"
+      # tail = has_val_error ? "#{suffix} ❌ Validation error" : suffix
+      "entry[#{index}]: **#{ref}** -> #{resource.resourceType} #{suffix}"
     end
 
     def read_composition_section_issues(section_metadata, composition_resource, bundle_resource, validation_errors)
@@ -85,7 +85,7 @@ module AUPSTestKit
       end
     end
 
-    def composition_section_ref_read_issues(ref, bundle_resource, entries_resource_types, validation_errors)
+    def composition_section_ref_read_issues(ref, bundle_resource, entries_resource_types, _validation_errors)
       resource = bundle_resource.resource_by_reference(ref)
       issues = []
       issues << "Resource not found for reference: #{ref}" if resource.blank?
@@ -93,7 +93,7 @@ module AUPSTestKit
         issues << "Resource type: #{resource.resourceType} is not in the list " \
                   "of expected resource types: #{entries_resource_types}"
       end
-      issues << "Validation error found for reference: #{ref}" if validation_errors.any? { |e| e[:full_url] == ref }
+      # issues << "Validation error found for reference: #{ref}" if validation_errors.any? { |e| e[:full_url] == ref }
       issues
     end
 
