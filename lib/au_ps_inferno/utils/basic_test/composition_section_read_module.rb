@@ -48,13 +48,21 @@ module AUPSTestKit
 
     def format_composition_section_entry_line(ref, bundle_resource, section_metadata)
       resource = bundle_resource.resource_by_reference(ref)
-      index = bundle_resource.extract_entry_index(ref)
+      index = get_section_entry_index(section_metadata, bundle_resource, ref)
       return composition_section_entry_line_unresolved(ref) if resource.blank?
       unless permitted_resource_types(section_metadata).include?(resource.resourceType)
         return composition_section_entry_line_bad_type(index, ref)
       end
 
       composition_section_entry_line_resolved(index, ref, resource)
+    end
+
+    def get_section_entry_index(section_metadata, bundle_resource, ref)
+      section_code = section_metadata[:code]
+      section = bundle_resource.composition_resource.section_by_code(section_code)
+      return nil if section.blank?
+
+      section.get_entry_index_by_reference(ref)
     end
 
     def composition_section_entry_line_unresolved(ref)
