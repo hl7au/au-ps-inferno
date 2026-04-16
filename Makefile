@@ -46,6 +46,7 @@ rubocop:
 
 generate:
 	rm -rf lib/au_ps_inferno/1.0.0-ballot
+	$(compose) $(inferno) bundle exec rake deps:get 
 	$(compose) $(inferno) bundle exec rake generator:generate
 
 rubocop_fix:
