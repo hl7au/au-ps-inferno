@@ -147,8 +147,7 @@ class Generator
     def metadata_dump_tail
       {
         profiles: @profiles,
-        resources_filters: @resources_filters,
-        normalized_sections_data: @normalized_sections_data
+        resources_filters: @resources_filters
       }
     end
 
@@ -525,7 +524,7 @@ class Generator
     # @return [Array<Hash>] Entry metadata hashes (see {#build_section_entry_data})
     def get_section_entry_data(elements, section_id)
       entries = elements.filter do |element|
-        element.id.include?("#{section_id}.entry:")
+        element.id.include?("#{section_id}.entry")
       end
 
       entries.map do |entry|

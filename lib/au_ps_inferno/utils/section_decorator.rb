@@ -2,6 +2,10 @@
 
 # Decorator for FHIR::Composition::Section
 class SectionDecorator < FHIR::Composition::Section
+  def get_entry_index_by_reference(reference)
+    entry&.index { |entr| entr.reference == reference }
+  end
+
   def entry_references
     entry&.map(&:reference) || []
   end

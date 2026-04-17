@@ -2,8 +2,8 @@ Test Results:
 ================================================================================
 AU PS 1.0.0-ballot Test Suite: X error
 AU PS 1.0.0-ballot Test Suite: X error
-1 AU PS Bundle Instance: * skip
-1 AU PS Bundle Instance: * skip
+1 AU PS Bundle Instance: X fail
+1 AU PS Bundle Instance: X fail
 1.1 AU PS Bundle Validation: * skip
 1.1.01 AU PS Bundle is valid against AU PS Bundle profile: * skip
 1.10 AU PS Composition Custodian: * skip
@@ -30,14 +30,16 @@ AU PS 1.0.0-ballot Test Suite: X error
 1.6.01 AU PS Composition optional sections are correctly populated: * skip
 1.7 AU PS Composition Undefined Sections: * skip
 1.7.01 Undefined sections are correctly populated: * skip
-1.8 AU PS Composition Subject: * skip
-1.8.01 Must Support elements SHALL be populated if a value is known: * skip
-1.8.02 Must Support sub-element SHALL be populated if a value is known and the parent is populated: * skip
-1.8.03 Must Support identifier slices SHALL be populated if a value is known: * skip
-1.9 AU PS Composition Author: * skip
-1.9.01 Must Support elements SHALL be populated if a value is known: * skip
-1.9.02 Must Support sub-elements SHALL be populated if a value is known: * skip
-1.9.03 Must Support identifier slices SHALL be populated if a value is known: * skip
+1.8 AU PS Composition Subject: X fail
+1.8.01 Subject reference in the AU PS Composition SHALL resolve to a valid resource type (Patient).: X fail
+1.8.02 Must Support elements SHALL be populated if a value is known: * skip
+1.8.03 Must Support sub-element SHALL be populated if a value is known and the parent is populated: * skip
+1.8.04 Must Support identifier slices SHALL be populated if a value is known: * skip
+1.9 AU PS Composition Author: X fail
+1.9.01 Author reference in the AU PS Composition SHALL resolve to a valid resource type (Practitioner, PractitionerRole, Device, Patient, RelatedPerson, Organization).: X fail
+1.9.02 Must Support elements SHALL be populated if a value is known: * skip
+1.9.03 Must Support sub-elements SHALL be populated if a value is known: * skip
+1.9.04 Must Support identifier slices SHALL be populated if a value is known: * skip
 2 Retrieve Capability Statement: * skip
 2.01 CapabilityStatement is valid: * skip
 2.02 CapabilityStatement supports IPS Recommended Operations: * skip
@@ -71,13 +73,15 @@ AU PS 1.0.0-ballot Test Suite: X error
 3.7 AU PS Composition Undefined Sections: * skip
 3.7.01 Undefined sections are correctly populated: * skip
 3.8 AU PS Composition Subject: ✓ pass
-3.8.01 Must Support elements SHALL be populated if a value is known: ✓ pass
-3.8.02 Must Support sub-element SHALL be populated if a value is known and the parent is populated: ✓ pass
-3.8.03 Must Support identifier slices SHALL be populated if a value is known: ✓ pass
+3.8.01 Subject reference in the AU PS Composition SHALL resolve to a valid resource type (Patient).: ✓ pass
+3.8.02 Must Support elements SHALL be populated if a value is known: ✓ pass
+3.8.03 Must Support sub-element SHALL be populated if a value is known and the parent is populated: ✓ pass
+3.8.04 Must Support identifier slices SHALL be populated if a value is known: ✓ pass
 3.9 AU PS Composition Author: ✓ pass
-3.9.01 Must Support elements SHALL be populated if a value is known: ✓ pass
-3.9.02 Must Support sub-elements SHALL be populated if a value is known: ✓ pass
-3.9.03 Must Support identifier slices SHALL be populated if a value is known: ✓ pass
+3.9.01 Author reference in the AU PS Composition SHALL resolve to a valid resource type (Practitioner, PractitionerRole, Device, Patient, RelatedPerson, Organization).: ✓ pass
+3.9.02 Must Support elements SHALL be populated if a value is known: ✓ pass
+3.9.03 Must Support sub-elements SHALL be populated if a value is known: ✓ pass
+3.9.04 Must Support identifier slices SHALL be populated if a value is known: ✓ pass
 4 Generate AU PS using IPS $summary validation tests: * skip
 4 Generate AU PS using IPS $summary validation tests: * skip
 4.1 AU PS Bundle Validation: * skip
@@ -107,11 +111,13 @@ AU PS 1.0.0-ballot Test Suite: X error
 4.7 AU PS Composition Undefined Sections: * skip
 4.7.01 Undefined sections are correctly populated: * skip
 4.8 AU PS Composition Subject: ✓ pass
-4.8.01 Must Support elements SHALL be populated if a value is known: ✓ pass
-4.8.02 Must Support sub-element SHALL be populated if a value is known and the parent is populated: ✓ pass
-4.8.03 Must Support identifier slices SHALL be populated if a value is known: ✓ pass
+4.8.01 Subject reference in the AU PS Composition SHALL resolve to a valid resource type (Patient).: ✓ pass
+4.8.02 Must Support elements SHALL be populated if a value is known: ✓ pass
+4.8.03 Must Support sub-element SHALL be populated if a value is known and the parent is populated: ✓ pass
+4.8.04 Must Support identifier slices SHALL be populated if a value is known: ✓ pass
 4.9 AU PS Composition Author: ✓ pass
-4.9.01 Must Support elements SHALL be populated if a value is known: ✓ pass
-4.9.02 Must Support sub-elements SHALL be populated if a value is known: ✓ pass
-4.9.03 Must Support identifier slices SHALL be populated if a value is known: ✓ pass
+4.9.01 Author reference in the AU PS Composition SHALL resolve to a valid resource type (Practitioner, PractitionerRole, Device, Patient, RelatedPerson, Organization).: ✓ pass
+4.9.02 Must Support elements SHALL be populated if a value is known: ✓ pass
+4.9.03 Must Support sub-elements SHALL be populated if a value is known: ✓ pass
+4.9.04 Must Support identifier slices SHALL be populated if a value is known: ✓ pass
 ================================================================================

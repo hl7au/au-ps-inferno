@@ -13,6 +13,14 @@ module AUPSTestKit
       @metadata ||= YAML.safe_load_file(@metadata_yaml_path, permitted_classes: [Symbol], aliases: true)
     end
 
+    def required_ms_sections_metadata
+      composition_sections_metadata.filter { |section| section[:required] == true && section[:mustSupport] == true }
+    end
+
+    def composition_sections_metadata
+      metadata[:composition_sections]
+    end
+
     def subject_metadata
       metadata[:subject]
     end
