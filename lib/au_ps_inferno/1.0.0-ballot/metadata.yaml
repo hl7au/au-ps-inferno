@@ -21,6 +21,14 @@
     :min: 0
   :code: 11450-4
   :entries:
+  - :id: Composition.section:sectionProblems.entry
+    :min: 0
+    :max: "*"
+    :required: false
+    :mustSupport: false
+    :profiles:
+    - Condition|http://hl7.org/fhir/StructureDefinition/Condition
+    - DocumentReference|http://hl7.org/fhir/StructureDefinition/DocumentReference
   - :id: Composition.section:sectionProblems.entry:problem
     :min: 0
     :max: "*"
@@ -53,6 +61,14 @@
     :min: 0
   :code: 48765-2
   :entries:
+  - :id: Composition.section:sectionAllergies.entry
+    :min: 0
+    :max: "*"
+    :required: false
+    :mustSupport: false
+    :profiles:
+    - AllergyIntolerance|http://hl7.org/fhir/StructureDefinition/AllergyIntolerance
+    - DocumentReference|http://hl7.org/fhir/StructureDefinition/DocumentReference
   - :id: Composition.section:sectionAllergies.entry:allergyOrIntolerance
     :min: 0
     :max: "*"
@@ -89,6 +105,17 @@
     :min: 0
   :code: 10160-0
   :entries:
+  - :id: Composition.section:sectionMedications.entry
+    :min: 0
+    :max: "*"
+    :required: false
+    :mustSupport: false
+    :profiles:
+    - MedicationStatement|http://hl7.org/fhir/StructureDefinition/MedicationStatement
+    - MedicationRequest|http://hl7.org/fhir/StructureDefinition/MedicationRequest
+    - MedicationAdministration|http://hl7.org/fhir/StructureDefinition/MedicationAdministration
+    - MedicationDispense|http://hl7.org/fhir/StructureDefinition/MedicationDispense
+    - DocumentReference|http://hl7.org/fhir/StructureDefinition/DocumentReference
   - :id: Composition.section:sectionMedications.entry:medicationStatementOrRequest
     :min: 0
     :max: "*"
@@ -120,6 +147,14 @@
     :min: 0
   :code: 11369-6
   :entries:
+  - :id: Composition.section:sectionImmunizations.entry
+    :min: 0
+    :max: "*"
+    :required: false
+    :mustSupport: false
+    :profiles:
+    - Immunization|http://hl7.org/fhir/StructureDefinition/Immunization
+    - DocumentReference|http://hl7.org/fhir/StructureDefinition/DocumentReference
   - :id: Composition.section:sectionImmunizations.entry:immunization
     :min: 0
     :max: "*"
@@ -150,6 +185,15 @@
     :min: 0
   :code: 30954-2
   :entries:
+  - :id: Composition.section:sectionResults.entry
+    :min: 0
+    :max: "*"
+    :required: false
+    :mustSupport: false
+    :profiles:
+    - Observation|http://hl7.org/fhir/StructureDefinition/Observation
+    - DiagnosticReport|http://hl7.org/fhir/StructureDefinition/DiagnosticReport
+    - DocumentReference|http://hl7.org/fhir/StructureDefinition/DocumentReference
   - :id: Composition.section:sectionResults.entry:results-observation-laboratory-pathology
     :min: 0
     :max: "*"
@@ -195,6 +239,14 @@
     :min: 0
   :code: 47519-4
   :entries:
+  - :id: Composition.section:sectionProceduresHx.entry
+    :min: 0
+    :max: "*"
+    :required: false
+    :mustSupport: false
+    :profiles:
+    - Procedure|http://hl7.org/fhir/StructureDefinition/Procedure
+    - DocumentReference|http://hl7.org/fhir/StructureDefinition/DocumentReference
   - :id: Composition.section:sectionProceduresHx.entry:procedure
     :min: 0
     :max: "*"
@@ -222,6 +274,14 @@
     :min: 0
   :code: 46264-8
   :entries:
+  - :id: Composition.section:sectionMedicalDevices.entry
+    :min: 0
+    :max: "*"
+    :required: false
+    :mustSupport: false
+    :profiles:
+    - DeviceUseStatement|http://hl7.org/fhir/StructureDefinition/DeviceUseStatement
+    - DocumentReference|http://hl7.org/fhir/StructureDefinition/DocumentReference
   - :id: Composition.section:sectionMedicalDevices.entry:deviceStatement
     :min: 0
     :max: "*"
@@ -249,6 +309,14 @@
     :min: 0
   :code: 42348-3
   :entries:
+  - :id: Composition.section:sectionAdvanceDirectives.entry
+    :min: 0
+    :max: "*"
+    :required: false
+    :mustSupport: false
+    :profiles:
+    - Consent|http://hl7.org/fhir/StructureDefinition/Consent
+    - DocumentReference|http://hl7.org/fhir/StructureDefinition/DocumentReference
   - :id: Composition.section:sectionAdvanceDirectives.entry:advanceDirectivesConsent
     :min: 0
     :max: "*"
@@ -278,6 +346,14 @@
     :min: 0
   :code: 104605-1
   :entries:
+  - :id: Composition.section:sectionAlerts.entry
+    :min: 0
+    :max: "*"
+    :required: false
+    :mustSupport: false
+    :profiles:
+    - Flag|http://hl7.org/fhir/StructureDefinition/Flag
+    - DocumentReference|http://hl7.org/fhir/StructureDefinition/DocumentReference
   - :id: Composition.section:sectionAlerts.entry:alertsFlag
     :min: 0
     :max: "*"
@@ -308,6 +384,15 @@
     :min: 0
   :code: 47420-5
   :entries:
+  - :id: Composition.section:sectionFunctionalStatus.entry
+    :min: 0
+    :max: "*"
+    :required: false
+    :mustSupport: false
+    :profiles:
+    - Condition|http://hl7.org/fhir/StructureDefinition/Condition
+    - ClinicalImpression|http://hl7.org/fhir/StructureDefinition/ClinicalImpression
+    - DocumentReference|http://hl7.org/fhir/StructureDefinition/DocumentReference
   - :id: Composition.section:sectionFunctionalStatus.entry:disability
     :min: 0
     :max: "*"
@@ -343,6 +428,14 @@
     :min: 0
   :code: 11348-0
   :entries:
+  - :id: Composition.section:sectionPastProblems.entry
+    :min: 0
+    :max: "*"
+    :required: false
+    :mustSupport: false
+    :profiles:
+    - Condition|http://hl7.org/fhir/StructureDefinition/Condition
+    - DocumentReference|http://hl7.org/fhir/StructureDefinition/DocumentReference
   - :id: Composition.section:sectionPastProblems.entry:pastProblem
     :min: 0
     :max: "*"
@@ -371,6 +464,14 @@
     :min: 0
   :code: 10162-6
   :entries:
+  - :id: Composition.section:sectionPregnancyHx.entry
+    :min: 0
+    :max: "*"
+    :required: false
+    :mustSupport: false
+    :profiles:
+    - Observation|http://hl7.org/fhir/StructureDefinition/Observation
+    - DocumentReference|http://hl7.org/fhir/StructureDefinition/DocumentReference
   - :id: Composition.section:sectionPregnancyHx.entry:pregnancyStatus
     :min: 0
     :max: "*"
@@ -406,7 +507,14 @@
   - :expression: emptyReason
     :min: 0
   :code: 81338-6
-  :entries: []
+  :entries:
+  - :id: Composition.section:sectionPatientStory.entry
+    :min: 0
+    :max: "*"
+    :required: false
+    :mustSupport: false
+    :profiles:
+    - Resource|http://hl7.org/fhir/StructureDefinition/Resource|4.0.1
 - :id: Composition.section:sectionPlanOfCare
   :short: Patient Summary Plan of Care Section
   :definition: Information about a patient's plans of care containing the expectations
@@ -429,6 +537,15 @@
     :min: 0
   :code: 18776-5
   :entries:
+  - :id: Composition.section:sectionPlanOfCare.entry
+    :min: 0
+    :max: "*"
+    :required: false
+    :mustSupport: false
+    :profiles:
+    - CarePlan|http://hl7.org/fhir/StructureDefinition/CarePlan
+    - ImmunizationRecommendation|http://hl7.org/fhir/StructureDefinition/ImmunizationRecommendation
+    - DocumentReference|http://hl7.org/fhir/StructureDefinition/DocumentReference
   - :id: Composition.section:sectionPlanOfCare.entry:carePlan
     :min: 0
     :max: "*"
@@ -465,6 +582,14 @@
     :min: 0
   :code: 29762-2
   :entries:
+  - :id: Composition.section:sectionSocialHistory.entry
+    :min: 0
+    :max: "*"
+    :required: false
+    :mustSupport: false
+    :profiles:
+    - Observation|http://hl7.org/fhir/StructureDefinition/Observation
+    - DocumentReference|http://hl7.org/fhir/StructureDefinition/DocumentReference
   - :id: Composition.section:sectionSocialHistory.entry:smokingTobaccoUse
     :min: 0
     :max: '1'
@@ -504,6 +629,14 @@
     :min: 0
   :code: 8716-3
   :entries:
+  - :id: Composition.section:sectionVitalSigns.entry
+    :min: 0
+    :max: "*"
+    :required: false
+    :mustSupport: false
+    :profiles:
+    - Observation|http://hl7.org/fhir/StructureDefinition/Observation
+    - DocumentReference|http://hl7.org/fhir/StructureDefinition/DocumentReference
   - :id: Composition.section:sectionVitalSigns.entry:vitalSign
     :min: 0
     :max: "*"
@@ -1199,19 +1332,19 @@
   :required: false
 :resources_filters:
 - :resource_profile: Observation|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-diagnosticresult-path
-  :filters: &1
+  :filters:
   - path: category.coding.code
     value: laboratory
 - :resource_profile: Observation|http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-results-radiology-uv-ips
-  :filters: &2
+  :filters:
   - path: category.coding.code
     value: imaging
 - :resource_profile: Observation|http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-pregnancy-status-uv-ips
-  :filters: &3
+  :filters:
   - path: code.coding.code
     value: 82810-3
 - :resource_profile: Observation|http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-pregnancy-outcome-uv-ips
-  :filters: &4
+  :filters:
   - path: code.coding.code
     value:
     - 11636-8
@@ -1224,103 +1357,10 @@
     - 11614-5
     - 33065-4
 - :resource_profile: Observation|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-smokingstatus
-  :filters: &5
+  :filters:
   - path: code.coding.code
     value: '1747861000168109'
 - :resource_profile: Observation|http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-alcoholuse-uv-ips
-  :filters: &6
+  :filters:
   - path: code.coding.code
     value: 74013-4
-:normalized_sections_data:
-- code: 11450-4
-  display: Patient Summary Problems Section
-  resources:
-    Condition|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-condition:
-      requirements: []
-- code: 48765-2
-  display: Patient Summary Allergies and Intolerances Section
-  resources:
-    AllergyIntolerance|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-allergyintolerance:
-      requirements: []
-- code: 10160-0
-  display: Patient Summary Medication Summary Section
-  resources:
-    MedicationStatement|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medicationstatement:
-      requirements: []
-    MedicationRequest|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medicationrequest:
-      requirements: []
-- code: 11369-6
-  display: Patient Summary Immunizations Section
-  resources:
-    Immunization|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-immunization:
-      requirements: []
-- code: 30954-2
-  display: Patient Summary Results Section
-  resources:
-    Observation|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-diagnosticresult-path:
-      requirements: *1
-    Observation|http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-results-radiology-uv-ips:
-      requirements: *2
-    DiagnosticReport|http://hl7.org/fhir/uv/ips/StructureDefinition/DiagnosticReport-uv-ips:
-      requirements: []
-- code: 47519-4
-  display: Patient Summary History of Procedures Section
-  resources:
-    Procedure|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-procedure:
-      requirements: []
-- code: 46264-8
-  display: Patient Summary Medical Devices Section
-  resources:
-    DeviceUseStatement|http://hl7.org/fhir/uv/ips/StructureDefinition/DeviceUseStatement-uv-ips:
-      requirements: []
-- code: 42348-3
-  display: Patient Summary Advance Directives Section
-  resources:
-    Consent|http://hl7.org/fhir/StructureDefinition/Consent:
-      requirements: []
-- code: 104605-1
-  display: Patient Summary Alerts Section
-  resources:
-    Flag|http://hl7.org/fhir/uv/ips/StructureDefinition/Flag-alert-uv-ips:
-      requirements: []
-- code: 47420-5
-  display: Patient Summary Functional Status Section
-  resources:
-    Condition|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-condition:
-      requirements: []
-    ClinicalImpression|http://hl7.org/fhir/StructureDefinition/ClinicalImpression:
-      requirements: []
-- code: 11348-0
-  display: Patient Summary History of Past Illness Section
-  resources:
-    Condition|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-condition:
-      requirements: []
-- code: 10162-6
-  display: Patient Summary History of Pregnancy Section
-  resources:
-    Observation|http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-pregnancy-status-uv-ips:
-      requirements: *3
-    Observation|http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-pregnancy-outcome-uv-ips:
-      requirements: *4
-- code: 81338-6
-  display: Patient Summary Patient Story Section
-  resources: {}
-- code: 18776-5
-  display: Patient Summary Plan of Care Section
-  resources:
-    CarePlan|http://hl7.org/fhir/StructureDefinition/CarePlan:
-      requirements: []
-    ImmunizationRecommendation|http://hl7.org/fhir/StructureDefinition/ImmunizationRecommendation:
-      requirements: []
-- code: 29762-2
-  display: Patient Summary Social History Section
-  resources:
-    Observation|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-smokingstatus:
-      requirements: *5
-    Observation|http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-alcoholuse-uv-ips:
-      requirements: *6
-- code: 8716-3
-  display: Patient Summary Vital Signs Section
-  resources:
-    Observation|http://hl7.org/fhir/StructureDefinition/vitalsigns:
-      requirements: []
