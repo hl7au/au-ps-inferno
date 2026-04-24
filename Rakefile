@@ -16,6 +16,14 @@ namespace :db do
   end
 end
 
+namespace :deps do
+  desc 'Get dependencies for the test suites'
+  task :get do
+    require_relative 'scripts/fetch_structure_definitions'
+    fetch_structure_definitions('additional_resources/deps_urls.txt', 'additional_resources')
+  end
+end
+
 namespace :generator do
   desc 'Generate AU PS/IPS test suites. Set ADDITIONAL_IG_RESOURCES to a folder to load extra JSON resources.'
   task :generate do
