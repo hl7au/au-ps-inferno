@@ -1,5 +1,13 @@
 # frozen_string_literal: true
 
+# Compatibility shim for pinned inferno_suite_generator versions
+# that still reference FHIR::R4::* classes.
+FHIR.const_set(:R4, FHIR) if defined?(FHIR) && !FHIR.const_defined?(:R4)
+
+require 'inferno_suite_generator'
+
+require_relative '../ms_checker'
+
 module AUPSTestKit
   # Reading composition section rows: profile/entry matching and list outcomes.
   module BasicTestCompositionSectionReadModule
@@ -7,7 +15,78 @@ module AUPSTestKit
 
     def read_composition_sections_info
       check_bundle_exists_in_scratch
+      composition_section_check_ms_pass?
       assert composition_sections_read_pass?, 'Some of the sections are not populated correctly.'
+    end
+
+    def composition_section_check_ms_pass?
+      scratch[:validation_errors] || []
+      bundle_resource = BundleDecorator.new(scratch_bundle.to_hash)
+      composition_resource = bundle_resource.composition_resource
+      sections_profiles = metadata_manager.required_ms_sections_metadata.map do |section_metadata|
+        section_metadata[:entries].map do |entry_metadata|
+          entry_metadata[:profiles]
+        end.flatten.uniq
+      end.flatten.uniq
+      filtered_sections_profiles = sections_profiles.filter do |profile|
+        profile.include?('au-ps')
+      end
+      sections_codes = metadata_manager.required_ms_sections_metadata.map do |section_metadata|
+        section_metadata[:code]
+      end
+      resources = sections_codes.map do |section_code|
+        composition_resource.section_by_code(section_code).entry_references.map do |ref|
+          bundle_resource.resource_by_reference(ref)
+        end
+      end.flatten.uniq
+      info sections_codes.inspect
+      info filtered_sections_profiles.inspect
+      info resources.count.inspect
+
+      filtered_sections_profiles.each do |profile|
+        resource_type = profile.split('|').first
+        resource_metadata_raw = metadata_manager.group_metadata_by_resource_type(resource_type)
+        filtered_resources = resources.filter do |resource|
+          resource.resourceType == resource_type
+        end
+        resource_metadata = InfernoSuiteGenerator::Generator::GroupMetadata.new(resource_metadata_raw)
+
+        info MSChecker.new.elements_present_statuses(resource_metadata, filtered_resources).inspect
+      end
+      # metadata_manager.required_ms_sections_metadata.map do |section_metadata|
+      #   report_composition_section_ms_read?(section_metadata, composition_resource, bundle_resource)
+      # end
+      # section_results.all?
+    end
+
+    def report_composition_section_ms_read?(section_metadata, composition_resource, bundle_resource)
+      section_entries_metadata = section_metadata[:entries]
+      resource_profiles = section_entries_metadata.map do |entry_metadata|
+        entry_metadata[:profiles]
+      end.flatten.uniq
+      au_ps_resource_profiles = resource_profiles.filter do |profile|
+        profile.include?('au-ps')
+      end
+      section_code = section_metadata[:code]
+      section = composition_resource.section_by_code(section_code)
+      section_entry_references = section.entry_references
+      resources = section_entry_references.map do |ref|
+        bundle_resource.resource_by_reference(ref)
+      end
+      info au_ps_resource_profiles.inspect
+      # info resource_profiles.inspect
+      # info resources.inspect
+      info "Found #{resources.count} resources in section #{section_code}"
+      resources.each do |resource|
+        resource_profiles = resource.meta&.profile || []
+
+        info resource_profiles.inspect
+        # resource_profiles.each do |profile|
+        #   profile_url = profile.split('|').last
+        #   profile_metadata = metadata_manager.group_metadata_by_profile_url(profile_url)
+        #   info profile_metadata.inspect
+        # end
+      end
     end
 
     def composition_sections_read_pass?
