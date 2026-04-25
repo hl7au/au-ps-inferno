@@ -20,7 +20,6 @@ module AUPSTestKit
     end
 
     def composition_section_check_ms_pass?
-      scratch[:validation_errors] || []
       bundle_resource = BundleDecorator.new(scratch_bundle.to_hash)
       composition_resource = bundle_resource.composition_resource
       sections_profiles = metadata_manager.required_ms_sections_metadata.map do |section_metadata|
@@ -39,24 +38,31 @@ module AUPSTestKit
           bundle_resource.resource_by_reference(ref)
         end
       end.flatten.uniq
-      info sections_codes.inspect
-      info filtered_sections_profiles.inspect
-      info resources.count.inspect
 
       filtered_sections_profiles.each do |profile|
         resource_type = profile.split('|').first
+        profile_url = profile.split('|').last
         resource_metadata_raw = metadata_manager.group_metadata_by_resource_type(resource_type)
         filtered_resources = resources.filter do |resource|
           resource.resourceType == resource_type
         end
+        if filtered_resources.empty?
+          add_message('warning', "No resources found for profile: #{profile_url}")
+          next
+        end
         resource_metadata = InfernoSuiteGenerator::Generator::GroupMetadata.new(resource_metadata_raw)
-
-        info MSChecker.new.elements_present_statuses(resource_metadata, filtered_resources).inspect
+        elements_statuses = MSChecker.new.elements_present_statuses(resource_metadata, filtered_resources)
+        profile_info_str = "Profile: #{resource_type} — #{profile_url}"
+        elements_statuses_list = elements_statuses.map do |element_status|
+          "#{element_status[:present] ? '✅ Populated' : '❌ Missing'}: #{element_status[:path]}"
+        end
+        full_message_data = [
+          profile_info_str,
+          'List of Must Support elements populated or missing',
+          elements_statuses_list
+        ].flatten
+        info full_message_data.join("\n\n")
       end
-      # metadata_manager.required_ms_sections_metadata.map do |section_metadata|
-      #   report_composition_section_ms_read?(section_metadata, composition_resource, bundle_resource)
-      # end
-      # section_results.all?
     end
 
     def report_composition_section_ms_read?(section_metadata, composition_resource, bundle_resource)
