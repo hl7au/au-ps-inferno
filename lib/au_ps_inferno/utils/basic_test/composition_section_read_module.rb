@@ -51,10 +51,21 @@ module AUPSTestKit
           next
         end
         resource_metadata = InfernoSuiteGenerator::Generator::GroupMetadata.new(resource_metadata_raw)
+        mandatory_element_elements_arr = resource_metadata.mandatory_elements.map do |mandatory_element|
+          mandatory_element.gsub("#{resource_type}.", '')
+        end
         elements_statuses = MSChecker.new.elements_present_statuses(resource_metadata, filtered_resources)
         profile_info_str = "Profile: #{resource_type} — #{profile_url}"
         elements_statuses_list = elements_statuses.map do |element_status|
-          "#{element_status[:present] ? '✅ Populated' : '❌ Missing'}: #{element_status[:path]}"
+          is_mandatory = mandatory_element_elements_arr.include?(element_status[:path])
+          missing_icon = is_mandatory ? '❌' : '⚠️'
+          missing_text = "#{missing_icon} Missing"
+          default_message = "#{element_status[:present] ? '✅ Populated' : missing_text}: #{element_status[:path]}"
+          if is_mandatory
+            "#{default_message} (M)"
+          else
+            default_message
+          end
         end
         full_message_data = [
           profile_info_str,
@@ -62,36 +73,6 @@ module AUPSTestKit
           elements_statuses_list
         ].flatten
         info full_message_data.join("\n\n")
-      end
-    end
-
-    def report_composition_section_ms_read?(section_metadata, composition_resource, bundle_resource)
-      section_entries_metadata = section_metadata[:entries]
-      resource_profiles = section_entries_metadata.map do |entry_metadata|
-        entry_metadata[:profiles]
-      end.flatten.uniq
-      au_ps_resource_profiles = resource_profiles.filter do |profile|
-        profile.include?('au-ps')
-      end
-      section_code = section_metadata[:code]
-      section = composition_resource.section_by_code(section_code)
-      section_entry_references = section.entry_references
-      resources = section_entry_references.map do |ref|
-        bundle_resource.resource_by_reference(ref)
-      end
-      info au_ps_resource_profiles.inspect
-      # info resource_profiles.inspect
-      # info resources.inspect
-      info "Found #{resources.count} resources in section #{section_code}"
-      resources.each do |resource|
-        resource_profiles = resource.meta&.profile || []
-
-        info resource_profiles.inspect
-        # resource_profiles.each do |profile|
-        #   profile_url = profile.split('|').last
-        #   profile_metadata = metadata_manager.group_metadata_by_profile_url(profile_url)
-        #   info profile_metadata.inspect
-        # end
       end
     end
 
