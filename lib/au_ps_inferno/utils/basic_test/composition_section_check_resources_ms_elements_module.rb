@@ -3,7 +3,14 @@
 module AUPSTestKit
   module BasicTestCompositionSectionReadModule
     # Composition Must Support elements in sections.
+    # rubocop:disable Metrics/ModuleLength
     module BasicTestCompositionSectionCheckResourcesMSElementsModule
+      OPTIONAL_MS_WARNING_MESSAGE = [
+        'At least one optional Must Support element is not populated. ',
+        'Further testing with data containing the missing elements or clarification ',
+        'the system does not ever know a value for the element is required.'
+      ].join.freeze
+
       private
 
       def sections_profiles
@@ -42,18 +49,13 @@ module AUPSTestKit
 
       def results_warning?(results)
         if results.any? { |result| result == 'warning' }
-          add_message('warning',
-                      'At least one optional Must Support element is not populated. Further testing with data containing the missing elements or clarification the system does not ever know a value for the element is required.')
+          add_message('warning', OPTIONAL_MS_WARNING_MESSAGE)
           return true
         end
         false
       end
 
       def optional_present?(element_status)
-        element_status[:present] == false && element_status[:mandatory] == false
-      end
-
-      def optional_not_present?(element_status)
         element_status[:present] == false && element_status[:mandatory] == false
       end
 
@@ -76,36 +78,47 @@ module AUPSTestKit
 
       def check_resources_against_profiles(sections_profiles, resources_to_check_ms)
         sections_profiles.map do |profile|
-          resource_type = profile.split('|').first
-          profile_url = profile.split('|').last
-          resource_metadata_raw = metadata_manager.group_metadata_by_resource_type(resource_type)
-          filtered_resources = resources_to_check_ms.filter do |resource|
-            resource.resourceType == resource_type
-          end
-          if filtered_resources.empty?
-            add_message('warning', "No resources found for profile: #{profile_url}")
-            next
-          end
-          resource_metadata = InfernoSuiteGenerator::Generator::GroupMetadata.new(resource_metadata_raw)
-          elements_statuses = MSChecker.new.elements_present_statuses(resource_metadata, filtered_resources)
-          profile_info_str = "Profile: #{resource_type} — #{profile_url}"
-          elements_statuses_list = elements_statuses.map do |element_status|
-            is_mandatory = element_status[:mandatory]
-            missing_icon = is_mandatory ? '❌' : '⚠️'
-            missing_text = "#{missing_icon} Missing"
-            default_message = "#{element_status[:present] ? '✅ Populated' : missing_text}: #{element_status[:path]}"
-            is_mandatory ? "#{default_message} (M)" : default_message
-          end
-          full_message_data = [
-            profile_info_str,
-            'List of Must Support elements populated or missing',
-            elements_statuses_list
-          ].flatten
-          st_hash = status_hash(elements_statuses)
-          msg_level = calculate_message_level(failed: st_hash[:failed], warning: st_hash[:warning],
-                                              info: st_hash[:info])
-          add_message(msg_level, full_message_data.join("\n\n"))
-          msg_level
+          process_profile(profile, resources_to_check_ms)
+        end
+      end
+
+      # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+      def process_profile(profile, resources_to_check_ms)
+        resource_type = profile.split('|').first
+        profile_url = profile.split('|').last
+        filtered_resources = resources_to_check_ms.filter { |resource| resource.resourceType == resource_type }
+        if filtered_resources.empty?
+          add_message('warning', "No resources found for profile: #{profile_url}")
+          return nil
+        end
+
+        elements_statuses = build_elements_statuses(resource_type, filtered_resources)
+        profile_info_str = "Profile: #{resource_type} — #{profile_url}"
+        full_message_data = [
+          profile_info_str,
+          'List of Must Support elements populated or missing',
+          build_elements_statuses_list(elements_statuses)
+        ].flatten
+        st_hash = status_hash(elements_statuses)
+        msg_level = calculate_message_level(failed: st_hash[:failed], warning: st_hash[:warning], info: st_hash[:info])
+        add_message(msg_level, full_message_data.join("\n\n"))
+        msg_level
+      end
+      # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
+
+      def build_elements_statuses(resource_type, filtered_resources)
+        resource_metadata_raw = metadata_manager.group_metadata_by_resource_type(resource_type)
+        resource_metadata = InfernoSuiteGenerator::Generator::GroupMetadata.new(resource_metadata_raw)
+        MSChecker.new.elements_present_statuses(resource_metadata, filtered_resources)
+      end
+
+      def build_elements_statuses_list(elements_statuses)
+        elements_statuses.map do |element_status|
+          is_mandatory = element_status[:mandatory]
+          missing_icon = is_mandatory ? '❌' : '⚠️'
+          missing_text = "#{missing_icon} Missing"
+          default_message = "#{element_status[:present] ? '✅ Populated' : missing_text}: #{element_status[:path]}"
+          is_mandatory ? "#{default_message} (M)" : default_message
         end
       end
 
@@ -118,5 +131,6 @@ module AUPSTestKit
         true
       end
     end
+    # rubocop:enable Metrics/ModuleLength
   end
 end
