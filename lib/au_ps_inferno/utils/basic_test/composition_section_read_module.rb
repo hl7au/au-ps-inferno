@@ -51,13 +51,19 @@ module AUPSTestKit
           next
         end
         resource_metadata = InfernoSuiteGenerator::Generator::GroupMetadata.new(resource_metadata_raw)
-        mandatory_element_elements_arr = resource_metadata.mandatory_elements.map do |mandatory_element|
-          mandatory_element.gsub("#{resource_type}.", '')
-        end
         elements_statuses = MSChecker.new.elements_present_statuses(resource_metadata, filtered_resources)
         profile_info_str = "Profile: #{resource_type} — #{profile_url}"
+        info elements_statuses.inspect
+        failed_status = elements_statuses.any? do |element_status|
+          element_status[:present] == false && element_status[:mandatory] == true
+        end
+        warning_status = elements_statuses.none? do |element_status|
+          element_status[:present] == false && element_status[:mandatory] == true
+        end && elements_statuses.any? do |element_status|
+          element_status[:present] == false && element_status[:mandatory] == false
+        end
         elements_statuses_list = elements_statuses.map do |element_status|
-          is_mandatory = mandatory_element_elements_arr.include?(element_status[:path])
+          is_mandatory = element_status[:mandatory]
           missing_icon = is_mandatory ? '❌' : '⚠️'
           missing_text = "#{missing_icon} Missing"
           default_message = "#{element_status[:present] ? '✅ Populated' : missing_text}: #{element_status[:path]}"
@@ -72,7 +78,11 @@ module AUPSTestKit
           'List of Must Support elements populated or missing',
           elements_statuses_list
         ].flatten
-        info full_message_data.join("\n\n")
+        add_message(
+          calculate_message_level(failed: failed_status, warning: warning_status,
+                                  info: !failed_status && !warning_status),
+          full_message_data.join("\n\n")
+        )
       end
     end
 
