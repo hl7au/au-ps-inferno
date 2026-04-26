@@ -20,31 +20,55 @@ module AUPSTestKit
       assert composition_section_check_ms_pass?, failed_msg
     end
 
-    def composition_section_check_ms_pass?
-      bundle_resource = BundleDecorator.new(scratch_bundle.to_hash)
-      composition_resource = bundle_resource.composition_resource
+    def sections_profiles
       sections_profiles = metadata_manager.required_ms_sections_metadata.map do |section_metadata|
         section_metadata[:entries].map do |entry_metadata|
           entry_metadata[:profiles]
         end.flatten.uniq
       end.flatten.uniq
-      filtered_sections_profiles = sections_profiles.filter do |profile|
+
+      sections_profiles.filter do |profile|
         profile.include?('au-ps')
       end
+    end
+
+    def resources_to_check_ms
+      bundle_resource = BundleDecorator.new(scratch_bundle.to_hash)
+      composition_resource = bundle_resource.composition_resource
       sections_codes = metadata_manager.required_ms_sections_metadata.map do |section_metadata|
         section_metadata[:code]
       end
-      resources = sections_codes.map do |section_code|
+
+      sections_codes.map do |section_code|
         composition_resource.section_by_code(section_code).entry_references.map do |ref|
           bundle_resource.resource_by_reference(ref)
         end
       end.flatten.uniq
+    end
 
-      results = filtered_sections_profiles.map do |profile|
+    def results_eror?(results)
+      if results.any? { |result| result == 'error' }
+        add_message('error', 'At least one mandatory Must Support elements is not populated.')
+        return true
+      end
+      false
+    end
+
+    def results_warning?(results)
+      if results.any? { |result| result == 'warning' }
+        add_message('warning',
+                    'At least one optional Must Support element is not populated. Further testing with data containing the missing elements or clarification the system does not ever know a value for the element is required.')
+        return true
+      end
+      false
+    end
+
+    def check_resources_against_profiles(sections_profiles, resources_to_check_ms)
+      sections_profiles.map do |profile|
         resource_type = profile.split('|').first
         profile_url = profile.split('|').last
         resource_metadata_raw = metadata_manager.group_metadata_by_resource_type(resource_type)
-        filtered_resources = resources.filter do |resource|
+        filtered_resources = resources_to_check_ms.filter do |resource|
           resource.resourceType == resource_type
         end
         if filtered_resources.empty?
@@ -83,16 +107,12 @@ module AUPSTestKit
         add_message(msg_level, full_message_data.join("\n\n"))
         msg_level
       end
-      if results.any? { |result| result == 'error' }
-        add_message('error', 'At least one mandatory Must Support elements is not populated.')
-        return false
-      end
+    end
 
-      if results.any? { |result| result == 'warning' }
-        add_message('warning',
-                    'At least one optional Must Support element is not populated. Further testing with data containing the missing elements or clarification the system does not ever know a value for the element is required.')
-        return true
-      end
+    def composition_section_check_ms_pass?
+      results = check_resources_against_profiles(sections_profiles, resources_to_check_ms)
+      return false if results_eror?(results)
+      return true if results_warning?(results)
 
       add_message('info', 'All Must Support elements are populated.')
       true
