@@ -15,8 +15,9 @@ module AUPSTestKit
 
     def read_composition_sections_info
       check_bundle_exists_in_scratch
-      composition_section_check_ms_pass?
-      assert composition_sections_read_pass?, 'Some of the sections are not populated correctly.'
+      failed_msg = 'Some of the sections are not populated correctly.'
+      assert composition_sections_read_pass?, failed_msg
+      assert composition_section_check_ms_pass?, failed_msg
     end
 
     def composition_section_check_ms_pass?
@@ -39,7 +40,7 @@ module AUPSTestKit
         end
       end.flatten.uniq
 
-      filtered_sections_profiles.each do |profile|
+      results = filtered_sections_profiles.map do |profile|
         resource_type = profile.split('|').first
         profile_url = profile.split('|').last
         resource_metadata_raw = metadata_manager.group_metadata_by_resource_type(resource_type)
@@ -53,7 +54,6 @@ module AUPSTestKit
         resource_metadata = InfernoSuiteGenerator::Generator::GroupMetadata.new(resource_metadata_raw)
         elements_statuses = MSChecker.new.elements_present_statuses(resource_metadata, filtered_resources)
         profile_info_str = "Profile: #{resource_type} — #{profile_url}"
-        info elements_statuses.inspect
         failed_status = elements_statuses.any? do |element_status|
           element_status[:present] == false && element_status[:mandatory] == true
         end
@@ -78,12 +78,24 @@ module AUPSTestKit
           'List of Must Support elements populated or missing',
           elements_statuses_list
         ].flatten
-        add_message(
-          calculate_message_level(failed: failed_status, warning: warning_status,
-                                  info: !failed_status && !warning_status),
-          full_message_data.join("\n\n")
-        )
+        msg_level = calculate_message_level(failed: failed_status, warning: warning_status,
+                                            info: !failed_status && !warning_status)
+        add_message(msg_level, full_message_data.join("\n\n"))
+        msg_level
       end
+      if results.any? { |result| result == 'error' }
+        add_message('error', 'At least one mandatory Must Support elements is not populated.')
+        return false
+      end
+
+      if results.any? { |result| result == 'warning' }
+        add_message('warning',
+                    'At least one optional Must Support element is not populated. Further testing with data containing the missing elements or clarification the system does not ever know a value for the element is required.')
+        return true
+      end
+
+      add_message('info', 'All Must Support elements are populated.')
+      true
     end
 
     def composition_sections_read_pass?
