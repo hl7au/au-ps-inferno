@@ -6,3 +6,7 @@ AllCops:
 
 Gemspec/DevelopmentDependencies:
   Enabled: false
+
+Naming/MethodName:
+  Exclude:
+    - "lib/au_ps_inferno/generator/generator.rb"

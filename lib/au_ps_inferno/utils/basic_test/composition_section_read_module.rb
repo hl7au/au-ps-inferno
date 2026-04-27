@@ -11,6 +11,7 @@ require_relative '../ms_checker'
 require_relative 'composition_section_check_resources_ms_elements_module'
 module AUPSTestKit
   # Reading composition section rows: profile/entry matching and list outcomes.
+  # rubocop:disable Metrics/ModuleLength
   module BasicTestCompositionSectionReadModule
     include BasicTestCompositionSectionCheckResourcesMSElementsModule
 
@@ -91,11 +92,8 @@ module AUPSTestKit
     end
 
     def composition_section_entry_line_resolved(index, ref, resource)
-      # validation_errors = scratch[:validation_errors] || []
-      # has_val_error = validation_errors.any? { |e| e[:full_url] == ref }
       profiles = resource.meta&.profile || []
       suffix = profiles.any? ? "(meta.profile: #{profiles.join(', ')})" : '(no meta.profile)'
-      # tail = has_val_error ? "#{suffix} ❌ Validation error" : suffix
       "entry[#{index}]: **#{ref}** -> #{resource.resourceType} #{suffix}"
     end
 
@@ -118,7 +116,6 @@ module AUPSTestKit
         issues << "Resource type: #{resource.resourceType} is not in the list " \
                   "of expected resource types: #{entries_resource_types}"
       end
-      # issues << "Validation error found for reference: #{ref}" if validation_errors.any? { |e| e[:full_url] == ref }
       issues
     end
 
@@ -138,4 +135,5 @@ module AUPSTestKit
       end
     end
   end
+  # rubocop:enable Metrics/ModuleLength
 end

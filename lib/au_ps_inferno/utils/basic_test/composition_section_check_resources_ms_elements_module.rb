@@ -123,7 +123,9 @@ module AUPSTestKit
         filtered_resources = resources_to_check_ms.filter { |resource| resource.resourceType == resource_type }
         return report_missing_resources(profile_info_str) if filtered_resources.empty?
 
-        elements_statuses = build_elements_statuses(resource_type, filtered_resources)
+        resource_metadata_raw = metadata_manager.group_metadata_by_resource_type(resource_type)
+        resource_metadata = InfernoSuiteGenerator::Generator::GroupMetadata.new(resource_metadata_raw)
+        elements_statuses = MSChecker.new.elements_present_statuses(resource_metadata, filtered_resources)
         report_profile_elements_status(profile_info_str, elements_statuses)
       end
 
@@ -141,7 +143,7 @@ module AUPSTestKit
           profile_info_str,
           msg_line('Message', message_with_details(elements_statuses)),
           LIST_MESSAGE,
-          build_elements_statuses_list(elements_statuses)
+          elements_statuses.map { |element_status| build_element_status_text(element_status) }
         ].flatten
 
         msg_level = calculate_elements_status_message_level(elements_statuses)
@@ -152,18 +154,6 @@ module AUPSTestKit
       def calculate_elements_status_message_level(elements_statuses)
         st_hash = status_hash(elements_statuses)
         calculate_message_level(failed: st_hash[:failed], warning: st_hash[:warning], info: st_hash[:info])
-      end
-
-      def build_elements_statuses(resource_type, filtered_resources)
-        resource_metadata_raw = metadata_manager.group_metadata_by_resource_type(resource_type)
-        resource_metadata = InfernoSuiteGenerator::Generator::GroupMetadata.new(resource_metadata_raw)
-        MSChecker.new.elements_present_statuses(resource_metadata, filtered_resources)
-      end
-
-      def build_elements_statuses_list(elements_statuses)
-        elements_statuses.map do |element_status|
-          build_element_status_text(element_status)
-        end
       end
 
       def build_element_status_text(element_status)

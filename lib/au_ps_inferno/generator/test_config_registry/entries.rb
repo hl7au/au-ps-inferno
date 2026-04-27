@@ -101,7 +101,10 @@ class Generator
           title: 'AU PS Composition Optional Sections capable of populating referenced profiles',
           description: 'Optional section SHALL be capable of populating section.entry with the referenced ' \
                        'profiles and SHOULD correctly populate section.entry if a value is known.',
-          commands: ['read_composition_sections_info(["42348-3", "104605-1", "47420-5", "11348-0", "10162-6", "81338-6", "18776-5", "29762-2", "8716-3"])']
+          commands: [
+            'read_composition_sections_info(["42348-3", "104605-1", "47420-5", "11348-0", ' \
+            '"10162-6", "81338-6", "18776-5", "29762-2", "8716-3"])'
+          ]
         },
         subject_resource_type_is_valid: {
           title: 'Subject reference in the AU PS Composition SHALL resolve to a valid resource type (Patient).',
