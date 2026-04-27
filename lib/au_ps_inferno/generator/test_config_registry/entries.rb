@@ -89,7 +89,7 @@ class Generator
           title: 'AU PS Composition Mandatory Sections capable of populating referenced profiles',
           description: 'Mandatory section SHALL be capable of populating section.entry with the referenced ' \
                        'profiles and SHOULD correctly populate section.entry if a value is known.',
-          commands: ['read_composition_sections_info']
+          commands: ['read_composition_sections_info(["11450-4", "48765-2", "10160-0"])']
         },
         subject_resource_type_is_valid: {
           title: 'Subject reference in the AU PS Composition SHALL resolve to a valid resource type (Patient).',

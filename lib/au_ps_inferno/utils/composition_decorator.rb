@@ -16,6 +16,14 @@ class CompositionDecorator < FHIR::Composition
     section.map { |sect| section_first_code(sect) }.compact
   end
 
+  def entry_references_by_codes(codes)
+    codes.map { |code| section_by_code(code).entry_references }.flatten
+  end
+
+  def sections_by_codes(codes)
+    codes.map { |code| section_by_code(code) }
+  end
+
   def section_by_code(code)
     section_data = section.find { |sect| section_first_code(sect) == code }
     return nil if section_data.nil?

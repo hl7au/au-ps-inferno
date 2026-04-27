@@ -16,18 +16,19 @@ module AUPSTestKit
 
     private
 
-    def read_composition_sections_info
+    def read_composition_sections_info(sections_codes)
       check_bundle_exists_in_scratch
       failed_msg = 'Some of the sections are not populated correctly.'
-      assert composition_sections_read_pass?, failed_msg
-      assert composition_section_check_ms_pass?, failed_msg
+      assert composition_sections_read_pass?(sections_codes), failed_msg
+      assert composition_section_check_ms_pass?(sections_codes), failed_msg
     end
 
-    def composition_sections_read_pass?
+    def composition_sections_read_pass?(sections_codes)
       validation_errors = scratch[:validation_errors] || []
       bundle_resource = BundleDecorator.new(scratch_bundle.to_hash)
       composition_resource = bundle_resource.composition_resource
-      section_results = metadata_manager.required_ms_sections_metadata.map do |section_metadata|
+      sections_metadata = metadata_manager.sections_metadata_by_codes(sections_codes)
+      section_results = sections_metadata.map do |section_metadata|
         report_composition_section_read?(section_metadata, composition_resource, bundle_resource, validation_errors)
       end
       section_results.all?

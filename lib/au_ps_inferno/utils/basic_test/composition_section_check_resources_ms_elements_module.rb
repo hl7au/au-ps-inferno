@@ -19,30 +19,27 @@ module AUPSTestKit
 
       private
 
-      def sections_profiles
-        sections_profiles = metadata_manager.required_ms_sections_metadata.map do |section_metadata|
+      def raw_sections_profiles(sections_codes)
+        sections_metadata = metadata_manager.sections_metadata_by_codes(sections_codes)
+        sections_metadata.map do |section_metadata|
           section_metadata[:entries].map do |entry_metadata|
             entry_metadata[:profiles]
-          end.flatten.uniq
+          end
         end.flatten.uniq
+      end
 
-        sections_profiles.filter do |profile|
+      def sections_profiles(sections_codes)
+        raw_sections_profiles(sections_codes).filter do |profile|
           profile.include?('au-ps')
         end
       end
 
-      def resources_to_check_ms
+      def resources_to_check_ms(sections_codes)
         bundle_resource = BundleDecorator.new(scratch_bundle.to_hash)
         composition_resource = bundle_resource.composition_resource
-        sections_codes = metadata_manager.required_ms_sections_metadata.map do |section_metadata|
-          section_metadata[:code]
-        end
 
-        sections_codes.map do |section_code|
-          composition_resource.section_by_code(section_code).entry_references.map do |ref|
-            bundle_resource.resource_by_reference(ref)
-          end
-        end.flatten.uniq
+        entry_references = composition_resource.entry_references_by_codes(sections_codes)
+        bundle_resource.resources_by_references(entry_references)
       end
 
       def result_has?(results, result_type)
@@ -179,8 +176,9 @@ module AUPSTestKit
         is_mandatory ? "#{default_message} (M)" : default_message
       end
 
-      def composition_section_check_ms_pass?
-        results = check_resources_against_profiles(sections_profiles, resources_to_check_ms)
+      def composition_section_check_ms_pass?(sections_codes)
+        results = check_resources_against_profiles(sections_profiles(sections_codes),
+                                                   resources_to_check_ms(sections_codes))
         return false if results_eror?(results)
         return true if results_warning?(results)
 
