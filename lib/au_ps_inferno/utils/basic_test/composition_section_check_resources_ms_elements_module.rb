@@ -11,6 +11,7 @@ module AUPSTestKit
         'the system does not ever know a value for the element is required.'
       ].join.freeze
       MS_OKAY_MESSAGE = 'All Must Support elements are populated.'
+      LIST_MESSAGE = 'List of Must Support elements populated or missing'
 
       private
 
@@ -40,31 +41,47 @@ module AUPSTestKit
         end.flatten.uniq
       end
 
+      def result_has?(results, result_type)
+        results.any? { |result| result == result_type }
+      end
+
       def results_eror?(results)
-        results.any? { |result| result == 'error' }
+        result_has?(results, 'error')
       end
 
       def results_warning?(results)
-        results.any? { |result| result == 'warning' }
+        result_has?(results, 'warning')
+      end
+
+      def element_status_has?(element_status, present, mandatory)
+        element_status[:present] == present && element_status[:mandatory] == mandatory
       end
 
       def optional_present?(element_status)
-        element_status[:present] == false && element_status[:mandatory] == false
+        element_status_has?(element_status, false, false)
       end
 
       def mandatory_present?(element_status)
-        element_status[:present] == false && element_status[:mandatory] == true
+        element_status_has?(element_status, false, true)
       end
 
-      def status_hash(elements_statuses)
-        failed_status = elements_statuses.any? do |element_status|
+      def failed_status(elements_statuses)
+        elements_statuses.any? do |element_status|
           mandatory_present?(element_status)
         end
-        warning_status = elements_statuses.none? do |element_status|
+      end
+
+      def warning_status(elements_statuses)
+        elements_statuses.none? do |element_status|
           mandatory_present?(element_status)
         end && elements_statuses.any? do |element_status|
           optional_present?(element_status)
         end
+      end
+
+      def status_hash(elements_statuses)
+        failed_status = failed_status(elements_statuses)
+        warning_status = warning_status(elements_statuses)
 
         { failed: failed_status, warning: warning_status, info: !failed_status && !warning_status }
       end
@@ -103,7 +120,7 @@ module AUPSTestKit
         full_message_data = [
           profile_info_str,
           "**Message:** #{message_with_details(elements_statuses)}",
-          'List of Must Support elements populated or missing',
+          LIST_MESSAGE,
           build_elements_statuses_list(elements_statuses)
         ].flatten
         st_hash = status_hash(elements_statuses)
@@ -134,7 +151,6 @@ module AUPSTestKit
         return false if results_eror?(results)
         return true if results_warning?(results)
 
-        add_message('info', 'All Must Support elements are populated.')
         true
       end
     end
