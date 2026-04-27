@@ -12,6 +12,9 @@ module AUPSTestKit
       ].join.freeze
       MS_OKAY_MESSAGE = 'All Must Support elements are populated.'
       LIST_MESSAGE = 'List of Must Support elements populated or missing'
+      WARNING_ICON = '⚠️'
+      ERROR_ICON = '❌'
+      SUCCESS_ICON = '✅'
 
       private
 
@@ -101,16 +104,31 @@ module AUPSTestKit
         MS_OKAY_MESSAGE
       end
 
+      def msg_line(title, text)
+        "**#{title}**: #{text}"
+      end
+
+      def normalize_resource_type_and_profile(profile)
+        splitted_data = profile.split('|')
+        raise StandardError, 'Profile is not in the correct format' if splitted_data.length != 2
+
+        {
+          resource_type: splitted_data[0],
+          profile_url: splitted_data[1]
+        }
+      end
+
       # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
       def process_profile(profile, resources_to_check_ms)
-        resource_type = profile.split('|').first
-        profile_url = profile.split('|').last
-        profile_info_str = "**Profile:** #{resource_type} — #{profile_url}"
+        resource_type_and_profile = normalize_resource_type_and_profile(profile)
+        resource_type = resource_type_and_profile[:resource_type]
+        profile_url = resource_type_and_profile[:profile_url]
+        profile_info_str = msg_line('Profile', "#{resource_type} — #{profile_url}")
         filtered_resources = resources_to_check_ms.filter { |resource| resource.resourceType == resource_type }
         if filtered_resources.empty?
           full_message_data = [
             profile_info_str,
-            '**Message:** No resources found'
+            msg_line('Message', 'No resources found')
           ]
           add_message('warning', full_message_data.join("\n\n"))
           return nil
@@ -119,7 +137,7 @@ module AUPSTestKit
         elements_statuses = build_elements_statuses(resource_type, filtered_resources)
         full_message_data = [
           profile_info_str,
-          "**Message:** #{message_with_details(elements_statuses)}",
+          msg_line('Message', message_with_details(elements_statuses)),
           LIST_MESSAGE,
           build_elements_statuses_list(elements_statuses)
         ].flatten
@@ -139,9 +157,10 @@ module AUPSTestKit
       def build_elements_statuses_list(elements_statuses)
         elements_statuses.map do |element_status|
           is_mandatory = element_status[:mandatory]
-          missing_icon = is_mandatory ? '❌' : '⚠️'
+          missing_icon = is_mandatory ? ERROR_ICON : WARNING_ICON
           missing_text = "#{missing_icon} Missing"
-          default_message = "#{element_status[:present] ? '✅ Populated' : missing_text}: #{element_status[:path]}"
+          populated_text = "#{SUCCESS_ICON} Populated"
+          default_message = "#{element_status[:present] ? populated_text : missing_text}: #{element_status[:path]}"
           is_mandatory ? "#{default_message} (M)" : default_message
         end
       end
