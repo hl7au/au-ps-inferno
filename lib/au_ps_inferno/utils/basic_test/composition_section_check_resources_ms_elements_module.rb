@@ -3,13 +3,14 @@
 module AUPSTestKit
   module BasicTestCompositionSectionReadModule
     # Composition Must Support elements in sections.
-    # rubocop:disable Metrics/ModuleLength
     module BasicTestCompositionSectionCheckResourcesMSElementsModule
+      MANDATORY_ERROR_MS_MESSAGE = 'At least one mandatory Must Support elements is not populated.'
       OPTIONAL_MS_WARNING_MESSAGE = [
         'At least one optional Must Support element is not populated. ',
         'Further testing with data containing the missing elements or clarification ',
         'the system does not ever know a value for the element is required.'
       ].join.freeze
+      MS_OKAY_MESSAGE = 'All Must Support elements are populated.'
 
       private
 
@@ -40,19 +41,11 @@ module AUPSTestKit
       end
 
       def results_eror?(results)
-        if results.any? { |result| result == 'error' }
-          add_message('error', 'At least one mandatory Must Support elements is not populated.')
-          return true
-        end
-        false
+        results.any? { |result| result == 'error' }
       end
 
       def results_warning?(results)
-        if results.any? { |result| result == 'warning' }
-          add_message('warning', OPTIONAL_MS_WARNING_MESSAGE)
-          return true
-        end
-        false
+        results.any? { |result| result == 'warning' }
       end
 
       def optional_present?(element_status)
@@ -82,20 +75,34 @@ module AUPSTestKit
         end
       end
 
+      def message_with_details(elements_statuses)
+        status_hash = status_hash(elements_statuses)
+
+        return MANDATORY_ERROR_MS_MESSAGE if status_hash[:failed] == true
+        return OPTIONAL_MS_WARNING_MESSAGE if status_hash[:warning] == true
+
+        MS_OKAY_MESSAGE
+      end
+
       # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
       def process_profile(profile, resources_to_check_ms)
         resource_type = profile.split('|').first
         profile_url = profile.split('|').last
+        profile_info_str = "**Profile:** #{resource_type} — #{profile_url}"
         filtered_resources = resources_to_check_ms.filter { |resource| resource.resourceType == resource_type }
         if filtered_resources.empty?
-          add_message('warning', "No resources found for profile: #{profile_url}")
+          full_message_data = [
+            profile_info_str,
+            '**Message:** No resources found'
+          ]
+          add_message('warning', full_message_data.join("\n\n"))
           return nil
         end
 
         elements_statuses = build_elements_statuses(resource_type, filtered_resources)
-        profile_info_str = "Profile: #{resource_type} — #{profile_url}"
         full_message_data = [
           profile_info_str,
+          "**Message:** #{message_with_details(elements_statuses)}",
           'List of Must Support elements populated or missing',
           build_elements_statuses_list(elements_statuses)
         ].flatten
@@ -131,6 +138,5 @@ module AUPSTestKit
         true
       end
     end
-    # rubocop:enable Metrics/ModuleLength
   end
 end
