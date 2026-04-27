@@ -3,20 +3,7 @@
 module AUPSTestKit
   module BasicTestCompositionSectionReadModule
     # Composition Must Support elements in sections.
-    # rubocop:disable Metrics/ModuleLength
     module BasicTestCompositionSectionCheckResourcesMSElementsModule
-      MANDATORY_ERROR_MS_MESSAGE = 'At least one mandatory Must Support elements is not populated.'
-      OPTIONAL_MS_WARNING_MESSAGE = [
-        'At least one optional Must Support element is not populated. ',
-        'Further testing with data containing the missing elements or clarification ',
-        'the system does not ever know a value for the element is required.'
-      ].join.freeze
-      MS_OKAY_MESSAGE = 'All Must Support elements are populated.'
-      LIST_MESSAGE = 'List of Must Support elements populated or missing'
-      WARNING_ICON = '⚠️'
-      ERROR_ICON = '❌'
-      SUCCESS_ICON = '✅'
-
       private
 
       def raw_sections_profiles(sections_codes)
@@ -54,56 +41,10 @@ module AUPSTestKit
         result_has?(results, 'warning')
       end
 
-      def element_status_has?(element_status, present, mandatory)
-        element_status[:present] == present && element_status[:mandatory] == mandatory
-      end
-
-      def optional_present?(element_status)
-        element_status_has?(element_status, false, false)
-      end
-
-      def mandatory_present?(element_status)
-        element_status_has?(element_status, false, true)
-      end
-
-      def failed_status(elements_statuses)
-        elements_statuses.any? do |element_status|
-          mandatory_present?(element_status)
-        end
-      end
-
-      def warning_status(elements_statuses)
-        elements_statuses.none? do |element_status|
-          mandatory_present?(element_status)
-        end && elements_statuses.any? do |element_status|
-          optional_present?(element_status)
-        end
-      end
-
-      def status_hash(elements_statuses)
-        failed_status = failed_status(elements_statuses)
-        warning_status = warning_status(elements_statuses)
-
-        { failed: failed_status, warning: warning_status, info: !failed_status && !warning_status }
-      end
-
       def check_resources_against_profiles(sections_profiles, resources_to_check_ms)
         sections_profiles.map do |profile|
           process_profile(profile, resources_to_check_ms)
         end
-      end
-
-      def message_with_details(elements_statuses)
-        status_hash = status_hash(elements_statuses)
-
-        return MANDATORY_ERROR_MS_MESSAGE if status_hash[:failed] == true
-        return OPTIONAL_MS_WARNING_MESSAGE if status_hash[:warning] == true
-
-        MS_OKAY_MESSAGE
-      end
-
-      def msg_line(title, text)
-        "**#{title}**: #{text}"
       end
 
       def normalize_resource_type_and_profile(profile)
@@ -120,13 +61,19 @@ module AUPSTestKit
         resource_type_and_profile = normalize_resource_type_and_profile(profile)
         resource_type, profile_url = resource_type_and_profile.values_at(:resource_type, :profile_url)
         profile_info_str = msg_line('Profile', "#{resource_type} — #{profile_url}")
+        checker = MSChecker.new
         filtered_resources = resources_to_check_ms.filter { |resource| resource.resourceType == resource_type }
         return report_missing_resources(profile_info_str) if filtered_resources.empty?
 
+        resource_metadata = group_metadata_for(resource_type)
+        check_result = checker.report_profile_elements_status(resource_metadata, filtered_resources)
+        add_message(check_result[:msg_level], check_result[:message])
+        check_result[:msg_level]
+      end
+
+      def group_metadata_for(resource_type)
         resource_metadata_raw = metadata_manager.group_metadata_by_resource_type(resource_type)
-        resource_metadata = InfernoSuiteGenerator::Generator::GroupMetadata.new(resource_metadata_raw)
-        elements_statuses = MSChecker.new.elements_present_statuses(resource_metadata, filtered_resources)
-        report_profile_elements_status(profile_info_str, elements_statuses)
+        InfernoSuiteGenerator::Generator::GroupMetadata.new(resource_metadata_raw)
       end
 
       def report_missing_resources(profile_info_str)
@@ -138,34 +85,6 @@ module AUPSTestKit
         nil
       end
 
-      def report_profile_elements_status(profile_info_str, elements_statuses)
-        full_message_data = [
-          profile_info_str,
-          msg_line('Message', message_with_details(elements_statuses)),
-          LIST_MESSAGE,
-          elements_statuses.map { |element_status| build_element_status_text(element_status) }
-        ].flatten
-
-        msg_level = calculate_elements_status_message_level(elements_statuses)
-        add_message(msg_level, full_message_data.join("\n\n"))
-        msg_level
-      end
-
-      def calculate_elements_status_message_level(elements_statuses)
-        st_hash = status_hash(elements_statuses)
-        calculate_message_level(failed: st_hash[:failed], warning: st_hash[:warning], info: st_hash[:info])
-      end
-
-      def build_element_status_text(element_status)
-        is_mandatory = element_status[:mandatory]
-        missing_icon = is_mandatory ? ERROR_ICON : WARNING_ICON
-        missing_text = "#{missing_icon} Missing"
-        populated_text = "#{SUCCESS_ICON} Populated"
-        element_status_text = element_status[:present] ? populated_text : missing_text
-        default_message = "#{element_status_text}: #{element_status[:path]}"
-        is_mandatory ? "#{default_message} (M)" : default_message
-      end
-
       def composition_section_check_ms_pass?(sections_codes)
         results = check_resources_against_profiles(sections_profiles(sections_codes),
                                                    resources_to_check_ms(sections_codes))
@@ -175,6 +94,5 @@ module AUPSTestKit
         true
       end
     end
-    # rubocop:enable Metrics/ModuleLength
   end
 end

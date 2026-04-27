@@ -23,6 +23,8 @@ services:
       context: ./
     volumes:
       - ./data:/opt/inferno/data
+      - ./lib/:/opt/inferno/lib
+      - ./:/opt/inferno/
     command: bundle exec sidekiq -r ./worker.rb
     depends_on:
       redis:
