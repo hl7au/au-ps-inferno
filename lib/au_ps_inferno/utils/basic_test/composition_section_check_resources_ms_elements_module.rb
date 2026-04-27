@@ -57,6 +57,10 @@ module AUPSTestKit
         }
       end
 
+      def msg_line(title, text)
+        "**#{title}**: #{text}"
+      end
+
       def process_profile(profile, resources_to_check_ms)
         resource_type_and_profile = normalize_resource_type_and_profile(profile)
         resource_type, profile_url = resource_type_and_profile.values_at(:resource_type, :profile_url)
