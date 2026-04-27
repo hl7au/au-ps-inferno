@@ -19,8 +19,11 @@ module AUPSTestKit
     def read_composition_sections_info(sections_codes)
       check_bundle_exists_in_scratch
       failed_msg = 'Some of the sections are not populated correctly.'
-      assert composition_sections_read_pass?(sections_codes), failed_msg
-      assert composition_section_check_ms_pass?(sections_codes), failed_msg
+      refs_test_pass = composition_sections_read_pass?(sections_codes)
+      ms_test_pass = composition_section_check_ms_pass?(sections_codes)
+
+      assert refs_test_pass, failed_msg
+      assert ms_test_pass, failed_msg
     end
 
     def composition_sections_read_pass?(sections_codes)

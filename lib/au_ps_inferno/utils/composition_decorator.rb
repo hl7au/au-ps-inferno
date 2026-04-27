@@ -17,7 +17,8 @@ class CompositionDecorator < FHIR::Composition
   end
 
   def entry_references_by_codes(codes)
-    codes.map { |code| section_by_code(code).entry_references }.flatten
+    sections = sections_by_codes(codes).compact
+    sections.map(&:entry_references).flatten
   end
 
   def sections_by_codes(codes)
