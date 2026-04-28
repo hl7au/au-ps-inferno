@@ -6,9 +6,7 @@ module MSCheckSuiteKit
   class MSCheckSuite < Inferno::TestSuite
     include AUPSTestKit::BasicTestCompositionSectionReadModule
 
-    id 'ms_check_suite'
-
-    input :bundle
+    id :ms_check_suite
 
     test do
       id :mandatory_ms_elements_populated
