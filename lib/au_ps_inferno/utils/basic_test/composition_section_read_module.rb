@@ -11,7 +11,6 @@ require_relative '../ms_checker'
 require_relative 'composition_section_check_resources_ms_elements_module'
 module AUPSTestKit
   # Reading composition section rows: profile/entry matching and list outcomes.
-  # rubocop:disable Metrics/ModuleLength
   module BasicTestCompositionSectionReadModule
     include BasicTestCompositionSectionCheckResourcesMSElementsModule
 
@@ -28,23 +27,19 @@ module AUPSTestKit
     end
 
     def composition_sections_references_resolution_pass?(sections_codes)
-      validation_errors = scratch[:validation_errors] || []
       bundle_resource = BundleDecorator.new(scratch_bundle.to_hash)
       composition_resource = bundle_resource.composition_resource
       sections_metadata = metadata_manager.sections_metadata_by_codes(sections_codes)
       section_results = sections_metadata.map do |section_metadata|
-        composition_section_references_resolution_issues?(section_metadata, composition_resource, bundle_resource,
-                                                          validation_errors)
+        composition_section_references_resolution_issues?(section_metadata, composition_resource, bundle_resource)
       end
       section_results.all?
     end
 
-    def composition_section_references_resolution_issues?(section_metadata, composition_resource, bundle_resource,
-                                                          validation_errors)
+    def composition_section_references_resolution_issues?(section_metadata, composition_resource, bundle_resource)
       section_code = section_metadata[:code]
       section = composition_resource.section_by_code(section_code)
-      issues = read_composition_section_issues(section_metadata, composition_resource, bundle_resource,
-                                               validation_errors)
+      issues = read_composition_section_issues(section_metadata, composition_resource, bundle_resource)
       text = composition_section_read_report_message(section_metadata, section, bundle_resource, section_code)
       add_message(issues.empty? ? 'info' : 'error', text)
       issues.empty?
@@ -99,18 +94,18 @@ module AUPSTestKit
       "entry[#{index}]: **#{ref}** -> #{resource.resourceType} #{suffix}"
     end
 
-    def read_composition_section_issues(section_metadata, composition_resource, bundle_resource, validation_errors)
+    def read_composition_section_issues(section_metadata, composition_resource, bundle_resource)
       section_code = section_metadata[:code]
       section = composition_resource.section_by_code(section_code)
       return ["No composition section found for code: #{section_code}"] if section.blank?
 
       entries_resource_types = permitted_resource_types(section_metadata)
       section.entry_references.flat_map do |ref|
-        composition_section_ref_read_issues(ref, bundle_resource, entries_resource_types, validation_errors)
+        composition_section_ref_read_issues(ref, bundle_resource, entries_resource_types)
       end
     end
 
-    def composition_section_ref_read_issues(ref, bundle_resource, entries_resource_types, _validation_errors)
+    def composition_section_ref_read_issues(ref, bundle_resource, entries_resource_types)
       resource = bundle_resource.resource_by_reference(ref)
       issues = []
       issues << "Resource not found for reference: #{ref}" if resource.blank?
@@ -137,5 +132,4 @@ module AUPSTestKit
       end
     end
   end
-  # rubocop:enable Metrics/ModuleLength
 end
