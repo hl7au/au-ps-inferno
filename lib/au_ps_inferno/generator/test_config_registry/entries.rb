@@ -89,21 +89,20 @@ class Generator
           title: 'AU PS Composition Mandatory Sections capable of populating referenced profiles',
           description: 'Mandatory section SHALL be capable of populating section.entry with the referenced ' \
                        'profiles and SHOULD correctly populate section.entry if a value is known.',
-          commands: ['read_composition_sections_info(["11450-4", "48765-2", "10160-0"])']
+          commands: ['test_composition_mandatory_sections']
         },
         recommended_sections_entry_profiles: {
           title: 'AU PS Composition Recommended Sections capable of populating referenced profiles',
           description: 'Recommended section SHALL be capable of populating section.entry with the referenced ' \
                        'profiles and SHOULD correctly populate section.entry if a value is known.',
-          commands: ['read_composition_sections_info(["11369-6", "30954-2", "47519-4", "46264-8"])']
+          commands: ['test_composition_recommended_sections']
         },
         optional_sections_entry_profiles: {
           title: 'AU PS Composition Optional Sections capable of populating referenced profiles',
           description: 'Optional section SHALL be capable of populating section.entry with the referenced ' \
                        'profiles and SHOULD correctly populate section.entry if a value is known.',
           commands: [
-            'read_composition_sections_info(["42348-3", "104605-1", "47420-5", "11348-0", ' \
-            '"10162-6", "81338-6", "18776-5", "29762-2", "8716-3"])'
+            'test_composition_optional_sections'
           ]
         },
         subject_resource_type_is_valid: {

@@ -12,11 +12,27 @@ require_relative 'composition_section_check_resources_ms_elements_module'
 module AUPSTestKit
   # Reading composition section rows: profile/entry matching and list outcomes.
   module BasicTestCompositionSectionReadModule
+    MANDATORY_SECTIONS_CODES = %w[11450-4 48765-2 10160-0].freeze
+    RECOMMENDED_SECTIONS_CODES = %w[11369-6 30954-2 47519-4 46264-8].freeze
+    OPTIONAL_SECTIONS_CODES = %w[42348-3 104605-1 47420-5 11348-0 10162-6 81338-6 18776-5 29762-2 8716-3].freeze
+
     include BasicTestCompositionSectionCheckResourcesMSElementsModule
 
     private
 
-    def read_composition_sections_info(sections_codes)
+    def test_composition_mandatory_sections
+      test_composition_sections_data(MANDATORY_SECTIONS_CODES)
+    end
+
+    def test_composition_recommended_sections
+      test_composition_sections_data(RECOMMENDED_SECTIONS_CODES)
+    end
+
+    def test_composition_optional_sections
+      test_composition_sections_data(OPTIONAL_SECTIONS_CODES)
+    end
+
+    def test_composition_sections_data(sections_codes)
       check_bundle_exists_in_scratch
       failed_msg = 'Some of the sections are not populated correctly.'
       refs_test_pass = composition_sections_references_resolution_pass?(sections_codes)
@@ -30,10 +46,9 @@ module AUPSTestKit
       bundle_resource = BundleDecorator.new(scratch_bundle.to_hash)
       composition_resource = bundle_resource.composition_resource
       sections_metadata = metadata_manager.sections_metadata_by_codes(sections_codes)
-      section_results = sections_metadata.map do |section_metadata|
+      sections_metadata.map do |section_metadata|
         composition_section_references_resolution_issues?(section_metadata, composition_resource, bundle_resource)
-      end
-      section_results.all?
+      end.all?
     end
 
     def composition_section_references_resolution_issues?(section_metadata, composition_resource, bundle_resource)
@@ -73,8 +88,7 @@ module AUPSTestKit
     end
 
     def get_section_entry_index(section_metadata, bundle_resource, ref)
-      section_code = section_metadata[:code]
-      section = bundle_resource.composition_resource.section_by_code(section_code)
+      section = bundle_resource.composition_resource.section_by_code(section_metadata[:code])
       return nil if section.blank?
 
       section.get_entry_index_by_reference(ref)

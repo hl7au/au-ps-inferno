@@ -422,7 +422,7 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do
     end
   end
 
-  describe '#read_composition_sections_info' do
+  describe '#test_composition_sections_data' do
     let(:sections_codes) { %w[history medications] }
     let(:failed_msg) { 'Some of the sections are not populated correctly.' }
 
@@ -437,7 +437,7 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do
       expect(test_instance).to receive(:assert).with(true, failed_msg)
       expect(test_instance).to receive(:assert).with(false, failed_msg)
 
-      test_instance.send(:read_composition_sections_info, sections_codes)
+      test_instance.send(:test_composition_sections_data, sections_codes)
     end
   end
 end
