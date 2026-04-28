@@ -2,8 +2,8 @@ Test Results:
 ================================================================================
 AU PS 1.0.0-ballot Test Suite: X error
 AU PS 1.0.0-ballot Test Suite: X error
-1 AU PS Bundle Instance: X fail
-1 AU PS Bundle Instance: X fail
+1 AU PS Bundle Instance: X error
+1 AU PS Bundle Instance: X error
 1.1 AU PS Bundle Validation: * skip
 1.1.01 AU PS Bundle is valid against AU PS Bundle profile: * skip
 1.10 AU PS Composition Custodian: * skip
@@ -21,9 +21,9 @@ AU PS 1.0.0-ballot Test Suite: X error
 1.3.02 Optional Must Support elements are correctly populated: ✓ pass
 1.3.03 Must Support sub-elements of a complex element are correctly populated: ✓ pass
 1.3.04 Must Support slices are correctly populated: ✓ pass
-1.4 AU PS Composition Mandatory Sections: * skip
+1.4 AU PS Composition Mandatory Sections: X error
 1.4.01 AU PS Composition Mandatory Sections are correctly populated: * skip
-1.4.02 AU PS Composition Mandatory Sections capable of populating referenced profiles: * skip
+1.4.02 AU PS Composition Mandatory Sections capable of populating referenced profiles: X error
 1.5 AU PS Composition Recommended Sections: * skip
 1.5.01 AU PS Composition recommended sections are correctly populated: * skip
 1.6 AU PS Composition Optional Sections: * skip
@@ -63,9 +63,9 @@ AU PS 1.0.0-ballot Test Suite: X error
 3.3.02 Optional Must Support elements are correctly populated: ✓ pass
 3.3.03 Must Support sub-elements of a complex element are correctly populated: ✓ pass
 3.3.04 Must Support slices are correctly populated: ✓ pass
-3.4 AU PS Composition Mandatory Sections: ✓ pass
+3.4 AU PS Composition Mandatory Sections: X error
 3.4.01 AU PS Composition Mandatory Sections are correctly populated: ✓ pass
-3.4.02 AU PS Composition Mandatory Sections capable of populating referenced profiles: ✓ pass
+3.4.02 AU PS Composition Mandatory Sections capable of populating referenced profiles: X error
 3.5 AU PS Composition Recommended Sections: ✓ pass
 3.5.01 AU PS Composition recommended sections are correctly populated: ✓ pass
 3.6 AU PS Composition Optional Sections: ✓ pass
@@ -82,8 +82,8 @@ AU PS 1.0.0-ballot Test Suite: X error
 3.9.02 Must Support elements SHALL be populated if a value is known: * omit
 3.9.03 Must Support sub-elements SHALL be populated if a value is known: * omit
 3.9.04 Must Support identifier slices SHALL be populated if a value is known: * omit
-4 Generate AU PS using IPS $summary validation tests: * skip
-4 Generate AU PS using IPS $summary validation tests: * skip
+4 Generate AU PS using IPS $summary validation tests: X error
+4 Generate AU PS using IPS $summary validation tests: X error
 4.1 AU PS Bundle Validation: * skip
 4.1.01 Generated Bundle is valid against AU PS Bundle profile: * skip
 4.10 AU PS Composition Custodian: ✓ pass
@@ -101,9 +101,9 @@ AU PS 1.0.0-ballot Test Suite: X error
 4.3.02 Optional Must Support elements are correctly populated: ✓ pass
 4.3.03 Must Support sub-elements of a complex element are correctly populated: ✓ pass
 4.3.04 Must Support slices are correctly populated: ✓ pass
-4.4 AU PS Composition Mandatory Sections: ✓ pass
+4.4 AU PS Composition Mandatory Sections: X error
 4.4.01 AU PS Composition Mandatory Sections are correctly populated: ✓ pass
-4.4.02 AU PS Composition Mandatory Sections capable of populating referenced profiles: ✓ pass
+4.4.02 AU PS Composition Mandatory Sections capable of populating referenced profiles: X error
 4.5 AU PS Composition Recommended Sections: ✓ pass
 4.5.01 AU PS Composition recommended sections are correctly populated: ✓ pass
 4.6 AU PS Composition Optional Sections: ✓ pass

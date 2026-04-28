@@ -1,5 +1,12 @@
 # frozen_string_literal: true
 
+if ENV['COVERAGE'] == '1'
+  require 'simplecov'
+  SimpleCov.start do
+    add_filter '/spec/'
+  end
+end
+
 # Hide deprecation warnings
 $VERBOSE = nil
 

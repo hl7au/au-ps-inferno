@@ -7,7 +7,7 @@ endif
 inferno = run inferno
 generated_v1_path = lib/au_ps_inferno/1.0.0-ballot
 
-.PHONY: pull build up stop down migrate setup run tests rubocop snapshot-tests snapshot-tests-update
+.PHONY: pull build up stop down migrate setup run tests coverage rubocop snapshot-tests snapshot-tests-update
 
 pull:
 	$(compose) pull
@@ -35,6 +35,9 @@ restart: stop down setup up
 
 tests:
 	$(compose) $(inferno) bundle exec rspec
+
+coverage:
+	$(compose) run -e COVERAGE=1 inferno bundle exec rspec --format documentation
 
 snapshot-tests:
 	$(compose) $(inferno) bundle exec rspec spec/integration/suite_100ballot_snapshots_spec.rb

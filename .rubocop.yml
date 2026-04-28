@@ -10,3 +10,11 @@ Gemspec/DevelopmentDependencies:
 Naming/MethodName:
   Exclude:
     - "lib/au_ps_inferno/generator/generator.rb"
+
+Metrics/BlockLength:
+  Exclude:
+    - "spec/unit/basic_test/composition_section_check_resources_ms_elements_module_spec.rb"
+
+Layout/LineLength:
+  Exclude:
+    - "spec/unit/basic_test/composition_section_check_resources_ms_elements_module_spec.rb"
