@@ -5,6 +5,7 @@ else ifeq ($(MODE), aidbox)
 compose = docker compose -f compose.aidbox.yaml
 endif
 inferno = run inferno
+generated_v1_path = lib/au_ps_inferno/1.0.0-ballot
 
 .PHONY: pull build up stop down migrate setup run tests rubocop snapshot-tests snapshot-tests-update
 
@@ -51,6 +52,10 @@ generate:
 
 rubocop_fix:
 	$(compose) $(inferno) bundle exec rubocop . -A
+
+clean_generated:
+	rm -rf $(generated_v1_path)
+	git restore --source=HEAD -- $(generated_v1_path)
 
 generate_and_fix: build generate rubocop_fix
 
