@@ -9,6 +9,7 @@ require 'inferno_suite_generator'
 require_relative '../ms_checker'
 
 require_relative 'composition_section_check_resources_ms_elements_module'
+require_relative 'composition_section_read_issues_helpers_module'
 module AUPSTestKit
   # Reading composition section rows: profile/entry matching and list outcomes.
   module BasicTestCompositionSectionReadModule
@@ -17,6 +18,7 @@ module AUPSTestKit
     OPTIONAL_SECTIONS_CODES = %w[42348-3 104605-1 47420-5 11348-0 10162-6 81338-6 18776-5 29762-2 8716-3].freeze
 
     include BasicTestCompositionSectionCheckResourcesMSElementsModule
+    include BasicTestCompositionSectionReadIssuesHelpersModule
 
     private
 
@@ -106,44 +108,6 @@ module AUPSTestKit
       profiles = resource.meta&.profile || []
       suffix = profiles.any? ? "(meta.profile: #{profiles.join(', ')})" : '(no meta.profile)'
       "entry[#{index}]: **#{ref}** -> #{resource.resourceType} #{suffix}"
-    end
-
-    def read_composition_section_issues(section_metadata, composition_resource, bundle_resource)
-      section_code = section_metadata[:code]
-      section = composition_resource.section_by_code(section_code)
-      return ["No composition section found for code: #{section_code}"] if section.blank?
-
-      entries_resource_types = permitted_resource_types(section_metadata)
-      section.entry_references.flat_map do |ref|
-        composition_section_ref_read_issues(ref, bundle_resource, entries_resource_types)
-      end
-    end
-
-    def composition_section_ref_read_issues(ref, bundle_resource, entries_resource_types)
-      resource = bundle_resource.resource_by_reference(ref)
-      issues = []
-      issues << "Resource not found for reference: #{ref}" if resource.blank?
-      if resource.present? && !entries_resource_types.include?(resource.resourceType)
-        issues << "Resource type: #{resource.resourceType} is not in the list " \
-                  "of expected resource types: #{entries_resource_types}"
-      end
-      issues
-    end
-
-    def permitted_resource_types(section_metadata)
-      section_metadata[:entries].map do |entry|
-        entry[:profiles].map do |profile|
-          profile.split('|').first
-        end
-      end.flatten.uniq
-    end
-
-    def empty_section_entry_reason_line(section)
-      if section.empty_reason_str.present?
-        "emptyReason: #{section.empty_reason_str}"
-      else
-        'No entries; no emptyReason.'
-      end
     end
   end
 end
