@@ -15,6 +15,11 @@ Metrics/BlockLength:
   Exclude:
     - "spec/unit/basic_test/composition_section_check_resources_ms_elements_module_spec.rb"
     - "spec/unit/basic_test/composition_section_read_module_spec.rb"
+    - "spec/unit/example_spec.rb"
+
+Lint/EmptyBlock:
+  Exclude:
+    - "spec/fixtures/example_suite.rb"
 
 Layout/LineLength:
   Exclude:
