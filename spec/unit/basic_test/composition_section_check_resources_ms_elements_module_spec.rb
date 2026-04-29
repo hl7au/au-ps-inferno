@@ -11,101 +11,150 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule::BasicTestComp
     Class.new do
       include AUPSTestKit::BasicTestCompositionSectionReadModule::BasicTestCompositionSectionCheckResourcesMSElementsModule
 
-      attr_accessor :metadata_manager
-      attr_accessor :scratch_bundle
+      attr_accessor :metadata_manager, :scratch_bundle
 
       def add_message(_level, _message); end
     end
   end
+
   let(:test_instance) { test_class.new }
+  let(:resource_type) { 'Condition' }
 
-  describe 'Function to check MS elements in the resource (check_ms_elements_populated)' do
-    let(:resource_type) { 'Condition' }
-    let(:metadata_manager) { AUPSTestKit::MetadataManager.new('spec/fixtures/metadata.yaml') }
-    let(:fixture_bundle_path) { 'spec/fixtures/resources/bundle_ms_info_min.json' }
-    let(:resources) do
-      bundle_json = File.read(fixture_bundle_path)
-      bundle = FHIR::Bundle.new(JSON.parse(bundle_json))
-      bundle.entry.map(&:resource).select { |resource| resource.resourceType == resource_type }
-    end
-    let(:result) { test_instance.send(:check_ms_elements_populated, resource_type, resources) }
-
-    before do
-      test_instance.metadata_manager = metadata_manager
-    end
-
-    def result_by_path(path)
-      result.find { |item| item[:path] == path }
-    end
-
-    it 'returns an array of hashes' do
-      expect(result).to be_an(Array)
-      expect(result.all?(Hash)).to be(true)
-    end
-
-    it 'returns records with keys definition, mandatory, path and present' do
-      expect_list = %i[definition mandatory path present]
-      expect(result.all? { |item| item.keys.sort == expect_list }).to be(true)
-    end
-
-    it 'returns correct paths for the resource type' do
-      result_paths = result.map { |item| item[:path] }.sort
-      expected_elements = metadata_manager.group_metadata_by_resource_type(resource_type)[:must_supports][:elements]
-      expected_paths = expected_elements.map { |element| element[:path] }.sort
-
-      expect(result_paths).to eq(expected_paths)
-    end
-
-    it 'returns mandatory elements marked as mandatory' do
-      metadata = metadata_manager.group_metadata_by_resource_type(resource_type)
-      mandatory_elements_paths = metadata[:mandatory_elements].map { |element| element.gsub("#{resource_type}.", '') }
-      mandatory_results = mandatory_elements_paths.map { |path| result_by_path(path)[:mandatory] == true }
-
-      expect(mandatory_results).to all(be(true))
-    end
-
-    it 'returns optional elements marked as mandatory: false' do
-      metadata = metadata_manager.group_metadata_by_resource_type(resource_type)
-      all_elements_paths = metadata[:must_supports][:elements].map { |element| element[:path] }
-      mandatory_elements_paths = metadata[:mandatory_elements].map { |element| element.gsub("#{resource_type}.", '') }
-      optional_elements_paths = all_elements_paths - mandatory_elements_paths
-      optional_results = optional_elements_paths.map { |path| result_by_path(path)[:mandatory] == false }
-
-      expect(optional_results).to all(be(true))
-    end
-
-    it 'returns correct presence for the minimal info fixture' do
-      expected_results_array = [
-        { path: 'clinicalStatus', present: true },
-        { path: 'category', present: true },
-        { path: 'code', present: true },
-        { path: 'subject', present: true },
-        { path: 'subject.reference', present: true },
-        { path: 'verificationStatus', present: false },
-        { path: 'severity', present: false },
-        { path: 'onsetDateTime', present: false },
-        { path: 'abatement[x]', present: false },
-        { path: 'note', present: false }
+  # Keep this minimal and local to this file
+  let(:minimal_metadata) do
+    {
+      groups: [
+        {
+          resource: 'Condition',
+          must_supports: {
+            elements: [
+              { path: 'clinicalStatus' },
+              { path: 'verificationStatus' },
+              { path: 'category' },
+              { path: 'severity' },
+              { path: 'code' },
+              { path: 'subject' },
+              { path: 'subject.reference' },
+              { path: 'onsetDateTime', original_path: 'onset[x]' },
+              { path: 'abatement[x]' },
+              { path: 'note' }
+            ]
+          },
+          mandatory_elements: %w[
+            Condition.category
+            Condition.code
+            Condition.subject
+            Condition.subject.reference
+          ]
+        }
       ]
+    }
+  end
 
-      expected_results_array.each do |expected_result|
-        expect(result_by_path(expected_result[:path])[:present]).to be(expected_result[:present])
-      end
+  let(:metadata_manager) do
+    AUPSTestKit::MetadataManager.new('spec/fixtures/metadata.yaml').tap do |manager|
+      allow(manager).to receive(:metadata).and_return(minimal_metadata)
+    end
+  end
+
+  let(:group_metadata) { metadata_manager.group_metadata_by_resource_type(resource_type) }
+
+  let(:bundle_hash) do
+    {
+      resourceType: 'Bundle',
+      type: 'document',
+      entry: [
+        {
+          resource: {
+            resourceType: 'Condition',
+            clinicalStatus: { coding: [{ code: 'active' }] },
+            category: [{ coding: [{ code: 'problem-list-item' }] }],
+            code: { coding: [{ code: '160245001' }] },
+            subject: { reference: 'urn:uuid:patient-1' }
+          }
+        }
+      ]
+    }
+  end
+
+  let(:resources) do
+    bundle = FHIR::Bundle.new(JSON.parse(JSON.generate(bundle_hash)))
+    bundle.entry.map(&:resource).select { |resource| resource.resourceType == resource_type }
+  end
+
+  let(:result) { test_instance.send(:check_ms_elements_populated, resource_type, resources) }
+
+  before do
+    test_instance.metadata_manager = metadata_manager
+  end
+
+  def result_by_path(path)
+    result.find { |item| item[:path] == path }
+  end
+
+  def check_presence_parametrize(test_cases, key_to_check)
+    test_cases.each do |path, expected_value|
+      item = result_by_path(path)
+      expect(item).not_to be_nil, "Expected result to include #{path}"
+      expect(item[key_to_check]).to eq(expected_value), "Expected #{path} #{key_to_check}=#{expected_value}, got #{item[key_to_check]}"
+    end
+  end
+
+  describe '#check_ms_elements_populated' do
+    it 'returns expected record shape' do
+      expect(result).to all(be_a(Hash))
+      expect(result.map(&:keys)).to all(match_array(%i[definition mandatory path present]))
     end
 
-    it 'documents polymorphic path normalization from onset[x] to onsetDateTime' do
-      onset_result = result_by_path('onsetDateTime')
-
-      expect(onset_result).not_to be_nil
-      expect(onset_result[:definition][:original_path]).to eq('onset[x]')
+    it 'returns paths from metadata must_support elements' do
+      expected_paths = group_metadata[:must_supports][:elements].map { |e| e[:path] }.sort
+      actual_paths = result.map { |item| item[:path] }.sort
+      expect(actual_paths).to eq(expected_paths)
     end
 
-    context 'when there are no resources to evaluate' do
+    it 'correctly marks mandatory for each element' do
+      test_cases = [
+        ['category', true],
+        ['code', true],
+        ['subject', true],
+        ['subject.reference', true],
+        ['clinicalStatus', false],
+        ['verificationStatus', false],
+        ['severity', false],
+        ['onsetDateTime', false],
+        ['abatement[x]', false],
+        ['note', false]
+      ]
+      check_presence_parametrize(test_cases, :mandatory)
+    end
+
+    it 'correctly marks presence for each element' do
+      test_cases = [
+        ['clinicalStatus', true],
+        ['category', true],
+        ['code', true],
+        ['subject', true],
+        ['subject.reference', true],
+        ['verificationStatus', false],
+        ['severity', false],
+        ['onsetDateTime', false],
+        ['abatement[x]', false],
+        ['note', false]
+      ]
+      check_presence_parametrize(test_cases, :present)
+    end
+
+    it 'keeps original polymorphic path metadata' do
+      item = result_by_path('onsetDateTime')
+      expect(item).not_to be_nil
+      expect(item.dig(:definition, :original_path)).to eq('onset[x]')
+    end
+
+    context 'when no resources are provided' do
       let(:resources) { [] }
 
-      it 'returns the full Must Support checklist with all elements marked as missing' do
+      it 'returns all must-support elements as missing' do
         expect(result.map { |item| item[:present] }.uniq).to eq([false])
-        expect(result.map { |item| item[:path] }).to include('category', 'code', 'subject.reference')
       end
     end
   end
