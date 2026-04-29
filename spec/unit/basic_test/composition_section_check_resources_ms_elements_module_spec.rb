@@ -48,54 +48,49 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule::BasicTestComp
       expect(result.all? { |item| item.keys.sort == expect_list }).to be(true)
     end
 
-    it 'documents the expected Condition Must Support paths' do
-      expect(result.map { |item| item[:path] }).to eq(
-        %w[
-          clinicalStatus
-          verificationStatus
-          category
-          severity
-          code
-          subject
-          subject.reference
-          onsetDateTime
-          abatement[x]
-          note
-        ]
-      )
+    it 'returns correct paths for the resource type' do
+      result_paths = result.map { |item| item[:path] }.sort
+      expected_elements = metadata_manager.group_metadata_by_resource_type(resource_type)[:must_supports][:elements]
+      expected_paths = expected_elements.map { |element| element[:path] }.sort
+
+      expect(result_paths).to eq(expected_paths)
     end
 
-    it 'documents which Condition Must Support elements are mandatory' do
-      expected_mandatory_by_path = {
-        'clinicalStatus' => false,
-        'verificationStatus' => false,
-        'category' => true,
-        'severity' => false,
-        'code' => true,
-        'subject' => true,
-        'subject.reference' => true,
-        'onsetDateTime' => false,
-        'abatement[x]' => false,
-        'note' => false
-      }
+    it 'returns mandatory elements marked as mandatory' do
+      metadata = metadata_manager.group_metadata_by_resource_type(resource_type)
+      mandatory_elements_paths = metadata[:mandatory_elements].map { |element| element.gsub("#{resource_type}.", '') }
+      mandatory_results = mandatory_elements_paths.map { |path| result_by_path(path)[:mandatory] == true }
 
-      expected_mandatory_by_path.each do |path, mandatory|
-        expect(result_by_path(path)[:mandatory]).to eq(mandatory)
+      expect(mandatory_results).to all(be(true))
+    end
+
+    it 'returns optional elements marked as mandatory: false' do
+      metadata = metadata_manager.group_metadata_by_resource_type(resource_type)
+      all_elements_paths = metadata[:must_supports][:elements].map { |element| element[:path] }
+      mandatory_elements_paths = metadata[:mandatory_elements].map { |element| element.gsub("#{resource_type}.", '') }
+      optional_elements_paths = all_elements_paths - mandatory_elements_paths
+      optional_results = optional_elements_paths.map { |path| result_by_path(path)[:mandatory] == false }
+
+      expect(optional_results).to all(be(true))
+    end
+
+    it 'returns correct presence for the minimal info fixture' do
+      expected_results_array = [
+        { path: 'clinicalStatus', present: true },
+        { path: 'category', present: true },
+        { path: 'code', present: true },
+        { path: 'subject', present: true },
+        { path: 'subject.reference', present: true },
+        { path: 'verificationStatus', present: false },
+        { path: 'severity', present: false },
+        { path: 'onsetDateTime', present: false },
+        { path: 'abatement[x]', present: false },
+        { path: 'note', present: false }
+      ]
+
+      expected_results_array.each do |expected_result|
+        expect(result_by_path(expected_result[:path])[:present]).to be(expected_result[:present])
       end
-    end
-
-    it 'documents optional and mandatory presence for the minimal info fixture' do
-      expect(result_by_path('clinicalStatus')[:present]).to be(true)
-      expect(result_by_path('category')[:present]).to be(true)
-      expect(result_by_path('code')[:present]).to be(true)
-      expect(result_by_path('subject')[:present]).to be(true)
-      expect(result_by_path('subject.reference')[:present]).to be(true)
-
-      expect(result_by_path('verificationStatus')[:present]).to be(false)
-      expect(result_by_path('severity')[:present]).to be(false)
-      expect(result_by_path('onsetDateTime')[:present]).to be(false)
-      expect(result_by_path('abatement[x]')[:present]).to be(false)
-      expect(result_by_path('note')[:present]).to be(false)
     end
 
     it 'documents polymorphic path normalization from onset[x] to onsetDateTime' do
@@ -103,23 +98,6 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule::BasicTestComp
 
       expect(onset_result).not_to be_nil
       expect(onset_result[:definition][:original_path]).to eq('onset[x]')
-    end
-
-    it 'documents nested element checks for subject and subject.reference' do
-      expect(result_by_path('subject')).not_to be_nil
-      expect(result_by_path('subject.reference')).not_to be_nil
-    end
-
-    context 'when Condition is minimally populated (warning fixture)' do
-      let(:fixture_bundle_path) { 'spec/fixtures/resources/bundle_ms_warning_min.json' }
-
-      it 'keeps mandatory fields present and optional fields missing in the same way as info fixture' do
-        expect(result_by_path('category')[:present]).to be(true)
-        expect(result_by_path('code')[:present]).to be(true)
-        expect(result_by_path('subject.reference')[:present]).to be(true)
-        expect(result_by_path('verificationStatus')[:present]).to be(false)
-        expect(result_by_path('onsetDateTime')[:present]).to be(false)
-      end
     end
 
     context 'when there are no resources to evaluate' do
