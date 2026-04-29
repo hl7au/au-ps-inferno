@@ -20,7 +20,6 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule::BasicTestComp
   let(:test_instance) { test_class.new }
   let(:resource_type) { 'Condition' }
 
-  # Keep this minimal and local to this file
   let(:minimal_metadata) do
     {
       groups: [
@@ -51,15 +50,7 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule::BasicTestComp
     }
   end
 
-  let(:metadata_manager) do
-    AUPSTestKit::MetadataManager.new('spec/fixtures/metadata.yaml').tap do |manager|
-      allow(manager).to receive(:metadata).and_return(minimal_metadata)
-    end
-  end
-
-  let(:group_metadata) { metadata_manager.group_metadata_by_resource_type(resource_type) }
-
-  let(:bundle_hash) do
+  def build_bundle_hash
     {
       resourceType: 'Bundle',
       type: 'document',
@@ -77,10 +68,20 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule::BasicTestComp
     }
   end
 
-  let(:resources) do
+  def build_resources_from_bundle(bundle_hash, type)
     bundle = FHIR::Bundle.new(JSON.parse(JSON.generate(bundle_hash)))
-    bundle.entry.map(&:resource).select { |resource| resource.resourceType == resource_type }
+    bundle.entry.map(&:resource).select { |resource| resource.resourceType == type }
   end
+
+  let(:metadata_manager) do
+    AUPSTestKit::MetadataManager.new('spec/fixtures/metadata.yaml').tap do |manager|
+      allow(manager).to receive(:metadata).and_return(minimal_metadata)
+    end
+  end
+
+  let(:group_metadata) { metadata_manager.group_metadata_by_resource_type(resource_type) }
+  let(:bundle_hash) { build_bundle_hash }
+  let(:resources) { build_resources_from_bundle(bundle_hash, resource_type) }
 
   let(:result) { test_instance.send(:check_ms_elements_populated, resource_type, resources) }
 
