@@ -6,8 +6,6 @@ FHIR.const_set(:R4, FHIR) if defined?(FHIR) && !FHIR.const_defined?(:R4)
 
 require 'inferno_suite_generator'
 
-require_relative '../ms_checker'
-
 require_relative 'composition_section_check_resources_ms_elements_module'
 require_relative 'composition_section_read_issues_helpers_module'
 module AUPSTestKit

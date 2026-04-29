@@ -1,0 +1,76 @@
+{
+  "resourceType": "Bundle",
+  "id": "bundle-ms-info-min",
+  "type": "document",
+  "entry": [
+    {
+      "fullUrl": "urn:uuid:comp-info",
+      "resource": {
+        "resourceType": "Composition",
+        "id": "comp-info",
+        "section": [
+          {
+            "code": {
+              "coding": [
+                {
+                  "system": "http://loinc.org",
+                  "code": "11450-4"
+                }
+              ]
+            },
+            "entry": [
+              {
+                "reference": "urn:uuid:cond-info"
+              }
+            ],
+            "text": {
+              "status": "generated",
+              "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">No problem entries in this minimal fixture.</div>"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:cond-info",
+      "resource": {
+        "resourceType": "Condition",
+        "id": "cond-info",
+        "meta": {
+          "profile": [
+            "http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-condition"
+          ]
+        },
+        "clinicalStatus": {
+          "coding": [
+            {
+              "system": "http://terminology.hl7.org/CodeSystem/condition-clinical",
+              "code": "active"
+            }
+          ]
+        },
+        "category": [
+          {
+            "coding": [
+              {
+                "system": "http://terminology.hl7.org/CodeSystem/condition-category",
+                "code": "problem-list-item"
+              }
+            ]
+          }
+        ],
+        "code": {
+          "coding": [
+            {
+              "system": "http://snomed.info/sct",
+              "code": "160245001"
+            }
+          ]
+        },
+        "subject": {
+          "reference": "urn:uuid:patient-info"
+        }
+      }
+    }
+  ]
+}

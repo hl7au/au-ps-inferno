@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'inferno_suite_generator'
+require 'inferno_suite_generator/test_utils/ms_checker'
 module AUPSTestKit
   module BasicTestCompositionSectionReadModule
     # Composition Must Support elements in sections.
@@ -61,16 +63,21 @@ module AUPSTestKit
         "**#{title}**: #{text}"
       end
 
+      def check_ms_elements_populated(resource_type, resources)
+        resource_metadata = group_metadata_for(resource_type)
+        ms_helpers = InfernoSuiteGenerator::MSChecker.new(resource_metadata)
+        ms_helpers.elements_present_statuses(resources)
+      end
+
+      # TODO: Rename the function. Name should be related to the MS checks. And cover THIS function by tests.
       def process_profile(profile, resources_to_check_ms)
         resource_type_and_profile = normalize_resource_type_and_profile(profile)
         resource_type, profile_url = resource_type_and_profile.values_at(:resource_type, :profile_url)
         profile_info_str = msg_line('Profile', "#{resource_type} — #{profile_url}")
-        checker = MSChecker.new
         filtered_resources = resources_to_check_ms.filter { |resource| resource.resourceType == resource_type }
         return report_missing_resources(profile_info_str) if filtered_resources.empty?
 
-        resource_metadata = group_metadata_for(resource_type)
-        check_result = checker.report_profile_elements_status(resource_metadata, filtered_resources)
+        check_result = check_ms_elements_populated(resource_type, filtered_resources)
         add_message(check_result[:msg_level], check_result[:message])
         check_result[:msg_level]
       end

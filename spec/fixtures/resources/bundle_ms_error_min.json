@@ -1,0 +1,43 @@
+{
+  "resourceType": "Bundle",
+  "id": "bundle-ms-error-min",
+  "type": "document",
+  "entry": [
+    {
+      "fullUrl": "urn:uuid:comp-error",
+      "resource": {
+        "resourceType": "Composition",
+        "id": "comp-error",
+        "section": [
+          {
+            "code": {
+              "coding": [
+                {
+                  "system": "http://loinc.org",
+                  "code": "11450-4"
+                }
+              ]
+            },
+            "entry": [
+              {
+                "reference": "urn:uuid:cond-error"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:cond-error",
+      "resource": {
+        "resourceType": "Condition",
+        "id": "cond-error",
+        "meta": {
+          "profile": [
+            "http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-condition"
+          ]
+        }
+      }
+    }
+  ]
+}
