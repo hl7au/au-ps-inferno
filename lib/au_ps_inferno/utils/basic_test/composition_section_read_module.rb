@@ -54,7 +54,7 @@ module AUPSTestKit
     def composition_section_references_resolution_issues?(section_metadata, composition_resource, bundle_resource)
       section_code = section_metadata[:code]
       section = composition_resource.section_by_code(section_code)
-      issues = read_composition_section_issues(section_metadata, composition_resource, bundle_resource)
+      issues = read_composition_section_issues(section_metadata, bundle_resource)
       text = composition_section_read_report_message(section_metadata, section, bundle_resource, section_code)
       add_message(issues.empty? ? 'info' : 'error', text)
       issues.empty?

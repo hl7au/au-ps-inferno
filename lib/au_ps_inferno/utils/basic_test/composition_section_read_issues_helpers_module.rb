@@ -5,15 +5,35 @@ module AUPSTestKit
   module BasicTestCompositionSectionReadIssuesHelpersModule
     private
 
-    def read_composition_section_issues(section_metadata, composition_resource, bundle_resource)
+    def read_composition_section_issues(section_metadata, bundle_resource)
       section_code = section_metadata[:code]
-      section = composition_resource.section_by_code(section_code)
-      return ["No composition section found for code: #{section_code}"] if section.blank?
-
-      entries_resource_types = permitted_resource_types(section_metadata)
-      section.entry_references.flat_map do |ref|
-        composition_section_ref_read_issues(ref, bundle_resource, entries_resource_types)
+      if bundle_resource.composition_resource.section_by_code(section_code).blank?
+        return ["No composition section found for code: #{section_code}"]
       end
+
+      references_resolution_report(section_metadata, bundle_resource).map do |ref_report|
+        ref_report[:issues]
+      end.flatten.compact
+    end
+
+    def references_resolution_report(section_metadata, bundle_resource)
+      section_code = section_metadata[:code]
+      composition_resource = bundle_resource.composition_resource
+      section = composition_resource.section_by_code(section_code)
+      entries_resource_types = permitted_resource_types(section_metadata)
+
+      section.entry_references.map do |ref|
+        issues = composition_section_ref_read_issues(ref, bundle_resource, entries_resource_types)
+        build_reference_resolution_report(ref, issues)
+      end
+    end
+
+    def build_reference_resolution_report(ref, issues)
+      {
+        reference: ref,
+        resolved: issues.empty?,
+        issues: issues
+      }
     end
 
     def composition_section_ref_read_issues(ref, bundle_resource, entries_resource_types)
