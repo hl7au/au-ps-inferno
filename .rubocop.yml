@@ -16,6 +16,8 @@ Metrics/BlockLength:
     - "spec/unit/basic_test/composition_section_check_resources_ms_elements_module_spec.rb"
     - "spec/unit/basic_test/composition_section_read_module_spec.rb"
     - "spec/unit/example_spec.rb"
+    - "spec/unit/example_spec_muted.rb"
+    - "spec/integration/suite_100ballot_snapshots_spec_muted.rb"
 
 Lint/EmptyBlock:
   Exclude:
@@ -25,3 +27,14 @@ Layout/LineLength:
   Exclude:
     - "spec/unit/basic_test/composition_section_check_resources_ms_elements_module_spec.rb"
     - "spec/unit/basic_test/composition_section_read_module_spec.rb"
+    - "spec/integration/suite_100ballot_snapshots_spec_muted.rb"
+
+Metrics/MethodLength:
+  Exclude:
+    - "spec/integration/suite_100ballot_snapshots_spec_muted.rb"
+    - "spec/unit/basic_test/composition_section_check_resources_ms_elements_module_spec.rb"
+    - "lib/au_ps_inferno/utils/basic_test/composition_section_check_resources_ms_elements_module.rb"
+
+Metrics/AbcSize:
+  Exclude:
+    - "spec/integration/suite_100ballot_snapshots_spec_muted.rb"

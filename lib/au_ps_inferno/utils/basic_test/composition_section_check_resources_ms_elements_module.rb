@@ -43,7 +43,7 @@ module AUPSTestKit
         result_has?(results, 'warning')
       end
 
-      def check_resources_against_profiles(sections_profiles, resources_to_check_ms)
+      def check_ms_elements_populated_against_profiles(sections_profiles, resources_to_check_ms)
         sections_profiles.map do |profile|
           process_profile(profile, resources_to_check_ms)
         end
@@ -63,13 +63,25 @@ module AUPSTestKit
         "**#{title}**: #{text}"
       end
 
-      def check_ms_elements_populated(resource_type, resources)
-        resource_metadata = group_metadata_for(resource_type)
-        ms_helpers = InfernoSuiteGenerator::MSChecker.new(resource_metadata)
-        ms_helpers.elements_present_statuses(resources)
+      def ms_checker_for(profile_metadata)
+        InfernoSuiteGenerator::MSChecker.new(profile_metadata)
       end
 
-      # TODO: Rename the function. Name should be related to the MS checks. And cover THIS function by tests.
+      def build_ms_outcome(profile_metadata, resources)
+        ms_helper = ms_checker_for(profile_metadata)
+        ms_checks_results = check_ms_elements_populated(profile_metadata.resource, resources)
+
+        {
+          status: ms_helper.calculate_elements_status_message_level(ms_checks_results),
+          message: ms_helper.build_report_message(profile_metadata, ms_checks_results)
+        }
+      end
+
+      def check_ms_elements_populated(resource_type, resources)
+        profile_metadata = group_metadata_for(resource_type)
+        ms_checker_for(profile_metadata).elements_present_statuses(resources)
+      end
+
       def process_profile(profile, resources_to_check_ms)
         resource_type_and_profile = normalize_resource_type_and_profile(profile)
         resource_type, profile_url = resource_type_and_profile.values_at(:resource_type, :profile_url)
@@ -77,9 +89,11 @@ module AUPSTestKit
         filtered_resources = resources_to_check_ms.filter { |resource| resource.resourceType == resource_type }
         return report_missing_resources(profile_info_str) if filtered_resources.empty?
 
-        check_result = check_ms_elements_populated(resource_type, filtered_resources)
-        add_message(check_result[:msg_level], check_result[:message])
-        check_result[:msg_level]
+        profile_metadata = group_metadata_for(resource_type)
+        outcome = build_ms_outcome(profile_metadata, filtered_resources)
+        add_message(outcome[:status], outcome[:message].join("\n\n"))
+
+        outcome[:status]
       end
 
       def group_metadata_for(resource_type)
@@ -97,8 +111,8 @@ module AUPSTestKit
       end
 
       def composition_section_check_ms_pass?(sections_codes)
-        results = check_resources_against_profiles(sections_profiles(sections_codes),
-                                                   resources_to_check_ms(sections_codes))
+        results = check_ms_elements_populated_against_profiles(sections_profiles(sections_codes),
+                                                               resources_to_check_ms(sections_codes))
         return false if results_eror?(results)
         return true if results_warning?(results)
 
