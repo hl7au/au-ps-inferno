@@ -41,7 +41,8 @@ class Generator
         InfernoSuiteGenerator::Generator::GroupMetadataExtractor.new(
           capability, profile.url, ig_metadata, ig_resources
         ).group_metadata
-      rescue StandardError
+      rescue StandardError => e
+        warn "Skipping profile #{profile.url}: #{e.message}"
         nil
       end
     end
@@ -73,7 +74,8 @@ class Generator
 
       keeper = InfernoSuiteGenerator::Generator::GeneratorConfigKeeper.new([config_path])
       Registry.register(:config_keeper, keeper)
-    rescue StandardError
+    rescue StandardError => e
+      warn "Failed to register inferno_suite_generator config: #{e.message}"
       nil
     end
 

@@ -24,7 +24,7 @@ class BundleDecorator < FHIR::Bundle
   end
 
   def resources_by_references(entry_references)
-    entry_references.map { |ref| resource_by_reference(ref) }.uniq
+    entry_references.filter_map { |ref| resource_by_reference(ref) }.uniq
   end
 
   def resource_by_reference(entry_reference)

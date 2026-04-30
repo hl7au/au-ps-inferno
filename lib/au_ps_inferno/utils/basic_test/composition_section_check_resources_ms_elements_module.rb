@@ -40,7 +40,7 @@ module AUPSTestKit
         results.any? { |result| result == result_type }
       end
 
-      def results_eror?(results)
+      def results_error?(results)
         result_has?(results, 'error')
       end
 
@@ -55,12 +55,12 @@ module AUPSTestKit
       end
 
       def normalize_resource_type_and_profile(profile)
-        splitted_data = profile.split('|')
-        raise StandardError, 'Profile is not in the correct format' if splitted_data.length != 2
+        parts = profile.split('|')
+        raise StandardError, 'Profile is not in the correct format' if parts.length < 2
 
         {
-          resource_type: splitted_data[0],
-          profile_url: splitted_data[1]
+          resource_type: parts[0],
+          profile_url: parts[1]
         }
       end
 
@@ -113,10 +113,7 @@ module AUPSTestKit
       def composition_section_check_ms_pass?(sections_codes)
         results = check_ms_elements_populated_against_profiles(sections_profiles(sections_codes),
                                                                resources_to_check_ms(sections_codes))
-        return false if results_eror?(results)
-        return true if results_warning?(results)
-
-        true
+        !results_error?(results)
       end
     end
   end
