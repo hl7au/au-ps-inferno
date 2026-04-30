@@ -3,6 +3,18 @@
 module AUPSTestKit
   # Helpers for reading composition section issues.
   module BasicTestCompositionSectionReadIssuesHelpersModule
+    def references_resolution_report(section_metadata, bundle_resource)
+      section_code = section_metadata[:code]
+      composition_resource = bundle_resource.composition_resource
+      section = composition_resource.section_by_code(section_code)
+      entries_resource_types = permitted_resource_types(section_metadata)
+
+      section.entry_references.map do |ref|
+        issues = composition_section_ref_read_issues(ref, bundle_resource, entries_resource_types)
+        build_reference_resolution_report(ref, issues)
+      end
+    end
+
     private
 
     def read_composition_section_issues(section_metadata, bundle_resource)
@@ -14,18 +26,6 @@ module AUPSTestKit
       references_resolution_report(section_metadata, bundle_resource).map do |ref_report|
         ref_report[:issues]
       end.flatten.compact
-    end
-
-    def references_resolution_report(section_metadata, bundle_resource)
-      section_code = section_metadata[:code]
-      composition_resource = bundle_resource.composition_resource
-      section = composition_resource.section_by_code(section_code)
-      entries_resource_types = permitted_resource_types(section_metadata)
-
-      section.entry_references.map do |ref|
-        issues = composition_section_ref_read_issues(ref, bundle_resource, entries_resource_types)
-        build_reference_resolution_report(ref, issues)
-      end
     end
 
     def build_reference_resolution_report(ref, issues)
