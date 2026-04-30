@@ -6,60 +6,52 @@ require 'fhir_models'
 require_relative '../../../lib/au_ps_inferno/utils/basic_test/composition_section_read_module'
 require_relative '../../../lib/au_ps_inferno/utils/metadata_manager'
 
-MINIMAL_METADATA = {
-  groups: [
+RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule::BasicTestCompositionSectionCheckResourcesMSElementsModule do
+  let(:minimal_metadata) do
     {
-      resource: 'Condition',
-      must_supports: {
-        elements: [
-          { path: 'clinicalStatus' },
-          { path: 'verificationStatus' },
-          { path: 'category' },
-          { path: 'severity' },
-          { path: 'code' },
-          { path: 'subject' },
-          { path: 'subject.reference' },
-          { path: 'onsetDateTime', original_path: 'onset[x]' },
-          { path: 'abatement[x]' },
-          { path: 'note' }
-        ]
-      },
-      mandatory_elements: %w[
-        Condition.category
-        Condition.code
-        Condition.subject
-        Condition.subject.reference
+      groups: [
+        {
+          resource: 'Condition',
+          must_supports: {
+            elements: [
+              { path: 'clinicalStatus' },
+              { path: 'verificationStatus' },
+              { path: 'category' },
+              { path: 'severity' },
+              { path: 'code' },
+              { path: 'subject' },
+              { path: 'subject.reference' },
+              { path: 'onsetDateTime', original_path: 'onset[x]' },
+              { path: 'abatement[x]' },
+              { path: 'note' }
+            ]
+          },
+          mandatory_elements: %w[
+            Condition.category
+            Condition.code
+            Condition.subject
+            Condition.subject.reference
+          ]
+        }
       ]
     }
-  ]
-}.freeze
-
-CONDITION_RESOURCE_DATA = {
-  resourceType: 'Condition',
-  clinicalStatus: { coding: [{ code: 'active' }] },
-  category: [{ coding: [{ code: 'problem-list-item' }] }],
-  code: { coding: [{ code: '160245001' }] },
-  subject: { reference: 'urn:uuid:patient-1' }
-}.freeze
-
-def result_by_path(path)
-  result.find { |item| item[:path] == path }
-end
-
-def check_presence_parametrize(test_cases, key_to_check)
-  test_cases.each do |path, expected_value|
-    item = result_by_path(path)
-    expect(item).not_to be_nil, "Expected result to include #{path}"
-    expect(item[key_to_check]).to eq(expected_value), "Expected #{path} #{key_to_check}=#{expected_value}, got #{item[key_to_check]}"
   end
-end
 
-RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule::BasicTestCompositionSectionCheckResourcesMSElementsModule do
+  let(:condition_resource_data) do
+    {
+      resourceType: 'Condition',
+      clinicalStatus: { coding: [{ code: 'active' }] },
+      category: [{ coding: [{ code: 'problem-list-item' }] }],
+      code: { coding: [{ code: '160245001' }] },
+      subject: { reference: 'urn:uuid:patient-1' }
+    }
+  end
+
   let(:test_class) do
     Class.new do
       include AUPSTestKit::BasicTestCompositionSectionReadModule::BasicTestCompositionSectionCheckResourcesMSElementsModule
 
-      attr_accessor :metadata_manager, :scratch_bundle
+      attr_accessor :metadata_manager
     end
   end
   let(:test_instance) { test_class.new }
@@ -67,14 +59,26 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule::BasicTestComp
 
   let(:metadata_manager) do
     AUPSTestKit::MetadataManager.new('spec/fixtures/metadata.yaml').tap do |manager|
-      allow(manager).to receive(:metadata).and_return(MINIMAL_METADATA)
+      allow(manager).to receive(:metadata).and_return(minimal_metadata)
     end
   end
 
   let(:group_metadata) { metadata_manager.group_metadata_by_resource_type(resource_type) }
-  let(:resources) { [FHIR::Condition.new(CONDITION_RESOURCE_DATA)] }
+  let(:resources) { [FHIR::Condition.new(condition_resource_data)] }
 
   let(:result) { test_instance.check_ms_elements_populated(resource_type, resources) }
+
+  def result_by_path(path)
+    result.find { |item| item[:path] == path }
+  end
+
+  def check_presence_parametrize(test_cases, key_to_check)
+    test_cases.each do |path, expected_value|
+      item = result_by_path(path)
+      expect(item).not_to be_nil, "Expected result to include #{path}"
+      expect(item[key_to_check]).to eq(expected_value), "Expected #{path} #{key_to_check}=#{expected_value}, got #{item[key_to_check]}"
+    end
+  end
 
   before do
     test_instance.metadata_manager = metadata_manager
@@ -93,34 +97,34 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule::BasicTestComp
     end
 
     it 'correctly marks mandatory for each element' do
-      test_cases = [
-        ['category', true],
-        ['code', true],
-        ['subject', true],
-        ['subject.reference', true],
-        ['clinicalStatus', false],
-        ['verificationStatus', false],
-        ['severity', false],
-        ['onsetDateTime', false],
-        ['abatement[x]', false],
-        ['note', false]
-      ]
+      test_cases = {
+        'category' => true,
+        'code' => true,
+        'subject' => true,
+        'subject.reference' => true,
+        'clinicalStatus' => false,
+        'verificationStatus' => false,
+        'severity' => false,
+        'onsetDateTime' => false,
+        'abatement[x]' => false,
+        'note' => false
+      }
       check_presence_parametrize(test_cases, :mandatory)
     end
 
     it 'correctly marks presence for each element' do
-      test_cases = [
-        ['clinicalStatus', true],
-        ['category', true],
-        ['code', true],
-        ['subject', true],
-        ['subject.reference', true],
-        ['verificationStatus', false],
-        ['severity', false],
-        ['onsetDateTime', false],
-        ['abatement[x]', false],
-        ['note', false]
-      ]
+      test_cases = {
+        'clinicalStatus' => true,
+        'category' => true,
+        'code' => true,
+        'subject' => true,
+        'subject.reference' => true,
+        'verificationStatus' => false,
+        'severity' => false,
+        'onsetDateTime' => false,
+        'abatement[x]' => false,
+        'note' => false
+      }
       check_presence_parametrize(test_cases, :present)
     end
 
