@@ -6,3 +6,39 @@ AllCops:
 
 Gemspec/DevelopmentDependencies:
   Enabled: false
+
+Naming/MethodName:
+  Exclude:
+    - "lib/au_ps_inferno/generator/generator.rb"
+
+Metrics/BlockLength:
+  Exclude:
+    - "spec/unit/basic_test/composition_section_check_resources_ms_elements_module_spec.rb"
+    - "spec/unit/basic_test/composition_section_read_module_spec.rb"
+    - "spec/unit/example_spec.rb"
+    - "spec/unit/example_spec_muted.rb"
+    - "spec/integration/suite_100ballot_snapshots_spec_muted.rb"
+    - "spec/unit/basic_test/composition_section_read_issues_helpers_module_spec.rb"
+    - "spec/support/basic_test/references_resolution_report_spec_support.rb"
+
+Lint/EmptyBlock:
+  Exclude:
+    - "spec/fixtures/example_suite.rb"
+
+Layout/LineLength:
+  Exclude:
+    - "spec/unit/basic_test/composition_section_check_resources_ms_elements_module_spec.rb"
+    - "spec/unit/basic_test/composition_section_read_module_spec.rb"
+    - "spec/integration/suite_100ballot_snapshots_spec_muted.rb"
+
+Metrics/MethodLength:
+  Exclude:
+    - "spec/integration/suite_100ballot_snapshots_spec_muted.rb"
+    - "spec/unit/basic_test/composition_section_check_resources_ms_elements_module_spec.rb"
+    - "lib/au_ps_inferno/utils/basic_test/composition_section_check_resources_ms_elements_module.rb"
+    - "spec/unit/basic_test/composition_section_read_issues_helpers_module_spec.rb"
+    - "spec/support/basic_test/references_resolution_report_spec_support.rb"
+
+Metrics/AbcSize:
+  Exclude:
+    - "spec/integration/suite_100ballot_snapshots_spec_muted.rb"

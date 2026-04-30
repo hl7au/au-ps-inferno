@@ -39,7 +39,7 @@ class Generator
         description: 'Verify the mandatory sections are correctly populated in the AU PS Composition resource',
         tests: [
           { id: :sections_shall_populated },
-          { id: :sections_entry_profiles }
+          { id: :mandatory_sections_entry_profiles }
         ],
         run_as_group: true
       },
@@ -47,7 +47,8 @@ class Generator
         name: 'AU PS Composition Recommended Sections',
         description: 'Verify the recommended sections are correctly populated in the Composition resource',
         tests: [
-          { id: :sections_should_populated }
+          { id: :sections_should_populated },
+          { id: :recommended_sections_entry_profiles }
         ],
         run_as_group: true
       },
@@ -55,7 +56,8 @@ class Generator
         name: 'AU PS Composition Optional Sections',
         description: 'Verify the optional sections are correctly populated in the AU PS Composition resource',
         tests: [
-          { id: :sections_may_populated }
+          { id: :sections_may_populated },
+          { id: :optional_sections_entry_profiles }
         ],
         run_as_group: true
       },
