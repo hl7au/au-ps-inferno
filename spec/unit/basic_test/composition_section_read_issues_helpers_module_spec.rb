@@ -7,13 +7,6 @@ require_relative '../../../lib/au_ps_inferno/utils/basic_test/composition_sectio
 require_relative '../../../lib/au_ps_inferno/utils/bundle_decorator'
 
 RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadIssuesHelpersModule do
-  let(:test_class) do
-    Class.new do
-      include AUPSTestKit::BasicTestCompositionSectionReadIssuesHelpersModule
-    end
-  end
-
-  let(:test_instance) { test_class.new }
   let(:section_code) { '11450-4' }
   let(:section_metadata) do
     {
@@ -41,6 +34,14 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadIssuesHelpersModule d
       }
     ]
   end
+
+  let(:test_class) do
+    Class.new do
+      include AUPSTestKit::BasicTestCompositionSectionReadIssuesHelpersModule
+    end
+  end
+  let(:test_instance) { test_class.new }
+
   let(:bundle_resource) do
     raw_bundle = JSON.parse(JSON.generate(build_bundle_hash(references: references, resources: resources)))
     fhir_bundle = FHIR::Bundle.new(raw_bundle)
