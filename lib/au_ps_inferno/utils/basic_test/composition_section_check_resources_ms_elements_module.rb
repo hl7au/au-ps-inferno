@@ -6,6 +6,11 @@ module AUPSTestKit
   module BasicTestCompositionSectionReadModule
     # Composition Must Support elements in sections.
     module BasicTestCompositionSectionCheckResourcesMSElementsModule
+      def check_ms_elements_populated(resource_type, resources)
+        profile_metadata = group_metadata_for(resource_type)
+        ms_checker_for(profile_metadata).elements_present_statuses(resources)
+      end
+
       private
 
       def raw_sections_profiles(sections_codes)
@@ -75,11 +80,6 @@ module AUPSTestKit
           status: ms_helper.calculate_elements_status_message_level(ms_checks_results),
           message: ms_helper.build_report_message(profile_metadata, ms_checks_results)
         }
-      end
-
-      def check_ms_elements_populated(resource_type, resources)
-        profile_metadata = group_metadata_for(resource_type)
-        ms_checker_for(profile_metadata).elements_present_statuses(resources)
       end
 
       def process_profile(profile, resources_to_check_ms)

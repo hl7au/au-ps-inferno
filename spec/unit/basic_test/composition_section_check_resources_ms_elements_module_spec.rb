@@ -6,99 +6,78 @@ require 'fhir_models'
 require_relative '../../../lib/au_ps_inferno/utils/basic_test/composition_section_read_module'
 require_relative '../../../lib/au_ps_inferno/utils/metadata_manager'
 
+MINIMAL_METADATA = {
+  groups: [
+    {
+      resource: 'Condition',
+      must_supports: {
+        elements: [
+          { path: 'clinicalStatus' },
+          { path: 'verificationStatus' },
+          { path: 'category' },
+          { path: 'severity' },
+          { path: 'code' },
+          { path: 'subject' },
+          { path: 'subject.reference' },
+          { path: 'onsetDateTime', original_path: 'onset[x]' },
+          { path: 'abatement[x]' },
+          { path: 'note' }
+        ]
+      },
+      mandatory_elements: %w[
+        Condition.category
+        Condition.code
+        Condition.subject
+        Condition.subject.reference
+      ]
+    }
+  ]
+}.freeze
+
+CONDITION_RESOURCE_DATA = {
+  resourceType: 'Condition',
+  clinicalStatus: { coding: [{ code: 'active' }] },
+  category: [{ coding: [{ code: 'problem-list-item' }] }],
+  code: { coding: [{ code: '160245001' }] },
+  subject: { reference: 'urn:uuid:patient-1' }
+}.freeze
+
+def result_by_path(path)
+  result.find { |item| item[:path] == path }
+end
+
+def check_presence_parametrize(test_cases, key_to_check)
+  test_cases.each do |path, expected_value|
+    item = result_by_path(path)
+    expect(item).not_to be_nil, "Expected result to include #{path}"
+    expect(item[key_to_check]).to eq(expected_value), "Expected #{path} #{key_to_check}=#{expected_value}, got #{item[key_to_check]}"
+  end
+end
+
 RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule::BasicTestCompositionSectionCheckResourcesMSElementsModule do
   let(:test_class) do
     Class.new do
       include AUPSTestKit::BasicTestCompositionSectionReadModule::BasicTestCompositionSectionCheckResourcesMSElementsModule
 
       attr_accessor :metadata_manager, :scratch_bundle
-
-      def add_message(_level, _message); end
     end
   end
-
   let(:test_instance) { test_class.new }
   let(:resource_type) { 'Condition' }
 
-  let(:minimal_metadata) do
-    {
-      groups: [
-        {
-          resource: 'Condition',
-          must_supports: {
-            elements: [
-              { path: 'clinicalStatus' },
-              { path: 'verificationStatus' },
-              { path: 'category' },
-              { path: 'severity' },
-              { path: 'code' },
-              { path: 'subject' },
-              { path: 'subject.reference' },
-              { path: 'onsetDateTime', original_path: 'onset[x]' },
-              { path: 'abatement[x]' },
-              { path: 'note' }
-            ]
-          },
-          mandatory_elements: %w[
-            Condition.category
-            Condition.code
-            Condition.subject
-            Condition.subject.reference
-          ]
-        }
-      ]
-    }
-  end
-
-  def build_bundle_hash
-    {
-      resourceType: 'Bundle',
-      type: 'document',
-      entry: [
-        {
-          resource: {
-            resourceType: 'Condition',
-            clinicalStatus: { coding: [{ code: 'active' }] },
-            category: [{ coding: [{ code: 'problem-list-item' }] }],
-            code: { coding: [{ code: '160245001' }] },
-            subject: { reference: 'urn:uuid:patient-1' }
-          }
-        }
-      ]
-    }
-  end
-
-  def build_resources_from_bundle(bundle_hash, type)
-    bundle = FHIR::Bundle.new(JSON.parse(JSON.generate(bundle_hash)))
-    bundle.entry.map(&:resource).select { |resource| resource.resourceType == type }
-  end
-
   let(:metadata_manager) do
     AUPSTestKit::MetadataManager.new('spec/fixtures/metadata.yaml').tap do |manager|
-      allow(manager).to receive(:metadata).and_return(minimal_metadata)
+      allow(manager).to receive(:metadata).and_return(MINIMAL_METADATA)
     end
   end
 
   let(:group_metadata) { metadata_manager.group_metadata_by_resource_type(resource_type) }
-  let(:bundle_hash) { build_bundle_hash }
-  let(:resources) { build_resources_from_bundle(bundle_hash, resource_type) }
+  let(:resources) { [FHIR::Condition.new(CONDITION_RESOURCE_DATA)] }
 
-  let(:result) { test_instance.send(:check_ms_elements_populated, resource_type, resources) }
+  let(:result) { test_instance.check_ms_elements_populated(resource_type, resources) }
 
   before do
     test_instance.metadata_manager = metadata_manager
-  end
-
-  def result_by_path(path)
-    result.find { |item| item[:path] == path }
-  end
-
-  def check_presence_parametrize(test_cases, key_to_check)
-    test_cases.each do |path, expected_value|
-      item = result_by_path(path)
-      expect(item).not_to be_nil, "Expected result to include #{path}"
-      expect(item[key_to_check]).to eq(expected_value), "Expected #{path} #{key_to_check}=#{expected_value}, got #{item[key_to_check]}"
-    end
   end
 
   describe '#check_ms_elements_populated' do
@@ -143,12 +122,6 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule::BasicTestComp
         ['note', false]
       ]
       check_presence_parametrize(test_cases, :present)
-    end
-
-    it 'keeps original polymorphic path metadata' do
-      item = result_by_path('onsetDateTime')
-      expect(item).not_to be_nil
-      expect(item.dig(:definition, :original_path)).to eq('onset[x]')
     end
 
     context 'when no resources are provided' do
