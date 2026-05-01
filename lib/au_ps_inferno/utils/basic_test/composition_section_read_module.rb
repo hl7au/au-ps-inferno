@@ -16,29 +16,32 @@ module AUPSTestKit
     private
 
     def test_composition_mandatory_sections
-      test_composition_sections_data(MANDATORY_SECTIONS_CODES)
+      check_bundle_exists_in_scratch
+      test_composition_sections_data(sections_codes: MANDATORY_SECTIONS_CODES, bundle_data: scratch_bundle)
     end
 
     def test_composition_recommended_sections
-      test_composition_sections_data(RECOMMENDED_SECTIONS_CODES)
+      check_bundle_exists_in_scratch
+      test_composition_sections_data(sections_codes: RECOMMENDED_SECTIONS_CODES, bundle_data: scratch_bundle)
     end
 
     def test_composition_optional_sections
-      test_composition_sections_data(OPTIONAL_SECTIONS_CODES)
-    end
-
-    def test_composition_sections_data(sections_codes)
       check_bundle_exists_in_scratch
-      failed_msg = 'Some of the sections are not populated correctly.'
-      refs_test_pass = composition_sections_references_resolution_pass?(sections_codes)
-      ms_test_pass = composition_section_check_ms_pass?(sections_codes)
-
-      assert refs_test_pass, failed_msg
-      assert ms_test_pass, failed_msg
+      test_composition_sections_data(sections_codes: OPTIONAL_SECTIONS_CODES, bundle_data: scratch_bundle)
     end
 
-    def composition_sections_references_resolution_pass?(sections_codes)
-      bundle_resource = BundleDecorator.new(scratch_bundle.to_hash)
+    def test_composition_sections_data(sections_codes:, bundle_data:)
+      bundle_resource = BundleDecorator.new(bundle_data.to_hash)
+      refs_test_pass = composition_sections_references_resolution_pass?(sections_codes: sections_codes,
+                                                                        bundle_resource: bundle_resource)
+      ms_test_pass = composition_section_check_ms_pass?(sections_codes: sections_codes,
+                                                        bundle_resource: bundle_resource)
+
+      assert refs_test_pass, 'Some of the sections are not populated correctly.'
+      assert ms_test_pass, 'Some of the sections are not populated with the correct Must Support elements.'
+    end
+
+    def composition_sections_references_resolution_pass?(sections_codes:, bundle_resource:)
       composition_resource = bundle_resource.composition_resource
       sections_metadata = metadata_manager.sections_metadata_by_codes(sections_codes)
       sections_metadata.map do |section_metadata|

@@ -26,12 +26,11 @@ module AUPSTestKit
 
       def sections_profiles(sections_codes)
         raw_sections_profiles(sections_codes).filter do |profile|
-          profile.split('|').last.start_with?(AU_PS_PROFILE_BASE_URL)
+          profile.split('|')[1].start_with?(AU_PS_PROFILE_BASE_URL)
         end
       end
 
-      def resources_to_check_ms(sections_codes)
-        bundle_resource = BundleDecorator.new(scratch_bundle.to_hash)
+      def resources_to_check_ms(sections_codes:, bundle_resource:)
         composition_resource = bundle_resource.composition_resource
 
         entry_references = composition_resource.entry_references_by_codes(sections_codes)
@@ -51,9 +50,7 @@ module AUPSTestKit
       end
 
       def check_ms_elements_populated_against_profiles(sections_profiles, resources_to_check_ms)
-        sections_profiles.map do |profile|
-          process_profile(profile, resources_to_check_ms)
-        end
+        sections_profiles.map { |profile| process_profile(profile, resources_to_check_ms) }
       end
 
       def normalize_resource_type_and_profile(profile)
@@ -112,9 +109,10 @@ module AUPSTestKit
         nil
       end
 
-      def composition_section_check_ms_pass?(sections_codes)
+      def composition_section_check_ms_pass?(sections_codes:, bundle_resource:)
         results = check_ms_elements_populated_against_profiles(sections_profiles(sections_codes),
-                                                               resources_to_check_ms(sections_codes))
+                                                               resources_to_check_ms(sections_codes: sections_codes,
+                                                                                     bundle_resource: bundle_resource))
         !results_error?(results)
       end
     end
