@@ -1,11 +1,13 @@
 # frozen_string_literal: true
 
-require 'inferno_suite_generator'
+require_relative '../inferno_suite_generator_compat'
 require 'inferno_suite_generator/test_utils/ms_checker'
 module AUPSTestKit
   module BasicTestCompositionSectionReadModule
     # Composition Must Support elements in sections.
     module BasicTestCompositionSectionCheckResourcesMSElementsModule
+      AU_PS_PROFILE_BASE_URL = 'http://hl7.org.au/fhir/ps/StructureDefinition/'
+
       def check_ms_elements_populated(resource_type, resources)
         profile_metadata = group_metadata_for(resource_type)
         ms_checker_for(profile_metadata).elements_present_statuses(resources)
@@ -24,7 +26,7 @@ module AUPSTestKit
 
       def sections_profiles(sections_codes)
         raw_sections_profiles(sections_codes).filter do |profile|
-          profile.include?('au-ps')
+          profile.split('|').last.start_with?(AU_PS_PROFILE_BASE_URL)
         end
       end
 
