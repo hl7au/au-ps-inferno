@@ -7,7 +7,7 @@ require_relative '../../../lib/au_ps_inferno/utils/basic_test/composition_sectio
 require_relative '../../../lib/au_ps_inferno/utils/bundle_decorator'
 require_relative '../../support/basic_test/references_resolution_report_spec_support'
 
-RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadIssuesHelpersModule do
+RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadIssuesHelpersModule do # rubocop:disable Metrics/BlockLength
   include_context 'references resolution report setup'
 
   section_code = '11450-4'
@@ -21,19 +21,16 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadIssuesHelpersModule d
       }
     ]
   }
-  condition_resource = {
+  condition_entry = FHIR::Bundle::Entry.new(
     fullUrl: 'urn:uuid:condition-1',
-    resource: {
-      resourceType: 'Condition',
-      subject: { reference: 'urn:uuid:patient-1' },
-      code: { coding: [{ system: 'http://snomed.info/sct', code: '160245001' }] }
-    }
-  }
+    resource: FHIR::Condition.new(resourceType: 'Condition', subject: { reference: 'urn:uuid:patient-1' },
+                                  code: { coding: [{ system: 'http://snomed.info/sct', code: '160245001' }] })
+  )
 
-  describe '#references_resolution_report' do
+  describe '#references_resolution_report' do # rubocop:disable Metrics/BlockLength
     it 'returns one report item per section entry reference' do
       bundle = build_bundle(section_code: section_code, references: ['urn:uuid:condition-1'],
-                            resources: [condition_resource])
+                            bundle_entries: [condition_entry])
       result = test_instance.references_resolution_report(section_metadata, bundle)
 
       expect(result.size).to eq(1)
@@ -42,7 +39,7 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadIssuesHelpersModule d
 
     it 'marks report item as resolved when reference exists and type is permitted' do
       bundle = build_bundle(section_code: section_code, references: ['urn:uuid:condition-1'],
-                            resources: [condition_resource])
+                            bundle_entries: [condition_entry])
       result = test_instance.references_resolution_report(section_metadata, bundle)
 
       expect(result.first).to eq(
@@ -55,7 +52,7 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadIssuesHelpersModule d
     end
 
     it 'marks report item unresolved with not-found issue when resource is missing' do
-      bundle = build_bundle(section_code: section_code, references: ['urn:uuid:condition-1'], resources: [])
+      bundle = build_bundle(section_code: section_code, references: ['urn:uuid:condition-1'], bundle_entries: [])
       result = test_instance.references_resolution_report(section_metadata, bundle)
 
       expect(result.first).to eq(
@@ -68,12 +65,13 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadIssuesHelpersModule d
     end
 
     it 'marks report item unresolved with invalid-type issue when resource type is not permitted' do
-      observation_resource = {
+      observation_entry = FHIR::Bundle::Entry.new(
         fullUrl: 'urn:uuid:condition-1',
-        resource: { resourceType: 'Observation', status: 'final', code: { coding: [{ code: '1234-5' }] } }
-      }
+        resource: FHIR::Observation.new(resourceType: 'Observation', status: 'final',
+                                        code: { coding: [{ code: '1234-5' }] })
+      )
       bundle = build_bundle(section_code: section_code, references: ['urn:uuid:condition-1'],
-                            resources: [observation_resource])
+                            bundle_entries: [observation_entry])
       result = test_instance.references_resolution_report(section_metadata, bundle)
 
       expect(result.first[:resolved]).to be(false)
@@ -84,7 +82,7 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadIssuesHelpersModule d
 
     it 'returns mixed report items preserving entry order when section has multiple references' do
       bundle = build_bundle(section_code: section_code, references: ['urn:uuid:condition-1', 'urn:uuid:condition-2'],
-                            resources: [condition_resource])
+                            bundle_entries: [condition_entry])
       result = test_instance.references_resolution_report(section_metadata, bundle)
 
       expect(result).to eq(
@@ -109,7 +107,7 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadIssuesHelpersModule d
         ]
       }
       bundle = build_bundle(section_code: section_code, references: ['urn:uuid:condition-1'],
-                            resources: [condition_resource])
+                            bundle_entries: [condition_entry])
       result = test_instance.references_resolution_report(deduped_metadata, bundle)
 
       expect(result.first[:resolved]).to be(true)

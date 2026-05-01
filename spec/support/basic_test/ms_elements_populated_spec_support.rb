@@ -14,5 +14,11 @@ RSpec.shared_context 'ms elements populated setup' do
     end
   end
 
+  def get_ms_elements_paths(resource_type)
+    metadata_manager.group_metadata_by_resource_type(resource_type)[:must_supports][:elements].map do |e|
+      e[:path]
+    end
+  end
+
   before { test_instance.metadata_manager = metadata_manager }
 end
