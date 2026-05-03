@@ -79,6 +79,7 @@ module AUPSTestKit
       summary_op_defined? if scratch[:summary_op_defined].blank?
       skip_if scratch[:summary_op_defined] == false, 'Server does not declare support for $summary operation'
       read_and_save_data
+      omit_if omit_au_ps_validation?, OMIT_AU_PS_MESSAGE
       validate_au_ps_bundle
     end
   end

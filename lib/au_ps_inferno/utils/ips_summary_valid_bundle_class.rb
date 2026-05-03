@@ -12,7 +12,7 @@ module AUPSTestKit
       summary_op_defined? if scratch[:summary_op_defined].blank?
       skip_if scratch[:summary_op_defined] == false, 'Server does not declare support for $summary operation'
       read_and_save_data
-      omit_if !ips_bundle_validation_enabled?, 'IPS Bundle validation is disabled'
+      omit_if omit_ips_validation?, OMIT_IPS_MESSAGE
       validate_ips_bundle
     end
   end

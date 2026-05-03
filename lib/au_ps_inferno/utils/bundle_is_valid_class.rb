@@ -15,10 +15,6 @@ module AUPSTestKit
       bundle_resource.blank?
     end
 
-    def omit_test?
-      validate_against.blank? || !validate_against.include?('au_ps_bundle')
-    end
-
     def read_and_save_data
       info 'Reading and saving provided Bundle resource'
       resource = FHIR.from_contents(bundle_resource)
@@ -30,7 +26,7 @@ module AUPSTestKit
     run do
       skip_if skip_test?, 'No Bundle resource provided'
       read_and_save_data
-      omit_if omit_test?, 'Validation against AU PS Bundle is disabled'
+      omit_if omit_au_ps_validation?, OMIT_AU_PS_MESSAGE
       validate_au_ps_bundle
     end
   end
