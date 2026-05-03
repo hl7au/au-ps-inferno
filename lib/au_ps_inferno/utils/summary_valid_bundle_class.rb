@@ -3,11 +3,11 @@
 require 'net/http'
 require 'uri'
 
-require_relative 'basic_test_class'
+require_relative 'basic_validate_bundle_test'
 
 module AUPSTestKit
   # The Bundle resource is valid against the AU PS Bundle profile
-  class SummaryValidBundleClass < BasicTest
+  class SummaryValidBundleClass < BasicValidateBundleTest
     id :summary_valid_bundle_class_test
     input_order :url, :patient_id, :identifier, :profile, :credentials, :header_name, :header_value
 
@@ -79,7 +79,7 @@ module AUPSTestKit
       summary_op_defined? if scratch[:summary_op_defined].blank?
       skip_if scratch[:summary_op_defined] == false, 'Server does not declare support for $summary operation'
       read_and_save_data
-      validate_ips_bundle
+      validate_au_ps_bundle
     end
   end
 end

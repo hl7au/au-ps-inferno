@@ -3,11 +3,11 @@
 require 'net/http'
 require 'uri'
 
-require_relative 'basic_test_class'
+require_relative 'basic_validate_bundle_test'
 
 module AUPSTestKit
   # A base class for all tests that retrieve a Bundle resource
-  class RetrieveBundleTestClass < BasicTest
+  class RetrieveBundleTestClass < BasicValidateBundleTest
     id :retrieve_bundle_test_class
     input_order :bundle_url, :url, :bundle_id, :credentials, :header_name, :header_value
 
@@ -78,7 +78,7 @@ module AUPSTestKit
     run do
       skip_if skip_test?, 'There is no FHIR server URL, Bundle ID or Bundle URL provided'
       read_and_save_data
-      validate_ips_bundle
+      validate_au_ps_bundle
     end
   end
 end

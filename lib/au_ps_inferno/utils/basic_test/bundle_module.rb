@@ -26,15 +26,23 @@ module AUPSTestKit
       false
     end
 
+    def validate_au_ps_bundle
+      validate_bundle_wrapper('http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-bundle|1.0.0-ballot')
+    end
+
     def validate_ips_bundle
-      check_bundle_exists_in_scratch
-      validate_bundle(
-        scratch_bundle,
-        'http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-bundle|1.0.0-ballot'
-      )
+      validate_bundle_wrapper('http://hl7.org/fhir/uv/ips/StructureDefinition/Bundle-uv-ips')
     end
 
     private
+
+    def validate_bundle_wrapper(profile_with_version)
+      check_bundle_exists_in_scratch
+      validate_bundle(
+        scratch_bundle,
+        profile_with_version
+      )
+    end
 
     def validate_bundle(resource, profile_with_version)
       return if skip_validation?

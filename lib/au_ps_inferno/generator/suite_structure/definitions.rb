@@ -9,8 +9,8 @@ class Generator
 
     SHARED_GROUP_DEFINITIONS = [
       {
-        name: 'AU PS Bundle Validation',
-        description: 'Validates that the bundle conforms to the AU PS Bundle profile.',
+        name: 'Bundle Validation',
+        description: 'Validates that the bundle conforms to the Bundle profiles.',
         tests: [BUNDLE_VALIDATION_PLACEHOLDER],
         run_as_group: true
       },
@@ -128,7 +128,7 @@ class Generator
         bundle_validation_description: 'The Bundle resource is valid against the AU PS Bundle profile ' \
                                        'using FHIR validator',
         bundle_validation_base_class_name: 'BundleIsValidClass',
-        bundle_validation_imports: ['../../../utils/bundle_is_valid_class'],
+        bundle_validation_imports: ['../../../utils/bundle_is_valid_class', '../../../utils/ips_bundle_is_valid_class'],
         run_as_group: true
       },
       {
@@ -139,7 +139,8 @@ class Generator
         bundle_validation_description: 'Verifies that a bundle retrieved from the server conforms to the ' \
                                        'AU PS Bundle profile.',
         bundle_validation_base_class_name: 'RetrieveBundleTestClass',
-        bundle_validation_imports: ['../../../utils/retrieve_bundle_test_class'],
+        bundle_validation_imports: ['../../../utils/retrieve_bundle_test_class',
+                                    '../../../utils/ips_retrieve_bundle_test_class'],
         run_as_group: true
       },
       {
@@ -150,7 +151,8 @@ class Generator
         bundle_validation_description: 'Verifies that a bundle produced by the IPS $summary operation ' \
                                        'conforms to the AU PS Bundle profile.',
         bundle_validation_base_class_name: 'SummaryValidBundleClass',
-        bundle_validation_imports: ['../../../utils/summary_valid_bundle_class'],
+        bundle_validation_imports: ['../../../utils/summary_valid_bundle_class',
+                                    '../../../utils/ips_summary_valid_bundle_class'],
         run_as_group: true
       }
     ].freeze
