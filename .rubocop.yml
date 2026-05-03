@@ -6,3 +6,11 @@ AllCops:
 
 Gemspec/DevelopmentDependencies:
   Enabled: false
+
+Naming/MethodName:
+  Exclude:
+    - "lib/au_ps_inferno/generator/generator.rb"
+
+Metrics/MethodLength:
+  Exclude:
+    - "lib/au_ps_inferno/utils/basic_test/composition_section_check_resources_ms_elements_module.rb"

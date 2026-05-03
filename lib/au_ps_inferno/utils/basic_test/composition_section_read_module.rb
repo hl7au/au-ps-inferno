@@ -1,30 +1,58 @@
 # frozen_string_literal: true
 
+require_relative '../inferno_suite_generator_compat'
+require_relative 'composition_section_check_resources_ms_elements_module'
+require_relative 'composition_section_read_issues_helpers_module'
 module AUPSTestKit
   # Reading composition section rows: profile/entry matching and list outcomes.
   module BasicTestCompositionSectionReadModule
+    MANDATORY_SECTIONS_CODES = %w[11450-4 48765-2 10160-0].freeze
+    RECOMMENDED_SECTIONS_CODES = %w[11369-6 30954-2 47519-4 46264-8].freeze
+    OPTIONAL_SECTIONS_CODES = %w[42348-3 104605-1 47420-5 11348-0 10162-6 81338-6 18776-5 29762-2 8716-3].freeze
+
+    include BasicTestCompositionSectionCheckResourcesMSElementsModule
+    include BasicTestCompositionSectionReadIssuesHelpersModule
+
     private
 
-    def read_composition_sections_info
+    def test_composition_mandatory_sections
       check_bundle_exists_in_scratch
-      assert composition_sections_read_pass?, 'Some of the sections are not populated correctly.'
+      test_composition_sections_data(sections_codes: MANDATORY_SECTIONS_CODES, bundle_data: scratch_bundle)
     end
 
-    def composition_sections_read_pass?
-      validation_errors = scratch[:validation_errors] || []
-      bundle_resource = BundleDecorator.new(scratch_bundle.to_hash)
+    def test_composition_recommended_sections
+      check_bundle_exists_in_scratch
+      test_composition_sections_data(sections_codes: RECOMMENDED_SECTIONS_CODES, bundle_data: scratch_bundle)
+    end
+
+    def test_composition_optional_sections
+      check_bundle_exists_in_scratch
+      test_composition_sections_data(sections_codes: OPTIONAL_SECTIONS_CODES, bundle_data: scratch_bundle)
+    end
+
+    def test_composition_sections_data(sections_codes:, bundle_data:)
+      bundle_resource = BundleDecorator.new(bundle_data.to_hash)
+      refs_test_pass = composition_sections_references_resolution_pass?(sections_codes: sections_codes,
+                                                                        bundle_resource: bundle_resource)
+      ms_test_pass = composition_section_check_ms_pass?(sections_codes: sections_codes,
+                                                        bundle_resource: bundle_resource)
+
+      assert refs_test_pass, 'Some of the sections are not populated correctly.'
+      assert ms_test_pass, 'Some of the sections are not populated with the correct Must Support elements.'
+    end
+
+    def composition_sections_references_resolution_pass?(sections_codes:, bundle_resource:)
       composition_resource = bundle_resource.composition_resource
-      section_results = metadata_manager.required_ms_sections_metadata.map do |section_metadata|
-        report_composition_section_read?(section_metadata, composition_resource, bundle_resource, validation_errors)
-      end
-      section_results.all?
+      sections_metadata = metadata_manager.sections_metadata_by_codes(sections_codes)
+      sections_metadata.map do |section_metadata|
+        composition_section_references_resolution_issues?(section_metadata, composition_resource, bundle_resource)
+      end.all?
     end
 
-    def report_composition_section_read?(section_metadata, composition_resource, bundle_resource, validation_errors)
+    def composition_section_references_resolution_issues?(section_metadata, composition_resource, bundle_resource)
       section_code = section_metadata[:code]
       section = composition_resource.section_by_code(section_code)
-      issues = read_composition_section_issues(section_metadata, composition_resource, bundle_resource,
-                                               validation_errors)
+      issues = read_composition_section_issues(section_metadata, bundle_resource)
       text = composition_section_read_report_message(section_metadata, section, bundle_resource, section_code)
       add_message(issues.empty? ? 'info' : 'error', text)
       issues.empty?
@@ -58,8 +86,7 @@ module AUPSTestKit
     end
 
     def get_section_entry_index(section_metadata, bundle_resource, ref)
-      section_code = section_metadata[:code]
-      section = bundle_resource.composition_resource.section_by_code(section_code)
+      section = bundle_resource.composition_resource.section_by_code(section_metadata[:code])
       return nil if section.blank?
 
       section.get_entry_index_by_reference(ref)
@@ -74,51 +101,9 @@ module AUPSTestKit
     end
 
     def composition_section_entry_line_resolved(index, ref, resource)
-      # validation_errors = scratch[:validation_errors] || []
-      # has_val_error = validation_errors.any? { |e| e[:full_url] == ref }
       profiles = resource.meta&.profile || []
       suffix = profiles.any? ? "(meta.profile: #{profiles.join(', ')})" : '(no meta.profile)'
-      # tail = has_val_error ? "#{suffix} ❌ Validation error" : suffix
       "entry[#{index}]: **#{ref}** -> #{resource.resourceType} #{suffix}"
-    end
-
-    def read_composition_section_issues(section_metadata, composition_resource, bundle_resource, validation_errors)
-      section_code = section_metadata[:code]
-      section = composition_resource.section_by_code(section_code)
-      return ["No composition section found for code: #{section_code}"] if section.blank?
-
-      entries_resource_types = permitted_resource_types(section_metadata)
-      section.entry_references.flat_map do |ref|
-        composition_section_ref_read_issues(ref, bundle_resource, entries_resource_types, validation_errors)
-      end
-    end
-
-    def composition_section_ref_read_issues(ref, bundle_resource, entries_resource_types, _validation_errors)
-      resource = bundle_resource.resource_by_reference(ref)
-      issues = []
-      issues << "Resource not found for reference: #{ref}" if resource.blank?
-      if resource.present? && !entries_resource_types.include?(resource.resourceType)
-        issues << "Resource type: #{resource.resourceType} is not in the list " \
-                  "of expected resource types: #{entries_resource_types}"
-      end
-      # issues << "Validation error found for reference: #{ref}" if validation_errors.any? { |e| e[:full_url] == ref }
-      issues
-    end
-
-    def permitted_resource_types(section_metadata)
-      section_metadata[:entries].map do |entry|
-        entry[:profiles].map do |profile|
-          profile.split('|').first
-        end
-      end.flatten.uniq
-    end
-
-    def empty_section_entry_reason_line(section)
-      if section.empty_reason_str.present?
-        "emptyReason: #{section.empty_reason_str}"
-      else
-        'No entries; no emptyReason.'
-      end
     end
   end
 end

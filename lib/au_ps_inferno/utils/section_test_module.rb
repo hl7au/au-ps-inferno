@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require_relative 'section_test_class'
-require_relative 'messages_keeper_class'
 require_relative 'rich_message_class'
 require_relative 'rich_validation_message'
 

@@ -85,11 +85,27 @@ class Generator
             { commands: ["validate_populated_undefined_sections_in_bundle(#{section_codes}, #{elements})"] }
           }
         },
-        sections_entry_profiles: {
+        mandatory_sections_entry_profiles: {
           title: 'AU PS Composition Mandatory Sections capable of populating referenced profiles',
           description: 'Mandatory section SHALL be capable of populating section.entry with the referenced ' \
                        'profiles and SHOULD correctly populate section.entry if a value is known.',
-          commands: ['read_composition_sections_info']
+          commands: ['test_composition_mandatory_sections']
+        },
+        recommended_sections_entry_profiles: {
+          title: 'AU PS Composition Recommended Sections capable of populating referenced profiles',
+          description: 'Recommended section SHALL be capable of populating section.entry with the referenced ' \
+                       'profiles and SHOULD correctly populate section.entry if a value is known.',
+          optional: true,
+          commands: ['test_composition_recommended_sections']
+        },
+        optional_sections_entry_profiles: {
+          title: 'AU PS Composition Optional Sections capable of populating referenced profiles',
+          description: 'Optional section SHALL be capable of populating section.entry with the referenced ' \
+                       'profiles and SHOULD correctly populate section.entry if a value is known.',
+          optional: true,
+          commands: [
+            'test_composition_optional_sections'
+          ]
         },
         subject_resource_type_is_valid: {
           title: 'Subject reference in the AU PS Composition SHALL resolve to a valid resource type (Patient).',
