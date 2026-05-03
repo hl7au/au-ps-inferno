@@ -8,15 +8,16 @@ class Generator
   #
   # Tests are referenced by symbol id. Add a new test type: add { id: :new_id } to the appropriate group
   # in SHARED_GROUP_DEFINITIONS and register title/description/config in TestConfigRegistry.
-  # :bundle_valid is a special case; its title/description/config come from HIGH_ORDER_GROUP_CONFIGS.
+  # :bundle_valid and :bundle_valid_ips are special cases; their title/description/config come from
+  # HIGH_ORDER_GROUP_CONFIGS.
   #
   # To add a new high-order group: add an entry to HIGH_ORDER_GROUP_CONFIGS.
   # To add a new shared group: add to SHARED_GROUP_DEFINITIONS with tests: [ { id: :... }, ... ].
   module SuiteStructure
     # Builds the full HIGH_ORDER_GROUPS structure expected by Generator (array of hashes with
     # :name, :description, :groups).
-    # Each group's tests are hashes with :id and, for :bundle_valid, :title, :description,
-    # :base_class_name, :imports, :ignore_commands.
+    # Each group's tests are hashes with :id and, for :bundle_valid / :bundle_valid_ips, :title,
+    # :description, :base_class_name, :imports, :ignore_commands.
     #
     # @return [Array<Hash>] same shape as the former Generator::HIGH_ORDER_GROUPS with :description added
     def self.expand_high_order_groups
@@ -41,6 +42,7 @@ class Generator
 
     def self.map_test_item(test_item, config)
       return bundle_valid_test_hash(config) if test_item == BUNDLE_VALIDATION_PLACEHOLDER
+      return bundle_valid_ips_test_hash(config) if test_item == BUNDLE_VALIDATION_IPS_PLACEHOLDER
 
       { id: test_item[:id] }
     end
@@ -51,6 +53,17 @@ class Generator
         title: config[:bundle_validation_title],
         description: config[:bundle_validation_description],
         base_class_name: config[:bundle_validation_base_class_name],
+        imports: config[:bundle_validation_imports],
+        ignore_commands: true
+      }
+    end
+
+    def self.bundle_valid_ips_test_hash(config)
+      {
+        id: :bundle_valid_ips,
+        title: config[:bundle_validation_ips_title],
+        description: config[:bundle_validation_ips_description],
+        base_class_name: config[:bundle_validation_ips_base_class_name],
         imports: config[:bundle_validation_imports],
         ignore_commands: true
       }

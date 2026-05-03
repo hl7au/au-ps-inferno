@@ -12,7 +12,7 @@ module AUPSTestKit
           title: 'Validate Against',
           optional: true,
           type: 'checkbox',
-          default: ['au_ps_bundle'],
+          default: %w[au_ps_bundle ips_bundle],
           options: {
             list_options: [
               {
@@ -36,7 +36,7 @@ module AUPSTestKit
 
     private
 
-    def omit_test_wrapper?(include_str)
+    def omit_test_wrapper(include_str)
       validate_against.blank? || !validate_against.include?(include_str)
     end
   end
