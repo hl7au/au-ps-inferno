@@ -8,8 +8,6 @@ module AUPSTestKit
     id :ips_bundle_is_valid_class_base
 
     run do
-      skip_if skip_test?, 'No Bundle resource provided'
-      read_and_save_data
       omit_if omit_ips_validation?, OMIT_IPS_MESSAGE
       validate_ips_bundle
     end

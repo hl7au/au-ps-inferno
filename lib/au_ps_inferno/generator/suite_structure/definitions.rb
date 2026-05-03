@@ -125,14 +125,12 @@ class Generator
         name: 'AU PS Bundle Instance',
         description: 'Validates a static AU PS bundle instance for profile conformance, Must Support ' \
                      'elements, and composition sections.',
-        bundle_validation_title: 'AU PS Bundle is valid against AU PS Bundle profile',
-        bundle_validation_description: 'The Bundle resource is valid against the AU PS Bundle profile ' \
-                                       'using FHIR validator',
+        bundle_validation_title: 'Bundle is valid against AU PS Bundle',
+        bundle_validation_description: 'The Bundle resource is valid against the AU PS Bundle profile using FHIR validator',
         bundle_validation_base_class_name: 'BundleIsValidClass',
         bundle_validation_imports: ['../../../utils/bundle_is_valid_class', '../../../utils/ips_bundle_is_valid_class'],
-        bundle_validation_ips_title: 'AU PS Bundle is valid against IPS Bundle profile',
-        bundle_validation_ips_description: 'The Bundle resource is valid against the IPS Bundle profile ' \
-                                           'using FHIR validator',
+        bundle_validation_ips_title: 'Bundle is valid against IPS Bundle',
+        bundle_validation_ips_description: 'The Bundle resource is valid against the IPS Bundle profile using FHIR validator',
         bundle_validation_ips_base_class_name: 'IpsBundleIsValidClass',
         run_as_group: true
       },

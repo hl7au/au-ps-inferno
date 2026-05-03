@@ -27,16 +27,16 @@ module AUPSTestKit
           }
 
     def omit_au_ps_validation?
-      omit_test_wrapper('au_ps_bundle')
+      omit_test_wrapper?('au_ps_bundle')
     end
 
     def omit_ips_validation?
-      omit_test_wrapper('ips_bundle')
+      omit_test_wrapper?('ips_bundle')
     end
 
     private
 
-    def omit_test_wrapper(include_str)
+    def omit_test_wrapper?(include_str)
       validate_against.blank? || !validate_against.include?(include_str)
     end
   end
