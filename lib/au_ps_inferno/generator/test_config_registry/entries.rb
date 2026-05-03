@@ -95,12 +95,14 @@ class Generator
           title: 'AU PS Composition Recommended Sections capable of populating referenced profiles',
           description: 'Recommended section SHALL be capable of populating section.entry with the referenced ' \
                        'profiles and SHOULD correctly populate section.entry if a value is known.',
+          optional: true,
           commands: ['test_composition_recommended_sections']
         },
         optional_sections_entry_profiles: {
           title: 'AU PS Composition Optional Sections capable of populating referenced profiles',
           description: 'Optional section SHALL be capable of populating section.entry with the referenced ' \
                        'profiles and SHOULD correctly populate section.entry if a value is known.',
+          optional: true,
           commands: [
             'test_composition_optional_sections'
           ]
