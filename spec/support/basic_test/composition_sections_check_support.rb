@@ -2,8 +2,11 @@
 
 require_relative '../../../lib/au_ps_inferno/utils/composition_utils'
 require_relative '../../../lib/au_ps_inferno/utils/metadata_manager'
+require_relative 'fhir_bundle_helpers'
 
 module CompositionSectionsCheckSupport
+  include FhirBundleHelpers
+
   def configure_test_class(test_class, metadata)
     manager = AUPSTestKit::MetadataManager.new(nil).tap do |m|
       allow(m).to receive(:metadata).and_return(metadata)
@@ -29,26 +32,8 @@ module CompositionSectionsCheckSupport
     Inferno::Repositories::Messages.new.messages_for_result(result.id)
   end
 
-  def build_bundle(sections:, extra_entries: []) # rubocop:disable Metrics/MethodLength
-    composition_entry = FHIR::Bundle::Entry.new(
-      fullUrl: 'urn:uuid:composition-1',
-      resource: FHIR::Composition.new(
-        resourceType: 'Composition',
-        status: 'final',
-        type: { coding: [{ code: '60591-5' }] },
-        subject: { reference: 'urn:uuid:patient-1' },
-        section: sections
-      )
-    )
-    patient_entry = FHIR::Bundle::Entry.new(
-      fullUrl: 'urn:uuid:patient-1',
-      resource: FHIR::Patient.new
-    )
-    FHIR::Bundle.new(
-      resourceType: 'Bundle',
-      type: 'document',
-      entry: [composition_entry, patient_entry] + extra_entries
-    )
+  def build_bundle(sections:, extra_entries: [])
+    build_fhir_bundle(sections: sections, extra_entries: extra_entries)
   end
 
   def section_without_entries(code)
