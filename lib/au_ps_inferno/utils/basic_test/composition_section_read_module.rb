@@ -17,17 +17,29 @@ module AUPSTestKit
 
     def test_composition_mandatory_sections
       check_bundle_exists_in_scratch
-      test_composition_sections_data(sections_codes: MANDATORY_SECTIONS_CODES, bundle_data: scratch_bundle)
+      test_mandatory_sections(scratch_bundle)
     end
 
     def test_composition_recommended_sections
       check_bundle_exists_in_scratch
-      test_composition_sections_data(sections_codes: RECOMMENDED_SECTIONS_CODES, bundle_data: scratch_bundle)
+      test_recommended_sections(scratch_bundle)
     end
 
     def test_composition_optional_sections
       check_bundle_exists_in_scratch
-      test_composition_sections_data(sections_codes: OPTIONAL_SECTIONS_CODES, bundle_data: scratch_bundle)
+      test_optional_sections(scratch_bundle)
+    end
+
+    def test_mandatory_sections(bundle_data)
+      test_composition_sections_data(sections_codes: MANDATORY_SECTIONS_CODES, bundle_data: bundle_data)
+    end
+
+    def test_recommended_sections(bundle_data)
+      test_composition_sections_data(sections_codes: RECOMMENDED_SECTIONS_CODES, bundle_data: bundle_data)
+    end
+
+    def test_optional_sections(bundle_data)
+      test_composition_sections_data(sections_codes: OPTIONAL_SECTIONS_CODES, bundle_data: bundle_data)
     end
 
     def test_composition_sections_data(sections_codes:, bundle_data:)
