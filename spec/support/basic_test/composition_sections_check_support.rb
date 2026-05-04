@@ -4,21 +4,6 @@ require_relative '../../../lib/au_ps_inferno/utils/composition_utils'
 require_relative '../../../lib/au_ps_inferno/utils/metadata_manager'
 
 module CompositionSectionsCheckSupport
-  def register_runnable_tree(runnable)
-    repo_for(runnable)&.then { |repo| repo.insert(runnable) unless repo.exists?(runnable.id) }
-    return unless runnable.respond_to?(:children)
-
-    runnable.children.each { |child| register_runnable_tree(child) }
-  end
-
-  def repo_for(runnable)
-    return Inferno::Repositories::TestSuites.new if runnable < Inferno::Entities::TestSuite
-    return Inferno::Repositories::TestGroups.new if runnable < Inferno::Entities::TestGroup
-    return Inferno::Repositories::Tests.new if runnable < Inferno::Entities::Test
-
-    nil
-  end
-
   def configure_test_class(test_class, metadata)
     manager = AUPSTestKit::MetadataManager.new(nil).tap do |m|
       allow(m).to receive(:metadata).and_return(metadata)
@@ -79,7 +64,21 @@ RSpec.shared_context 'composition sections check setup' do
   include CompositionSectionsCheckSupport
 
   let(:suite_id) { 'composition_sections_check_suite' }
-  let(:suite) { described_class }
 
-  before { register_runnable_tree(described_class) }
+  before do
+    suite_stub = Class.new(Inferno::TestSuite) { id 'composition_sections_check_suite' }
+    repo = Inferno::Repositories::TestSuites.new
+    repo.insert(suite_stub) unless repo.exists?(suite_id)
+  end
+
+  def find_test(method_name)
+    test_id = "#{suite_id}-#{method_name}"
+    test_class = Class.new(Inferno::Test) do
+      id test_id
+      run { send(method_name) }
+    end
+    repo = Inferno::Repositories::Tests.new
+    repo.insert(test_class) unless repo.exists?(test_id)
+    test_class
+  end
 end

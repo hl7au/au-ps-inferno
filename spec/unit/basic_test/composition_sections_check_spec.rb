@@ -1,19 +1,16 @@
 # frozen_string_literal: true
 
-require 'yaml'
-require 'json'
 require 'fhir_models'
 
-require_relative '../../fixtures/composition_check_suite'
 require_relative '../../support/basic_test/composition_sections_check_support'
 require File.join(Gem::Specification.find_by_name('inferno_core').full_gem_path, 'spec/runnable_context')
 
-RSpec.describe CompositionSectionsCheckSuiteKit::CompositionSectionsCheckSuite do # rubocop:disable Metrics/BlockLength
+RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:disable Metrics/BlockLength
   include_context 'when testing a runnable'
   include_context 'composition sections check setup'
 
   describe 'sections_shall_populated test' do # rubocop:disable Metrics/BlockLength
-    let(:test) { find_test(suite, 'sections_shall_populated') }
+    let(:test) { find_test(:test_composition_mandatory_sections) }
     let(:metadata) do # rubocop:disable Metrics/BlockLength
       {
         composition_sections: [
@@ -60,6 +57,7 @@ RSpec.describe CompositionSectionsCheckSuiteKit::CompositionSectionsCheckSuite d
       result = run_test(scratch_with(bundle))
       messages = messages_for(result)
 
+      # TODO: Test should check the full message content
       expect(result.result).to eq('pass'), result.result_message
       expect(messages.none? { |m| m.type == 'error' }).to be(true)
       expect(messages.count { |m| m.type == 'info' }).to eq(3)
@@ -122,7 +120,7 @@ RSpec.describe CompositionSectionsCheckSuiteKit::CompositionSectionsCheckSuite d
   end
 
   describe 'sections_should_populated test' do # rubocop:disable Metrics/BlockLength
-    let(:test) { find_test(suite, 'sections_should_populated') }
+    let(:test) { find_test(:test_composition_recommended_sections) }
     let(:metadata) do
       {
         composition_sections: [
@@ -176,7 +174,7 @@ RSpec.describe CompositionSectionsCheckSuiteKit::CompositionSectionsCheckSuite d
   end
 
   describe 'sections_may_populated test' do # rubocop:disable Metrics/BlockLength
-    let(:test) { find_test(suite, 'sections_may_populated') }
+    let(:test) { find_test(:test_composition_optional_sections) }
     let(:metadata) do
       {
         composition_sections: [
