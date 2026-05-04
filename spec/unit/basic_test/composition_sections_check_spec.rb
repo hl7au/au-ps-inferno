@@ -207,6 +207,42 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
       )
     end
 
+    it 'fails when section entries mix resolved and unresolved references' do # rubocop:disable Metrics/BlockLength
+      condition_entry = FHIR::Bundle::Entry.new(
+        fullUrl: 'urn:uuid:condition-1',
+        resource: FHIR::Condition.new(
+          resourceType: 'Condition',
+          category: [{ coding: [{ code: 'problem-list-item' }] }],
+          code: { coding: [{ code: '160245001' }] },
+          subject: { reference: 'urn:uuid:patient-1' }
+        )
+      )
+      bundle = build_bundle(
+        sections: [
+          {
+            code: { coding: [{ code: '11450-4' }] },
+            entry: [
+              { reference: 'urn:uuid:condition-1' },
+              { reference: 'urn:uuid:missing-2' }
+            ]
+          },
+          section_without_entries('48765-2'),
+          section_without_entries('10160-0')
+        ],
+        extra_entries: [condition_entry]
+      )
+      result = run_test(scratch_with(bundle))
+      messages = messages_for(result)
+      problems_section_message = messages.find do |message|
+        message.type == 'error' && message.message.start_with?('Patient Summary Problems Section (11450-4)')
+      end
+
+      expect(result.result).to eq('fail')
+      expect(problems_section_message).not_to be_nil
+      expect(problems_section_message.message).to include('entry[0]: **urn:uuid:condition-1** -> Condition (no meta.profile)')
+      expect(problems_section_message.message).to include('**urn:uuid:missing-2** -> ❌ Reference does not resolve')
+    end
+
     it 'fails when all mandatory sections are absent from the composition' do
       bundle = build_bundle(sections: [])
       result = run_test(scratch_with(bundle))
