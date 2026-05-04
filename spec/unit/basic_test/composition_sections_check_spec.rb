@@ -10,7 +10,7 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
   include_context 'when testing a runnable'
   include_context 'composition sections check setup'
 
-  describe 'sections_shall_populated test' do # rubocop:disable Metrics/BlockLength
+  describe 'Composition Sections Check - Mandatory Sections' do # rubocop:disable Metrics/BlockLength
     let(:test) { find_test(:test_composition_mandatory_sections) }
     let(:metadata) do # rubocop:disable Metrics/BlockLength
       {
@@ -165,7 +165,7 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
     end
   end
 
-  describe 'sections_should_populated test' do # rubocop:disable Metrics/BlockLength
+  describe 'Composition Sections Check - Recommended Sections' do # rubocop:disable Metrics/BlockLength
     let(:test) { find_test(:test_composition_recommended_sections) }
     let(:metadata) do
       {
@@ -240,7 +240,7 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
     end
   end
 
-  describe 'sections_may_populated test' do # rubocop:disable Metrics/BlockLength
+  describe 'Composition Sections Check - Optional Sections' do # rubocop:disable Metrics/BlockLength
     let(:test) { find_test(:test_composition_optional_sections) }
     let(:metadata) do
       {
@@ -280,6 +280,26 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
       expect(messages).to match_array([
                                         have_attributes(type: 'error',
                                                         message: "Patient Summary Advance Directives Section (42348-3)\n\nNo composition section found for code: 42348-3")
+                                      ])
+    end
+
+    it 'fails when an optional section entry references a resource of the wrong type' do
+      observation_entry = FHIR::Bundle::Entry.new(
+        fullUrl: 'urn:uuid:observation-1',
+        resource: FHIR::Observation.new(resourceType: 'Observation', status: 'final',
+                                        code: { coding: [{ code: '1234-5' }] })
+      )
+      bundle = build_bundle(
+        sections: [section_with_entry('42348-3', 'urn:uuid:observation-1')],
+        extra_entries: [observation_entry]
+      )
+      result = run_test(scratch_with(bundle))
+      messages = messages_for(result)
+
+      expect(result.result).to eq('fail')
+      expect(messages).to match_array([
+                                        have_attributes(type: 'error',
+                                                        message: "Patient Summary Advance Directives Section (42348-3)\n\nentry[0]: **urn:uuid:observation-1** -> ❌ Invalid resource type")
                                       ])
     end
   end
