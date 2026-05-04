@@ -238,6 +238,32 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
         ] + au_ps_warnings
       )
     end
+
+    it 'fails when a section entry references a resource of the wrong type' do
+      condition_entry = FHIR::Bundle::Entry.new(
+        fullUrl: 'urn:uuid:condition-1',
+        resource: FHIR::Condition.new(resourceType: 'Condition')
+      )
+      bundle = build_bundle(
+        sections: [
+          section_with_entry('11369-6', 'urn:uuid:condition-1'),
+          section_without_entries('30954-2')
+        ],
+        extra_entries: [condition_entry]
+      )
+      result = run_test(scratch_with(bundle))
+      messages = messages_for(result)
+
+      expect(result.result).to eq('fail')
+      expect(messages).to match_array(
+        [
+          have_attributes(type: 'error',
+                          message: "Patient Summary Immunizations Section (11369-6)\n\nentry[0]: **urn:uuid:condition-1** -> ❌ Invalid resource type"),
+          have_attributes(type: 'info',
+                          message: "Patient Summary Results Section (30954-2)\n\nNo entries; no emptyReason.")
+        ] + au_ps_warnings
+      )
+    end
   end
 
   describe 'Composition Sections Check - Optional Sections' do # rubocop:disable Metrics/BlockLength
