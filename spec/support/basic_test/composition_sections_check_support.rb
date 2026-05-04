@@ -4,7 +4,6 @@ require_relative '../../../lib/au_ps_inferno/utils/composition_utils'
 require_relative '../../../lib/au_ps_inferno/utils/metadata_manager'
 
 module CompositionSectionsCheckSupport
-  BUNDLE_FIXTURE_PATH = 'spec/fixtures/resources/bundle_mandatory_ok.json'
   METADATA_FIXTURE_PATH = 'spec/fixtures/metadata.yaml'
 
   def register_runnable_tree(runnable)
@@ -32,9 +31,41 @@ module CompositionSectionsCheckSupport
     end
   end
 
-  def scratch_with_bundle_fixture
-    bundle_json = File.read(BUNDLE_FIXTURE_PATH)
-    bundle = FHIR::Bundle.new(JSON.parse(bundle_json))
+  def scratch_with(bundle)
     { bundle_ips_resource: bundle }
+  end
+
+  def messages_for(result)
+    Inferno::Repositories::Messages.new.messages_for_result(result.id)
+  end
+
+  def build_bundle(sections:, extra_entries: []) # rubocop:disable Metrics/MethodLength
+    composition_entry = FHIR::Bundle::Entry.new(
+      fullUrl: 'urn:uuid:composition-1',
+      resource: FHIR::Composition.new(
+        resourceType: 'Composition',
+        status: 'final',
+        type: { coding: [{ code: '60591-5' }] },
+        subject: { reference: 'urn:uuid:patient-1' },
+        section: sections
+      )
+    )
+    patient_entry = FHIR::Bundle::Entry.new(
+      fullUrl: 'urn:uuid:patient-1',
+      resource: FHIR::Patient.new
+    )
+    FHIR::Bundle.new(
+      resourceType: 'Bundle',
+      type: 'document',
+      entry: [composition_entry, patient_entry] + extra_entries
+    )
+  end
+
+  def section_without_entries(code)
+    { code: { coding: [{ code: code }] } }
+  end
+
+  def section_with_entry(code, reference)
+    { code: { coding: [{ code: code }] }, entry: [{ reference: reference }] }
   end
 end
