@@ -4,8 +4,6 @@ require_relative '../../../lib/au_ps_inferno/utils/composition_utils'
 require_relative '../../../lib/au_ps_inferno/utils/metadata_manager'
 
 module CompositionSectionsCheckSupport
-  METADATA_FIXTURE_PATH = 'spec/fixtures/metadata.yaml'
-
   def register_runnable_tree(runnable)
     repo_for(runnable)&.then { |repo| repo.insert(runnable) unless repo.exists?(runnable.id) }
     return unless runnable.respond_to?(:children)
@@ -21,13 +19,16 @@ module CompositionSectionsCheckSupport
     nil
   end
 
-  def configure_test_class(test_class)
+  def configure_test_class(test_class, metadata)
+    manager = AUPSTestKit::MetadataManager.new(nil).tap do |m|
+      allow(m).to receive(:metadata).and_return(metadata)
+    end
     test_class.class_eval do
       include CompositionUtils unless ancestors.include?(CompositionUtils)
       unless ancestors.include?(AUPSTestKit::BasicTestCompositionSectionReadModule)
         include AUPSTestKit::BasicTestCompositionSectionReadModule
       end
-      define_method(:metadata_manager) { @metadata_manager ||= AUPSTestKit::MetadataManager.new(METADATA_FIXTURE_PATH) }
+      define_method(:metadata_manager) { manager }
     end
   end
 
@@ -72,4 +73,13 @@ module CompositionSectionsCheckSupport
   def section_with_entry(code, reference)
     { code: { coding: [{ code: code }] }, entry: [{ reference: reference }] }
   end
+end
+
+RSpec.shared_context 'composition sections check setup' do
+  include CompositionSectionsCheckSupport
+
+  let(:suite_id) { 'composition_sections_check_suite' }
+  let(:suite) { described_class }
+
+  before { register_runnable_tree(described_class) }
 end
