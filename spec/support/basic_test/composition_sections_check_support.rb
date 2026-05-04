@@ -58,6 +58,10 @@ module CompositionSectionsCheckSupport
   def section_with_entry(code, reference)
     { code: { coding: [{ code: code }] }, entry: [{ reference: reference }] }
   end
+
+  def section_with_empty_reason(code, display:, reason_code:)
+    { code: { coding: [{ code: code }] }, emptyReason: { coding: [{ display: display, code: reason_code }] } }
+  end
 end
 
 RSpec.shared_context 'composition sections check setup' do

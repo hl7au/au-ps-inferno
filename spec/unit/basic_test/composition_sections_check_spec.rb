@@ -103,6 +103,28 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
       )
     end
 
+    it 'passes when a section has an emptyReason instead of entries' do
+      bundle = build_bundle(sections: [
+                              section_with_empty_reason('11450-4', display: 'Withheld', reason_code: 'withheld'),
+                              section_without_entries('48765-2'),
+                              section_without_entries('10160-0')
+                            ])
+      result = run_test(scratch_with(bundle))
+      messages = messages_for(result)
+
+      expect(result.result).to eq('pass'), result.result_message
+      expect(messages).to match_array(
+        [
+          have_attributes(type: 'info',
+                          message: "Patient Summary Problems Section (11450-4)\n\nemptyReason: Withheld (withheld)"),
+          have_attributes(type: 'info',
+                          message: "Patient Summary Allergies and Intolerances Section (48765-2)\n\nNo entries; no emptyReason."),
+          have_attributes(type: 'info',
+                          message: "Patient Summary Medication Summary Section (10160-0)\n\nNo entries; no emptyReason.")
+        ] + au_ps_warnings
+      )
+    end
+
     it 'fails when a mandatory section is absent from the composition' do
       bundle = build_bundle(sections: [
                               section_without_entries('48765-2'),
@@ -174,6 +196,38 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
       expect(problems_section_message).to have_attributes(
         type: 'info',
         message: "Patient Summary Problems Section (11450-4)\n\nentry[0]: **urn:uuid:condition-1** -> Condition (no meta.profile)"
+      )
+    end
+
+    it 'passes when a section entry reference resolves with meta.profile' do
+      condition_entry = FHIR::Bundle::Entry.new(
+        fullUrl: 'urn:uuid:condition-1',
+        resource: FHIR::Condition.new(
+          resourceType: 'Condition',
+          meta: { profile: ['http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-condition'] },
+          category: [{ coding: [{ code: 'problem-list-item' }] }],
+          code: { coding: [{ code: '160245001' }] },
+          subject: { reference: 'urn:uuid:patient-1' }
+        )
+      )
+      bundle = build_bundle(
+        sections: [
+          section_with_entry('11450-4', 'urn:uuid:condition-1'),
+          section_without_entries('48765-2'),
+          section_without_entries('10160-0')
+        ],
+        extra_entries: [condition_entry]
+      )
+      result = run_test(scratch_with(bundle))
+      messages = messages_for(result)
+      problems_section_message = messages.find do |message|
+        message.type == 'info' && message.message.start_with?('Patient Summary Problems Section (11450-4)')
+      end
+
+      expect(result.result).to eq('pass'), result.result_message
+      expect(problems_section_message).to have_attributes(
+        type: 'info',
+        message: "Patient Summary Problems Section (11450-4)\n\nentry[0]: **urn:uuid:condition-1** -> Condition (meta.profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-condition)"
       )
     end
 
@@ -368,6 +422,13 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
         ] + au_ps_warnings
       )
     end
+
+    it 'skips when no bundle is provided in scratch' do
+      result = run_test({})
+
+      expect(result.result).to eq('skip')
+      expect(messages_for(result)).to be_empty
+    end
   end
 
   describe 'Composition Sections Check - Optional Sections' do # rubocop:disable Metrics/BlockLength
@@ -431,6 +492,13 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
                                         have_attributes(type: 'error',
                                                         message: "Patient Summary Advance Directives Section (42348-3)\n\nentry[0]: **urn:uuid:observation-1** -> ❌ Invalid resource type")
                                       ])
+    end
+
+    it 'skips when no bundle is provided in scratch' do
+      result = run_test({})
+
+      expect(result.result).to eq('skip')
+      expect(messages_for(result)).to be_empty
     end
   end
 end
