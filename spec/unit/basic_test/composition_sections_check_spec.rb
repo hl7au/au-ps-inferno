@@ -28,7 +28,7 @@ RSpec.describe CompositionSectionsCheckSuiteKit::CompositionSectionsCheckSuite d
                               section_without_entries('48765-2'),
                               section_without_entries('10160-0')
                             ])
-      result = run(test, {}, scratch_with(bundle))
+      result = run_test(scratch_with(bundle))
       messages = messages_for(result)
 
       expect(result.result).to eq('pass'), result.result_message
@@ -41,7 +41,7 @@ RSpec.describe CompositionSectionsCheckSuiteKit::CompositionSectionsCheckSuite d
                               section_without_entries('48765-2'),
                               section_without_entries('10160-0')
                             ])
-      result = run(test, {}, scratch_with(bundle))
+      result = run_test(scratch_with(bundle))
       messages = messages_for(result)
 
       expect(result.result).to eq('fail')
@@ -55,7 +55,7 @@ RSpec.describe CompositionSectionsCheckSuiteKit::CompositionSectionsCheckSuite d
                               section_without_entries('48765-2'),
                               section_without_entries('10160-0')
                             ])
-      result = run(test, {}, scratch_with(bundle))
+      result = run_test(scratch_with(bundle))
       messages = messages_for(result)
 
       expect(result.result).to eq('fail')
@@ -77,7 +77,7 @@ RSpec.describe CompositionSectionsCheckSuiteKit::CompositionSectionsCheckSuite d
         ],
         extra_entries: [observation_entry]
       )
-      result = run(test, {}, scratch_with(bundle))
+      result = run_test(scratch_with(bundle))
       messages = messages_for(result)
 
       expect(result.result).to eq('fail')
@@ -86,7 +86,7 @@ RSpec.describe CompositionSectionsCheckSuiteKit::CompositionSectionsCheckSuite d
     end
 
     it 'skips when no bundle is provided in scratch' do
-      result = run(test, {}, {})
+      result = run_test({})
 
       expect(result.result).to eq('skip')
     end
@@ -102,7 +102,7 @@ RSpec.describe CompositionSectionsCheckSuiteKit::CompositionSectionsCheckSuite d
                               section_without_entries('11369-6'),
                               section_without_entries('30954-2')
                             ])
-      result = run(test, {}, scratch_with(bundle))
+      result = run_test(scratch_with(bundle))
       messages = messages_for(result)
 
       expect(result.result).to eq('pass'), result.result_message
@@ -112,7 +112,7 @@ RSpec.describe CompositionSectionsCheckSuiteKit::CompositionSectionsCheckSuite d
 
     it 'fails when a recommended section is absent from the composition' do
       bundle = build_bundle(sections: [section_without_entries('30954-2')])
-      result = run(test, {}, scratch_with(bundle))
+      result = run_test(scratch_with(bundle))
       messages = messages_for(result)
 
       expect(result.result).to eq('fail')
@@ -128,7 +128,7 @@ RSpec.describe CompositionSectionsCheckSuiteKit::CompositionSectionsCheckSuite d
 
     it 'passes when the optional section is present' do
       bundle = build_bundle(sections: [section_without_entries('42348-3')])
-      result = run(test, {}, scratch_with(bundle))
+      result = run_test(scratch_with(bundle))
       messages = messages_for(result)
 
       expect(result.result).to eq('pass'), result.result_message
@@ -138,7 +138,7 @@ RSpec.describe CompositionSectionsCheckSuiteKit::CompositionSectionsCheckSuite d
 
     it 'fails when the optional section is absent from the composition' do
       bundle = build_bundle(sections: [])
-      result = run(test, {}, scratch_with(bundle))
+      result = run_test(scratch_with(bundle))
       messages = messages_for(result)
 
       expect(result.result).to eq('fail')

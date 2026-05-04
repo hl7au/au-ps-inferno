@@ -31,6 +31,10 @@ module CompositionSectionsCheckSupport
     end
   end
 
+  def run_test(scratch)
+    run(test, {}, scratch)
+  end
+
   def scratch_with(bundle)
     { bundle_ips_resource: bundle }
   end
