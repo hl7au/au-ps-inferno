@@ -43,6 +43,25 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
                            'MedicationRequest|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medicationrequest'] }
             ]
           }
+        ],
+        groups: [
+          {
+            resource: 'Condition',
+            must_supports: {
+              elements: [
+                { path: 'category' },
+                { path: 'code' },
+                { path: 'subject' },
+                { path: 'subject.reference' }
+              ]
+            },
+            mandatory_elements: %w[
+              Condition.category
+              Condition.code
+              Condition.subject
+              Condition.subject.reference
+            ]
+          }
         ]
       }
     end
@@ -124,6 +143,37 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
           have_attributes(type: 'info',
                           message: "Patient Summary Medication Summary Section (10160-0)\n\nNo entries; no emptyReason.")
         ] + au_ps_warnings
+      )
+    end
+
+    it 'passes when a section entry reference resolves with no meta.profile' do
+      condition_entry = FHIR::Bundle::Entry.new(
+        fullUrl: 'urn:uuid:condition-1',
+        resource: FHIR::Condition.new(
+          resourceType: 'Condition',
+          category: [{ coding: [{ code: 'problem-list-item' }] }],
+          code: { coding: [{ code: '160245001' }] },
+          subject: { reference: 'urn:uuid:patient-1' }
+        )
+      )
+      bundle = build_bundle(
+        sections: [
+          section_with_entry('11450-4', 'urn:uuid:condition-1'),
+          section_without_entries('48765-2'),
+          section_without_entries('10160-0')
+        ],
+        extra_entries: [condition_entry]
+      )
+      result = run_test(scratch_with(bundle))
+      messages = messages_for(result)
+      problems_section_message = messages.find do |message|
+        message.type == 'info' && message.message.start_with?('Patient Summary Problems Section (11450-4)')
+      end
+
+      expect(result.result).to eq('pass'), result.result_message
+      expect(problems_section_message).to have_attributes(
+        type: 'info',
+        message: "Patient Summary Problems Section (11450-4)\n\nentry[0]: **urn:uuid:condition-1** -> Condition (no meta.profile)"
       )
     end
 
