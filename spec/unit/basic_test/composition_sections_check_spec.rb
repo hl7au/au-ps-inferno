@@ -157,6 +157,24 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
       )
     end
 
+    it 'fails when all mandatory sections are absent from the composition' do
+      bundle = build_bundle(sections: [])
+      result = run_test(scratch_with(bundle))
+      messages = messages_for(result)
+
+      expect(result.result).to eq('fail')
+      expect(messages).to match_array(
+        [
+          have_attributes(type: 'error',
+                          message: "Patient Summary Problems Section (11450-4)\n\nNo composition section found for code: 11450-4"),
+          have_attributes(type: 'error',
+                          message: "Patient Summary Allergies and Intolerances Section (48765-2)\n\nNo composition section found for code: 48765-2"),
+          have_attributes(type: 'error',
+                          message: "Patient Summary Medication Summary Section (10160-0)\n\nNo composition section found for code: 10160-0")
+        ] + au_ps_warnings
+      )
+    end
+
     it 'skips when no bundle is provided in scratch' do
       result = run_test({})
 
