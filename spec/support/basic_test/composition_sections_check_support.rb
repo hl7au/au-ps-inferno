@@ -37,6 +37,13 @@ module CompositionSectionsCheckSupport
     Inferno::Repositories::Messages.new.messages_for_result(result.id)
   end
 
+  def expect_messages(messages, expected_messages)
+    expect(messages.size).to eq(expected_messages.size)
+    expected_messages.each do |expected_message|
+      expect(messages).to include_message(type: expected_message[:type], text: expected_message[:text])
+    end
+  end
+
   def build_bundle(sections:, extra_entries: [])
     build_fhir_bundle(sections: sections, extra_entries: extra_entries)
   end

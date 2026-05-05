@@ -68,14 +68,14 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
 
     let(:au_ps_warnings) do
       [
-        have_attributes(type: 'warning',
-                        message: "**Profile**: Condition — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-condition\n\n**Message**: No resources found"),
-        have_attributes(type: 'warning',
-                        message: "**Profile**: AllergyIntolerance — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-allergyintolerance\n\n**Message**: No resources found"),
-        have_attributes(type: 'warning',
-                        message: "**Profile**: MedicationStatement — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medicationstatement\n\n**Message**: No resources found"),
-        have_attributes(type: 'warning',
-                        message: "**Profile**: MedicationRequest — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medicationrequest\n\n**Message**: No resources found")
+        { type: 'warning',
+          text: "**Profile**: Condition — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-condition\n\n**Message**: No resources found" },
+        { type: 'warning',
+          text: "**Profile**: AllergyIntolerance — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-allergyintolerance\n\n**Message**: No resources found" },
+        { type: 'warning',
+          text: "**Profile**: MedicationStatement — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medicationstatement\n\n**Message**: No resources found" },
+        { type: 'warning',
+          text: "**Profile**: MedicationRequest — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medicationrequest\n\n**Message**: No resources found" }
       ]
     end
 
@@ -90,16 +90,14 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
       result, messages = run_bundle(bundle)
 
       expect(result.result).to eq('pass'), result.result_message
-      expect(messages).to match_array(
-        [
-          have_attributes(type: 'info',
-                          message: "Patient Summary Problems Section (11450-4)\n\nNo entries; no emptyReason."),
-          have_attributes(type: 'info',
-                          message: "Patient Summary Allergies and Intolerances Section (48765-2)\n\nNo entries; no emptyReason."),
-          have_attributes(type: 'info',
-                          message: "Patient Summary Medication Summary Section (10160-0)\n\nNo entries; no emptyReason.")
-        ] + au_ps_warnings
-      )
+      expect_messages(messages, [
+        { type: 'info',
+          text: "Patient Summary Problems Section (11450-4)\n\nNo entries; no emptyReason." },
+        { type: 'info',
+          text: "Patient Summary Allergies and Intolerances Section (48765-2)\n\nNo entries; no emptyReason." },
+        { type: 'info',
+          text: "Patient Summary Medication Summary Section (10160-0)\n\nNo entries; no emptyReason." }
+      ] + au_ps_warnings)
     end
 
     it 'passes when a section has an emptyReason instead of entries' do
@@ -111,16 +109,14 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
       result, messages = run_bundle(bundle)
 
       expect(result.result).to eq('pass'), result.result_message
-      expect(messages).to match_array(
-        [
-          have_attributes(type: 'info',
-                          message: "Patient Summary Problems Section (11450-4)\n\nemptyReason: Withheld (withheld)"),
-          have_attributes(type: 'info',
-                          message: "Patient Summary Allergies and Intolerances Section (48765-2)\n\nNo entries; no emptyReason."),
-          have_attributes(type: 'info',
-                          message: "Patient Summary Medication Summary Section (10160-0)\n\nNo entries; no emptyReason.")
-        ] + au_ps_warnings
-      )
+      expect_messages(messages, [
+        { type: 'info',
+          text: "Patient Summary Problems Section (11450-4)\n\nemptyReason: Withheld (withheld)" },
+        { type: 'info',
+          text: "Patient Summary Allergies and Intolerances Section (48765-2)\n\nNo entries; no emptyReason." },
+        { type: 'info',
+          text: "Patient Summary Medication Summary Section (10160-0)\n\nNo entries; no emptyReason." }
+      ] + au_ps_warnings)
     end
 
     it 'fails when a mandatory section is absent from the composition' do
@@ -131,16 +127,14 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
       result, messages = run_bundle(bundle)
 
       expect(result.result).to eq('fail')
-      expect(messages).to match_array(
-        [
-          have_attributes(type: 'error',
-                          message: "Patient Summary Problems Section (11450-4)\n\nNo composition section found for code: 11450-4"),
-          have_attributes(type: 'info',
-                          message: "Patient Summary Allergies and Intolerances Section (48765-2)\n\nNo entries; no emptyReason."),
-          have_attributes(type: 'info',
-                          message: "Patient Summary Medication Summary Section (10160-0)\n\nNo entries; no emptyReason.")
-        ] + au_ps_warnings
-      )
+      expect_messages(messages, [
+        { type: 'error',
+          text: "Patient Summary Problems Section (11450-4)\n\nNo composition section found for code: 11450-4" },
+        { type: 'info',
+          text: "Patient Summary Allergies and Intolerances Section (48765-2)\n\nNo entries; no emptyReason." },
+        { type: 'info',
+          text: "Patient Summary Medication Summary Section (10160-0)\n\nNo entries; no emptyReason." }
+      ] + au_ps_warnings)
     end
 
     it 'fails when a section entry reference does not resolve' do
@@ -152,16 +146,14 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
       result, messages = run_bundle(bundle)
 
       expect(result.result).to eq('fail')
-      expect(messages).to match_array(
-        [
-          have_attributes(type: 'error',
-                          message: "Patient Summary Problems Section (11450-4)\n\n**urn:uuid:missing-condition-1** -> ❌ Reference does not resolve"),
-          have_attributes(type: 'info',
-                          message: "Patient Summary Allergies and Intolerances Section (48765-2)\n\nNo entries; no emptyReason."),
-          have_attributes(type: 'info',
-                          message: "Patient Summary Medication Summary Section (10160-0)\n\nNo entries; no emptyReason.")
-        ] + au_ps_warnings
-      )
+      expect_messages(messages, [
+        { type: 'error',
+          text: "Patient Summary Problems Section (11450-4)\n\n**urn:uuid:missing-condition-1** -> ❌ Reference does not resolve" },
+        { type: 'info',
+          text: "Patient Summary Allergies and Intolerances Section (48765-2)\n\nNo entries; no emptyReason." },
+        { type: 'info',
+          text: "Patient Summary Medication Summary Section (10160-0)\n\nNo entries; no emptyReason." }
+      ] + au_ps_warnings)
     end
 
     it 'passes when a section entry reference resolves with no meta.profile' do
@@ -183,14 +175,10 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
         extra_entries: [condition_entry]
       )
       result, messages = run_bundle(bundle)
-      problems_section_message = messages.find do |message|
-        message.type == 'info' && message.message.start_with?('Patient Summary Problems Section (11450-4)')
-      end
-
       expect(result.result).to eq('pass'), result.result_message
-      expect(problems_section_message).to have_attributes(
+      expect(messages).to include_message(
         type: 'info',
-        message: "Patient Summary Problems Section (11450-4)\n\nentry[0]: **urn:uuid:condition-1** -> Condition (no meta.profile)"
+        text: "Patient Summary Problems Section (11450-4)\n\nentry[0]: **urn:uuid:condition-1** -> Condition (no meta.profile)"
       )
     end
 
@@ -214,18 +202,14 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
         extra_entries: [condition_entry]
       )
       result, messages = run_bundle(bundle)
-      problems_section_message = messages.find do |message|
-        message.type == 'info' && message.message.start_with?('Patient Summary Problems Section (11450-4)')
-      end
-
       expect(result.result).to eq('pass'), result.result_message
-      expect(problems_section_message).to have_attributes(
+      expect(messages).to include_message(
         type: 'info',
-        message: "Patient Summary Problems Section (11450-4)\n\nentry[0]: **urn:uuid:condition-1** -> Condition (meta.profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-condition)"
+        text: "Patient Summary Problems Section (11450-4)\n\nentry[0]: **urn:uuid:condition-1** -> Condition (meta.profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-condition)"
       )
     end
 
-    it 'fails when a section entry references a resource of the wrong type' do # rubocop:disable Metrics/BlockLength
+    it 'fails when a section entry references a resource of the wrong type' do
       observation_entry = FHIR::Bundle::Entry.new(
         fullUrl: 'urn:uuid:observation-1',
         resource: FHIR::Observation.new(resourceType: 'Observation', status: 'final',
@@ -242,16 +226,14 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
       result, messages = run_bundle(bundle)
 
       expect(result.result).to eq('fail')
-      expect(messages).to match_array(
-        [
-          have_attributes(type: 'error',
-                          message: "Patient Summary Problems Section (11450-4)\n\nentry[0]: **urn:uuid:observation-1** -> ❌ Invalid resource type"),
-          have_attributes(type: 'info',
-                          message: "Patient Summary Allergies and Intolerances Section (48765-2)\n\nNo entries; no emptyReason."),
-          have_attributes(type: 'info',
-                          message: "Patient Summary Medication Summary Section (10160-0)\n\nNo entries; no emptyReason.")
-        ] + au_ps_warnings
-      )
+      expect_messages(messages, [
+        { type: 'error',
+          text: "Patient Summary Problems Section (11450-4)\n\nentry[0]: **urn:uuid:observation-1** -> ❌ Invalid resource type" },
+        { type: 'info',
+          text: "Patient Summary Allergies and Intolerances Section (48765-2)\n\nNo entries; no emptyReason." },
+        { type: 'info',
+          text: "Patient Summary Medication Summary Section (10160-0)\n\nNo entries; no emptyReason." }
+      ] + au_ps_warnings)
     end
 
     it 'fails when section entries mix resolved and unresolved references' do # rubocop:disable Metrics/BlockLength
@@ -294,16 +276,14 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
       result, messages = run_bundle(bundle)
 
       expect(result.result).to eq('fail')
-      expect(messages).to match_array(
-        [
-          have_attributes(type: 'error',
-                          message: "Patient Summary Problems Section (11450-4)\n\nNo composition section found for code: 11450-4"),
-          have_attributes(type: 'error',
-                          message: "Patient Summary Allergies and Intolerances Section (48765-2)\n\nNo composition section found for code: 48765-2"),
-          have_attributes(type: 'error',
-                          message: "Patient Summary Medication Summary Section (10160-0)\n\nNo composition section found for code: 10160-0")
-        ] + au_ps_warnings
-      )
+      expect_messages(messages, [
+        { type: 'error',
+          text: "Patient Summary Problems Section (11450-4)\n\nNo composition section found for code: 11450-4" },
+        { type: 'error',
+          text: "Patient Summary Allergies and Intolerances Section (48765-2)\n\nNo composition section found for code: 48765-2" },
+        { type: 'error',
+          text: "Patient Summary Medication Summary Section (10160-0)\n\nNo composition section found for code: 10160-0" }
+      ] + au_ps_warnings)
     end
 
     it 'skips when no bundle is provided in scratch' do
@@ -344,10 +324,10 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
 
     let(:au_ps_warnings) do
       [
-        have_attributes(type: 'warning',
-                        message: "**Profile**: Immunization — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-immunization\n\n**Message**: No resources found"),
-        have_attributes(type: 'warning',
-                        message: "**Profile**: Observation — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-diagnosticresult-path\n\n**Message**: No resources found")
+        { type: 'warning',
+          text: "**Profile**: Immunization — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-immunization\n\n**Message**: No resources found" },
+        { type: 'warning',
+          text: "**Profile**: Observation — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-diagnosticresult-path\n\n**Message**: No resources found" }
       ]
     end
 
@@ -361,14 +341,12 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
       result, messages = run_bundle(bundle)
 
       expect(result.result).to eq('pass'), result.result_message
-      expect(messages).to match_array(
-        [
-          have_attributes(type: 'info',
-                          message: "Patient Summary Immunizations Section (11369-6)\n\nNo entries; no emptyReason."),
-          have_attributes(type: 'info',
-                          message: "Patient Summary Results Section (30954-2)\n\nNo entries; no emptyReason.")
-        ] + au_ps_warnings
-      )
+      expect_messages(messages, [
+        { type: 'info',
+          text: "Patient Summary Immunizations Section (11369-6)\n\nNo entries; no emptyReason." },
+        { type: 'info',
+          text: "Patient Summary Results Section (30954-2)\n\nNo entries; no emptyReason." }
+      ] + au_ps_warnings)
     end
 
     it 'fails when a recommended section is absent from the composition' do
@@ -376,14 +354,12 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
       result, messages = run_bundle(bundle)
 
       expect(result.result).to eq('fail')
-      expect(messages).to match_array(
-        [
-          have_attributes(type: 'error',
-                          message: "Patient Summary Immunizations Section (11369-6)\n\nNo composition section found for code: 11369-6"),
-          have_attributes(type: 'info',
-                          message: "Patient Summary Results Section (30954-2)\n\nNo entries; no emptyReason.")
-        ] + au_ps_warnings
-      )
+      expect_messages(messages, [
+        { type: 'error',
+          text: "Patient Summary Immunizations Section (11369-6)\n\nNo composition section found for code: 11369-6" },
+        { type: 'info',
+          text: "Patient Summary Results Section (30954-2)\n\nNo entries; no emptyReason." }
+      ] + au_ps_warnings)
     end
 
     it 'fails when a section entry references a resource of the wrong type' do
@@ -401,14 +377,12 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
       result, messages = run_bundle(bundle)
 
       expect(result.result).to eq('fail')
-      expect(messages).to match_array(
-        [
-          have_attributes(type: 'error',
-                          message: "Patient Summary Immunizations Section (11369-6)\n\nentry[0]: **urn:uuid:condition-1** -> ❌ Invalid resource type"),
-          have_attributes(type: 'info',
-                          message: "Patient Summary Results Section (30954-2)\n\nNo entries; no emptyReason.")
-        ] + au_ps_warnings
-      )
+      expect_messages(messages, [
+        { type: 'error',
+          text: "Patient Summary Immunizations Section (11369-6)\n\nentry[0]: **urn:uuid:condition-1** -> ❌ Invalid resource type" },
+        { type: 'info',
+          text: "Patient Summary Results Section (30954-2)\n\nNo entries; no emptyReason." }
+      ] + au_ps_warnings)
     end
 
     it 'skips when no bundle is provided in scratch' do
@@ -443,10 +417,10 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
       result, messages = run_bundle(bundle)
 
       expect(result.result).to eq('pass'), result.result_message
-      expect(messages).to match_array([
-                                        have_attributes(type: 'info',
-                                                        message: "Patient Summary Advance Directives Section (42348-3)\n\nNo entries; no emptyReason.")
-                                      ])
+      expect_messages(messages, [
+                        { type: 'info',
+                          text: "Patient Summary Advance Directives Section (42348-3)\n\nNo entries; no emptyReason." }
+                      ])
     end
 
     it 'fails when the optional section is absent from the composition' do
@@ -454,10 +428,10 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
       result, messages = run_bundle(bundle)
 
       expect(result.result).to eq('fail')
-      expect(messages).to match_array([
-                                        have_attributes(type: 'error',
-                                                        message: "Patient Summary Advance Directives Section (42348-3)\n\nNo composition section found for code: 42348-3")
-                                      ])
+      expect_messages(messages, [
+                        { type: 'error',
+                          text: "Patient Summary Advance Directives Section (42348-3)\n\nNo composition section found for code: 42348-3" }
+                      ])
     end
 
     it 'fails when an optional section entry references a resource of the wrong type' do
@@ -473,10 +447,10 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
       result, messages = run_bundle(bundle)
 
       expect(result.result).to eq('fail')
-      expect(messages).to match_array([
-                                        have_attributes(type: 'error',
-                                                        message: "Patient Summary Advance Directives Section (42348-3)\n\nentry[0]: **urn:uuid:observation-1** -> ❌ Invalid resource type")
-                                      ])
+      expect_messages(messages, [
+                        { type: 'error',
+                          text: "Patient Summary Advance Directives Section (42348-3)\n\nentry[0]: **urn:uuid:observation-1** -> ❌ Invalid resource type" }
+                      ])
     end
 
     it 'skips when no bundle is provided in scratch' do

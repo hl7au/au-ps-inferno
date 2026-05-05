@@ -140,6 +140,7 @@ FactoryBot.definition_file_paths = [
 ]
 
 RSpec::Matchers.define_negated_matcher :exclude, :include
+require_relative 'support/matchers/message_matchers'
 
 FHIR.logger = Inferno::Application['logger']
 

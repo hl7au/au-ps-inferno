@@ -5,6 +5,7 @@ require_relative 'basic_test_instance_setup'
 
 RSpec.shared_context 'references resolution report setup' do
   include FhirBundleHelpers
+
   include_context 'basic test instance setup'
 
   def build_bundle(section_code:, references:, bundle_entries:)
