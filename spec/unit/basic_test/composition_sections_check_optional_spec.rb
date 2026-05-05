@@ -12,20 +12,7 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
 
   describe 'Composition Sections Check - Optional Sections' do # rubocop:disable Metrics/BlockLength
     let(:test) { find_test(:test_composition_optional_sections) }
-    let(:metadata) do
-      {
-        composition_sections: [
-          {
-            code: CompositionSectionsConstants::ADVANCE_DIRECTIVES_SECTION[:code],
-            short: CompositionSectionsConstants::ADVANCE_DIRECTIVES_SECTION[:title],
-            entries: [
-              { profiles: ['Consent|http://hl7.org/fhir/StructureDefinition/Consent',
-                           'DocumentReference|http://hl7.org/fhir/StructureDefinition/DocumentReference'] }
-            ]
-          }
-        ]
-      }
-    end
+    let(:metadata) { CompositionSectionsMetadata::OPTIONAL_SECTIONS }
 
     before { configure_test_class(test, metadata) }
 

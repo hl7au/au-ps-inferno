@@ -12,59 +12,7 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
 
   describe 'Composition Sections Check - Mandatory Sections' do # rubocop:disable Metrics/BlockLength
     let(:test) { find_test(:test_composition_mandatory_sections) }
-    let(:metadata) do # rubocop:disable Metrics/BlockLength
-      {
-        composition_sections: [
-          {
-            code: CompositionSectionsConstants::PROBLEMS_SECTION[:code],
-            short: CompositionSectionsConstants::PROBLEMS_SECTION[:title],
-            entries: [
-              { profiles: ['Condition|http://hl7.org/fhir/StructureDefinition/Condition',
-                           'DocumentReference|http://hl7.org/fhir/StructureDefinition/DocumentReference'] },
-              { profiles: ['Condition|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-condition'] }
-            ]
-          },
-          {
-            code: CompositionSectionsConstants::ALLERGIES_SECTION[:code],
-            short: CompositionSectionsConstants::ALLERGIES_SECTION[:title],
-            entries: [
-              { profiles: ['AllergyIntolerance|http://hl7.org/fhir/StructureDefinition/AllergyIntolerance',
-                           'DocumentReference|http://hl7.org/fhir/StructureDefinition/DocumentReference'] },
-              { profiles: ['AllergyIntolerance|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-allergyintolerance'] }
-            ]
-          },
-          {
-            code: CompositionSectionsConstants::MEDICATION_SECTION[:code],
-            short: CompositionSectionsConstants::MEDICATION_SECTION[:title],
-            entries: [
-              { profiles: ['MedicationStatement|http://hl7.org/fhir/StructureDefinition/MedicationStatement',
-                           'MedicationRequest|http://hl7.org/fhir/StructureDefinition/MedicationRequest'] },
-              { profiles: ['MedicationStatement|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medicationstatement',
-                           'MedicationRequest|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medicationrequest'] }
-            ]
-          }
-        ],
-        groups: [
-          {
-            resource: 'Condition',
-            must_supports: {
-              elements: [
-                { path: 'category' },
-                { path: 'code' },
-                { path: 'subject' },
-                { path: 'subject.reference' }
-              ]
-            },
-            mandatory_elements: %w[
-              Condition.category
-              Condition.code
-              Condition.subject
-              Condition.subject.reference
-            ]
-          }
-        ]
-      }
-    end
+    let(:metadata) { CompositionSectionsMetadata::MANDATORY_SECTIONS }
 
     before { configure_test_class(test, metadata) }
 

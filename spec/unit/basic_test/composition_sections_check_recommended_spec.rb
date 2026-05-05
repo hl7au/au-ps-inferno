@@ -12,31 +12,7 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
 
   describe 'Composition Sections Check - Recommended Sections' do # rubocop:disable Metrics/BlockLength
     let(:test) { find_test(:test_composition_recommended_sections) }
-    let(:metadata) do
-      {
-        composition_sections: [
-          {
-            code: CompositionSectionsConstants::IMMUNIZATIONS_SECTION[:code],
-            short: CompositionSectionsConstants::IMMUNIZATIONS_SECTION[:title],
-            entries: [
-              { profiles: ['Immunization|http://hl7.org/fhir/StructureDefinition/Immunization',
-                           'DocumentReference|http://hl7.org/fhir/StructureDefinition/DocumentReference'] },
-              { profiles: ['Immunization|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-immunization'] }
-            ]
-          },
-          {
-            code: CompositionSectionsConstants::RESULTS_SECTION[:code],
-            short: CompositionSectionsConstants::RESULTS_SECTION[:title],
-            entries: [
-              { profiles: ['Observation|http://hl7.org/fhir/StructureDefinition/Observation',
-                           'DiagnosticReport|http://hl7.org/fhir/StructureDefinition/DiagnosticReport',
-                           'DocumentReference|http://hl7.org/fhir/StructureDefinition/DocumentReference'] },
-              { profiles: ['Observation|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-diagnosticresult-path'] }
-            ]
-          }
-        ]
-      }
-    end
+    let(:metadata) { CompositionSectionsMetadata::RECOMMENDED_SECTIONS }
 
     before { configure_test_class(test, metadata) }
 
