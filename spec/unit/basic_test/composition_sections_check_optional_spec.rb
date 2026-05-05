@@ -33,14 +33,14 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
       outcome = run_with_sections(test, sections: [section_without_entries(CompositionSectionsConstants::ADVANCE_DIRECTIVES_SECTION[:code])])
 
       expect_pass(outcome)
-      expect_info_message(outcome, "#{CompositionSectionsConstants::ADVANCE_DIRECTIVES_SECTION[:title]} (#{CompositionSectionsConstants::ADVANCE_DIRECTIVES_SECTION[:code]})\n\nNo entries; no emptyReason.")
+      expect_info_message(outcome, "Patient Summary Advance Directives Section (42348-3)\n\nNo entries; no emptyReason.")
     end
 
     it 'fails when the optional section is absent from the composition' do
       outcome = run_with_sections(test, sections: [])
 
       expect_fail(outcome)
-      expect_error_message(outcome, "#{CompositionSectionsConstants::ADVANCE_DIRECTIVES_SECTION[:title]} (#{CompositionSectionsConstants::ADVANCE_DIRECTIVES_SECTION[:code]})\n\nNo composition section found for code: #{CompositionSectionsConstants::ADVANCE_DIRECTIVES_SECTION[:code]}")
+      expect_error_message(outcome, "Patient Summary Advance Directives Section (42348-3)\n\nNo composition section found for code: 42348-3")
     end
 
     it 'fails when an optional section entry references a resource of the wrong type' do
@@ -51,7 +51,7 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
       )
 
       expect_fail(outcome)
-      expect_error_message(outcome, "#{CompositionSectionsConstants::ADVANCE_DIRECTIVES_SECTION[:title]} (#{CompositionSectionsConstants::ADVANCE_DIRECTIVES_SECTION[:code]})\n\nentry[0]: **urn:uuid:observation-1** -> ❌ Invalid resource type")
+      expect_error_message(outcome, "Patient Summary Advance Directives Section (42348-3)\n\nentry[0]: **urn:uuid:observation-1** -> ❌ Invalid resource type")
     end
 
     it 'skips when no bundle is provided in scratch' do

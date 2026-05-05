@@ -50,8 +50,8 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
       )
 
       expect_pass(outcome)
-      expect_info_message(outcome, "#{CompositionSectionsConstants::IMMUNIZATIONS_SECTION[:title]} (#{CompositionSectionsConstants::IMMUNIZATIONS_SECTION[:code]})\n\nNo entries; no emptyReason.")
-      expect_info_message(outcome, "#{CompositionSectionsConstants::RESULTS_SECTION[:title]} (#{CompositionSectionsConstants::RESULTS_SECTION[:code]})\n\nNo entries; no emptyReason.")
+      expect_info_message(outcome, "Patient Summary Immunizations Section (11369-6)\n\nNo entries; no emptyReason.")
+      expect_info_message(outcome, "Patient Summary Results Section (30954-2)\n\nNo entries; no emptyReason.")
       expect_warning_message(outcome, "**Profile**: Immunization — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-immunization\n\n**Message**: No resources found")
       expect_warning_message(outcome, "**Profile**: Observation — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-diagnosticresult-path\n\n**Message**: No resources found")
     end
@@ -60,8 +60,8 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
       outcome = run_with_sections(test, sections: [section_without_entries(CompositionSectionsConstants::RESULTS_SECTION[:code])])
 
       expect_fail(outcome)
-      expect_error_message(outcome, "#{CompositionSectionsConstants::IMMUNIZATIONS_SECTION[:title]} (#{CompositionSectionsConstants::IMMUNIZATIONS_SECTION[:code]})\n\nNo composition section found for code: #{CompositionSectionsConstants::IMMUNIZATIONS_SECTION[:code]}")
-      expect_info_message(outcome, "#{CompositionSectionsConstants::RESULTS_SECTION[:title]} (#{CompositionSectionsConstants::RESULTS_SECTION[:code]})\n\nNo entries; no emptyReason.")
+      expect_error_message(outcome, "Patient Summary Immunizations Section (11369-6)\n\nNo composition section found for code: 11369-6")
+      expect_info_message(outcome, "Patient Summary Results Section (30954-2)\n\nNo entries; no emptyReason.")
       expect_warning_message(outcome, "**Profile**: Immunization — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-immunization\n\n**Message**: No resources found")
       expect_warning_message(outcome, "**Profile**: Observation — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-diagnosticresult-path\n\n**Message**: No resources found")
     end
@@ -77,8 +77,8 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
       )
 
       expect_fail(outcome)
-      expect_error_message(outcome, "#{CompositionSectionsConstants::IMMUNIZATIONS_SECTION[:title]} (#{CompositionSectionsConstants::IMMUNIZATIONS_SECTION[:code]})\n\nentry[0]: **urn:uuid:condition-1** -> ❌ Invalid resource type")
-      expect_info_message(outcome, "#{CompositionSectionsConstants::RESULTS_SECTION[:title]} (#{CompositionSectionsConstants::RESULTS_SECTION[:code]})\n\nNo entries; no emptyReason.")
+      expect_error_message(outcome, "Patient Summary Immunizations Section (11369-6)\n\nentry[0]: **urn:uuid:condition-1** -> ❌ Invalid resource type")
+      expect_info_message(outcome, "Patient Summary Results Section (30954-2)\n\nNo entries; no emptyReason.")
       expect_warning_message(outcome, "**Profile**: Immunization — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-immunization\n\n**Message**: No resources found")
       expect_warning_message(outcome, "**Profile**: Observation — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-diagnosticresult-path\n\n**Message**: No resources found")
     end
