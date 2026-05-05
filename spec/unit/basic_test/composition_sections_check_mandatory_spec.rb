@@ -79,9 +79,9 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
       )
 
       expect_pass(outcome)
-      expect_info_message(outcome, "#{CompositionSectionsConstants::PROBLEMS_SECTION[:title]} (#{CompositionSectionsConstants::PROBLEMS_SECTION[:code]})\n\nNo entries; no emptyReason.")
-      expect_info_message(outcome, "#{CompositionSectionsConstants::ALLERGIES_SECTION[:title]} (#{CompositionSectionsConstants::ALLERGIES_SECTION[:code]})\n\nNo entries; no emptyReason.")
-      expect_info_message(outcome, "#{CompositionSectionsConstants::MEDICATION_SECTION[:title]} (#{CompositionSectionsConstants::MEDICATION_SECTION[:code]})\n\nNo entries; no emptyReason.")
+      expect_info_message(outcome, "Patient Summary Problems Section (11450-4)\n\nNo entries; no emptyReason.")
+      expect_info_message(outcome, "Patient Summary Allergies and Intolerances Section (48765-2)\n\nNo entries; no emptyReason.")
+      expect_info_message(outcome, "Patient Summary Medication Summary Section (10160-0)\n\nNo entries; no emptyReason.")
       expect_warning_message(outcome, "**Profile**: AllergyIntolerance — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-allergyintolerance\n\n**Message**: No resources found")
       expect_warning_message(outcome, "**Profile**: MedicationStatement — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medicationstatement\n\n**Message**: No resources found")
       expect_warning_message(outcome, "**Profile**: MedicationRequest — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medicationrequest\n\n**Message**: No resources found")
@@ -98,9 +98,9 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
       )
 
       expect_pass(outcome)
-      expect_info_message(outcome, "#{CompositionSectionsConstants::PROBLEMS_SECTION[:title]} (#{CompositionSectionsConstants::PROBLEMS_SECTION[:code]})\n\nemptyReason: Withheld (withheld)")
-      expect_info_message(outcome, "#{CompositionSectionsConstants::ALLERGIES_SECTION[:title]} (#{CompositionSectionsConstants::ALLERGIES_SECTION[:code]})\n\nNo entries; no emptyReason.")
-      expect_info_message(outcome, "#{CompositionSectionsConstants::MEDICATION_SECTION[:title]} (#{CompositionSectionsConstants::MEDICATION_SECTION[:code]})\n\nNo entries; no emptyReason.")
+      expect_info_message(outcome, "Patient Summary Problems Section (11450-4)\n\nemptyReason: Withheld (withheld)")
+      expect_info_message(outcome, "Patient Summary Allergies and Intolerances Section (48765-2)\n\nNo entries; no emptyReason.")
+      expect_info_message(outcome, "Patient Summary Medication Summary Section (10160-0)\n\nNo entries; no emptyReason.")
       expect_warning_message(outcome, "**Profile**: AllergyIntolerance — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-allergyintolerance\n\n**Message**: No resources found")
       expect_warning_message(outcome, "**Profile**: MedicationStatement — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medicationstatement\n\n**Message**: No resources found")
       expect_warning_message(outcome, "**Profile**: MedicationRequest — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medicationrequest\n\n**Message**: No resources found")
@@ -116,9 +116,9 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
       )
 
       expect_fail(outcome)
-      expect_error_message(outcome, "#{CompositionSectionsConstants::PROBLEMS_SECTION[:title]} (#{CompositionSectionsConstants::PROBLEMS_SECTION[:code]})\n\nNo composition section found for code: #{CompositionSectionsConstants::PROBLEMS_SECTION[:code]}")
-      expect_info_message(outcome, "#{CompositionSectionsConstants::ALLERGIES_SECTION[:title]} (#{CompositionSectionsConstants::ALLERGIES_SECTION[:code]})\n\nNo entries; no emptyReason.")
-      expect_info_message(outcome, "#{CompositionSectionsConstants::MEDICATION_SECTION[:title]} (#{CompositionSectionsConstants::MEDICATION_SECTION[:code]})\n\nNo entries; no emptyReason.")
+      expect_error_message(outcome, "Patient Summary Problems Section (11450-4)\n\nNo composition section found for code: 11450-4")
+      expect_info_message(outcome, "Patient Summary Allergies and Intolerances Section (48765-2)\n\nNo entries; no emptyReason.")
+      expect_info_message(outcome, "Patient Summary Medication Summary Section (10160-0)\n\nNo entries; no emptyReason.")
       expect_warning_message(outcome, "**Profile**: AllergyIntolerance — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-allergyintolerance\n\n**Message**: No resources found")
       expect_warning_message(outcome, "**Profile**: MedicationStatement — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medicationstatement\n\n**Message**: No resources found")
       expect_warning_message(outcome, "**Profile**: MedicationRequest — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medicationrequest\n\n**Message**: No resources found")
@@ -135,9 +135,9 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
       )
 
       expect_fail(outcome)
-      expect_error_message(outcome, "#{CompositionSectionsConstants::PROBLEMS_SECTION[:title]} (#{CompositionSectionsConstants::PROBLEMS_SECTION[:code]})\n\n**urn:uuid:missing-condition-1** -> ❌ Reference does not resolve")
-      expect_info_message(outcome, "#{CompositionSectionsConstants::ALLERGIES_SECTION[:title]} (#{CompositionSectionsConstants::ALLERGIES_SECTION[:code]})\n\nNo entries; no emptyReason.")
-      expect_info_message(outcome, "#{CompositionSectionsConstants::MEDICATION_SECTION[:title]} (#{CompositionSectionsConstants::MEDICATION_SECTION[:code]})\n\nNo entries; no emptyReason.")
+      expect_error_message(outcome, "Patient Summary Problems Section (11450-4)\n\n**urn:uuid:missing-condition-1** -> ❌ Reference does not resolve")
+      expect_info_message(outcome, "Patient Summary Allergies and Intolerances Section (48765-2)\n\nNo entries; no emptyReason.")
+      expect_info_message(outcome, "Patient Summary Medication Summary Section (10160-0)\n\nNo entries; no emptyReason.")
       expect_warning_message(outcome, "**Profile**: Condition — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-condition\n\n**Message**: No resources found")
       expect_warning_message(outcome, "**Profile**: AllergyIntolerance — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-allergyintolerance\n\n**Message**: No resources found")
       expect_warning_message(outcome, "**Profile**: MedicationStatement — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medicationstatement\n\n**Message**: No resources found")
@@ -165,7 +165,7 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
       )
 
       expect_pass(outcome)
-      expect_info_message(outcome, "#{CompositionSectionsConstants::PROBLEMS_SECTION[:title]} (#{CompositionSectionsConstants::PROBLEMS_SECTION[:code]})\n\nentry[0]: **urn:uuid:condition-1** -> Condition (no meta.profile)")
+      expect_info_message(outcome, "Patient Summary Problems Section (11450-4)\n\nentry[0]: **urn:uuid:condition-1** -> Condition (no meta.profile)")
     end
 
     it 'passes when a section entry reference resolves with meta.profile' do
@@ -190,7 +190,7 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
       )
 
       expect_pass(outcome)
-      expect_info_message(outcome, "#{CompositionSectionsConstants::PROBLEMS_SECTION[:title]} (#{CompositionSectionsConstants::PROBLEMS_SECTION[:code]})\n\nentry[0]: **urn:uuid:condition-1** -> Condition (meta.profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-condition)")
+      expect_info_message(outcome, "Patient Summary Problems Section (11450-4)\n\nentry[0]: **urn:uuid:condition-1** -> Condition (meta.profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-condition)")
     end
 
     it 'fails when a section entry references a resource of the wrong type' do
@@ -210,9 +210,9 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
       )
 
       expect_fail(outcome)
-      expect_error_message(outcome, "#{CompositionSectionsConstants::PROBLEMS_SECTION[:title]} (#{CompositionSectionsConstants::PROBLEMS_SECTION[:code]})\n\nentry[0]: **urn:uuid:observation-1** -> ❌ Invalid resource type")
-      expect_info_message(outcome, "#{CompositionSectionsConstants::ALLERGIES_SECTION[:title]} (#{CompositionSectionsConstants::ALLERGIES_SECTION[:code]})\n\nNo entries; no emptyReason.")
-      expect_info_message(outcome, "#{CompositionSectionsConstants::MEDICATION_SECTION[:title]} (#{CompositionSectionsConstants::MEDICATION_SECTION[:code]})\n\nNo entries; no emptyReason.")
+      expect_error_message(outcome, "Patient Summary Problems Section (11450-4)\n\nentry[0]: **urn:uuid:observation-1** -> ❌ Invalid resource type")
+      expect_info_message(outcome, "Patient Summary Allergies and Intolerances Section (48765-2)\n\nNo entries; no emptyReason.")
+      expect_info_message(outcome, "Patient Summary Medication Summary Section (10160-0)\n\nNo entries; no emptyReason.")
       expect_warning_message(outcome, "**Profile**: Condition — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-condition\n\n**Message**: No resources found")
       expect_warning_message(outcome, "**Profile**: AllergyIntolerance — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-allergyintolerance\n\n**Message**: No resources found")
       expect_warning_message(outcome, "**Profile**: MedicationStatement — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medicationstatement\n\n**Message**: No resources found")
@@ -246,10 +246,10 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
       )
 
       expect_fail(outcome)
-      expect_error_message(outcome, "#{CompositionSectionsConstants::PROBLEMS_SECTION[:title]} (#{CompositionSectionsConstants::PROBLEMS_SECTION[:code]})\n\nentry[0]: **urn:uuid:condition-1** -> Condition (no meta.profile)")
+      expect_error_message(outcome, "Patient Summary Problems Section (11450-4)\n\nentry[0]: **urn:uuid:condition-1** -> Condition (no meta.profile)")
       expect_error_message(outcome, '**urn:uuid:missing-2** -> ❌ Reference does not resolve')
-      expect_info_message(outcome, "#{CompositionSectionsConstants::ALLERGIES_SECTION[:title]} (#{CompositionSectionsConstants::ALLERGIES_SECTION[:code]})\n\nNo entries; no emptyReason.")
-      expect_info_message(outcome, "#{CompositionSectionsConstants::MEDICATION_SECTION[:title]} (#{CompositionSectionsConstants::MEDICATION_SECTION[:code]})\n\nNo entries; no emptyReason.")
+      expect_info_message(outcome, "Patient Summary Allergies and Intolerances Section (48765-2)\n\nNo entries; no emptyReason.")
+      expect_info_message(outcome, "Patient Summary Medication Summary Section (10160-0)\n\nNo entries; no emptyReason.")
       expect_warning_message(outcome, "**Profile**: AllergyIntolerance — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-allergyintolerance\n\n**Message**: No resources found")
       expect_warning_message(outcome, "**Profile**: MedicationStatement — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medicationstatement\n\n**Message**: No resources found")
     end
@@ -258,9 +258,9 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
       outcome = run_with_sections(test, sections: [])
 
       expect_fail(outcome)
-      expect_error_message(outcome, "#{CompositionSectionsConstants::PROBLEMS_SECTION[:title]} (#{CompositionSectionsConstants::PROBLEMS_SECTION[:code]})\n\nNo composition section found for code: #{CompositionSectionsConstants::PROBLEMS_SECTION[:code]}")
-      expect_error_message(outcome, "#{CompositionSectionsConstants::ALLERGIES_SECTION[:title]} (#{CompositionSectionsConstants::ALLERGIES_SECTION[:code]})\n\nNo composition section found for code: #{CompositionSectionsConstants::ALLERGIES_SECTION[:code]}")
-      expect_error_message(outcome, "#{CompositionSectionsConstants::MEDICATION_SECTION[:title]} (#{CompositionSectionsConstants::MEDICATION_SECTION[:code]})\n\nNo composition section found for code: #{CompositionSectionsConstants::MEDICATION_SECTION[:code]}")
+      expect_error_message(outcome, "Patient Summary Problems Section (11450-4)\n\nNo composition section found for code: 11450-4")
+      expect_error_message(outcome, "Patient Summary Allergies and Intolerances Section (48765-2)\n\nNo composition section found for code: 48765-2")
+      expect_error_message(outcome, "Patient Summary Medication Summary Section (10160-0)\n\nNo composition section found for code: 10160-0")
       expect_warning_message(outcome, "**Profile**: Condition — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-condition\n\n**Message**: No resources found")
       expect_warning_message(outcome, "**Profile**: AllergyIntolerance — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-allergyintolerance\n\n**Message**: No resources found")
       expect_warning_message(outcome, "**Profile**: MedicationStatement — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medicationstatement\n\n**Message**: No resources found")
