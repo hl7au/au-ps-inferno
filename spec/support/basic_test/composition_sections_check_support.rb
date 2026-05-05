@@ -84,8 +84,12 @@ module CompositionSectionsCheckSupport
     { code: { coding: [{ code: code }] } }
   end
 
+  def section_with_entries(code, *references)
+    { code: { coding: [{ code: code }] }, entry: references.map { |ref| { reference: ref } } }
+  end
+
   def section_with_entry(code, reference)
-    { code: { coding: [{ code: code }] }, entry: [{ reference: reference }] }
+    section_with_entries(code, reference)
   end
 
   def section_with_empty_reason(code, display:, reason_code:)

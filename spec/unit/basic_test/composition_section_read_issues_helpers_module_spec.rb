@@ -24,14 +24,6 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadIssuesHelpersModule d
         ]
       }
     end
-    let(:condition_entry) do
-      FHIR::Bundle::Entry.new(
-        fullUrl: 'urn:uuid:condition-1',
-        resource: FHIR::Condition.new(resourceType: 'Condition', subject: { reference: 'urn:uuid:patient-1' },
-                                      code: { coding: [{ system: 'http://snomed.info/sct', code: '160245001' }] })
-      )
-    end
-
     it 'returns one report item per section entry reference' do
       bundle = build_section_bundle(section_code: section_code, references: ['urn:uuid:condition-1'],
                                     bundle_entries: [condition_entry])
@@ -70,13 +62,8 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadIssuesHelpersModule d
     end
 
     it 'marks report item unresolved with invalid-type issue when resource type is not permitted' do
-      observation_entry = FHIR::Bundle::Entry.new(
-        fullUrl: 'urn:uuid:condition-1',
-        resource: FHIR::Observation.new(resourceType: 'Observation', status: 'final',
-                                        code: { coding: [{ code: '1234-5' }] })
-      )
       bundle = build_section_bundle(section_code: section_code, references: ['urn:uuid:condition-1'],
-                                    bundle_entries: [observation_entry])
+                                    bundle_entries: [observation_entry(url: 'urn:uuid:condition-1')])
       result = test_instance.references_resolution_report(section_metadata, bundle)
 
       expect(result.first[:resolved]).to be(false)

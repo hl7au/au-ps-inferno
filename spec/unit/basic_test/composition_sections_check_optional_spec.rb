@@ -56,11 +56,6 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
     end
 
     it 'fails when an optional section entry references a resource of the wrong type' do
-      observation_entry = FHIR::Bundle::Entry.new(
-        fullUrl: 'urn:uuid:observation-1',
-        resource: FHIR::Observation.new(resourceType: 'Observation', status: 'final',
-                                        code: { coding: [{ code: '1234-5' }] })
-      )
       outcome = run_with_sections(
         test,
         sections: [section_with_entry(CompositionSectionsConstants::ADVANCE_DIRECTIVES_SECTION[:code], 'urn:uuid:observation-1')],

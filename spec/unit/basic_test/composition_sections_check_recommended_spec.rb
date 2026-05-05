@@ -86,10 +86,6 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
     end
 
     it 'fails when a section entry references a resource of the wrong type' do
-      condition_entry = FHIR::Bundle::Entry.new(
-        fullUrl: 'urn:uuid:condition-1',
-        resource: FHIR::Condition.new(resourceType: 'Condition')
-      )
       outcome = run_with_sections(
         test,
         sections: [

@@ -145,15 +145,6 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
     end
 
     it 'passes when a section entry reference resolves with no meta.profile' do
-      condition_entry = FHIR::Bundle::Entry.new(
-        fullUrl: 'urn:uuid:condition-1',
-        resource: FHIR::Condition.new(
-          resourceType: 'Condition',
-          category: [{ coding: [{ code: 'problem-list-item' }] }],
-          code: { coding: [{ code: '160245001' }] },
-          subject: { reference: 'urn:uuid:patient-1' }
-        )
-      )
       outcome = run_with_sections(
         test,
         sections: [
@@ -169,16 +160,6 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
     end
 
     it 'passes when a section entry reference resolves with meta.profile' do
-      condition_entry = FHIR::Bundle::Entry.new(
-        fullUrl: 'urn:uuid:condition-1',
-        resource: FHIR::Condition.new(
-          resourceType: 'Condition',
-          meta: { profile: ['http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-condition'] },
-          category: [{ coding: [{ code: 'problem-list-item' }] }],
-          code: { coding: [{ code: '160245001' }] },
-          subject: { reference: 'urn:uuid:patient-1' }
-        )
-      )
       outcome = run_with_sections(
         test,
         sections: [
@@ -186,7 +167,7 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
           section_without_entries(CompositionSectionsConstants::ALLERGIES_SECTION[:code]),
           section_without_entries(CompositionSectionsConstants::MEDICATION_SECTION[:code])
         ],
-        extra_entries: [condition_entry]
+        extra_entries: [condition_entry(meta_profile: 'http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-condition')]
       )
 
       expect_pass(outcome)
@@ -194,11 +175,6 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
     end
 
     it 'fails when a section entry references a resource of the wrong type' do
-      observation_entry = FHIR::Bundle::Entry.new(
-        fullUrl: 'urn:uuid:observation-1',
-        resource: FHIR::Observation.new(resourceType: 'Observation', status: 'final',
-                                        code: { coding: [{ code: '1234-5' }] })
-      )
       outcome = run_with_sections(
         test,
         sections: [
@@ -219,26 +195,11 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
       expect_warning_message(outcome, "**Profile**: MedicationRequest — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medicationrequest\n\n**Message**: No resources found")
     end
 
-    it 'fails when section entries mix resolved and unresolved references' do # rubocop:disable Metrics/BlockLength
-      condition_entry = FHIR::Bundle::Entry.new(
-        fullUrl: 'urn:uuid:condition-1',
-        resource: FHIR::Condition.new(
-          resourceType: 'Condition',
-          category: [{ coding: [{ code: 'problem-list-item' }] }],
-          code: { coding: [{ code: '160245001' }] },
-          subject: { reference: 'urn:uuid:patient-1' }
-        )
-      )
+    it 'fails when section entries mix resolved and unresolved references' do
       outcome = run_with_sections(
         test,
         sections: [
-          {
-            code: { coding: [{ code: CompositionSectionsConstants::PROBLEMS_SECTION[:code] }] },
-            entry: [
-              { reference: 'urn:uuid:condition-1' },
-              { reference: 'urn:uuid:missing-2' }
-            ]
-          },
+          section_with_entries(CompositionSectionsConstants::PROBLEMS_SECTION[:code], 'urn:uuid:condition-1', 'urn:uuid:missing-2'),
           section_without_entries(CompositionSectionsConstants::ALLERGIES_SECTION[:code]),
           section_without_entries(CompositionSectionsConstants::MEDICATION_SECTION[:code])
         ],
