@@ -1,16 +1,11 @@
 # frozen_string_literal: true
 
 require_relative 'fhir_bundle_helpers'
+require_relative 'basic_test_instance_setup'
 
 RSpec.shared_context 'references resolution report setup' do
   include FhirBundleHelpers
-
-  let(:test_class) do
-    Class.new(AUPSTestKit::BasicTest) do
-      attr_accessor :metadata_manager
-    end
-  end
-  let(:test_instance) { test_class.new }
+  include_context 'basic test instance setup'
 
   def build_bundle(section_code:, references:, bundle_entries:)
     sections = [{ code: { coding: [{ code: section_code }] }, entry: references.map { |ref| { reference: ref } } }]

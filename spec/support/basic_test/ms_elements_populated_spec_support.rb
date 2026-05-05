@@ -1,12 +1,9 @@
 # frozen_string_literal: true
 
+require_relative 'basic_test_instance_setup'
+
 RSpec.shared_context 'ms elements populated setup' do
-  let(:test_class) do
-    Class.new(AUPSTestKit::BasicTest) do
-      attr_accessor :metadata_manager
-    end
-  end
-  let(:test_instance) { test_class.new }
+  include_context 'basic test instance setup'
 
   let(:metadata_manager) do
     AUPSTestKit::MetadataManager.new('spec/fixtures/metadata.yaml').tap do |manager|
