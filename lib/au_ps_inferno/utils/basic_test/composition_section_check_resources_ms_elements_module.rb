@@ -124,8 +124,8 @@ module AUPSTestKit
 
       def report_missing_resources(profile_info_str)
         full_message_data = [
-          profile_info_str,
-          msg_line('Message', 'No resources found')
+          'No resources found',
+          profile_info_str
         ]
         add_message('warning', full_message_data.join("\n\n"))
         nil
