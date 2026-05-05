@@ -30,11 +30,6 @@ module CompositionSectionsCheckSupport
     { bundle_ips_resource: bundle }
   end
 
-  def run_bundle(bundle)
-    result = run_test(scratch_with(bundle))
-    [result, messages_for(result)]
-  end
-
   def run_with_sections(test, sections:, extra_entries: [])
     bundle = build_bundle(sections: sections, extra_entries: extra_entries)
     result = run(test, {}, scratch_with(bundle))
@@ -83,10 +78,6 @@ module CompositionSectionsCheckSupport
     expected_messages.each do |expected_message|
       expect(messages).to include_message(type: expected_message[:type], text: expected_message[:text])
     end
-  end
-
-  def build_bundle(sections:, extra_entries: [])
-    build_fhir_bundle(sections: sections, extra_entries: extra_entries)
   end
 
   def section_without_entries(code)

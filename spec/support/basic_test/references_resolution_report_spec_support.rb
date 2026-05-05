@@ -8,9 +8,9 @@ RSpec.shared_context 'references resolution report setup' do
 
   include_context 'basic test instance setup'
 
-  def build_bundle(section_code:, references:, bundle_entries:)
+  def build_section_bundle(section_code:, references:, bundle_entries:)
     sections = [{ code: { coding: [{ code: section_code }] }, entry: references.map { |ref| { reference: ref } } }]
     author_entry = FHIR::Bundle::Entry.new(fullUrl: 'urn:uuid:author-1', resource: FHIR::Practitioner.new)
-    BundleDecorator.new(build_fhir_bundle(sections: sections, extra_entries: [author_entry, *bundle_entries]))
+    BundleDecorator.new(build_bundle(sections: sections, extra_entries: [author_entry, *bundle_entries]))
   end
 end

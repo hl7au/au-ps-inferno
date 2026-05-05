@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module FhirBundleHelpers
-  def build_fhir_bundle(sections:, extra_entries: [])
+  def build_bundle(sections:, extra_entries: [])
     composition_entry = FHIR::Bundle::Entry.new(
       fullUrl: 'urn:uuid:composition-1',
       resource: FHIR::Composition.new(
