@@ -17,7 +17,8 @@ module AUPSTestKit
 
     def test_composition_mandatory_sections
       check_bundle_exists_in_scratch
-      test_composition_sections_data(sections_codes: MANDATORY_SECTIONS_CODES, bundle_data: scratch_bundle)
+      test_composition_sections_data(sections_codes: MANDATORY_SECTIONS_CODES, bundle_data: scratch_bundle,
+                                     mandatory: true)
     end
 
     def test_composition_recommended_sections
@@ -30,31 +31,38 @@ module AUPSTestKit
       test_composition_sections_data(sections_codes: OPTIONAL_SECTIONS_CODES, bundle_data: scratch_bundle)
     end
 
-    def test_composition_sections_data(sections_codes:, bundle_data:)
+    def test_composition_sections_data(sections_codes:, bundle_data:, mandatory: false)
       bundle_resource = BundleDecorator.new(bundle_data.to_hash)
       refs_test_pass = composition_sections_references_resolution_pass?(sections_codes: sections_codes,
-                                                                        bundle_resource: bundle_resource)
+                                                                        bundle_resource: bundle_resource,
+                                                                        mandatory: mandatory)
       ms_test_pass = composition_section_check_ms_pass?(sections_codes: sections_codes,
                                                         bundle_resource: bundle_resource)
 
-      assert refs_test_pass, 'Some of the sections are not populated correctly.'
-      assert ms_test_pass, 'Some of the sections are not populated with the correct Must Support elements.'
+      assert mandatory ? refs_test_pass : true, 'Some of the mandatory sections are not populated correctly.'
+      assert mandatory ? ms_test_pass : true,
+             'Some of the mandatory sections are not populated with the correct Must Support elements.'
     end
 
-    def composition_sections_references_resolution_pass?(sections_codes:, bundle_resource:)
+    def composition_sections_references_resolution_pass?(sections_codes:, bundle_resource:, mandatory: false)
       composition_resource = bundle_resource.composition_resource
       sections_metadata = metadata_manager.sections_metadata_by_codes(sections_codes)
       sections_metadata.map do |section_metadata|
-        composition_section_references_resolution_issues?(section_metadata, composition_resource, bundle_resource)
+        composition_section_references_resolution_issues?(section_metadata: section_metadata,
+                                                          composition_resource: composition_resource,
+                                                          bundle_resource: bundle_resource,
+                                                          mandatory: mandatory)
       end.all?
     end
 
-    def composition_section_references_resolution_issues?(section_metadata, composition_resource, bundle_resource)
+    def composition_section_references_resolution_issues?(section_metadata:, composition_resource:, bundle_resource:,
+                                                          mandatory:)
       section_code = section_metadata[:code]
       section = composition_resource.section_by_code(section_code)
       issues = read_composition_section_issues(section_metadata, bundle_resource)
       text = composition_section_read_report_message(section_metadata, section, bundle_resource, section_code)
-      add_message(issues.empty? ? 'info' : 'error', text)
+      error_level = mandatory ? 'error' : 'warning'
+      add_message(issues.empty? ? 'info' : error_level, text)
       issues.empty?
     end
 
