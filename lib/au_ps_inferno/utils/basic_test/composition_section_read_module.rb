@@ -87,7 +87,7 @@ module AUPSTestKit
       index = get_section_entry_index(section_metadata, bundle_resource, ref)
       return composition_section_entry_line_unresolved(ref) if resource.blank?
       unless permitted_resource_types(section_metadata).include?(resource.resourceType)
-        return composition_section_entry_line_bad_type(index, ref)
+        return composition_section_entry_line_bad_type(index, ref, resource.resourceType)
       end
 
       composition_section_entry_line_resolved(index, ref, resource)
@@ -104,8 +104,8 @@ module AUPSTestKit
       "**#{ref}** -> ❌ Reference does not resolve"
     end
 
-    def composition_section_entry_line_bad_type(index, ref)
-      "entry[#{index}]: **#{ref}** -> ❌ Invalid resource type"
+    def composition_section_entry_line_bad_type(index, ref, resource_type)
+      "entry[#{index}]: **#{ref}** -> ❌ Invalid resource type: #{resource_type}"
     end
 
     def composition_section_entry_line_resolved(index, ref, resource)
