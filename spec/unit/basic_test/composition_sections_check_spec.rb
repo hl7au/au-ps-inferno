@@ -87,8 +87,7 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
                               section_without_entries('48765-2'),
                               section_without_entries('10160-0')
                             ])
-      result = run_test(scratch_with(bundle))
-      messages = messages_for(result)
+      result, messages = run_bundle(bundle)
 
       expect(result.result).to eq('pass'), result.result_message
       expect(messages).to match_array(
@@ -109,8 +108,7 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
                               section_without_entries('48765-2'),
                               section_without_entries('10160-0')
                             ])
-      result = run_test(scratch_with(bundle))
-      messages = messages_for(result)
+      result, messages = run_bundle(bundle)
 
       expect(result.result).to eq('pass'), result.result_message
       expect(messages).to match_array(
@@ -130,8 +128,7 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
                               section_without_entries('48765-2'),
                               section_without_entries('10160-0')
                             ])
-      result = run_test(scratch_with(bundle))
-      messages = messages_for(result)
+      result, messages = run_bundle(bundle)
 
       expect(result.result).to eq('fail')
       expect(messages).to match_array(
@@ -152,8 +149,7 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
                               section_without_entries('48765-2'),
                               section_without_entries('10160-0')
                             ])
-      result = run_test(scratch_with(bundle))
-      messages = messages_for(result)
+      result, messages = run_bundle(bundle)
 
       expect(result.result).to eq('fail')
       expect(messages).to match_array(
@@ -186,8 +182,7 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
         ],
         extra_entries: [condition_entry]
       )
-      result = run_test(scratch_with(bundle))
-      messages = messages_for(result)
+      result, messages = run_bundle(bundle)
       problems_section_message = messages.find do |message|
         message.type == 'info' && message.message.start_with?('Patient Summary Problems Section (11450-4)')
       end
@@ -218,8 +213,7 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
         ],
         extra_entries: [condition_entry]
       )
-      result = run_test(scratch_with(bundle))
-      messages = messages_for(result)
+      result, messages = run_bundle(bundle)
       problems_section_message = messages.find do |message|
         message.type == 'info' && message.message.start_with?('Patient Summary Problems Section (11450-4)')
       end
@@ -245,8 +239,7 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
         ],
         extra_entries: [observation_entry]
       )
-      result = run_test(scratch_with(bundle))
-      messages = messages_for(result)
+      result, messages = run_bundle(bundle)
 
       expect(result.result).to eq('fail')
       expect(messages).to match_array(
@@ -285,8 +278,7 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
         ],
         extra_entries: [condition_entry]
       )
-      result = run_test(scratch_with(bundle))
-      messages = messages_for(result)
+      result, messages = run_bundle(bundle)
       problems_section_message = messages.find do |message|
         message.type == 'error' && message.message.start_with?('Patient Summary Problems Section (11450-4)')
       end
@@ -299,8 +291,7 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
 
     it 'fails when all mandatory sections are absent from the composition' do
       bundle = build_bundle(sections: [])
-      result = run_test(scratch_with(bundle))
-      messages = messages_for(result)
+      result, messages = run_bundle(bundle)
 
       expect(result.result).to eq('fail')
       expect(messages).to match_array(
@@ -367,8 +358,7 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
                               section_without_entries('11369-6'),
                               section_without_entries('30954-2')
                             ])
-      result = run_test(scratch_with(bundle))
-      messages = messages_for(result)
+      result, messages = run_bundle(bundle)
 
       expect(result.result).to eq('pass'), result.result_message
       expect(messages).to match_array(
@@ -383,8 +373,7 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
 
     it 'fails when a recommended section is absent from the composition' do
       bundle = build_bundle(sections: [section_without_entries('30954-2')])
-      result = run_test(scratch_with(bundle))
-      messages = messages_for(result)
+      result, messages = run_bundle(bundle)
 
       expect(result.result).to eq('fail')
       expect(messages).to match_array(
@@ -409,8 +398,7 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
         ],
         extra_entries: [condition_entry]
       )
-      result = run_test(scratch_with(bundle))
-      messages = messages_for(result)
+      result, messages = run_bundle(bundle)
 
       expect(result.result).to eq('fail')
       expect(messages).to match_array(
@@ -452,8 +440,7 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
 
     it 'passes when the optional section is present' do
       bundle = build_bundle(sections: [section_without_entries('42348-3')])
-      result = run_test(scratch_with(bundle))
-      messages = messages_for(result)
+      result, messages = run_bundle(bundle)
 
       expect(result.result).to eq('pass'), result.result_message
       expect(messages).to match_array([
@@ -464,8 +451,7 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
 
     it 'fails when the optional section is absent from the composition' do
       bundle = build_bundle(sections: [])
-      result = run_test(scratch_with(bundle))
-      messages = messages_for(result)
+      result, messages = run_bundle(bundle)
 
       expect(result.result).to eq('fail')
       expect(messages).to match_array([
@@ -484,8 +470,7 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
         sections: [section_with_entry('42348-3', 'urn:uuid:observation-1')],
         extra_entries: [observation_entry]
       )
-      result = run_test(scratch_with(bundle))
-      messages = messages_for(result)
+      result, messages = run_bundle(bundle)
 
       expect(result.result).to eq('fail')
       expect(messages).to match_array([

@@ -28,6 +28,11 @@ module CompositionSectionsCheckSupport
     { bundle_ips_resource: bundle }
   end
 
+  def run_bundle(bundle)
+    result = run_test(scratch_with(bundle))
+    [result, messages_for(result)]
+  end
+
   def messages_for(result)
     Inferno::Repositories::Messages.new.messages_for_result(result.id)
   end
