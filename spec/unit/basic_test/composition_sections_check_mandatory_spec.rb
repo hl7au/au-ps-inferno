@@ -16,8 +16,8 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
       {
         composition_sections: [
           {
-            code: '11450-4',
-            short: 'Patient Summary Problems Section',
+            code: CompositionSectionsConstants::PROBLEMS_SECTION[:code],
+            short: CompositionSectionsConstants::PROBLEMS_SECTION[:title],
             entries: [
               { profiles: ['Condition|http://hl7.org/fhir/StructureDefinition/Condition',
                            'DocumentReference|http://hl7.org/fhir/StructureDefinition/DocumentReference'] },
@@ -25,8 +25,8 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
             ]
           },
           {
-            code: '48765-2',
-            short: 'Patient Summary Allergies and Intolerances Section',
+            code: CompositionSectionsConstants::ALLERGIES_SECTION[:code],
+            short: CompositionSectionsConstants::ALLERGIES_SECTION[:title],
             entries: [
               { profiles: ['AllergyIntolerance|http://hl7.org/fhir/StructureDefinition/AllergyIntolerance',
                            'DocumentReference|http://hl7.org/fhir/StructureDefinition/DocumentReference'] },
@@ -34,8 +34,8 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
             ]
           },
           {
-            code: '10160-0',
-            short: 'Patient Summary Medication Summary Section',
+            code: CompositionSectionsConstants::MEDICATION_SECTION[:code],
+            short: CompositionSectionsConstants::MEDICATION_SECTION[:title],
             entries: [
               { profiles: ['MedicationStatement|http://hl7.org/fhir/StructureDefinition/MedicationStatement',
                            'MedicationRequest|http://hl7.org/fhir/StructureDefinition/MedicationRequest'] },
@@ -85,9 +85,9 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
       outcome = run_with_sections(
         test,
         sections: [
-          section_without_entries('11450-4'),
-          section_without_entries('48765-2'),
-          section_without_entries('10160-0')
+          section_without_entries(CompositionSectionsConstants::PROBLEMS_SECTION[:code]),
+          section_without_entries(CompositionSectionsConstants::ALLERGIES_SECTION[:code]),
+          section_without_entries(CompositionSectionsConstants::MEDICATION_SECTION[:code])
         ]
       )
       expect_result_and_messages(
@@ -96,11 +96,11 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
         status: 'pass',
         expected_messages: [
           { type: 'info',
-            text: "Patient Summary Problems Section (11450-4)\n\nNo entries; no emptyReason." },
+            text: "#{CompositionSectionsConstants::PROBLEMS_SECTION[:title]} (#{CompositionSectionsConstants::PROBLEMS_SECTION[:code]})\n\nNo entries; no emptyReason." },
           { type: 'info',
-            text: "Patient Summary Allergies and Intolerances Section (48765-2)\n\nNo entries; no emptyReason." },
+            text: "#{CompositionSectionsConstants::ALLERGIES_SECTION[:title]} (#{CompositionSectionsConstants::ALLERGIES_SECTION[:code]})\n\nNo entries; no emptyReason." },
           { type: 'info',
-            text: "Patient Summary Medication Summary Section (10160-0)\n\nNo entries; no emptyReason." }
+            text: "#{CompositionSectionsConstants::MEDICATION_SECTION[:title]} (#{CompositionSectionsConstants::MEDICATION_SECTION[:code]})\n\nNo entries; no emptyReason." }
         ] + au_ps_warnings
       )
     end
@@ -109,9 +109,9 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
       outcome = run_with_sections(
         test,
         sections: [
-          section_with_empty_reason('11450-4', display: 'Withheld', reason_code: 'withheld'),
-          section_without_entries('48765-2'),
-          section_without_entries('10160-0')
+          section_with_empty_reason(CompositionSectionsConstants::PROBLEMS_SECTION[:code], display: 'Withheld', reason_code: 'withheld'),
+          section_without_entries(CompositionSectionsConstants::ALLERGIES_SECTION[:code]),
+          section_without_entries(CompositionSectionsConstants::MEDICATION_SECTION[:code])
         ]
       )
       expect_result_and_messages(
@@ -120,11 +120,11 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
         status: 'pass',
         expected_messages: [
           { type: 'info',
-            text: "Patient Summary Problems Section (11450-4)\n\nemptyReason: Withheld (withheld)" },
+            text: "#{CompositionSectionsConstants::PROBLEMS_SECTION[:title]} (#{CompositionSectionsConstants::PROBLEMS_SECTION[:code]})\n\nemptyReason: Withheld (withheld)" },
           { type: 'info',
-            text: "Patient Summary Allergies and Intolerances Section (48765-2)\n\nNo entries; no emptyReason." },
+            text: "#{CompositionSectionsConstants::ALLERGIES_SECTION[:title]} (#{CompositionSectionsConstants::ALLERGIES_SECTION[:code]})\n\nNo entries; no emptyReason." },
           { type: 'info',
-            text: "Patient Summary Medication Summary Section (10160-0)\n\nNo entries; no emptyReason." }
+            text: "#{CompositionSectionsConstants::MEDICATION_SECTION[:title]} (#{CompositionSectionsConstants::MEDICATION_SECTION[:code]})\n\nNo entries; no emptyReason." }
         ] + au_ps_warnings
       )
     end
@@ -133,8 +133,8 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
       outcome = run_with_sections(
         test,
         sections: [
-          section_without_entries('48765-2'),
-          section_without_entries('10160-0')
+          section_without_entries(CompositionSectionsConstants::ALLERGIES_SECTION[:code]),
+          section_without_entries(CompositionSectionsConstants::MEDICATION_SECTION[:code])
         ]
       )
       expect_result_and_messages(
@@ -143,11 +143,11 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
         status: 'fail',
         expected_messages: [
           { type: 'error',
-            text: "Patient Summary Problems Section (11450-4)\n\nNo composition section found for code: 11450-4" },
+            text: "#{CompositionSectionsConstants::PROBLEMS_SECTION[:title]} (#{CompositionSectionsConstants::PROBLEMS_SECTION[:code]})\n\nNo composition section found for code: #{CompositionSectionsConstants::PROBLEMS_SECTION[:code]}" },
           { type: 'info',
-            text: "Patient Summary Allergies and Intolerances Section (48765-2)\n\nNo entries; no emptyReason." },
+            text: "#{CompositionSectionsConstants::ALLERGIES_SECTION[:title]} (#{CompositionSectionsConstants::ALLERGIES_SECTION[:code]})\n\nNo entries; no emptyReason." },
           { type: 'info',
-            text: "Patient Summary Medication Summary Section (10160-0)\n\nNo entries; no emptyReason." }
+            text: "#{CompositionSectionsConstants::MEDICATION_SECTION[:title]} (#{CompositionSectionsConstants::MEDICATION_SECTION[:code]})\n\nNo entries; no emptyReason." }
         ] + au_ps_warnings
       )
     end
@@ -156,9 +156,9 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
       outcome = run_with_sections(
         test,
         sections: [
-          section_with_entry('11450-4', 'urn:uuid:missing-condition-1'),
-          section_without_entries('48765-2'),
-          section_without_entries('10160-0')
+          section_with_entry(CompositionSectionsConstants::PROBLEMS_SECTION[:code], 'urn:uuid:missing-condition-1'),
+          section_without_entries(CompositionSectionsConstants::ALLERGIES_SECTION[:code]),
+          section_without_entries(CompositionSectionsConstants::MEDICATION_SECTION[:code])
         ]
       )
       expect_result_and_messages(
@@ -167,11 +167,11 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
         status: 'fail',
         expected_messages: [
           { type: 'error',
-            text: "Patient Summary Problems Section (11450-4)\n\n**urn:uuid:missing-condition-1** -> ❌ Reference does not resolve" },
+            text: "#{CompositionSectionsConstants::PROBLEMS_SECTION[:title]} (#{CompositionSectionsConstants::PROBLEMS_SECTION[:code]})\n\n**urn:uuid:missing-condition-1** -> ❌ Reference does not resolve" },
           { type: 'info',
-            text: "Patient Summary Allergies and Intolerances Section (48765-2)\n\nNo entries; no emptyReason." },
+            text: "#{CompositionSectionsConstants::ALLERGIES_SECTION[:title]} (#{CompositionSectionsConstants::ALLERGIES_SECTION[:code]})\n\nNo entries; no emptyReason." },
           { type: 'info',
-            text: "Patient Summary Medication Summary Section (10160-0)\n\nNo entries; no emptyReason." }
+            text: "#{CompositionSectionsConstants::MEDICATION_SECTION[:title]} (#{CompositionSectionsConstants::MEDICATION_SECTION[:code]})\n\nNo entries; no emptyReason." }
         ] + au_ps_warnings
       )
     end
@@ -189,16 +189,16 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
       outcome = run_with_sections(
         test,
         sections: [
-          section_with_entry('11450-4', 'urn:uuid:condition-1'),
-          section_without_entries('48765-2'),
-          section_without_entries('10160-0')
+          section_with_entry(CompositionSectionsConstants::PROBLEMS_SECTION[:code], 'urn:uuid:condition-1'),
+          section_without_entries(CompositionSectionsConstants::ALLERGIES_SECTION[:code]),
+          section_without_entries(CompositionSectionsConstants::MEDICATION_SECTION[:code])
         ],
         extra_entries: [condition_entry]
       )
       expect(outcome[:result].result).to eq('pass'), outcome[:result].result_message
       expect(outcome[:messages]).to include_message(
         type: 'info',
-        text: "Patient Summary Problems Section (11450-4)\n\nentry[0]: **urn:uuid:condition-1** -> Condition (no meta.profile)"
+        text: "#{CompositionSectionsConstants::PROBLEMS_SECTION[:title]} (#{CompositionSectionsConstants::PROBLEMS_SECTION[:code]})\n\nentry[0]: **urn:uuid:condition-1** -> Condition (no meta.profile)"
       )
     end
 
@@ -216,16 +216,16 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
       outcome = run_with_sections(
         test,
         sections: [
-          section_with_entry('11450-4', 'urn:uuid:condition-1'),
-          section_without_entries('48765-2'),
-          section_without_entries('10160-0')
+          section_with_entry(CompositionSectionsConstants::PROBLEMS_SECTION[:code], 'urn:uuid:condition-1'),
+          section_without_entries(CompositionSectionsConstants::ALLERGIES_SECTION[:code]),
+          section_without_entries(CompositionSectionsConstants::MEDICATION_SECTION[:code])
         ],
         extra_entries: [condition_entry]
       )
       expect(outcome[:result].result).to eq('pass'), outcome[:result].result_message
       expect(outcome[:messages]).to include_message(
         type: 'info',
-        text: "Patient Summary Problems Section (11450-4)\n\nentry[0]: **urn:uuid:condition-1** -> Condition (meta.profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-condition)"
+        text: "#{CompositionSectionsConstants::PROBLEMS_SECTION[:title]} (#{CompositionSectionsConstants::PROBLEMS_SECTION[:code]})\n\nentry[0]: **urn:uuid:condition-1** -> Condition (meta.profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-condition)"
       )
     end
 
@@ -238,9 +238,9 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
       outcome = run_with_sections(
         test,
         sections: [
-          section_with_entry('11450-4', 'urn:uuid:observation-1'),
-          section_without_entries('48765-2'),
-          section_without_entries('10160-0')
+          section_with_entry(CompositionSectionsConstants::PROBLEMS_SECTION[:code], 'urn:uuid:observation-1'),
+          section_without_entries(CompositionSectionsConstants::ALLERGIES_SECTION[:code]),
+          section_without_entries(CompositionSectionsConstants::MEDICATION_SECTION[:code])
         ],
         extra_entries: [observation_entry]
       )
@@ -250,11 +250,11 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
         status: 'fail',
         expected_messages: [
           { type: 'error',
-            text: "Patient Summary Problems Section (11450-4)\n\nentry[0]: **urn:uuid:observation-1** -> ❌ Invalid resource type" },
+            text: "#{CompositionSectionsConstants::PROBLEMS_SECTION[:title]} (#{CompositionSectionsConstants::PROBLEMS_SECTION[:code]})\n\nentry[0]: **urn:uuid:observation-1** -> ❌ Invalid resource type" },
           { type: 'info',
-            text: "Patient Summary Allergies and Intolerances Section (48765-2)\n\nNo entries; no emptyReason." },
+            text: "#{CompositionSectionsConstants::ALLERGIES_SECTION[:title]} (#{CompositionSectionsConstants::ALLERGIES_SECTION[:code]})\n\nNo entries; no emptyReason." },
           { type: 'info',
-            text: "Patient Summary Medication Summary Section (10160-0)\n\nNo entries; no emptyReason." }
+            text: "#{CompositionSectionsConstants::MEDICATION_SECTION[:title]} (#{CompositionSectionsConstants::MEDICATION_SECTION[:code]})\n\nNo entries; no emptyReason." }
         ] + au_ps_warnings
       )
     end
@@ -273,19 +273,20 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
         test,
         sections: [
           {
-            code: { coding: [{ code: '11450-4' }] },
+            code: { coding: [{ code: CompositionSectionsConstants::PROBLEMS_SECTION[:code] }] },
             entry: [
               { reference: 'urn:uuid:condition-1' },
               { reference: 'urn:uuid:missing-2' }
             ]
           },
-          section_without_entries('48765-2'),
-          section_without_entries('10160-0')
+          section_without_entries(CompositionSectionsConstants::ALLERGIES_SECTION[:code]),
+          section_without_entries(CompositionSectionsConstants::MEDICATION_SECTION[:code])
         ],
         extra_entries: [condition_entry]
       )
       problems_section_message = outcome[:messages].find do |message|
-        message.type == 'error' && message.message.start_with?('Patient Summary Problems Section (11450-4)')
+        message.type == 'error' &&
+          message.message.start_with?("#{CompositionSectionsConstants::PROBLEMS_SECTION[:title]} (#{CompositionSectionsConstants::PROBLEMS_SECTION[:code]})")
       end
 
       expect(outcome[:result].result).to eq('fail')
@@ -302,11 +303,11 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
         status: 'fail',
         expected_messages: [
           { type: 'error',
-            text: "Patient Summary Problems Section (11450-4)\n\nNo composition section found for code: 11450-4" },
+            text: "#{CompositionSectionsConstants::PROBLEMS_SECTION[:title]} (#{CompositionSectionsConstants::PROBLEMS_SECTION[:code]})\n\nNo composition section found for code: #{CompositionSectionsConstants::PROBLEMS_SECTION[:code]}" },
           { type: 'error',
-            text: "Patient Summary Allergies and Intolerances Section (48765-2)\n\nNo composition section found for code: 48765-2" },
+            text: "#{CompositionSectionsConstants::ALLERGIES_SECTION[:title]} (#{CompositionSectionsConstants::ALLERGIES_SECTION[:code]})\n\nNo composition section found for code: #{CompositionSectionsConstants::ALLERGIES_SECTION[:code]}" },
           { type: 'error',
-            text: "Patient Summary Medication Summary Section (10160-0)\n\nNo composition section found for code: 10160-0" }
+            text: "#{CompositionSectionsConstants::MEDICATION_SECTION[:title]} (#{CompositionSectionsConstants::MEDICATION_SECTION[:code]})\n\nNo composition section found for code: #{CompositionSectionsConstants::MEDICATION_SECTION[:code]}" }
         ] + au_ps_warnings
       )
     end

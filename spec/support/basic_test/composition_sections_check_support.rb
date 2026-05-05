@@ -2,9 +2,11 @@
 
 require_relative '../../../lib/au_ps_inferno/utils/composition_utils'
 require_relative '../../../lib/au_ps_inferno/utils/metadata_manager'
+require_relative 'composition_sections_constants'
 require_relative 'fhir_bundle_helpers'
 
 module CompositionSectionsCheckSupport
+  include CompositionSectionsConstants
   include FhirBundleHelpers
 
   def configure_test_class(test_class, metadata)

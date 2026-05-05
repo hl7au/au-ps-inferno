@@ -16,8 +16,8 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
       {
         composition_sections: [
           {
-            code: '42348-3',
-            short: 'Patient Summary Advance Directives Section',
+            code: CompositionSectionsConstants::ADVANCE_DIRECTIVES_SECTION[:code],
+            short: CompositionSectionsConstants::ADVANCE_DIRECTIVES_SECTION[:title],
             entries: [
               { profiles: ['Consent|http://hl7.org/fhir/StructureDefinition/Consent',
                            'DocumentReference|http://hl7.org/fhir/StructureDefinition/DocumentReference'] }
@@ -30,14 +30,14 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
     before { configure_test_class(test, metadata) }
 
     it 'passes when the optional section is present' do
-      outcome = run_with_sections(test, sections: [section_without_entries('42348-3')])
+      outcome = run_with_sections(test, sections: [section_without_entries(CompositionSectionsConstants::ADVANCE_DIRECTIVES_SECTION[:code])])
       expect_result_and_messages(
         result: outcome[:result],
         messages: outcome[:messages],
         status: 'pass',
         expected_messages: [
           { type: 'info',
-            text: "Patient Summary Advance Directives Section (42348-3)\n\nNo entries; no emptyReason." }
+            text: "#{CompositionSectionsConstants::ADVANCE_DIRECTIVES_SECTION[:title]} (#{CompositionSectionsConstants::ADVANCE_DIRECTIVES_SECTION[:code]})\n\nNo entries; no emptyReason." }
         ]
       )
     end
@@ -50,7 +50,7 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
         status: 'fail',
         expected_messages: [
           { type: 'error',
-            text: "Patient Summary Advance Directives Section (42348-3)\n\nNo composition section found for code: 42348-3" }
+            text: "#{CompositionSectionsConstants::ADVANCE_DIRECTIVES_SECTION[:title]} (#{CompositionSectionsConstants::ADVANCE_DIRECTIVES_SECTION[:code]})\n\nNo composition section found for code: #{CompositionSectionsConstants::ADVANCE_DIRECTIVES_SECTION[:code]}" }
         ]
       )
     end
@@ -63,7 +63,7 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
       )
       outcome = run_with_sections(
         test,
-        sections: [section_with_entry('42348-3', 'urn:uuid:observation-1')],
+        sections: [section_with_entry(CompositionSectionsConstants::ADVANCE_DIRECTIVES_SECTION[:code], 'urn:uuid:observation-1')],
         extra_entries: [observation_entry]
       )
       expect_result_and_messages(
@@ -72,7 +72,7 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
         status: 'fail',
         expected_messages: [
           { type: 'error',
-            text: "Patient Summary Advance Directives Section (42348-3)\n\nentry[0]: **urn:uuid:observation-1** -> ❌ Invalid resource type" }
+            text: "#{CompositionSectionsConstants::ADVANCE_DIRECTIVES_SECTION[:title]} (#{CompositionSectionsConstants::ADVANCE_DIRECTIVES_SECTION[:code]})\n\nentry[0]: **urn:uuid:observation-1** -> ❌ Invalid resource type" }
         ]
       )
     end
