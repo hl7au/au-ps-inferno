@@ -59,12 +59,7 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
       expect_warning_message(outcome, "**Profile**: Observation — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-diagnosticresult-path\n\n**Message**: No resources found")
     end
 
-    it 'skips when no bundle is provided in scratch' do
-      result = run_test({})
-
-      expect(result.result).to eq('skip')
-      expect(messages_for(result)).to be_empty
-    end
+    include_examples 'skips when no bundle is provided'
   end
 end
 # rubocop:enable Layout/LineLength

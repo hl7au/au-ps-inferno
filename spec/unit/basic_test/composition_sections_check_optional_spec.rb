@@ -41,12 +41,7 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
       expect_error_message(outcome, "Patient Summary Advance Directives Section (42348-3)\n\nentry[0]: **urn:uuid:observation-1** -> ❌ Invalid resource type")
     end
 
-    it 'skips when no bundle is provided in scratch' do
-      result = run_test({})
-
-      expect(result.result).to eq('skip')
-      expect(messages_for(result)).to be_empty
-    end
+    include_examples 'skips when no bundle is provided'
   end
 end
 # rubocop:enable Layout/LineLength

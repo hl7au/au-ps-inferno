@@ -117,6 +117,15 @@ module CompositionSectionsCheckSupport
   end
 end
 
+RSpec.shared_examples 'skips when no bundle is provided' do
+  it 'skips when no bundle is provided in scratch' do
+    result = run_test({})
+
+    expect(result.result).to eq('skip')
+    expect(messages_for(result)).to be_empty
+  end
+end
+
 RSpec.shared_context 'composition sections check setup' do
   include CompositionSectionsCheckSupport
 
