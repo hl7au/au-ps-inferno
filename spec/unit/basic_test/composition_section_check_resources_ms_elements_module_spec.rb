@@ -97,5 +97,29 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule::BasicTestComp
 
       expect(result.map { |item| item[:present] }.uniq).to eq([false])
     end
+
+    it 'returns all must-support elements as absent when resources have no overlapping paths' do
+      result = test_instance.check_ms_elements_populated(target_resource_type, [FHIR::Observation.new])
+
+      expect(result.map { |item| item[:present] }.uniq).to eq([false])
+    end
+
+    context 'when must_supports has no elements' do
+      let(:minimal_metadata) do
+        {
+          groups: [{
+            resource: 'Condition',
+            must_supports: { elements: [] },
+            mandatory_elements: []
+          }]
+        }
+      end
+
+      it 'returns an empty array' do
+        result = test_instance.check_ms_elements_populated(target_resource_type, resources_array)
+
+        expect(result).to be_empty
+      end
+    end
   end
 end
