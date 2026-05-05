@@ -31,28 +31,16 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
 
     it 'passes when the optional section is present' do
       outcome = run_with_sections(test, sections: [section_without_entries(CompositionSectionsConstants::ADVANCE_DIRECTIVES_SECTION[:code])])
-      expect_result_and_messages(
-        result: outcome[:result],
-        messages: outcome[:messages],
-        status: 'pass',
-        expected_messages: [
-          { type: 'info',
-            text: "#{CompositionSectionsConstants::ADVANCE_DIRECTIVES_SECTION[:title]} (#{CompositionSectionsConstants::ADVANCE_DIRECTIVES_SECTION[:code]})\n\nNo entries; no emptyReason." }
-        ]
-      )
+
+      expect_pass(outcome)
+      expect_info_message(outcome, "#{CompositionSectionsConstants::ADVANCE_DIRECTIVES_SECTION[:title]} (#{CompositionSectionsConstants::ADVANCE_DIRECTIVES_SECTION[:code]})\n\nNo entries; no emptyReason.")
     end
 
     it 'fails when the optional section is absent from the composition' do
       outcome = run_with_sections(test, sections: [])
-      expect_result_and_messages(
-        result: outcome[:result],
-        messages: outcome[:messages],
-        status: 'fail',
-        expected_messages: [
-          { type: 'error',
-            text: "#{CompositionSectionsConstants::ADVANCE_DIRECTIVES_SECTION[:title]} (#{CompositionSectionsConstants::ADVANCE_DIRECTIVES_SECTION[:code]})\n\nNo composition section found for code: #{CompositionSectionsConstants::ADVANCE_DIRECTIVES_SECTION[:code]}" }
-        ]
-      )
+
+      expect_fail(outcome)
+      expect_error_message(outcome, "#{CompositionSectionsConstants::ADVANCE_DIRECTIVES_SECTION[:title]} (#{CompositionSectionsConstants::ADVANCE_DIRECTIVES_SECTION[:code]})\n\nNo composition section found for code: #{CompositionSectionsConstants::ADVANCE_DIRECTIVES_SECTION[:code]}")
     end
 
     it 'fails when an optional section entry references a resource of the wrong type' do
@@ -61,15 +49,9 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
         sections: [section_with_entry(CompositionSectionsConstants::ADVANCE_DIRECTIVES_SECTION[:code], 'urn:uuid:observation-1')],
         extra_entries: [observation_entry]
       )
-      expect_result_and_messages(
-        result: outcome[:result],
-        messages: outcome[:messages],
-        status: 'fail',
-        expected_messages: [
-          { type: 'error',
-            text: "#{CompositionSectionsConstants::ADVANCE_DIRECTIVES_SECTION[:title]} (#{CompositionSectionsConstants::ADVANCE_DIRECTIVES_SECTION[:code]})\n\nentry[0]: **urn:uuid:observation-1** -> ❌ Invalid resource type" }
-        ]
-      )
+
+      expect_fail(outcome)
+      expect_error_message(outcome, "#{CompositionSectionsConstants::ADVANCE_DIRECTIVES_SECTION[:title]} (#{CompositionSectionsConstants::ADVANCE_DIRECTIVES_SECTION[:code]})\n\nentry[0]: **urn:uuid:observation-1** -> ❌ Invalid resource type")
     end
 
     it 'skips when no bundle is provided in scratch' do
