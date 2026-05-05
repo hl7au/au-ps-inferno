@@ -100,7 +100,7 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
           section_without_entries(CompositionSectionsConstants::ALLERGIES_SECTION[:code]),
           section_without_entries(CompositionSectionsConstants::MEDICATION_SECTION[:code])
         ],
-        extra_entries: [condition_entry]
+        extra_entries: [condition_entry(url: 'urn:uuid:condition-1')]
       )
 
       expect_pass(outcome)
@@ -115,7 +115,7 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
           section_without_entries(CompositionSectionsConstants::ALLERGIES_SECTION[:code]),
           section_without_entries(CompositionSectionsConstants::MEDICATION_SECTION[:code])
         ],
-        extra_entries: [condition_entry(meta_profile: 'http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-condition')]
+        extra_entries: [condition_entry(url: 'urn:uuid:condition-1', meta_profile: 'http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-condition')]
       )
 
       expect_pass(outcome)
@@ -151,7 +151,7 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
           section_without_entries(CompositionSectionsConstants::ALLERGIES_SECTION[:code]),
           section_without_entries(CompositionSectionsConstants::MEDICATION_SECTION[:code])
         ],
-        extra_entries: [condition_entry]
+        extra_entries: [condition_entry(url: 'urn:uuid:condition-1')]
       )
 
       expect_fail(outcome)

@@ -10,7 +10,7 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
   include_context 'when testing a runnable'
   include_context 'composition sections check setup'
 
-  describe 'Composition Sections Check - Optional Sections' do # rubocop:disable Metrics/BlockLength
+  describe 'Composition Sections Check - Optional Sections' do
     let(:test) { find_test(:test_composition_optional_sections) }
     let(:metadata) { CompositionSectionsMetadata::OPTIONAL_SECTIONS }
 

@@ -49,7 +49,7 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
           section_with_entry(CompositionSectionsConstants::IMMUNIZATIONS_SECTION[:code], 'urn:uuid:condition-1'),
           section_without_entries(CompositionSectionsConstants::RESULTS_SECTION[:code])
         ],
-        extra_entries: [condition_entry]
+        extra_entries: [condition_entry(url: 'urn:uuid:condition-1')]
       )
 
       expect_fail(outcome)

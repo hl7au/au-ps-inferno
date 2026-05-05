@@ -20,6 +20,22 @@ module FhirBundleHelpers
     )
   end
 
+  def section_without_entries(code)
+    { code: { coding: [{ code: code }] } }
+  end
+
+  def section_with_entries(code, *references)
+    { code: { coding: [{ code: code }] }, entry: references.map { |ref| { reference: ref } } }
+  end
+
+  def section_with_entry(code, reference)
+    section_with_entries(code, reference)
+  end
+
+  def section_with_empty_reason(code, display:, reason_code:)
+    { code: { coding: [{ code: code }] }, emptyReason: { coding: [{ display: display, code: reason_code }] } }
+  end
+
   def build_bundle(sections:, extra_entries: [])
     composition_entry = FHIR::Bundle::Entry.new(
       fullUrl: 'urn:uuid:composition-1',
