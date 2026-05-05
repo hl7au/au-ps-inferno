@@ -38,6 +38,24 @@ module CompositionSectionsCheckSupport
     { result: result, messages: messages_for(result) }
   end
 
+  def expect_info_messages(outcome, messages_array)
+    messages_array.each do |message|
+      expect_info_message(outcome, message)
+    end
+  end
+
+  def expect_warning_messages(outcome, messages_array)
+    messages_array.each do |message|
+      expect_warning_message(outcome, message)
+    end
+  end
+
+  def expect_error_messages(outcome, messages_array)
+    messages_array.each do |message|
+      expect_error_message(outcome, message)
+    end
+  end
+
   def expect_info_message(outcome, expected_message)
     expect(outcome[:messages]).to include_message(type: 'info', text: expected_message)
   end

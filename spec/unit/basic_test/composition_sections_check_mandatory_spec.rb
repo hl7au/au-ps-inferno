@@ -54,6 +54,33 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
       expect_warning_message(outcome, "**Profile**: MedicationRequest — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medicationrequest\n\n**Message**: No resources found")
     end
 
+    it 'passes when all mandatory sections are present (version 2)' do
+      # NOTE: Experimental implementation of expect_info_messages and expect_warning_messages.
+      # We should discuss if we want to keep this.
+      outcome = run_with_sections(
+        test,
+        sections: [
+          section_without_entries(CompositionSectionsConstants::PROBLEMS_SECTION[:code]),
+          section_without_entries(CompositionSectionsConstants::ALLERGIES_SECTION[:code]),
+          section_without_entries(CompositionSectionsConstants::MEDICATION_SECTION[:code])
+        ]
+      )
+      expected_info_messages = [
+        "Patient Summary Problems Section (11450-4)\n\nNo entries; no emptyReason.",
+        "Patient Summary Allergies and Intolerances Section (48765-2)\n\nNo entries; no emptyReason.",
+        "Patient Summary Medication Summary Section (10160-0)\n\nNo entries; no emptyReason."
+      ]
+      expected_warning_messages = [
+        "**Profile**: AllergyIntolerance — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-allergyintolerance\n\n**Message**: No resources found",
+        "**Profile**: MedicationStatement — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medicationstatement\n\n**Message**: No resources found",
+        "**Profile**: MedicationRequest — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medicationrequest\n\n**Message**: No resources found"
+      ]
+
+      expect_pass(outcome)
+      expect_info_messages(outcome, expected_info_messages)
+      expect_warning_messages(outcome, expected_warning_messages)
+    end
+
     it 'fails when a mandatory section is absent from the composition' do
       outcome = run_with_sections(
         test,
