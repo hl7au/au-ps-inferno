@@ -82,78 +82,98 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
     before { configure_test_class(test, metadata) }
 
     it 'passes when all mandatory sections are present' do
-      bundle = build_bundle(sections: [
-                              section_without_entries('11450-4'),
-                              section_without_entries('48765-2'),
-                              section_without_entries('10160-0')
-                            ])
-      result, messages = run_bundle(bundle)
-
-      expect(result.result).to eq('pass'), result.result_message
-      expect_messages(messages, [
-        { type: 'info',
-          text: "Patient Summary Problems Section (11450-4)\n\nNo entries; no emptyReason." },
-        { type: 'info',
-          text: "Patient Summary Allergies and Intolerances Section (48765-2)\n\nNo entries; no emptyReason." },
-        { type: 'info',
-          text: "Patient Summary Medication Summary Section (10160-0)\n\nNo entries; no emptyReason." }
-      ] + au_ps_warnings)
+      outcome = run_with_sections(
+        test,
+        sections: [
+          section_without_entries('11450-4'),
+          section_without_entries('48765-2'),
+          section_without_entries('10160-0')
+        ]
+      )
+      expect_result_and_messages(
+        result: outcome[:result],
+        messages: outcome[:messages],
+        status: 'pass',
+        expected_messages: [
+          { type: 'info',
+            text: "Patient Summary Problems Section (11450-4)\n\nNo entries; no emptyReason." },
+          { type: 'info',
+            text: "Patient Summary Allergies and Intolerances Section (48765-2)\n\nNo entries; no emptyReason." },
+          { type: 'info',
+            text: "Patient Summary Medication Summary Section (10160-0)\n\nNo entries; no emptyReason." }
+        ] + au_ps_warnings
+      )
     end
 
     it 'passes when a section has an emptyReason instead of entries' do
-      bundle = build_bundle(sections: [
-                              section_with_empty_reason('11450-4', display: 'Withheld', reason_code: 'withheld'),
-                              section_without_entries('48765-2'),
-                              section_without_entries('10160-0')
-                            ])
-      result, messages = run_bundle(bundle)
-
-      expect(result.result).to eq('pass'), result.result_message
-      expect_messages(messages, [
-        { type: 'info',
-          text: "Patient Summary Problems Section (11450-4)\n\nemptyReason: Withheld (withheld)" },
-        { type: 'info',
-          text: "Patient Summary Allergies and Intolerances Section (48765-2)\n\nNo entries; no emptyReason." },
-        { type: 'info',
-          text: "Patient Summary Medication Summary Section (10160-0)\n\nNo entries; no emptyReason." }
-      ] + au_ps_warnings)
+      outcome = run_with_sections(
+        test,
+        sections: [
+          section_with_empty_reason('11450-4', display: 'Withheld', reason_code: 'withheld'),
+          section_without_entries('48765-2'),
+          section_without_entries('10160-0')
+        ]
+      )
+      expect_result_and_messages(
+        result: outcome[:result],
+        messages: outcome[:messages],
+        status: 'pass',
+        expected_messages: [
+          { type: 'info',
+            text: "Patient Summary Problems Section (11450-4)\n\nemptyReason: Withheld (withheld)" },
+          { type: 'info',
+            text: "Patient Summary Allergies and Intolerances Section (48765-2)\n\nNo entries; no emptyReason." },
+          { type: 'info',
+            text: "Patient Summary Medication Summary Section (10160-0)\n\nNo entries; no emptyReason." }
+        ] + au_ps_warnings
+      )
     end
 
     it 'fails when a mandatory section is absent from the composition' do
-      bundle = build_bundle(sections: [
-                              section_without_entries('48765-2'),
-                              section_without_entries('10160-0')
-                            ])
-      result, messages = run_bundle(bundle)
-
-      expect(result.result).to eq('fail')
-      expect_messages(messages, [
-        { type: 'error',
-          text: "Patient Summary Problems Section (11450-4)\n\nNo composition section found for code: 11450-4" },
-        { type: 'info',
-          text: "Patient Summary Allergies and Intolerances Section (48765-2)\n\nNo entries; no emptyReason." },
-        { type: 'info',
-          text: "Patient Summary Medication Summary Section (10160-0)\n\nNo entries; no emptyReason." }
-      ] + au_ps_warnings)
+      outcome = run_with_sections(
+        test,
+        sections: [
+          section_without_entries('48765-2'),
+          section_without_entries('10160-0')
+        ]
+      )
+      expect_result_and_messages(
+        result: outcome[:result],
+        messages: outcome[:messages],
+        status: 'fail',
+        expected_messages: [
+          { type: 'error',
+            text: "Patient Summary Problems Section (11450-4)\n\nNo composition section found for code: 11450-4" },
+          { type: 'info',
+            text: "Patient Summary Allergies and Intolerances Section (48765-2)\n\nNo entries; no emptyReason." },
+          { type: 'info',
+            text: "Patient Summary Medication Summary Section (10160-0)\n\nNo entries; no emptyReason." }
+        ] + au_ps_warnings
+      )
     end
 
     it 'fails when a section entry reference does not resolve' do
-      bundle = build_bundle(sections: [
-                              section_with_entry('11450-4', 'urn:uuid:missing-condition-1'),
-                              section_without_entries('48765-2'),
-                              section_without_entries('10160-0')
-                            ])
-      result, messages = run_bundle(bundle)
-
-      expect(result.result).to eq('fail')
-      expect_messages(messages, [
-        { type: 'error',
-          text: "Patient Summary Problems Section (11450-4)\n\n**urn:uuid:missing-condition-1** -> ❌ Reference does not resolve" },
-        { type: 'info',
-          text: "Patient Summary Allergies and Intolerances Section (48765-2)\n\nNo entries; no emptyReason." },
-        { type: 'info',
-          text: "Patient Summary Medication Summary Section (10160-0)\n\nNo entries; no emptyReason." }
-      ] + au_ps_warnings)
+      outcome = run_with_sections(
+        test,
+        sections: [
+          section_with_entry('11450-4', 'urn:uuid:missing-condition-1'),
+          section_without_entries('48765-2'),
+          section_without_entries('10160-0')
+        ]
+      )
+      expect_result_and_messages(
+        result: outcome[:result],
+        messages: outcome[:messages],
+        status: 'fail',
+        expected_messages: [
+          { type: 'error',
+            text: "Patient Summary Problems Section (11450-4)\n\n**urn:uuid:missing-condition-1** -> ❌ Reference does not resolve" },
+          { type: 'info',
+            text: "Patient Summary Allergies and Intolerances Section (48765-2)\n\nNo entries; no emptyReason." },
+          { type: 'info',
+            text: "Patient Summary Medication Summary Section (10160-0)\n\nNo entries; no emptyReason." }
+        ] + au_ps_warnings
+      )
     end
 
     it 'passes when a section entry reference resolves with no meta.profile' do
@@ -166,7 +186,8 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
           subject: { reference: 'urn:uuid:patient-1' }
         )
       )
-      bundle = build_bundle(
+      outcome = run_with_sections(
+        test,
         sections: [
           section_with_entry('11450-4', 'urn:uuid:condition-1'),
           section_without_entries('48765-2'),
@@ -174,9 +195,8 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
         ],
         extra_entries: [condition_entry]
       )
-      result, messages = run_bundle(bundle)
-      expect(result.result).to eq('pass'), result.result_message
-      expect(messages).to include_message(
+      expect(outcome[:result].result).to eq('pass'), outcome[:result].result_message
+      expect(outcome[:messages]).to include_message(
         type: 'info',
         text: "Patient Summary Problems Section (11450-4)\n\nentry[0]: **urn:uuid:condition-1** -> Condition (no meta.profile)"
       )
@@ -193,7 +213,8 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
           subject: { reference: 'urn:uuid:patient-1' }
         )
       )
-      bundle = build_bundle(
+      outcome = run_with_sections(
+        test,
         sections: [
           section_with_entry('11450-4', 'urn:uuid:condition-1'),
           section_without_entries('48765-2'),
@@ -201,9 +222,8 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
         ],
         extra_entries: [condition_entry]
       )
-      result, messages = run_bundle(bundle)
-      expect(result.result).to eq('pass'), result.result_message
-      expect(messages).to include_message(
+      expect(outcome[:result].result).to eq('pass'), outcome[:result].result_message
+      expect(outcome[:messages]).to include_message(
         type: 'info',
         text: "Patient Summary Problems Section (11450-4)\n\nentry[0]: **urn:uuid:condition-1** -> Condition (meta.profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-condition)"
       )
@@ -215,7 +235,8 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
         resource: FHIR::Observation.new(resourceType: 'Observation', status: 'final',
                                         code: { coding: [{ code: '1234-5' }] })
       )
-      bundle = build_bundle(
+      outcome = run_with_sections(
+        test,
         sections: [
           section_with_entry('11450-4', 'urn:uuid:observation-1'),
           section_without_entries('48765-2'),
@@ -223,17 +244,19 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
         ],
         extra_entries: [observation_entry]
       )
-      result, messages = run_bundle(bundle)
-
-      expect(result.result).to eq('fail')
-      expect_messages(messages, [
-        { type: 'error',
-          text: "Patient Summary Problems Section (11450-4)\n\nentry[0]: **urn:uuid:observation-1** -> ❌ Invalid resource type" },
-        { type: 'info',
-          text: "Patient Summary Allergies and Intolerances Section (48765-2)\n\nNo entries; no emptyReason." },
-        { type: 'info',
-          text: "Patient Summary Medication Summary Section (10160-0)\n\nNo entries; no emptyReason." }
-      ] + au_ps_warnings)
+      expect_result_and_messages(
+        result: outcome[:result],
+        messages: outcome[:messages],
+        status: 'fail',
+        expected_messages: [
+          { type: 'error',
+            text: "Patient Summary Problems Section (11450-4)\n\nentry[0]: **urn:uuid:observation-1** -> ❌ Invalid resource type" },
+          { type: 'info',
+            text: "Patient Summary Allergies and Intolerances Section (48765-2)\n\nNo entries; no emptyReason." },
+          { type: 'info',
+            text: "Patient Summary Medication Summary Section (10160-0)\n\nNo entries; no emptyReason." }
+        ] + au_ps_warnings
+      )
     end
 
     it 'fails when section entries mix resolved and unresolved references' do # rubocop:disable Metrics/BlockLength
@@ -246,7 +269,8 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
           subject: { reference: 'urn:uuid:patient-1' }
         )
       )
-      bundle = build_bundle(
+      outcome = run_with_sections(
+        test,
         sections: [
           {
             code: { coding: [{ code: '11450-4' }] },
@@ -260,30 +284,31 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
         ],
         extra_entries: [condition_entry]
       )
-      result, messages = run_bundle(bundle)
-      problems_section_message = messages.find do |message|
+      problems_section_message = outcome[:messages].find do |message|
         message.type == 'error' && message.message.start_with?('Patient Summary Problems Section (11450-4)')
       end
 
-      expect(result.result).to eq('fail')
+      expect(outcome[:result].result).to eq('fail')
       expect(problems_section_message).not_to be_nil
       expect(problems_section_message.message).to include('entry[0]: **urn:uuid:condition-1** -> Condition (no meta.profile)')
       expect(problems_section_message.message).to include('**urn:uuid:missing-2** -> ❌ Reference does not resolve')
     end
 
     it 'fails when all mandatory sections are absent from the composition' do
-      bundle = build_bundle(sections: [])
-      result, messages = run_bundle(bundle)
-
-      expect(result.result).to eq('fail')
-      expect_messages(messages, [
-        { type: 'error',
-          text: "Patient Summary Problems Section (11450-4)\n\nNo composition section found for code: 11450-4" },
-        { type: 'error',
-          text: "Patient Summary Allergies and Intolerances Section (48765-2)\n\nNo composition section found for code: 48765-2" },
-        { type: 'error',
-          text: "Patient Summary Medication Summary Section (10160-0)\n\nNo composition section found for code: 10160-0" }
-      ] + au_ps_warnings)
+      outcome = run_with_sections(test, sections: [])
+      expect_result_and_messages(
+        result: outcome[:result],
+        messages: outcome[:messages],
+        status: 'fail',
+        expected_messages: [
+          { type: 'error',
+            text: "Patient Summary Problems Section (11450-4)\n\nNo composition section found for code: 11450-4" },
+          { type: 'error',
+            text: "Patient Summary Allergies and Intolerances Section (48765-2)\n\nNo composition section found for code: 48765-2" },
+          { type: 'error',
+            text: "Patient Summary Medication Summary Section (10160-0)\n\nNo composition section found for code: 10160-0" }
+        ] + au_ps_warnings
+      )
     end
 
     it 'skips when no bundle is provided in scratch' do

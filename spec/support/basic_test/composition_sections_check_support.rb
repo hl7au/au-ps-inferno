@@ -33,6 +33,17 @@ module CompositionSectionsCheckSupport
     [result, messages_for(result)]
   end
 
+  def run_with_sections(test, sections:, extra_entries: [])
+    bundle = build_bundle(sections: sections, extra_entries: extra_entries)
+    result = run(test, {}, scratch_with(bundle))
+    { result: result, messages: messages_for(result) }
+  end
+
+  def expect_result_and_messages(result:, messages:, status:, expected_messages:)
+    expect(result.result).to eq(status), result.result_message
+    expect_messages(messages, expected_messages)
+  end
+
   def messages_for(result)
     Inferno::Repositories::Messages.new.messages_for_result(result.id)
   end

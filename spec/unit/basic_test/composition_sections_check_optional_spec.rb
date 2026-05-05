@@ -30,25 +30,29 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
     before { configure_test_class(test, metadata) }
 
     it 'passes when the optional section is present' do
-      bundle = build_bundle(sections: [section_without_entries('42348-3')])
-      result, messages = run_bundle(bundle)
-
-      expect(result.result).to eq('pass'), result.result_message
-      expect_messages(messages, [
-        { type: 'info',
-          text: "Patient Summary Advance Directives Section (42348-3)\n\nNo entries; no emptyReason." }
-      ])
+      outcome = run_with_sections(test, sections: [section_without_entries('42348-3')])
+      expect_result_and_messages(
+        result: outcome[:result],
+        messages: outcome[:messages],
+        status: 'pass',
+        expected_messages: [
+          { type: 'info',
+            text: "Patient Summary Advance Directives Section (42348-3)\n\nNo entries; no emptyReason." }
+        ]
+      )
     end
 
     it 'fails when the optional section is absent from the composition' do
-      bundle = build_bundle(sections: [])
-      result, messages = run_bundle(bundle)
-
-      expect(result.result).to eq('fail')
-      expect_messages(messages, [
-        { type: 'error',
-          text: "Patient Summary Advance Directives Section (42348-3)\n\nNo composition section found for code: 42348-3" }
-      ])
+      outcome = run_with_sections(test, sections: [])
+      expect_result_and_messages(
+        result: outcome[:result],
+        messages: outcome[:messages],
+        status: 'fail',
+        expected_messages: [
+          { type: 'error',
+            text: "Patient Summary Advance Directives Section (42348-3)\n\nNo composition section found for code: 42348-3" }
+        ]
+      )
     end
 
     it 'fails when an optional section entry references a resource of the wrong type' do
@@ -57,17 +61,20 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
         resource: FHIR::Observation.new(resourceType: 'Observation', status: 'final',
                                         code: { coding: [{ code: '1234-5' }] })
       )
-      bundle = build_bundle(
+      outcome = run_with_sections(
+        test,
         sections: [section_with_entry('42348-3', 'urn:uuid:observation-1')],
         extra_entries: [observation_entry]
       )
-      result, messages = run_bundle(bundle)
-
-      expect(result.result).to eq('fail')
-      expect_messages(messages, [
-        { type: 'error',
-          text: "Patient Summary Advance Directives Section (42348-3)\n\nentry[0]: **urn:uuid:observation-1** -> ❌ Invalid resource type" }
-      ])
+      expect_result_and_messages(
+        result: outcome[:result],
+        messages: outcome[:messages],
+        status: 'fail',
+        expected_messages: [
+          { type: 'error',
+            text: "Patient Summary Advance Directives Section (42348-3)\n\nentry[0]: **urn:uuid:observation-1** -> ❌ Invalid resource type" }
+        ]
+      )
     end
 
     it 'skips when no bundle is provided in scratch' do

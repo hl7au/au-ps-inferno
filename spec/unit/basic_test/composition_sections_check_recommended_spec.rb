@@ -50,32 +50,39 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
     before { configure_test_class(test, metadata) }
 
     it 'passes when recommended sections are present' do
-      bundle = build_bundle(sections: [
-                              section_without_entries('11369-6'),
-                              section_without_entries('30954-2')
-                            ])
-      result, messages = run_bundle(bundle)
-
-      expect(result.result).to eq('pass'), result.result_message
-      expect_messages(messages, [
-        { type: 'info',
-          text: "Patient Summary Immunizations Section (11369-6)\n\nNo entries; no emptyReason." },
-        { type: 'info',
-          text: "Patient Summary Results Section (30954-2)\n\nNo entries; no emptyReason." }
-      ] + au_ps_warnings)
+      outcome = run_with_sections(
+        test,
+        sections: [
+          section_without_entries('11369-6'),
+          section_without_entries('30954-2')
+        ]
+      )
+      expect_result_and_messages(
+        result: outcome[:result],
+        messages: outcome[:messages],
+        status: 'pass',
+        expected_messages: [
+          { type: 'info',
+            text: "Patient Summary Immunizations Section (11369-6)\n\nNo entries; no emptyReason." },
+          { type: 'info',
+            text: "Patient Summary Results Section (30954-2)\n\nNo entries; no emptyReason." }
+        ] + au_ps_warnings
+      )
     end
 
     it 'fails when a recommended section is absent from the composition' do
-      bundle = build_bundle(sections: [section_without_entries('30954-2')])
-      result, messages = run_bundle(bundle)
-
-      expect(result.result).to eq('fail')
-      expect_messages(messages, [
-        { type: 'error',
-          text: "Patient Summary Immunizations Section (11369-6)\n\nNo composition section found for code: 11369-6" },
-        { type: 'info',
-          text: "Patient Summary Results Section (30954-2)\n\nNo entries; no emptyReason." }
-      ] + au_ps_warnings)
+      outcome = run_with_sections(test, sections: [section_without_entries('30954-2')])
+      expect_result_and_messages(
+        result: outcome[:result],
+        messages: outcome[:messages],
+        status: 'fail',
+        expected_messages: [
+          { type: 'error',
+            text: "Patient Summary Immunizations Section (11369-6)\n\nNo composition section found for code: 11369-6" },
+          { type: 'info',
+            text: "Patient Summary Results Section (30954-2)\n\nNo entries; no emptyReason." }
+        ] + au_ps_warnings
+      )
     end
 
     it 'fails when a section entry references a resource of the wrong type' do
@@ -83,22 +90,25 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:d
         fullUrl: 'urn:uuid:condition-1',
         resource: FHIR::Condition.new(resourceType: 'Condition')
       )
-      bundle = build_bundle(
+      outcome = run_with_sections(
+        test,
         sections: [
           section_with_entry('11369-6', 'urn:uuid:condition-1'),
           section_without_entries('30954-2')
         ],
         extra_entries: [condition_entry]
       )
-      result, messages = run_bundle(bundle)
-
-      expect(result.result).to eq('fail')
-      expect_messages(messages, [
-        { type: 'error',
-          text: "Patient Summary Immunizations Section (11369-6)\n\nentry[0]: **urn:uuid:condition-1** -> ❌ Invalid resource type" },
-        { type: 'info',
-          text: "Patient Summary Results Section (30954-2)\n\nNo entries; no emptyReason." }
-      ] + au_ps_warnings)
+      expect_result_and_messages(
+        result: outcome[:result],
+        messages: outcome[:messages],
+        status: 'fail',
+        expected_messages: [
+          { type: 'error',
+            text: "Patient Summary Immunizations Section (11369-6)\n\nentry[0]: **urn:uuid:condition-1** -> ❌ Invalid resource type" },
+          { type: 'info',
+            text: "Patient Summary Results Section (30954-2)\n\nNo entries; no emptyReason." }
+        ] + au_ps_warnings
+      )
     end
 
     it 'skips when no bundle is provided in scratch' do
