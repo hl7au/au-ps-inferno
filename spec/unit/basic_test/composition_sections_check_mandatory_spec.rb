@@ -1,182 +1,222 @@
 # frozen_string_literal: true
 
-require 'fhir_models'
+require_relative '../../support/basic_test/composition_sections_mandatory_fixture_spec_setup'
 
-require_relative '../../support/basic_test/composition_sections_check_support'
-require File.join(Gem::Specification.find_by_name('inferno_core').full_gem_path, 'spec/runnable_context')
+SUCCESS_BUNDLE_FILENAME = 'mandatory-success-bundle.json'
+ERROR_MS_BUNDLE_FILENAME = 'mandatory-error-ms-bundle.json'
+METADATA_FILENAME = 'metadata.yaml'
 
-# rubocop:disable Layout/LineLength
-RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do # rubocop:disable Metrics/BlockLength
-  include_context 'when testing a runnable'
-  include_context 'composition sections check setup'
+RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do
+  include_context 'mandatory composition sections fixture by metadata path'
 
-  describe 'Composition Sections Check - Mandatory Sections' do # rubocop:disable Metrics/BlockLength
-    let(:test) { find_test(:test_composition_mandatory_sections) }
-    let(:metadata) { CompositionSectionsMetadata::MANDATORY_SECTIONS }
-
-    before { configure_test_class(test, metadata) }
-
-    it 'passes when all mandatory sections are present' do
-      outcome = run_with_sections(
-        test,
-        sections: [
-          section_without_entries(CompositionSectionsConstants::PROBLEMS_SECTION[:code]),
-          section_without_entries(CompositionSectionsConstants::ALLERGIES_SECTION[:code]),
-          section_without_entries(CompositionSectionsConstants::MEDICATION_SECTION[:code])
-        ]
+  describe 'Example Mandatory Fixture Spec' do
+    it 'It should pass when all mandatory elements are present and references are resolved correctly' do
+      outcome = run_with_fixture_bundle_for(
+        test_method: :test_composition_mandatory_sections,
+        fixture_filename: SUCCESS_BUNDLE_FILENAME,
+        metadata_fixture_filename: METADATA_FILENAME
       )
 
       expect_pass(outcome)
-      expect_info_message(outcome, "Patient Summary Problems Section (11450-4)\n\nNo entries; no emptyReason.")
-      expect_info_message(outcome, "Patient Summary Allergies and Intolerances Section (48765-2)\n\nNo entries; no emptyReason.")
-      expect_info_message(outcome, "Patient Summary Medication Summary Section (10160-0)\n\nNo entries; no emptyReason.")
-      expect_warning_message(outcome, "**Profile**: AllergyIntolerance — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-allergyintolerance\n\n**Message**: No resources found")
-      expect_warning_message(outcome, "**Profile**: MedicationStatement — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medicationstatement\n\n**Message**: No resources found")
-      expect_warning_message(outcome, "**Profile**: MedicationRequest — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medicationrequest\n\n**Message**: No resources found")
     end
 
-    it 'passes when a section has an emptyReason instead of entries' do
-      outcome = run_with_sections(
-        test,
-        sections: [
-          section_with_empty_reason(CompositionSectionsConstants::PROBLEMS_SECTION[:code], display: 'Withheld', reason_code: 'withheld'),
-          section_without_entries(CompositionSectionsConstants::ALLERGIES_SECTION[:code]),
-          section_without_entries(CompositionSectionsConstants::MEDICATION_SECTION[:code])
-        ]
-      )
-
-      expect_pass(outcome)
-      expect_info_message(outcome, "Patient Summary Problems Section (11450-4)\n\nemptyReason: Withheld (withheld)")
-      expect_info_message(outcome, "Patient Summary Allergies and Intolerances Section (48765-2)\n\nNo entries; no emptyReason.")
-      expect_info_message(outcome, "Patient Summary Medication Summary Section (10160-0)\n\nNo entries; no emptyReason.")
-      expect_warning_message(outcome, "**Profile**: AllergyIntolerance — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-allergyintolerance\n\n**Message**: No resources found")
-      expect_warning_message(outcome, "**Profile**: MedicationStatement — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medicationstatement\n\n**Message**: No resources found")
-      expect_warning_message(outcome, "**Profile**: MedicationRequest — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medicationrequest\n\n**Message**: No resources found")
-    end
-
-    it 'fails when a mandatory section is absent from the composition' do
-      outcome = run_with_sections(
-        test,
-        sections: [
-          section_without_entries(CompositionSectionsConstants::ALLERGIES_SECTION[:code]),
-          section_without_entries(CompositionSectionsConstants::MEDICATION_SECTION[:code])
-        ]
+    it 'It should fail when any mandatory element is not populated or references are not resolved correctly' do
+      outcome = run_with_fixture_bundle_for(
+        test_method: :test_composition_mandatory_sections,
+        fixture_filename: ERROR_MS_BUNDLE_FILENAME,
+        metadata_fixture_filename: METADATA_FILENAME
       )
 
       expect_fail(outcome)
-      expect_error_message(outcome, "Patient Summary Problems Section (11450-4)\n\nNo composition section found for code: 11450-4")
-      expect_info_message(outcome, "Patient Summary Allergies and Intolerances Section (48765-2)\n\nNo entries; no emptyReason.")
-      expect_info_message(outcome, "Patient Summary Medication Summary Section (10160-0)\n\nNo entries; no emptyReason.")
-      expect_warning_message(outcome, "**Profile**: AllergyIntolerance — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-allergyintolerance\n\n**Message**: No resources found")
-      expect_warning_message(outcome, "**Profile**: MedicationStatement — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medicationstatement\n\n**Message**: No resources found")
-      expect_warning_message(outcome, "**Profile**: MedicationRequest — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medicationrequest\n\n**Message**: No resources found")
     end
 
-    it 'fails when a section entry reference does not resolve' do
-      outcome = run_with_sections(
-        test,
-        sections: [
-          section_with_entry(CompositionSectionsConstants::PROBLEMS_SECTION[:code], 'urn:uuid:missing-condition-1'),
-          section_without_entries(CompositionSectionsConstants::ALLERGIES_SECTION[:code]),
-          section_without_entries(CompositionSectionsConstants::MEDICATION_SECTION[:code])
-        ]
+    it 'It should return info message when all mandatory and optional elements are populated' do
+      outcome = run_with_fixture_bundle_for(
+        test_method: :test_composition_mandatory_sections,
+        fixture_filename: SUCCESS_BUNDLE_FILENAME,
+        metadata_fixture_filename: METADATA_FILENAME
+      )
+      expect_info_message(
+        outcome,
+        <<~MSG.chomp
+          **Profile**: AllergyIntolerance — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-allergyintolerance
+
+          **Message**: All Must Support elements are populated.
+
+          List of Must Support elements populated or missing
+
+          ✅ Populated: clinicalStatus
+
+          ✅ Populated: verificationStatus
+
+          ✅ Populated: type
+
+          ✅ Populated: code (M)
+
+          ✅ Populated: patient (M)
+
+          ✅ Populated: patient.reference (M)
+
+          ✅ Populated: onsetDateTime
+
+          ✅ Populated: note
+
+          ✅ Populated: reaction
+
+          ✅ Populated: reaction.manifestation (M)
+
+          ✅ Populated: reaction.severity
+        MSG
+      )
+    end
+    it 'It should return warning message with details when mandatory elements are populated but optional elements are not' do
+      outcome = run_with_fixture_bundle_for(
+        test_method: :test_composition_mandatory_sections,
+        fixture_filename: SUCCESS_BUNDLE_FILENAME,
+        metadata_fixture_filename: METADATA_FILENAME
       )
 
-      expect_fail(outcome)
-      expect_error_message(outcome, "Patient Summary Problems Section (11450-4)\n\n**urn:uuid:missing-condition-1** -> ❌ Reference does not resolve")
-      expect_info_message(outcome, "Patient Summary Allergies and Intolerances Section (48765-2)\n\nNo entries; no emptyReason.")
-      expect_info_message(outcome, "Patient Summary Medication Summary Section (10160-0)\n\nNo entries; no emptyReason.")
-      expect_warning_message(outcome, "**Profile**: Condition — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-condition\n\n**Message**: No resources found")
-      expect_warning_message(outcome, "**Profile**: AllergyIntolerance — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-allergyintolerance\n\n**Message**: No resources found")
-      expect_warning_message(outcome, "**Profile**: MedicationStatement — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medicationstatement\n\n**Message**: No resources found")
-      expect_warning_message(outcome, "**Profile**: MedicationRequest — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medicationrequest\n\n**Message**: No resources found")
+      expect_warning_message(
+        outcome,
+        <<~MSG.chomp
+          **Profile**: Condition — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-condition
+
+          **Message**: At least one optional Must Support element is not populated. Further testing with data containing the missing elements or clarification the system does not ever know a value for the element is required.
+
+          List of Must Support elements populated or missing
+
+          ✅ Populated: clinicalStatus
+
+          ⚠️ Missing: verificationStatus
+
+          ✅ Populated: category (M)
+
+          ⚠️ Missing: severity
+
+          ✅ Populated: code (M)
+
+          ✅ Populated: subject (M)
+
+          ✅ Populated: subject.reference (M)
+
+          ⚠️ Missing: onsetDateTime
+
+          ⚠️ Missing: abatement[x]
+
+          ⚠️ Missing: note
+        MSG
+      )
     end
 
-    it 'passes when a section entry reference resolves with no meta.profile' do
-      outcome = run_with_sections(
-        test,
-        sections: [
-          section_with_entry(CompositionSectionsConstants::PROBLEMS_SECTION[:code], 'urn:uuid:condition-1'),
-          section_without_entries(CompositionSectionsConstants::ALLERGIES_SECTION[:code]),
-          section_without_entries(CompositionSectionsConstants::MEDICATION_SECTION[:code])
-        ],
-        extra_entries: [condition_entry(url: 'urn:uuid:condition-1')]
+    it 'It should return warning message with details when there is no resource in the section' do
+      outcome = run_with_fixture_bundle_for(
+        test_method: :test_composition_mandatory_sections,
+        fixture_filename: ERROR_MS_BUNDLE_FILENAME,
+        metadata_fixture_filename: METADATA_FILENAME
       )
 
-      expect_pass(outcome)
-      expect_info_message(outcome, "Patient Summary Problems Section (11450-4)\n\nentry[0]: **urn:uuid:condition-1** -> Condition (no meta.profile)")
+      expect_warning_message(
+        outcome,
+        <<~MSG.chomp
+          **Profile**: MedicationRequest — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medicationrequest
+
+          **Message**: No resources found
+        MSG
+      )
     end
 
-    it 'passes when a section entry reference resolves with meta.profile' do
-      outcome = run_with_sections(
-        test,
-        sections: [
-          section_with_entry(CompositionSectionsConstants::PROBLEMS_SECTION[:code], 'urn:uuid:condition-1'),
-          section_without_entries(CompositionSectionsConstants::ALLERGIES_SECTION[:code]),
-          section_without_entries(CompositionSectionsConstants::MEDICATION_SECTION[:code])
-        ],
-        extra_entries: [condition_entry(url: 'urn:uuid:condition-1', meta_profile: 'http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-condition')]
+    it 'It should return error message with details when any mandatory element is not populated' do
+      outcome = run_with_fixture_bundle_for(
+        test_method: :test_composition_mandatory_sections,
+        fixture_filename: ERROR_MS_BUNDLE_FILENAME,
+        metadata_fixture_filename: METADATA_FILENAME
       )
 
-      expect_pass(outcome)
-      expect_info_message(outcome, "Patient Summary Problems Section (11450-4)\n\nentry[0]: **urn:uuid:condition-1** -> Condition (meta.profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-condition)")
+      expect_error_message(
+        outcome,
+        <<~MSG.chomp
+          **Profile**: Condition — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-condition
+
+          **Message**: At least one mandatory Must Support elements is not populated.
+
+          List of Must Support elements populated or missing
+
+          ✅ Populated: clinicalStatus
+
+          ⚠️ Missing: verificationStatus
+
+          ❌ Missing: category (M)
+
+          ⚠️ Missing: severity
+
+          ✅ Populated: code (M)
+
+          ✅ Populated: subject (M)
+
+          ✅ Populated: subject.reference (M)
+
+          ⚠️ Missing: onsetDateTime
+
+          ⚠️ Missing: abatement[x]
+
+          ⚠️ Missing: note
+        MSG
+      )
     end
 
-    it 'fails when a section entry references a resource of the wrong type' do
-      outcome = run_with_sections(
-        test,
-        sections: [
-          section_with_entry(CompositionSectionsConstants::PROBLEMS_SECTION[:code], 'urn:uuid:observation-1'),
-          section_without_entries(CompositionSectionsConstants::ALLERGIES_SECTION[:code]),
-          section_without_entries(CompositionSectionsConstants::MEDICATION_SECTION[:code])
-        ],
-        extra_entries: [observation_entry]
+    it 'It should return info message with details when reference is resolved without meta.profile' do
+      outcome = run_with_fixture_bundle_for(
+        test_method: :test_composition_mandatory_sections,
+        fixture_filename: SUCCESS_BUNDLE_FILENAME,
+        metadata_fixture_filename: METADATA_FILENAME
       )
 
-      expect_fail(outcome)
-      expect_error_message(outcome, "Patient Summary Problems Section (11450-4)\n\nentry[0]: **urn:uuid:observation-1** -> ❌ Invalid resource type")
-      expect_info_message(outcome, "Patient Summary Allergies and Intolerances Section (48765-2)\n\nNo entries; no emptyReason.")
-      expect_info_message(outcome, "Patient Summary Medication Summary Section (10160-0)\n\nNo entries; no emptyReason.")
-      expect_warning_message(outcome, "**Profile**: Condition — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-condition\n\n**Message**: No resources found")
-      expect_warning_message(outcome, "**Profile**: AllergyIntolerance — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-allergyintolerance\n\n**Message**: No resources found")
-      expect_warning_message(outcome, "**Profile**: MedicationStatement — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medicationstatement\n\n**Message**: No resources found")
-      expect_warning_message(outcome, "**Profile**: MedicationRequest — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medicationrequest\n\n**Message**: No resources found")
+      expect_info_message(
+        outcome,
+        <<~MSG.chomp
+          Patient Summary Problems Section (11450-4)
+
+          entry[0]: **urn:uuid:310f1593-d610-4144-a6e8-1f823d955e0d** -> Condition (no meta.profile)
+        MSG
+      )
     end
 
-    it 'fails when section entries mix resolved and unresolved references' do
-      outcome = run_with_sections(
-        test,
-        sections: [
-          section_with_entries(CompositionSectionsConstants::PROBLEMS_SECTION[:code], 'urn:uuid:condition-1', 'urn:uuid:missing-2'),
-          section_without_entries(CompositionSectionsConstants::ALLERGIES_SECTION[:code]),
-          section_without_entries(CompositionSectionsConstants::MEDICATION_SECTION[:code])
-        ],
-        extra_entries: [condition_entry(url: 'urn:uuid:condition-1')]
+    it 'It should return info message with details when reference is resolved with meta.profile' do
+      outcome = run_with_fixture_bundle_for(
+        test_method: :test_composition_mandatory_sections,
+        fixture_filename: ERROR_MS_BUNDLE_FILENAME,
+        metadata_fixture_filename: METADATA_FILENAME
       )
 
-      expect_fail(outcome)
-      expect_error_message(outcome, "Patient Summary Problems Section (11450-4)\n\nentry[0]: **urn:uuid:condition-1** -> Condition (no meta.profile)")
-      expect_error_message(outcome, '**urn:uuid:missing-2** -> ❌ Reference does not resolve')
-      expect_info_message(outcome, "Patient Summary Allergies and Intolerances Section (48765-2)\n\nNo entries; no emptyReason.")
-      expect_info_message(outcome, "Patient Summary Medication Summary Section (10160-0)\n\nNo entries; no emptyReason.")
-      expect_warning_message(outcome, "**Profile**: AllergyIntolerance — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-allergyintolerance\n\n**Message**: No resources found")
-      expect_warning_message(outcome, "**Profile**: MedicationStatement — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medicationstatement\n\n**Message**: No resources found")
+      expect_info_message(
+        outcome,
+        <<~MSG.chomp
+          Patient Summary Allergies and Intolerances Section (48765-2)
+
+          entry[0]: **urn:uuid:ad6fb7b7-c76f-441e-88a5-9051e795db26** -> AllergyIntolerance (meta.profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-allergyintolerance)
+
+          entry[1]: **urn:uuid:06ba95f5-345b-412d-aa66-99e354470015** -> AllergyIntolerance (no meta.profile)
+
+          entry[2]: **urn:uuid:d24db2d5-3400-4158-892c-d018acdeba09** -> AllergyIntolerance (no meta.profile)
+        MSG
+      )
     end
 
-    it 'fails when all mandatory sections are absent from the composition' do
-      outcome = run_with_sections(test, sections: [])
+    it 'It should return error message with details when reference is resolved but resource type is not permitted' do
+      outcome = run_with_fixture_bundle_for(
+        test_method: :test_composition_mandatory_sections,
+        fixture_filename: ERROR_MS_BUNDLE_FILENAME,
+        metadata_fixture_filename: METADATA_FILENAME
+      )
 
-      expect_fail(outcome)
-      expect_error_message(outcome, "Patient Summary Problems Section (11450-4)\n\nNo composition section found for code: 11450-4")
-      expect_error_message(outcome, "Patient Summary Allergies and Intolerances Section (48765-2)\n\nNo composition section found for code: 48765-2")
-      expect_error_message(outcome, "Patient Summary Medication Summary Section (10160-0)\n\nNo composition section found for code: 10160-0")
-      expect_warning_message(outcome, "**Profile**: Condition — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-condition\n\n**Message**: No resources found")
-      expect_warning_message(outcome, "**Profile**: AllergyIntolerance — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-allergyintolerance\n\n**Message**: No resources found")
-      expect_warning_message(outcome, "**Profile**: MedicationStatement — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medicationstatement\n\n**Message**: No resources found")
-      expect_warning_message(outcome, "**Profile**: MedicationRequest — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medicationrequest\n\n**Message**: No resources found")
+      expect_error_message(
+        outcome,
+        <<~MSG.chomp
+          Patient Summary Medication Summary Section (10160-0)
+
+          entry[0]: **urn:uuid:347e8435-cea1-4e94-9755-abb027926bb1** -> ❌ Invalid resource type
+        MSG
+      )
     end
-
-    include_examples 'skips when no bundle is provided'
   end
 end
-# rubocop:enable Layout/LineLength
