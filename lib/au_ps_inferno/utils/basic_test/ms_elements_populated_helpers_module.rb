@@ -141,7 +141,7 @@ module AUPSTestKit
       metadata[:elements]
         .filter { |element| element[:expression].include?('.') }
         .map do |element|
-          normalize_element(element).merge(type: :element)
+        normalize_element(element).merge(type: :element)
       end
     end
 

@@ -52,3 +52,29 @@ RSpec.shared_context 'mandatory composition sections fixture by metadata path' d
 
   before { configure_test_class_with_metadata_path(test, metadata_path) }
 end
+
+RSpec.shared_context 'recommended composition sections fixture by metadata path' do
+  include_context 'when testing a runnable'
+  include_context 'composition sections check setup'
+  include CompositionSectionsFixtureSupport
+
+  let(:test_method) { :test_composition_recommended_sections }
+  let(:test) { find_test(test_method) }
+  let(:metadata_fixture_filename) { 'metadata.yaml' }
+  let(:metadata_path) { metadata_path_from_fixture_filename(metadata_fixture_filename) }
+
+  before { configure_test_class_with_metadata_path(test, metadata_path) }
+end
+
+RSpec.shared_context 'optional composition sections fixture by metadata path' do
+  include_context 'when testing a runnable'
+  include_context 'composition sections check setup'
+  include CompositionSectionsFixtureSupport
+
+  let(:test_method) { :test_composition_optional_sections }
+  let(:test) { find_test(test_method) }
+  let(:metadata_fixture_filename) { 'metadata.yaml' }
+  let(:metadata_path) { metadata_path_from_fixture_filename(metadata_fixture_filename) }
+
+  before { configure_test_class_with_metadata_path(test, metadata_path) }
+end

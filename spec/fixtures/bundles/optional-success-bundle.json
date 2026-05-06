@@ -1,0 +1,141 @@
+{
+  "resourceType": "Bundle",
+  "id": "aups-optional-success",
+  "meta": {
+    "profile": ["http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-bundle"]
+  },
+  "language": "en-AU",
+  "identifier": {
+    "system": "urn:ietf:rfc:3986",
+    "value": "urn:uuid:cccccccc-0003-0000-0000-000000000000"
+  },
+  "type": "document",
+  "timestamp": "2025-03-01T10:00:00+10:00",
+  "entry": [
+    {
+      "fullUrl": "urn:uuid:cccccccc-0003-0000-0000-000000000001",
+      "resource": {
+        "resourceType": "Composition",
+        "id": "cccccccc-0003-0000-0000-000000000001",
+        "status": "final",
+        "type": {
+          "coding": [{"system": "http://loinc.org", "code": "60591-5", "display": "Patient summary Document"}]
+        },
+        "subject": {"reference": "urn:uuid:bbbbbbbb-0000-0000-0000-000000000001"},
+        "date": "2025-03-01",
+        "author": [{"reference": "urn:uuid:bbbbbbbb-0000-0000-0000-000000000004"}],
+        "title": "Australian Patient Summary",
+        "custodian": {"reference": "urn:uuid:bbbbbbbb-0000-0000-0000-000000000002"},
+        "section": [
+          {
+            "title": "Advance Directives",
+            "code": {"coding": [{"system": "http://loinc.org", "code": "42348-3"}]},
+            "text": {"status": "generated", "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">No advance directives.</div>"}
+          },
+          {
+            "title": "Alerts",
+            "code": {"coding": [{"system": "http://loinc.org", "code": "104605-1"}]},
+            "text": {"status": "generated", "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">No alerts.</div>"}
+          },
+          {
+            "title": "Functional Status",
+            "code": {"coding": [{"system": "http://loinc.org", "code": "47420-5"}]},
+            "text": {"status": "generated", "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">Functional status.</div>"},
+            "entry": [{"reference": "urn:uuid:cccccccc-0003-0000-0000-000000000006"}]
+          },
+          {
+            "title": "History of Past Illness",
+            "code": {"coding": [{"system": "http://loinc.org", "code": "11348-0"}]},
+            "text": {"status": "generated", "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">No past illness.</div>"}
+          },
+          {
+            "title": "History of Pregnancy",
+            "code": {"coding": [{"system": "http://loinc.org", "code": "10162-6"}]},
+            "text": {"status": "generated", "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">Not applicable.</div>"}
+          },
+          {
+            "title": "Patient Story",
+            "code": {"coding": [{"system": "http://loinc.org", "code": "81338-6"}]},
+            "text": {"status": "generated", "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">No patient story recorded.</div>"}
+          },
+          {
+            "title": "Plan of Care",
+            "code": {"coding": [{"system": "http://loinc.org", "code": "18776-5"}]},
+            "text": {"status": "generated", "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">No plan of care.</div>"}
+          },
+          {
+            "title": "Social History",
+            "code": {"coding": [{"system": "http://loinc.org", "code": "29762-2"}]},
+            "text": {"status": "generated", "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">No social history recorded.</div>"}
+          },
+          {
+            "title": "Vital Signs",
+            "code": {"coding": [{"system": "http://loinc.org", "code": "8716-3"}]},
+            "text": {"status": "generated", "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">No vital signs recorded.</div>"}
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:bbbbbbbb-0000-0000-0000-000000000001",
+      "resource": {
+        "resourceType": "Patient",
+        "id": "bbbbbbbb-0000-0000-0000-000000000001",
+        "name": [{"family": "Smith", "given": ["Jane"]}],
+        "gender": "female",
+        "birthDate": "1975-04-12"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:bbbbbbbb-0000-0000-0000-000000000002",
+      "resource": {
+        "resourceType": "Organization",
+        "id": "bbbbbbbb-0000-0000-0000-000000000002",
+        "name": "Test Medical Centre"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:bbbbbbbb-0000-0000-0000-000000000003",
+      "resource": {
+        "resourceType": "Practitioner",
+        "id": "bbbbbbbb-0000-0000-0000-000000000003",
+        "name": [{"family": "Jones", "given": ["Alice"]}]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:bbbbbbbb-0000-0000-0000-000000000004",
+      "resource": {
+        "resourceType": "PractitionerRole",
+        "id": "bbbbbbbb-0000-0000-0000-000000000004",
+        "practitioner": {"reference": "urn:uuid:bbbbbbbb-0000-0000-0000-000000000003"},
+        "organization": {"reference": "urn:uuid:bbbbbbbb-0000-0000-0000-000000000002"}
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:cccccccc-0003-0000-0000-000000000006",
+      "resource": {
+        "resourceType": "Condition",
+        "id": "cccccccc-0003-0000-0000-000000000006",
+        "clinicalStatus": {
+          "coding": [{"system": "http://terminology.hl7.org/CodeSystem/condition-clinical", "code": "active", "display": "Active"}]
+        },
+        "verificationStatus": {
+          "coding": [{"system": "http://terminology.hl7.org/CodeSystem/condition-ver-status", "code": "confirmed", "display": "Confirmed"}]
+        },
+        "category": [
+          {"coding": [{"system": "http://terminology.hl7.org/CodeSystem/condition-category", "code": "problem-list-item"}]}
+        ],
+        "severity": {
+          "coding": [{"system": "http://snomed.info/sct", "code": "255604002", "display": "Mild"}]
+        },
+        "code": {
+          "coding": [{"system": "http://snomed.info/sct", "code": "73595000", "display": "Stress"}]
+        },
+        "subject": {"reference": "urn:uuid:bbbbbbbb-0000-0000-0000-000000000001"},
+        "onsetDateTime": "2022-06-01",
+        "abatementDateTime": "2023-01-15",
+        "note": [{"text": "Resolved with therapy"}]
+      }
+    }
+  ]
+}
