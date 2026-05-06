@@ -128,7 +128,7 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadIssuesHelpersModule d
                                 issues: ['Resource not found for reference: urn:uuid:condition-3'] })
     end
 
-    it 'resolves correctly when profile format omits the version suffix' do # rubocop:disable Layout/LineLength
+    it 'resolves correctly when profile format omits the version suffix' do
       two_part_metadata = {
         code: section_code,
         entries: [{ profiles: ['Condition|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-condition'] }]
@@ -141,7 +141,7 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadIssuesHelpersModule d
       expect(result.first[:issues]).to be_empty
     end
 
-    it 'marks reference as wrong type when profile string is a bare URL without a type prefix' do # rubocop:disable Layout/LineLength
+    it 'marks reference as wrong type when profile string is a bare URL without a type prefix' do
       url_only_metadata = {
         code: section_code,
         entries: [{ profiles: ['http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-condition'] }]

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module CompositionSectionsMetadata
+module CompositionSectionsMetadata # rubocop:disable Metrics/ModuleLength
   MANDATORY_SECTIONS = {
     composition_sections: [
       {
@@ -48,6 +48,36 @@ module CompositionSectionsMetadata
           Condition.code
           Condition.subject
           Condition.subject.reference
+        ]
+      },
+      {
+        resource: 'AllergyIntolerance',
+        profile_url: 'http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-allergyintolerance',
+        must_supports: {
+          elements: [
+            { path: 'patient' },
+            { path: 'code' }
+          ]
+        },
+        mandatory_elements: %w[
+          AllergyIntolerance.patient
+          AllergyIntolerance.code
+        ]
+      },
+      {
+        resource: 'MedicationStatement',
+        profile_url: 'http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medicationstatement',
+        must_supports: {
+          elements: [
+            { path: 'status' },
+            { path: 'subject' },
+            { path: 'medicationCodeableConcept' }
+          ]
+        },
+        mandatory_elements: %w[
+          MedicationStatement.status
+          MedicationStatement.subject
+          MedicationStatement.medicationCodeableConcept
         ]
       }
     ]
