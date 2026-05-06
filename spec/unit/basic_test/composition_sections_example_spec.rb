@@ -2,6 +2,10 @@
 
 require_relative '../../support/basic_test/composition_sections_mandatory_fixture_spec_setup'
 
+SUCCESS_BUNDLE_FILENAME = 'mandatory-success-bundle.json'
+ERROR_MS_BUNDLE_FILENAME = 'mandatory-error-ms-bundle.json'
+METADATA_FILENAME = 'metadata.yaml'
+
 RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do
   include_context 'mandatory composition sections fixture by metadata path'
 
@@ -9,8 +13,8 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do
     it 'It should pass when all mandatory elements are present and references are resolved correctly' do
       outcome = run_with_fixture_bundle_for(
         test_method: :test_composition_mandatory_sections,
-        fixture_filename: 'mandatory-success-bundle.json',
-        metadata_fixture_filename: 'metadata.yaml'
+        fixture_filename: SUCCESS_BUNDLE_FILENAME,
+        metadata_fixture_filename: METADATA_FILENAME
       )
 
       expect_pass(outcome)
@@ -19,8 +23,8 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do
     it 'It should fail when any mandatory element is not populated or references are not resolved correctly' do
       outcome = run_with_fixture_bundle_for(
         test_method: :test_composition_mandatory_sections,
-        fixture_filename: 'mandatory-error-ms-bundle.json',
-        metadata_fixture_filename: 'metadata.yaml'
+        fixture_filename: ERROR_MS_BUNDLE_FILENAME,
+        metadata_fixture_filename: METADATA_FILENAME
       )
 
       expect_fail(outcome)
@@ -29,8 +33,8 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do
     it 'It should return info message when all mandatory and optional elements are populated' do
       outcome = run_with_fixture_bundle_for(
         test_method: :test_composition_mandatory_sections,
-        fixture_filename: 'mandatory-success-bundle.json',
-        metadata_fixture_filename: 'metadata.yaml'
+        fixture_filename: SUCCESS_BUNDLE_FILENAME,
+        metadata_fixture_filename: METADATA_FILENAME
       )
       expect_info_message(
         outcome,
@@ -68,8 +72,8 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do
     it 'It should return warning message with details when mandatory elements are populated but optional elements are not' do
       outcome = run_with_fixture_bundle_for(
         test_method: :test_composition_mandatory_sections,
-        fixture_filename: 'mandatory-success-bundle.json',
-        metadata_fixture_filename: 'metadata.yaml'
+        fixture_filename: SUCCESS_BUNDLE_FILENAME,
+        metadata_fixture_filename: METADATA_FILENAME
       )
 
       expect_warning_message(
@@ -107,8 +111,8 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do
     it 'It should return warning message with details when there is no resource in the section' do
       outcome = run_with_fixture_bundle_for(
         test_method: :test_composition_mandatory_sections,
-        fixture_filename: 'mandatory-error-ms-bundle.json',
-        metadata_fixture_filename: 'metadata.yaml'
+        fixture_filename: ERROR_MS_BUNDLE_FILENAME,
+        metadata_fixture_filename: METADATA_FILENAME
       )
 
       expect_warning_message(
@@ -124,8 +128,8 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do
     it 'It should return error message with details when any mandatory element is not populated' do
       outcome = run_with_fixture_bundle_for(
         test_method: :test_composition_mandatory_sections,
-        fixture_filename: 'mandatory-error-ms-bundle.json',
-        metadata_fixture_filename: 'metadata.yaml'
+        fixture_filename: ERROR_MS_BUNDLE_FILENAME,
+        metadata_fixture_filename: METADATA_FILENAME
       )
 
       expect_error_message(
@@ -163,8 +167,8 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do
     it 'It should return info message with details when reference is resolved without meta.profile' do
       outcome = run_with_fixture_bundle_for(
         test_method: :test_composition_mandatory_sections,
-        fixture_filename: 'mandatory-success-bundle.json',
-        metadata_fixture_filename: 'metadata.yaml'
+        fixture_filename: SUCCESS_BUNDLE_FILENAME,
+        metadata_fixture_filename: METADATA_FILENAME
       )
 
       expect_info_message(
@@ -180,8 +184,8 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do
     it 'It should return info message with details when reference is resolved with meta.profile' do
       outcome = run_with_fixture_bundle_for(
         test_method: :test_composition_mandatory_sections,
-        fixture_filename: 'mandatory-error-ms-bundle.json',
-        metadata_fixture_filename: 'metadata.yaml'
+        fixture_filename: ERROR_MS_BUNDLE_FILENAME,
+        metadata_fixture_filename: METADATA_FILENAME
       )
 
       expect_info_message(
@@ -201,8 +205,8 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do
     it 'It should return error message with details when reference is resolved but resource type is not permitted' do
       outcome = run_with_fixture_bundle_for(
         test_method: :test_composition_mandatory_sections,
-        fixture_filename: 'mandatory-error-ms-bundle.json',
-        metadata_fixture_filename: 'metadata.yaml'
+        fixture_filename: ERROR_MS_BUNDLE_FILENAME,
+        metadata_fixture_filename: METADATA_FILENAME
       )
 
       expect_error_message(
