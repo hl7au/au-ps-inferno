@@ -10,10 +10,39 @@ module AUPSTestKit
 
       def check_ms_elements_populated(resource_type, resources)
         profile_metadata = group_metadata_for(resource_type)
-        ms_checker_for(profile_metadata).elements_present_statuses(resources)
+        collapsed_elements_statuses(ms_checker_for(profile_metadata).elements_present_statuses(resources))
       end
 
       private
+
+      def collapsed_elements_statuses(elements_statuses)
+        to_collapse = parent_paths_to_collapse(elements_statuses)
+        elements_statuses.filter do |element|
+          next true unless element[:path].include?('.')
+
+          to_collapse.none? do |to_collapse_path|
+            element[:path].start_with?("#{to_collapse_path}.")
+          end
+        end
+      end
+
+      def parent_paths_to_collapse(elements_statuses)
+        optional_missing_parent_elements(elements_statuses).map { |element| element[:path] }.uniq
+      end
+
+      def complex_elements(elements_statuses)
+        elements_statuses.filter { |element| element[:path].include?('.') }.map { |element| element[:path] }
+      end
+
+      def optional_missing_parent_elements(elements_statuses)
+        complex_elements_paths = complex_elements(elements_statuses)
+        elements_statuses.filter do |element|
+          element[:present] == false &&
+            element[:mandatory] == false &&
+            !element[:path].include?('.') &&
+            complex_elements_paths.any? { |complex_element| complex_element.start_with?(element[:path]) }
+        end
+      end
 
       def raw_sections_profiles(sections_codes)
         sections_metadata = metadata_manager.sections_metadata_by_codes(sections_codes)
@@ -36,7 +65,6 @@ module AUPSTestKit
         uniq_profiles = Set.new
         raw_sections_profiles(sections_codes).filter do |profile|
           _, profile_url = profile[:profile].split('|', 2)
-          next false if uniq_profiles.include?(profile_url)
           next false unless profile_url.present? && profile_url.start_with?(AU_PS_PROFILE_BASE_URL)
           next false if uniq_profiles.include?(profile_url)
 
