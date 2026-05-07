@@ -11,6 +11,6 @@ group :development, :test do
   gem 'simplecov', require: false
 end
 
-gem 'inferno_suite_generator', github: 'hl7au/inferno_suite_generator', ref: '61fa318d86459d94298a32dcb37bec43f3653e8b'
+gem 'inferno_suite_generator', github: 'hl7au/inferno_suite_generator', ref: 'db36af62742307cb5f28c650355d2b00490b3283'
 gem 'pg', '~> 1.5'
 gem 'rubocop', '~> 1.71.2'
