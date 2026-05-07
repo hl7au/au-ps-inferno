@@ -40,16 +40,4 @@ module CompositionSectionsCheckAssertions
   def expect_skip(outcome)
     outcome_expect_to_status(outcome, 'skip')
   end
-
-  def expect_result_and_messages(result:, messages:, status:, expected_messages:)
-    expect(result.result).to eq(status), result.result_message
-    expect_messages(messages, expected_messages)
-  end
-
-  def expect_messages(messages, expected_messages)
-    expect(messages.size).to eq(expected_messages.size)
-    expected_messages.each do |expected_message|
-      expect(messages).to include_message(type: expected_message[:type], text: expected_message[:text])
-    end
-  end
 end
