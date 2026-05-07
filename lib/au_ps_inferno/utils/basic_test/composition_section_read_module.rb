@@ -37,7 +37,8 @@ module AUPSTestKit
                                                                         bundle_resource: bundle_resource,
                                                                         mandatory: mandatory)
       ms_test_pass = composition_section_check_ms_pass?(sections_codes: sections_codes,
-                                                        bundle_resource: bundle_resource)
+                                                        bundle_resource: bundle_resource,
+                                                        all_present: mandatory)
 
       assert mandatory ? refs_test_pass : true, 'Some of the mandatory sections are not populated correctly.'
       assert mandatory ? ms_test_pass : true,
