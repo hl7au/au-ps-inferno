@@ -17,7 +17,7 @@ module AUPSTestKit
 
       def raw_sections_profiles(sections_codes)
         sections_metadata = metadata_manager.sections_metadata_by_codes(sections_codes)
-        profiles_with_context = sections_metadata.flat_map do |section_metadata|
+        sections_metadata.flat_map do |section_metadata|
           section_short = section_metadata[:short]
           section_code = section_metadata[:code]
           section_metadata[:entries].flat_map do |entry_metadata|
@@ -30,14 +30,18 @@ module AUPSTestKit
             end
           end
         end
-
-        profiles_with_context.uniq { |item| [item[:profile], item[:section_code]] }
       end
 
       def sections_profiles(sections_codes)
+        uniq_profiles = Set.new
         raw_sections_profiles(sections_codes).filter do |profile|
-          profile_url = profile[:profile].split('|')[1]
-          profile_url.present? && profile_url.start_with?(AU_PS_PROFILE_BASE_URL)
+          _, profile_url = profile[:profile].split('|', 2)
+          next false if uniq_profiles.include?(profile_url)
+          next false unless profile_url.present? && profile_url.start_with?(AU_PS_PROFILE_BASE_URL)
+          next false if uniq_profiles.include?(profile_url)
+
+          uniq_profiles.add(profile_url)
+          true
         end
       end
 
