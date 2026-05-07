@@ -7,10 +7,10 @@ require_relative '../../../lib/au_ps_inferno/utils/basic_test/composition_sectio
 require_relative '../../../lib/au_ps_inferno/utils/metadata_manager'
 require_relative '../../support/basic_test/ms_elements_populated_spec_support'
 
-RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule::BasicTestCompositionSectionCheckResourcesMSElementsModule do # rubocop:disable Metrics/BlockLength,Layout/LineLength
+RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule::BasicTestCompositionSectionCheckResourcesMSElementsModule do # rubocop:disable Layout/LineLength
   include_context 'ms elements populated setup'
 
-  let(:minimal_metadata) do # rubocop:disable Metrics/BlockLength
+  let(:minimal_metadata) do
     {
       groups: [
         {
@@ -51,7 +51,7 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule::BasicTestComp
     }
   )]
 
-  describe '#check_ms_elements_populated' do # rubocop:disable Metrics/BlockLength
+  describe '#check_ms_elements_populated' do
     it 'returns expected result shape as array of hashes with keys :definition, :mandatory, :path, :present' do
       result = test_instance.check_ms_elements_populated(target_resource_type, resources_array)
 

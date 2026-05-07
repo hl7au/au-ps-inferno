@@ -10,7 +10,7 @@ require_relative '../../support/basic_test/references_resolution_report_spec_sup
 RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadIssuesHelpersModule do
   include_context 'references resolution report setup'
 
-  describe '#references_resolution_report' do # rubocop:disable Metrics/BlockLength
+  describe '#references_resolution_report' do
     let(:section_code) { '11450-4' }
     let(:section_metadata) do
       {
@@ -73,8 +73,11 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadIssuesHelpersModule d
     end
 
     it 'returns mixed report items preserving entry order when section has multiple references' do
-      bundle = build_section_bundle(section_code: section_code, references: ['urn:uuid:condition-1', 'urn:uuid:condition-2'],
-                                    bundle_entries: [condition_entry])
+      bundle = build_section_bundle(
+        section_code: section_code,
+        references: ['urn:uuid:condition-1', 'urn:uuid:condition-2'],
+        bundle_entries: [condition_entry]
+      )
       result = test_instance.references_resolution_report(section_metadata, bundle)
 
       expect(result).to eq(

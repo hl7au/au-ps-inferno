@@ -15,6 +15,10 @@ Metrics/MethodLength:
   Exclude:
     - "lib/au_ps_inferno/utils/basic_test/composition_section_check_resources_ms_elements_module.rb"
 
+Metrics/BlockLength:
+  Exclude:
+    - "spec/**/*"
+
 Layout/LineLength:
   Exclude:
     - "lib/au_ps_inferno/generator/suite_structure/definitions.rb"
