@@ -50,7 +50,7 @@ module AUPSTestKit
       end
 
       def check_ms_elements_populated_against_profiles(sections_profiles, resources_to_check_ms)
-        sections_profiles.map { |profile| process_profile(profile, resources_to_check_ms) }
+        sections_profiles.map { |profile| check_ms_elements(profile, resources_to_check_ms) }
       end
 
       def normalize_resource_type_and_profile(profile)
@@ -81,7 +81,7 @@ module AUPSTestKit
         }
       end
 
-      def process_profile(profile, resources_to_check_ms)
+      def check_ms_elements(profile, resources_to_check_ms)
         resource_type_and_profile = normalize_resource_type_and_profile(profile)
         resource_type, profile_url = resource_type_and_profile.values_at(:resource_type, :profile_url)
         profile_info_str = msg_line('Profile', "#{resource_type} — #{profile_url}")

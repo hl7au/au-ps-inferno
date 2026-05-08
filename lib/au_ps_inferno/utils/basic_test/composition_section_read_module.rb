@@ -6,6 +6,8 @@ require_relative 'composition_section_read_issues_helpers_module'
 module AUPSTestKit
   # Reading composition section rows: profile/entry matching and list outcomes.
   module BasicTestCompositionSectionReadModule
+    # !!!!!!!!!!
+    # TODO: Remove generator and replace with runtime
     MANDATORY_SECTIONS_CODES = %w[11450-4 48765-2 10160-0].freeze
     RECOMMENDED_SECTIONS_CODES = %w[11369-6 30954-2 47519-4 46264-8].freeze
     OPTIONAL_SECTIONS_CODES = %w[42348-3 104605-1 47420-5 11348-0 10162-6 81338-6 18776-5 29762-2 8716-3].freeze
@@ -31,6 +33,8 @@ module AUPSTestKit
     end
 
     def test_mandatory_sections(bundle_data)
+      # test_composition_sections_data(sections_codes: MANDATORY_SECTIONS_CODES, bundle_data: bundle_data,
+      # assertation_behavior)
       test_composition_sections_data(sections_codes: MANDATORY_SECTIONS_CODES, bundle_data: bundle_data)
     end
 
@@ -43,6 +47,7 @@ module AUPSTestKit
     end
 
     def test_composition_sections_data(sections_codes:, bundle_data:)
+      # TODO: Add parameter to control how FN should react on missing elements (error or pass)
       bundle_resource = BundleDecorator.new(bundle_data.to_hash)
       refs_test_pass = composition_sections_references_resolution_pass?(sections_codes: sections_codes,
                                                                         bundle_resource: bundle_resource)
