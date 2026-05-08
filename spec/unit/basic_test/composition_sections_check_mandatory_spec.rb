@@ -26,7 +26,7 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do
 
       expect_info_message(
         outcome,
-        <<~MSG.chomp
+        msg(<<~MSG)
           **Profile**: AllergyIntolerance — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-allergyintolerance
 
           **Message**: All Must Support elements are populated.
@@ -63,7 +63,7 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do
 
       expect_warning_message(
         outcome,
-        <<~MSG.chomp
+        msg(<<~MSG)
           **Profile**: Condition — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-condition
 
           **Message**: At least one optional Must Support element is not populated. Further testing with data containing the missing elements or clarification the system does not ever know a value for the element is required.
@@ -98,7 +98,7 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do
 
       expect_warning_message(
         outcome,
-        <<~MSG.chomp
+        msg(<<~MSG)
           **Profile**: MedicationRequest — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medicationrequest
 
           **Message**: No resources found
@@ -111,7 +111,7 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do
 
       expect_error_message(
         outcome,
-        <<~MSG.chomp
+        msg(<<~MSG)
           **Profile**: Condition — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-condition
 
           **Message**: At least one mandatory Must Support elements is not populated.
@@ -146,7 +146,7 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do
 
       expect_info_message(
         outcome,
-        <<~MSG.chomp
+        msg(<<~MSG)
           Patient Summary Problems Section (11450-4)
 
           entry[0]: **urn:uuid:310f1593-d610-4144-a6e8-1f823d955e0d** -> Condition (no meta.profile)
@@ -159,7 +159,7 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do
 
       expect_info_message(
         outcome,
-        <<~MSG.chomp
+        msg(<<~MSG)
           Patient Summary Allergies and Intolerances Section (48765-2)
 
           entry[0]: **urn:uuid:ad6fb7b7-c76f-441e-88a5-9051e795db26** -> AllergyIntolerance (meta.profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-allergyintolerance)
@@ -176,7 +176,7 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do
 
       expect_error_message(
         outcome,
-        <<~MSG.chomp
+        msg(<<~MSG)
           Patient Summary Medication Summary Section (10160-0)
 
           entry[0]: **urn:uuid:347e8435-cea1-4e94-9755-abb027926bb1** -> ❌ Invalid resource type

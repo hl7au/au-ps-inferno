@@ -8,6 +8,10 @@ module CompositionSectionsFixtureSupport
   FIXTURE_BUNDLES_DIR = File.expand_path('../../fixtures/bundles', __dir__).freeze
   FIXTURE_METADATA_PATH = File.expand_path('../../fixtures/metadata.yaml', __dir__).freeze
 
+  def msg(text)
+    text.chomp
+  end
+
   def load_fixture_bundle_hash(filename)
     fixture_path = File.join(FIXTURE_BUNDLES_DIR, filename)
     JSON.parse(File.read(fixture_path))
