@@ -14,18 +14,3 @@ RSpec.shared_context 'composition sections by metadata path base' do
 
   before { configure_test_class_with_metadata_path(test, CompositionSectionsFixtureSupport::FIXTURE_METADATA_PATH) }
 end
-
-RSpec.shared_context 'mandatory composition sections fixture by metadata path' do
-  include_context 'composition sections by metadata path base'
-  let(:test_method) { :test_composition_mandatory_sections }
-end
-
-RSpec.shared_context 'recommended composition sections fixture by metadata path' do
-  include_context 'composition sections by metadata path base'
-  let(:test_method) { :test_composition_recommended_sections }
-end
-
-RSpec.shared_context 'optional composition sections fixture by metadata path' do
-  include_context 'composition sections by metadata path base'
-  let(:test_method) { :test_composition_optional_sections }
-end

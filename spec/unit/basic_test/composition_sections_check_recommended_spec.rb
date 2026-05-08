@@ -3,9 +3,10 @@
 require_relative '../../support/basic_test/composition_sections_mandatory_fixture_spec_setup'
 
 RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do
-  include_context 'recommended composition sections fixture by metadata path'
+  include_context 'composition sections by metadata path base'
 
   describe 'Composition Sections Check - Recommended Sections' do
+    let(:test) { find_test(:test_composition_recommended_sections) }
     let(:success_bundle_filename) { 'recommended-success-bundle.json' }
     let(:error_bundle_filename) { 'recommended-error-ms-bundle.json' }
 
