@@ -31,7 +31,7 @@ module AUPSTestKit
     def validate_populated_slices_in_composition(slices_array)
       return false unless scratch_bundle.present?
 
-      composition_resource = BundleDecorator.new(scratch_bundle.to_hash).composition_resource
+      composition_resource = BundleDecorator.new(scratch_bundle).composition_resource
       return false unless composition_resource.present?
 
       check_event_slice_presence(composition_resource, slices_array)

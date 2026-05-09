@@ -8,7 +8,7 @@ module AUPSTestKit
     def validate_populated_undefined_sections_in_bundle(sections_code_to_filter, elements_array)
       skip_if scratch_bundle.blank?, 'No Bundle resource provided'
 
-      bundle_resource = BundleDecorator.new(scratch_bundle.to_hash)
+      bundle_resource = BundleDecorator.new(scratch_bundle)
       sections_to_validate = bundle_resource.composition_resource.section_codes.filter do |section_code|
         !sections_code_to_filter.include?(section_code)
       end
@@ -21,7 +21,7 @@ module AUPSTestKit
       skip_if scratch_bundle.blank?, 'No Bundle resource provided'
       skip_if section_codes_array.blank?, 'No sections to validate'
 
-      composition = BundleDecorator.new(scratch_bundle.to_hash).composition_resource
+      composition = BundleDecorator.new(scratch_bundle).composition_resource
       all_errors = section_codes_array.filter_map do |section_code|
         section_bundle_row_failure?(composition, section_code, elements_array, optional: optional)
       end

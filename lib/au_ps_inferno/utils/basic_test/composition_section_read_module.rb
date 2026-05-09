@@ -32,7 +32,7 @@ module AUPSTestKit
     end
 
     def test_composition_sections_data(sections_codes:, bundle_data:, mandatory: false)
-      bundle_resource = BundleDecorator.new(bundle_data.to_hash)
+      bundle_resource = BundleDecorator.new(bundle_data)
       refs_test_pass = composition_sections_references_resolution_pass?(sections_codes: sections_codes,
                                                                         bundle_resource: bundle_resource,
                                                                         mandatory: mandatory)
