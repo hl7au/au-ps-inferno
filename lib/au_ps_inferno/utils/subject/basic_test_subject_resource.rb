@@ -8,7 +8,7 @@ module AUPSTestKit
     def subject_resource
       return false unless scratch_bundle.present?
 
-      bundle_resource = BundleDecorator.new(scratch_bundle.to_hash)
+      bundle_resource = BundleDecorator.new(scratch_bundle)
       composition_resource = bundle_resource.composition_resource
       return false unless composition_resource.present?
 

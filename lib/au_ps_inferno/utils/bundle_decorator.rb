@@ -9,7 +9,7 @@ class BundleDecorator < FHIR::Bundle
     if data.is_a?(Hash)
       super
     else
-      super(data.to_hash)
+      super(data.respond_to?(:source_hash) ? data.source_hash : data.to_hash)
     end
   end
 

@@ -46,7 +46,7 @@ module AUPSTestKit
         type_str = identifier_type_display(result[:identifier])
         "✅ Populated: **#{result[:slice][:name]}** — system: #{result[:slice][:system]}#{type_str}"
       else
-        "❌ Missing: **#{result[:slice][:name]}**"
+        "⚠️ Missing: **#{result[:slice][:name]}**"
       end
     end
 
@@ -54,7 +54,7 @@ module AUPSTestKit
       if result[:identifier].present?
         "✅ Populated: **#{result[:slice][:name]}** — system: #{result[:slice][:system]}"
       else
-        "❌ Missing: **#{result[:slice][:name]}**"
+        "⚠️ Missing: **#{result[:slice][:name]}**"
       end
     end
   end
