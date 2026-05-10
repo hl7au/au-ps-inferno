@@ -6,7 +6,7 @@ class BundleEntryDecorator < FHIR::Bundle::Entry
     if data.is_a?(Hash)
       super
     else
-      super(data.to_hash)
+      super(data.respond_to?(:source_hash) ? data.source_hash : data.to_hash)
     end
   end
 

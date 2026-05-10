@@ -9,7 +9,7 @@ class BundleDecorator < FHIR::Bundle
     if data.is_a?(Hash)
       super
     else
-      super(data.to_hash)
+      super(data.respond_to?(:source_hash) ? data.source_hash : data.to_hash)
     end
   end
 
@@ -21,6 +21,10 @@ class BundleDecorator < FHIR::Bundle
 
   def composition_entry
     entry.find { |entr| entr.resource.resourceType == 'Composition' }
+  end
+
+  def resources_by_references(entry_references)
+    entry_references.filter_map { |ref| resource_by_reference(ref) }.uniq
   end
 
   def resource_by_reference(entry_reference)

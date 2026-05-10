@@ -8,7 +8,9 @@ gemspec
 
 group :development, :test do
   gem 'debug'
+  gem 'simplecov', require: false
 end
 
+gem 'inferno_suite_generator', github: 'hl7au/inferno_suite_generator', ref: 'b7d35902727343e898cd8d03dff600823b15384c'
 gem 'pg', '~> 1.5'
 gem 'rubocop', '~> 1.71.2'

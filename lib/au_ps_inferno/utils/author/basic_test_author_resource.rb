@@ -8,7 +8,7 @@ module AUPSTestKit
     def author_resource
       return nil unless scratch_bundle.present?
 
-      bundle_resource = BundleDecorator.new(scratch_bundle.to_hash)
+      bundle_resource = BundleDecorator.new(scratch_bundle)
       composition_resource = bundle_resource.composition_resource
       return nil unless composition_resource.present?
 

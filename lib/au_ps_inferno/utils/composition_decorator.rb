@@ -8,12 +8,21 @@ class CompositionDecorator < FHIR::Composition
     if data.is_a?(Hash)
       super
     else
-      super(data.to_hash)
+      super(data.respond_to?(:source_hash) ? data.source_hash : data.to_hash)
     end
   end
 
   def section_codes
     section.map { |sect| section_first_code(sect) }.compact
+  end
+
+  def entry_references_by_codes(codes)
+    sections = sections_by_codes(codes).compact
+    sections.map(&:entry_references).flatten
+  end
+
+  def sections_by_codes(codes)
+    codes.map { |code| section_by_code(code) }
   end
 
   def section_by_code(code)

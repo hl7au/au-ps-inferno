@@ -21,36 +21,12 @@ module AUPSTestKit
       }
     end
 
-    def base_result_messages(container_type, resource)
-      [
-        'Must Support elements correctly populated',
-        "**Referenced #{container_type}**: #{resource_type_and_profile_str(resource, container_type)}",
-        '## List of Must Support elements (complex) populated or missing'
-      ]
-    end
-
     def base_result_messages_sub_elements(container_type, resource, parent_path)
       [
         'Must Support sub-elements correctly populated',
         "**Referenced #{container_type}**: #{resource_type_and_profile_str(resource, container_type)}",
         "## Complex element **#{parent_path}** — Must Support sub-elements populated or missing"
       ]
-    end
-
-    def process_elements(resource, target_metadata, state, messages)
-      normalize_elements_from_metadata(target_metadata).each do |element|
-        populated = resolve_path_with_dar(resource, element[:expression]).first.present?
-        update_population_state(state, :element, populated, element[:min])
-        messages << element_message_item_template(populated, element[:label], mandatory?(element[:min]))
-      end
-    end
-
-    def process_slices(resource, target_metadata, state, messages)
-      normalize_slices_from_metadata(target_metadata).each do |slice|
-        populated = resolve_slice_populated?(resource, slice)
-        update_population_state(state, :slice, populated, slice[:min])
-        messages << element_message_item_template(populated, slice[:label], mandatory?(slice[:min]))
-      end
     end
 
     def resolve_slice_populated?(resource, slice)
@@ -73,33 +49,12 @@ module AUPSTestKit
       min.to_i.positive?
     end
 
-    def finalize_population_result(state, messages)
-      add_message(message_level(state), messages.join("\n\n"))
-      assert mandatory_populated?(state), assert_message
-    end
-
-    def message_level(state)
-      calculate_message_level(
-        failed: !mandatory_populated?(state),
-        warning: mandatory_populated?(state) && !optional_populated?(state),
-        info: mandatory_populated?(state) && optional_populated?(state)
-      )
-    end
-
     def mandatory_populated?(state)
       state[:mandatory_elements] && state[:mandatory_slices]
     end
 
-    def optional_populated?(state)
-      state[:optional_elements] && state[:optional_slices]
-    end
-
     def assert_message
       'When any mandatory Must Support element is missing. See the list in messages tab.'
-    end
-
-    def simple_elements(metadata)
-      metadata[:elements].reject { |element| element[:expression].include?('.') }
     end
 
     def normalize_element(element)
@@ -111,20 +66,6 @@ module AUPSTestKit
       }
     end
 
-    def extension_slices(metadata)
-      metadata[:slices].filter { |slice| slice[:expression].include?('extension') }
-    end
-
-    def normalize_slice(slice)
-      {
-        id: slice[:id],
-        expression: slice[:expression],
-        profile: slice[:profile],
-        min: slice[:min],
-        label: slice[:label]
-      }
-    end
-
     def element_message_item_template(populated, label, mandatory)
       [
         "#{boolean_to_existent_string(populated)}:",
@@ -133,21 +74,12 @@ module AUPSTestKit
       ].compact.join(' ')
     end
 
-    def normalize_elements_from_metadata(metadata)
-      simple_elements(metadata).map { |element| normalize_element(element) }
-    end
-
     def normalize_sub_elements_from_metadata(metadata)
       metadata[:elements]
         .filter { |element| element[:expression].include?('.') }
         .map do |element|
         normalize_element(element).merge(type: :element)
       end
-    end
-
-    def normalize_slices_from_metadata(metadata)
-      # According to the business logic, we need to check only extension slices in tests 8.01, 9.01 ... 11.01
-      extension_slices(metadata).map { |slice| normalize_slice(slice) }
     end
 
     def sub_elements_grouped_by_parent_path(metadata)

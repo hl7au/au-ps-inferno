@@ -1,5 +1,10 @@
 # frozen_string_literal: true
 
+require 'fhir_models'
+require 'fileutils'
+require 'yaml'
+require_relative '../utils/inferno_suite_generator_compat'
+
 require_relative 'ig_resources_extractor'
 require_relative 'metadata_manager'
 require_relative 'naming'
@@ -13,6 +18,7 @@ require_relative 'primitive_test'
 require_relative 'primitive_group'
 require_relative 'high_order_group'
 require_relative 'suite_primitive'
+require_relative 'generator_group_based_metadata_module'
 
 # Generator for test suites targeting AU PS and IPS implementation guides.
 #
@@ -30,8 +36,12 @@ require_relative 'suite_primitive'
 # rubocop:disable Metrics/ClassLength -- orchestration class; primitive helpers kept private below
 class Generator
   PATH_BASE = 'lib/au_ps_inferno'
+  SyntheticCapability = Struct.new(
+    :type, :interaction, :operation, :searchParam, :searchInclude, :searchRevInclude, :extension
+  )
 
   include Naming
+  include GeneratorGroupBasedMetadataModule
 
   # High-order groups are built from SuiteStructure (single source of truth).
   # See SuiteStructure and TestConfigRegistry for adding new groups or test types.
@@ -48,11 +58,13 @@ class Generator
     @ig_path = ig_path
     @suite_version = Generator.suite_version_from_ig_path(ig_path)
     @version_suffix = Generator.version_suffix(File.basename(ig_path))
+    register_inferno_suite_generator_config
     @resources_manager = IGResourcesExtractor.new(
       ig_path,
       additional_resources_path: additional_resources_path
     )
     @metadata = MetadataManager.new(@resources_manager.ig_resources)
+    @new_metadata = build_new_metadata
   end
 
   # Runs the generator: extracts IG resources, writes metadata, generates bundle and section groups,
@@ -305,7 +317,12 @@ class Generator
     return if @suite_version.empty?
 
     metadata_path = File.join(File.expand_path(File.join('lib', 'au_ps_inferno', @suite_version)), 'metadata.yaml')
-    @metadata.save_to_file(metadata_path)
+    FileUtils.mkdir_p(File.dirname(metadata_path))
+    @metadata.initiate_build
+    old_metadata = @metadata.metadata_to_dump
+    new_metadata = @new_metadata&.to_hash || {}
+    merged_metadata = merge_metadata_values(old_metadata, new_metadata)
+    File.write(metadata_path, YAML.dump(merged_metadata))
   end
 end
 # rubocop:enable Metrics/ClassLength
