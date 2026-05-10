@@ -25,30 +25,16 @@ module AUPSTestKit
 
     def test_composition_recommended_sections
       check_bundle_exists_in_scratch
-      test_recommended_sections(scratch_bundle)
+      test_composition_sections_data(sections_codes: RECOMMENDED_SECTIONS_CODES, bundle_data: scratch_bundle)
     end
 
     def test_composition_optional_sections
       check_bundle_exists_in_scratch
-      test_optional_sections(scratch_bundle)
+      test_composition_sections_data(sections_codes: OPTIONAL_SECTIONS_CODES, bundle_data: scratch_bundle)
     end
 
-    def test_mandatory_sections(bundle_data)
-      # test_composition_sections_data(sections_codes: MANDATORY_SECTIONS_CODES, bundle_data: bundle_data,
-      # assertation_behavior)
-      test_composition_sections_data(sections_codes: MANDATORY_SECTIONS_CODES, bundle_data: bundle_data)
-    end
-
-    def test_recommended_sections(bundle_data)
-      test_composition_sections_data(sections_codes: RECOMMENDED_SECTIONS_CODES, bundle_data: bundle_data)
-    end
-
-    def test_optional_sections(bundle_data)
-      test_composition_sections_data(sections_codes: OPTIONAL_SECTIONS_CODES, bundle_data: bundle_data)
-    end
-
-    def test_composition_sections_data(sections_codes:, bundle_data:)
-      # TODO: Add parameter to control how FN should react on missing elements (error or pass)
+    def test_composition_sections_data(sections_codes:, bundle_data:, mandatory: false)
+      # Mandatory: true - FN should fail if any mandatory section is not populated correctly.
       bundle_resource = BundleDecorator.new(bundle_data)
       refs_test_pass = composition_sections_references_resolution_pass?(sections_codes: sections_codes,
                                                                         bundle_resource: bundle_resource,
