@@ -11,46 +11,68 @@ module AUPSTestKit
       guard_populated_resource(container_type)
 
       resource = get_resource_by_container_type(container_type)
-      raw_metadata = metadata_manager.group_metadata_by_resource_type(resource.resourceType)
-      return unless raw_metadata.present?
+      return unless (metadata = get_metadata_by_resource_type(resource.resourceType)).present?
 
       author_and_device_resource?(container_type, resource)
 
-      profile_metadata = InfernoSuiteGenerator::Generator::GroupMetadata.new(raw_metadata)
-      ms_checker = InfernoSuiteGenerator::MSChecker.new(profile_metadata)
-      results = ms_checker.elements_present_statuses([resource], all_present: false)
-      filtered_results = results.filter { |result| sub_element?(result[:path]) }
-      new_grouped_sub_elements = filtered_results.group_by { |result| result[:path].split('.').first }
+      filtered_results, new_grouped_sub_elements, ms_checker, results =
+        sub_elements_filtered_grouped_and_check_context(resource, metadata)
       omit_if new_grouped_sub_elements.blank?, 'No complex element with Must Support sub-elements is defined'
 
-      new_grouped_sub_elements.each do |parent_path, sub_elements|
-        sub_element_message(ms_checker, sub_elements, resource, parent_path, results)
-      end
-
+      show_ms_elements_messages(new_grouped_sub_elements, ms_checker, resource, results)
       assert assert_result(filtered_results, new_grouped_sub_elements),
              'When any mandatory Must Support sub-element is missing. See the list in messages tab.'
     end
 
     private
 
-    def assert_result(results, grouped_sub_elements)
-      result = true
+    def ms_checker(metadata)
+      @ms_checker ||= InfernoSuiteGenerator::MSChecker.new(metadata)
+    end
 
-      grouped_sub_elements.each do |parent_path, sub_elements|
-        mandatory_sub_elements = sub_elements.filter { |res| res[:mandatory] == true }
-        next if mandatory_sub_elements.empty?
+    def get_metadata_by_resource_type(resource_type)
+      raw_metadata = metadata_manager.group_metadata_by_resource_type(resource_type)
 
-        mandatory_sub_elements_present = mandatory_sub_elements.all? { |res| res[:present] == true }
+      InfernoSuiteGenerator::Generator::GroupMetadata.new(raw_metadata)
+    end
 
-        parent_element = results.find { |res| res[:path] == parent_path }
-        next if parent_element.nil?
+    def sub_elements_filtered_grouped_and_check_context(resource, metadata)
+      checker = ms_checker(metadata)
+      results = checker.elements_present_statuses([resource], all_present: false)
+      filtered_results = results.filter { |result| sub_element?(result[:path]) }
+      grouped = filtered_results.group_by { |result| result[:path].split('.').first }
 
-        parent_present = parent_element[:present] == true
+      [filtered_results, grouped, checker, results]
+    end
 
-        result = false if !mandatory_sub_elements_present && parent_present
+    def show_ms_elements_messages(new_grouped_sub_elements, ms_checker, resource, results)
+      new_grouped_sub_elements.each do |parent_path, sub_elements|
+        sub_element_message(ms_checker, sub_elements, resource, parent_path, results)
       end
+    end
 
-      result
+    def assert_result(results, grouped_sub_elements)
+      grouped_sub_elements.all? do |parent_path, sub_elements|
+        !sub_element_assertion_failure?(results, parent_path, sub_elements)
+      end
+    end
+
+    def mandatory_ms_sub_elements(sub_elements)
+      sub_elements.filter { |res| res[:mandatory] == true }
+    end
+
+    def sub_element_assertion_failure?(results, parent_path, sub_elements)
+      mandatory_sub_elements = mandatory_ms_sub_elements(sub_elements)
+      return false if mandatory_sub_elements.empty?
+
+      mandatory_sub_elements_present = mandatory_sub_elements.all? { |res| res[:present] == true }
+
+      parent_element = results.find { |res| res[:path] == parent_path }
+      return false if parent_element.nil?
+
+      parent_present = parent_element[:present] == true
+
+      !mandatory_sub_elements_present && parent_present
     end
 
     def sub_element_message(ms_checker, sub_elements, resource, parent_path, results)
