@@ -34,7 +34,7 @@ run: build up
 restart: stop down setup up
 
 tests:
-	$(compose) $(inferno) bundle exec rspec
+	$(compose) $(inferno) bundle exec rspec spec/unit
 
 coverage:
 	$(compose) run -e COVERAGE=1 inferno bundle exec rspec --format documentation
