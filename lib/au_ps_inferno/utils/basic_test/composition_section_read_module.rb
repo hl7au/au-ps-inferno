@@ -32,12 +32,13 @@ module AUPSTestKit
     end
 
     def test_composition_sections_data(sections_codes:, bundle_data:, mandatory: false)
-      bundle_resource = BundleDecorator.new(bundle_data.to_hash)
+      bundle_resource = BundleDecorator.new(bundle_data)
       refs_test_pass = composition_sections_references_resolution_pass?(sections_codes: sections_codes,
                                                                         bundle_resource: bundle_resource,
                                                                         mandatory: mandatory)
       ms_test_pass = composition_section_check_ms_pass?(sections_codes: sections_codes,
-                                                        bundle_resource: bundle_resource)
+                                                        bundle_resource: bundle_resource,
+                                                        all_present: mandatory)
 
       assert mandatory ? refs_test_pass : true, 'Some of the mandatory sections are not populated correctly.'
       assert mandatory ? ms_test_pass : true,

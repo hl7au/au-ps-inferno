@@ -624,7 +624,7 @@ class Generator
 
     def get_extension_slices_from_structure_definition(sd_data)
       # Return mandatory MS extension slices
-      sd_decorator = StructureDefinitionDecorator.new(sd_data.to_hash)
+      sd_decorator = StructureDefinitionDecorator.new(sd_data)
       extension_slices = sd_decorator.extension_slices
       filtered_extension_slices = extension_slices.filter { |element| element.mustSupport == true }
       filtered_extension_slices.map do |element|
@@ -646,7 +646,7 @@ class Generator
     end
 
     def get_elements_from_structure_definition(sd_data)
-      structure_definition_data = StructureDefinitionDecorator.new(sd_data.to_hash)
+      structure_definition_data = StructureDefinitionDecorator.new(sd_data)
       elements = structure_definition_data.simple_elements(include_str: "#{sd_data.type}.")
       filtered_elements = elements.reject { |element| element.id.include?(':') }
       filtered_elements.map do |element|
