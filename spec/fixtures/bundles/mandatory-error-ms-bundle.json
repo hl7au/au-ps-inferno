@@ -97,9 +97,20 @@
             "div" : "<div xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en-AU\" lang=\"en-AU\">\n              <table border=\"1\">\n                <thead>\n                  <tr>\n                    <th>Medicine</th>\n                    <th>Directions</th>\n                    <th>Date asserted</th>\n                  </tr>\n                </thead>\n                <tbody>\n                  <tr>\n                    <td><b>Bisoprolol</b> 2.5mg tab</td>\n                    <td>Take 1/2 tablet in the morning</td>\n                    <td>05/01/2025</td>\n                  </tr>\n                </tbody>\n              </table>\n            </div>"
           },
           "entry" : [{
+            "reference" : "urn:uuid:aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee"
+          },
+          {
             "reference" : "urn:uuid:347e8435-cea1-4e94-9755-abb027926bb1"
           }]
         }]
+      }
+    },
+    {
+      "fullUrl" : "urn:uuid:aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee",
+      "resource" : {
+        "resourceType" : "Device",
+        "id" : "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee",
+        "status" : "active"
       }
     },
     {
@@ -488,7 +499,7 @@
     {
       "fullUrl" : "urn:uuid:347e8435-cea1-4e94-9755-abb027926bb1",
       "resource" : {
-        "resourceType" : "Device",
+        "resourceType" : "MedicationStatement",
         "id" : "347e8435-cea1-4e94-9755-abb027926bb1",
         "text" : {
           "status" : "generated",

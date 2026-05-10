@@ -16,10 +16,10 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do
       expect_pass(outcome)
     end
 
-    it 'fails when any mandatory element is not populated or references are not resolved correctly' do
+    it 'passes even when the error bundle has MS or reference issues (recommended sections do not fail the runnable)' do
       outcome = run_with_fixture_bundle(test, fixture_filename: error_bundle_filename)
 
-      expect_fail(outcome)
+      expect_pass(outcome)
     end
 
     it 'returns an info message when all mandatory and optional elements are populated' do
@@ -28,9 +28,9 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do
       expect_info_message(
         outcome,
         <<~MSG.chomp
-          **Profile**: Immunization — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-immunization
+          All Must Support elements are populated in the Patient Summary Immunizations Section (11369-6) section.
 
-          **Message**: All Must Support elements are populated.
+          **Profile**: Immunization — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-immunization
 
           List of Must Support elements populated or missing
 
@@ -40,7 +40,7 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do
 
           ✅ Populated: patient (M)
 
-          ✅ Populated: patient.reference (M)
+          |- ✅ Populated: patient.reference (M)
 
           ✅ Populated: occurrenceDateTime
 
@@ -59,9 +59,9 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do
       expect_warning_message(
         outcome,
         <<~MSG.chomp
-          **Profile**: Observation — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-diagnosticresult-path
+          At least one optional Must Support element is not populated in the Patient Summary Results Section (30954-2) section. Further testing with data containing the missing elements or clarification the system does not ever know a value for the element is required.
 
-          **Message**: At least one optional Must Support element is not populated. Further testing with data containing the missing elements or clarification the system does not ever know a value for the element is required.
+          **Profile**: Observation — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-diagnosticresult-path
 
           List of Must Support elements populated or missing
 
@@ -73,7 +73,7 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do
 
           ✅ Populated: subject (M)
 
-          ✅ Populated: subject.reference (M)
+          |- ✅ Populated: subject.reference (M)
 
           ✅ Populated: effectiveDateTime
 
@@ -89,23 +89,15 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do
 
           ⚠️ Missing: referenceRange
 
-          ⚠️ Missing: referenceRange.low
-
-          ⚠️ Missing: referenceRange.high
-
-          ⚠️ Missing: referenceRange.type
-
-          ⚠️ Missing: referenceRange.text
-
           ⚠️ Missing: hasMember
 
           ✅ Populated: component
 
-          ✅ Populated: component.code (M)
+          |- ✅ Populated: component.code (M)
 
-          ✅ Populated: component.value[x]
+          |- ✅ Populated: component.value[x]
 
-          ⚠️ Missing: component.dataAbsentReason
+          |- ⚠️ Missing: component.dataAbsentReason
         MSG
       )
     end
@@ -116,9 +108,9 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do
       expect_warning_message(
         outcome,
         <<~MSG.chomp
-          **Profile**: Procedure — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-procedure
+          No resources found
 
-          **Message**: No resources found
+          **Profile**: Procedure — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-procedure
         MSG
       )
     end
@@ -129,9 +121,9 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do
       expect_error_message(
         outcome,
         <<~MSG.chomp
-          **Profile**: Immunization — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-immunization
+          At least one mandatory Must Support element is not populated in the Patient Summary Immunizations Section (11369-6) section.
 
-          **Message**: At least one mandatory Must Support elements is not populated.
+          **Profile**: Immunization — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-immunization
 
           List of Must Support elements populated or missing
 
@@ -141,7 +133,7 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do
 
           ✅ Populated: patient (M)
 
-          ✅ Populated: patient.reference (M)
+          |- ✅ Populated: patient.reference (M)
 
           ✅ Populated: occurrenceDateTime
 
@@ -184,15 +176,15 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do
       )
     end
 
-    it 'returns an error message when reference is resolved but resource type is not permitted' do
+    it 'returns a warning message when reference is resolved but resource type is not permitted' do
       outcome = run_with_fixture_bundle(test, fixture_filename: error_bundle_filename)
 
-      expect_error_message(
+      expect_warning_message(
         outcome,
         <<~MSG.chomp
           Patient Summary Results Section (30954-2)
 
-          entry[0]: **urn:uuid:cccccccc-0002-0000-0000-000000000009** -> ❌ Invalid resource type
+          entry[0]: **urn:uuid:cccccccc-0002-0000-0000-000000000009** -> ❌ Invalid resource type: AllergyIntolerance
         MSG
       )
     end
