@@ -10,7 +10,8 @@ end
 # Hide deprecation warnings
 $VERBOSE = nil
 
-ENV['APP_ENV'] ||= 'test'
+# Docker image sets APP_ENV=production; force test so .env.test (ASYNC_JOBS=false) applies.
+ENV['APP_ENV'] = 'test'
 
 require 'database_cleaner/sequel'
 require 'pry'
