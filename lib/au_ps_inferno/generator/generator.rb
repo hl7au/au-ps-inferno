@@ -8,16 +8,8 @@ require_relative '../utils/inferno_suite_generator_compat'
 require_relative 'ig_resources_extractor'
 require_relative 'metadata_manager'
 require_relative 'naming'
-require_relative 'suite_structure'
-require_relative 'test_config_registry'
-require_relative 'retrieve_cs_group_generator'
 require_relative 'sections_validation_group_generator'
 require_relative 'test_file_generator'
-require_relative 'version_suffix'
-require_relative 'primitive_test'
-require_relative 'primitive_group'
-require_relative 'high_order_group'
-require_relative 'suite_primitive'
 require_relative 'generator_group_based_metadata_module'
 
 # Generator for test suites targeting AU PS and IPS implementation guides.
@@ -35,7 +27,6 @@ require_relative 'generator_group_based_metadata_module'
 #
 # rubocop:disable Metrics/ClassLength -- orchestration class; primitive helpers kept private below
 class Generator
-  PATH_BASE = 'lib/au_ps_inferno'
   SyntheticCapability = Struct.new(
     :type, :interaction, :operation, :searchParam, :searchInclude, :searchRevInclude, :extension
   )
@@ -43,20 +34,6 @@ class Generator
   include Naming
   include GeneratorGroupBasedMetadataModule
 
-  # High-order groups are built from SuiteStructure (single source of truth).
-  # See SuiteStructure and TestConfigRegistry for adding new groups or test types.
-  HIGH_ORDER_GROUPS = SuiteStructure.expand_high_order_groups.freeze
-
-  # Primitive tests expanded from SuiteStructure placeholders for AU PS vs IPS bundle validation.
-  BUNDLE_VALID_TEST_TYPE_IDS = %i[bundle_valid bundle_valid_ips].freeze
-
-  # Constructs a new Generator.
-  #
-  # @param ig_path [String]
-  #   Path to the FHIR IG package archive (.tar.gz or .tgz).
-  # @param additional_resources_path [String, nil]
-  #   Optional: Path to a directory containing additional FHIR resources in JSON form
-  #   (such as StructureDefinition, SearchParameter, etc.) to supplement those in the package.
   def initialize(ig_path, additional_resources_path: nil)
     register_inferno_suite_generator_config
     @resources_manager = IGResourcesExtractor.new(
@@ -67,10 +44,6 @@ class Generator
     @new_metadata = build_new_metadata
   end
 
-  # Runs the generator: extracts IG resources, writes metadata, generates bundle and section groups,
-  # and generates the suite file.
-  #
-  # @return [void]
   def generate
     @resources_manager.extract
     save_metadata_to_version_folder

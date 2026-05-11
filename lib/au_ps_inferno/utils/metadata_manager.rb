@@ -17,14 +17,6 @@ module AUPSTestKit
       composition_sections_metadata.filter { |section| codes.include?(section[:code]) }
     end
 
-    def section_metadata_by_code(code)
-      composition_sections_metadata.find { |section| section[:code] == code }
-    end
-
-    def required_ms_sections_metadata
-      composition_sections_metadata.filter { |section| section[:required] == true && section[:mustSupport] == true }
-    end
-
     def group_metadata_by_resource_type(resource_type)
       group_metadata = groups_metadata.find { |group| group[:resource] == resource_type }
       return nil if group_metadata.nil?

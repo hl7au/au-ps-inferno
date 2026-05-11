@@ -61,14 +61,6 @@ module AUPSTestKit
       "\n\n**Referenced #{human_readable_name}**: #{result}"
     end
 
-    # Backward-compatible plain formatter used by legacy MS message helpers.
-    def resource_type_and_profile_str(resource, _human_readable_name = nil)
-      resource_type_str = resource.respond_to?(:resourceType) ? resource.resourceType : resource['resourceType']
-      profiles = resource_profiles(resource)
-      profile_str = profiles.is_a?(Array) && profiles.length.positive? ? profiles.join(', ') : nil
-      [resource_type_str, profile_str].compact.join(' — ')
-    end
-
     def populated_elements_list(list_lines)
       return '' if list_lines.blank?
 

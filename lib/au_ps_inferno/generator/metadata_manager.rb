@@ -21,10 +21,8 @@ class Generator
 
     include Constants
 
-    REQUIRED_SECTIONS_CODES = %w[11450-4 48765-2 10160-0].freeze
     RECOMMENDED_SECTIONS_CODES = %w[11369-6 30954-2 47519-4 46264-8].freeze
     OPTIONAL_SECTIONS_CODES = %w[42348-3 104605-1 47420-5 11348-0 10162-6 81338-6 18776-5 29762-2 8716-3].freeze
-    ALL_SECTIONS_CODES = REQUIRED_SECTIONS_CODES + RECOMMENDED_SECTIONS_CODES + OPTIONAL_SECTIONS_CODES.freeze
     SUB_ELEMENTS_TO_SKIP = %w[event.period event.code section.emptyReason section.entry section.code section.text
                               section.title meta.profile].freeze
 
@@ -87,10 +85,6 @@ class Generator
       normalize_sections_data
     end
 
-    def return_normalized_sections_data
-      @normalized_sections_data
-    end
-
     def normalize_sections_data
       @normalized_sections_data = @composition_sections.map do |section|
         normalize_section_data(section[:id])
@@ -104,19 +98,6 @@ class Generator
           filters: filters
         }
       end
-    end
-
-    # Builds composition metadata and writes it to a YAML file.
-    # Calls {#initiate_build} first, then serializes
-    # {composition_sections:, composition_mandatory_ms_elements:, composition_optional_ms_elements:, profiles:}
-    # to YAML.
-    #
-    # @param file_path [String] Path to the output YAML file (e.g. +metadata.yaml+)
-    # @return [void]
-    def save_to_file(file_path)
-      initiate_build
-      FileUtils.mkdir_p(File.dirname(file_path))
-      File.write(file_path, YAML.dump(metadata_to_dump))
     end
 
     def metadata_to_dump
@@ -151,9 +132,6 @@ class Generator
       }
     end
 
-    attr_reader :normalized_sections_data, :composition_mandatory_ms_elements, :composition_optional_ms_elements,
-                :composition_mandatory_ms_sub_elements, :composition_optional_ms_sub_elements
-
     def normalize_section_data(section_id)
       section_data = @composition_sections.find { |section| section[:id] == section_id }
       return section_data if section_data.nil?
@@ -163,10 +141,6 @@ class Generator
         'display' => section_data[:short],
         'resources' => build_section_resources(section_data)
       }
-    end
-
-    def all_sections_data_codes
-      ALL_SECTIONS_CODES
     end
 
     def composition_ms_sections_elements
@@ -179,24 +153,6 @@ class Generator
     def section_element_expression_min(element)
       path = element.path.gsub('Composition.section.', '')
       { expression: path, min: element.min }
-    end
-
-    def required_sections_data_codes
-      composition_sections.filter do |section|
-        REQUIRED_SECTIONS_CODES.include?(section[:code])
-      end
-    end
-
-    def optional_sections_data_codes
-      composition_sections.filter do |section|
-        OPTIONAL_SECTIONS_CODES.include?(section[:code])
-      end
-    end
-
-    def recommended_sections_data_codes
-      composition_sections.filter do |section|
-        RECOMMENDED_SECTIONS_CODES.include?(section[:code])
-      end
     end
 
     def build_section_resources(section_data)
@@ -569,22 +525,8 @@ class Generator
       { expression: path, label: path }
     end
 
-    def optional_ms_sub_elements
-      @composition_optional_ms_sub_elements.map { |element| normalize_path_to_hash(element) }
-    end
-
     def mandatory_ms_sub_elements
       @composition_mandatory_ms_sub_elements.map { |element| normalize_path_to_hash(element) }
-    end
-
-    def au_ps_profiles_mapping_required
-      required = @profiles.filter { |profile| profile[:required] }
-      required.to_h { |profile| [profile[:url], profile[:name]] }
-    end
-
-    def au_ps_profiles_mapping_other
-      other = @profiles.filter { |profile| !profile[:required] }
-      other.to_h { |profile| [profile[:url], profile[:name]] }
     end
 
     def build_metadata_for_subject

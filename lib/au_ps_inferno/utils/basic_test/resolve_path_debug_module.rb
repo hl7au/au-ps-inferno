@@ -11,39 +11,7 @@ module AUPSTestKit
       check_for_dar(resource, path)
     end
 
-    def resolve_slice(resource, path, profile)
-      # Path may by only extension or identifier
-      case path
-      when 'extension'
-        [resolve_extension(resource, path, profile)]
-      when 'identifier'
-        [resolve_identifier(resource, path, profile)]
-      else
-        []
-      end
-    end
-
     private
-
-    def resolve_extension(resource, path, profile)
-      result = resolve_path(resource, path)
-      return nil if result.empty?
-
-      target_extension = result.find { |item| item.url == profile }
-      return nil if target_extension.nil?
-
-      target_extension.value
-    end
-
-    def resolve_identifier(resource, path, profile)
-      result = resolve_path(resource, path)
-      return nil if result.empty?
-
-      target_identifier = result.find { |item| item.system == profile }
-      return nil if target_identifier.nil?
-
-      target_identifier.value
-    end
 
     def eval_expression(resource, path)
       result = resolve_path(resource, path)
