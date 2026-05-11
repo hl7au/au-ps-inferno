@@ -32,6 +32,7 @@ module AUPSTestKit
 
     def get_metadata_by_resource_type(resource_type)
       raw_metadata = metadata_manager.group_metadata_by_resource_type(resource_type)
+      return nil unless raw_metadata.present?
 
       InfernoSuiteGenerator::Generator::GroupMetadata.new(raw_metadata)
     end
