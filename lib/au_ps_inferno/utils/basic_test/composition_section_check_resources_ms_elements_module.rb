@@ -8,8 +8,8 @@ module AUPSTestKit
     module BasicTestCompositionSectionCheckResourcesMSElementsModule # rubocop:disable Metrics/ModuleLength
       AU_PS_PROFILE_BASE_URL = 'http://hl7.org.au/fhir/ps/StructureDefinition/'
 
-      def check_ms_elements_populated(resource_type, resources, all_present: false)
-        profile_metadata = group_metadata_for(resource_type)
+      def check_ms_elements_populated(profile_url, resources, all_present: false)
+        profile_metadata = group_metadata_for(profile_url)
         collapsed_elements_statuses(ms_checker_for(profile_metadata).elements_present_statuses(resources, all_present:))
       end
 
@@ -116,7 +116,7 @@ module AUPSTestKit
 
       def build_ms_outcome(profile_metadata, resources, section_context = nil, all_present: false)
         ms_helper = ms_checker_for(profile_metadata, section_context)
-        ms_checks_results = check_ms_elements_populated(profile_metadata.resource, resources, all_present:)
+        ms_checks_results = check_ms_elements_populated(profile_metadata.profile_url, resources, all_present:)
 
         {
           status: ms_helper.calculate_elements_status_message_level(ms_checks_results),
@@ -125,11 +125,11 @@ module AUPSTestKit
       end
 
       def process_profile(section_profile, resources_to_check_ms, all_present: false)
-        profile_info_str, filtered_resources, resource_type =
+        profile_info_str, filtered_resources, _, profile_url =
           build_profile_context(section_profile, resources_to_check_ms)
         return report_missing_resources(profile_info_str) if filtered_resources.blank?
 
-        profile_metadata = group_metadata_for(resource_type)
+        profile_metadata = group_metadata_for(profile_url)
         outcome = build_ms_outcome(profile_metadata, filtered_resources, section_profile, all_present:)
         add_message(outcome[:status], outcome[:message].join("\n\n"))
 
@@ -142,15 +142,15 @@ module AUPSTestKit
         profile_info_str = msg_line('Profile', "#{resource_type} — #{profile_url}")
         filtered_resources = resources_by_type(resources_to_check_ms, resource_type)
 
-        [profile_info_str, filtered_resources, resource_type]
+        [profile_info_str, filtered_resources, resource_type, profile_url]
       end
 
       def resources_by_type(resources, resource_type)
         resources.filter { |resource| resource.resourceType == resource_type }
       end
 
-      def group_metadata_for(resource_type)
-        resource_metadata_raw = metadata_manager.group_metadata_by_resource_type(resource_type)
+      def group_metadata_for(profile_url)
+        resource_metadata_raw = metadata_manager.group_metadata_by_profile_url(profile_url)
         InfernoSuiteGenerator::Generator::GroupMetadata.new(resource_metadata_raw)
       end
 
