@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-
 require_relative 'au_ps_bundle_instance/au_ps_bundle_instance'
 
 require_relative 'au_ps_retrieve_cs_group/au_ps_retrieve_cs_group'
@@ -8,7 +7,6 @@ require_relative 'au_ps_retrieve_cs_group/au_ps_retrieve_cs_group'
 require_relative 'retrieve_au_ps_bundle_validation_tests/retrieve_au_ps_bundle_validation_tests'
 
 require_relative 'generate_au_ps_using_ips_summary_validation_tests/generate_au_ps_using_ips_summary_validation_tests'
-
 
 module AUPSTestKit
   # Automatically generated suite for AU PS 1.0.0-preview Test Suite
@@ -25,15 +23,12 @@ module AUPSTestKit
       end
     end
 
-    
     group from: :suite_100preview_au_ps_bundle_instance
-    
+
     group from: :au_ps_retrieve_cs_group_100preview
-    
+
     group from: :suite_100preview_retrieve_au_ps_bundle_validation_tests
-    
+
     group from: :suite_100preview_generate_au_ps_using_ips_summary_validation_tests
-    
   end
 end
-

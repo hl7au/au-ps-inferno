@@ -9,7 +9,6 @@ module AUPSTestKit
     description 'Verifies that the server returns a valid CapabilityStatement resource.'
     id :au_ps_cs_is_valid_100preview
 
-    
     run do
       skip_if url.blank?, 'No FHIR server specified'
       fhir_get_capability_statement
@@ -18,6 +17,5 @@ module AUPSTestKit
       assert_response_status(200)
       assert_resource_type(:capability_statement)
     end
-    
   end
 end

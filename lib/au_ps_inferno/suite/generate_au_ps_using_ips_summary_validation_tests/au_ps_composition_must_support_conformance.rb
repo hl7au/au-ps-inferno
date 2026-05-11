@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-
-
 require_relative 'au_ps_composition_must_support_conformance/suite_100preview_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_must_support_conformance_composition_mandatory_ms_populated'
 
 require_relative 'au_ps_composition_must_support_conformance/suite_100preview_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_must_support_conformance_composition_optional_ms_populated'
@@ -10,26 +8,21 @@ require_relative 'au_ps_composition_must_support_conformance/suite_100preview_ge
 
 require_relative 'au_ps_composition_must_support_conformance/suite_100preview_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_must_support_conformance_composition_optional_ms_slices'
 
-
 module AUPSTestKit
   # Automatically generated primitive group for AU PS Composition Must Support Conformance
   class AUPSSuite100previewGenerateAuPsUsingIpsSummaryValidationTestsAuPsCompositionMustSupportConformance < Inferno::TestGroup
     title 'AU PS Composition Must Support Conformance'
     description 'Verifies that Composition Must Support elements (mandatory, optional, sub-elements, slices) are correctly populated when data is known.'
     id :suite_100preview_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_must_support_conformance
-    
-    
-    run_as_group
-    
 
-    
+    run_as_group
+
     test from: :suite_100preview_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_must_support_conformance_composition_mandatory_ms_populated
-    
+
     test from: :suite_100preview_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_must_support_conformance_composition_optional_ms_populated
-    
+
     test from: :suite_100preview_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_must_support_conformance_composition_ms_subelements_populated
-    
+
     test from: :suite_100preview_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_must_support_conformance_composition_optional_ms_slices
-    
   end
 end
