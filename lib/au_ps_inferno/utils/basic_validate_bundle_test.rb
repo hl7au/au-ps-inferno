@@ -12,7 +12,7 @@ module AUPSTestKit
           title: 'Validate Against',
           optional: true,
           type: 'checkbox',
-          default: %w[au_ps_bundle ips_bundle],
+          default: %w[au_ps_bundle],
           options: {
             list_options: [
               {
