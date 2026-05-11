@@ -2,7 +2,10 @@ AllCops:
   NewCops: enable
   Exclude:
     - "lib/au_ps_inferno/1.0.0-ballot/**/*"
+    - "lib/au_ps_inferno/1.0.0-preview/**/*"
     - "spec/integration/suite_100ballot_snapshots_spec.rb"
+    - "lib/au_ps_inferno/generator/primitive_test.rb"
+    - "lib/au_ps_inferno/generator/generator.rb"
 
 Gemspec/DevelopmentDependencies:
   Enabled: false
