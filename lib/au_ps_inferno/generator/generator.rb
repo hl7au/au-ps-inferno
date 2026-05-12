@@ -162,7 +162,8 @@ class Generator
       resolved_description: resolved_description,
       test_id: "#{group_id}_#{build_id(test_type_id)}",
       high_order_group_file_name: high_order_group_file_name,
-      group_file_name: group_file_name
+      group_file_name: group_file_name,
+      version: @suite_version
     )
     apply_primitive_test_type_config!(test_config, test, test_type_id, resolved_title, resolved_description)
     PrimitiveTest.new(test_config).generate
@@ -204,7 +205,8 @@ class Generator
       id: test_id,
       output_file_path: versioned_path(
         opts.fetch(:high_order_group_file_name), opts.fetch(:group_file_name), filename: "#{test_id}.rb"
-      )
+      ),
+      version: opts.fetch(:version)
     }
   end
 

@@ -9,7 +9,7 @@ class Generator
   # All template files should be in the templates folder.
   class PrimitiveTest
     attr_reader :class_name, :base_class_name, :title, :description, :id, :commands, :output_file_path, :imports,
-                :ignore_commands, :optional
+                :ignore_commands, :optional, :version
 
     def initialize(config)
       @class_name = config[:class_name]
@@ -22,6 +22,7 @@ class Generator
       @imports = config[:imports] || []
       @ignore_commands = config[:ignore_commands] || false
       @optional = config[:optional] || false
+      @version = config[:version]
     end
 
     def generate
