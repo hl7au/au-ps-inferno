@@ -15,12 +15,25 @@ module AUPSTestKit
 
       author_and_device_resource?(container_type, resource)
 
-      filtered_results, new_grouped_sub_elements, ms_checker, results =
+      ms_sub_elements_populated_message_wrapper(resource, metadata)
+    end
+
+    def ms_sub_elements_populated_message_by_resource(resource)
+      return unless (metadata = get_metadata_by_resource_type(resource.resourceType)).present?
+
+      ms_sub_elements_populated_message_wrapper(resource, metadata)
+    end
+
+    def ms_sub_elements_populated_message_wrapper(resource, metadata)
+      _, new_grouped_sub_elements, ms_checker, results =
         sub_elements_filtered_grouped_and_check_context(resource, metadata)
       omit_if new_grouped_sub_elements.blank?, 'No complex element with Must Support sub-elements is defined'
 
-      show_ms_elements_messages(new_grouped_sub_elements, ms_checker, resource, results)
-      assert assert_result(filtered_results, new_grouped_sub_elements),
+      filtered_results = results.filter { |result| !result[:path].include?('section:') }
+      filtered_grouped_sub_elements = new_grouped_sub_elements.filter { |path, _| !path.include?('section:') }
+
+      show_ms_elements_messages(filtered_grouped_sub_elements, ms_checker, resource, filtered_results)
+      assert assert_result(filtered_results, filtered_grouped_sub_elements),
              'When any mandatory Must Support sub-element is missing. See the list in messages tab.'
     end
 

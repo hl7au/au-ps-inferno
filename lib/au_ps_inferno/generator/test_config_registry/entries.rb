@@ -16,28 +16,18 @@ class Generator
           title: 'Mandatory Must Support elements are correctly populated',
           description: 'Mandatory Must Support element SHALL be able to be populated if a value is known and ' \
                        'allowed to share.',
-          commands_builder: lambda { |m|
-            { commands: ["validate_populated_elements_in_composition(#{m.composition_mandatory_ms_elements})"] }
-          }
+          commands: ['validate_mandatory_ms_elements_in_composition']
         },
         composition_optional_ms_populated: {
           title: 'Optional Must Support elements are correctly populated',
           description: 'Optional Must Support elements SHALL be correctly populated if a value is known',
-          commands_builder: lambda { |m|
-            cmd = 'validate_populated_elements_in_composition(' \
-                  "#{m.composition_optional_ms_elements}, required: false)"
-            { commands: [cmd] }
-          }
+          commands: ['validate_optional_ms_elements_in_composition']
         },
         composition_ms_subelements_populated: {
           title: 'Must Support sub-elements of a complex element are correctly populated',
           description: 'Must Support sub-elements of a complex element SHALL be correctly populated if a value ' \
                        'is known',
-          commands_builder: lambda { |m|
-            cmd = 'validate_populated_sub_elements_in_composition(' \
-                  "#{m.composition_mandatory_ms_sub_elements}, #{m.composition_optional_ms_sub_elements})"
-            { commands: [cmd] }
-          }
+          commands: ['validate_populated_sub_elements_in_composition']
         },
         composition_optional_ms_slices: {
           title: 'Must Support slices are correctly populated',

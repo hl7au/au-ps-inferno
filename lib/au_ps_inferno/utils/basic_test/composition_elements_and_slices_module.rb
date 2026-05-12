@@ -1,9 +1,55 @@
 # frozen_string_literal: true
 
+require 'inferno_suite_generator/test_utils/ms_checker'
+
 module AUPSTestKit
   # Composition Must Support elements and optional slices (e.g. event:careProvisioningEvent).
   module BasicTestCompositionElementsAndSlicesModule
     private
+
+    def validate_mandatory_ms_elements_in_composition
+      validate_composition_ms_elements_wrapper(mandatory: true)
+    end
+
+    def validate_optional_ms_elements_in_composition
+      validate_composition_ms_elements_wrapper(mandatory: false)
+    end
+
+    def validate_composition_ms_elements_wrapper(mandatory: false)
+      result = validate_composition_ms_elements(mandatory: mandatory)
+      msg_level = result[:msg_level]
+
+      add_message(msg_level, result[:msg])
+      return unless mandatory == true
+
+      assert msg_level == 'info',
+             'Some of the elements are not populated. See the list of populated elements in messages tab.'
+    end
+
+    def validate_composition_ms_elements(mandatory: false)
+      composition_resource = composition_resource_from_scratch
+      return false unless composition_resource.present?
+
+      raw_metadata = metadata_manager.group_metadata_by_resource_type('Composition')
+      return nil unless raw_metadata.present?
+
+      results, profile_metadata, ms_checker = raw_check_results(raw_metadata:, composition_resource:, mandatory:)
+
+      {
+        msg_level: ms_checker.calculate_elements_status_message_level(results),
+        msg: ms_checker.build_report_message(profile_metadata, results).join("\n\n")
+      }
+    end
+
+    def raw_check_results(raw_metadata:, composition_resource:, mandatory: false)
+      profile_metadata = InfernoSuiteGenerator::Generator::GroupMetadata.new(raw_metadata)
+      ms_checker = InfernoSuiteGenerator::MSChecker.new(profile_metadata)
+      raw_results = ms_checker.elements_present_statuses([composition_resource], all_present: false)
+      parent_results = raw_results.filter { |result| !result[:path].include?('.') }
+      results = parent_results.filter { |result| result[:mandatory] == mandatory }
+
+      [results, profile_metadata, ms_checker]
+    end
 
     def validate_populated_elements_in_composition(elements_array, required: true)
       composition_resource = composition_resource_from_scratch

@@ -17,7 +17,7 @@ module AUPSTestKit
     
     run do
       
-      validate_populated_elements_in_composition(["attester", "custodian", "identifier", "text", "event"], required: false)
+      validate_optional_ms_elements_in_composition
       
     end
     

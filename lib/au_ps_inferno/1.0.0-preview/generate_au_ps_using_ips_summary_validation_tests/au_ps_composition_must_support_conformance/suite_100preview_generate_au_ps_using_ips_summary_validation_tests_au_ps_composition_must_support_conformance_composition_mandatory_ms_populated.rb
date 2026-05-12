@@ -17,7 +17,7 @@ module AUPSTestKit
     
     run do
       
-      validate_populated_elements_in_composition(["author", "date", "status", "subject", "title", "type"])
+      validate_mandatory_ms_elements_in_composition
       
     end
     

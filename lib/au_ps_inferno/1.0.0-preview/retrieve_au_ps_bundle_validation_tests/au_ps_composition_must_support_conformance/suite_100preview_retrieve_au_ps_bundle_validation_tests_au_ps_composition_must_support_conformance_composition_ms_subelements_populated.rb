@@ -17,7 +17,7 @@ module AUPSTestKit
     
     run do
       
-      validate_populated_sub_elements_in_composition(["attester.mode", "subject.reference"], ["attester.party", "attester.time"])
+      validate_populated_sub_elements_in_composition
       
     end
     

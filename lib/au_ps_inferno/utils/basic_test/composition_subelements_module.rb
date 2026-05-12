@@ -1,16 +1,19 @@
 # frozen_string_literal: true
 
+require_relative 'ms_sub_elements_populated_module'
+
 module AUPSTestKit
   # Composition Must Support sub-elements (grouped paths) and parent-group validation on arbitrary resources.
   module BasicTestCompositionSubelementsModule
+    include BasicTestMsSubElementsPopulatedModule
+
     private
 
-    def validate_populated_sub_elements_in_composition(mandatory_ms, optional_ms)
+    def validate_populated_sub_elements_in_composition
       composition_resource = composition_resource_from_scratch
       return false unless composition_resource.present?
 
-      grouped_elements = (mandatory_ms + optional_ms).group_by { |element| element.split('.').first }
-      run_composition_subelements_assertions(composition_resource, grouped_elements, mandatory_ms)
+      ms_sub_elements_populated_message_by_resource(composition_resource)
     end
 
     def composition_resource_from_scratch
