@@ -47,6 +47,9 @@ class Generator
   # See SuiteStructure and TestConfigRegistry for adding new groups or test types.
   HIGH_ORDER_GROUPS = SuiteStructure.expand_high_order_groups.freeze
 
+  # Primitive tests expanded from SuiteStructure placeholders for AU PS vs IPS bundle validation.
+  BUNDLE_VALID_TEST_TYPE_IDS = %i[bundle_valid bundle_valid_ips].freeze
+
   # Constructs a new Generator.
   #
   # @param ig_path [String]
@@ -167,7 +170,7 @@ class Generator
   # rubocop:enable Metrics/MethodLength
 
   def validate_primitive_test_type!(test_type_id)
-    return if test_type_id == :bundle_valid
+    return if BUNDLE_VALID_TEST_TYPE_IDS.include?(test_type_id)
     return if TestConfigRegistry.registered?(test_type_id)
 
     raise "Unknown test type id: #{test_type_id.inspect}. Add it to TestConfigRegistry."
@@ -176,16 +179,16 @@ class Generator
   def resolve_primitive_test_labels(test, test_type_id)
     title = test[:title]
     description = test[:description]
-    return [title, description] if test_type_id == :bundle_valid
+    return [title, description] if BUNDLE_VALID_TEST_TYPE_IDS.include?(test_type_id)
 
     registry_config = TestConfigRegistry.config_for(test_type_id, @metadata)
     [title || registry_config[:title], description || registry_config[:description]]
   end
 
   def ensure_bundle_valid_has_title!(test_type_id, resolved_title)
-    return unless test_type_id == :bundle_valid && resolved_title.nil?
+    return unless BUNDLE_VALID_TEST_TYPE_IDS.include?(test_type_id) && resolved_title.nil?
 
-    raise 'Bundle validation test requires bundle_validation_title in high-order config.'
+    raise 'Bundle validation test requires bundle_validation_title / bundle_validation_ips_title in high-order config.'
   end
 
   def primitive_test_fallback_description(resolved_title)
@@ -206,7 +209,7 @@ class Generator
   end
 
   def apply_primitive_test_type_config!(test_config, test, test_type_id, resolved_title, resolved_description)
-    if test_type_id == :bundle_valid
+    if BUNDLE_VALID_TEST_TYPE_IDS.include?(test_type_id)
       test_config[:base_class_name] = test[:base_class_name]
       test_config[:imports] = test[:imports]
       test_config[:ignore_commands] = test[:ignore_commands]

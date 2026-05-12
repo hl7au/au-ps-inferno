@@ -15,6 +15,7 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule::BasicTestComp
       groups: [
         {
           resource: 'Condition',
+          profile_url: 'http://hl7.org.au/fhir/ps/StructureDefinition/condition',
           must_supports: {
             elements: [
               { path: 'clinicalStatus' },
@@ -40,7 +41,7 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule::BasicTestComp
     }
   end
 
-  target_resource_type = 'Condition'
+  target_profile_url = 'http://hl7.org.au/fhir/ps/StructureDefinition/condition'
   resources_array = [FHIR::Condition.new(
     {
       resourceType: 'Condition',
@@ -53,7 +54,7 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule::BasicTestComp
 
   describe '#check_ms_elements_populated' do # rubocop:disable Metrics/BlockLength
     it 'returns expected result shape as array of hashes with keys :definition, :mandatory, :path, :present' do
-      result = test_instance.check_ms_elements_populated(target_resource_type, resources_array)
+      result = test_instance.check_ms_elements_populated(target_profile_url, resources_array)
 
       expect(result).to be_an(Array)
       expect(result).to all(be_a(Hash))
@@ -61,8 +62,8 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule::BasicTestComp
     end
 
     it 'returns paths from metadata must_support elements' do
-      ms_elements_paths = get_ms_elements_paths(target_resource_type)
-      result = test_instance.check_ms_elements_populated(target_resource_type, resources_array)
+      ms_elements_paths = get_ms_elements_paths(target_profile_url)
+      result = test_instance.check_ms_elements_populated(target_profile_url, resources_array)
       actual_paths = result.map { |item| item[:path] }
 
       expect(actual_paths).to match_array(ms_elements_paths)
@@ -72,7 +73,7 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule::BasicTestComp
       expected_mandatory_values = ['category', 'code', 'subject', 'subject.reference']
       expected_optional_values = ['clinicalStatus', 'verificationStatus', 'severity', 'onsetDateTime', 'abatement[x]',
                                   'note']
-      result = test_instance.check_ms_elements_populated(target_resource_type, resources_array)
+      result = test_instance.check_ms_elements_populated(target_profile_url, resources_array)
       mandatory_values = result.map { |item| item[:path] if item[:mandatory] }.compact
       optional_values = result.map { |item| item[:path] unless item[:mandatory] }.compact
 
@@ -83,7 +84,7 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule::BasicTestComp
     it 'correctly marks presence for each element' do
       expected_values_to_populate = ['clinicalStatus', 'category', 'code', 'subject', 'subject.reference']
       expected_values_to_empty = ['verificationStatus', 'severity', 'onsetDateTime', 'abatement[x]', 'note']
-      result = test_instance.check_ms_elements_populated(target_resource_type, resources_array)
+      result = test_instance.check_ms_elements_populated(target_profile_url, resources_array)
 
       populated_values = result.map { |item| item[:path] if item[:present] }.compact
       empty_values = result.map { |item| item[:path] unless item[:present] }.compact
@@ -93,7 +94,7 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule::BasicTestComp
     end
 
     it 'returns all must-support elements as missing when no resources are provided' do
-      result = test_instance.check_ms_elements_populated(target_resource_type, [])
+      result = test_instance.check_ms_elements_populated(target_profile_url, [])
 
       expect(result.map { |item| item[:present] }.uniq).to eq([false])
     end

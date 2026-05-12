@@ -32,6 +32,7 @@ module AUPSTestKit
 
     def get_metadata_by_resource_type(resource_type)
       raw_metadata = metadata_manager.group_metadata_by_resource_type(resource_type)
+      return nil unless raw_metadata.present?
 
       InfernoSuiteGenerator::Generator::GroupMetadata.new(raw_metadata)
     end
@@ -108,7 +109,8 @@ module AUPSTestKit
     end
 
     def parent_element_is_not_populated?(sub_elements, results)
-      results.any? { |result| result[:path] == sub_elements[0][:path] && result[:present] == false }
+      parent_path = sub_elements[0][:path].split('.').first
+      results.any? { |result| result[:path] == parent_path && result[:present] == false }
     end
 
     def parent_element_is_not_populated_text(parent_path, sub_elements)

@@ -3,11 +3,11 @@
 require 'net/http'
 require 'uri'
 
-require_relative 'basic_test_class'
+require_relative 'basic_validate_bundle_test'
 
 module AUPSTestKit
   # A base class for all tests that retrieve a Bundle resource
-  class RetrieveBundleTestClass < BasicTest
+  class RetrieveBundleTestClass < BasicValidateBundleTest
     id :retrieve_bundle_test_class
     input_order :bundle_url, :url, :bundle_id, :credentials, :header_name, :header_value
 
@@ -43,16 +43,13 @@ module AUPSTestKit
     end
 
     def get_bundle_resource_from_fhir_server(bundle_id)
-      info "Retrieving Bundle resource with id #{bundle_id}"
       fhir_read(:bundle, bundle_id)
       assert_response_status(200)
       assert_resource_type(:bundle)
       scratch[:bundle_ips_resource] = resource
-      info "Bundle resource saved to scratch: #{scratch_bundle}"
     end
 
     def get_bundle_resource_from_url(bundle_url)
-      info "Retrieving Bundle resource from url #{bundle_url}"
       uri = URI(bundle_url)
       response = Net::HTTP.get_response(uri)
       assert response.code == '200', "Bundle resource not found at #{bundle_url}"
@@ -60,7 +57,6 @@ module AUPSTestKit
       assert bundle_resource.resourceType == 'Bundle', 'Resource have different type than Bundle'
       scratch[:bundle_ips_resource] = bundle_resource
       save_bundle_entities_to_scratch(scratch_bundle)
-      info "Bundle resource saved to scratch: #{scratch_bundle}"
     end
 
     def skip_test?
@@ -78,7 +74,8 @@ module AUPSTestKit
     run do
       skip_if skip_test?, 'There is no FHIR server URL, Bundle ID or Bundle URL provided'
       read_and_save_data
-      validate_ips_bundle
+      omit_if omit_au_ps_validation?, OMIT_AU_PS_MESSAGE
+      validate_au_ps_bundle
     end
   end
 end
