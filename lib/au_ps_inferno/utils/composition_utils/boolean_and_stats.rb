@@ -2,8 +2,9 @@
 
 # Bundle-level booleans and per-path statistics lines for CompositionUtils.
 module CompositionUtilsBooleanAndStats
-  def boolean_to_existent_string(boolean_value)
-    boolean_value ? '✅ Populated' : '❌ Missing'
+  def boolean_to_existent_string(boolean_value, optional: false)
+    missing_icon = optional ? '⚠️' : '❌'
+    boolean_value ? '✅ Populated' : "#{missing_icon} Missing"
   end
 
   def all_entries_have_full_url_info?

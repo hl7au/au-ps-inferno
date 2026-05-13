@@ -60,7 +60,7 @@ module AUPSTestKit
       end
 
       level = composition_subelements_worst_level(composition_resource, sub_elements, mandatory_ms)
-      add_message(level, populated_paths_info(composition_resource, sub_elements))
+      add_message(level, populated_paths_info(composition_resource, sub_elements, mandatory_array: mandatory_ms))
     end
 
     def composition_subelement_parent_unpopulated_message(parent_path, sub_elements)
