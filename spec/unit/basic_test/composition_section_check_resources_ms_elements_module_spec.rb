@@ -100,7 +100,7 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule::BasicTestComp
     end
 
     it 'returns all must-support elements as absent when resources have no overlapping paths' do
-      result = test_instance.check_ms_elements_populated(target_resource_type, [FHIR::Observation.new])
+      result = test_instance.check_ms_elements_populated(target_profile_url, [FHIR::Observation.new])
 
       expect(result.map { |item| item[:present] }.uniq).to eq([false])
     end
@@ -110,6 +110,7 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule::BasicTestComp
         {
           groups: [{
             resource: 'Condition',
+            profile_url: target_profile_url,
             must_supports: { elements: [] },
             mandatory_elements: []
           }]
@@ -117,7 +118,7 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule::BasicTestComp
       end
 
       it 'returns an empty array' do
-        result = test_instance.check_ms_elements_populated(target_resource_type, resources_array)
+        result = test_instance.check_ms_elements_populated(target_profile_url, resources_array)
 
         expect(result).to be_empty
       end
