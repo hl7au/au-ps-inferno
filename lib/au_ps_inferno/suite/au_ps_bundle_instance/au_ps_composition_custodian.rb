@@ -1,26 +1,26 @@
 # frozen_string_literal: true
 
-require_relative 'au_ps_composition_custodian/suite_100preview_au_ps_bundle_instance_au_ps_composition_custodian_custodian_ms_elements'
+require_relative 'au_ps_composition_custodian/suite_au_ps_bundle_instance_au_ps_composition_custodian_custodian_ms_elements'
 
-require_relative 'au_ps_composition_custodian/suite_100preview_au_ps_bundle_instance_au_ps_composition_custodian_custodian_ms_subelements'
+require_relative 'au_ps_composition_custodian/suite_au_ps_bundle_instance_au_ps_composition_custodian_custodian_ms_subelements'
 
-require_relative 'au_ps_composition_custodian/suite_100preview_au_ps_bundle_instance_au_ps_composition_custodian_custodian_ms_identifier_slices'
+require_relative 'au_ps_composition_custodian/suite_au_ps_bundle_instance_au_ps_composition_custodian_custodian_ms_identifier_slices'
 
 module AUPSTestKit
   # Automatically generated primitive group for AU PS Composition Custodian
-  class AUPSSuite100previewAuPsBundleInstanceAuPsCompositionCustodian < Inferno::TestGroup
+  class AUPSSuiteAuPsBundleInstanceAuPsCompositionCustodian < Inferno::TestGroup
     title 'AU PS Composition Custodian'
     description 'Verify the referenced custodian is a correctly populated AU PS Organization resource.'
-    id :suite_100preview_au_ps_bundle_instance_au_ps_composition_custodian
+    id :suite_au_ps_bundle_instance_au_ps_composition_custodian
 
     optional
 
     run_as_group
 
-    test from: :suite_100preview_au_ps_bundle_instance_au_ps_composition_custodian_custodian_ms_elements
+    test from: :suite_au_ps_bundle_instance_au_ps_composition_custodian_custodian_ms_elements
 
-    test from: :suite_100preview_au_ps_bundle_instance_au_ps_composition_custodian_custodian_ms_subelements
+    test from: :suite_au_ps_bundle_instance_au_ps_composition_custodian_custodian_ms_subelements
 
-    test from: :suite_100preview_au_ps_bundle_instance_au_ps_composition_custodian_custodian_ms_identifier_slices
+    test from: :suite_au_ps_bundle_instance_au_ps_composition_custodian_custodian_ms_identifier_slices
   end
 end
