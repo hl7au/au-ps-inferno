@@ -11,7 +11,9 @@ module AUPSTestKit
 
       result = all_paths_are_populated?(composition_resource, elements_array)
       msg_type = composition_elements_message_type(result, required)
-      add_message(msg_type, populated_paths_info(composition_resource, elements_array))
+      add_message(msg_type,
+                  populated_paths_info(composition_resource, elements_array,
+                                       mandatory_array: required ? elements_array : []))
       assert_composition_elements_if_required(result, required)
     end
 
@@ -52,7 +54,7 @@ module AUPSTestKit
 
     def composition_slice_validation_passes?(composition_resource, slice, event)
       paths = composition_slice_element_paths(slice)
-      message_data = populated_paths_info(composition_resource, paths[:combined])
+      message_data = populated_paths_info(composition_resource, paths[:combined], mandatory_array: paths[:required])
       full_data = composition_slice_full_message_data(message_data)
       return false unless composition_slice_required_paths_ok?(composition_resource, paths, full_data)
 
