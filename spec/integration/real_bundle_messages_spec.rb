@@ -68,6 +68,19 @@ RSpec.describe 'AU PS conformance messages against a real example bundle' do # r
     )
   end
 
+  it 'renders every Must Support list in the consistent IG-profile format (icon: name (M))' do
+    joined = all_messages.join("\n")
+    # consistent list header everywhere
+    expect(joined).to include('List of Must Support elements populated or missing')
+    expect(joined).not_to include('## List of populated elements')
+    # bundle + section lists now use the same "✅ Populated: name (M)" order as the x.4.2 profile lists
+    expect(joined).to include('✅ Populated: **identifier** (M)') # bundle MS
+    expect(joined).to include('✅ Populated: **title** (M)')      # section MS
+    # old reversed format gone
+    expect(joined).not_to include('**identifier**: ✅ Populated')
+    expect(joined).not_to include('**title**: ✅ Populated')
+  end
+
   it 'no longer emits any of the old/misleading wording' do
     joined = all_messages.join("\n")
     expect(joined).not_to include('List mandatory Must Support elements populated and missing')

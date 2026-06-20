@@ -55,11 +55,10 @@ module AUPSTestKit
     end
 
     def section_ms_elements_message(section, section_code, elements_array)
+      # Section-level Must Support elements (title, code, text) are mandatory; render them in the same
+      # "✅ Populated: name (M)" format as the profile Must Support lists (x.4.2) for consistency.
       title = "### #{get_section_name(section_code)}"
-      elements_list = elements_array.map do |element|
-        "**#{element}**: #{boolean_to_existent_string(resolve_path_with_dar(section, element).first.present?)}"
-      end.join("\n\n")
-      [title, 'List of Must Support elements populated or missing:', elements_list].join("\n\n")
+      [title, populated_paths_info(section, elements_array, mandatory_array: elements_array)].join("\n\n")
     end
   end
 end

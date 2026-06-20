@@ -6,7 +6,7 @@ module AUPSTestKit
     private
 
     def populated_paths_info(resource, elements_array, mandatory_array: [])
-      title = '## List of populated elements'
+      title = 'List of Must Support elements populated or missing'
       result = elements_array.map do |element|
         mandatory = mandatory_array.include?(element)
         element_str = "**#{element}**"

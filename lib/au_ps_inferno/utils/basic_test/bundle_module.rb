@@ -22,12 +22,14 @@ module AUPSTestKit
     end
 
     def mandatory_ms_elements_info
-      [
-        "**identifier**: #{boolean_to_existent_string(identifier_info?)}",
-        "**type**: #{boolean_to_existent_string(type_info?)}",
-        "**timestamp**: #{boolean_to_existent_string(timestamp_info?)}",
-        "**All entry exists fullUrl**: #{boolean_to_existent_string(all_entries_have_full_url_info?)}"
-      ].join("\n\n")
+      title = 'List of Must Support elements populated or missing'
+      lines = [
+        "#{boolean_to_existent_string(identifier_info?)}: **identifier** (M)",
+        "#{boolean_to_existent_string(type_info?)}: **type** (M)",
+        "#{boolean_to_existent_string(timestamp_info?)}: **timestamp** (M)",
+        "#{boolean_to_existent_string(all_entries_have_full_url_info?)}: **entry.fullUrl** (M)"
+      ]
+      [title, lines.join("\n\n")].join("\n\n")
     end
 
     def skip_validation?
