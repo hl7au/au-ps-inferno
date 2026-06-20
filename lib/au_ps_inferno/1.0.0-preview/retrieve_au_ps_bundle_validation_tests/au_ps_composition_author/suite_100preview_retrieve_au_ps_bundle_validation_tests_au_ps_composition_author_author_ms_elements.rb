@@ -5,10 +5,10 @@ require_relative '../../../utils/metadata_manager'
 
 
 module AUPSTestKit
-  # Automatically generated primitive test for Must Support elements SHALL be populated if a value is known
-  class AUPSSuite100previewRetrieveAuPsBundleValidationTestsAuPsCompositionAuthorMustSupportElementsShallBePopulatedIfAValueIsKnown < BasicTest
-    title 'Must Support elements SHALL be populated if a value is known'
-    description 'Must Support elements SHALL be populated if a value is known'
+  # Automatically generated primitive test for Must Support elements (including sub-elements) SHALL be populated if a value is known
+  class AUPSSuite100previewRetrieveAuPsBundleValidationTestsAuPsCompositionAuthorMustSupportElementsIncludingSubelementsShallBePopulatedIfAValueIsKnown < BasicTest
+    title 'Must Support elements (including sub-elements) SHALL be populated if a value is known'
+    description 'Must Support elements, including sub-elements of complex elements, SHALL be populated if a value is known.'
     id :suite_100preview_retrieve_au_ps_bundle_validation_tests_au_ps_composition_author_author_ms_elements
     
     def metadata_manager

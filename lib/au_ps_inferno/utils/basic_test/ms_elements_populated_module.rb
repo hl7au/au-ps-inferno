@@ -37,9 +37,11 @@ module AUPSTestKit
       all_check_results.none? { |result| !result[:present] && result[:mandatory] }
     end
 
+    # Include sub-elements (paths with a dot) in one unified list — collapsed under absent optional
+    # parents — exactly like the profile Must Support lists (x.4.2). This replaces the separate
+    # sub-element test (x.8.03), which was redundant with the nested list the MSChecker already renders.
     def elements(checker, resources)
-      elements_statuses = checker.elements_present_statuses(resources, all_present: false)
-      elements_statuses.filter { |result| element_simple?(result[:path]) }
+      collapsed_elements_statuses(checker.elements_present_statuses(resources, all_present: false))
     end
 
     def slices(checker, resources)

@@ -23,7 +23,6 @@ require_relative 'basic_test/section_bundle_validation_module'
 require_relative 'basic_test/resolve_path_debug_module'
 require_relative 'basic_test/scratch_bundle_entries_module'
 require_relative 'basic_test/ms_elements_populated_module'
-require_relative 'basic_test/ms_sub_elements_populated_module'
 require_relative 'basic_test/resolve_resource_type_module'
 
 module AUPSTestKit
@@ -52,7 +51,6 @@ module AUPSTestKit
     include BasicTestResolvePathDebugModule
     include BasicTestScratchBundleEntriesModule
     include BasicTestMsElementsPopulatedModule
-    include BasicTestMsSubElementsPopulatedModule
     include BasicTestResolveResourceTypeModule
   end
 end

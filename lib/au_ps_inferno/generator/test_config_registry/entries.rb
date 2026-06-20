@@ -11,37 +11,17 @@ class Generator
           description: 'Must Support elements SHALL be included if a value is known and allowed to be shared.',
           commands: ['bundle_mandatory_ms_elements_info']
         },
-        composition_mandatory_ms_populated: {
-          title: 'Mandatory Must Support elements are correctly populated',
-          description: 'Must Support elements SHALL be included if a value is known and allowed to be shared.',
+        composition_must_support_populated: {
+          title: 'Composition Must Support elements are correctly populated',
+          description: 'Composition Must Support elements — mandatory and optional elements, sub-elements ' \
+                       'of complex elements, and the careProvisioningEvent slice — SHALL be populated if a ' \
+                       'value is known and allowed to be shared.',
           commands_builder: lambda { |m|
-            { commands: ["validate_populated_elements_in_composition(#{m.composition_mandatory_ms_elements})"] }
-          }
-        },
-        composition_optional_ms_populated: {
-          title: 'Optional Must Support elements are correctly populated',
-          description: 'Optional Must Support elements SHALL be correctly populated if a value is known',
-          commands_builder: lambda { |m|
-            cmd = 'validate_populated_elements_in_composition(' \
-                  "#{m.composition_optional_ms_elements}, required: false)"
+            cmd = 'validate_composition_must_support(' \
+                  "#{m.composition_mandatory_ms_elements}, #{m.composition_optional_ms_elements}, " \
+                  "#{m.composition_mandatory_ms_sub_elements}, #{m.composition_optional_ms_sub_elements}, " \
+                  "#{m.composition_optional_ms_slices})"
             { commands: [cmd] }
-          }
-        },
-        composition_ms_subelements_populated: {
-          title: 'Must Support sub-elements of a complex element are correctly populated',
-          description: 'Must Support sub-elements of a complex element SHALL be correctly populated and the ' \
-                       'parent is populated.',
-          commands_builder: lambda { |m|
-            cmd = 'validate_populated_sub_elements_in_composition(' \
-                  "#{m.composition_mandatory_ms_sub_elements}, #{m.composition_optional_ms_sub_elements})"
-            { commands: [cmd] }
-          }
-        },
-        composition_optional_ms_slices: {
-          title: 'Must Support sliced elements are correctly populated',
-          description: 'Must Support sliced elements SHALL be populated if a value is known.',
-          commands_builder: lambda { |m|
-            { commands: ["validate_populated_slices_in_composition(#{m.composition_optional_ms_slices})"] }
           }
         },
         sections_shall_populated: {
@@ -109,14 +89,10 @@ class Generator
           commands: ['test_resource_type_is_valid?("subject")']
         },
         subject_ms_elements: {
-          title: 'Must Support elements SHALL be populated if a value is known',
-          description: 'Must Support elements SHALL be populated if a value is known',
+          title: 'Must Support elements (including sub-elements) SHALL be populated if a value is known',
+          description: 'Must Support elements, including sub-elements of complex elements, SHALL be ' \
+                       'populated if a value is known.',
           commands: ['ms_elements_populated_message("subject")']
-        },
-        subject_ms_subelements_populated: {
-          title: 'Must Support sub-element SHALL be populated if a value is known and the parent is populated',
-          description: 'Must Support sub-element SHALL be populated if a value is known and the parent is populated',
-          commands: ['ms_sub_elements_populated_message("subject")']
         },
         subject_ms_identifier_slices: {
           title: 'Must Support identifier slices SHALL be populated if a value is known',
@@ -132,14 +108,10 @@ class Generator
           commands: ['test_resource_type_is_valid?("author")']
         },
         author_ms_elements: {
-          title: 'Must Support elements SHALL be populated if a value is known',
-          description: 'Must Support elements SHALL be populated if a value is known',
+          title: 'Must Support elements (including sub-elements) SHALL be populated if a value is known',
+          description: 'Must Support elements, including sub-elements of complex elements, SHALL be ' \
+                       'populated if a value is known.',
           commands: ['ms_elements_populated_message("author")']
-        },
-        author_ms_subelements: {
-          title: 'Must Support sub-elements SHALL be populated if a value is known',
-          description: 'Must Support sub-elements SHALL be populated if a value is known',
-          commands: ['ms_sub_elements_populated_message("author")']
         },
         author_ms_identifier_slices: {
           title: 'Must Support identifier slices SHALL be populated if a value is known',
@@ -147,14 +119,10 @@ class Generator
           commands: ['test_composition_author_ms_identifier_slices']
         },
         custodian_ms_elements: {
-          title: 'Must Support element SHALL be populated if a value is known',
-          description: 'Must Support element SHALL be populated if a value is known',
+          title: 'Must Support elements (including sub-elements) SHALL be populated if a value is known',
+          description: 'Must Support elements, including sub-elements of complex elements, SHALL be ' \
+                       'populated if a value is known.',
           commands: ['ms_elements_populated_message("custodian")']
-        },
-        custodian_ms_subelements: {
-          title: 'Must Support sub-element SHALL be populated if a value is known',
-          description: 'Must Support sub-element SHALL be populated if a value is known',
-          commands: ['ms_sub_elements_populated_message("custodian")']
         },
         custodian_ms_identifier_slices: {
           title: 'Must Support identifier slices SHALL be populated if a value is known',
@@ -162,14 +130,10 @@ class Generator
           commands: ['test_composition_custodian_ms_identifier_slices']
         },
         attester_party_ms_elements: {
-          title: 'Must Support elements SHALL be populated if a value is known',
-          description: 'Must Support elements SHALL be populated if a value is known',
+          title: 'Must Support elements (including sub-elements) SHALL be populated if a value is known',
+          description: 'Must Support elements, including sub-elements of complex elements, SHALL be ' \
+                       'populated if a value is known.',
           commands: ['ms_elements_populated_message("attester")']
-        },
-        attester_party_ms_subelements: {
-          title: 'Must Support sub-element SHALL be populated if a value is known',
-          description: 'Must Support sub-element SHALL be populated if a value is known',
-          commands: ['ms_sub_elements_populated_message("attester")']
         },
         attester_party_ms_identifier_slices: {
           title: 'Must Support identifier slices SHALL be populated if a value is known',

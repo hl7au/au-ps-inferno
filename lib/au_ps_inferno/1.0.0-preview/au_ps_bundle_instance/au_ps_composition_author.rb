@@ -6,8 +6,6 @@ require_relative 'au_ps_composition_author/suite_100preview_au_ps_bundle_instanc
 
 require_relative 'au_ps_composition_author/suite_100preview_au_ps_bundle_instance_au_ps_composition_author_author_ms_elements'
 
-require_relative 'au_ps_composition_author/suite_100preview_au_ps_bundle_instance_au_ps_composition_author_author_ms_subelements'
-
 require_relative 'au_ps_composition_author/suite_100preview_au_ps_bundle_instance_au_ps_composition_author_author_ms_identifier_slices'
 
 
@@ -26,8 +24,6 @@ module AUPSTestKit
     test from: :suite_100preview_au_ps_bundle_instance_au_ps_composition_author_author_resource_type_is_valid
     
     test from: :suite_100preview_au_ps_bundle_instance_au_ps_composition_author_author_ms_elements
-    
-    test from: :suite_100preview_au_ps_bundle_instance_au_ps_composition_author_author_ms_subelements
     
     test from: :suite_100preview_au_ps_bundle_instance_au_ps_composition_author_author_ms_identifier_slices
     

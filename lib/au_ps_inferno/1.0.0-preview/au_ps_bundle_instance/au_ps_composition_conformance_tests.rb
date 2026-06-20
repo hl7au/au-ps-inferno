@@ -2,13 +2,7 @@
 
 
 
-require_relative 'au_ps_composition_conformance_tests/suite_100preview_au_ps_bundle_instance_au_ps_composition_conformance_tests_composition_mandatory_ms_populated'
-
-require_relative 'au_ps_composition_conformance_tests/suite_100preview_au_ps_bundle_instance_au_ps_composition_conformance_tests_composition_optional_ms_populated'
-
-require_relative 'au_ps_composition_conformance_tests/suite_100preview_au_ps_bundle_instance_au_ps_composition_conformance_tests_composition_ms_subelements_populated'
-
-require_relative 'au_ps_composition_conformance_tests/suite_100preview_au_ps_bundle_instance_au_ps_composition_conformance_tests_composition_optional_ms_slices'
+require_relative 'au_ps_composition_conformance_tests/suite_100preview_au_ps_bundle_instance_au_ps_composition_conformance_tests_composition_must_support_populated'
 
 
 module AUPSTestKit
@@ -23,13 +17,7 @@ module AUPSTestKit
     
 
     
-    test from: :suite_100preview_au_ps_bundle_instance_au_ps_composition_conformance_tests_composition_mandatory_ms_populated
-    
-    test from: :suite_100preview_au_ps_bundle_instance_au_ps_composition_conformance_tests_composition_optional_ms_populated
-    
-    test from: :suite_100preview_au_ps_bundle_instance_au_ps_composition_conformance_tests_composition_ms_subelements_populated
-    
-    test from: :suite_100preview_au_ps_bundle_instance_au_ps_composition_conformance_tests_composition_optional_ms_slices
+    test from: :suite_100preview_au_ps_bundle_instance_au_ps_composition_conformance_tests_composition_must_support_populated
     
   end
 end

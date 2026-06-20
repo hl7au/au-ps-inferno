@@ -28,10 +28,7 @@ class Generator
         description: 'Verifies the Composition resource is populated according to AU PS Composition ' \
                      'conformance requirements.',
         tests: [
-          { id: :composition_mandatory_ms_populated },
-          { id: :composition_optional_ms_populated },
-          { id: :composition_ms_subelements_populated },
-          { id: :composition_optional_ms_slices }
+          { id: :composition_must_support_populated }
         ],
         run_as_group: true
       },
@@ -77,7 +74,6 @@ class Generator
         tests: [
           { id: :subject_resource_type_is_valid },
           { id: :subject_ms_elements },
-          { id: :subject_ms_subelements_populated },
           { id: :subject_ms_identifier_slices }
         ],
         run_as_group: true
@@ -90,7 +86,6 @@ class Generator
         tests: [
           { id: :author_resource_type_is_valid },
           { id: :author_ms_elements },
-          { id: :author_ms_subelements },
           { id: :author_ms_identifier_slices }
         ],
         run_as_group: true
@@ -100,7 +95,6 @@ class Generator
         description: 'Verify the referenced custodian is a correctly populated AU PS Organization resource.',
         tests: [
           { id: :custodian_ms_elements },
-          { id: :custodian_ms_subelements },
           { id: :custodian_ms_identifier_slices }
         ],
         optional: true,
@@ -112,7 +106,6 @@ class Generator
                      'RelatedPerson, Practitioner, PractitionerRole, or Organization resource.',
         tests: [
           { id: :attester_party_ms_elements },
-          { id: :attester_party_ms_subelements },
           { id: :attester_party_ms_identifier_slices }
         ],
         optional: true,

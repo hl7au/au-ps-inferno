@@ -91,11 +91,39 @@ RSpec.describe 'AU PS conformance messages against a real example bundle' do # r
 
   it 'passes the Bundle and Composition Must Support conformance tests for a valid summary' do
     results = results_repo.current_results_for_test_session(test_session.id)
-    %w[bundle_must_support_populated composition_mandatory_ms_populated].each do |suffix|
+    %w[bundle_must_support_populated composition_must_support_populated].each do |suffix|
       result = results.find { |r| r.test_id.to_s.end_with?(suffix) }
       expect(result).not_to be_nil, "no result for #{suffix}"
       expect(result.result).to eq('pass'), "#{suffix} => #{result.result}: #{result.result_message}"
     end
+  end
+
+  it 'merges composition MS into ONE test rendering a single unified nested list (item A)' do
+    # the four old composition MS tests are now one
+    group = find_runnable(suite, 'au_ps_composition_conformance_tests')
+    test_ids = group.children.map { |c| c.id.to_s.split('_').last(3).join('_') }
+    expect(group.children.size).to eq(1)
+    %w[composition_mandatory_ms_populated composition_optional_ms_populated
+       composition_ms_subelements_populated composition_optional_ms_slices].each do |gone|
+      expect(find_runnable(suite, gone)).to be_nil
+    end
+    # the single message is the unified IG-profile list incl. nested sub-elements
+    result = results_repo.current_results_for_test_session(test_session.id)
+             .find { |r| r.test_id.to_s.end_with?('composition_must_support_populated') }
+    msg = result.messages.map(&:message).join("\n")
+    expect(msg).to include('List of Must Support elements populated or missing')
+    expect(msg).to include('✅ Populated: subject (M)')          # top-level
+    expect(msg).to include('|- ✅ Populated: subject.reference (M)') # nested sub-element in the SAME list
+  end
+
+  it 'merges subject sub-elements into the elements test, nested in one list (item B)' do
+    subject_group = find_runnable(suite, 'au_ps_composition_subject')
+    expect(subject_group.children.map { |c| c.id.to_s }.join).not_to include('subelements')
+    result = results_repo.current_results_for_test_session(test_session.id)
+             .find { |r| r.test_id.to_s.end_with?('subject_ms_elements') }
+    msg = result.messages.map(&:message).join("\n")
+    # sub-elements now appear nested in the elements list (was a separate test before)
+    expect(msg).to match(/\|- .*Populated: name\./)
   end
 end
 

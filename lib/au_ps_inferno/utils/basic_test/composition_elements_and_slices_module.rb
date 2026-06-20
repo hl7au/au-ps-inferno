@@ -1,93 +1,121 @@
 # frozen_string_literal: true
 
+require 'inferno_suite_generator/test_utils/ms_checker'
+
 module AUPSTestKit
-  # Composition Must Support elements and optional slices (e.g. event:careProvisioningEvent).
+  # Composition Must Support conformance presented as a single unified list (mandatory + optional
+  # elements, sub-elements of complex elements, and the careProvisioningEvent slice) in the same
+  # nested IG-profile format as the profile Must Support lists (x.4.2): "✅ Populated: path (M)",
+  # sub-elements nested with "|-", collapsed under absent optional parents.
   module BasicTestCompositionElementsAndSlicesModule
+    COMPOSITION_PROFILE_URL = 'http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-composition'
+
     private
 
-    def validate_populated_elements_in_composition(elements_array, required: true)
-      composition_resource = composition_resource_from_scratch
-      return false unless composition_resource.present?
+    def validate_composition_must_support(mandatory_elements, optional_elements, mandatory_sub, optional_sub, slices)
+      composition = composition_resource_from_scratch
+      return false unless composition.present?
 
-      result = all_paths_are_populated?(composition_resource, elements_array)
-      msg_type = composition_elements_message_type(result, required)
-      list = populated_paths_info(composition_resource, elements_array,
-                                  mandatory_array: required ? elements_array : [])
-      add_message(msg_type, "#{composition_elements_message_heading(result, required)}\n\n#{list}")
-      assert_composition_elements_if_required(result, required)
+      rows = composition_ms_rows(composition,
+                                 mandatory_elements: mandatory_elements, optional_elements: optional_elements,
+                                 mandatory_sub: mandatory_sub, optional_sub: optional_sub, slices: slices)
+      visible = rows.select { |row| row[:applicable] }
+      level = composition_ms_level(visible)
+      add_message(level, composition_ms_report(level, visible))
+      assert composition_ms_mandatory_ok?(visible), 'Mandatory Must Support elements are not populated.'
     end
 
-    def composition_elements_message_type(result, required)
-      return 'info' if result
-
-      required ? 'error' : 'warning'
+    def composition_ms_rows(composition, lists)
+      subs = labelled_paths(lists[:mandatory_sub], lists[:optional_sub])
+      parents = labelled_paths(lists[:mandatory_elements], lists[:optional_elements])
+      element_rows = parents.flat_map { |path, mandatory| composition_element_rows(composition, path, mandatory, subs) }
+      element_rows + lists[:slices].flat_map { |slice| composition_slice_rows(composition, slice) }
     end
 
-    def composition_elements_message_heading(result, required)
-      if required
-        result ? all_mandatory_ms_populated_heading : mandatory_ms_missing_heading
-      else
-        result ? all_optional_ms_populated_heading : optional_ms_missing_heading
+    # Pair each path with whether it is mandatory: [[path, true], [path, false], ...].
+    def labelled_paths(mandatory, optional)
+      mandatory.map { |path| [path, true] } + optional.map { |path| [path, false] }
+    end
+
+    # One parent row plus a row for each of its Must Support sub-elements. Sub-elements are only
+    # "applicable" (shown / asserted) when the parent element is itself populated.
+    def composition_element_rows(composition, path, mandatory, subs)
+      present = composition_path_present?(composition, path)
+      rows = [composition_ms_row(path, mandatory, false, present, true)]
+      subs.select { |sub_path, _| sub_path.start_with?("#{path}.") }.each do |sub_path, sub_mandatory|
+        present_sub = composition_path_present?(composition, sub_path)
+        rows << composition_ms_row(sub_path, sub_mandatory, true, present_sub, present)
+      end
+      rows
+    end
+
+    def composition_slice_rows(composition, slice)
+      label = "#{slice[:path]}:#{slice[:sliceName]}"
+      present = composition_slice_present?(composition, slice)
+      [composition_ms_row(label, false, false, present, true)] +
+        composition_slice_sub_rows(composition, slice, label, present)
+    end
+
+    def composition_slice_sub_rows(composition, slice, label, present)
+      subs = slice[:mandatory_ms_sub_elements].map { |s| [s, true] } +
+             slice[:optional_ms_sub_elements].map { |s| [s, false] }
+      subs.map do |sub, mandatory|
+        sub_present = composition_path_present?(composition, "#{slice[:path]}.#{sub}")
+        composition_ms_row("#{label}.#{sub}", mandatory, true, sub_present, present)
       end
     end
 
-    def assert_composition_elements_if_required(result, required)
-      return unless required
+    def composition_slice_present?(composition, slice)
+      return composition.event_by_code('PCPR').present? if slice[:sliceName] == 'careProvisioningEvent'
 
-      assert result, 'Mandatory Must Support elements are not populated.'
+      composition_path_present?(composition, slice[:path])
     end
 
-    SLICE_DISPLAY_NAME = 'event:careProvisioningEvent'
-
-    def validate_populated_slices_in_composition(slices_array)
-      return false unless scratch_bundle.present?
-
-      composition_resource = BundleDecorator.new(scratch_bundle).composition_resource
-      return false unless composition_resource.present?
-
-      check_event_slice_presence(composition_resource, slices_array)
+    def composition_ms_row(path, mandatory, child, present, applicable)
+      { path: path, mandatory: mandatory, child: child, present: present, applicable: applicable }
     end
 
-    def check_event_slice_presence(composition_resource, slices_array)
-      event = composition_resource.event_by_code('PCPR')
-
-      if event.nil?
-        add_message('warning',
-                    "Must Support slice #{SLICE_DISPLAY_NAME} is not populated.\n\n#{ms_remediation('sliced element')}")
-        return
-      end
-
-      mandatory_ok = slices_array.map do |slice|
-        composition_slice_mandatory_ok?(composition_resource, slice)
-      end.all?
-      assert mandatory_ok, 'Must Support sliced element is not correctly populated.'
+    def composition_path_present?(composition, path)
+      resolve_path_with_dar(composition, path).first.present?
     end
 
-    # Reports one status-specific message per slice and returns whether its mandatory sub-elements are populated.
-    def composition_slice_mandatory_ok?(composition_resource, slice)
-      paths = composition_slice_element_paths(slice)
-      list = populated_paths_info(composition_resource, paths[:combined], mandatory_array: paths[:required])
-      mandatory_ok = all_paths_are_populated?(composition_resource, paths[:required])
-      optional_ok = all_paths_are_populated?(composition_resource, paths[:optional])
-
-      level = composition_slice_level(mandatory_ok, optional_ok)
-      heading = ms_status_heading(level, 'sliced element', SLICE_DISPLAY_NAME)
-      add_message(level, "#{heading}\n\n#{list}\n\nSlice: **#{SLICE_DISPLAY_NAME}**")
-      mandatory_ok
-    end
-
-    def composition_slice_level(mandatory_ok, optional_ok)
-      return 'error' unless mandatory_ok
-      return 'warning' unless optional_ok
+    def composition_ms_level(rows)
+      return 'error' if rows.any? { |row| row[:mandatory] && !row[:present] }
+      return 'warning' if rows.any? { |row| !row[:mandatory] && !row[:present] }
 
       'info'
     end
 
-    def composition_slice_element_paths(slice)
-      base = slice[:path]
-      required = slice[:mandatory_ms_sub_elements].map { |el| "#{base}.#{el}" }
-      optional = slice[:optional_ms_sub_elements].map { |el| "#{base}.#{el}" }
-      { required: required, optional: optional, combined: required + optional }
+    def composition_ms_mandatory_ok?(rows)
+      rows.none? { |row| row[:mandatory] && !row[:present] }
+    end
+
+    def composition_ms_report(level, rows)
+      header = composition_ms_header(level)
+      lines = rows.map { |row| composition_ms_line(row) }
+      [header,
+       "**Profile**: Composition — #{COMPOSITION_PROFILE_URL}",
+       'List of Must Support elements populated or missing',
+       *lines].join("\n\n")
+    end
+
+    def composition_ms_header(level)
+      case level
+      when 'error' then InfernoSuiteGenerator::MSChecker::MANDATORY_ERROR_MS_MESSAGE
+      when 'warning' then InfernoSuiteGenerator::MSChecker::OPTIONAL_MS_WARNING_MESSAGE
+      else InfernoSuiteGenerator::MSChecker::MS_OKAY_MESSAGE
+      end
+    end
+
+    def composition_ms_line(row)
+      icon = if row[:present]
+               '✅ Populated'
+             else
+               row[:mandatory] ? '❌ Missing' : '⚠️ Missing'
+             end
+      text = "#{icon}: #{row[:path]}"
+      text += ' (M)' if row[:mandatory]
+      row[:child] ? "|- #{text}" : text
     end
   end
 end
