@@ -3,8 +3,8 @@
 module AUPSTestKit
   # Basic test for validating a Bundle resource against the AU PS Bundle or IPS Bundle profile
   class BasicValidateBundleTest < BasicTest
-    OMIT_AU_PS_MESSAGE = 'Validation against AU PS Bundle is disabled'
-    OMIT_IPS_MESSAGE = 'Validation against IPS Bundle is disabled'
+    OMIT_AU_PS_MESSAGE = 'Resource validation against AU Patient Summary is disabled'
+    OMIT_IPS_MESSAGE = 'Resource validation against IPS is disabled'
 
     id :basic_validate_bundle_test
 

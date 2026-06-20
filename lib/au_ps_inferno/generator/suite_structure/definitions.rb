@@ -10,23 +10,23 @@ class Generator
 
     SHARED_GROUP_DEFINITIONS = [
       {
-        name: 'Bundle Validation',
-        description: 'Validates that the bundle conforms to the Bundle profiles.',
+        name: 'Patient Summary Bundle Validation Tests',
+        description: 'Validates that the Bundle resource conforms to the AU Patient Summary profiles.',
         tests: [BUNDLE_VALIDATION_PLACEHOLDER, BUNDLE_VALIDATION_IPS_PLACEHOLDER],
         run_as_group: true
       },
       {
-        name: 'AU PS Bundle Must Support Conformance',
-        description: 'Verifies that Must Support elements at the bundle level are populated when data is available.',
+        name: 'AU PS Bundle Conformance Tests',
+        description: 'Verifies the Bundle resource is populated according to AU PS Bundle conformance requirements.',
         tests: [
           { id: :bundle_must_support_populated }
         ],
         run_as_group: true
       },
       {
-        name: 'AU PS Composition Must Support Conformance',
-        description: 'Verifies that Composition Must Support elements (mandatory, optional, sub-elements, ' \
-                     'slices) are correctly populated when data is known.',
+        name: 'AU PS Composition Conformance Tests',
+        description: 'Verifies the Composition resource is populated according to AU PS Composition ' \
+                     'conformance requirements.',
         tests: [
           { id: :composition_mandatory_ms_populated },
           { id: :composition_optional_ms_populated },
@@ -125,12 +125,12 @@ class Generator
         name: 'AU PS Bundle Instance',
         description: 'Validates a static AU PS bundle instance for profile conformance, Must Support ' \
                      'elements, and composition sections.',
-        bundle_validation_title: 'Bundle is valid against AU PS Bundle',
-        bundle_validation_description: 'The Bundle resource is valid against the AU PS Bundle profile using FHIR validator',
+        bundle_validation_title: 'Bundle resource is a valid AU Patient Summary',
+        bundle_validation_description: 'The Bundle resource is valid against the AU PS profiles using FHIR validator',
         bundle_validation_base_class_name: 'BundleIsValidClass',
         bundle_validation_imports: ['../../../utils/bundle_is_valid_class', '../../../utils/ips_bundle_is_valid_class'],
-        bundle_validation_ips_title: 'Bundle is valid against IPS Bundle',
-        bundle_validation_ips_description: 'The Bundle resource is valid against the IPS Bundle profile using FHIR validator',
+        bundle_validation_ips_title: 'Bundle resource is a valid IPS',
+        bundle_validation_ips_description: 'The Bundle resource is valid against the IPS profiles using FHIR validator',
         bundle_validation_ips_base_class_name: 'IpsBundleIsValidClass',
         run_as_group: true
       },
@@ -138,15 +138,15 @@ class Generator
         name: 'Retrieve AU PS Bundle validation tests',
         description: 'Retrieve document Bundle using Bundle read interaction or other HTTP GET request ' \
                      'and verify response is valid AU PS Bundle',
-        bundle_validation_title: 'Retrieved Bundle is valid against AU PS Bundle profile',
-        bundle_validation_description: 'Verifies that a bundle retrieved from the server conforms to the ' \
-                                       'AU PS Bundle profile.',
+        bundle_validation_title: 'Retrieved Bundle resource is a valid AU Patient Summary',
+        bundle_validation_description: 'Verifies that a Bundle retrieved from the server conforms to the ' \
+                                       'AU PS profiles.',
         bundle_validation_base_class_name: 'RetrieveBundleTestClass',
         bundle_validation_imports: ['../../../utils/retrieve_bundle_test_class',
                                     '../../../utils/ips_retrieve_bundle_test_class'],
-        bundle_validation_ips_title: 'Retrieved Bundle is valid against IPS Bundle profile',
-        bundle_validation_ips_description: 'Verifies that a bundle retrieved from the server conforms to the ' \
-                                           'IPS Bundle profile.',
+        bundle_validation_ips_title: 'Retrieved Bundle resource is a valid IPS',
+        bundle_validation_ips_description: 'Verifies that a Bundle retrieved from the server conforms to the ' \
+                                           'IPS profiles.',
         bundle_validation_ips_base_class_name: 'IpsRetrieveBundleTestClass',
         run_as_group: true
       },
@@ -154,15 +154,15 @@ class Generator
         name: 'Generate AU PS using IPS $summary validation tests',
         description: 'Generate AU Patient Summary using IPS $summary operation and verify response is ' \
                      'valid AU PS Bundle',
-        bundle_validation_title: 'Generated Bundle is valid against AU PS Bundle profile',
-        bundle_validation_description: 'Verifies that a bundle produced by the IPS $summary operation ' \
-                                       'conforms to the AU PS Bundle profile.',
+        bundle_validation_title: 'Generated Bundle resource is a valid AU Patient Summary',
+        bundle_validation_description: 'Verifies that a Bundle produced by the IPS $summary operation ' \
+                                       'conforms to the AU PS profiles.',
         bundle_validation_base_class_name: 'SummaryValidBundleClass',
         bundle_validation_imports: ['../../../utils/summary_valid_bundle_class',
                                     '../../../utils/ips_summary_valid_bundle_class'],
-        bundle_validation_ips_title: 'Generated Bundle is valid against IPS Bundle profile',
-        bundle_validation_ips_description: 'Verifies that a bundle produced by the IPS $summary operation ' \
-                                           'conforms to the IPS Bundle profile.',
+        bundle_validation_ips_title: 'Generated Bundle resource is a valid IPS',
+        bundle_validation_ips_description: 'Verifies that a Bundle produced by the IPS $summary operation ' \
+                                           'conforms to the IPS profiles.',
         bundle_validation_ips_base_class_name: 'IpsSummaryValidBundleClass',
         run_as_group: true
       }

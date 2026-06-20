@@ -34,9 +34,7 @@ module AUPSTestKit
       end
 
       skip_if !any_parent, 'No complex element with Must Support sub-elements is populated'
-      msg = 'Some of the mandatory Must Support sub-elements are not populated. ' \
-            'See the list of populated sub-elements in messages tab.'
-      assert mandatory_ok, msg
+      assert mandatory_ok, 'Must Support sub-elements of a complex element are not correctly populated.'
     end
 
     def composition_any_subelement_parent_populated?(composition_resource, grouped_elements)
@@ -55,18 +53,18 @@ module AUPSTestKit
 
     def add_composition_subelements_messages(composition_resource, parent_path, sub_elements, mandatory_ms)
       unless resolve_path_with_dar(composition_resource, parent_path).first.present?
-        add_message('warning', composition_subelement_parent_unpopulated_message(parent_path, sub_elements))
+        add_message('warning', composition_subelement_parent_unpopulated_message(parent_path))
         return
       end
 
       level = composition_subelements_worst_level(composition_resource, sub_elements, mandatory_ms)
-      add_message(level, populated_paths_info(composition_resource, sub_elements, mandatory_array: mandatory_ms))
+      heading = ms_status_heading(level, 'complex element', parent_path)
+      list = populated_paths_info(composition_resource, sub_elements, mandatory_array: mandatory_ms)
+      add_message(level, "#{heading}\n\n#{list}")
     end
 
-    def composition_subelement_parent_unpopulated_message(parent_path, sub_elements)
-      detail = "**Complex element #{parent_path}** is not populated. " \
-               "Must Support sub-elements that would be validated: #{sub_elements.join(', ')}."
-      ['Must Support sub-elements correctly populated', 'Composition', detail].join("\n\n")
+    def composition_subelement_parent_unpopulated_message(parent_path)
+      "Complex element #{parent_path} is not populated.\n\n#{ms_remediation('complex element')}"
     end
 
     def composition_subelements_worst_level(composition_resource, sub_elements, mandatory_ms)

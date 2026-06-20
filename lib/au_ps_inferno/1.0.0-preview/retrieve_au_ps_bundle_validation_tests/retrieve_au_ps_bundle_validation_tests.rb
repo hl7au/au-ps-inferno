@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
 
-require_relative 'bundle_validation'
+require_relative 'patient_summary_bundle_validation_tests'
 
-require_relative 'au_ps_bundle_must_support_conformance'
+require_relative 'au_ps_bundle_conformance_tests'
 
-require_relative 'au_ps_composition_must_support_conformance'
+require_relative 'au_ps_composition_conformance_tests'
 
 require_relative 'au_ps_composition_mandatory_sections'
 
@@ -36,11 +36,11 @@ module AUPSTestKit
     
 
     
-    group from: :suite_100preview_retrieve_au_ps_bundle_validation_tests_bundle_validation
+    group from: :suite_100preview_retrieve_au_ps_bundle_validation_tests_patient_summary_bundle_validation_tests
     
-    group from: :suite_100preview_retrieve_au_ps_bundle_validation_tests_au_ps_bundle_must_support_conformance
+    group from: :suite_100preview_retrieve_au_ps_bundle_validation_tests_au_ps_bundle_conformance_tests
     
-    group from: :suite_100preview_retrieve_au_ps_bundle_validation_tests_au_ps_composition_must_support_conformance
+    group from: :suite_100preview_retrieve_au_ps_bundle_validation_tests_au_ps_composition_conformance_tests
     
     group from: :suite_100preview_retrieve_au_ps_bundle_validation_tests_au_ps_composition_mandatory_sections
     

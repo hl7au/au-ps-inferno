@@ -6,11 +6,19 @@ module AUPSTestKit
     def bundle_mandatory_ms_elements_info
       check_bundle_exists_in_scratch
       passed = [identifier_info?, type_info?, timestamp_info?, all_entries_have_full_url_info?].all?
-      message_type = passed ? 'info' : 'error'
-      add_message(message_type,
-                  "**List mandatory Must Support elements populated and missing**:\n\n#{mandatory_ms_elements_info}")
-      info "**List any entry resources by type (and meta.profile if exists)**:\n\n#{entry_resources_info}"
+      add_message(passed ? 'info' : 'error',
+                  "#{bundle_mandatory_ms_heading(passed)}\n\n#{mandatory_ms_elements_info}")
+      info '**The test data included the following resource types as an entry in the Bundle**:' \
+           "\n\n#{entry_resources_info}"
       assert passed, 'Mandatory Must Support elements are not populated'
+    end
+
+    def bundle_mandatory_ms_heading(passed)
+      if passed
+        '**All mandatory Must Support elements are correctly populated**'
+      else
+        '**At least one mandatory Must Support element is not populated**'
+      end
     end
 
     def mandatory_ms_elements_info
@@ -31,7 +39,7 @@ module AUPSTestKit
     end
 
     def validate_ips_bundle
-      validate_bundle_wrapper('http://hl7.org/fhir/uv/ips/StructureDefinition/Bundle-uv-ips')
+      validate_bundle_wrapper('http://hl7.org/fhir/uv/ips/StructureDefinition/Bundle-uv-ips|2.0.0')
     end
 
     private

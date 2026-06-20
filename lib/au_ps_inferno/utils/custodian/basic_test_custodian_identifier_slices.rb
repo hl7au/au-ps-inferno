@@ -26,8 +26,9 @@ module AUPSTestKit
 
     def custodian_post_identifier_slices_message(custodian_header, slice_results)
       lines = slice_results.map { |result| custodian_identifier_slice_line(result) }
-      message_type = slice_results.all? { |r| r[:identifier].present? } ? 'info' : 'warning'
-      add_message(message_type, custodian_identifier_slices_full_message(custodian_header, lines))
+      all_present = slice_results.all? { |r| r[:identifier].present? }
+      add_message(all_present ? 'info' : 'warning',
+                  custodian_identifier_slices_full_message(custodian_header, lines, all_present))
     end
 
     def custodian_identifier_slice_line(result)
@@ -39,9 +40,9 @@ module AUPSTestKit
       end
     end
 
-    def custodian_identifier_slices_full_message(custodian_header, lines)
+    def custodian_identifier_slices_full_message(custodian_header, lines, all_present)
       heading = '## List of Must Support identifier slices populated or missing (type and system when populated)'
-      ['Must support identifier slices correctly populated', custodian_header, heading, lines.join("\n\n")].join("\n\n")
+      [identifier_slices_intro(all_present), custodian_header, heading, lines.join("\n\n")].join("\n\n")
     end
   end
 end

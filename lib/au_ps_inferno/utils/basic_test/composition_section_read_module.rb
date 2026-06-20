@@ -40,9 +40,9 @@ module AUPSTestKit
                                                         bundle_resource: bundle_resource,
                                                         all_present: mandatory)
 
-      assert mandatory ? refs_test_pass : true, 'Some of the mandatory sections are not populated correctly.'
+      assert mandatory ? refs_test_pass : true, 'Some of the sections are not populated correctly.'
       assert mandatory ? ms_test_pass : true,
-             'Some of the mandatory sections are not populated with the correct Must Support elements.'
+             'Some of the sections are not populated with the correct Must Support elements.'
     end
 
     def composition_sections_references_resolution_pass?(sections_codes:, bundle_resource:, mandatory: false)

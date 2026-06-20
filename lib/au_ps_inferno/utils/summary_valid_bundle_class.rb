@@ -39,7 +39,8 @@ module AUPSTestKit
     input :profile,
           optional: true,
           default: 'http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-bundle',
-          description: 'To specify profile for the patient summary'
+          description: 'To specify the profile parameter when calling the $summary operation ' \
+                       '(i.e. Patient/$summary?profile={profile})'
 
     fhir_client do
       url :url

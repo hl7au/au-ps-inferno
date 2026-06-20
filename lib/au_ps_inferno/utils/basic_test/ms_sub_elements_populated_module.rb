@@ -19,9 +19,9 @@ module AUPSTestKit
         sub_elements_filtered_grouped_and_check_context(resource, metadata)
       omit_if new_grouped_sub_elements.blank?, 'No complex element with Must Support sub-elements is defined'
 
-      show_ms_elements_messages(new_grouped_sub_elements, ms_checker, resource, results)
+      show_ms_elements_messages(container_type, new_grouped_sub_elements, ms_checker, resource, results)
       assert assert_result(filtered_results, new_grouped_sub_elements),
-             'When any mandatory Must Support sub-element is missing. See the list in messages tab.'
+             'At least one mandatory Must Support sub-element is not populated.'
     end
 
     private
@@ -46,9 +46,11 @@ module AUPSTestKit
       [filtered_results, grouped, checker, results]
     end
 
-    def show_ms_elements_messages(new_grouped_sub_elements, ms_checker, resource, results)
+    def show_ms_elements_messages(container_type, new_grouped_sub_elements, ms_checker, resource, results)
       new_grouped_sub_elements.each do |parent_path, sub_elements|
-        sub_element_message(ms_checker, sub_elements, resource, parent_path, results)
+        level = build_message_level(ms_checker, sub_elements, results)
+        context = { container_type:, ms_checker:, resource:, results:, level: }
+        add_message(level, build_sub_element_message_content(sub_elements, parent_path, context))
       end
     end
 
@@ -76,31 +78,29 @@ module AUPSTestKit
       !mandatory_sub_elements_present && parent_present
     end
 
-    def sub_element_message(ms_checker, sub_elements, resource, parent_path, results)
-      message_level = build_message_level(ms_checker, sub_elements, results)
-      message = build_sub_element_message_content(ms_checker, sub_elements, resource, parent_path, results)
-      add_message(message_level, message)
-    end
-
     def build_message_level(ms_checker, sub_elements, results)
       return 'warning' if parent_element_is_not_populated?(sub_elements, results)
 
       ms_checker.calculate_elements_status_message_level(sub_elements)
     end
 
-    def build_sub_element_message_content(ms_checker, sub_elements, resource, parent_path, results)
+    def build_sub_element_message_content(sub_elements, parent_path, context)
+      reference_line = "**Referenced #{context[:container_type]}**: #{context[:resource].resourceType}"
+      if parent_element_is_not_populated?(sub_elements, context[:results])
+        return [reference_line, parent_element_is_not_populated_text(parent_path)].join("\n\n")
+      end
+
       [
-        'Must Support sub-elements correctly populated',
-        "**Referenced subject**: #{resource.resourceType}",
+        ms_status_heading(context[:level], 'complex element', parent_path),
+        reference_line,
         "## Complex element **#{parent_path}** — Must Support sub-elements populated or missing",
-        sub_element_statuses_texts(ms_checker, sub_elements, results, parent_path)
+        sub_element_statuses_texts(context[:ms_checker], sub_elements, context[:results], parent_path)
       ].join("\n\n")
     end
 
     def sub_element_statuses_texts(ms_checker, sub_elements, results, parent_path)
       if parent_element_is_not_populated?(sub_elements, results)
-        return parent_element_is_not_populated_text(parent_path,
-                                                    sub_elements)
+        return parent_element_is_not_populated_text(parent_path)
       end
 
       ms_checker.element_statuses_texts(sub_elements).map do |text|
@@ -113,11 +113,8 @@ module AUPSTestKit
       results.any? { |result| result[:path] == parent_path && result[:present] == false }
     end
 
-    def parent_element_is_not_populated_text(parent_path, sub_elements)
-      "**Complex element #{parent_path}** is not populated. " \
-        "Must Support sub-elements that would be validated: #{sub_elements.map do |element|
-          element[:path]
-        end.join(', ')}."
+    def parent_element_is_not_populated_text(parent_path)
+      "Complex element #{parent_path} is not populated.\n\n#{ms_remediation('complex element')}"
     end
 
     def sub_element?(path)

@@ -8,14 +8,12 @@ class Generator
       REGISTRY = {
         bundle_must_support_populated: {
           title: 'AU PS Bundle Must Support elements are correctly populated',
-          description: 'Must Support elements SHALL be populated when an element value is known and allowed ' \
-                       'to share.',
+          description: 'Must Support elements SHALL be included if a value is known and allowed to be shared.',
           commands: ['bundle_mandatory_ms_elements_info']
         },
         composition_mandatory_ms_populated: {
           title: 'Mandatory Must Support elements are correctly populated',
-          description: 'Mandatory Must Support element SHALL be able to be populated if a value is known and ' \
-                       'allowed to share.',
+          description: 'Must Support elements SHALL be included if a value is known and allowed to be shared.',
           commands_builder: lambda { |m|
             { commands: ["validate_populated_elements_in_composition(#{m.composition_mandatory_ms_elements})"] }
           }
@@ -31,8 +29,8 @@ class Generator
         },
         composition_ms_subelements_populated: {
           title: 'Must Support sub-elements of a complex element are correctly populated',
-          description: 'Must Support sub-elements of a complex element SHALL be correctly populated if a value ' \
-                       'is known',
+          description: 'Must Support sub-elements of a complex element SHALL be correctly populated and the ' \
+                       'parent is populated.',
           commands_builder: lambda { |m|
             cmd = 'validate_populated_sub_elements_in_composition(' \
                   "#{m.composition_mandatory_ms_sub_elements}, #{m.composition_optional_ms_sub_elements})"
@@ -40,8 +38,8 @@ class Generator
           }
         },
         composition_optional_ms_slices: {
-          title: 'Must Support slices are correctly populated',
-          description: 'Must Support slice careProvisioningEvent SHALL be populated if a value is known.',
+          title: 'Must Support sliced elements are correctly populated',
+          description: 'Must Support sliced elements SHALL be populated if a value is known.',
           commands_builder: lambda { |m|
             { commands: ["validate_populated_slices_in_composition(#{m.composition_optional_ms_slices})"] }
           }

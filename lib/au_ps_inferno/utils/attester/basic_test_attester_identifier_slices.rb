@@ -14,14 +14,15 @@ module AUPSTestKit
       slice_results = attester_party_build_slice_results(slices, identifiers)
       header = attester_party_referenced_type_profile_header(resource_type_str, profile_str)
       lines = slice_results.map { |r| attester_party_format_identifier_slice_line(r) }
-      message_type = slice_results.all? { |r| r[:identifier].present? } ? 'info' : 'warning'
-      add_message(message_type, attester_party_identifier_slices_full_message(header, lines))
+      all_present = slice_results.all? { |r| r[:identifier].present? }
+      add_message(all_present ? 'info' : 'warning',
+                  attester_party_identifier_slices_full_message(header, lines, all_present))
     end
 
     def test_composition_attester_party_ms_identifier_slices
       check_bundle_exists_in_scratch
       resource = attester_party_resource
-      skip_if resource.blank?, 'Attester or attester.party is not populated'
+      omit_if resource.blank?, 'Attester or attester.party is not populated or does not resolve'
 
       resource_type_str = resource_type(resource)
       slices = AUTHOR_MS_IDENTIFIER_SLICES_BY_TYPE[resource_type_str] || []
@@ -49,15 +50,15 @@ module AUPSTestKit
       end
     end
 
-    def attester_party_identifier_slices_full_message(header, lines)
+    def attester_party_identifier_slices_full_message(header, lines, all_present)
       attester_party_join_message_sections(
-        attester_party_identifier_slices_message_parts(header, lines)
+        attester_party_identifier_slices_message_parts(header, lines, all_present)
       )
     end
 
-    def attester_party_identifier_slices_message_parts(header, lines)
+    def attester_party_identifier_slices_message_parts(header, lines, all_present)
       [
-        'Must support identifier slices correctly populated', '',
+        identifier_slices_intro(all_present), '',
         header, '',
         attester_party_identifier_slices_heading, '',
         lines.join("\n\n")

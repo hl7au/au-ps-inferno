@@ -16,6 +16,7 @@ require_relative 'basic_test/composition_section_read_module'
 require_relative 'basic_test/paths_module'
 require_relative 'basic_test/resource_helpers_module'
 require_relative 'basic_test/composition_subelements_module'
+require_relative 'basic_test/ms_message_text_module'
 require_relative 'basic_test/ms_identifier_slices_module'
 require_relative 'basic_test/composition_elements_and_slices_module'
 require_relative 'basic_test/section_bundle_validation_module'
@@ -44,6 +45,7 @@ module AUPSTestKit
     include BasicTestPathsModule
     include BasicTestResourceHelpersModule
     include BasicTestCompositionSubelementsModule
+    include BasicTestMsMessageTextModule
     include BasicTestMsIdentifierSlicesModule
     include BasicTestCompositionElementsAndSlicesModule
     include BasicTestSectionBundleValidationModule

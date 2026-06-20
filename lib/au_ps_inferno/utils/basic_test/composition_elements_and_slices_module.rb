@@ -11,9 +11,9 @@ module AUPSTestKit
 
       result = all_paths_are_populated?(composition_resource, elements_array)
       msg_type = composition_elements_message_type(result, required)
-      add_message(msg_type,
-                  populated_paths_info(composition_resource, elements_array,
-                                       mandatory_array: required ? elements_array : []))
+      list = populated_paths_info(composition_resource, elements_array,
+                                  mandatory_array: required ? elements_array : [])
+      add_message(msg_type, "#{composition_elements_message_heading(result, required)}\n\n#{list}")
       assert_composition_elements_if_required(result, required)
     end
 
@@ -23,12 +23,21 @@ module AUPSTestKit
       required ? 'error' : 'warning'
     end
 
+    def composition_elements_message_heading(result, required)
+      if required
+        result ? all_mandatory_ms_populated_heading : mandatory_ms_missing_heading
+      else
+        result ? all_optional_ms_populated_heading : optional_ms_missing_heading
+      end
+    end
+
     def assert_composition_elements_if_required(result, required)
       return unless required
 
-      assert result,
-             'Some of the elements are not populated. See the list of populated elements in messages tab.'
+      assert result, 'Mandatory Must Support elements are not populated.'
     end
+
+    SLICE_DISPLAY_NAME = 'event:careProvisioningEvent'
 
     def validate_populated_slices_in_composition(slices_array)
       return false unless scratch_bundle.present?
@@ -43,49 +52,35 @@ module AUPSTestKit
       event = composition_resource.event_by_code('PCPR')
 
       if event.nil?
-        add_message('warning', 'event:careProvisioningEvent slice is not present')
-        assert true
-      else
-        slices_array.all? do |slice|
-          composition_slice_validation_passes?(composition_resource, slice, event)
-        end
+        add_message('warning',
+                    "Must Support slice #{SLICE_DISPLAY_NAME} is not populated.\n\n#{ms_remediation('sliced element')}")
+        return
       end
+
+      mandatory_ok = slices_array.map do |slice|
+        composition_slice_mandatory_ok?(composition_resource, slice)
+      end.all?
+      assert mandatory_ok, 'Must Support sliced element is not correctly populated.'
     end
 
-    def composition_slice_validation_passes?(composition_resource, slice, event)
+    # Reports one status-specific message per slice and returns whether its mandatory sub-elements are populated.
+    def composition_slice_mandatory_ok?(composition_resource, slice)
       paths = composition_slice_element_paths(slice)
-      message_data = populated_paths_info(composition_resource, paths[:combined], mandatory_array: paths[:required])
-      full_data = composition_slice_full_message_data(message_data)
-      return false unless composition_slice_required_paths_ok?(composition_resource, paths, full_data)
+      list = populated_paths_info(composition_resource, paths[:combined], mandatory_array: paths[:required])
+      mandatory_ok = all_paths_are_populated?(composition_resource, paths[:required])
+      optional_ok = all_paths_are_populated?(composition_resource, paths[:optional])
 
-      composition_slice_optional_and_event_outcome?(composition_resource, paths, full_data, message_data, event)
+      level = composition_slice_level(mandatory_ok, optional_ok)
+      heading = ms_status_heading(level, 'sliced element', SLICE_DISPLAY_NAME)
+      add_message(level, "#{heading}\n\n#{list}\n\nSlice: **#{SLICE_DISPLAY_NAME}**")
+      mandatory_ok
     end
 
-    def composition_slice_full_message_data(message_data)
-      "#{message_data}\n\nSlice: **event:careProvisioningEvent**"
-    end
+    def composition_slice_level(mandatory_ok, optional_ok)
+      return 'error' unless mandatory_ok
+      return 'warning' unless optional_ok
 
-    def composition_slice_required_paths_ok?(composition_resource, paths, full_data)
-      return true if all_paths_are_populated?(composition_resource, paths[:required])
-
-      add_message('warning', full_data)
-      false
-    end
-
-    def composition_slice_optional_and_event_outcome?(composition_resource, paths, full_data, message_data, event)
-      unless all_paths_are_populated?(composition_resource, paths[:optional])
-        add_message('warning', full_data)
-        return true
-      end
-      return composition_slice_warn_if_event_nil?(message_data) if event.nil?
-
-      add_message('info', full_data)
-      true
-    end
-
-    def composition_slice_warn_if_event_nil?(message_data)
-      add_message('warning', message_data)
-      true
+      'info'
     end
 
     def composition_slice_element_paths(slice)

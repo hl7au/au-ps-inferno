@@ -22,16 +22,21 @@ module AUPSTestKit
     def add_ms_identifier_slices_populated_message(slice_results)
       lines = slice_results.map { |r| ms_identifier_slice_line_with_type(r) }
       heading = '## List of Must Support identifier slices populated or missing'
-      body = ['Must support identifier slices correctly populated', heading, lines.join("\n\n")].join("\n\n")
-      add_message(slice_results.all? { |r| r[:identifier].present? } ? 'info' : 'warning', body)
+      all_present = slice_results.all? { |r| r[:identifier].present? }
+      add_message(all_present ? 'info' : 'warning',
+                  [identifier_slices_intro(all_present), heading, lines.join("\n\n")].join("\n\n"))
     end
 
     def add_ms_identifier_slices_at_least_one_message(slice_results)
       lines = slice_results.map { |r| ms_identifier_slice_line_system_only(r) }
       heading = '## List of Must Support identifier slices populated or missing (system when populated)'
-      intro = 'At least one Must Support identifier slices is populated'
-      body = [intro, heading, lines.join("\n\n")].join("\n\n")
-      add_message(slice_results.any? { |r| r[:identifier].present? } ? 'info' : 'warning', body)
+      any_present = slice_results.any? { |r| r[:identifier].present? }
+      intro = if any_present
+                'At least one Must Support identifier slice is populated'
+              else
+                "No Must Support identifier slices are populated.\n\n#{ms_remediation('identifier slice')}"
+              end
+      add_message(any_present ? 'info' : 'warning', [intro, heading, lines.join("\n\n")].join("\n\n"))
     end
 
     def build_ms_identifier_slice_results(identifiers, slices)

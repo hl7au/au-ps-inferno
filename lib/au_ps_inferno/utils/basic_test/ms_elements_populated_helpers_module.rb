@@ -23,7 +23,7 @@ module AUPSTestKit
 
     def base_result_messages_sub_elements(container_type, resource, parent_path)
       [
-        'Must Support sub-elements correctly populated',
+        "All Must Support sub-elements of complex element #{parent_path} correctly populated",
         "**Referenced #{container_type}**: #{resource_type_and_profile_str(resource, container_type)}",
         "## Complex element **#{parent_path}** — Must Support sub-elements populated or missing"
       ]
@@ -54,7 +54,7 @@ module AUPSTestKit
     end
 
     def assert_message
-      'When any mandatory Must Support element is missing. See the list in messages tab.'
+      'At least one mandatory Must Support element is not populated.'
     end
 
     def normalize_element(element)
@@ -138,11 +138,8 @@ module AUPSTestKit
       end
     end
 
-    def sub_element_parent_missing_message(parent_path, sub_elements)
-      expected = sub_elements.map { |item| item[:label] }.join(', ')
-      detail = "**Complex element #{parent_path}** is not populated. " \
-               "Must Support sub-elements that would be validated: #{expected}."
-      [detail]
+    def sub_element_parent_missing_message(parent_path, _sub_elements)
+      ["Complex element #{parent_path} is not populated.\n\n#{ms_remediation('complex element')}"]
     end
 
     def group_message_level(types)

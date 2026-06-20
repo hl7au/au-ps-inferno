@@ -123,9 +123,14 @@ module AUPSTestKit
       ", type: #{coding['display'].presence || coding['code'].presence || '—'}"
     end
 
+    # Optional reference groups are omitted when absent/unresolved; mandatory groups stay skipped.
+    OMIT_WHEN_UNRESOLVED_CONTAINERS = %w[custodian attester].freeze
+
     def guard_populated_resource(container_type)
-      resource_is_poluated = raw_resource_type_is_valid(container_type)
-      skip_if !resource_is_poluated[:valid?], resource_is_poluated[:msg]
+      result = raw_resource_type_is_valid(container_type)
+      return if result[:valid?]
+
+      OMIT_WHEN_UNRESOLVED_CONTAINERS.include?(container_type) ? omit(result[:msg]) : skip(result[:msg])
     end
 
     def author_and_device_resource?(container_type, resource)
