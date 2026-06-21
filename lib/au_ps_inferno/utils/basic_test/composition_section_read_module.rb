@@ -35,6 +35,7 @@ module AUPSTestKit
 
     def test_composition_sections_data(sections_codes:, bundle_data:, mandatory: false)
       # Mandatory: true - FN should fail if any mandatory section is not populated correctly.
+      # Unresolved references always fail regardless of mandatory status.
       bundle_resource = BundleDecorator.new(bundle_data)
       refs_test_pass = composition_sections_references_resolution_pass?(sections_codes: sections_codes,
                                                                         bundle_resource: bundle_resource,
@@ -43,7 +44,7 @@ module AUPSTestKit
                                                         bundle_resource: bundle_resource,
                                                         all_present: mandatory)
 
-      assert mandatory ? refs_test_pass : true, 'Some of the mandatory sections are not populated correctly.'
+      assert refs_test_pass, 'Some section entry references cannot be resolved.'
       assert mandatory ? ms_test_pass : true,
              'Some of the mandatory sections are not populated with the correct Must Support elements.'
     end
@@ -65,9 +66,12 @@ module AUPSTestKit
       section = composition_resource.section_by_code(section_code)
       issues = read_composition_section_issues(section_metadata, bundle_resource)
       text = composition_section_read_report_message(section_metadata, section, bundle_resource, section_code)
-      error_level = mandatory ? 'error' : 'warning'
+      has_unresolved = section.present? && section.entry_references.any? do |ref|
+        bundle_resource.resource_by_reference(ref).blank?
+      end
+      error_level = (mandatory || has_unresolved) ? 'error' : 'warning'
       add_message(issues.empty? ? 'info' : error_level, text)
-      issues.empty?
+      issues.empty? || (!mandatory && !has_unresolved)
     end
 
     def composition_section_read_report_message(section_metadata, section, bundle_resource, section_code)
