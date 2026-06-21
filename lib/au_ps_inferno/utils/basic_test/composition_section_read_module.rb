@@ -60,17 +60,25 @@ module AUPSTestKit
       end.all?
     end
 
+    def section_has_unresolved_refs?(section, bundle_resource)
+      section.present? && section.entry_references.any? do |ref|
+        bundle_resource.resource_by_reference(ref).blank?
+      end
+    end
+
+    def section_reference_message_level(mandatory:, has_unresolved:)
+      mandatory || has_unresolved ? 'error' : 'warning'
+    end
+
     def composition_section_references_resolution_issues?(section_metadata:, composition_resource:, bundle_resource:,
                                                           mandatory:)
       section_code = section_metadata[:code]
       section = composition_resource.section_by_code(section_code)
       issues = read_composition_section_issues(section_metadata, bundle_resource)
       text = composition_section_read_report_message(section_metadata, section, bundle_resource, section_code)
-      has_unresolved = section.present? && section.entry_references.any? do |ref|
-        bundle_resource.resource_by_reference(ref).blank?
-      end
-      error_level = (mandatory || has_unresolved) ? 'error' : 'warning'
-      add_message(issues.empty? ? 'info' : error_level, text)
+      has_unresolved = section_has_unresolved_refs?(section, bundle_resource)
+      level = section_reference_message_level(mandatory:, has_unresolved:)
+      add_message(issues.empty? ? 'info' : level, text)
       issues.empty? || (!mandatory && !has_unresolved)
     end
 
