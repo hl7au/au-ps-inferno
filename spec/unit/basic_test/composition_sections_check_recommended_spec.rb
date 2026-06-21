@@ -188,5 +188,30 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do
         MSG
       )
     end
+
+    context 'when a section entry reference does not resolve (resource not in bundle)' do
+      let(:unresolved_ref_bundle_filename) { 'recommended-error-unresolved-ref-bundle.json' }
+
+      it 'fails the test when an entry reference cannot be resolved' do
+        outcome = run_with_fixture_bundle(test, fixture_filename: unresolved_ref_bundle_filename)
+
+        expect_fail(outcome)
+      end
+
+      it 'returns an error message when an entry reference cannot be resolved' do
+        outcome = run_with_fixture_bundle(test, fixture_filename: unresolved_ref_bundle_filename)
+
+        expect_error_message(
+          outcome,
+          <<~MSG.chomp
+            Patient Summary Immunizations Section (11369-6)
+
+            entry[0]: **urn:uuid:cccccccc-0005-0000-0000-000000000006** -> Immunization (no meta.profile)
+
+            **urn:uuid:cccccccc-0005-0000-0000-000000000099** -> ❌ Reference does not resolve
+          MSG
+        )
+      end
+    end
   end
 end
