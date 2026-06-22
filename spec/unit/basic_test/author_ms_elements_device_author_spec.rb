@@ -8,9 +8,9 @@ require_relative '../../../lib/au_ps_inferno/utils/metadata_manager'
 
 require File.join(Gem::Specification.find_by_name('inferno_core').full_gem_path, 'spec/runnable_context')
 
-RSpec.describe 'Author Must Support element tests omit when author is Device' do
-  DEVICE_AUTHOR_FIXTURE_METADATA_PATH = File.expand_path('../../fixtures/metadata.yaml', __dir__).freeze
+DEVICE_AUTHOR_FIXTURE_METADATA_PATH = File.expand_path('../../fixtures/metadata.yaml', __dir__).freeze
 
+RSpec.describe 'Author Must Support element tests omit when author is Device' do
   include_context 'when testing a runnable'
 
   let(:suite_id) { 'author_device_ms_test_suite' }
@@ -67,12 +67,11 @@ RSpec.describe 'Author Must Support element tests omit when author is Device' do
   end
 
   def create_author_ms_test(test_id, method_name)
-    metadata_path = DEVICE_AUTHOR_FIXTURE_METADATA_PATH
     klass = Class.new(AUPSTestKit::BasicTest) do
       id test_id
       run { send(method_name, 'author') }
       define_method(:metadata_manager) do
-        @metadata_manager ||= AUPSTestKit::MetadataManager.new(metadata_path)
+        @metadata_manager ||= AUPSTestKit::MetadataManager.new(DEVICE_AUTHOR_FIXTURE_METADATA_PATH)
       end
     end
     repo = Inferno::Repositories::Tests.new
