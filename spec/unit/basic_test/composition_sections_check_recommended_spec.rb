@@ -22,6 +22,13 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do
       expect_pass(outcome)
     end
 
+    # RED test for issue #78: error messages in recommended sections should fail the test
+    it 'fails when mandatory MS elements are missing in recommended sections (issue #78)' do
+      outcome = run_with_fixture_bundle(test, fixture_filename: error_bundle_filename)
+
+      expect_fail(outcome)
+    end
+
     it 'returns an info message when all mandatory and optional elements are populated' do
       outcome = run_with_fixture_bundle(test, fixture_filename: success_bundle_filename)
 
