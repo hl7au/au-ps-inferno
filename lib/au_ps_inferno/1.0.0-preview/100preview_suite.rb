@@ -22,6 +22,7 @@ module AUPSTestKit
 
       cli_context do
         txServer ENV.fetch('TX_SERVER_URL', 'https://tx.dev.hl7.org.au/fhir')
+        noEcosystem true
       end
     end
 
