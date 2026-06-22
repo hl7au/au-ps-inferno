@@ -11,9 +11,10 @@ module AUPSTestKit
       guard_populated_resource(container_type)
 
       resource = get_resource_by_container_type(container_type)
-      return unless (metadata = get_metadata_by_resource_type(resource.resourceType)).present?
 
       author_and_device_resource?(container_type, resource)
+
+      return unless (metadata = get_metadata_by_resource_type(resource.resourceType)).present?
 
       filtered_results, new_grouped_sub_elements, ms_checker, results =
         sub_elements_filtered_grouped_and_check_context(resource, metadata)
