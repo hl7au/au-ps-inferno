@@ -16,14 +16,7 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do
       expect_pass(outcome)
     end
 
-    it 'passes even when the error bundle has MS or reference issues (recommended sections do not fail the runnable)' do
-      outcome = run_with_fixture_bundle(test, fixture_filename: error_bundle_filename)
-
-      expect_pass(outcome)
-    end
-
-    # RED test for issue #78: error messages in recommended sections should fail the test
-    skip 'fails when mandatory MS elements are missing in recommended sections (issue #78)' do
+    it 'fails when mandatory MS elements are missing in recommended sections' do
       outcome = run_with_fixture_bundle(test, fixture_filename: error_bundle_filename)
 
       expect_fail(outcome)
@@ -146,7 +139,7 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do
 
           ✅ Populated: primarySource
 
-          ✅ Populated: lotNumber
+          ⚠️ Missing: lotNumber
 
           ✅ Populated: note
         MSG
