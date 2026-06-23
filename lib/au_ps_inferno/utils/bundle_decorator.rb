@@ -35,26 +35,38 @@ class BundleDecorator < FHIR::Bundle
   private
 
   def resolve_entry_reference_as_reference(entry_reference)
+    base_url = BundleEntryDecorator.new(composition_entry).full_url_base
+
     entry.find do |entr|
-      entry_full_url = entr.fullUrl
-      next unless entry_full_url.start_with?('http') || entry_full_url.start_with?('https')
+      next unless entr.fullUrl&.start_with?('http')
 
-      base_url = BundleEntryDecorator.new(composition_entry).full_url_base
-      next if base_url.nil?
-
-      entr.fullUrl == base_url + entry_reference
+      if base_url
+        entr.fullUrl == base_url + entry_reference
+      else
+        # Composition fullUrl is a URN so no base URL is derivable. Fall back to
+        # suffix match: a relative {Type}/{id} reference can resolve to an absolute
+        # fullUrl that ends with /{Type}/{id} (FHIR bundle reference rules).
+        entr.fullUrl.end_with?("/#{entry_reference}")
+      end
     end
   end
 
   def resolve_entry_reference(entry_reference)
     is_urn = entry_reference.start_with?('urn:')
     is_url = entry_reference.start_with?('http') || entry_reference.start_with?('https')
-    is_reference = entry_reference.split('/').length == 2
+    is_reference = !is_urn && !is_url && entry_reference.split('/').length == 2
 
-    return entry.find { |entr| entr.fullUrl == entry_reference } if is_urn || is_url
+    if is_urn || is_url
+      canonical = strip_history_suffix(entry_reference)
+      return entry.find { |entr| entr.fullUrl == canonical }
+    end
 
     return resolve_entry_reference_as_reference(entry_reference) if is_reference
 
     nil
+  end
+
+  def strip_history_suffix(url)
+    url&.sub(%r{/_history/[^/]+$}, '')
   end
 end

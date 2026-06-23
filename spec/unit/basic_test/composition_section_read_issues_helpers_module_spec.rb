@@ -156,5 +156,80 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadIssuesHelpersModule d
       expect(result.first[:resolved]).to be(false)
       expect(result.first[:issues].first).to include('is not in the list of expected resource types')
     end
+
+    # Issue #74 sub-case: absolute URL reference with /_history/{version} suffix
+    context 'when reference is an absolute URL with a /_history/ version suffix' do
+      let(:base_url) { 'https://example.org' }
+
+      it 'resolves against the entry whose fullUrl is the same URL without the history suffix' do
+        bundle = build_section_bundle(
+          section_code: section_code,
+          references: ["#{base_url}/Condition/condition-1/_history/2"],
+          bundle_entries: [condition_entry(url: "#{base_url}/Condition/condition-1")]
+        )
+        result = test_instance.references_resolution_report(section_metadata, bundle)
+
+        expect(result.first[:resolved]).to be(true)
+        expect(result.first[:issues]).to be_empty
+      end
+
+      it 'reports not-found when no entry matches the URL without the history suffix' do
+        bundle = build_section_bundle(
+          section_code: section_code,
+          references: ["#{base_url}/Condition/missing/_history/2"],
+          bundle_entries: [condition_entry(url: "#{base_url}/Condition/condition-1")]
+        )
+        result = test_instance.references_resolution_report(section_metadata, bundle)
+
+        expect(result.first[:resolved]).to be(false)
+        expect(result.first[:issues]).to eq(
+          ["Resource not found for reference: #{base_url}/Condition/missing/_history/2"]
+        )
+      end
+    end
+
+    # Issue #74: relative references against absolute fullUrls
+    context 'when Composition fullUrl is URN and entry fullUrl is absolute (issue #74)' do
+      let(:base_url) { 'https://example.org' }
+
+      it 'resolves a relative reference when the matching entry has an absolute fullUrl' do
+        bundle = build_section_bundle(
+          section_code: section_code,
+          references: ['Condition/condition-1'],
+          bundle_entries: [condition_entry(url: "#{base_url}/Condition/condition-1")]
+        )
+        result = test_instance.references_resolution_report(section_metadata, bundle)
+
+        expect(result.first[:resolved]).to be(true)
+        expect(result.first[:issues]).to be_empty
+      end
+
+      it 'reports not-found when the relative reference has no matching absolute fullUrl' do
+        bundle = build_section_bundle(
+          section_code: section_code,
+          references: ['Condition/condition-1'],
+          bundle_entries: [condition_entry(url: "#{base_url}/Condition/condition-2")]
+        )
+        result = test_instance.references_resolution_report(section_metadata, bundle)
+
+        expect(result.first[:resolved]).to be(false)
+        expect(result.first[:issues]).to eq(['Resource not found for reference: Condition/condition-1'])
+      end
+
+      it 'resolves relative references alongside URN-based references in the same section' do
+        bundle = build_section_bundle(
+          section_code: section_code,
+          references: ['urn:uuid:condition-1', 'Condition/condition-2'],
+          bundle_entries: [
+            condition_entry(url: 'urn:uuid:condition-1'),
+            condition_entry(url: "#{base_url}/Condition/condition-2")
+          ]
+        )
+        result = test_instance.references_resolution_report(section_metadata, bundle)
+
+        expect(result[0]).to eq({ reference: 'urn:uuid:condition-1', resolved: true, issues: [] })
+        expect(result[1]).to eq({ reference: 'Condition/condition-2', resolved: true, issues: [] })
+      end
+    end
   end
 end
