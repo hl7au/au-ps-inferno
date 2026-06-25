@@ -36,22 +36,27 @@ class BundleDecorator < FHIR::Bundle
 
   def resolve_entry_reference_as_reference(entry_reference)
     base_url = BundleEntryDecorator.new(composition_entry).full_url_base
+    return resolve_by_base_url(entry_reference, base_url) if base_url
 
-    if base_url
-      entry.find do |entr|
-        next unless entr.fullUrl&.start_with?('http')
+    resolve_by_suffix_match(entry_reference)
+  end
 
-        entr.fullUrl == base_url + entry_reference
-      end
-    else
-      # Composition fullUrl is a URN so no base URL is derivable. Fall back to
-      # suffix match: a relative {Type}/{id} reference can resolve to an absolute
-      # fullUrl that ends with /{Type}/{id} (FHIR bundle reference rules).
-      # Only resolve when exactly one entry matches — multiple matches are
-      # ambiguous (entries from different servers share the same type/id).
-      matches = entry.select { |entr| entr.fullUrl&.end_with?("/#{entry_reference}") }
-      matches.length == 1 ? matches.first : nil
+  def resolve_by_base_url(entry_reference, base_url)
+    entry.find do |entr|
+      next unless entr.fullUrl&.start_with?('http')
+
+      entr.fullUrl == base_url + entry_reference
     end
+  end
+
+  def resolve_by_suffix_match(entry_reference)
+    # Composition fullUrl is a URN so no base URL is derivable. Fall back to
+    # suffix match: a relative {Type}/{id} reference can resolve to an absolute
+    # fullUrl that ends with /{Type}/{id} (FHIR bundle reference rules).
+    # Only resolve when exactly one entry matches — multiple matches are
+    # ambiguous (entries from different servers share the same type/id).
+    matches = entry.select { |entr| entr.fullUrl&.end_with?("/#{entry_reference}") }
+    matches.length == 1 ? matches.first : nil
   end
 
   def resolve_entry_reference_by_exact_url(entry_reference)
