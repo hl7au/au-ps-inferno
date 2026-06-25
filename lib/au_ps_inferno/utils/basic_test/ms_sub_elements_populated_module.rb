@@ -16,7 +16,7 @@ module AUPSTestKit
 
       return unless (metadata = get_metadata_by_resource_type(resource.resourceType)).present?
 
-      filtered_results, new_grouped_sub_elements, ms_checker, results =
+      _, new_grouped_sub_elements, ms_checker, results =
         sub_elements_filtered_grouped_and_check_context(resource, metadata)
       omit_if new_grouped_sub_elements.blank?, 'No complex element with Must Support sub-elements is defined'
 

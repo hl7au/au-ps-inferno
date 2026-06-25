@@ -51,16 +51,17 @@ class BundleDecorator < FHIR::Bundle
     end
   end
 
+  def resolve_entry_reference_as_urn(entry_reference)
+    canonical = strip_history_suffix(entry_reference)
+    entry.find { |entr| entr.fullUrl == canonical }
+  end
+
   def resolve_entry_reference(entry_reference)
     is_urn = entry_reference.start_with?('urn:')
     is_url = entry_reference.start_with?('http') || entry_reference.start_with?('https')
     is_reference = !is_urn && !is_url && entry_reference.split('/').length == 2
 
-    if is_urn || is_url
-      canonical = strip_history_suffix(entry_reference)
-      return entry.find { |entr| entr.fullUrl == canonical }
-    end
-
+    return resolve_entry_reference_as_urn(entry_reference) if is_urn || is_url
     return resolve_entry_reference_as_reference(entry_reference) if is_reference
 
     nil
