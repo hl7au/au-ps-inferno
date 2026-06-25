@@ -79,7 +79,7 @@ RSpec.describe 'Subject Must Support sub-elements populated (test 1.8.03)' do
     # sub-element) is missing, the test should fail. Currently passes because assert_result receives
     # filtered_results (sub-elements only) instead of full results, so the parent 'communication' is
     # never found and sub_element_assertion_failure? always returns false.
-    skip 'fails when a mandatory MS sub-element is missing but its parent element is present (issue #78)' do
+    it 'fails when a mandatory MS sub-element is missing but its parent element is present (issue #78)' do
       patient = FHIR::Patient.new(
         resourceType: 'Patient',
         id: 'patient-1',

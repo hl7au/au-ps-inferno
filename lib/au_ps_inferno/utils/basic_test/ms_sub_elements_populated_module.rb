@@ -21,7 +21,7 @@ module AUPSTestKit
       omit_if new_grouped_sub_elements.blank?, 'No complex element with Must Support sub-elements is defined'
 
       show_ms_elements_messages(new_grouped_sub_elements, ms_checker, resource, results)
-      assert assert_result(filtered_results, new_grouped_sub_elements),
+      assert assert_result(results, new_grouped_sub_elements),
              'When any mandatory Must Support sub-element is missing. See the list in messages tab.'
     end
 
