@@ -37,31 +37,34 @@ class BundleDecorator < FHIR::Bundle
   def resolve_entry_reference_as_reference(entry_reference)
     base_url = BundleEntryDecorator.new(composition_entry).full_url_base
 
-    entry.find do |entr|
-      next unless entr.fullUrl&.start_with?('http')
+    if base_url
+      entry.find do |entr|
+        next unless entr.fullUrl&.start_with?('http')
 
-      if base_url
         entr.fullUrl == base_url + entry_reference
-      else
-        # Composition fullUrl is a URN so no base URL is derivable. Fall back to
-        # suffix match: a relative {Type}/{id} reference can resolve to an absolute
-        # fullUrl that ends with /{Type}/{id} (FHIR bundle reference rules).
-        entr.fullUrl.end_with?("/#{entry_reference}")
       end
+    else
+      # Composition fullUrl is a URN so no base URL is derivable. Fall back to
+      # suffix match: a relative {Type}/{id} reference can resolve to an absolute
+      # fullUrl that ends with /{Type}/{id} (FHIR bundle reference rules).
+      # Only resolve when exactly one entry matches — multiple matches are
+      # ambiguous (entries from different servers share the same type/id).
+      matches = entry.select { |entr| entr.fullUrl&.end_with?("/#{entry_reference}") }
+      matches.length == 1 ? matches.first : nil
     end
   end
 
-  def resolve_entry_reference_as_urn(entry_reference)
+  def resolve_entry_reference_by_exact_url(entry_reference)
     canonical = strip_history_suffix(entry_reference)
     entry.find { |entr| entr.fullUrl == canonical }
   end
 
   def resolve_entry_reference(entry_reference)
     is_urn = entry_reference.start_with?('urn:')
-    is_url = entry_reference.start_with?('http') || entry_reference.start_with?('https')
+    is_url = entry_reference.start_with?('http')
     is_reference = !is_urn && !is_url && entry_reference.split('/').length == 2
 
-    return resolve_entry_reference_as_urn(entry_reference) if is_urn || is_url
+    return resolve_entry_reference_by_exact_url(entry_reference) if is_urn || is_url
     return resolve_entry_reference_as_reference(entry_reference) if is_reference
 
     nil
