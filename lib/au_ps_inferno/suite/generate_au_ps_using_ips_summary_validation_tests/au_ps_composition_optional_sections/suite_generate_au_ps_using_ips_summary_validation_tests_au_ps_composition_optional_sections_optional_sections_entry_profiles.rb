@@ -9,6 +9,7 @@ module AUPSTestKit
     title 'AU PS Composition Optional Sections capable of populating referenced profiles'
     description 'Optional section SHALL be capable of populating section.entry with the referenced profiles and SHOULD correctly populate section.entry if a value is known.'
     id :suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_optional_sections_optional_sections_entry_profiles
+    optional
 
     def metadata_manager
       @metadata_manager ||= MetadataManager.new(File.expand_path('../../../metadata.yaml', __dir__))

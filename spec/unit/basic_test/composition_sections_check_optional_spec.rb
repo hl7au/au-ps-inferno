@@ -16,10 +16,10 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do
       expect_pass(outcome)
     end
 
-    it 'passes even when the error bundle has MS or reference issues (optional sections do not fail the runnable)' do
+    it 'fails when mandatory MS elements are missing in optional sections' do
       outcome = run_with_fixture_bundle(test, fixture_filename: error_bundle_filename)
 
-      expect_pass(outcome)
+      expect_fail(outcome)
     end
 
     it 'returns an info message when all mandatory and optional elements are populated' do

@@ -11,12 +11,13 @@ module AUPSTestKit
       guard_populated_resource(container_type)
 
       resource = get_resource_by_container_type(container_type)
+
+      author_and_device_resource?(container_type, resource)
+
       resource_metadata_raw = metadata_manager.group_metadata_by_resource_type(resource.resourceType)
       return unless resource_metadata_raw.present?
 
       profile_metadata = InfernoSuiteGenerator::Generator::GroupMetadata.new(resource_metadata_raw)
-
-      author_and_device_resource?(container_type, resource)
 
       assert all_ms_mandatory_elements_populated?(resource, profile_metadata), assert_message
     end

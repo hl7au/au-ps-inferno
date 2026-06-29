@@ -35,17 +35,18 @@ module AUPSTestKit
 
     def test_composition_sections_data(sections_codes:, bundle_data:, mandatory: false)
       # Mandatory: true - FN should fail if any mandatory section is not populated correctly.
+      # Unresolved references always fail regardless of mandatory status.
       bundle_resource = BundleDecorator.new(bundle_data)
       refs_test_pass = composition_sections_references_resolution_pass?(sections_codes: sections_codes,
                                                                         bundle_resource: bundle_resource,
                                                                         mandatory: mandatory)
       ms_test_pass = composition_section_check_ms_pass?(sections_codes: sections_codes,
                                                         bundle_resource: bundle_resource,
-                                                        all_present: mandatory)
+                                                        all_present: true)
 
-      assert mandatory ? refs_test_pass : true, 'Some of the mandatory sections are not populated correctly.'
-      assert mandatory ? ms_test_pass : true,
-             'Some of the mandatory sections are not populated with the correct Must Support elements.'
+      assert refs_test_pass, 'Some section entry references cannot be resolved.'
+      assert ms_test_pass,
+             'Some of the sections are not populated with the correct Must Support elements.'
     end
 
     def composition_sections_references_resolution_pass?(sections_codes:, bundle_resource:, mandatory: false)
@@ -59,15 +60,20 @@ module AUPSTestKit
       end.all?
     end
 
+    def section_reference_message_level(mandatory:, has_unresolved:)
+      mandatory || has_unresolved ? 'error' : 'warning'
+    end
+
     def composition_section_references_resolution_issues?(section_metadata:, composition_resource:, bundle_resource:,
                                                           mandatory:)
       section_code = section_metadata[:code]
       section = composition_resource.section_by_code(section_code)
       issues = read_composition_section_issues(section_metadata, bundle_resource)
       text = composition_section_read_report_message(section_metadata, section, bundle_resource, section_code)
-      error_level = mandatory ? 'error' : 'warning'
-      add_message(issues.empty? ? 'info' : error_level, text)
-      issues.empty?
+      has_unresolved = issues.any? { |issue| issue.start_with?('Resource not found for reference:') }
+      level = section_reference_message_level(mandatory:, has_unresolved:)
+      add_message(issues.empty? ? 'info' : level, text)
+      issues.empty? || (!mandatory && !has_unresolved)
     end
 
     def composition_section_read_report_message(section_metadata, section, bundle_resource, section_code)

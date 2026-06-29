@@ -35,26 +35,47 @@ class BundleDecorator < FHIR::Bundle
   private
 
   def resolve_entry_reference_as_reference(entry_reference)
-    entry.find do |entr|
-      entry_full_url = entr.fullUrl
-      next unless entry_full_url.start_with?('http') || entry_full_url.start_with?('https')
+    base_url = BundleEntryDecorator.new(composition_entry).full_url_base
+    return resolve_by_base_url(entry_reference, base_url) if base_url
 
-      base_url = BundleEntryDecorator.new(composition_entry).full_url_base
-      next if base_url.nil?
+    resolve_by_suffix_match(entry_reference)
+  end
+
+  def resolve_by_base_url(entry_reference, base_url)
+    entry.find do |entr|
+      next unless entr.fullUrl&.start_with?('http')
 
       entr.fullUrl == base_url + entry_reference
     end
   end
 
+  def resolve_by_suffix_match(entry_reference)
+    # Composition fullUrl is a URN so no base URL is derivable. Fall back to
+    # suffix match: a relative {Type}/{id} reference can resolve to an absolute
+    # fullUrl that ends with /{Type}/{id} (FHIR bundle reference rules).
+    # Only resolve when exactly one entry matches — multiple matches are
+    # ambiguous (entries from different servers share the same type/id).
+    matches = entry.select { |entr| entr.fullUrl&.end_with?("/#{entry_reference}") }
+    matches.length == 1 ? matches.first : nil
+  end
+
+  def resolve_entry_reference_by_exact_url(entry_reference)
+    canonical = strip_history_suffix(entry_reference)
+    entry.find { |entr| entr.fullUrl == canonical }
+  end
+
   def resolve_entry_reference(entry_reference)
     is_urn = entry_reference.start_with?('urn:')
-    is_url = entry_reference.start_with?('http') || entry_reference.start_with?('https')
-    is_reference = entry_reference.split('/').length == 2
+    is_url = entry_reference.start_with?('http')
+    is_reference = !is_urn && !is_url && entry_reference.split('/').length == 2
 
-    return entry.find { |entr| entr.fullUrl == entry_reference } if is_urn || is_url
-
+    return resolve_entry_reference_by_exact_url(entry_reference) if is_urn || is_url
     return resolve_entry_reference_as_reference(entry_reference) if is_reference
 
     nil
+  end
+
+  def strip_history_suffix(url)
+    url&.sub(%r{/_history/[^/]+$}, '')
   end
 end

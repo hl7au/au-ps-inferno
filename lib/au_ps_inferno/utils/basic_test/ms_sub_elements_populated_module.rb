@@ -11,16 +11,17 @@ module AUPSTestKit
       guard_populated_resource(container_type)
 
       resource = get_resource_by_container_type(container_type)
-      return unless (metadata = get_metadata_by_resource_type(resource.resourceType)).present?
 
       author_and_device_resource?(container_type, resource)
 
-      filtered_results, new_grouped_sub_elements, ms_checker, results =
+      return unless (metadata = get_metadata_by_resource_type(resource.resourceType)).present?
+
+      _, new_grouped_sub_elements, ms_checker, results =
         sub_elements_filtered_grouped_and_check_context(resource, metadata)
       omit_if new_grouped_sub_elements.blank?, 'No complex element with Must Support sub-elements is defined'
 
       show_ms_elements_messages(new_grouped_sub_elements, ms_checker, resource, results)
-      assert assert_result(filtered_results, new_grouped_sub_elements),
+      assert assert_result(results, new_grouped_sub_elements),
              'When any mandatory Must Support sub-element is missing. See the list in messages tab.'
     end
 
