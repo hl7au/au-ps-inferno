@@ -88,10 +88,6 @@ module AUPSTestKit
         result_has?(results, 'error')
       end
 
-      def results_warning?(results)
-        result_has?(results, 'warning')
-      end
-
       def check_ms_elements_populated_against_profiles(sections_profiles, resources_to_check_ms, all_present: false)
         sections_profiles.map { |profile| process_profile(profile, resources_to_check_ms, all_present:) }
       end

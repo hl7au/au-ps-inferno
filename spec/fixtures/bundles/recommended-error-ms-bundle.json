@@ -1,0 +1,148 @@
+{
+  "resourceType": "Bundle",
+  "id": "aups-recommended-error",
+  "meta": {
+    "profile": ["http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-bundle"]
+  },
+  "language": "en-AU",
+  "identifier": {
+    "system": "urn:ietf:rfc:3986",
+    "value": "urn:uuid:cccccccc-0002-0000-0000-000000000000"
+  },
+  "type": "document",
+  "timestamp": "2025-03-01T10:00:00+10:00",
+  "entry": [
+    {
+      "fullUrl": "urn:uuid:cccccccc-0002-0000-0000-000000000001",
+      "resource": {
+        "resourceType": "Composition",
+        "id": "cccccccc-0002-0000-0000-000000000001",
+        "status": "final",
+        "type": {
+          "coding": [{"system": "http://loinc.org", "code": "60591-5", "display": "Patient summary Document"}]
+        },
+        "subject": {"reference": "urn:uuid:bbbbbbbb-0000-0000-0000-000000000001"},
+        "date": "2025-03-01",
+        "author": [{"reference": "urn:uuid:bbbbbbbb-0000-0000-0000-000000000004"}],
+        "title": "Australian Patient Summary",
+        "custodian": {"reference": "urn:uuid:bbbbbbbb-0000-0000-0000-000000000002"},
+        "section": [
+          {
+            "title": "Immunizations",
+            "code": {"coding": [{"system": "http://loinc.org", "code": "11369-6"}]},
+            "text": {"status": "generated", "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">Immunizations</div>"},
+            "entry": [
+              {"reference": "urn:uuid:cccccccc-0002-0000-0000-000000000006"},
+              {"reference": "urn:uuid:cccccccc-0002-0000-0000-000000000007"},
+              {"reference": "urn:uuid:cccccccc-0002-0000-0000-000000000008"}
+            ]
+          },
+          {
+            "title": "Results",
+            "code": {"coding": [{"system": "http://loinc.org", "code": "30954-2"}]},
+            "text": {"status": "generated", "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">Results</div>"},
+            "entry": [{"reference": "urn:uuid:cccccccc-0002-0000-0000-000000000009"}]
+          },
+          {
+            "title": "History of Procedures",
+            "code": {"coding": [{"system": "http://loinc.org", "code": "47519-4"}]},
+            "text": {"status": "generated", "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">No known procedures.</div>"}
+          },
+          {
+            "title": "Medical Devices",
+            "code": {"coding": [{"system": "http://loinc.org", "code": "46264-8"}]},
+            "text": {"status": "generated", "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">No medical devices.</div>"}
+          }
+        ]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:bbbbbbbb-0000-0000-0000-000000000001",
+      "resource": {
+        "resourceType": "Patient",
+        "id": "bbbbbbbb-0000-0000-0000-000000000001",
+        "name": [{"family": "Smith", "given": ["Jane"]}],
+        "gender": "female",
+        "birthDate": "1975-04-12"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:bbbbbbbb-0000-0000-0000-000000000002",
+      "resource": {
+        "resourceType": "Organization",
+        "id": "bbbbbbbb-0000-0000-0000-000000000002",
+        "name": "Test Medical Centre"
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:bbbbbbbb-0000-0000-0000-000000000003",
+      "resource": {
+        "resourceType": "Practitioner",
+        "id": "bbbbbbbb-0000-0000-0000-000000000003",
+        "name": [{"family": "Jones", "given": ["Alice"]}]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:bbbbbbbb-0000-0000-0000-000000000004",
+      "resource": {
+        "resourceType": "PractitionerRole",
+        "id": "bbbbbbbb-0000-0000-0000-000000000004",
+        "practitioner": {"reference": "urn:uuid:bbbbbbbb-0000-0000-0000-000000000003"},
+        "organization": {"reference": "urn:uuid:bbbbbbbb-0000-0000-0000-000000000002"}
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:cccccccc-0002-0000-0000-000000000006",
+      "resource": {
+        "resourceType": "Immunization",
+        "id": "cccccccc-0002-0000-0000-000000000006",
+        "meta": {
+          "profile": ["http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-immunization"]
+        },
+        "status": "completed",
+        "patient": {"reference": "urn:uuid:bbbbbbbb-0000-0000-0000-000000000001"},
+        "occurrenceDateTime": "2023-05-15",
+        "primarySource": true,
+        "lotNumber": "LOT2023A",
+        "note": [{"text": "Missing vaccineCode — mandatory MS element absent"}]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:cccccccc-0002-0000-0000-000000000007",
+      "resource": {
+        "resourceType": "Immunization",
+        "id": "cccccccc-0002-0000-0000-000000000007",
+        "status": "completed",
+        "patient": {"reference": "urn:uuid:bbbbbbbb-0000-0000-0000-000000000001"},
+        "occurrenceDateTime": "2022-04-20",
+        "primarySource": false,
+        "lotNumber": "LOT2022B",
+        "note": [{"text": "Also missing vaccineCode"}]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:cccccccc-0002-0000-0000-000000000008",
+      "resource": {
+        "resourceType": "Immunization",
+        "id": "cccccccc-0002-0000-0000-000000000008",
+        "status": "completed",
+        "patient": {"reference": "urn:uuid:bbbbbbbb-0000-0000-0000-000000000001"},
+        "occurrenceDateTime": "2021-03-10",
+        "primarySource": false,
+        "note": [{"text": "Also missing vaccineCode and lotNumber"}]
+      }
+    },
+    {
+      "fullUrl": "urn:uuid:cccccccc-0002-0000-0000-000000000009",
+      "resource": {
+        "resourceType": "AllergyIntolerance",
+        "id": "cccccccc-0002-0000-0000-000000000009",
+        "clinicalStatus": {
+          "coding": [{"system": "http://terminology.hl7.org/CodeSystem/allergyintolerance-clinical", "code": "active"}]
+        },
+        "code": {"coding": [{"system": "http://snomed.info/sct", "code": "387406002", "display": "Sulfonamide"}]},
+        "patient": {"reference": "urn:uuid:bbbbbbbb-0000-0000-0000-000000000001"}
+      }
+    }
+  ]
+}

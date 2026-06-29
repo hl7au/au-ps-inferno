@@ -7,30 +7,26 @@ require_relative '../../../lib/au_ps_inferno/utils/basic_test/composition_sectio
 require_relative '../../../lib/au_ps_inferno/utils/bundle_decorator'
 require_relative '../../support/basic_test/references_resolution_report_spec_support'
 
-RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadIssuesHelpersModule do # rubocop:disable Metrics/BlockLength
+RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadIssuesHelpersModule do
   include_context 'references resolution report setup'
 
-  section_code = '11450-4'
-  section_metadata = {
-    code: section_code,
-    entries: [
+  describe '#references_resolution_report' do
+    let(:section_code) { '11450-4' }
+    let(:section_metadata) do
       {
-        profiles: [
-          'Condition|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-condition|1.0.0-ballot'
+        code: section_code,
+        entries: [
+          {
+            profiles: [
+              'Condition|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-condition|1.0.0-ballot'
+            ]
+          }
         ]
       }
-    ]
-  }
-  condition_entry = FHIR::Bundle::Entry.new(
-    fullUrl: 'urn:uuid:condition-1',
-    resource: FHIR::Condition.new(resourceType: 'Condition', subject: { reference: 'urn:uuid:patient-1' },
-                                  code: { coding: [{ system: 'http://snomed.info/sct', code: '160245001' }] })
-  )
-
-  describe '#references_resolution_report' do # rubocop:disable Metrics/BlockLength
+    end
     it 'returns one report item per section entry reference' do
-      bundle = build_bundle(section_code: section_code, references: ['urn:uuid:condition-1'],
-                            bundle_entries: [condition_entry])
+      bundle = build_section_bundle(section_code: section_code, references: ['urn:uuid:condition-1'],
+                                    bundle_entries: [condition_entry])
       result = test_instance.references_resolution_report(section_metadata, bundle)
 
       expect(result.size).to eq(1)
@@ -38,8 +34,8 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadIssuesHelpersModule d
     end
 
     it 'marks report item as resolved when reference exists and type is permitted' do
-      bundle = build_bundle(section_code: section_code, references: ['urn:uuid:condition-1'],
-                            bundle_entries: [condition_entry])
+      bundle = build_section_bundle(section_code: section_code, references: ['urn:uuid:condition-1'],
+                                    bundle_entries: [condition_entry])
       result = test_instance.references_resolution_report(section_metadata, bundle)
 
       expect(result.first).to eq(
@@ -52,7 +48,8 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadIssuesHelpersModule d
     end
 
     it 'marks report item unresolved with not-found issue when resource is missing' do
-      bundle = build_bundle(section_code: section_code, references: ['urn:uuid:condition-1'], bundle_entries: [])
+      bundle = build_section_bundle(section_code: section_code, references: ['urn:uuid:condition-1'],
+                                    bundle_entries: [])
       result = test_instance.references_resolution_report(section_metadata, bundle)
 
       expect(result.first).to eq(
@@ -65,13 +62,8 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadIssuesHelpersModule d
     end
 
     it 'marks report item unresolved with invalid-type issue when resource type is not permitted' do
-      observation_entry = FHIR::Bundle::Entry.new(
-        fullUrl: 'urn:uuid:condition-1',
-        resource: FHIR::Observation.new(resourceType: 'Observation', status: 'final',
-                                        code: { coding: [{ code: '1234-5' }] })
-      )
-      bundle = build_bundle(section_code: section_code, references: ['urn:uuid:condition-1'],
-                            bundle_entries: [observation_entry])
+      bundle = build_section_bundle(section_code: section_code, references: ['urn:uuid:condition-1'],
+                                    bundle_entries: [observation_entry(url: 'urn:uuid:condition-1')])
       result = test_instance.references_resolution_report(section_metadata, bundle)
 
       expect(result.first[:resolved]).to be(false)
@@ -81,8 +73,11 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadIssuesHelpersModule d
     end
 
     it 'returns mixed report items preserving entry order when section has multiple references' do
-      bundle = build_bundle(section_code: section_code, references: ['urn:uuid:condition-1', 'urn:uuid:condition-2'],
-                            bundle_entries: [condition_entry])
+      bundle = build_section_bundle(
+        section_code: section_code,
+        references: ['urn:uuid:condition-1', 'urn:uuid:condition-2'],
+        bundle_entries: [condition_entry]
+      )
       result = test_instance.references_resolution_report(section_metadata, bundle)
 
       expect(result).to eq(
@@ -106,12 +101,60 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadIssuesHelpersModule d
           }
         ]
       }
-      bundle = build_bundle(section_code: section_code, references: ['urn:uuid:condition-1'],
-                            bundle_entries: [condition_entry])
+      bundle = build_section_bundle(section_code: section_code, references: ['urn:uuid:condition-1'],
+                                    bundle_entries: [condition_entry])
       result = test_instance.references_resolution_report(deduped_metadata, bundle)
 
       expect(result.first[:resolved]).to be(true)
       expect(result.first[:issues]).to eq([])
+    end
+
+    it 'returns an empty array when the section has no entry references' do
+      bundle = build_section_bundle(section_code: section_code, references: [], bundle_entries: [])
+      result = test_instance.references_resolution_report(section_metadata, bundle)
+
+      expect(result).to be_empty
+    end
+
+    it 'returns one item per entry preserving order when section has three references' do
+      bundle = build_section_bundle(
+        section_code: section_code,
+        references: ['urn:uuid:condition-1', 'urn:uuid:condition-2', 'urn:uuid:condition-3'],
+        bundle_entries: [condition_entry(url: 'urn:uuid:condition-1'), condition_entry(url: 'urn:uuid:condition-2')]
+      )
+      result = test_instance.references_resolution_report(section_metadata, bundle)
+
+      expect(result.size).to eq(3)
+      expect(result[0]).to eq({ reference: 'urn:uuid:condition-1', resolved: true, issues: [] })
+      expect(result[1]).to eq({ reference: 'urn:uuid:condition-2', resolved: true, issues: [] })
+      expect(result[2]).to eq({ reference: 'urn:uuid:condition-3', resolved: false,
+                                issues: ['Resource not found for reference: urn:uuid:condition-3'] })
+    end
+
+    it 'resolves correctly when profile format omits the version suffix' do
+      two_part_metadata = {
+        code: section_code,
+        entries: [{ profiles: ['Condition|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-condition'] }]
+      }
+      bundle = build_section_bundle(section_code: section_code, references: ['urn:uuid:condition-1'],
+                                    bundle_entries: [condition_entry(url: 'urn:uuid:condition-1')])
+      result = test_instance.references_resolution_report(two_part_metadata, bundle)
+
+      expect(result.first[:resolved]).to be(true)
+      expect(result.first[:issues]).to be_empty
+    end
+
+    it 'marks reference as wrong type when profile string is a bare URL without a type prefix' do
+      url_only_metadata = {
+        code: section_code,
+        entries: [{ profiles: ['http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-condition'] }]
+      }
+      bundle = build_section_bundle(section_code: section_code, references: ['urn:uuid:condition-1'],
+                                    bundle_entries: [condition_entry(url: 'urn:uuid:condition-1')])
+      result = test_instance.references_resolution_report(url_only_metadata, bundle)
+
+      expect(result.first[:resolved]).to be(false)
+      expect(result.first[:issues].first).to include('is not in the list of expected resource types')
     end
   end
 end
