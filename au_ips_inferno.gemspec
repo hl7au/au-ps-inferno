@@ -1,8 +1,10 @@
 # frozen_string_literal: true
 
+require_relative 'lib/au_ps_inferno/version'
+
 Gem::Specification.new do |spec|
   spec.name          = 'au_ps_inferno'
-  spec.version       = '0.0.1'
+  spec.version       = AUPSTestKit::VERSION
   spec.authors       = ['Ilya Beda', 'Pavel Rozhkov']
   spec.email         = ['ilya@beda.software', 'pavel.r@beda.software']
   spec.summary       = 'AU PS Inferno Test Kit'

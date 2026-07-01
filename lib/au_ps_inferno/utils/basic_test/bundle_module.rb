@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative '../../version'
+
 module AUPSTestKit
   # Bundle-level checks, mandatory MS list info, and IPS bundle profile validation.
   module BasicTestBundleModule
@@ -27,7 +29,7 @@ module AUPSTestKit
     end
 
     def validate_au_ps_bundle
-      validate_bundle_wrapper('http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-bundle|1.0.0-ballot')
+      validate_bundle_wrapper("http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-bundle|#{AUPSTestKit::IG_VERSION}")
     end
 
     def validate_ips_bundle

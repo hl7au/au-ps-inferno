@@ -47,9 +47,19 @@ class Generator
   def generate
     @resources_manager.extract
     save_metadata_to_version_folder
+    update_ig_version_rb(@resources_manager.ig_version)
   end
 
   private
+
+  def update_ig_version_rb(version)
+    return unless version
+
+    version_rb_path = File.expand_path(File.join('lib', 'au_ps_inferno', 'version.rb'))
+    content = File.read(version_rb_path)
+    updated = content.gsub(/IG_VERSION = '.*'/, "IG_VERSION = '#{version}'")
+    File.write(version_rb_path, updated)
+  end
 
   def save_metadata_to_version_folder
     metadata_path = File.join(File.expand_path(File.join('lib', 'au_ps_inferno')), 'metadata.yaml')
