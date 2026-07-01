@@ -52,11 +52,15 @@ class Generator
   private
 
   def update_ig_version_rb(version)
-    return unless version
+    return if version.nil? || version.empty?
 
     version_rb_path = File.expand_path(File.join('lib', 'au_ps_inferno', 'version.rb'))
     content = File.read(version_rb_path)
     updated = content.gsub(/IG_VERSION = '.*'/, "IG_VERSION = '#{version}'")
+    if updated == content
+      puts "Warning: IG_VERSION pattern not found in #{version_rb_path}; version was not updated."
+      return
+    end
     File.write(version_rb_path, updated)
   end
 

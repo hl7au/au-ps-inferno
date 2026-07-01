@@ -74,7 +74,7 @@ class Generator
     # @return [void]
     def process_tar(tar)
       tar.each do |entry|
-        if entry.file? && entry.full_name == 'package/package.json'
+        if entry.file? && entry.full_name.delete_prefix('./') == 'package/package.json'
           extract_ig_version(entry)
           next
         end
