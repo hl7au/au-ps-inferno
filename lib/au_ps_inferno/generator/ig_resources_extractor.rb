@@ -88,7 +88,7 @@ class Generator
     # @return [void]
     def extract_ig_version(entry)
       json = JSON.parse(entry.read)
-      @ig_version = json['version']
+      @ig_version = json['version']&.to_s
     rescue StandardError => e
       puts "Error reading IG version from package.json: #{e.message}"
     end

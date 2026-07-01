@@ -56,7 +56,7 @@ class Generator
 
     version_rb_path = File.expand_path(File.join('lib', 'au_ps_inferno', 'version.rb'))
     content = File.read(version_rb_path)
-    updated = content.gsub(/IG_VERSION = '.*'/, "IG_VERSION = '#{version}'")
+    updated = content.gsub(/IG_VERSION = '.*'/) { "IG_VERSION = '#{version}'" }
     if updated == content
       puts "Warning: IG_VERSION pattern not found in #{version_rb_path}; version was not updated."
       return
