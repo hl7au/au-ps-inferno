@@ -4,7 +4,7 @@
 This is an [Inferno](https://inferno-framework.github.io/inferno-core/) test kit for the [AU PS Implementation Guide](http://hl7.org.au/fhir/ps/)
 
 **Currently available versions:**
-1. [0.5.0-preview](https://hl7.org.au/fhir/ps/0.5.0-preview)
+1. [1.0.0-preview](https://hl7.org.au/fhir/ps/1.0.0-preview)
 
 ## Use Inferno as a service
 You can test your FHIR server using this link [https://inferno.hl7.org.au/test-kits/au-ps](https://inferno.hl7.org.au/test-kits/au-ps/)
@@ -27,21 +27,20 @@ make run
 
 4. Navigate to http://localhost. The AU PS test suite will be available.
 
-## How to Generate New Test Suites
+## How to Regenerate the Suite for a New IG Version
 
-If you visit http://hl7.org.au/fhir/ps/history.html and notice that there is a new release, you can initiate the generation of test suites yourself. To accomplish this, you will need to take several steps:
+If a new AU PS IG release appears at http://hl7.org.au/fhir/ps/history.html, follow these steps to regenerate the suite metadata:
 
-1. Follow the link to the Generate Tests workflow (https://github.com/hl7au/au-ps-inferno/actions/workflows/generate-tests.yaml).
-2. A list of already completed pipelines will open. In the upper right corner, you will see the "Run Workflow" button. Click on it and confirm the launch.
-3. The pipeline launch will be initiated. When it completes, a new Pull Request will be created with the changes. You can accept or reject it (https://github.com/hl7au/au-ps-inferno/pulls)
+1. Download the new IG package (`.tgz`) from the release page and place it in `lib/au_ps_inferno/igs/`.
+2. Update the path in `Rakefile` (`generator:generate` task) to point to the new archive.
+3. Run the Generate Suite workflow: go to the [workflow page](https://github.com/hl7au/au-ps-inferno/actions/workflows/generate-suite.yaml), click **Run workflow**, and confirm.
+4. When the workflow completes, a Pull Request will be created automatically. Review and merge it.
 
-### The algorithm of the pipeline is as follows:
+### What the pipeline does
 
-1. The script will visit the releases history page;
-2. It will download all archives and store them in the igs folder;
-3. The generator will generate test groups for each IG archive;
-4. If there are any new test groups, they will be added to the project automatically;
-5. If there are any changes, the action will create a pull request.
+1. Runs `make generate_and_fix`, which invokes the generator against the IG archive already present in `lib/au_ps_inferno/igs/`;
+2. The generator extracts IG resources from the archive, updates `lib/au_ps_inferno/metadata.yaml`, and sets `IG_VERSION` in `lib/au_ps_inferno/version.rb` to the version declared in the package's `package.json`;
+3. If there are any changes, a Pull Request is created automatically.
 
 ## Development workflow
 This repository contains both the source code of the tests generator and the generated tests themselves.
@@ -56,7 +55,10 @@ Once the code review is done, a person who merged the changes SHALL run the gene
 It may be a direct commit to the master branch. 
 
 ## Release management
-When we would like to issue a new release, you need to update the application version in this file TODO
+When we would like to issue a new release, you need to update the version constants in `lib/au_ps_inferno/version.rb`:
+- `VERSION` — the gem version (e.g. `'0.0.2'`)
+- `IG_VERSION` — the AU PS IG version the suite targets (e.g. `'1.0.0-preview'`); this is also updated automatically when the generator runs (see [How to Generate New Test Suites](#how-to-generate-new-test-suites))
+
 Then you need to create a tag for this version. The tag name should start with `v` and then contain a numeric version like this `v0.0.1`
 Once a tag is created, you need to create a GitHub release for this newly published version.
 The release creation triggers the pipeline that deploys a new version to the cloud environment.
@@ -115,5 +117,4 @@ If you would like to contribute to **hl7au/au-ps-inferno**, here’s how:
 1. [Pre-requisites](/docs/pre-requisites.md)
 2. [Validator instructions](/docs/validator_instructions.md)
 3. [Changelog](CHANGELOG.md)
-4. [AU Inferno Test Coverage](https://github.com/beda-software/au-inferno-test-coverage): A work-in-progress repository containing text, code, and resources focused on addressing the challenge of achieving IG coverage through Inferno tests. 
 
