@@ -11,10 +11,13 @@ require_relative 'retrieve_au_ps_bundle_validation_tests/retrieve_au_ps_bundle_v
 require_relative 'generate_au_ps_using_ips_summary_validation_tests/generate_au_ps_using_ips_summary_validation_tests'
 
 module AUPSTestKit
+  # Test suite for the AU PS (Australian Primary Care and Shared Health) Implementation Guide.
   class AUPSSuitePreview < Inferno::TestSuite
     id :suite
     title "AU PS #{AUPSTestKit::IG_VERSION} Test Suite"
-    description "Validates AU PS (Australian Primary Care and Shared Health) bundles, compositions, sections, and server CapabilityStatement support for the #{AUPSTestKit::IG_VERSION} implementation guide."
+    description 'Validates AU PS (Australian Primary Care and Shared Health) bundles, ' \
+                'compositions, sections, and server CapabilityStatement support for the ' \
+                "#{AUPSTestKit::IG_VERSION} implementation guide."
 
     fhir_resource_validator do
       igs "hl7.fhir.au.ps##{AUPSTestKit::IG_VERSION}"

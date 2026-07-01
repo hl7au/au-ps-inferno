@@ -25,7 +25,6 @@ require_relative 'generator_group_based_metadata_module'
 #   generator = Generator.new('/path/to/ig', additional_resources_path: 'path/to/extra-ig-resources')
 #   generator.generate
 #
-# rubocop:disable Metrics/ClassLength -- orchestration class; primitive helpers kept private below
 class Generator
   SyntheticCapability = Struct.new(
     :type, :interaction, :operation, :searchParam, :searchInclude, :searchRevInclude, :extension
@@ -71,4 +70,3 @@ class Generator
     File.write(metadata_path, YAML.dump(merged_metadata))
   end
 end
-# rubocop:enable Metrics/ClassLength
