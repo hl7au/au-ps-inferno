@@ -27,7 +27,7 @@ module AUPSTestKit
     end
 
     def validate_au_ps_bundle
-      validate_bundle_wrapper('http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-bundle')
+      validate_bundle_wrapper("http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-bundle|#{metadata_manager.ig_version}")
     end
 
     def validate_ips_bundle

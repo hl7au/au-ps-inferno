@@ -13,6 +13,10 @@ module AUPSTestKit
       @metadata ||= YAML.safe_load_file(@metadata_yaml_path, permitted_classes: [Symbol], aliases: true)
     end
 
+    def ig_version
+      metadata[:ig_version].to_s.delete_prefix('v')
+    end
+
     def sections_metadata_by_codes(codes)
       composition_sections_metadata.filter { |section| codes.include?(section[:code]) }
     end
