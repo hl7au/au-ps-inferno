@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 
+require 'json'
+require 'fileutils'
+require_relative 'naming'
+
 class Generator
   # Module for building group-based metadata
   module GeneratorGroupBasedMetadataModule
@@ -66,13 +70,19 @@ class Generator
       )
     end
 
-    def register_inferno_suite_generator_config
-      return if Registry.get(:config_keeper)
+    # Registers a config_keeper for the given IG version/archive, always overwriting any
+    # previously registered one. This is per-archive (not memoized) so that generating
+    # multiple IG versions picks up the right ig.version/ig.package_archive_path each time
+    # instead of the static values in inferno_suite_generator.config.json.
+    #
+    # @param ig_version [String] full IG version (e.g. "1.0.0-preview")
+    # @param ig_path [String] path to the IG package archive being processed
+    def register_inferno_suite_generator_config(ig_version, ig_path)
+      base_config_path = inferno_suite_generator_config_path
+      return unless base_config_path
 
-      config_path = inferno_suite_generator_config_path
-      return unless config_path
-
-      keeper = InfernoSuiteGenerator::Generator::GeneratorConfigKeeper.new([config_path])
+      override_path = write_ig_config_override(ig_version, ig_path)
+      keeper = InfernoSuiteGenerator::Generator::GeneratorConfigKeeper.new([base_config_path, override_path])
       Registry.register(:config_keeper, keeper)
     rescue StandardError => e
       warn "Failed to register inferno_suite_generator config: #{e.message}"
@@ -85,6 +95,19 @@ class Generator
         File.expand_path('../../../../inferno_suite_generator.config.json', __dir__)
       ]
       config_paths.find { |path| File.exist?(path) }
+    end
+
+    # Writes a small override config (deep-merged over inferno_suite_generator.config.json)
+    # pinning ig.version/ig.package_archive_path to the archive currently being processed.
+    #
+    # @return [String] path to the written override config file
+    def write_ig_config_override(ig_version, ig_path)
+      override = { 'ig' => { 'version' => ig_version.to_s, 'package_archive_path' => ig_path.to_s } }
+      override_path = File.expand_path(File.join('tmp',
+                                                 "ig_config_override_#{Naming.reformatted_version(ig_version)}.json"))
+      FileUtils.mkdir_p(File.dirname(override_path))
+      File.write(override_path, JSON.dump(override))
+      override_path
     end
 
     def merge_metadata_values(old_value, new_value)
