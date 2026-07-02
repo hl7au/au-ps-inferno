@@ -5,8 +5,7 @@ else ifeq ($(MODE), aidbox)
 compose = docker compose -f compose.aidbox.yaml
 endif
 inferno = run inferno
-generated_v1_path = lib/au_ps_inferno/1.0.0-ballot
-generated_v1_preview_path = lib/au_ps_inferno/1.0.0-preview
+generated_paths = $(patsubst lib/au_ps_inferno/igs/%.tgz,lib/au_ps_inferno/%,$(wildcard lib/au_ps_inferno/igs/*.tgz))
 
 .PHONY: pull build up stop down migrate setup run tests coverage rubocop snapshot-tests snapshot-tests-update
 
@@ -53,7 +52,7 @@ rake_generate:
 	$(compose) $(inferno) bundle exec rake generator:generate
 
 rm_generated:
-	rm -rf $(generated_v1_preview_path)
+	rm -rf $(generated_paths)
 
 get_deps:
 	$(compose) $(inferno) bundle exec rake deps:get
@@ -64,8 +63,8 @@ rubocop_fix:
 	$(compose) $(inferno) bundle exec rubocop . -A
 
 clean_generated:
-	rm -rf $(generated_v1_preview_path)
-	git restore --source=HEAD -- $(generated_v1_preview_path)
+	rm -rf $(generated_paths)
+	git restore --source=HEAD -- $(generated_paths)
 
 generate_and_fix: build generate rubocop_fix
 

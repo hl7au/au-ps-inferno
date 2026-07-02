@@ -27,20 +27,30 @@ make run
 
 4. Navigate to http://localhost. The AU PS test suite will be available.
 
+## IG version-specific suites
+
+Every AU PS IG package archive present in `lib/au_ps_inferno/igs/` gets its own, isolated suite,
+generated into `lib/au_ps_inferno/<ig_version>/` (e.g. `lib/au_ps_inferno/1.0.0-preview/`). Multiple
+versions coexist in the same deployment: each has its own suite id, class names, and Inferno test
+ids, all suffixed with a compact form of the version (e.g. `100preview`), and each loads exactly one
+IG package via its own `fhir_resource_validator`. There is also a version-agnostic `:suite` id
+(`lib/au_ps_inferno/suite/suite.rb`) that is regenerated to always alias whichever IG version is
+"latest", for tooling/URLs that don't want to track a specific version.
+
 ## How to Regenerate the Suite for a New IG Version
 
 If a new AU PS IG release appears at http://hl7.org.au/fhir/ps/history.html, follow these steps to regenerate the suite metadata:
 
-1. Download the new IG package (`.tgz`) from the release page and place it in `lib/au_ps_inferno/igs/`.
-2. Update the path in `Rakefile` (`generator:generate` task) to point to the new archive.
-3. Run the Generate Suite workflow: go to the [workflow page](https://github.com/hl7au/au-ps-inferno/actions/workflows/generate-suite.yaml), click **Run workflow**, and confirm.
-4. When the workflow completes, a Pull Request will be created automatically. Review and merge it.
+1. Download the new IG package (`.tgz`) from the release page and place it in `lib/au_ps_inferno/igs/`. No other configuration is needed — the IG version is read from the archive's own `package.json`.
+2. Run the Generate Suite workflow: go to the [workflow page](https://github.com/hl7au/au-ps-inferno/actions/workflows/generate-suite.yaml), click **Run workflow**, and confirm.
+3. When the workflow completes, a Pull Request will be created automatically. Review and merge it.
 
 ### What the pipeline does
 
-1. Runs `make generate_and_fix`, which invokes the generator against the IG archive already present in `lib/au_ps_inferno/igs/`;
-2. The generator extracts IG resources from the archive, updates `lib/au_ps_inferno/metadata.yaml`, and sets `IG_VERSION` in `lib/au_ps_inferno/version.rb` to the version declared in the package's `package.json`;
-3. If there are any changes, a Pull Request is created automatically.
+1. Runs `make generate_and_fix`, which invokes the generator once per `.tgz` archive present in `lib/au_ps_inferno/igs/`;
+2. For each archive, the generator extracts IG resources, writes `lib/au_ps_inferno/<ig_version>/metadata.yaml` and the version's suite/group files, and sets `IG_VERSION` in `lib/au_ps_inferno/version.rb` to the version declared in the package's `package.json` (the last-processed, highest-versioned archive wins);
+3. After every archive is processed, the version-agnostic `lib/au_ps_inferno/suite/suite.rb` alias is regenerated to point at whichever version is now "latest";
+4. If there are any changes, a Pull Request is created automatically.
 
 ## Development workflow
 This repository contains both the source code of the tests generator and the generated tests themselves.
