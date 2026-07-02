@@ -24,7 +24,7 @@ class Generator
   #   extractor.extract
   class IGResourcesExtractor
     # @return [Array<FHIR::Model>] FHIR resources extracted from the IG package and optional folder
-    attr_reader :ig_resources
+    attr_reader :ig_resources, :ig_version
 
     # @param ig_path [String] Path to the IG package file (.tar.gz or .tgz)
     # @param additional_resources_path [String, nil] Optional path to a folder of JSON FHIR resources
@@ -33,6 +33,7 @@ class Generator
       @ig_path = ig_path
       @additional_resources_path = additional_resources_path
       @ig_resources = []
+      @ig_version = nil
     end
 
     # Processes the package archive and optional folder, and populates {#ig_resources}.
@@ -73,10 +74,23 @@ class Generator
     # @return [void]
     def process_tar(tar)
       tar.each do |entry|
+        if entry.file? && entry.full_name.delete_prefix('./') == 'package/package.json'
+          extract_ig_version(entry)
+          next
+        end
         next unless relevant_json_entry?(entry)
 
         collect_resource_from_entry(entry)
       end
+    end
+
+    # @param entry [Gem::Package::TarReader::Entry]
+    # @return [void]
+    def extract_ig_version(entry)
+      json = JSON.parse(entry.read)
+      @ig_version = json['version']&.to_s
+    rescue StandardError => e
+      puts "Error reading IG version from package.json: #{e.message}"
     end
 
     # @param entry [Gem::Package::TarReader::Entry]

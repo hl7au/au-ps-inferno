@@ -25,7 +25,6 @@ require_relative 'generator_group_based_metadata_module'
 #   generator = Generator.new('/path/to/ig', additional_resources_path: 'path/to/extra-ig-resources')
 #   generator.generate
 #
-# rubocop:disable Metrics/ClassLength -- orchestration class; primitive helpers kept private below
 class Generator
   SyntheticCapability = Struct.new(
     :type, :interaction, :operation, :searchParam, :searchInclude, :searchRevInclude, :extension
@@ -47,9 +46,23 @@ class Generator
   def generate
     @resources_manager.extract
     save_metadata_to_version_folder
+    update_ig_version_rb(@resources_manager.ig_version)
   end
 
   private
+
+  def update_ig_version_rb(version)
+    return if version.nil? || version.empty?
+
+    version_rb_path = File.expand_path(File.join('lib', 'au_ps_inferno', 'version.rb'))
+    content = File.read(version_rb_path)
+    updated = content.gsub(/IG_VERSION = '.*'/) { "IG_VERSION = '#{version}'" }
+    if updated == content
+      puts "Warning: IG_VERSION pattern not found in #{version_rb_path}; version was not updated."
+      return
+    end
+    File.write(version_rb_path, updated)
+  end
 
   def save_metadata_to_version_folder
     metadata_path = File.join(File.expand_path(File.join('lib', 'au_ps_inferno')), 'metadata.yaml')
@@ -61,4 +74,3 @@ class Generator
     File.write(metadata_path, YAML.dump(merged_metadata))
   end
 end
-# rubocop:enable Metrics/ClassLength
