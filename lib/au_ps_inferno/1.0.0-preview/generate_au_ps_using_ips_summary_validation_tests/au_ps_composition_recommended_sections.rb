@@ -1,0 +1,20 @@
+# frozen_string_literal: true
+
+require_relative 'au_ps_composition_recommended_sections/suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_recommended_sections_sections_should_populated'
+
+require_relative 'au_ps_composition_recommended_sections/suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_recommended_sections_recommended_sections_entry_profiles'
+
+module AUPSTestKit
+  # Automatically generated primitive group for AU PS Composition Recommended Sections
+  class AUPSSuiteGenerateAuPsUsingIpsSummaryValidationTestsAuPsCompositionRecommendedSections100preview < Inferno::TestGroup
+    title 'AU PS Composition Recommended Sections'
+    description 'Verify the recommended sections are correctly populated in the Composition resource'
+    id :suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_recommended_sections_100preview
+
+    run_as_group
+
+    test from: :suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_recommended_sections_sections_should_populated_100preview
+
+    test from: :suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_recommended_sections_recommended_sections_entry_profiles_100preview
+  end
+end

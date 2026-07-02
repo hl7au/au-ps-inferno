@@ -1,0 +1,28 @@
+# frozen_string_literal: true
+
+require_relative 'au_ps_composition_subject/suite_au_ps_bundle_instance_au_ps_composition_subject_subject_resource_type_is_valid'
+
+require_relative 'au_ps_composition_subject/suite_au_ps_bundle_instance_au_ps_composition_subject_subject_ms_elements'
+
+require_relative 'au_ps_composition_subject/suite_au_ps_bundle_instance_au_ps_composition_subject_subject_ms_subelements_populated'
+
+require_relative 'au_ps_composition_subject/suite_au_ps_bundle_instance_au_ps_composition_subject_subject_ms_identifier_slices'
+
+module AUPSTestKit
+  # Automatically generated primitive group for AU PS Composition Subject
+  class AUPSSuiteAuPsBundleInstanceAuPsCompositionSubject100preview < Inferno::TestGroup
+    title 'AU PS Composition Subject'
+    description 'Verify the referenced subject is a correctly populated AU PS Patient resource.'
+    id :suite_au_ps_bundle_instance_au_ps_composition_subject_100preview
+
+    run_as_group
+
+    test from: :suite_au_ps_bundle_instance_au_ps_composition_subject_subject_resource_type_is_valid_100preview
+
+    test from: :suite_au_ps_bundle_instance_au_ps_composition_subject_subject_ms_elements_100preview
+
+    test from: :suite_au_ps_bundle_instance_au_ps_composition_subject_subject_ms_subelements_populated_100preview
+
+    test from: :suite_au_ps_bundle_instance_au_ps_composition_subject_subject_ms_identifier_slices_100preview
+  end
+end
