@@ -1,0 +1,20 @@
+# frozen_string_literal: true
+
+require_relative 'au_ps_composition_optional_sections/suite_retrieve_au_ps_bundle_validation_tests_au_ps_composition_optional_sections_sections_may_populated'
+
+require_relative 'au_ps_composition_optional_sections/suite_retrieve_au_ps_bundle_validation_tests_au_ps_composition_optional_sections_optional_sections_entry_profiles'
+
+module AUPSTestKit
+  # Automatically generated primitive group for AU PS Composition Optional Sections
+  class AUPSSuiteRetrieveAuPsBundleValidationTestsAuPsCompositionOptionalSections100ballot < Inferno::TestGroup
+    title 'AU PS Composition Optional Sections'
+    description 'Verify the optional sections are correctly populated in the AU PS Composition resource'
+    id :suite_retrieve_au_ps_bundle_validation_tests_au_ps_composition_optional_sections_100ballot
+
+    run_as_group
+
+    test from: :suite_retrieve_au_ps_bundle_validation_tests_au_ps_composition_optional_sections_sections_may_populated_100ballot
+
+    test from: :suite_retrieve_au_ps_bundle_validation_tests_au_ps_composition_optional_sections_optional_sections_entry_profiles_100ballot
+  end
+end
