@@ -4,7 +4,7 @@
 This is an [Inferno](https://inferno-framework.github.io/inferno-core/) test kit for the [AU PS Implementation Guide](http://hl7.org.au/fhir/ps/)
 
 **Currently available versions:**
-1. [1.0.0-preview](https://hl7.org.au/fhir/ps/1.0.0-preview)
+1. [1.0.0](https://hl7.org.au/fhir/ps/1.0.0)
 
 ## Use Inferno as a service
 You can test your FHIR server using this link [https://inferno.hl7.org.au/test-kits/au-ps](https://inferno.hl7.org.au/test-kits/au-ps/)
@@ -57,7 +57,7 @@ It may be a direct commit to the master branch.
 ## Release management
 When we would like to issue a new release, you need to update the version constants in `lib/au_ps_inferno/version.rb`:
 - `VERSION` — the gem version (e.g. `'0.0.2'`)
-- `IG_VERSION` — the AU PS IG version the suite targets (e.g. `'1.0.0-preview'`); this is also updated automatically when the generator runs (see [How to Generate New Test Suites](#how-to-generate-new-test-suites))
+- `IG_VERSION` — the AU PS IG version the suite targets (e.g. `'1.0.0'`); this is also updated automatically when the generator runs (see [How to Generate New Test Suites](#how-to-generate-new-test-suites))
 
 Then you need to create a tag for this version. The tag name should start with `v` and then contain a numeric version like this `v0.0.1`
 Once a tag is created, you need to create a GitHub release for this newly published version.

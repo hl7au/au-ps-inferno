@@ -1368,16 +1368,16 @@
 :ig_title: AU PS
 :ig_module_name_prefix: AUPS
 :ig_test_id_prefix: au_ps
-:ig_version: v1.0.0-preview
+:ig_version: v1.0.0
 :groups:
 - :name: au_ps_allergyintolerance
   :class_name: AuPsAllergyintoleranceSequence
-  :version: v1.0.0-preview
-  :reformatted_version: v100_preview
+  :version: v1.0.0
+  :reformatted_version: v100
   :resource: AllergyIntolerance
   :profile_url: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-allergyintolerance
   :profile_name: AU PS AllergyIntolerance
-  :profile_version: 1.0.0-preview
+  :profile_version: 1.0.0
   :title: AllergyIntolerance
   :short_description: Verify support for the server capabilities required by the AU
     PS AllergyIntolerance.
@@ -1464,12 +1464,12 @@
   :delayed_references: []
 - :name: au_ps_composition
   :class_name: AuPsCompositionSequence
-  :version: v1.0.0-preview
-  :reformatted_version: v100_preview
+  :version: v1.0.0
+  :reformatted_version: v100
   :resource: Composition
   :profile_url: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-composition
   :profile_name: AU PS Composition
-  :profile_version: 1.0.0-preview
+  :profile_version: 1.0.0
   :title: Composition
   :short_description: Verify support for the server capabilities required by the AU
     PS Composition.
@@ -2241,12 +2241,12 @@
     - Observation
 - :name: au_ps_condition
   :class_name: AuPsConditionSequence
-  :version: v1.0.0-preview
-  :reformatted_version: v100_preview
+  :version: v1.0.0
+  :reformatted_version: v100
   :resource: Condition
   :profile_url: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-condition
   :profile_name: AU PS Condition
-  :profile_version: 1.0.0-preview
+  :profile_version: 1.0.0
   :title: Condition
   :short_description: Verify support for the server capabilities required by the AU
     PS Condition.
@@ -2324,12 +2324,12 @@
   :delayed_references: []
 - :name: au_ps_diagnosticresult_path
   :class_name: AuPsDiagnosticresultPathSequence
-  :version: v1.0.0-preview
-  :reformatted_version: v100_preview
+  :version: v1.0.0
+  :reformatted_version: v100
   :resource: Observation
   :profile_url: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-diagnosticresult-path
   :profile_name: AU PS Pathology Result Observation
-  :profile_version: 1.0.0-preview
+  :profile_version: 1.0.0
   :title: Observation Pathology Result
   :short_description: Verify support for the server capabilities required by the AU
     PS Pathology Result Observation.
@@ -2496,12 +2496,12 @@
     - Observation
 - :name: au_ps_encounter
   :class_name: AuPsEncounterSequence
-  :version: v1.0.0-preview
-  :reformatted_version: v100_preview
+  :version: v1.0.0
+  :reformatted_version: v100
   :resource: Encounter
   :profile_url: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-encounter
   :profile_name: AU PS Encounter
-  :profile_version: 1.0.0-preview
+  :profile_version: 1.0.0
   :title: Encounter
   :short_description: Verify support for the server capabilities required by the AU
     PS Encounter.
@@ -2641,12 +2641,12 @@
     - Organization
 - :name: au_ps_immunization
   :class_name: AuPsImmunizationSequence
-  :version: v1.0.0-preview
-  :reformatted_version: v100_preview
+  :version: v1.0.0
+  :reformatted_version: v100
   :resource: Immunization
   :profile_url: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-immunization
   :profile_name: AU PS Immunization
-  :profile_version: 1.0.0-preview
+  :profile_version: 1.0.0
   :title: Immunization
   :short_description: Verify support for the server capabilities required by the AU
     PS Immunization.
@@ -2732,12 +2732,12 @@
   :delayed_references: []
 - :name: au_ps_medication
   :class_name: AuPsMedicationSequence
-  :version: v1.0.0-preview
-  :reformatted_version: v100_preview
+  :version: v1.0.0
+  :reformatted_version: v100
   :resource: Medication
   :profile_url: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medication
   :profile_name: AU PS Medication
-  :profile_version: 1.0.0-preview
+  :profile_version: 1.0.0
   :title: Medication
   :short_description: Verify support for the server capabilities required by the AU
     PS Medication.
@@ -2774,12 +2774,12 @@
   :delayed_references: []
 - :name: au_ps_medicationrequest
   :class_name: AuPsMedicationrequestSequence
-  :version: v1.0.0-preview
-  :reformatted_version: v100_preview
+  :version: v1.0.0
+  :reformatted_version: v100
   :resource: MedicationRequest
   :profile_url: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medicationrequest
   :profile_name: AU PS MedicationRequest
-  :profile_version: 1.0.0-preview
+  :profile_version: 1.0.0
   :title: MedicationRequest
   :short_description: Verify support for the server capabilities required by the AU
     PS MedicationRequest.
@@ -2952,12 +2952,12 @@
     - Condition
 - :name: au_ps_medicationstatement
   :class_name: AuPsMedicationstatementSequence
-  :version: v1.0.0-preview
-  :reformatted_version: v100_preview
+  :version: v1.0.0
+  :reformatted_version: v100
   :resource: MedicationStatement
   :profile_url: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medicationstatement
   :profile_name: AU PS MedicationStatement
-  :profile_version: 1.0.0-preview
+  :profile_version: 1.0.0
   :title: MedicationStatement
   :short_description: Verify support for the server capabilities required by the AU
     PS MedicationStatement.
@@ -3068,12 +3068,12 @@
     - Condition
 - :name: au_ps_organization
   :class_name: AuPsOrganizationSequence
-  :version: v1.0.0-preview
-  :reformatted_version: v100_preview
+  :version: v1.0.0
+  :reformatted_version: v100
   :resource: Organization
   :profile_url: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-organization
   :profile_name: AU PS Organization
-  :profile_version: 1.0.0-preview
+  :profile_version: 1.0.0
   :title: Organization
   :short_description: Verify support for the server capabilities required by the AU
     PS Organization.
@@ -3116,12 +3116,12 @@
   :delayed_references: []
 - :name: au_ps_patient
   :class_name: AuPsPatientSequence
-  :version: v1.0.0-preview
-  :reformatted_version: v100_preview
+  :version: v1.0.0
+  :reformatted_version: v100
   :resource: Patient
   :profile_url: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-patient
   :profile_name: AU PS Patient
-  :profile_version: 1.0.0-preview
+  :profile_version: 1.0.0
   :title: Patient
   :short_description: Verify support for the server capabilities required by the AU
     PS Patient.
@@ -3222,12 +3222,12 @@
     - PractitionerRole
 - :name: au_ps_practitioner
   :class_name: AuPsPractitionerSequence
-  :version: v1.0.0-preview
-  :reformatted_version: v100_preview
+  :version: v1.0.0
+  :reformatted_version: v100
   :resource: Practitioner
   :profile_url: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-practitioner
   :profile_name: AU PS Practitioner
-  :profile_version: 1.0.0-preview
+  :profile_version: 1.0.0
   :title: Practitioner
   :short_description: Verify support for the server capabilities required by the AU
     PS Practitioner.
@@ -3268,12 +3268,12 @@
   :delayed_references: []
 - :name: au_ps_practitionerrole
   :class_name: AuPsPractitionerroleSequence
-  :version: v1.0.0-preview
-  :reformatted_version: v100_preview
+  :version: v1.0.0
+  :reformatted_version: v100
   :resource: PractitionerRole
   :profile_url: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-practitionerrole
   :profile_name: AU PS PractitionerRole
-  :profile_version: 1.0.0-preview
+  :profile_version: 1.0.0
   :title: PractitionerRole
   :short_description: Verify support for the server capabilities required by the AU
     PS PractitionerRole.
@@ -3349,12 +3349,12 @@
     - Organization
 - :name: au_ps_procedure
   :class_name: AuPsProcedureSequence
-  :version: v1.0.0-preview
-  :reformatted_version: v100_preview
+  :version: v1.0.0
+  :reformatted_version: v100
   :resource: Procedure
   :profile_url: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-procedure
   :profile_name: AU PS Procedure
-  :profile_version: 1.0.0-preview
+  :profile_version: 1.0.0
   :title: Procedure
   :short_description: Verify support for the server capabilities required by the AU
     PS Procedure.
@@ -3499,12 +3499,12 @@
     - Procedure
 - :name: au_ps_relatedperson
   :class_name: AuPsRelatedpersonSequence
-  :version: v1.0.0-preview
-  :reformatted_version: v100_preview
+  :version: v1.0.0
+  :reformatted_version: v100
   :resource: RelatedPerson
   :profile_url: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-relatedperson
   :profile_name: AU PS RelatedPerson
-  :profile_version: 1.0.0-preview
+  :profile_version: 1.0.0
   :title: RelatedPerson
   :short_description: Verify support for the server capabilities required by the AU
     PS RelatedPerson.
@@ -3555,12 +3555,12 @@
   :delayed_references: []
 - :name: au_ps_smokingstatus
   :class_name: AuPsSmokingstatusSequence
-  :version: v1.0.0-preview
-  :reformatted_version: v100_preview
+  :version: v1.0.0
+  :reformatted_version: v100
   :resource: Observation
   :profile_url: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-smokingstatus
   :profile_name: AU PS Smoking Status
-  :profile_version: 1.0.0-preview
+  :profile_version: 1.0.0
   :title: Observation Smoking Status
   :short_description: Verify support for the server capabilities required by the AU
     PS Smoking Status.
