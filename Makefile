@@ -6,7 +6,7 @@ compose = docker compose -f compose.aidbox.yaml
 endif
 inferno = run inferno
 generated_v1_path = lib/au_ps_inferno/1.0.0-ballot
-generated_v1_preview_path = lib/au_ps_inferno/1.0.0-preview
+generated_v1_preview_path = lib/au_ps_inferno/1.0.0
 
 .PHONY: pull build up stop down migrate setup run tests coverage rubocop snapshot-tests snapshot-tests-update
 

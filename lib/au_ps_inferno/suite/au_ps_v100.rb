@@ -13,7 +13,7 @@ require_relative 'generate_au_ps_using_ips_summary_validation_tests/generate_au_
 module AUPSTestKit
   # Test suite for the AU PS (Australian Primary Care and Shared Health) Implementation Guide.
   class AUPSSuitePreview < Inferno::TestSuite
-    id :au_ps_v100preview
+    id :au_ps_v100
     title "AU PS #{AUPSTestKit::IG_VERSION} Test Suite"
     description 'Validates AU PS (Australian Primary Care and Shared Health) bundles, ' \
                 'compositions, sections, and server CapabilityStatement support for the ' \
