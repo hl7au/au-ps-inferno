@@ -24,33 +24,33 @@ require_relative 'au_ps_composition_attester'
 
 module AUPSTestKit
   # Automatically generated high order group for Generate AU PS using IPS $summary validation tests
-  class AUPSSuiteGenerateAuPsUsingIpsSummaryValidationTests < Inferno::TestGroup
+  class IpsSummary < Inferno::TestGroup
     title 'Generate AU PS using IPS $summary validation tests'
     description 'Generate AU Patient Summary using IPS $summary operation and verify response is valid AU PS Bundle'
-    id :suite_generate_au_ps_using_ips_summary_validation_tests
+    id :ips_summary
 
     run_as_group
 
-    group from: :suite_generate_au_ps_using_ips_summary_validation_tests_bundle_validation
+    group from: :ips_summary_bundle_validation
 
-    group from: :suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_bundle_must_support_conformance
+    group from: :ips_summary_bundle_must_support_conformance
 
-    group from: :suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_must_support_conformance
+    group from: :ips_summary_composition_must_support_conformance
 
-    group from: :suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_mandatory_sections
+    group from: :ips_summary_composition_mandatory_sections
 
-    group from: :suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_recommended_sections
+    group from: :ips_summary_composition_recommended_sections
 
-    group from: :suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_optional_sections
+    group from: :ips_summary_composition_optional_sections
 
-    group from: :suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_undefined_sections
+    group from: :ips_summary_composition_undefined_sections
 
-    group from: :suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_subject
+    group from: :ips_summary_composition_subject
 
-    group from: :suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_author
+    group from: :ips_summary_composition_author
 
-    group from: :suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_custodian
+    group from: :ips_summary_composition_custodian
 
-    group from: :suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_attester
+    group from: :ips_summary_composition_attester
   end
 end
