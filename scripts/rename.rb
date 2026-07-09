@@ -92,7 +92,11 @@ end
 def update_references(replacements)
   Dir.glob('lib/au_ps_inferno/suite/**/*.rb').each do |file|
     text = File.read(file)
-    new_contents = replacements.reduce(text) { |contents, (old_str, new_str)| contents.gsub(old_str, new_str) }
+    new_contents = text.lines.map do |line|
+      next line unless line.include?('require_relative')
+
+      replacements.reduce(line) { |l, (old_str, new_str)| l.gsub(old_str, new_str) }
+    end.join
     next if new_contents == text
 
     File.write(file, new_contents)
