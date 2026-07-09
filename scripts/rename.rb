@@ -79,32 +79,36 @@ end
 
 def rename_file(original_filename, new_filename)
   matches = Dir.glob(File.join('lib', 'au_ps_inferno', 'suite', '**', original_filename))
-  return puts("File not found: #{original_filename}") if matches.empty?
+  raise "File not found: #{original_filename}" if matches.empty?
 
   original_path = matches.first
   new_path = File.join(File.dirname(original_path), new_filename)
-  return puts("Skipped (destination already exists): #{original_path} -> #{new_path}") if File.exist?(new_path)
+  raise "Destination already exists: #{original_path} -> #{new_path}" if File.exist?(new_path)
 
   File.rename(original_path, new_path)
   puts "Renamed: #{original_path} -> #{new_path}"
 end
 
-def find_str_and_gsub_in_all_files(original_str, new_str)
+def update_references(replacements)
   Dir.glob('lib/au_ps_inferno/suite/**/*.rb').each do |file|
     text = File.read(file)
-    new_contents = text.gsub(original_str, new_str)
-    File.open(file, 'w') { |f| f.puts new_contents }
+    new_contents = replacements.reduce(text) { |contents, (old_str, new_str)| contents.gsub(old_str, new_str) }
+    next if new_contents == text
+
+    File.write(file, new_contents)
   end
 end
 
 def process_files(files, rename_method)
-  files.each do |file|
+  files.map do |file|
     new_file_name = rename_method.call(file)
     rename_file(file, new_file_name)
-    find_str_and_gsub_in_all_files(file.gsub('.rb', ''), new_file_name.gsub('.rb', ''))
+    [File.basename(file, '.rb'), File.basename(new_file_name, '.rb')]
   end
 end
 
-process_files(summary_op_files, method(:rename_sum_test))
-process_files(instance_files, method(:rename_instance_test))
-process_files(retrieve_files, method(:rename_retrieve_test))
+replacements = process_files(summary_op_files, method(:rename_sum_test)) +
+                process_files(instance_files, method(:rename_instance_test)) +
+                process_files(retrieve_files, method(:rename_retrieve_test))
+
+update_references(replacements)
