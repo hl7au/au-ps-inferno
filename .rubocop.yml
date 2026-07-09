@@ -5,6 +5,7 @@ AllCops:
     - "spec/integration/suite_100ballot_snapshots_spec.rb"
     - "lib/au_ps_inferno/generator/primitive_test.rb"
     - "lib/au_ps_inferno/generator/generator.rb"
+    - "scripts/rename.rb"
 
 Gemspec/DevelopmentDependencies:
   Enabled: false

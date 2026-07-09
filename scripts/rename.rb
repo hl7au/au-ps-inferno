@@ -1,0 +1,110 @@
+# frozen_string_literal: true
+
+# This script renames files and updates references in the codebase for the AU PS Inferno project.
+
+summary_op_files = [
+  'suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_attester_attester_party_ms_subelements.rb',
+  'suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_attester_attester_party_ms_identifier_slices.rb',
+  'suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_attester_attester_party_ms_elements.rb',
+  'suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_optional_sections_optional_sections_entry_profiles.rb',
+  'suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_optional_sections_sections_may_populated.rb',
+  'suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_recommended_sections_sections_should_populated.rb',
+  'suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_recommended_sections_recommended_sections_entry_profiles.rb',
+  'suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_author_author_ms_subelements.rb',
+  'suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_author_author_resource_type_is_valid.rb',
+  'suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_author_author_ms_elements.rb',
+  'suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_author_author_ms_identifier_slices.rb',
+  'suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_custodian_custodian_ms_identifier_slices.rb',
+  'suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_custodian_custodian_ms_elements.rb',
+  'suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_custodian_custodian_ms_subelements.rb',
+  'suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_bundle_must_support_conformance_bundle_must_support_populated.rb',
+  'suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_subject_subject_ms_subelements_populated.rb',
+  'suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_subject_subject_ms_elements.rb',
+  'suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_subject_subject_ms_identifier_slices.rb',
+  'suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_subject_subject_resource_type_is_valid.rb',
+  'suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_mandatory_sections_mandatory_sections_entry_profiles.rb',
+  'suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_mandatory_sections_sections_shall_populated.rb',
+  'suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_must_support_conformance_composition_optional_ms_slices.rb',
+  'suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_must_support_conformance_composition_mandatory_ms_populated.rb',
+  'suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_must_support_conformance_composition_ms_subelements_populated.rb',
+  'suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_must_support_conformance_composition_optional_ms_populated.rb',
+  'suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_undefined_sections_sections_may_undefined.rb'
+].freeze
+
+instance_files = [
+  'suite_au_ps_bundle_instance_au_ps_composition_recommended_sections_recommended_sections_entry_profiles.rb',
+  'suite_au_ps_bundle_instance_au_ps_composition_mandatory_sections_mandatory_sections_entry_profiles.rb',
+  'suite_au_ps_bundle_instance_au_ps_composition_must_support_conformance_composition_optional_ms_slices.rb',
+  'suite_au_ps_bundle_instance_au_ps_composition_must_support_conformance_composition_optional_ms_populated.rb',
+  'suite_au_ps_bundle_instance_au_ps_composition_must_support_conformance_composition_mandatory_ms_populated.rb',
+  'suite_au_ps_bundle_instance_au_ps_composition_must_support_conformance_composition_ms_subelements_populated.rb'
+].freeze
+
+retrieve_files = [
+  'suite_retrieve_au_ps_bundle_validation_tests_au_ps_composition_attester_attester_party_ms_subelements.rb',
+  'suite_retrieve_au_ps_bundle_validation_tests_au_ps_composition_attester_attester_party_ms_identifier_slices.rb',
+  'suite_retrieve_au_ps_bundle_validation_tests_au_ps_composition_attester_attester_party_ms_elements.rb',
+  'suite_retrieve_au_ps_bundle_validation_tests_au_ps_composition_optional_sections_sections_may_populated.rb',
+  'suite_retrieve_au_ps_bundle_validation_tests_au_ps_composition_optional_sections_optional_sections_entry_profiles.rb',
+  'suite_retrieve_au_ps_bundle_validation_tests_au_ps_composition_recommended_sections_sections_should_populated.rb',
+  'suite_retrieve_au_ps_bundle_validation_tests_au_ps_composition_recommended_sections_recommended_sections_entry_profiles.rb',
+  'suite_retrieve_au_ps_bundle_validation_tests_au_ps_composition_author_author_ms_identifier_slices.rb',
+  'suite_retrieve_au_ps_bundle_validation_tests_au_ps_composition_author_author_resource_type_is_valid.rb',
+  'suite_retrieve_au_ps_bundle_validation_tests_au_ps_composition_custodian_custodian_ms_identifier_slices.rb',
+  'suite_retrieve_au_ps_bundle_validation_tests_au_ps_composition_custodian_custodian_ms_subelements.rb',
+  'suite_retrieve_au_ps_bundle_validation_tests_au_ps_bundle_must_support_conformance_bundle_must_support_populated.rb',
+  'suite_retrieve_au_ps_bundle_validation_tests_au_ps_composition_subject_subject_ms_subelements_populated.rb',
+  'suite_retrieve_au_ps_bundle_validation_tests_au_ps_composition_subject_subject_ms_identifier_slices.rb',
+  'suite_retrieve_au_ps_bundle_validation_tests_au_ps_composition_subject_subject_resource_type_is_valid.rb',
+  'suite_retrieve_au_ps_bundle_validation_tests_au_ps_composition_mandatory_sections_mandatory_sections_entry_profiles.rb',
+  'suite_retrieve_au_ps_bundle_validation_tests_au_ps_composition_mandatory_sections_sections_shall_populated.rb',
+  'suite_retrieve_au_ps_bundle_validation_tests_au_ps_composition_must_support_conformance_composition_optional_ms_populated.rb',
+  'suite_retrieve_au_ps_bundle_validation_tests_au_ps_composition_must_support_conformance_composition_optional_ms_slices.rb',
+  'suite_retrieve_au_ps_bundle_validation_tests_au_ps_composition_must_support_conformance_composition_mandatory_ms_populated.rb',
+  'suite_retrieve_au_ps_bundle_validation_tests_au_ps_composition_must_support_conformance_composition_ms_subelements_populated.rb',
+  'suite_retrieve_au_ps_bundle_validation_tests_au_ps_composition_undefined_sections_sections_may_undefined.rb'
+].freeze
+
+def rename_sum_test(name)
+  name.gsub('suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_', '')
+end
+
+def rename_instance_test(name)
+  name.gsub('suite_au_ps_bundle_instance_au_ps_', '')
+end
+
+def rename_retrieve_test(name)
+  name.gsub('suite_retrieve_au_ps_bundle_validation_tests_au_ps_', '')
+end
+
+def rename_file(original_filename, new_filename)
+  matches = Dir.glob(File.join('lib', 'au_ps_inferno', 'suite', '**', original_filename))
+  return puts("File not found: #{original_filename}") if matches.empty?
+
+  original_path = matches.first
+  new_path = File.join(File.dirname(original_path), new_filename)
+  return puts("Skipped (destination already exists): #{original_path} -> #{new_path}") if File.exist?(new_path)
+
+  File.rename(original_path, new_path)
+  puts "Renamed: #{original_path} -> #{new_path}"
+end
+
+def find_str_and_gsub_in_all_files(original_str, new_str)
+  Dir.glob('lib/au_ps_inferno/suite/**/*.rb').each do |file|
+    text = File.read(file)
+    new_contents = text.gsub(original_str, new_str)
+    File.open(file, 'w') { |f| f.puts new_contents }
+  end
+end
+
+def process_files(files, rename_method)
+  files.each do |file|
+    new_file_name = rename_method.call(file)
+    rename_file(file, new_file_name)
+    find_str_and_gsub_in_all_files(file.gsub('.rb', ''), new_file_name.gsub('.rb', ''))
+  end
+end
+
+process_files(summary_op_files, method(:rename_sum_test))
+process_files(instance_files, method(:rename_instance_test))
+process_files(retrieve_files, method(:rename_retrieve_test))
