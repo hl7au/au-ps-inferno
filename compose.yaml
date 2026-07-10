@@ -1,10 +1,8 @@
-version: '3'
 services:
   inferno:
     build:
       context: ./
     volumes:
-      - ./data:/opt/inferno/data
       - ./:/opt/inferno/
     depends_on:
       redis:
@@ -21,7 +19,6 @@ services:
     build:
       context: ./
     volumes:
-      - ./data:/opt/inferno/data
       - ./:/opt/inferno/
     command: bundle exec sidekiq -r ./worker.rb
     depends_on:
@@ -39,7 +36,7 @@ services:
     environment:
       SESSION_CACHE_DURATION: -1
     volumes:
-      - ./lib/au_ips_inferno/igs:/home/igs
+      - ./lib/au_ps_inferno/igs:/home/igs
   nginx:
     image: nginx
     ports:
@@ -72,6 +69,7 @@ services:
       POSTGRES_DB: inferno
   fhir_packages_manager:
     image: ghcr.io/projkov/fhir_packages_manager:0.3.0
+    profiles: ["tools"]
     volumes:
       - ./lib/au_ps_inferno/igs:/fhir_packages
       - ./fhir_packages_ignore.yml:/fhir_packages_ignore.yml

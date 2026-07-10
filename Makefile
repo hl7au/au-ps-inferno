@@ -2,7 +2,7 @@ MODE ?= default
 ifeq ($(MODE), default)
 compose = docker compose
 else ifeq ($(MODE), aidbox)
-compose = docker compose -f compose.aidbox.yaml
+compose = docker compose -f compose.yaml -f compose.aidbox.yaml
 endif
 inferno = run inferno
 IG_ARCHIVE ?= lib/au_ps_inferno/igs/hl7.fhir.au.ps-1.0.0.tgz
@@ -16,7 +16,7 @@ IG_REGISTRIES ?= -r https://packages.fhir.org -r https://packages.simplifier.net
 .PHONY: pull build up stop down migrate setup run tests coverage rubocop snapshot-tests snapshot-tests-update pending generate_pending check_ig fetch_ig list_ig_versions sync_igs
 
 pull:
-	$(compose) pull
+	$(compose) --profile tools pull
 
 build:
 	$(compose) build
