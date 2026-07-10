@@ -19,7 +19,7 @@ class Generator
     private
 
     def default_igs_dir
-      File.expand_path(File.join('lib', 'au_ps_inferno', 'igs'))
+      File.join('lib', 'au_ps_inferno', 'igs')
     end
   end
 end

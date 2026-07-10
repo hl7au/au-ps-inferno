@@ -80,7 +80,7 @@ generate_and_fix: build generate rubocop_fix
 dev_restart: stop down build generate rubocop_fix setup up
 
 generate_pending: build
-	@archives=$$($(compose) $(inferno) bundle exec rake generator:pending 2>/dev/null | grep '\.tgz$$' | sed 's#^/opt/inferno/##'); \
+	@archives=$$($(compose) $(inferno) bundle exec rake generator:pending 2>/dev/null | grep '\.tgz$$'); \
 	if [ -z "$$archives" ]; then echo "No pending archives."; exit 0; fi; \
 	for archive in $$archives; do \
 		echo "=== Generating suite for $$archive ==="; \
