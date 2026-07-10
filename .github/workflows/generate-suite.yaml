@@ -1,35 +1,76 @@
 name: Generate Suite
-on: workflow_dispatch
+on:
+  push:
+    branches: [master]
+    paths:
+      - 'lib/au_ps_inferno/igs/*.tgz'
+  workflow_dispatch:
 permissions:
   contents: write
   pull-requests: write
 jobs:
-  build:
+  detect:
     runs-on: ubuntu-latest
+    outputs:
+      archives: ${{ steps.pending.outputs.archives }}
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
-      with:
-        fetch-depth: 0
-    - name: Generate tests
-      run: make generate_and_fix
-    - name: Change ownership
-      run: sudo chown -R $USER:$USER .
-    - name: Prepare PR metadata
-      shell: bash
-      run: |
-        DATE=$(date -u +%Y-%m-%d)
-        echo "PR_TITLE=Regenerate suite - ${DATE} #${GITHUB_RUN_NUMBER}" >> "$GITHUB_ENV"
-        echo "PR_BODY=Automated suite regeneration from workflow run #${GITHUB_RUN_NUMBER}: https://github.com/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}" >> "$GITHUB_ENV"
-    - name: Create Pull Request
-      uses: peter-evans/create-pull-request@v6
-      id: cpr
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
-        delete-branch: true
-        branch: automated/suite-regen-${{ github.run_id }}
-        commit-message: ${{ env.PR_TITLE }}
-        title: ${{ env.PR_TITLE }}
-        body: ${{ env.PR_BODY }}
-        labels: automated-pr
-        base: master
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Setup environment
+        run: make setup
+      - name: List pending archives
+        id: pending
+        shell: bash
+        run: |
+          output=$(make pending)
+          if echo "$output" | grep -q '^No pending archives'; then
+            echo 'archives=[]' >> "$GITHUB_OUTPUT"
+          else
+            json=$(echo "$output" | grep '^lib/au_ps_inferno/igs/' | jq -R . | jq -sc .)
+            echo "archives=$json" >> "$GITHUB_OUTPUT"
+          fi
+          echo "Pending archives: $output"
+
+  generate:
+    needs: detect
+    if: needs.detect.outputs.archives != '[]'
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        archive: ${{ fromJson(needs.detect.outputs.archives) }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Setup environment
+        run: make setup
+      - name: Generate suite
+        run: IG_ARCHIVE=${{ matrix.archive }} make generate_and_fix
+      - name: Run tests
+        run: make tests
+      - name: Change ownership
+        run: sudo chown -R $USER:$USER .
+      - name: Prepare PR metadata
+        id: meta
+        shell: bash
+        run: |
+          archive_name=$(basename "${{ matrix.archive }}")
+          echo "display_name=${archive_name%.tgz}" >> "$GITHUB_OUTPUT"
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          delete-branch: true
+          branch: automated/generate-suite-${{ steps.meta.outputs.display_name }}
+          commit-message: "Generate suite for AU PS ${{ steps.meta.outputs.display_name }}"
+          title: "Generate suite for AU PS ${{ steps.meta.outputs.display_name }}"
+          body: >
+            Automated suite generation for `${{ matrix.archive }}`
+            (workflow run #${{ github.run_number }}:
+            https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}).
+          labels: automated-pr
+          base: master

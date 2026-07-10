@@ -1,0 +1,24 @@
+# frozen_string_literal: true
+
+<% leaf_file_names.each do |file_name| -%>
+require_relative '<%= group_dir_name %>/<%= file_name %>'
+
+<% end -%>
+module AUPSTestKit
+  # Automatically generated primitive group for <%= title %>
+  class <%= class_name %> < Inferno::TestGroup
+    title '<%= title.gsub("'", "\\\\'") %>'
+    description '<%= description.gsub("'", "\\\\'") %>'
+    id :<%= id %>
+<% if optional_group -%>
+
+    optional
+<% end -%>
+
+    run_as_group
+<% leaf_ids.each do |leaf_id| -%>
+
+    test from: :<%= leaf_id %>
+<% end -%>
+  end
+end

@@ -1,0 +1,13 @@
+# A bare string ignores all versions of a package:
+#   - hl7.fhir.r4.core
+#
+# A name/version pair ignores only that specific version:
+#   - name: hl7.fhir.au.ps
+#     version: 0.9.0-ballot
+#
+- name: hl7.fhir.au.ps
+  version: 0.1.0-preview
+- name: hl7.fhir.au.ps
+  version: 0.5.0-preview
+- name: hl7.fhir.au.ps
+  version: 1.0.0-ballot

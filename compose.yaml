@@ -70,3 +70,8 @@ services:
     environment:
       POSTGRES_PASSWORD: password
       POSTGRES_DB: inferno
+  fhir_packages_manager:
+    image: ghcr.io/projkov/fhir_packages_manager:0.3.0
+    volumes:
+      - ./lib/au_ps_inferno/igs:/fhir_packages
+      - ./fhir_packages_ignore.yml:/fhir_packages_ignore.yml

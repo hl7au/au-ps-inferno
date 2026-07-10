@@ -1,0 +1,20 @@
+# frozen_string_literal: true
+
+<% group_dir_names.each do |dir_name| -%>
+require_relative '<%= dir_name %>'
+
+<% end -%>
+module AUPSTestKit
+  # Automatically generated high order group for <%= title %>
+  class <%= class_name %> < Inferno::TestGroup
+    title '<%= title.gsub("'", "\\\\'") %>'
+    description '<%= description.gsub("'", "\\\\'") %>'
+    id :<%= id %>
+
+    run_as_group
+<% group_ids.each do |group_id| -%>
+
+    group from: :<%= group_id %>
+<% end -%>
+  end
+end

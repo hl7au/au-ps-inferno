@@ -25,7 +25,8 @@ namespace :deps do
 end
 
 namespace :generator do
-  desc 'Generate AU PS/IPS test suites. Set ADDITIONAL_IG_RESOURCES to a folder to load extra JSON resources.'
+  desc 'Generate AU PS/IPS test suites. Set IG_ARCHIVE to the .tgz to generate from (defaults to ' \
+       'hl7.fhir.au.ps-1.0.0.tgz), and ADDITIONAL_IG_RESOURCES to a folder to load extra JSON resources.'
   task :generate do
     require 'au_ps_inferno/generator/generator'
     extra = ENV.fetch('ADDITIONAL_IG_RESOURCES', nil)
@@ -34,6 +35,17 @@ namespace :generator do
       extra = default_extra if File.directory?(default_extra)
     end
     opts = extra ? { additional_resources_path: extra } : {}
-    Generator.new('lib/au_ps_inferno/igs/1.0.0.tgz', **opts).generate
+    Generator.new(ENV.fetch('IG_ARCHIVE', 'lib/au_ps_inferno/igs/hl7.fhir.au.ps-1.0.0.tgz'), **opts).generate
+  end
+
+  desc 'List lib/au_ps_inferno/igs/*.tgz archives that are new or changed since they were last generated'
+  task :pending do
+    require 'au_ps_inferno/generator/pending_archives'
+    pending = Generator::PendingArchives.new.list
+    if pending.empty?
+      puts 'No pending archives.'
+    else
+      pending.each { |archive| puts archive }
+    end
   end
 end

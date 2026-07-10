@@ -26,7 +26,7 @@ class Generator
     #
     # @return [void]
     def generate
-      template = ERB.new(File.read(template_file_path))
+      template = ERB.new(File.read(template_file_path), trim_mode: '-')
       path = output_file_path
       FileUtils.mkdir_p(File.dirname(path))
       File.write(path, template.result(erb_binding))

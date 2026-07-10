@@ -1,0 +1,25 @@
+# frozen_string_literal: true
+
+require_relative '<%= utils_rel %>/basic_test_class'
+require_relative '<%= utils_rel %>/metadata_manager'
+
+module AUPSTestKit
+  # Automatically generated primitive test for <%= title %>
+  class <%= class_name %> < BasicTest
+    title '<%= title.gsub("'", "\\\\'") %>'
+    description '<%= description.gsub("'", "\\\\'") %>'
+    id :<%= id %>
+<% if optional_test -%>
+
+    optional
+<% end -%>
+
+    def metadata_manager
+      @metadata_manager ||= MetadataManager.new(File.expand_path('<%= metadata_rel %>', __dir__))
+    end
+
+    run do
+      <%= run_body %>
+    end
+  end
+end

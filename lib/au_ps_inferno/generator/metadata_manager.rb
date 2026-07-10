@@ -17,7 +17,12 @@ class Generator
   # rubocop:disable Metrics/ClassLength
   class MetadataManager
     # @return [Array<Hash>] Array of section metadata hashes
-    attr_reader :composition_sections
+    # composition_mandatory_ms_slices/composition_optional_ms_slices are already public methods
+    # (computed from composition_extract_slices below), so they aren't repeated here.
+    attr_reader :composition_sections,
+                :composition_mandatory_ms_elements, :composition_mandatory_ms_sub_elements,
+                :composition_optional_ms_elements, :composition_optional_ms_sub_elements,
+                :profiles, :groups
 
     include Constants
 
@@ -60,6 +65,12 @@ class Generator
     end
 
     def reset_composition_metadata_ivars!
+      reset_composition_arrays!
+      @resources_filters = {}
+      @normalized_sections_data = []
+    end
+
+    def reset_composition_arrays!
       @composition_sections = []
       @composition_mandatory_ms_elements = []
       @composition_mandatory_ms_sub_elements = []
@@ -68,8 +79,7 @@ class Generator
       @composition_mandatory_ms_slices = []
       @composition_optional_ms_slices = []
       @profiles = []
-      @resources_filters = {}
-      @normalized_sections_data = []
+      @groups = []
     end
 
     # Generates composition section metadata from IG resources (in-memory only).
@@ -81,6 +91,7 @@ class Generator
       extract_required_ms_elements
       extract_optional_ms_elements
       extract_profiles
+      extract_groups
       extract_resource_filters
       normalize_sections_data
     end
@@ -128,6 +139,7 @@ class Generator
     def metadata_dump_tail
       {
         profiles: @profiles,
+        groups: @groups,
         resources_filters: @resources_filters
       }
     end
@@ -191,6 +203,75 @@ class Generator
     # @return [Boolean] true if the profile URL is in {Generator::Constants::REQUIRED_PROFILES}
     def profile_required?(profile)
       REQUIRED_PROFILES.include?(profile.url.to_s)
+    end
+
+    # Populates @groups with per-profile Must Support metadata consumed by
+    # InfernoSuiteGenerator::Generator::GroupMetadata (resource, profile_url, mandatory_elements,
+    # must_supports[:elements]). Slices/extensions are left empty: deriving them requires
+    # translating ElementDefinition.slicing discriminators, which nothing in this generator does yet.
+    #
+    # @return [void]
+    def extract_groups
+      @groups = main_profiles.map { |profile| build_group_for_profile(profile) }
+    end
+
+    def build_group_for_profile(profile)
+      elements = must_support_elements_without_slices(profile)
+      {
+        resource: profile.type,
+        profile_url: profile.url.to_s,
+        mandatory_elements: mandatory_elements_for(profile, elements),
+        must_supports: build_must_supports(profile, elements)
+      }
+    end
+
+    def build_must_supports(profile, elements)
+      {
+        elements: elements.map { |element| must_support_element_data(element, profile) },
+        slices: [],
+        extensions: []
+      }
+    end
+
+    # Must Support elements for a profile, excluding sliced elements (id includes ':'): those
+    # belong under must_supports[:slices], which this generator doesn't populate yet.
+    def must_support_elements_without_slices(profile)
+      StructureDefinitionDecorator.new(profile).simple_elements(include_str: "#{profile.type}.")
+                                  .reject { |element| element.id.include?(':') }
+    end
+
+    def mandatory_elements_for(profile, elements)
+      elements.filter { |element| element.min.positive? }
+              .map { |element| "#{profile.type}.#{resolved_relative_path(element, profile)}" }
+    end
+
+    def must_support_element_data(element, profile)
+      original = relative_path(element, profile)
+      resolved = resolved_relative_path(element, profile)
+      data = { path: resolved }
+      data[:original_path] = original if resolved != original
+      data
+    end
+
+    def relative_path(element, profile)
+      element.path.gsub("#{profile.type}.", '')
+    end
+
+    # Resolves a choice-type path (e.g. "onset[x]") to its concrete field name (e.g.
+    # "onsetDateTime") when the profile leaves exactly one type for it; a still-ambiguous
+    # choice (more than one type) is left as-is, since no single field name would be correct.
+    def resolved_relative_path(element, profile)
+      path = relative_path(element, profile)
+      return path unless path.end_with?('[x]')
+
+      type_codes = Array(element.type).map(&:code)
+      return path unless type_codes.size == 1
+
+      "#{path.delete_suffix('[x]')}#{capitalize_first(type_codes.first)}"
+    end
+
+    def capitalize_first(str)
+      str[0].upcase + str[1..]
     end
 
     # StructureDefinitions from the IG whose URL is an AU PS profile

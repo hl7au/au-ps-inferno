@@ -2,9 +2,12 @@ AllCops:
   NewCops: enable
   Exclude:
     - "lib/au_ps_inferno/suite/**/*"
+    - "lib/au_ps_inferno/generated/**/*"
     - "spec/integration/suite_100ballot_snapshots_spec.rb"
     - "lib/au_ps_inferno/generator/primitive_test.rb"
     - "lib/au_ps_inferno/generator/generator.rb"
+    - "lib/au_ps_inferno/generator/suite_file_generator.rb"
+    - "lib/au_ps_inferno/generator/suite_spec.rb"
     - "scripts/rename.rb"
 
 Gemspec/DevelopmentDependencies:
