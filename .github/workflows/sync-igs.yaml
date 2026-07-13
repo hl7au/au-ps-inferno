@@ -1,14 +1,6 @@
 name: Sync IGs
 on:
   workflow_dispatch:
-    inputs:
-      ignore:
-        description: >
-          Optional: package(s) to add to fhir_packages_ignore.yml before syncing, comma or
-          newline separated. Use "package" to ignore all versions, or "package@version" to
-          ignore just that version, e.g. hl7.fhir.au.ps@1.0.0-ballot
-        required: false
-        type: string
 permissions:
   contents: write
   pull-requests: write
@@ -20,48 +12,21 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Update ignore list
-        if: inputs.ignore != ''
-        shell: bash
-        env:
-          IGNORE_INPUT: ${{ inputs.ignore }}
-        run: |
-          echo "$IGNORE_INPUT" | tr ',' '\n' | while IFS= read -r entry; do
-            entry="$(echo "$entry" | xargs)"
-            [ -z "$entry" ] && continue
-            if [[ "$entry" == *"@"* ]]; then
-              pkg="${entry%%@*}"
-              ver="${entry#*@}"
-              if grep -A1 -F -- "- name: $pkg" fhir_packages_ignore.yml | grep -qF -- "version: $ver"; then
-                echo "Already ignored: $pkg@$ver"
-                continue
-              fi
-              printf -- '- name: %s\n  version: %s\n' "$pkg" "$ver" >> fhir_packages_ignore.yml
-              echo "Added to ignore list: $pkg@$ver"
-            else
-              if grep -qxF -- "- $entry" fhir_packages_ignore.yml; then
-                echo "Already ignored: $entry"
-                continue
-              fi
-              printf -- '- %s\n' "$entry" >> fhir_packages_ignore.yml
-              echo "Added to ignore list: $entry"
-            fi
-          done
       - name: Pull images
         run: make pull
       - name: Sync IGs
         run: make sync_igs
       - name: Change ownership
         run: sudo chown -R $USER:$USER .
-      - name: Check for changes
+      - name: Check for new archives
         id: changes
         shell: bash
         run: |
-          if git status --porcelain -- lib/au_ps_inferno/igs fhir_packages_ignore.yml | grep -q .; then
+          if git status --porcelain -- lib/au_ps_inferno/igs | grep -q .; then
             echo "changed=true" >> "$GITHUB_OUTPUT"
           else
             echo "changed=false" >> "$GITHUB_OUTPUT"
-            echo "No new IG archives or ignore list changes found."
+            echo "No new IG archives found."
           fi
       - name: Create Pull Request
         if: steps.changes.outputs.changed == 'true'
@@ -77,11 +42,8 @@ jobs:
             https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}).
 
 
-            Merging this PR pushes any new archive(s) to `master`, which automatically
+            Merging this PR pushes the new archive(s) to `master`, which automatically
             triggers the [Generate Suite workflow](https://github.com/${{ github.repository }}/actions/workflows/generate-suite.yaml)
-            to generate a test suite for each new IG version.${{ inputs.ignore != '' && format('
-
-
-            This run also updated `fhir_packages_ignore.yml` with: `{0}`.', inputs.ignore) || '' }}
+            to generate a test suite for each new IG version.
           labels: automated-pr
           base: master
