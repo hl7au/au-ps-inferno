@@ -8,10 +8,11 @@ module AUPSTestKit
     def attester_party_resource
       return nil unless scratch_bundle.present?
 
-      ref_str = attester_party_ref_from_bundle(BundleDecorator.new(scratch_bundle))
+      bundle_resource = BundleDecorator.new(scratch_bundle)
+      ref_str = attester_party_ref_from_bundle(bundle_resource)
       return nil if ref_str.blank?
 
-      bundle_entity_resource_from_scratch(ref_str)
+      bundle_resource.resource_by_reference(ref_str)
     end
 
     private
