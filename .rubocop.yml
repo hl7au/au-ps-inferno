@@ -8,7 +8,6 @@ AllCops:
     - "lib/au_ps_inferno/generator/generator.rb"
     - "lib/au_ps_inferno/generator/suite_file_generator.rb"
     - "lib/au_ps_inferno/generator/suite_spec.rb"
-    - "scripts/rename.rb"
 
 Gemspec/DevelopmentDependencies:
   Enabled: false
