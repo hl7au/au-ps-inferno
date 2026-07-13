@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative 'au_ps_bundle_must_support_conformance/suite_retrieve_au_ps_bundle_validation_tests_au_ps_bundle_must_support_conformance_bundle_must_support_populated'
+require_relative 'au_ps_bundle_must_support_conformance/bundle_must_support_conformance_bundle_must_support_populated'
 
 module AUPSTestKit
   # Automatically generated primitive group for AU PS Bundle Must Support Conformance
