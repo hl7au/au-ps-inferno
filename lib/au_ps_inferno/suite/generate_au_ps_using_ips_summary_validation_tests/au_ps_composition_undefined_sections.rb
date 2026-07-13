@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative 'au_ps_composition_undefined_sections/suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_undefined_sections_sections_may_undefined'
+require_relative 'au_ps_composition_undefined_sections/composition_undefined_sections_sections_may_undefined'
 
 module AUPSTestKit
   # Automatically generated primitive group for AU PS Composition Undefined Sections
