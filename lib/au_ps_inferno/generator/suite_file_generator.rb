@@ -6,22 +6,18 @@ require_relative 'test_file_generator'
 
 class Generator
   # Renders a full suite (suite class, high-order groups, primitive groups, leaf tests, retrieve-CS
-  # group) for one new IG version from {SuiteSpec} + a built {MetadataManager}, into
+  # group) for one IG version from {SuiteSpec} + a built {MetadataManager}, into
   # lib/au_ps_inferno/generated/<ig_version>/, using the same relative-require/metadata-path
-  # conventions as the hand-authored `lib/au_ps_inferno/suite/` tree (the 1.0.0 suite).
+  # conventions as the hand-authored `lib/au_ps_inferno/suite/` tree (the original 1.0.0 suite).
   #
-  # `lib/au_ps_inferno/suite/` is never read or written by this class.
+  # `lib/au_ps_inferno/suite/` is never read or written by this class, regardless of ig_version -
+  # including 1.0.0, which this class is just as able to generate (into
+  # lib/au_ps_inferno/generated/1.0.0/) as any other version.
   class SuiteFileGenerator
-    LEGACY_IG_VERSION = '1.0.0'
-
     # @param metadata [Generator::MetadataManager] already built (#initiate_build called)
     # @param ig_version [String] full semantic IG version, e.g. "1.1.0-ballot"
     # @param lib_root [String] absolute path to lib/au_ps_inferno
     def initialize(metadata, ig_version, lib_root)
-      if ig_version == LEGACY_IG_VERSION
-        raise ArgumentError, "Refusing to regenerate the hand-authored #{LEGACY_IG_VERSION} suite"
-      end
-
       @metadata = metadata
       @ig_version = ig_version
       @lib_root = lib_root

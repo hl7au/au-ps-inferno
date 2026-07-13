@@ -31,9 +31,6 @@ class Generator
     :type, :interaction, :operation, :searchParam, :searchInclude, :searchRevInclude, :extension
   )
 
-  # The 1.0.0 suite (lib/au_ps_inferno/suite/) is hand-authored and is never regenerated.
-  LEGACY_IG_VERSION = SuiteFileGenerator::LEGACY_IG_VERSION
-
   include Naming
   include GeneratorGroupBasedMetadataModule
 
@@ -48,10 +45,11 @@ class Generator
     @new_metadata = build_new_metadata
   end
 
-  # Extracts the IG package and, for any version other than the hand-authored 1.0.0, writes
-  # lib/au_ps_inferno/generated/<ig_version>/metadata.yaml plus a full generated suite tree
-  # alongside it. Records the archive in lib/au_ps_inferno/igs/generated.yaml either way, so
-  # `rake generator:pending` doesn't keep flagging it.
+  # Extracts the IG package and writes lib/au_ps_inferno/generated/<ig_version>/metadata.yaml plus
+  # a full generated suite tree alongside it. This never touches the hand-authored
+  # lib/au_ps_inferno/suite/ tree, so it's safe to run for any ig_version, including 1.0.0.
+  # Records the archive in lib/au_ps_inferno/igs/generated.yaml, so `rake generator:pending`
+  # doesn't keep flagging it.
   #
   # @return [void]
   def generate
@@ -63,13 +61,8 @@ class Generator
       return
     end
 
-    if ig_version == LEGACY_IG_VERSION
-      warn "Skipping generation for #{LEGACY_IG_VERSION}: its suite under lib/au_ps_inferno/suite/ " \
-           'is hand-authored and is not regenerated.'
-    else
-      save_metadata_to_version_folder(ig_version)
-      SuiteFileGenerator.new(@metadata, ig_version, lib_au_ps_inferno_root).generate
-    end
+    save_metadata_to_version_folder(ig_version)
+    SuiteFileGenerator.new(@metadata, ig_version, lib_au_ps_inferno_root).generate
 
     record_generated_archive(ig_version)
   end

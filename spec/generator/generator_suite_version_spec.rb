@@ -21,10 +21,17 @@ RSpec.describe Generator::SuiteFileGenerator do
 
   after { FileUtils.rm_rf(tmp_root) }
 
-  it 'refuses to regenerate the hand-authored 1.0.0 suite' do
-    expect do
-      described_class.new(fake_metadata, '1.0.0', tmp_root)
-    end.to raise_error(ArgumentError, /1\.0\.0/)
+  it 'generates a suite for 1.0.0 just like any other version, without touching the hand-authored ' \
+     'lib/au_ps_inferno/suite/ tree' do
+    described_class.new(fake_metadata, '1.0.0', tmp_root).generate
+
+    suite_file = File.join(tmp_root, 'generated', '1.0.0', 'suite', 'suite_1_0_0_suite.rb')
+    expect(File).to exist(suite_file)
+
+    content = File.read(suite_file)
+    expect(content).to include('class AUPSSuite1_0_0 < Inferno::TestSuite')
+    expect(content).to include('id :suite_1_0_0')
+    expect(content).to include('AU PS 1.0.0 Test Suite')
   end
 
   it 'derives a version-suffixed suite id, class name, and output path from a full semantic version' do

@@ -49,7 +49,7 @@ If a new AU PS IG release appears at http://hl7.org.au/fhir/ps/history.html, fol
 
 1. The `detect` job runs `rake generator:pending` to list archives under `lib/au_ps_inferno/igs/` that are new or whose content changed since the last recorded generation (tracked in `lib/au_ps_inferno/igs/generated.yaml`);
 2. For each pending archive, the `generate` job runs `make generate_and_fix`, which invokes the generator against that archive;
-3. The generator extracts IG resources from the archive and, for any version other than the hand-authored `1.0.0` baseline, writes `lib/au_ps_inferno/generated/<ig_version>/metadata.yaml` plus a full generated test suite tree alongside it. Generation is a no-op for `1.0.0`, since that suite under `lib/au_ps_inferno/suite/` is hand-authored and never regenerated;
+3. The generator extracts IG resources from the archive and writes `lib/au_ps_inferno/generated/<ig_version>/metadata.yaml` plus a full generated test suite tree alongside it, for any IG version including `1.0.0`. This never touches the separate, hand-authored suite under `lib/au_ps_inferno/suite/`, which predates the generator and isn't regenerated or removed by it;
 4. The archive's checksum and resulting IG version are recorded in `lib/au_ps_inferno/igs/generated.yaml`, so it won't be picked up as pending again unless it changes;
 5. If there are any changes, a Pull Request is created automatically.
 
@@ -68,7 +68,7 @@ It may be a direct commit to the master branch.
 ## Release management
 When we would like to issue a new release, you need to update `VERSION` (the gem version, e.g. `'0.0.2'`) in `lib/au_ps_inferno/version.rb`.
 
-Each AU PS IG version other than `1.0.0` generates its own suite and its own `lib/au_ps_inferno/generated/<ig_version>/metadata.yaml` (see [How to Regenerate the Suite for a New IG Version](#how-to-regenerate-the-suite-for-a-new-ig-version)), so there's no single global IG version constant to update for those — suites for different IG versions coexist and are all loaded automatically. `1.0.0` remains hand-authored under `lib/au_ps_inferno/suite/` and keeps using `IG_VERSION` in `lib/au_ps_inferno/version.rb` as before.
+Each AU PS IG version generates its own suite and its own `lib/au_ps_inferno/generated/<ig_version>/metadata.yaml` (see [How to Regenerate the Suite for a New IG Version](#how-to-regenerate-the-suite-for-a-new-ig-version)), so there's no single global IG version constant to update — suites for different IG versions coexist and are all loaded automatically. The pre-existing, hand-authored suite under `lib/au_ps_inferno/suite/` is a separate legacy tree that predates the generator; it still uses `IG_VERSION` in `lib/au_ps_inferno/version.rb` as before and is unaffected by generator runs.
 
 Then you need to create a tag for this version. The tag name should start with `v` and then contain a numeric version like this `v0.0.1`
 Once a tag is created, you need to create a GitHub release for this newly published version.
