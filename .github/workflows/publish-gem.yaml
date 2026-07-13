@@ -10,9 +10,34 @@ jobs:
       packages: write
       contents: read
     steps:
-    - uses: actions/checkout@v2
-    - name: Build and publish gem
-      uses: jstastny/publish-gem-to-github@master
-      with:
-       token: ${{ secrets.GITHUB_TOKEN }}
-       owner: ${{ github.repository_owner }}
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Set up Ruby 3.3.6
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.3.6
+      - name: Verify tag matches gem version
+        if: github.event_name == 'release'
+        run: |
+          GEM_VERSION="v$(ruby -r ./lib/au_ps_inferno/version -e 'print AUPSTestKit::VERSION')"
+          echo "Release tag: ${{ github.ref_name }} | gem version: ${GEM_VERSION}"
+          if [ "${GEM_VERSION}" != "${{ github.ref_name }}" ]; then
+            echo "::error::Release tag ${{ github.ref_name }} does not match gem version ${GEM_VERSION} (lib/au_ps_inferno/version.rb)"
+            exit 1
+          fi
+      - name: Install dependencies
+        run: bundle install
+      - name: Configure RubyGems credentials
+        env:
+          RUBYGEMS_API_KEY: ${{ secrets.RUBYGEMSKEY }}
+        run: |
+          mkdir -p ~/.gem
+          echo "---" > ~/.gem/credentials
+          echo ":rubygems_api_key: ${RUBYGEMS_API_KEY}" >> ~/.gem/credentials
+          chmod 0600 ~/.gem/credentials
+      - name: Build gem
+        run: gem build *.gemspec
+      - name: Push to RubyGems
+        run: |
+          gem push *.gem
+
