@@ -5,23 +5,24 @@ require 'digest'
 require 'fileutils'
 
 class Generator
-  # Reads/writes lib/au_ps_inferno/igs/generated.yaml, the manifest of which IG archives have
-  # already been generated (with their checksum and resulting IG version), so CI/Rake can tell
-  # whether an archive under lib/au_ps_inferno/igs/ is new or has changed.
+  # Reads/writes lib/au_ps_inferno/igs/generated/<archive>.yaml fragment files, recording which
+  # IG archives have already been generated (with their checksum and resulting IG version), so
+  # CI/Rake can tell whether an archive under lib/au_ps_inferno/igs/ is new or has changed.
+  #
+  # Each archive gets its own fragment file (rather than one shared manifest) so that concurrent
+  # `generate-suite` CI runs for different archives never write to the same file and race.
   class GeneratedManifest
     def initialize(igs_dir)
       @igs_dir = igs_dir
-      @manifest_path = File.join(igs_dir, 'generated.yaml')
+      @generated_dir = File.join(igs_dir, 'generated')
     end
 
     def entries
-      return [] unless File.exist?(@manifest_path)
-
-      YAML.safe_load_file(@manifest_path) || []
+      Dir.glob(File.join(@generated_dir, '*.yaml')).map { |path| YAML.safe_load_file(path) }
     end
 
     def changed?(archive_path)
-      entry = entries.find { |e| e['archive'] == File.basename(archive_path) }
+      entry = YAML.safe_load_file(fragment_path(archive_path)) if File.exist?(fragment_path(archive_path))
       entry.nil? || entry['sha256'] != checksum(archive_path)
     end
 
@@ -35,16 +36,20 @@ class Generator
     # @param ig_version [String] IG version the archive generated (from package.json)
     # @return [void]
     def record(archive_path, ig_version)
-      archive_name = File.basename(archive_path)
-      updated = entries.reject { |e| e['archive'] == archive_name }
-      updated << {
-        'archive' => archive_name,
+      entry = {
+        'archive' => File.basename(archive_path),
         'sha256' => checksum(archive_path),
         'ig_version' => ig_version,
         'generated_at' => Time.now.utc.strftime('%Y-%m-%d')
       }
-      FileUtils.mkdir_p(@igs_dir)
-      File.write(@manifest_path, YAML.dump(updated.sort_by { |e| e['archive'] }))
+      FileUtils.mkdir_p(@generated_dir)
+      File.write(fragment_path(archive_path), YAML.dump(entry))
+    end
+
+    private
+
+    def fragment_path(archive_path)
+      File.join(@generated_dir, "#{File.basename(archive_path)}.yaml")
     end
   end
 end

@@ -49,5 +49,18 @@ RSpec.describe Generator::GeneratedManifest do
 
       expect(manifest.entries.count { |e| e['archive'] == '1.1.0.tgz' }).to eq(1)
     end
+
+    it 'does not clobber a concurrently recorded entry for a different archive' do
+      other_archive_path = File.join(igs_dir, '1.2.0.tgz')
+      File.write(other_archive_path, 'other fake archive content')
+
+      # Simulates two CI matrix jobs, each with its own process-local manifest instance,
+      # recording different archives without seeing each other's writes.
+      described_class.new(igs_dir).record(archive_path, '1.1.0')
+      described_class.new(igs_dir).record(other_archive_path, '1.2.0')
+
+      entries = described_class.new(igs_dir).entries
+      expect(entries.map { |e| e['archive'] }).to contain_exactly('1.1.0.tgz', '1.2.0.tgz')
+    end
   end
 end
