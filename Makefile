@@ -71,7 +71,7 @@ generate_pending: build
 	if [ -z "$$archives" ]; then echo "No pending archives."; exit 0; fi; \
 	for archive in $$archives; do \
 		echo "=== Generating suite for $$archive ==="; \
-		IG_ARCHIVE=$$archive $(MAKE) generate_and_fix || exit 1; \
+		IG_ARCHIVE=$$archive $(MAKE) generate rubocop_fix || exit 1; \
 	done
 
 sync_igs:
