@@ -31,26 +31,24 @@ make run
 
 If a new AU PS IG release appears at http://hl7.org.au/fhir/ps/history.html, follow these steps to regenerate the suite:
 
-1. Get the new IG package (`.tgz`) into `lib/au_ps_inferno/igs/`, either by downloading it from the release page yourself, or by fetching it via [fhir_packages_manager](https://github.com/projkov/fhir_packages_manager). Archives are named `<package>-<version>.tgz` (e.g. `hl7.fhir.au.ps-1.0.0.tgz`), the naming the tool itself uses to fetch and download packages:
+1. Trigger the [Generate Suite workflow](https://github.com/hl7au/au-ps-inferno/actions/workflows/generate-suite.yaml) manually (**Run workflow**). It syncs any new, non-ignored IG versions from the registries and generates a suite for every archive under `lib/au_ps_inferno/igs/` that is new or has changed since it was last generated.
+2. When the workflow completes, a Pull Request is created automatically with the synced archive(s) and generated suite(s). Review and merge it.
 
-   ```bash
-   make list_ig_versions   # list all hl7.fhir.au.ps versions published on the registries
-   make check_ig           # check whether the latest hl7.fhir.au.ps version is available
-   make fetch_ig IG_PACKAGE_VERSION=X.Y.Z  # download hl7.fhir.au.ps@X.Y.Z into lib/au_ps_inferno/igs/
-   make sync_igs           # download every non-ignored version from Simplifier not already in lib/au_ps_inferno/igs/
-   ```
+You can also do this locally instead:
 
-   Packages or versions listed in `fhir_packages_ignore.yml` are excluded from all four commands.
-2. Commit and push it to `master`. Pushing a `.tgz` under `lib/au_ps_inferno/igs/` automatically triggers the Generate Suite workflow. You can also trigger it manually from the [workflow page](https://github.com/hl7au/au-ps-inferno/actions/workflows/generate-suite.yaml) (**Run workflow**).
-3. The workflow generates a suite for every archive under `lib/au_ps_inferno/igs/` that is new or has changed since it was last generated (you can check this locally with `make pending`).
-4. When the workflow completes, a Pull Request is created automatically for each generated archive. Review and merge it.
+```bash
+make sync_igs         # download every non-ignored version from the registries not already in lib/au_ps_inferno/igs/
+make generate_pending # generate a suite for every new or changed archive (you can check what's pending with `make pending`)
+```
+
+Packages or versions listed in `fhir_packages_ignore.yml` are excluded from syncing.
 
 ### What the pipeline does
 
-1. The `detect` job runs `rake generator:pending` to list archives under `lib/au_ps_inferno/igs/` that are new or whose content changed since the last recorded generation (tracked in `lib/au_ps_inferno/igs/generated.yaml`);
-2. For each pending archive, the `generate` job runs `make generate_and_fix`, which invokes the generator against that archive;
-3. The generator extracts IG resources from the archive and writes `lib/au_ps_inferno/generated/<ig_version>/metadata.yaml` plus a full generated test suite tree alongside it, for any IG version including `1.0.0`. This never touches the separate, hand-authored suite under `lib/au_ps_inferno/suite/`, which predates the generator and isn't regenerated or removed by it;
-4. The archive's checksum and resulting IG version are recorded in `lib/au_ps_inferno/igs/generated.yaml`, so it won't be picked up as pending again unless it changes;
+1. `make sync_igs` downloads any new, non-ignored IG package versions into `lib/au_ps_inferno/igs/`;
+2. `make generate_pending` runs `rake generator:pending` to list archives that are new or whose content changed since the last recorded generation (tracked in `lib/au_ps_inferno/igs/generated.yaml`), then generates a suite for each;
+3. The generator extracts IG resources from each archive and writes `lib/au_ps_inferno/generated/<ig_version>/metadata.yaml` plus a full generated test suite tree alongside it, for any IG version including `1.0.0`. This never touches the separate, hand-authored suite under `lib/au_ps_inferno/suite/`, which predates the generator and isn't regenerated or removed by it;
+4. Each archive's checksum and resulting IG version are recorded in `lib/au_ps_inferno/igs/generated.yaml`, so it won't be picked up as pending again unless it changes;
 5. If there are any changes, a Pull Request is created automatically.
 
 ## Development workflow
