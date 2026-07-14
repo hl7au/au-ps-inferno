@@ -1368,7 +1368,7 @@
 :ig_title: AU PS
 :ig_module_name_prefix: AUPS
 :ig_test_id_prefix: au_ps
-:ig_version: v1.0.0
+:ig_version: 1.0.0
 :groups:
 - :name: au_ps_allergyintolerance
   :class_name: AuPsAllergyintoleranceSequence

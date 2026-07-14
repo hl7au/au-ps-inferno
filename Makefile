@@ -101,3 +101,5 @@ IG_SYNC_REGISTRIES ?= -r https://packages.simplifier.net
 
 sync_igs:
 	$(compose) run --rm fhir_packages_manager sync $(IG_PACKAGE) $(IG_SYNC_REGISTRIES) -d /fhir_packages -i /fhir_packages_ignore.yml
+
+sync_and_generate: sync_igs generate_pending

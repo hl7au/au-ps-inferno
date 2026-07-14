@@ -54,5 +54,9 @@ module AUPSTestKit
     def groups_metadata
       metadata[:groups]
     end
+
+    def ig_version
+      metadata[:ig_version]
+    end
   end
 end
