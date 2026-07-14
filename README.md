@@ -64,7 +64,6 @@ Once the code review is done, a person who merged the changes SHALL run the gene
 It may be a direct commit to the master branch. 
 
 ## Release management
-When we would like to issue a new release, you need to update `VERSION` (the gem version, e.g. `'0.0.2'`) in `lib/au_ps_inferno/version.rb`.
 
 Each AU PS IG version generates its own suite and its own `lib/au_ps_inferno/generated/<ig_version>/metadata.yaml` (see [How to Regenerate the Suite for a New IG Version](#how-to-regenerate-the-suite-for-a-new-ig-version)), so there's no single global IG version constant to update — suites for different IG versions coexist and are all loaded automatically. The pre-existing, hand-authored suite under `lib/au_ps_inferno/suite/` is a separate legacy tree that predates the generator; it still uses `IG_VERSION` in `lib/au_ps_inferno/version.rb` as before and is unaffected by generator runs.
 
