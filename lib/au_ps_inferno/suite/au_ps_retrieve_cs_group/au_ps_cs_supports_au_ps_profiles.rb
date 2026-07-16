@@ -23,6 +23,7 @@ module AUPSTestKit
     end
 
     run do
+      omit_if url.blank?, 'No FHIR server specified'
       skip_if scratch[:capability_statement].blank?, 'No CapabilityStatement resource provided'
       check_profiles_status(
         { 'http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-allergyintolerance' => 'AUPSAllergyIntolerance',

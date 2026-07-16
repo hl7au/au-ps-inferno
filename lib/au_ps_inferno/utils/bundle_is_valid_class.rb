@@ -1,18 +1,16 @@
 # frozen_string_literal: true
 
 require_relative 'basic_validate_bundle_test'
+require_relative 'common_inputs_module'
 
 module AUPSTestKit
   # The Bundle resource is valid against the AU PS Bundle profile
   class BundleIsValidClass < BasicValidateBundleTest
     id :bundle_is_valid_class_test
-    input :bundle_resource,
-          optional: true,
-          description: 'If you want to check existing Bundle resource',
-          type: 'textarea'
+    CommonInputsModule.shared_inputs(self)
 
     def skip_test?
-      bundle_resource.blank?
+      scratch_bundle.blank? && bundle_resource.blank?
     end
 
     def read_and_save_data
@@ -22,8 +20,8 @@ module AUPSTestKit
     end
 
     run do
-      skip_if skip_test?, 'No Bundle resource provided'
-      read_and_save_data
+      omit_if skip_test?, 'No Bundle resource provided'
+      read_and_save_data if scratch_bundle.blank?
       omit_if omit_au_ps_validation?, OMIT_AU_PS_MESSAGE
       validate_au_ps_bundle
     end
