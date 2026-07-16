@@ -3,13 +3,16 @@
 require 'net/http'
 require 'uri'
 
-require_relative 'basic_validate_bundle_test'
+require_relative 'basic_test_class'
 
 module AUPSTestKit
-  # A base class for all tests that retrieve a Bundle resource
-  class RetrieveBundleTestClass < BasicValidateBundleTest
+  # Retrieves a Bundle from a FHIR server (or a direct URL) into the group's scratch space
+  class RetrieveBundleTestClass < BasicTest
     id :retrieve_bundle_test_class
     input_order :bundle_url, :url, :bundle_id, :credentials, :header_name, :header_value
+
+    NO_RETRIEVAL_INPUTS_MESSAGE = 'No FHIR server URL with Bundle ID, and no Bundle URL, were provided, ' \
+                                  'so this test group is omitted.'
 
     input :bundle_id,
           optional: true,
@@ -64,17 +67,15 @@ module AUPSTestKit
 
     def read_and_save_data
       if url.present? && bundle_id.present?
-        get_bundle_resource_from_fhir_server(bundle_id) if url.present? && bundle_id.present?
+        get_bundle_resource_from_fhir_server(bundle_id)
       elsif bundle_url.present?
         get_bundle_resource_from_url(bundle_url)
       end
     end
 
     run do
-      skip_if skip_test?, 'There is no FHIR server URL, Bundle ID or Bundle URL provided'
+      omit_if skip_test?, NO_RETRIEVAL_INPUTS_MESSAGE
       read_and_save_data
-      omit_if omit_au_ps_validation?, OMIT_AU_PS_MESSAGE
-      validate_au_ps_bundle
     end
   end
 end

@@ -3,26 +3,12 @@
 require_relative 'basic_validate_bundle_test'
 
 module AUPSTestKit
-  # The Bundle resource is valid against the AU PS Bundle profile
+  # The Bundle loaded by this test group is valid against the AU PS Bundle profile
   class BundleIsValidClass < BasicValidateBundleTest
     id :bundle_is_valid_class_test
-    input :bundle_resource,
-          optional: true,
-          description: 'If you want to check existing Bundle resource',
-          type: 'textarea'
-
-    def skip_test?
-      bundle_resource.blank?
-    end
-
-    def read_and_save_data
-      resource = FHIR.from_contents(bundle_resource)
-      save_bundle_to_scratch(resource)
-    end
 
     run do
-      skip_if skip_test?, 'No Bundle resource provided'
-      read_and_save_data
+      omit_unless_bundle_in_scratch
       omit_if omit_au_ps_validation?, OMIT_AU_PS_MESSAGE
       validate_au_ps_bundle
     end

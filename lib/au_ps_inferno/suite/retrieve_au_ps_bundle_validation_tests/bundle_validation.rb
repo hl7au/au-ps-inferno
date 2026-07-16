@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative 'bundle_validation/suite_retrieve_au_ps_bundle_validation_tests_bundle_validation_bundle_retrieve'
+
 require_relative 'bundle_validation/suite_retrieve_au_ps_bundle_validation_tests_bundle_validation_bundle_valid'
 
 require_relative 'bundle_validation/suite_retrieve_au_ps_bundle_validation_tests_bundle_validation_bundle_valid_ips'
@@ -12,6 +14,8 @@ module AUPSTestKit
     id :suite_retrieve_au_ps_bundle_validation_tests_bundle_validation
 
     run_as_group
+
+    test from: :suite_retrieve_au_ps_bundle_validation_tests_bundle_validation_bundle_retrieve
 
     test from: :suite_retrieve_au_ps_bundle_validation_tests_bundle_validation_bundle_valid
 
