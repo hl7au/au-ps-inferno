@@ -8,9 +8,12 @@ module AUPSTestKit
         operation.definition == op_def_url || names_arr.include?(operation.name.downcase)
       end
 
-      message_base = 'Server CapabilityStatement declares support for operation with operation definition'
-
-      info "#{message_base} #{op_def_url}: #{boolean_to_existent_string(operation_defined)}"
+      if operation_defined
+        info "Server CapabilityStatement declares support for operation #{op_def_url}: ✅ Declared"
+      else
+        info "Server CapabilityStatement does not declare support for operation #{op_def_url}. " \
+             'This operation is not required by AU PS; this message is informational only.'
+      end
 
       scratch[scratch_key] = operation_defined
     end
