@@ -6,10 +6,12 @@ require_relative '../../utils/metadata_manager'
 require_relative '../../utils/provided_bundle_test_class'
 
 module AUPSTestKit
-  # Automatically generated primitive test for Load the provided AU PS Bundle
+  # Automatically generated primitive test for Bundle instance is parsable
   class AUPSSuiteAuPsBundleInstanceBundleValidationLoadTheProvidedAuPsBundle < ProvidedBundleTestClass
-    title 'Load the provided AU PS Bundle'
-    description 'Parses the Bundle resource pasted as text and stores it for the validation tests in this group.'
+    title 'Bundle instance is parsable'
+    description 'The provided text can be parsed as a FHIR resource (JSON or XML) and its resourceType is ' \
+                'Bundle. The parsed Bundle is stored for the validation tests in this group; conformance to the ' \
+                'AU PS Bundle profile is tested separately under Bundle Validation.'
     id :suite_au_ps_bundle_instance_bundle_provide
 
     def metadata_manager

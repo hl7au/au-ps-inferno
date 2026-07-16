@@ -6,11 +6,12 @@ require_relative '../../utils/metadata_manager'
 require_relative '../../utils/retrieve_bundle_test_class'
 
 module AUPSTestKit
-  # Automatically generated primitive test for Retrieve AU PS Bundle from the FHIR server
+  # Automatically generated primitive test for Bundle is retrievable from the FHIR server
   class AUPSSuiteRetrieveAuPsBundleValidationTestsBundleValidationRetrieveAuPsBundleFromTheFhirServer < RetrieveBundleTestClass
-    title 'Retrieve AU PS Bundle from the FHIR server'
-    description 'Retrieves the document Bundle using a Bundle read interaction or a direct HTTP GET request ' \
-                'and stores it for the validation tests in this group.'
+    title 'Bundle is retrievable from the FHIR server'
+    description 'A Bundle can be retrieved via a Bundle read interaction (FHIR server URL and Bundle ID) or a ' \
+                'direct HTTP GET of the Bundle URL, returning HTTP 200 with a parsable FHIR Bundle. The ' \
+                'retrieved Bundle is stored for the validation tests in this group.'
     id :suite_retrieve_au_ps_bundle_validation_tests_bundle_retrieve
 
     def metadata_manager
