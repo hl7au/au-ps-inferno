@@ -46,7 +46,7 @@ module AUPSTestKit
       fhir_read(:bundle, bundle_id)
       assert_response_status(200)
       assert_resource_type(:bundle)
-      scratch[:bundle_ips_resource] = resource
+      save_bundle_to_scratch(resource)
     end
 
     def get_bundle_resource_from_url(bundle_url)
@@ -55,8 +55,7 @@ module AUPSTestKit
       assert response.code == '200', "Bundle resource not found at #{bundle_url}"
       bundle_resource = FHIR.from_contents(response.body)
       assert bundle_resource.resourceType == 'Bundle', 'Resource have different type than Bundle'
-      scratch[:bundle_ips_resource] = bundle_resource
-      save_bundle_entities_to_scratch(scratch_bundle)
+      save_bundle_to_scratch(bundle_resource)
     end
 
     def skip_test?

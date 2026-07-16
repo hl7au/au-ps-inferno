@@ -10,8 +10,26 @@ module CompositionUtils
   NO_BUNDLE_OMIT_MESSAGE = 'No AU PS Bundle was loaded by this test group (its inputs were not provided or ' \
                            'the Bundle could not be acquired), so this test is omitted.'
 
+  # Each top-level group keeps its Bundle under its own scratch key so that a
+  # group can never validate a Bundle acquired by a different group.
+  BUNDLE_SOURCE_GROUPS = {
+    'retrieve_au_ps_bundle_validation_tests' => 'retrieve',
+    'generate_au_ps_using_ips_summary_validation_tests' => 'summary',
+    'au_ps_bundle_instance' => 'instance'
+  }.freeze
+
+  def bundle_scratch_key
+    id_str = self.class.id.to_s
+    _slug, source = BUNDLE_SOURCE_GROUPS.find { |slug, _| id_str.include?(slug) }
+    source ? :"bundle_ips_resource_#{source}" : :bundle_ips_resource
+  end
+
   def scratch_bundle
-    scratch[:bundle_ips_resource]
+    scratch[bundle_scratch_key]
+  end
+
+  def save_bundle_to_scratch(bundle)
+    scratch[bundle_scratch_key] = bundle
   end
 
   def omit_unless_bundle_in_scratch

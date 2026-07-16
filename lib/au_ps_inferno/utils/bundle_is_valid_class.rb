@@ -17,8 +17,7 @@ module AUPSTestKit
 
     def read_and_save_data
       resource = FHIR.from_contents(bundle_resource)
-      scratch[:bundle_ips_resource] = resource
-      save_bundle_entities_to_scratch(scratch_bundle)
+      save_bundle_to_scratch(resource)
     end
 
     run do
