@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative 'suite_au_ps_bundle_instance_bundle_provide'
+
 require_relative 'bundle_validation'
 
 require_relative 'au_ps_bundle_must_support_conformance'
@@ -30,6 +32,8 @@ module AUPSTestKit
     id :suite_au_ps_bundle_instance
 
     run_as_group
+
+    test from: :suite_au_ps_bundle_instance_bundle_provide
 
     group from: :suite_au_ps_bundle_instance_bundle_validation
 
