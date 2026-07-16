@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative 'suite_retrieve_au_ps_bundle_validation_tests_bundle_retrieve'
+require_relative 'bundle_acquisition'
 
 require_relative 'bundle_validation'
 
@@ -33,7 +33,7 @@ module AUPSTestKit
 
     run_as_group
 
-    test from: :suite_retrieve_au_ps_bundle_validation_tests_bundle_retrieve
+    group from: :suite_retrieve_au_ps_bundle_validation_tests_bundle_acquisition
 
     group from: :suite_retrieve_au_ps_bundle_validation_tests_bundle_validation
 

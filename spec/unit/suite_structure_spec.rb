@@ -23,7 +23,8 @@ RSpec.describe 'AU PS suite structure' do
 
   it 'starts the instance group with the load test, followed by Bundle Validation' do
     group = top_level_group('au_ps_bundle_instance')
-    expect(group.children.first.title).to eq('Load the provided AU PS Bundle')
+    expect(group.children.first.title).to eq('Provide AU PS Bundle')
+    expect(group.children.first.children.map(&:title)).to eq(['Load the provided AU PS Bundle'])
     expect(bundle_validation_group('au_ps_bundle_instance').children.map(&:title)).to eq(
       [
         'Bundle is valid against AU PS Bundle',
@@ -34,7 +35,8 @@ RSpec.describe 'AU PS suite structure' do
 
   it 'starts the retrieve group with the retrieval test, followed by Bundle Validation' do
     group = top_level_group('retrieve_au_ps_bundle_validation_tests')
-    expect(group.children.first.title).to eq('Retrieve AU PS Bundle from the FHIR server')
+    expect(group.children.first.title).to eq('Retrieve AU PS Bundle')
+    expect(group.children.first.children.map(&:title)).to eq(['Retrieve AU PS Bundle from the FHIR server'])
     expect(bundle_validation_group('retrieve_au_ps_bundle_validation_tests').children.map(&:title)).to eq(
       [
         'Retrieved Bundle is valid against AU PS Bundle profile',
@@ -45,7 +47,9 @@ RSpec.describe 'AU PS suite structure' do
 
   it 'starts the $summary group with the generate test, followed by Bundle Validation' do
     group = top_level_group('generate_au_ps_using_ips_summary')
-    expect(group.children.first.title).to eq('Generate AU PS Bundle using the IPS $summary operation')
+    expect(group.children.first.title).to eq('Generate AU PS Bundle using $summary')
+    expect(group.children.first.children.map(&:title))
+      .to eq(['Generate AU PS Bundle using the IPS $summary operation'])
     expect(bundle_validation_group('generate_au_ps_using_ips_summary').children.map(&:title)).to eq(
       [
         'Generated Bundle is valid against AU PS Bundle profile',
