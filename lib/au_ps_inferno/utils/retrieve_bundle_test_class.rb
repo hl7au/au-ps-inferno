@@ -1,8 +1,5 @@
 # frozen_string_literal: true
 
-require 'net/http'
-require 'uri'
-
 require_relative 'basic_test_class'
 
 module AUPSTestKit
@@ -53,12 +50,23 @@ module AUPSTestKit
     end
 
     def get_bundle_resource_from_url(bundle_url)
-      uri = URI(bundle_url)
-      response = Net::HTTP.get_response(uri)
-      assert response.code == '200', "Bundle resource not found at #{bundle_url}"
-      bundle_resource = FHIR.from_contents(response.body)
-      assert bundle_resource.resourceType == 'Bundle', 'Resource have different type than Bundle'
+      get(bundle_url, headers: extra_headers)
+      assert_response_status(200)
+      bundle_resource = parse_bundle(request.response_body)
+      assert bundle_resource.present?, "The response from #{bundle_url} could not be parsed as a FHIR resource"
+      assert bundle_resource.resourceType == 'Bundle',
+             "The resource at #{bundle_url} is a #{bundle_resource.resourceType}, expected a Bundle"
       save_bundle_to_scratch(bundle_resource)
+    end
+
+    def extra_headers
+      header_name.present? && header_value.present? ? { header_name => header_value } : {}
+    end
+
+    def parse_bundle(body)
+      FHIR.from_contents(body)
+    rescue StandardError
+      nil
     end
 
     def skip_test?

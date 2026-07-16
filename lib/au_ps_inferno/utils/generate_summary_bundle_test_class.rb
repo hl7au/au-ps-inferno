@@ -1,8 +1,5 @@
 # frozen_string_literal: true
 
-require 'net/http'
-require 'uri'
-
 require_relative 'basic_test_class'
 
 module AUPSTestKit
