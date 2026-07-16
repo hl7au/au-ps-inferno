@@ -76,8 +76,6 @@ module AUPSTestKit
 
     run do
       omit_if skip_test?, NO_SUMMARY_INPUTS_MESSAGE
-      summary_op_defined? if scratch[:summary_op_defined].blank?
-      skip_if scratch[:summary_op_defined] == false, 'Server does not declare support for $summary operation'
       read_and_save_data
     end
   end
