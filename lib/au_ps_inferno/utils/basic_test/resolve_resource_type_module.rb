@@ -4,6 +4,7 @@ module AUPSTestKit
   # Resolves the resource type from a resource. This module is used in tests for subject, author, custodian, attester.
   module BasicTestResolveResourceTypeModule
     def test_resource_type_is_valid?(container_type)
+      omit_unless_bundle_in_scratch
       result = raw_resource_type_is_valid(container_type)
       valid = result[:valid?]
       result_msg = result[:msg]

@@ -7,12 +7,15 @@ require_relative 'composition_utils/boolean_and_stats'
 module CompositionUtils
   include CompositionUtilsBooleanAndStats
 
+  NO_BUNDLE_OMIT_MESSAGE = 'No AU PS Bundle was loaded by this test group (its inputs were not provided or ' \
+                           'the Bundle could not be acquired), so this test is omitted.'
+
   def scratch_bundle
     scratch[:bundle_ips_resource]
   end
 
-  def check_bundle_exists_in_scratch
-    skip_if scratch_bundle.blank?, 'No Bundle resource provided'
+  def omit_unless_bundle_in_scratch
+    omit_if scratch_bundle.blank?, NO_BUNDLE_OMIT_MESSAGE
   end
 
   def group_section_output(section_info_array)

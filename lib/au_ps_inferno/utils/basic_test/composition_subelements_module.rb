@@ -6,6 +6,7 @@ module AUPSTestKit
     private
 
     def validate_populated_sub_elements_in_composition(mandatory_ms, optional_ms)
+      omit_unless_bundle_in_scratch
       composition_resource = composition_resource_from_scratch
       return false unless composition_resource.present?
 
