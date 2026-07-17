@@ -17,7 +17,6 @@ module AUPSTestKit
       retrieve_bundle_inputs(klass)
       summary_operation_inputs(klass)
       configure_fhir_client(klass)
-      define_url_helper(klass)
     end
 
     def self.order_inputs(klass)
@@ -61,25 +60,6 @@ module AUPSTestKit
         { label: 'AU PS Bundle Validation', value: 'au_ps_bundle' },
         { label: 'IPS Bundle Validation', value: 'ips_bundle' }
       ]
-    end
-
-    def self.define_url_helper(klass)
-      url_method = proc do
-        case retrieval_method
-        when 'url' then url_retrieve
-        when 'summary_op' then url_sum
-        end
-      end
-
-      klass.send(:define_method, :url, &url_method)
-
-      # `klass` may be a TestGroup declaring these inputs for tests added via
-      # `test from: :some_id`. Those tests are separate classes, not subclasses
-      # of `klass`, so the method above must be defined on each of them directly
-      # for it to be reachable when the test actually runs.
-      return unless klass.respond_to?(:tests)
-
-      klass.tests.each { |test_klass| test_klass.send(:define_method, :url, &url_method) }
     end
 
     def self.configure_fhir_client(klass)

@@ -50,5 +50,17 @@ module AUPSTestKit
     include BasicTestMsElementsPopulatedModule
     include BasicTestMsSubElementsPopulatedModule
     include BasicTestResolveResourceTypeModule
+
+    # Resolves the FHIR server URL based on the `retrieval_method` input
+    # shared by `CommonInputsModule`. Defined here (rather than propagated
+    # via `define_method` at group-definition time) so it is inherited
+    # normally by every test class, including those attached to a group
+    # via `test from:`/`group from:` after the group's inputs were declared.
+    def url
+      case retrieval_method
+      when 'url' then url_retrieve
+      when 'summary_op' then url_sum
+      end
+    end
   end
 end

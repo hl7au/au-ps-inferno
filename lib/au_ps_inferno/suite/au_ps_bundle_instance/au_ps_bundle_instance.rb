@@ -24,6 +24,8 @@ require_relative 'au_ps_composition_custodian'
 
 require_relative 'au_ps_composition_attester'
 
+require_relative '../../utils/common_inputs_module'
+
 module AUPSTestKit
   # Automatically generated high order group for AU PS Bundle Instance
   class AUPSSuiteAuPsBundleInstance < Inferno::TestGroup
@@ -32,6 +34,8 @@ module AUPSTestKit
     id :suite_au_ps_bundle_instance
 
     run_as_group
+
+    CommonInputsModule.shared_inputs(self)
 
     group from: :suite_au_ps_bundle_instance_bundle_acquisition
 
