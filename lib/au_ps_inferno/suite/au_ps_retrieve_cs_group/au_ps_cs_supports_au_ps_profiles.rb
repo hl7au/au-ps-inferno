@@ -23,7 +23,8 @@ module AUPSTestKit
     end
 
     run do
-      skip_if scratch[:capability_statement].blank?, 'No CapabilityStatement resource provided'
+      omit_if url.blank?, NO_SERVER_URL_OMIT_MESSAGE
+      skip_if scratch[:capability_statement].blank?, 'CapabilityStatement was not retrieved from the server'
       check_profiles_status(
         { 'http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-allergyintolerance' => 'AUPSAllergyIntolerance',
           'http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-bundle' => 'AUPSBundle', 'http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-composition' => 'AUPSComposition', 'http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-condition' => 'AUPSCondition', 'http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medicationrequest' => 'AUPSMedicationRequest', 'http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medicationstatement' => 'AUPSMedicationStatement', 'http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-patient' => 'AUPSPatient' },

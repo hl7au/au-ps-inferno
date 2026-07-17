@@ -19,7 +19,7 @@ module AUPSTestKit
     end
 
     def test_composition_attester_party_ms_identifier_slices
-      check_bundle_exists_in_scratch
+      omit_unless_bundle_in_scratch
       resource = attester_party_resource
       skip_if resource.blank?, 'Attester or attester.party is not populated'
 

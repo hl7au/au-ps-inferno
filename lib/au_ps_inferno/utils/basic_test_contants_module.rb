@@ -2,6 +2,7 @@
 
 module AUPSTestKit
   module BasicTestConstants
+    NO_SERVER_URL_OMIT_MESSAGE = 'No FHIR server URL was provided, so this test group is omitted.'
     # AU PS Patient Must Support identifier slices (optional). System URLs for IHI, DVA, Medicare.
     PATIENT_MS_IDENTIFIER_SLICES = [
       { name: 'IHI', system: 'http://ns.electronichealth.net.au/id/hi/ihi/1.0' },

@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative 'bundle_acquisition'
+
 require_relative 'bundle_validation'
 
 require_relative 'au_ps_bundle_must_support_conformance'
@@ -30,6 +32,8 @@ module AUPSTestKit
     id :suite_generate_au_ps_using_ips_summary_validation_tests
 
     run_as_group
+
+    group from: :suite_generate_au_ps_using_ips_summary_validation_tests_bundle_acquisition
 
     group from: :suite_generate_au_ps_using_ips_summary_validation_tests_bundle_validation
 

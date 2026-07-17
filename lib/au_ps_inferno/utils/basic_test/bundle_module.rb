@@ -6,7 +6,7 @@ module AUPSTestKit
   # Bundle-level checks, mandatory MS list info, and IPS bundle profile validation.
   module BasicTestBundleModule
     def bundle_mandatory_ms_elements_info
-      check_bundle_exists_in_scratch
+      omit_unless_bundle_in_scratch
       passed = [identifier_info?, type_info?, timestamp_info?, all_entries_have_full_url_info?].all?
       message_type = passed ? 'info' : 'error'
       add_message(message_type,
@@ -39,7 +39,7 @@ module AUPSTestKit
     private
 
     def validate_bundle_wrapper(profile_with_version)
-      check_bundle_exists_in_scratch
+      omit_unless_bundle_in_scratch
       validate_bundle(
         scratch_bundle,
         profile_with_version

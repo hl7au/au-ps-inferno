@@ -6,6 +6,7 @@ module AUPSTestKit
     private
 
     def validate_populated_elements_in_composition(elements_array, required: true)
+      omit_unless_bundle_in_scratch
       composition_resource = composition_resource_from_scratch
       return false unless composition_resource.present?
 
@@ -31,6 +32,7 @@ module AUPSTestKit
     end
 
     def validate_populated_slices_in_composition(slices_array)
+      omit_unless_bundle_in_scratch
       return false unless scratch_bundle.present?
 
       composition_resource = BundleDecorator.new(scratch_bundle).composition_resource

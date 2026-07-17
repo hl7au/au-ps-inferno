@@ -1,15 +1,15 @@
 # frozen_string_literal: true
 
-require 'net/http'
-require 'uri'
-
-require_relative 'basic_validate_bundle_test'
+require_relative 'basic_test_class'
 
 module AUPSTestKit
-  # The Bundle resource is valid against the AU PS Bundle profile
-  class SummaryValidBundleClass < BasicValidateBundleTest
-    id :summary_valid_bundle_class_test
+  # Generates a Bundle via the IPS $summary operation into the group's scratch space
+  class GenerateSummaryBundleTestClass < BasicTest
+    id :generate_summary_bundle_test_class
     input_order :url, :patient_id, :identifier, :profile, :credentials, :header_name, :header_value
+
+    NO_SUMMARY_INPUTS_MESSAGE = 'No FHIR server URL with patient id or patient identifier was provided, ' \
+                                'so this test group is omitted.'
 
     input :url,
           title: 'FHIR Server Base Url',
@@ -68,17 +68,12 @@ module AUPSTestKit
       assert_response_status(200)
       assert_resource_type(:bundle)
       resource_from_request = FHIR.from_contents(response.response_body)
-      scratch[:bundle_ips_resource] = resource_from_request
-      save_bundle_entities_to_scratch(scratch_bundle)
+      save_bundle_to_scratch(resource_from_request)
     end
 
     run do
-      skip_if url.blank?, 'No FHIR server specified'
-      summary_op_defined? if scratch[:summary_op_defined].blank?
-      skip_if scratch[:summary_op_defined] == false, 'Server does not declare support for $summary operation'
+      omit_if skip_test?, NO_SUMMARY_INPUTS_MESSAGE
       read_and_save_data
-      omit_if omit_au_ps_validation?, OMIT_AU_PS_MESSAGE
-      validate_au_ps_bundle
     end
   end
 end

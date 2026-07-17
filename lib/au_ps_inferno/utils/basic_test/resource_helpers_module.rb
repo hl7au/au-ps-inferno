@@ -116,6 +116,7 @@ module AUPSTestKit
     end
 
     def guard_populated_resource(container_type)
+      omit_unless_bundle_in_scratch
       resource_is_poluated = raw_resource_type_is_valid(container_type)
       skip_if !resource_is_poluated[:valid?], resource_is_poluated[:msg]
     end
