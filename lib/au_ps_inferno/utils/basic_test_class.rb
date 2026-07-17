@@ -62,5 +62,21 @@ module AUPSTestKit
       when 'summary_op' then url_sum
       end
     end
+
+    # Resolves the custom auth header name/value based on the `retrieval_method`
+    # input, mirroring `url` above.
+    def header_name
+      case retrieval_method
+      when 'url' then header_name_retrieve
+      when 'summary_op' then header_name_sum
+      end
+    end
+
+    def header_value
+      case retrieval_method
+      when 'url' then header_value_retrieve
+      when 'summary_op' then header_value_sum
+      end
+    end
   end
 end
