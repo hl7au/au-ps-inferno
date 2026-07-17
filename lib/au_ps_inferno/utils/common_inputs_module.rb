@@ -20,12 +20,11 @@ module AUPSTestKit
     end
 
     def self.order_inputs(klass)
-      klass.input_order :retrieval_method,
+      klass.input_order :validate_against, :retrieval_method,
                         :url_sum, :auth_needed_sum, :credentials_sum, :header_name_sum, :header_value_sum,
                         :url_retrieve, :auth_needed_retrieve, :credentials_retrieve, :header_name_retrieve,
                         :header_value_retrieve,
-                        :bundle_id, :bundle_url, :patient_id, :identifier, :profile, :bundle_resource,
-                        :validate_against
+                        :bundle_id, :bundle_url, :patient_id, :identifier, :profile, :bundle_resource
     end
 
     def self.retrieval_method_input(klass)

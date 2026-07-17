@@ -3,6 +3,7 @@ services:
   inferno:
     build:
       context: ./
+    command: bundle exec rerun --force-polling --background --dir lib,config -p '**/*.rb' -- bundle exec puma
     volumes:
       - ./data:/opt/inferno/data
       - ./lib/:/opt/inferno/lib
