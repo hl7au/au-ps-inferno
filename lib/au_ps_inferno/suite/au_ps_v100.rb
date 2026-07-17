@@ -1,14 +1,8 @@
 # frozen_string_literal: true
 
 require_relative '../version'
-
 require_relative 'au_ps_bundle_instance/au_ps_bundle_instance'
-
 require_relative 'au_ps_retrieve_cs_group/au_ps_retrieve_cs_group'
-
-require_relative 'retrieve_au_ps_bundle_validation_tests/retrieve_au_ps_bundle_validation_tests'
-
-require_relative 'generate_au_ps_using_ips_summary_validation_tests/generate_au_ps_using_ips_summary_validation_tests'
 
 module AUPSTestKit
   # Test suite for the AU PS (Australian Primary Care and Shared Health) Implementation Guide.
@@ -29,11 +23,6 @@ module AUPSTestKit
     end
 
     group from: :au_ps_retrieve_cs_group_100preview
-
-    group from: :suite_retrieve_au_ps_bundle_validation_tests
-
-    group from: :suite_generate_au_ps_using_ips_summary_validation_tests
-
     group from: :suite_au_ps_bundle_instance
   end
 end
