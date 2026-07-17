@@ -6,7 +6,6 @@ module AUPSTestKit
   # Generates a Bundle via the IPS $summary operation into the group's scratch space
   class GenerateSummaryBundleTestClass < BasicTest
     id :generate_summary_bundle_test_class
-    input_order :url, :patient_id, :identifier, :profile, :credentials, :header_name, :header_value
 
     NO_SUMMARY_INPUTS_MESSAGE = 'No FHIR server URL with patient id or patient identifier was provided, ' \
                                 'so this test group is omitted.'
