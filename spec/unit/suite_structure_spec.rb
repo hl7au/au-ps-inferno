@@ -23,8 +23,14 @@ RSpec.describe 'AU PS suite structure' do
 
   it 'starts the instance group with the load test, followed by Bundle Validation' do
     group = top_level_group('au_ps_bundle_instance')
-    expect(group.children.first.title).to eq('Provide AU PS Bundle')
-    expect(group.children.first.children.map(&:title)).to eq(['Bundle instance is parsable'])
+    expect(group.children.first.title).to eq('Acquire AU PS Bundle')
+    expect(group.children.first.children.map(&:title)).to eq(
+      [
+        'Bundle instance is parsable',
+        'Retrieve AU PS Bundle from the FHIR server',
+        'Generate AU PS Bundle via $summary'
+      ]
+    )
     expect(bundle_validation_group('au_ps_bundle_instance').children.map(&:title)).to eq(
       [
         'Bundle is valid against AU PS Bundle',

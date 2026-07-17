@@ -10,6 +10,8 @@ require_relative '../../../lib/au_ps_inferno/utils/metadata_manager'
 require File.join(Gem::Specification.find_by_name('inferno_core').full_gem_path, 'spec/runnable_context')
 
 RETRIEVE_URL_FIXTURE_METADATA_PATH = File.expand_path('../../fixtures/metadata.yaml', __dir__).freeze
+RETRIEVE_URL_TEST_INPUT_NAMES = %i[retrieval_method bundle_url url_retrieve header_name_retrieve
+                                   header_value_retrieve].freeze
 
 RSpec.describe AUPSTestKit::RetrieveBundleTestClass do
   include_context 'when testing a runnable'
@@ -23,6 +25,10 @@ RSpec.describe AUPSTestKit::RetrieveBundleTestClass do
     repo.insert(suite_stub) unless repo.exists?('retrieve_bundle_url_test_suite')
   end
 
+  def declare_optional_inputs(klass, *names)
+    names.each { |name| klass.input name, optional: true }
+  end
+
   def create_test(test_id)
     klass = Class.new(described_class) do
       id test_id
@@ -30,6 +36,7 @@ RSpec.describe AUPSTestKit::RetrieveBundleTestClass do
         @metadata_manager ||= AUPSTestKit::MetadataManager.new(RETRIEVE_URL_FIXTURE_METADATA_PATH)
       end
     end
+    declare_optional_inputs(klass, *RETRIEVE_URL_TEST_INPUT_NAMES)
     repo = Inferno::Repositories::Tests.new
     repo.insert(klass) unless repo.exists?(test_id)
     klass
@@ -60,7 +67,8 @@ RSpec.describe AUPSTestKit::RetrieveBundleTestClass do
       .to_return(status: 200, body: bundle_json, headers: { 'Content-Type' => 'application/fhir+json' })
 
     test = create_test('suite_retrieve_au_ps_bundle_validation_tests_url_header_test')
-    result = run(test, { bundle_url: bundle_url, header_name: 'X-Api-Key', header_value: 'secret' })
+    result = run(test, { bundle_url: bundle_url, retrieval_method: 'url', header_name_retrieve: 'X-Api-Key',
+                         header_value_retrieve: 'secret' })
 
     expect(result.result).to eq('pass')
   end
