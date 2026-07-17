@@ -28,12 +28,12 @@ module AUPSTestKit
       end
     end
 
-    group from: :suite_au_ps_bundle_instance
-
     group from: :au_ps_retrieve_cs_group_100preview
 
     group from: :suite_retrieve_au_ps_bundle_validation_tests
 
     group from: :suite_generate_au_ps_using_ips_summary_validation_tests
+
+    group from: :suite_au_ps_bundle_instance
   end
 end

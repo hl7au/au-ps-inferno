@@ -27,7 +27,7 @@ require_relative 'au_ps_composition_attester'
 module AUPSTestKit
   # Automatically generated high order group for AU PS Bundle Instance
   class AUPSSuiteAuPsBundleInstance < Inferno::TestGroup
-    title 'AU PS Bundle Instance'
+    title 'Validate AU PS Bundle Instance'
     description 'Validates a static AU PS bundle instance for profile conformance, Must Support elements, and composition sections.'
     id :suite_au_ps_bundle_instance
 

@@ -11,42 +11,6 @@ module AUPSTestKit
     NO_SUMMARY_INPUTS_MESSAGE = 'No FHIR server URL with patient id or patient identifier was provided, ' \
                                 'so this test group is omitted.'
 
-    input :url,
-          title: 'FHIR Server Base Url',
-          optional: true
-
-    input :credentials,
-          title: 'OAuth Credentials',
-          type: :oauth_credentials,
-          optional: true
-
-    input :header_name,
-          title: 'Header name',
-          optional: true
-
-    input :header_value,
-          title: 'Header value',
-          optional: true
-
-    input :patient_id,
-          optional: true,
-          description: 'To request Patient/{patient_id}/$summary'
-
-    input :identifier,
-          optional: true,
-          description: 'To request Patient/$summary?identifier={identifier}'
-
-    input :profile,
-          optional: true,
-          default: 'http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-bundle',
-          description: 'To specify profile for the patient summary'
-
-    fhir_client do
-      url :url
-      oauth_credentials :credentials
-      headers(header_name.present? && header_value.present? ? { header_name => header_value } : {})
-    end
-
     makes_request :summary_operation
 
     def skip_test?
