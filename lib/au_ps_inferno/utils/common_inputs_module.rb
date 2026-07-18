@@ -15,7 +15,7 @@ module AUPSTestKit
       bundle_resource_input(klass)
       validate_against_input(klass)
       retrieve_bundle_inputs(klass)
-      summary_operation_inputs(klass)
+      fhir_server_inputs(klass)
       configure_fhir_client(klass)
     end
 
@@ -32,7 +32,7 @@ module AUPSTestKit
         list_options: [
           { value: 'json_file', label: 'JSON file' },
           { value: 'url', label: 'URL to Bundle' },
-          { value: 'summary_op', label: 'FHIR Server' }
+          { value: 'fhir_server', label: 'FHIR Server' }
         ]
       }, default: 'json_file'
     end
@@ -66,7 +66,7 @@ module AUPSTestKit
       klass.fhir_client do
         case retrieval_method
         when 'url' then CommonInputsModule.configure_retrieve_client(self)
-        when 'summary_op' then CommonInputsModule.configure_summary_client(self)
+        when 'fhir_server' then CommonInputsModule.configure_fhir_server_client(self)
         end
       end
     end
@@ -76,10 +76,10 @@ module AUPSTestKit
       client.headers(build_headers(client.header_name_retrieve, client.header_value_retrieve))
     end
 
-    def self.configure_summary_client(client)
-      client.url :url_sum
-      client.oauth_credentials :credentials_sum
-      client.headers(build_headers(client.header_name_sum, client.header_value_sum))
+    def self.configure_fhir_server_client(client)
+      client.url :url_fhir_server
+      client.oauth_credentials :credentials_fhir_server
+      client.headers(build_headers(client.header_name_fhir_server, client.header_value_fhir_server))
     end
 
     def self.build_headers(name, value)
