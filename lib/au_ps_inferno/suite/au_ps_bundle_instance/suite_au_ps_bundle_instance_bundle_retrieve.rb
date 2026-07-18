@@ -6,17 +6,16 @@ require_relative '../../utils/metadata_manager'
 require_relative '../../utils/retrieve_bundle_test_class'
 
 module AUPSTestKit
-  # Retrieves the AU PS Bundle from the FHIR server, gated on the 'url' retrieval method being selected
+  # Retrieves the AU PS Bundle by a FHIR Bundle read (FHIR server URL + Bundle ID, under the 'fhir_server'
+  # retrieval method) or a direct HTTP GET of a Bundle URL (under the 'url' retrieval method). Applicability
+  # is determined by RetrieveBundleTestClass#skip_test?, based on whichever inputs are actually populated,
+  # rather than a single retrieval_method value.
   class AUPSSuiteAuPsBundleInstanceBundleAcquisitionRetrieveAuPsBundle < RetrieveBundleTestClass
     title 'Retrieve AU PS Bundle from the FHIR server'
     description 'A Bundle can be retrieved via a Bundle read interaction (FHIR server URL and Bundle ID) or a ' \
                 'direct HTTP GET of the Bundle URL, returning HTTP 200 with a parsable FHIR Bundle. The ' \
                 'retrieved Bundle is stored for the validation tests in this group.'
     id :suite_au_ps_bundle_instance_bundle_retrieve
-
-    def skip_test?
-      retrieval_method != 'url' || super
-    end
 
     def metadata_manager
       @metadata_manager ||= MetadataManager.new(File.expand_path('../../metadata.yaml', __dir__))
