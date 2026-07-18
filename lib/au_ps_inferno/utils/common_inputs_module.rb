@@ -21,9 +21,9 @@ module AUPSTestKit
 
     def self.order_inputs(klass)
       klass.input_order :validate_against, :retrieval_method,
-                        :url_sum, :auth_needed_sum, :credentials_sum, :header_name_sum, :header_value_sum,
-                        :url_retrieve, :auth_needed_retrieve, :credentials_retrieve, :header_name_retrieve,
-                        :header_value_retrieve,
+                        :url_fhir_server, :auth_needed_fhir_server, :credentials_fhir_server,
+                        :header_name_fhir_server, :header_value_fhir_server,
+                        :header_name_retrieve, :header_value_retrieve,
                         :bundle_id, :bundle_url, :patient_id, :identifier, :profile, :bundle_resource
     end
 
@@ -64,16 +64,8 @@ module AUPSTestKit
 
     def self.configure_fhir_client(klass)
       klass.fhir_client do
-        case retrieval_method
-        when 'url' then CommonInputsModule.configure_retrieve_client(self)
-        when 'fhir_server' then CommonInputsModule.configure_fhir_server_client(self)
-        end
+        CommonInputsModule.configure_fhir_server_client(self) if retrieval_method == 'fhir_server'
       end
-    end
-
-    def self.configure_retrieve_client(client)
-      client.url :url_retrieve
-      client.headers(build_headers(client.header_name_retrieve, client.header_value_retrieve))
     end
 
     def self.configure_fhir_server_client(client)

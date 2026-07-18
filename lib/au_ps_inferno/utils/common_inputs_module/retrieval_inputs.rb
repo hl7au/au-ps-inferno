@@ -27,7 +27,9 @@ module AUPSTestKit
     def fhir_server_inputs(klass)
       fhir_server_connection_inputs(klass)
       fhir_server_auth_detail_inputs(klass)
-      fhir_server_resource_inputs(klass)
+      fhir_server_patient_inputs(klass)
+      fhir_server_bundle_id_input(klass)
+      fhir_server_profile_input(klass)
     end
 
     def fhir_server_connection_inputs(klass)
@@ -50,7 +52,7 @@ module AUPSTestKit
                                              enable_when: { input_name: 'auth_needed_fhir_server', value: 'true' }
     end
 
-    def fhir_server_resource_inputs(klass)
+    def fhir_server_patient_inputs(klass)
       klass.input :patient_id,
                   title: 'Patient ID',
                   optional: true,
@@ -61,10 +63,22 @@ module AUPSTestKit
                   optional: true,
                   description: 'To request Patient/$summary?identifier={identifier}',
                   enable_when: { input_name: 'retrieval_method', value: 'fhir_server' }
+    end
+
+    def fhir_server_bundle_id_input(klass)
       klass.input :bundle_id,
                   title: 'Bundle ID',
                   optional: true,
                   description: 'To request Bundle/{bundle_id}',
+                  enable_when: { input_name: 'retrieval_method', value: 'fhir_server' }
+    end
+
+    def fhir_server_profile_input(klass)
+      klass.input :profile,
+                  title: 'Profile',
+                  optional: true,
+                  default: 'http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-bundle',
+                  description: 'To specify profile for the patient summary',
                   enable_when: { input_name: 'retrieval_method', value: 'fhir_server' }
     end
   end

@@ -6,7 +6,7 @@ require_relative '../../utils/metadata_manager'
 require_relative '../../utils/generate_summary_bundle_test_class'
 
 module AUPSTestKit
-  # Generates the AU PS Bundle via the IPS $summary operation, gated on the 'summary_op' retrieval method
+  # Generates the AU PS Bundle via the IPS $summary operation, gated on the 'fhir_server' retrieval method
   # being selected
   class AUPSSuiteAuPsBundleInstanceBundleAcquisitionGenerateAuPsBundleViaSummary < GenerateSummaryBundleTestClass
     title 'Generate AU PS Bundle via $summary'
@@ -15,7 +15,7 @@ module AUPSTestKit
     id :suite_au_ps_bundle_instance_bundle_summary
 
     def skip_test?
-      retrieval_method != 'summary_op' || super
+      retrieval_method != 'fhir_server' || super
     end
 
     def metadata_manager

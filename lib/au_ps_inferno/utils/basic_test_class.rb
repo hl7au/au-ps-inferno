@@ -57,10 +57,7 @@ module AUPSTestKit
     # normally by every test class, including those attached to a group
     # via `test from:`/`group from:` after the group's inputs were declared.
     def url
-      case retrieval_method
-      when 'url' then url_retrieve
-      when 'summary_op' then url_sum
-      end
+      url_fhir_server if retrieval_method == 'fhir_server'
     end
 
     # Resolves the custom auth header name/value based on the `retrieval_method`
@@ -68,14 +65,14 @@ module AUPSTestKit
     def header_name
       case retrieval_method
       when 'url' then header_name_retrieve
-      when 'summary_op' then header_name_sum
+      when 'fhir_server' then header_name_fhir_server
       end
     end
 
     def header_value
       case retrieval_method
       when 'url' then header_value_retrieve
-      when 'summary_op' then header_value_sum
+      when 'fhir_server' then header_value_fhir_server
       end
     end
   end
