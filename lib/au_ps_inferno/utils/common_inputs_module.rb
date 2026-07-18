@@ -31,14 +31,15 @@ module AUPSTestKit
       klass.input :retrieval_method, title: 'Bundle retrieval method', type: 'radio', options: {
         list_options: [
           { value: 'json_file', label: 'JSON file' },
-          { value: 'url', label: 'URL to FHIR Bundle' },
-          { value: 'summary_op', label: '$summary Operation' }
+          { value: 'url', label: 'URL to Bundle' },
+          { value: 'summary_op', label: 'FHIR Server' }
         ]
       }, default: 'json_file'
     end
 
     def self.bundle_resource_input(klass)
       klass.input :bundle_resource,
+                  title: 'Bundle Resource',
                   optional: true,
                   description: 'If you want to check existing Bundle resource',
                   type: 'textarea',
@@ -72,7 +73,6 @@ module AUPSTestKit
 
     def self.configure_retrieve_client(client)
       client.url :url_retrieve
-      client.oauth_credentials :credentials_retrieve
       client.headers(build_headers(client.header_name_retrieve, client.header_value_retrieve))
     end
 
