@@ -24,6 +24,7 @@ Gem::Specification.new do |spec|
     Dir['lib/**/*.json'],
     Dir['lib/**/*.tgz'],
     Dir['lib/**/*.yaml'],
+    Dir['lib/**/*.yml'],
     'LICENSE'
   ].flatten
 
