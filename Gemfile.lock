@@ -11,7 +11,7 @@ GIT
 PATH
   remote: .
   specs:
-    au_ps_inferno (0.2.0)
+    au_ps_inferno (0.2.1)
       inferno_core (~> 1.0.6)
 
 GEM

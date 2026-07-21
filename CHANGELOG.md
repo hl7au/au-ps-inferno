@@ -1,5 +1,11 @@
 # Changelog
 
+## [0.2.1] - 2026-07-21
+
+### Fixed
+
+- The gemspec now packages `.tgz`, `.yml` and `.yaml` files under `lib/`, so the Implementation Guide package is no longer missing from the built gem.
+
 ## [0.2.0] - 2026-07-21
 
 ### Changed
