@@ -9,6 +9,9 @@ AllCops:
 Gemspec/DevelopmentDependencies:
   Enabled: false
 
+Gemspec/RequireMFA:
+  Enabled: false
+
 Naming/MethodName:
   Exclude:
     - "lib/au_ps_inferno/generator/generator.rb"
