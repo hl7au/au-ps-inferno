@@ -5,8 +5,8 @@ require_relative 'lib/au_ps_inferno/version'
 Gem::Specification.new do |spec|
   spec.name          = 'au_ps_inferno'
   spec.version       = AUPSTestKit::VERSION
-  spec.authors       = ['Ilya Beda', 'Pavel Rozhkov']
-  spec.email         = ['ilya@beda.software', 'pavel.r@beda.software']
+  spec.authors       = ['Ilya Beda', 'Pavel Rozhkov', 'Kyle Pettigrew']
+  spec.email         = ['ilya@beda.software', 'pavel.r@beda.software', 'kyle.pettigrew@csiro.au']
   spec.summary       = 'AU PS Inferno Test Kit'
   spec.description   = 'AU PS Inferno Test Kit'
   spec.homepage      = 'https://github.com/hl7au/au-ps-inferno'
