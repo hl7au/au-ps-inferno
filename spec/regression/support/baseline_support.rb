@@ -5,9 +5,8 @@ require 'json'
 
 # Compares a `{ test_id => { result, result_message } }` map produced by
 # RunFullGroupSupport#run_group_with_bundle against a committed baseline JSON
-# file, one per (group, bundle case) pair. Mirrors the UPDATE_SNAPSHOTS=1
-# convention already used by spec/integration/suite_100ballot_snapshots_spec.rb,
-# but for structured per-test results instead of raw CLI text.
+# file, one per (group, bundle case) pair, using the UPDATE_BASELINE=1
+# convention for structured per-test results.
 module BaselineSupport
   UPDATE_BASELINE = ENV['UPDATE_BASELINE'] == '1'
 
