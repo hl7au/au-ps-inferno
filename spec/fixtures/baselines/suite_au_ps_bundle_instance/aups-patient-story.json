@@ -1,0 +1,118 @@
+{
+  "au_ps_v100-suite_au_ps_bundle_instance-suite_au_ps_bundle_instance_au_ps_bundle_must_support_conformance-suite_au_ps_bundle_instance_au_ps_bundle_must_support_conformance_bundle_must_support_populated": {
+    "result": "pass",
+    "result_message": null
+  },
+  "au_ps_v100-suite_au_ps_bundle_instance-suite_au_ps_bundle_instance_au_ps_composition_attester-suite_au_ps_bundle_instance_au_ps_composition_attester_attester_party_ms_elements": {
+    "result": "skip",
+    "result_message": "Attester reference does not resolve"
+  },
+  "au_ps_v100-suite_au_ps_bundle_instance-suite_au_ps_bundle_instance_au_ps_composition_attester-suite_au_ps_bundle_instance_au_ps_composition_attester_attester_party_ms_identifier_slices": {
+    "result": "skip",
+    "result_message": "Attester or attester.party is not populated"
+  },
+  "au_ps_v100-suite_au_ps_bundle_instance-suite_au_ps_bundle_instance_au_ps_composition_attester-suite_au_ps_bundle_instance_au_ps_composition_attester_attester_party_ms_subelements": {
+    "result": "skip",
+    "result_message": "Attester reference does not resolve"
+  },
+  "au_ps_v100-suite_au_ps_bundle_instance-suite_au_ps_bundle_instance_au_ps_composition_author-suite_au_ps_bundle_instance_au_ps_composition_author_author_ms_elements": {
+    "result": "pass",
+    "result_message": null
+  },
+  "au_ps_v100-suite_au_ps_bundle_instance-suite_au_ps_bundle_instance_au_ps_composition_author-suite_au_ps_bundle_instance_au_ps_composition_author_author_ms_identifier_slices": {
+    "result": "pass",
+    "result_message": null
+  },
+  "au_ps_v100-suite_au_ps_bundle_instance-suite_au_ps_bundle_instance_au_ps_composition_author-suite_au_ps_bundle_instance_au_ps_composition_author_author_ms_subelements": {
+    "result": "pass",
+    "result_message": null
+  },
+  "au_ps_v100-suite_au_ps_bundle_instance-suite_au_ps_bundle_instance_au_ps_composition_author-suite_au_ps_bundle_instance_au_ps_composition_author_author_resource_type_is_valid": {
+    "result": "pass",
+    "result_message": null
+  },
+  "au_ps_v100-suite_au_ps_bundle_instance-suite_au_ps_bundle_instance_au_ps_composition_custodian-suite_au_ps_bundle_instance_au_ps_composition_custodian_custodian_ms_elements": {
+    "result": "skip",
+    "result_message": "Custodian reference does not resolve"
+  },
+  "au_ps_v100-suite_au_ps_bundle_instance-suite_au_ps_bundle_instance_au_ps_composition_custodian-suite_au_ps_bundle_instance_au_ps_composition_custodian_custodian_ms_identifier_slices": {
+    "result": "skip",
+    "result_message": "Custodian is not populated"
+  },
+  "au_ps_v100-suite_au_ps_bundle_instance-suite_au_ps_bundle_instance_au_ps_composition_custodian-suite_au_ps_bundle_instance_au_ps_composition_custodian_custodian_ms_subelements": {
+    "result": "skip",
+    "result_message": "Custodian reference does not resolve"
+  },
+  "au_ps_v100-suite_au_ps_bundle_instance-suite_au_ps_bundle_instance_au_ps_composition_mandatory_sections-suite_au_ps_bundle_instance_au_ps_composition_mandatory_sections_mandatory_sections_entry_profiles": {
+    "result": "pass",
+    "result_message": null
+  },
+  "au_ps_v100-suite_au_ps_bundle_instance-suite_au_ps_bundle_instance_au_ps_composition_mandatory_sections-suite_au_ps_bundle_instance_au_ps_composition_mandatory_sections_sections_shall_populated": {
+    "result": "pass",
+    "result_message": null
+  },
+  "au_ps_v100-suite_au_ps_bundle_instance-suite_au_ps_bundle_instance_au_ps_composition_must_support_conformance-suite_au_ps_bundle_instance_au_ps_composition_must_support_conformance_composition_mandatory_ms_populated": {
+    "result": "pass",
+    "result_message": null
+  },
+  "au_ps_v100-suite_au_ps_bundle_instance-suite_au_ps_bundle_instance_au_ps_composition_must_support_conformance-suite_au_ps_bundle_instance_au_ps_composition_must_support_conformance_composition_ms_subelements_populated": {
+    "result": "pass",
+    "result_message": null
+  },
+  "au_ps_v100-suite_au_ps_bundle_instance-suite_au_ps_bundle_instance_au_ps_composition_must_support_conformance-suite_au_ps_bundle_instance_au_ps_composition_must_support_conformance_composition_optional_ms_populated": {
+    "result": "pass",
+    "result_message": null
+  },
+  "au_ps_v100-suite_au_ps_bundle_instance-suite_au_ps_bundle_instance_au_ps_composition_must_support_conformance-suite_au_ps_bundle_instance_au_ps_composition_must_support_conformance_composition_optional_ms_slices": {
+    "result": "pass",
+    "result_message": null
+  },
+  "au_ps_v100-suite_au_ps_bundle_instance-suite_au_ps_bundle_instance_au_ps_composition_optional_sections-suite_au_ps_bundle_instance_au_ps_composition_optional_sections_optional_sections_entry_profiles": {
+    "result": "pass",
+    "result_message": null
+  },
+  "au_ps_v100-suite_au_ps_bundle_instance-suite_au_ps_bundle_instance_au_ps_composition_optional_sections-suite_au_ps_bundle_instance_au_ps_composition_optional_sections_sections_may_populated": {
+    "result": "pass",
+    "result_message": null
+  },
+  "au_ps_v100-suite_au_ps_bundle_instance-suite_au_ps_bundle_instance_au_ps_composition_recommended_sections-suite_au_ps_bundle_instance_au_ps_composition_recommended_sections_recommended_sections_entry_profiles": {
+    "result": "pass",
+    "result_message": null
+  },
+  "au_ps_v100-suite_au_ps_bundle_instance-suite_au_ps_bundle_instance_au_ps_composition_recommended_sections-suite_au_ps_bundle_instance_au_ps_composition_recommended_sections_sections_should_populated": {
+    "result": "pass",
+    "result_message": null
+  },
+  "au_ps_v100-suite_au_ps_bundle_instance-suite_au_ps_bundle_instance_au_ps_composition_subject-suite_au_ps_bundle_instance_au_ps_composition_subject_subject_ms_elements": {
+    "result": "pass",
+    "result_message": null
+  },
+  "au_ps_v100-suite_au_ps_bundle_instance-suite_au_ps_bundle_instance_au_ps_composition_subject-suite_au_ps_bundle_instance_au_ps_composition_subject_subject_ms_identifier_slices": {
+    "result": "pass",
+    "result_message": null
+  },
+  "au_ps_v100-suite_au_ps_bundle_instance-suite_au_ps_bundle_instance_au_ps_composition_subject-suite_au_ps_bundle_instance_au_ps_composition_subject_subject_ms_subelements_populated": {
+    "result": "pass",
+    "result_message": null
+  },
+  "au_ps_v100-suite_au_ps_bundle_instance-suite_au_ps_bundle_instance_au_ps_composition_subject-suite_au_ps_bundle_instance_au_ps_composition_subject_subject_resource_type_is_valid": {
+    "result": "pass",
+    "result_message": null
+  },
+  "au_ps_v100-suite_au_ps_bundle_instance-suite_au_ps_bundle_instance_au_ps_composition_undefined_sections-suite_au_ps_bundle_instance_au_ps_composition_undefined_sections_sections_may_undefined": {
+    "result": "skip",
+    "result_message": "No sections to validate"
+  },
+  "au_ps_v100-suite_au_ps_bundle_instance-suite_au_ps_bundle_instance_bundle_acquisition-suite_au_ps_bundle_instance_bundle_provide": {
+    "result": "pass",
+    "result_message": null
+  },
+  "au_ps_v100-suite_au_ps_bundle_instance-suite_au_ps_bundle_instance_bundle_validation-suite_au_ps_bundle_instance_bundle_validation_bundle_valid": {
+    "result": "pass",
+    "result_message": null
+  },
+  "au_ps_v100-suite_au_ps_bundle_instance-suite_au_ps_bundle_instance_bundle_validation-suite_au_ps_bundle_instance_bundle_validation_bundle_valid_ips": {
+    "result": "pass",
+    "result_message": null
+  }
+}

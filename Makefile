@@ -8,7 +8,7 @@ inferno = run inferno
 generated_v1_path = lib/au_ps_inferno/1.0.0-ballot
 generated_v1_preview_path = lib/au_ps_inferno/1.0.0
 
-.PHONY: pull build up stop down migrate setup run tests coverage rubocop snapshot-tests snapshot-tests-update
+.PHONY: pull build up stop down migrate setup run tests coverage rubocop snapshot-tests snapshot-tests-update regression-tests regression-tests-update
 
 pull:
 	$(compose) pull
@@ -35,7 +35,7 @@ run: build up
 restart: stop down setup up
 
 tests:
-	$(compose) $(inferno) bundle exec rspec spec/unit
+	$(compose) $(inferno) bundle exec rspec spec/unit spec/regression
 
 coverage:
 	$(compose) run -e COVERAGE=1 inferno bundle exec rspec --format documentation
@@ -45,6 +45,12 @@ snapshot-tests:
 
 snapshot-tests-update:
 	$(compose) run -e UPDATE_SNAPSHOTS=1 inferno bundle exec rspec spec/integration/suite_100ballot_snapshots_spec.rb
+
+regression-tests:
+	$(compose) $(inferno) bundle exec rspec spec/regression
+
+regression-tests-update:
+	$(compose) run -e UPDATE_BASELINE=1 inferno bundle exec rspec spec/regression
 
 rubocop:
 	$(compose) $(inferno) rubocop
