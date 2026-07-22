@@ -45,8 +45,8 @@ module RunFullGroupSupport
   def results_by_test_id(test_session_id)
     results = Inferno::Repositories::Results.new.current_results_for_test_session(test_session_id)
 
-    results.select { |result| result.test_id.present? }.each_with_object({}) do |result, map|
-      map[result.test_id] = { 'result' => result.result, 'result_message' => result.result_message }
+    results.select { |result| result.test_id.present? }.to_h do |result|
+      [result.test_id, { 'result' => result.result, 'result_message' => result.result_message }]
     end
   end
 end

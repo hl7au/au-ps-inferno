@@ -5,27 +5,25 @@ module AUPSTestKit
   # header, reused identically across the top-level AU PS test groups (au_ps_retrieve_cs_group,
   # RetrieveBundleTestClass, GenerateSummaryBundleTestClass), so they aren't redeclared in each.
   module CommonInputsModule
-    def self.validate_against_input(klass)
-      klass.input :validate_against,
-                  title: 'Validate Against',
-                  optional: true,
-                  type: 'checkbox',
-                  default: %w[au_ps_bundle],
-                  options: {
-                    list_options: [
-                      {
-                        label: 'AU PS Bundle Validation',
-                        value: 'au_ps_bundle'
-                      },
-                      {
-                        label: 'IPS Bundle Validation',
-                        value: 'ips_bundle'
-                      }
-                    ]
-                  }
-    end
-
     SINGLE_INPUT_DEFINITIONS = {
+      validate_against_input: [:validate_against, {
+        title: 'Validate Against',
+        optional: true,
+        type: 'checkbox',
+        default: %w[au_ps_bundle],
+        options: {
+          list_options: [
+            {
+              label: 'AU PS Bundle Validation',
+              value: 'au_ps_bundle'
+            },
+            {
+              label: 'IPS Bundle Validation',
+              value: 'ips_bundle'
+            }
+          ]
+        }
+      }],
       bundle_id_input: [:bundle_id, {
         optional: true, description: 'To request Bundle/{bundle_id}'
       }],
