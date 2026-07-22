@@ -7,13 +7,11 @@ module AUPSTestKit
   # Retrieves a Bundle from a FHIR server (or a direct URL) into the group's scratch space
   class RetrieveBundleTestClass < BasicTest
     id :retrieve_bundle_test_class
-    input_order :bundle_url, :url, :bundle_id, :credentials, :header_name, :header_value
 
     NO_RETRIEVAL_INPUTS_MESSAGE = 'No FHIR server URL with Bundle ID, and no Bundle URL, were provided, ' \
                                   'so this test group is omitted.'
 
     CommonInputsModule.retrieve_bundle_inputs(self)
-    CommonInputsModule.shared_inputs(self)
 
     def get_bundle_resource_from_fhir_server(bundle_id)
       fhir_read(:bundle, bundle_id)

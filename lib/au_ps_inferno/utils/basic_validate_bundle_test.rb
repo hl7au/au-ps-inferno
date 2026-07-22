@@ -12,7 +12,7 @@ module AUPSTestKit
 
     id :basic_validate_bundle_test
 
-    CommonInputsModule.validate_against_inputs(self)
+    CommonInputsModule.validate_against_input(self)
 
     def omit_au_ps_validation?
       omit_test_wrapper?('au_ps_bundle')

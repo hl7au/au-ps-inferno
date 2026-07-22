@@ -15,7 +15,7 @@ module AUPSTestKit
     description 'Verifies that the server exposes a valid CapabilityStatement and declares support for AU PS profiles and IPS recommended operations.'
     id :au_ps_retrieve_cs_group_100preview
 
-    CommonInputsModule.shared_inputs(self)
+    CommonInputsModule.retrieve_cs_inputs(self)
 
     run_as_group
 
