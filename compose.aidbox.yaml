@@ -3,6 +3,7 @@ services:
   inferno:
     build:
       context: ./
+    command: bundle exec rerun --force-polling --background --dir lib,config -p '**/*.rb' -- bundle exec puma
     volumes:
       - ./data:/opt/inferno/data
       - ./lib/:/opt/inferno/lib
@@ -25,6 +26,8 @@ services:
       context: ./
     volumes:
       - ./data:/opt/inferno/data
+      - ./lib/:/opt/inferno/lib
+      - ./:/opt/inferno/
     command: bundle exec sidekiq -r ./worker.rb
     depends_on:
       validator-api-worker:

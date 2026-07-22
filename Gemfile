@@ -8,6 +8,7 @@ gemspec
 
 group :development, :test do
   gem 'debug'
+  gem 'rerun', '~> 0.14', require: false
   gem 'simplecov', require: false
 end
 
