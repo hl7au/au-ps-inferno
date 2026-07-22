@@ -25,67 +25,45 @@ module AUPSTestKit
                   }
     end
 
-    def self.bundle_id_input(klass)
-      klass.input :bundle_id,
-                  optional: true,
-                  description: 'To request Bundle/{bundle_id}'
-    end
+    SINGLE_INPUT_DEFINITIONS = {
+      bundle_id_input: [:bundle_id, {
+        optional: true, description: 'To request Bundle/{bundle_id}'
+      }],
+      bundle_url_input: [:bundle_url, {
+        optional: true, description: 'To retrieve document Bundle using HTTP GET request'
+      }],
+      bundle_resource_input: [:bundle_resource, {
+        optional: true, description: 'If you want to check existing Bundle resource', type: 'textarea'
+      }],
+      patient_id_input: [:patient_id, {
+        optional: true, description: 'To request Patient/{patient_id}/$summary'
+      }],
+      patient_identifier_input: [:identifier, {
+        optional: true, description: 'To request Patient/$summary?identifier={identifier}'
+      }],
+      profile_input: [:profile, {
+        optional: true,
+        default: 'http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-bundle',
+        description: 'To specify profile for the patient summary'
+      }],
+      credentials_input: [:credentials, {
+        title: 'OAuth Credentials', type: :oauth_credentials, optional: true
+      }],
+      fhir_server_url_input: [:url, {
+        title: 'FHIR Server Base Url', optional: true
+      }],
+      header_name_input: [:header_name, {
+        title: 'Header name', optional: true
+      }],
+      header_value_input: [:header_value, {
+        title: 'Header value', optional: true
+      }]
+    }.freeze
 
-    def self.bundle_url_input(klass)
-      klass.input :bundle_url,
-                  optional: true,
-                  description: 'To retrieve document Bundle using HTTP GET request'
-    end
-
-    def self.bundle_resource_input(klass)
-      klass.input :bundle_resource,
-                  optional: true,
-                  description: 'If you want to check existing Bundle resource',
-                  type: 'textarea'
-    end
-
-    def self.patient_id_input(klass)
-      klass.input :patient_id,
-                  optional: true,
-                  description: 'To request Patient/{patient_id}/$summary'
-    end
-
-    def self.patient_identifier_input(klass)
-      klass.input :identifier,
-                  optional: true,
-                  description: 'To request Patient/$summary?identifier={identifier}'
-    end
-
-    def self.profile_input(klass)
-      klass.input :profile,
-                  optional: true,
-                  default: 'http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-bundle',
-                  description: 'To specify profile for the patient summary'
-    end
-
-    def self.credentials_input(klass)
-      klass.input :credentials,
-                  title: 'OAuth Credentials',
-                  type: :oauth_credentials,
-                  optional: true
-    end
-
-    def self.fhir_server_url_input(klass)
-      klass.input :url,
-                  title: 'FHIR Server Base Url',
-                  optional: true
-    end
-
-    def self.header_name_input(klass)
-      klass.input :header_name,
-                  title: 'Header name',
-                  optional: true
-    end
-
-    def self.header_value_input(klass)
-      klass.input :header_value,
-                  title: 'Header value',
-                  optional: true
+    SINGLE_INPUT_DEFINITIONS.each do |method_name, (input_name, options)|
+      define_singleton_method(method_name) do |klass|
+        klass.input input_name, **options
+      end
     end
 
     def self.auth_header_input(klass)
@@ -98,45 +76,36 @@ module AUPSTestKit
       auth_header_input(klass)
     end
 
-    def self.bundle_resource_inputs(klass)
-      klass.input_order :validate_against, :bundle_resource
+    INPUT_NAMES_BY_METHOD = SINGLE_INPUT_DEFINITIONS.transform_values { |(input_name, _)| [input_name] }.merge(
+      validate_against_input: [:validate_against],
+      authentication_inputs: %i[credentials header_name header_value]
+    ).freeze
 
-      validate_against_input(klass)
-      bundle_resource_input(klass)
+    def self.declare_inputs(klass, *method_names)
+      klass.input_order(*method_names.flat_map { |method_name| INPUT_NAMES_BY_METHOD.fetch(method_name) })
+      method_names.each { |method_name| public_send(method_name, klass) }
+    end
+
+    def self.bundle_resource_inputs(klass)
+      declare_inputs(klass, :validate_against_input, :bundle_resource_input)
     end
 
     def self.retrieve_bundle_inputs(klass)
-      klass.input_order :bundle_url, :url, :bundle_id, :credentials, :header_name, :header_value, :validate_against
-
-      validate_against_input(klass)
-      authentication_inputs(klass)
-      fhir_server_url_input(klass)
-      bundle_id_input(klass)
-      bundle_url_input(klass)
-      authentication_inputs(klass)
+      declare_inputs(klass, :bundle_url_input, :fhir_server_url_input, :bundle_id_input,
+                     :authentication_inputs, :validate_against_input)
 
       configure_fhir_client(klass)
     end
 
     def self.summary_inputs(klass)
-      klass.input_order :url, :patient_id, :identifier, :profile, :credentials, :header_name,
-                        :header_value, :validate_against
-
-      validate_against_input(klass)
-      fhir_server_url_input(klass)
-      patient_id_input(klass)
-      patient_identifier_input(klass)
-      profile_input(klass)
-      authentication_inputs(klass)
+      declare_inputs(klass, :fhir_server_url_input, :patient_id_input, :patient_identifier_input,
+                     :profile_input, :authentication_inputs, :validate_against_input)
 
       configure_fhir_client(klass)
     end
 
     def self.retrieve_cs_inputs(klass)
-      klass.input_order :url, :credentials, :header_name, :header_value
-
-      fhir_server_url_input(klass)
-      authentication_inputs(klass)
+      declare_inputs(klass, :fhir_server_url_input, :authentication_inputs)
 
       configure_fhir_client(klass)
     end
