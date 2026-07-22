@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative 'common_inputs_module'
+
 module AUPSTestKit
   # Basic test for validating a Bundle resource against the AU PS Bundle or IPS Bundle profile
   class BasicValidateBundleTest < BasicTest
@@ -10,23 +12,7 @@ module AUPSTestKit
 
     id :basic_validate_bundle_test
 
-    input :validate_against,
-          title: 'Validate Against',
-          optional: true,
-          type: 'checkbox',
-          default: %w[au_ps_bundle],
-          options: {
-            list_options: [
-              {
-                label: 'AU PS Bundle Validation',
-                value: 'au_ps_bundle'
-              },
-              {
-                label: 'IPS Bundle Validation',
-                value: 'ips_bundle'
-              }
-            ]
-          }
+    CommonInputsModule.validate_against_inputs(self)
 
     def omit_au_ps_validation?
       omit_test_wrapper?('au_ps_bundle')
