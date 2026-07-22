@@ -25,21 +25,22 @@ module AUPSTestKit
         }
       }],
       bundle_id_input: [:bundle_id, {
-        optional: true, description: 'To request Bundle/{bundle_id}'
+        title: 'Bundle ID', optional: true, description: 'To request Bundle/{bundle_id}'
       }],
       bundle_url_input: [:bundle_url, {
-        optional: true, description: 'To retrieve document Bundle using HTTP GET request'
+        title: 'Bundle URL', optional: true, description: 'To retrieve document Bundle using HTTP GET request'
       }],
       bundle_resource_input: [:bundle_resource, {
-        optional: true, description: 'If you want to check existing Bundle resource', type: 'textarea'
+        title: 'Bundle Resource', optional: true, description: 'If you want to check existing Bundle resource', type: 'textarea'
       }],
       patient_id_input: [:patient_id, {
-        optional: true, description: 'To request Patient/{patient_id}/$summary'
+        title: 'Patient ID', optional: true, description: 'To request Patient/{patient_id}/$summary'
       }],
       patient_identifier_input: [:identifier, {
-        optional: true, description: 'To request Patient/$summary?identifier={identifier}'
+        title: 'Patient Identifier', optional: true, description: 'To request Patient/$summary?identifier={identifier}'
       }],
       profile_input: [:profile, {
+        title: 'Profile URL',
         optional: true,
         default: 'http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-bundle',
         description: 'To specify profile for the patient summary'
