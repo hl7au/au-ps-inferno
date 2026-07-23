@@ -16,7 +16,22 @@ module AUPSTestKit
     makes_request :summary_operation
 
     def skip_test?
-      (patient_id.blank? && identifier.blank?) || url.blank?
+      skip_summary? && skip_get_bundle_by_id?
+    end
+
+    def summary_data_available?
+      [patient_id, identifier, url].all?(&:present?)
+    end
+
+    def bundle_by_id_available?
+      [bundle_id, url].all?(&:present?)
+    end
+
+    def get_bundle_resource_from_fhir_server(bundle_id)
+      fhir_read(:bundle, bundle_id)
+      assert_response_status(200)
+      assert_resource_type(:bundle)
+      save_bundle_to_scratch(resource)
     end
 
     def operation_path
@@ -29,7 +44,7 @@ module AUPSTestKit
       end
     end
 
-    def read_and_save_data
+    def read_and_save_data_from_summary
       response = fhir_operation(operation_path, name: :summary_operation, operation_method: :get)
       assert_response_status(200)
       assert_resource_type(:bundle)
@@ -38,8 +53,13 @@ module AUPSTestKit
     end
 
     run do
-      omit_if skip_test?, NO_SUMMARY_INPUTS_MESSAGE
-      read_and_save_data
+      if summary_data_available?
+        read_and_save_data_from_summary
+      elsif bundle_by_id_available?
+        get_bundle_resource_from_fhir_server
+      else
+        omit NO_SUMMARY_INPUTS_MESSAGE
+      end
     end
   end
 end

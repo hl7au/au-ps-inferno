@@ -81,6 +81,9 @@ module AUPSTestKit
         title: 'FHIR Server Base Url', optional: true,
         enable_when: { input_name: 'bundle_retrieve_method', value: 'fhir_server' }
       }],
+      fhir_server_url_cs_input: [:url, {
+        title: 'FHIR Server Base Url', optional: true, hidden: true
+      }],
       header_name_input: [:header_name, {
         title: 'Header name', optional: true,
         enable_when: { input_name: 'bundle_retrieve_method', value: 'fhir_server' }
@@ -108,7 +111,7 @@ module AUPSTestKit
                                        patient_id_input patient_identifier_input
                                        profile_input bundle_id_input credentials_input header_name_input
                                        header_value_input].freeze
-    RETRIEVE_CS_INPUTS_DEFINITION = %i[].freeze
+    RETRIEVE_CS_INPUTS_DEFINITION = %i[fhir_server_url_cs_input].freeze
 
     SINGLE_INPUT_DEFINITIONS.each do |method_name, (input_name, options)|
       define_singleton_method(method_name) do |klass|
