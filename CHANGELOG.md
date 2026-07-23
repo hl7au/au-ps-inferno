@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.0.0] - 2026-07-29
+
+First stable release of the AU PS Inferno Test Kit, targeting AU PS Implementation Guide version 1.0.0. This release is functionally identical to 0.2.1; the version bump signals API and behaviour stability rather than new changes.
+
+### Summary of changes since 0.1.0
+
+- Bundle acquisition (pasted, retrieved from the FHIR server, or generated via `$summary`) is reported as its own test case, separate from Bundle Validation, so a failed retrieval no longer reads as a validation failure.
+- Each top-level test group validates only the Bundle it acquired itself, using a per-group scratch key, so a Bundle acquired in one group can no longer leak into and be validated by another.
+- Tests omit uniformly with one clear reason when a group's Bundle was not provided or acquired, instead of failing, passing vacuously, or skipping with inconsistent messages.
+- Direct-URL Bundle retrieval goes through the Inferno HTTP DSL instead of raw `Net::HTTP`, so the request appears in the Requests tab and configured auth headers are honoured.
+- The `$summary` acquisition test no longer skips when the server's CapabilityStatement omits the operation's declaration, since AU PS does not require it to be declared.
+- The gemspec packages `.tgz`, `.yml` and `.yaml` files under `lib/`, so the Implementation Guide package is included in the built gem.
+- The gem publishing workflow verifies the release tag matches the gem version, installs dependencies, and reliably builds and pushes the gem.
+
 ## [0.2.1] - 2026-07-21
 
 ### Fixed
