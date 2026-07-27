@@ -113,8 +113,22 @@ If you would like to contribute to **hl7au/au-ps-inferno**, here’s how:
 4. Submit a pull request (PR) for review.
 5. Once the PR has been reviewed, feedback addressed collaboratively, and approved (by the designated HL7 AU project facilitator or their delegate - refer to the [HL7 AU Project Registry](https://confluence.hl7.org/display/HA/HL7+Australia+Project+Registry)), it may be merged into the main branch.
 
+## Security, safety and privacy
+
+The test kit is developer tooling for checking conformance to the AU PS IG. It is not a clinical
+system, and its results are indicative rather than a certification.
+
+**Use synthetic or de-identified data only. Do not submit real patient data.** On the public
+service at [inferno.hl7.org.au](https://inferno.hl7.org.au/test-kits/au-ps/) there is no login,
+session data is retained, and a session URL grants access to whoever holds it. Run the test kit
+locally with Docker if your data cannot be shared with a public service.
+
+See [SECURITY.md](SECURITY.md) for the full statement, including how to report a security or
+privacy concern privately.
+
 ## Additional information
 1. [Pre-requisites](/docs/pre-requisites.md)
 2. [Validator instructions](/docs/validator_instructions.md)
 3. [Changelog](CHANGELOG.md)
+4. [Security, safety and privacy](SECURITY.md)
 

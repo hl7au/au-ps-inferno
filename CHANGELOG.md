@@ -1,5 +1,11 @@
 # Changelog
 
+## [Unreleased]
+
+### Added
+
+- `SECURITY.md`: a security, safety and privacy statement covering the test kit and its use on the public HL7 AU Inferno service, including guidance to use synthetic or de-identified data only and a private route for reporting security concerns. Required by step 5 of the HL7 AU technical project publication process.
+
 ## [0.2.1] - 2026-07-21
 
 ### Fixed
