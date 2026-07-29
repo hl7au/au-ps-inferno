@@ -13,6 +13,7 @@ PATH
   specs:
     au_ps_inferno (0.2.1)
       inferno_core (~> 1.0.6)
+      reverse_markdown (~> 2.1)
 
 GEM
   remote: https://rubygems.org/
@@ -263,6 +264,8 @@ GEM
       http-cookie (>= 1.0.2, < 2.0)
       mime-types (>= 1.16, < 4.0)
       netrc (~> 0.8)
+    reverse_markdown (2.1.1)
+      nokogiri
     rexml (3.4.4)
     roo (2.10.1)
       nokogiri (~> 1)

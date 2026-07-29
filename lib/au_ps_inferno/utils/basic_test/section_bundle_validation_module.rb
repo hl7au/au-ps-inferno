@@ -64,7 +64,12 @@ module AUPSTestKit
       elements_list = elements_array.map do |element|
         "**#{element}**: #{boolean_to_existent_string(resolve_path_with_dar(section, element).first.present?)}"
       end.join("\n\n")
-      [title, 'List of Must Support elements populated or missing:', elements_list].join("\n\n")
+      [
+        title,
+        'List of Must Support elements populated or missing:',
+        elements_list,
+        section_narrative_body(section)
+      ].join("\n\n")
     end
   end
 end
