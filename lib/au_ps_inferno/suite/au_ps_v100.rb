@@ -2,6 +2,8 @@
 
 require_relative '../version'
 
+require_relative 'suppressed_validation_messages'
+
 require_relative 'au_ps_bundle_instance/au_ps_bundle_instance'
 
 require_relative 'au_ps_retrieve_cs_group/au_ps_retrieve_cs_group'
@@ -19,12 +21,8 @@ module AUPSTestKit
                 'compositions, sections, and server CapabilityStatement support for the ' \
                 "#{AUPSTestKit::IG_VERSION} implementation guide."
 
-    # Known validation messages that are expected and should not fail AU PS tests.
-    # Add entries here only once a specific message has been confirmed as a known,
-    # acceptable issue (see https://github.com/hl7au/au-ps-inferno/issues/38) —
-    # `type` is one of 'error', 'warning', 'info'; `pattern` is matched against the message text.
-    SUPPRESSED_VALIDATION_MESSAGES = [
-    ].freeze
+    # See suppressed_validation_messages.rb for the list of known, accepted validation messages.
+    SUPPRESSED_VALIDATION_MESSAGES = SuppressedValidationMessages::LIST
 
     fhir_resource_validator do
       igs "hl7.fhir.au.ps##{AUPSTestKit::IG_VERSION}"
