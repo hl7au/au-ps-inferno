@@ -27,18 +27,35 @@ RSpec.describe AUPSTestKit::BasicTestSectionNarrativeModule do
       )
     end
 
-    it 'strips table structure from an HTML table narrative, keeping only the cell text' do
+    it 'converts an HTML table narrative into Markdown table syntax' do
       section = section_with_text(
         status: 'generated',
-        div: '<div xmlns="http://www.w3.org/1999/xhtml"><table><thead><tr><th>Medicine</th></tr></thead>' \
-             '<tbody><tr><td>Bisoprolol</td></tr></tbody></table></div>'
+        div: '<div xmlns="http://www.w3.org/1999/xhtml"><table><thead><tr><th>Medicine</th><th>Dose</th></tr></thead>' \
+             '<tbody><tr><td>Bisoprolol</td><td>2.5mg</td></tr></tbody></table></div>'
       )
 
       result = test_instance.section_narrative_body(section)
 
-      # Sanitize::Config::RESTRICTED does not allow table elements, so their tags are
-      # dropped and the cell text is concatenated with no separator between cells.
-      expect(result).to eq("Narrative status: `generated`\n\nMedicineBisoprolol")
+      expect(result).to eq(
+        "Narrative status: `generated`\n\n" \
+        "| Medicine | Dose |\n" \
+        "| --- | --- |\n" \
+        '| Bisoprolol | 2.5mg |'
+      )
+    end
+
+    it 'converts a link narrative into Markdown link syntax, keeping only safe protocols' do
+      section = section_with_text(
+        status: 'generated',
+        div: '<div xmlns="http://www.w3.org/1999/xhtml">' \
+             '<a href="mailto:info@example.com">info@example.com</a></div>'
+      )
+
+      result = test_instance.section_narrative_body(section)
+
+      expect(result).to eq(
+        "Narrative status: `generated`\n\n[info@example.com](mailto:info@example.com)"
+      )
     end
 
     it 'flags empty-status placeholder narrative so it is visible to a reviewer' do
