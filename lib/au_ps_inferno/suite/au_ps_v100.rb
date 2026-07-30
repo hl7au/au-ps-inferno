@@ -19,12 +19,25 @@ module AUPSTestKit
                 'compositions, sections, and server CapabilityStatement support for the ' \
                 "#{AUPSTestKit::IG_VERSION} implementation guide."
 
+    # Known validation messages that are expected and should not fail AU PS tests.
+    # Add entries here only once a specific message has been confirmed as a known,
+    # acceptable issue (see https://github.com/hl7au/au-ps-inferno/issues/38) —
+    # `type` is one of 'error', 'warning', 'info'; `pattern` is matched against the message text.
+    SUPPRESSED_VALIDATION_MESSAGES = [
+    ].freeze
+
     fhir_resource_validator do
       igs "hl7.fhir.au.ps##{AUPSTestKit::IG_VERSION}"
 
       cli_context do
         txServer ENV.fetch('TX_SERVER_URL', 'https://tx.dev.hl7.org.au/fhir')
         noEcosystem true
+      end
+
+      exclude_message do |message|
+        SUPPRESSED_VALIDATION_MESSAGES.any? do |suppression|
+          message.type == suppression[:type] && suppression[:pattern].match?(message.message)
+        end
       end
     end
 
