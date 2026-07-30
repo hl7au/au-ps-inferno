@@ -27,7 +27,7 @@ RSpec.describe AUPSTestKit::BasicTestSectionNarrativeModule do
       )
     end
 
-    it 'converts an HTML table narrative into Markdown table syntax' do
+    it 'strips table structure from an HTML table narrative, keeping only the cell text' do
       section = section_with_text(
         status: 'generated',
         div: '<div xmlns="http://www.w3.org/1999/xhtml"><table><thead><tr><th>Medicine</th></tr></thead>' \
@@ -36,11 +36,9 @@ RSpec.describe AUPSTestKit::BasicTestSectionNarrativeModule do
 
       result = test_instance.section_narrative_body(section)
 
-      expect(result).to start_with("Narrative status: `generated`\n\n")
-      expect(result).to include('Medicine')
-      expect(result).to include('Bisoprolol')
-      expect(result).not_to include('<table>')
-      expect(result).not_to include('<td>')
+      # Sanitize::Config::RESTRICTED does not allow table elements, so their tags are
+      # dropped and the cell text is concatenated with no separator between cells.
+      expect(result).to eq("Narrative status: `generated`\n\nMedicineBisoprolol")
     end
 
     it 'flags empty-status placeholder narrative so it is visible to a reviewer' do
@@ -73,6 +71,21 @@ RSpec.describe AUPSTestKit::BasicTestSectionNarrativeModule do
       expect(result).to include('Safe text')
       expect(result).not_to include('<script>')
       expect(result).not_to include('alert(1)')
+    end
+
+    it 'strips event-handler attributes even from tags reverse_markdown has no converter for' do
+      section = section_with_text(
+        status: 'generated',
+        div: '<div xmlns="http://www.w3.org/1999/xhtml">' \
+             '<u onmouseover="alert(1)">hover me</u><a href="javascript:alert(2)">click</a></div>'
+      )
+
+      result = test_instance.section_narrative_body(section)
+
+      expect(result).not_to include('onmouseover')
+      expect(result).not_to include('javascript:')
+      expect(result).not_to include('alert(1)')
+      expect(result).not_to include('alert(2)')
     end
   end
 end
