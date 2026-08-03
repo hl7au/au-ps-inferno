@@ -21,6 +21,12 @@ RSpec.describe 'AU PS suite structure' do
     expect(suite.groups.length).to eq(4)
   end
 
+  it 'pins the validator to the Australian SNOMED CT edition' do
+    definition = suite.fhir_validators[:default].first.validation_context.definition
+
+    expect(definition[:snomedCT]).to eq('au')
+  end
+
   it 'starts the instance group with the load test, followed by Bundle Validation' do
     group = top_level_group('au_ps_bundle_instance')
     expect(group.children.first.title).to eq('Provide AU PS Bundle')
