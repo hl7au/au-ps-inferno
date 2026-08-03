@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Added
+
+- Warn when `Address.country` on a Patient, Practitioner, RelatedPerson, or Organization resource doesn't match the `au-address` fixed code `"AU"` (e.g. `"Australia"`, `"AUS"`) (#35).
+
 ### Fixed
 
 - Select the Australian SNOMED CT edition for validation instead of the validator's International default. The AU terminology server carries only the Australian edition, so the default made every SNOMED lookup fail and caused valid codes to be reported as absent from their value sets. Validating the AU PS `aups-basicsummary` example against `tx.dev.hl7.org.au` drops from 28 warnings and 19 information messages to 8 and 9, and removes a spurious error on the contained Medication's AMT code. Override with the `SNOMED_EDITION` environment variable.

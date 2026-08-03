@@ -54,5 +54,13 @@ module AUPSTestKit
     def groups_metadata
       metadata[:groups]
     end
+
+    def address_profile_elements
+      metadata[:address_profile_elements] || []
+    end
+
+    def address_profile_resource_types
+      address_profile_elements.map { |element| element[:resource_type] }.uniq
+    end
   end
 end

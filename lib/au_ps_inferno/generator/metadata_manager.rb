@@ -51,6 +51,8 @@ class Generator
       'Patient|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-patient'
     ].freeze
 
+    AU_ADDRESS_PROFILE_URL = 'http://hl7.org.au/fhir/StructureDefinition/au-address'
+
     # Initializes a MetadataManager for the given IG resources.
     #
     # @param ig_resources [Array<FHIR::Model>] Parsed IG resources (e.g. from IGResourcesExtractor#ig_resources)
@@ -59,6 +61,7 @@ class Generator
       reset_composition_metadata_ivars!
     end
 
+    # rubocop:disable Metrics/MethodLength
     def reset_composition_metadata_ivars!
       @composition_sections = []
       @composition_mandatory_ms_elements = []
@@ -70,7 +73,9 @@ class Generator
       @profiles = []
       @resources_filters = {}
       @normalized_sections_data = []
+      @address_profile_elements = []
     end
+    # rubocop:enable Metrics/MethodLength
 
     # Generates composition section metadata from IG resources (in-memory only).
     # Populates the internal composition sections and related metadata used by {#save_to_file}.
@@ -82,6 +87,7 @@ class Generator
       extract_optional_ms_elements
       extract_profiles
       extract_resource_filters
+      extract_address_profile_elements
       normalize_sections_data
     end
 
@@ -128,8 +134,25 @@ class Generator
     def metadata_dump_tail
       {
         profiles: @profiles,
-        resources_filters: @resources_filters
+        resources_filters: @resources_filters,
+        address_profile_elements: @address_profile_elements
       }
+    end
+
+    def extract_address_profile_elements
+      @address_profile_elements = main_profiles.flat_map { |sd| address_profile_elements_for(sd) }
+    end
+
+    def address_profile_elements_for(structure_definition)
+      structure_definition.snapshot.element.select { |element| au_address_typed?(element) }.map do |element|
+        { resource_type: structure_definition.type, path: element.path.gsub("#{structure_definition.type}.", '') }
+      end
+    end
+
+    def au_address_typed?(element)
+      (element.type || []).any? do |type|
+        type.code == 'Address' && (type.profile || []).include?(AU_ADDRESS_PROFILE_URL)
+      end
     end
 
     def normalize_section_data(section_id)
