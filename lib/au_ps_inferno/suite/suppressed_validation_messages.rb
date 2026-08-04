@@ -6,412 +6,721 @@ module AUPSTestKit
   # acceptable issue (see https://github.com/hl7au/au-ps-inferno/issues/38) —
   # `type` is one of 'error', 'warning', 'info'; `pattern` is matched against the message text.
   module SuppressedValidationMessages
-    REASON = 'See https://hl7.org.au/fhir/core/2.0.0/qa.html#suppressed'
-
     LIST = [
       {
         type: 'error',
-        pattern: %r{Unknown code '[^']+' in the CodeSystem 'http://pbs\.gov\.au/code/item'},
-        reason: REASON
+        pattern: %r{This profile does not comply with claimed profile 'http://hl7\.org/fhir/uv/ips/StructureDefinition/Patient-uv-ips' because: Mismatch in slicing at Patient\.extension:genderIdentity: no slice found for the discriminator value:url with the values  and Mismatch in slicing at Patient\.extension:personalPronouns: no slice found for the discriminator value:url with the values},
+        reason: 'This error is caused by an IPS 2.0.0 internal dependency on hl7.fhir.uv.extensions.r4#5.3.0-ballot-tc1 that downstream IGs don’t load. Not an AU PS defect. IPS will publish a 2.0.1 errata/technical correction to resolve this for downstream IGs. See Zulip: https://chat.fhir.org/#narrow/channel/207835-IPS/topic/IPS.202.2E0.2E1.20errata.2Ftechnical.20correction/with/547940503',
       },
       {
         type: 'error',
-        pattern: %r{No definition could be found for URL value 'http://hl7\.org/fhir/tools/StructureDefinition/expansion-parameters'},
-        reason: REASON
+        pattern: %r{Unable to find a profile match for urn:uuid:85822a88-55b1-460c-bb7b-e8fc22d8568f among choices: http://hl7\.org/fhir/uv/ips/StructureDefinition/Patient-uv-ips},
+        reason: 'This error is caused by an IPS 2.0.0 internal dependency on hl7.fhir.uv.extensions.r4#5.3.0-ballot-tc1 that downstream IGs don’t load. Not an AU PS defect. IPS will publish a 2.0.1 errata/technical correction to resolve this for downstream IGs. See Zulip: https://chat.fhir.org/#narrow/channel/207835-IPS/topic/IPS.202.2E0.2E1.20errata.2Ftechnical.20correction/with/547940503',
       },
       {
-        type: 'info',
-        pattern: %r{Reference to draft ValueSet http://hl7\.org/fhir/ValueSet/condition-severity\|4\.0\.1},
-        reason: REASON
+        type: 'error',
+        pattern: %r{Unable to find a profile match for urn:uuid:ad82d71b-ca1c-4db6-a726-cc70cf638306 among choices: http://hl7\.org/fhir/uv/ips/StructureDefinition/Observation-pregnancy-edd-uv-ips},
+        reason: 'This error is caused by an IPS 2.0.0 internal dependency on hl7.fhir.uv.extensions.r4#5.3.0-ballot-tc1 that downstream IGs don’t load. Not an AU PS defect. IPS will publish a 2.0.1 errata/technical correction to resolve this for downstream IGs. See Zulip: https://chat.fhir.org/#narrow/channel/207835-IPS/topic/IPS.202.2E0.2E1.20errata.2Ftechnical.20correction/with/547940503',
       },
       {
-        type: 'info',
-        pattern: %r{Reference to draft ValueSet http://hl7\.org/fhir/ValueSet/device-action\|4\.0\.1},
-        reason: REASON
+        type: 'error',
+        pattern: %r{The entry resource did not match any of the allowed profiles \(Type Observation: http://hl7\.org/fhir/StructureDefinition/Observation, http://hl7\.org/fhir/uv/ips/StructureDefinition/Observation-pregnancy-edd-uv-ips, http://hl7\.org/fhir/uv/ips/StructureDefinition/Observation-pregnancy-outcome-uv-ips, http://hl7\.org/fhir/uv/ips/StructureDefinition/Observation-pregnancy-status-uv-ips, http://hl7\.org/fhir/uv/ips/StructureDefinition/Observation-alcoholuse-uv-ips, http://hl7\.org\.au/fhir/ps/StructureDefinition/au-ps-smokingstatus, http://hl7\.org\.au/fhir/ps/StructureDefinition/au-ps-diagnosticresult-path, http://hl7\.org/fhir/uv/ips/StructureDefinition/Observation-results-radiology-uv-ips, http://hl7\.org/fhir/StructureDefinition/vitalsigns, http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bloodpressure, http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bodyheight, http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bodytemp, http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bodyweight, http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-heartrate, http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-resprate, http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-waistcircum\)},
+        reason: 'This error is caused by an IPS 2.0.0 internal dependency on hl7.fhir.uv.extensions.r4#5.3.0-ballot-tc1 that downstream IGs don’t load. Not an AU PS defect. IPS will publish a 2.0.1 errata/technical correction to resolve this for downstream IGs. See Zulip: https://chat.fhir.org/#narrow/channel/207835-IPS/topic/IPS.202.2E0.2E1.20errata.2Ftechnical.20correction/with/547940503',
       },
       {
-        type: 'info',
-        pattern: %r{Reference to deprecated ValueSet http://hl7\.org/fhir/5\.0/ValueSet/jurisdiction\|5\.0\.0},
-        reason: REASON
+        type: 'error',
+        pattern: %r{This profile does not comply with claimed profile 'http://hl7\.org/fhir/uv/ips/StructureDefinition/Bundle-uv-ips' because: Mismatch in slicing rules at Bundle\.entry: the discriminator 'Bundle\.entry:PROFILE' was not found},
+        reason: 'Bundle.entry slicing discriminator mismatch. IPS slices Bundle.entry using both type:resource and profile:resource discriminators. AU PS uses only type:resource to enforce stricter control over allowed entry types. This causes a mismatch with IPS, but is intentional to ensure AU PS-specific profiles are used.',
       },
       {
-        type: 'info',
-        pattern: /The discriminator type 'pattern' is deprecated in R5\+/,
-        reason: REASON
+        type: 'error',
+        pattern: %r{This profile does not comply with claimed profile 'http://hl7\.org/fhir/uv/ips/StructureDefinition/Observation-results-laboratory-pathology-uv-ips' because: The constraint 'value\.exists\(\) or hasMember\.exists\(\) or component\.exists\(\) or dataAbsentReason\.exists\(\)' is defined in the claimed profile, but missing, The constraint 'component\.exists\(\) implies \(component\.value\.exists\(\) or component\.dataAbsentReason\.exists\(\)\)' is defined in the claimed profile, but missing, Mismatch in slicing rules at Observation\.category: the discriminator 'Observation\.category:VALUE' was not found, Mismatch in slicing at Observation\.value\[x\]:valueString: no slice found for the discriminator type:\$this with the values string and Mismatch in slicing at Observation\.value\[x\]:valueQuantity: no slice found for the discriminator type:\$this with the values Quantity},
+        reason: 'This error is raised because AU PS Pathology Result Observation is modelled with structural differences to Observation Results - Laboratory/Pathology (IPS) that the tooling is not able to reconcile as compliant: a) IPS invariants and AU Core invariants set the same rules but use different FHIRPath b) Observation.category slicing discriminator is different; IPS uses pattern:$this and AU PS uses code/system. b) Observation.value[x], IPS labels data types string, Quantity and CodeableConcept as Must Support. AU PS is stronger by placing the rule on the element i.e. every data type has obligations on it not just the three IPS.',
       },
       {
-        type: 'info',
-        pattern: %r{
-          The\ extension\ http://hl7\.org/fhir/StructureDefinition/elementdefinition-maxValueSet\|5\.2\.0\s
-          is\ deprecated
-        }x,
-        reason: REASON
+        type: 'error',
+        pattern: %r{Error at http://hl7\.org\.au/fhir/ps/StructureDefinition/au-ps-medicationstatement\#MedicationStatement\.reasonReference: The target profile http://hl7\.org/fhir/uv/ips/StructureDefinition/DiagnosticReport-uv-ips is not a valid constraint on the base \(\[CanonicalType\[http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-condition\], CanonicalType\[http://hl7\.org/fhir/StructureDefinition/Observation\], CanonicalType\[http://hl7\.org\.au/fhir/StructureDefinition/au-diagnosticreport\]\]\)},
+        reason: 'Target profile in MedicationStatement.reasonReference is flagged due to IPS profile not being derived from AU Core base profile. This is a known cross-profile compatibility limitation when constraining to both AU Core and IPS derived targets.',
       },
       {
-        type: 'info',
-        pattern: %r{The extension http://hl7\.org/fhir/StructureDefinition/regex\|5\.2\.0 is deprecated},
-        reason: REASON
-      },
-      {
-        type: 'info',
-        pattern: %r{does not match any known slice defined in the profile http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-patient\|2\.0\.0},
-        reason: REASON
-      },
-      {
-        type: 'info',
-        pattern: %r{does not match any known slice defined in the profile http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-practitionerrole\|2\.0\.0},
-        reason: REASON
-      },
-      {
-        type: 'info',
-        pattern: %r{does not match any known slice defined in the profile http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-smokingstatus\|2\.0\.0},
-        reason: REASON
-      },
-      {
-        type: 'info',
-        pattern: %r{does not match any known slice defined in the profile http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-heartrate\|2\.0\.0},
-        reason: REASON
-      },
-      {
-        type: 'info',
-        pattern: %r{does not match any known slice defined in the profile http://hl7\.org/fhir/StructureDefinition/bp\|4\.0\.1},
-        reason: REASON
-      },
-      {
-        type: 'info',
-        pattern: %r{does not match any known slice defined in the profile http://hl7\.org/fhir/StructureDefinition/capabilitystatement-search-parameter-combination\|5\.2\.0},
-        reason: REASON
-      },
-      {
-        type: 'info',
-        pattern: %r{does not match any known slice defined in the profile http://hl7\.org/fhir/StructureDefinition/obligation\|5\.2\.0},
-        reason: REASON
+        type: 'error',
+        pattern: %r{This profile does not comply with claimed profile 'http://hl7\.org/fhir/uv/ips/StructureDefinition/Observation-tobaccouse-uv-ips' because: The pattern value of '\[http://snomed\.info/sct\#1747861000168109\]' on the path Observation\.code does not comply with the value '\[http://loinc\.org\#72166-2\]' from the claimed profile},
+        reason: 'This error is raised because AU PS Smoking Status inherits SNOMED patternCodeableConcept from AU Core where IPS requires a LOINC pattern on Observation.code. AU PS profiles support both SNOMED and LOINC codings to satisfy both AU Core and IPS requirements.',
       },
       {
         type: 'warning',
-        pattern: /
-          An\ HTML\ fragment\ from\ the\ set\s
-          \[cross-version-analysis\.xhtml,\ cross-version-analysis-inline\.xhtml\]\s
-          is\ not\ included\ anywhere\ in\ the\ produced\ implementation\ guide
-        /x,
-        reason: REASON
+        pattern: %r{The HTML fragment 'ip-statements\.xhtml' is not included anywhere in the produced implementation guide},
+        reason: 'These are warnings for publication artefacts not used in HL7 AU specifications at this time and are accepted by the AU FHIR WG.',
       },
       {
         type: 'warning',
-        pattern: /
-          The\ HTML\ fragment\ 'globals-table\.xhtml'\s
-          is\ not\ included\ anywhere\ in\ the\ produced\ implementation\ guide
-        /x,
-        reason: REASON
+        pattern: %r{An HTML fragment from the set \[cross-version-analysis\.xhtml, cross-version-analysis-inline\.xhtml\] is not included anywhere in the produced implementation guide},
+        reason: 'These are warnings for publication artefacts not used in HL7 AU specifications at this time and are accepted by the AU FHIR WG.',
       },
       {
         type: 'warning',
-        pattern: /
-          The\ HTML\ fragment\ 'ip-statements\.xhtml'\s
-          is\ not\ included\ anywhere\ in\ the\ produced\ implementation\ guide
-        /x,
-        reason: REASON
+        pattern: %r{The HTML fragment 'globals-table\.xhtml' is not included anywhere in the produced implementation guide},
+        reason: 'These are warnings for publication artefacts not used in HL7 AU specifications at this time and are accepted by the AU FHIR WG.',
       },
       {
         type: 'warning',
-        pattern: %r{
-          Found\ multiple\ matching\ profiles\ among\ \d+\ choices:\s
-          http://hl7\.org\.au/fhir/StructureDefinition/au-address,\s
-          http://hl7\.org/fhir/StructureDefinition/Address
-        }x,
-        reason: REASON
+        pattern: %r{Found multiple matching profiles among 2 choices: http://hl7\.org\.au/fhir/StructureDefinition/au-address, http://hl7\.org/fhir/StructureDefinition/Address},
+        reason: 'INHERITED FROM AU BASE: Artefacts inherit multiple profiles for certain data types (e.g., Address, Identifier). The IG Publisher cannot match example instances to a single profile and generates these warnings. This behaviour is expected and consistent with the design of AU Base.',
       },
       {
         type: 'warning',
-        pattern: %r{
-          Found\ multiple\ matching\ profiles\ among\ \d+\ choices:\s
-          http://hl7\.org\.au/fhir/StructureDefinition/au-australianbusinessnumber,\s
-          http://hl7\.org/fhir/StructureDefinition/Identifier
-        }x,
-        reason: REASON
+        pattern: %r{Found multiple matching profiles among 2 choices: http://hl7\.org\.au/fhir/StructureDefinition/au-australianbusinessnumber, http://hl7\.org/fhir/StructureDefinition/Identifier},
+        reason: 'INHERITED FROM AU BASE: Artefacts inherit multiple profiles for certain data types (e.g., Address, Identifier). The IG Publisher cannot match example instances to a single profile and generates these warnings. This behaviour is expected and consistent with the design of AU Base.',
       },
       {
         type: 'warning',
-        pattern: %r{
-          Found\ multiple\ matching\ profiles\ among\ \d+\ choices:\s
-          http://hl7\.org\.au/fhir/StructureDefinition/au-dvanumber,\s
-          http://hl7\.org/fhir/StructureDefinition/Identifier
-        }x,
-        reason: REASON
+        pattern: %r{Found multiple matching profiles among 2 choices: http://hl7\.org\.au/fhir/StructureDefinition/au-hpio, http://hl7\.org/fhir/StructureDefinition/Identifier},
+        reason: 'INHERITED FROM AU BASE: Artefacts inherit multiple profiles for certain data types (e.g., Address, Identifier). The IG Publisher cannot match example instances to a single profile and generates these warnings. This behaviour is expected and consistent with the design of AU Base.',
       },
       {
         type: 'warning',
-        pattern: %r{
-          Found\ multiple\ matching\ profiles\ among\ \d+\ choices:\s
-          http://hl7\.org\.au/fhir/StructureDefinition/au-employeenumber,\s
-          http://hl7\.org/fhir/StructureDefinition/Identifier
-        }x,
-        reason: REASON
+        pattern: %r{Found multiple matching profiles among 2 choices: http://hl7\.org\.au/fhir/StructureDefinition/au-medicalrecordnumber, http://hl7\.org/fhir/StructureDefinition/Identifier},
+        reason: 'INHERITED FROM AU BASE: Artefacts inherit multiple profiles for certain data types (e.g., Address, Identifier). The IG Publisher cannot match example instances to a single profile and generates these warnings. This behaviour is expected and consistent with the design of AU Base.',
       },
       {
         type: 'warning',
-        pattern: %r{
-          Found\ multiple\ matching\ profiles\ among\ \d+\ choices:\s
-          http://hl7\.org\.au/fhir/StructureDefinition/au-hpii,\s
-          http://hl7\.org/fhir/StructureDefinition/Identifier
-        }x,
-        reason: REASON
+        pattern: %r{Found multiple matching profiles among 2 choices: http://hl7\.org\.au/fhir/StructureDefinition/au-ihi, http://hl7\.org/fhir/StructureDefinition/Identifier},
+        reason: 'INHERITED FROM AU BASE: Artefacts inherit multiple profiles for certain data types (e.g., Address, Identifier). The IG Publisher cannot match example instances to a single profile and generates these warnings. This behaviour is expected and consistent with the design of AU Base.',
       },
       {
         type: 'warning',
-        pattern: %r{
-          Found\ multiple\ matching\ profiles\ among\ \d+\ choices:\s
-          http://hl7\.org\.au/fhir/StructureDefinition/au-hpio,\s
-          http://hl7\.org/fhir/StructureDefinition/Identifier
-        }x,
-        reason: REASON
+        pattern: %r{Found multiple matching profiles among 2 choices: http://hl7\.org\.au/fhir/StructureDefinition/au-dvanumber, http://hl7\.org/fhir/StructureDefinition/Identifier},
+        reason: 'INHERITED FROM AU BASE: Artefacts inherit multiple profiles for certain data types (e.g., Address, Identifier). The IG Publisher cannot match example instances to a single profile and generates these warnings. This behaviour is expected and consistent with the design of AU Base.',
       },
       {
         type: 'warning',
-        pattern: %r{
-          Found\ multiple\ matching\ profiles\ among\ \d+\ choices:\s
-          http://hl7\.org\.au/fhir/StructureDefinition/au-ihi,\s
-          http://hl7\.org/fhir/StructureDefinition/Identifier
-        }x,
-        reason: REASON
+        pattern: %r{Found multiple matching profiles among 2 choices: http://hl7\.org\.au/fhir/StructureDefinition/au-hpii, http://hl7\.org/fhir/StructureDefinition/Identifier},
+        reason: 'INHERITED FROM AU BASE: Artefacts inherit multiple profiles for certain data types (e.g., Address, Identifier). The IG Publisher cannot match example instances to a single profile and generates these warnings. This behaviour is expected and consistent with the design of AU Base.',
       },
       {
         type: 'warning',
-        pattern: %r{
-          Found\ multiple\ matching\ profiles\ among\ \d+\ choices:\s
-          http://hl7\.org\.au/fhir/StructureDefinition/au-medicalrecordnumber,\s
-          http://hl7\.org/fhir/StructureDefinition/Identifier
-        }x,
-        reason: REASON
+        pattern: %r{Found multiple matching profiles among 2 choices: http://hl7\.org\.au/fhir/StructureDefinition/au-employeenumber, http://hl7\.org/fhir/StructureDefinition/Identifier},
+        reason: 'INHERITED FROM AU BASE: Artefacts inherit multiple profiles for certain data types (e.g., Address, Identifier). The IG Publisher cannot match example instances to a single profile and generates these warnings. This behaviour is expected and consistent with the design of AU Base.',
       },
       {
         type: 'warning',
-        pattern: %r{
-          Found\ multiple\ matching\ profiles\ among\ \d+\ choices:\s
-          http://hl7\.org\.au/fhir/StructureDefinition/au-medicareprovidernumber,\s
-          http://hl7\.org/fhir/StructureDefinition/Identifier
-        }x,
-        reason: REASON
+        pattern: %r{Found multiple matching profiles among 2 choices: http://hl7\.org\.au/fhir/StructureDefinition/au-medicareprovidernumber, http://hl7\.org/fhir/StructureDefinition/Identifier},
+        reason: 'INHERITED FROM AU BASE: Artefacts inherit multiple profiles for certain data types (e.g., Address, Identifier). The IG Publisher cannot match example instances to a single profile and generates these warnings. This behaviour is expected and consistent with the design of AU Base.',
       },
       {
         type: 'warning',
-        pattern: /Best Practice Recommendation: In general, all observations should have a performer/,
-        reason: REASON
+        pattern: %r{Found multiple matching profiles among 2 choices: http://hl7\.org\.au/fhir/StructureDefinition/au-medicarecardnumber, http://hl7\.org/fhir/StructureDefinition/Identifier},
+        reason: 'INHERITED FROM AU BASE: Artefacts inherit multiple profiles for certain data types (e.g., Address, Identifier). The IG Publisher cannot match example instances to a single profile and generates these warnings. This behaviour is expected and consistent with the design of AU Base.',
       },
       {
         type: 'warning',
-        pattern: %r{multiple different potential matches for the url 'http://hl7\.org/fhir/StructureDefinition/bodySite'},
-        reason: REASON
+        pattern: %r{Found multiple matching profiles among 2 choices: http://hl7\.org\.au/fhir/StructureDefinition/au-pbsprescribernumber, http://hl7\.org/fhir/StructureDefinition/Identifier},
+        reason: 'INHERITED FROM AU BASE: Artefacts inherit multiple profiles for certain data types (e.g., Address, Identifier). The IG Publisher cannot match example instances to a single profile and generates these warnings. This behaviour is expected and consistent with the design of AU Base.',
       },
       {
         type: 'warning',
-        pattern: %r{multiple different potential matches for the url 'http://hl7\.org/fhir/StructureDefinition/individual-genderIdentity'},
-        reason: REASON
+        pattern: %r{Found multiple matching profiles among 2 choices: http://hl7\.org\.au/fhir/ps/StructureDefinition/au-ps-diagnosticresult-path, http://hl7\.org/fhir/StructureDefinition/Observation},
+        reason: 'AU PS Bundle profile is sliced by resource type. For profiles of type Observation, the slice includes all relevant profiles and to remain open (allowing for additional profiles of Observation) includes the Observation resource. This means that Artefacts inherit multiple profiles for certain data types (e.g., Address, Identifier). The IG Publisher cannot match example instances to a single profile and generates these warnings. This behaviour is expected and consistent with the design of AU PS (and IPS).',
       },
       {
         type: 'warning',
-        pattern: %r{multiple different potential matches for the url 'http://hl7\.org/fhir/StructureDefinition/individual-pronouns'},
-        reason: REASON
-      },
-      {
-        type: 'warning',
-        pattern: %r{multiple different potential matches for the url 'http://hl7\.org/fhir/StructureDefinition/individual-recordedSexOrGender'},
-        reason: REASON
-      },
-      {
-        type: 'warning',
-        pattern: %r{multiple different potential matches for the url 'http://hl7\.org/fhir/StructureDefinition/patient-birthPlace'},
-        reason: REASON
-      },
-      {
-        type: 'warning',
-        pattern: %r{multiple different potential matches for the url 'http://hl7\.org/fhir/StructureDefinition/patient-birthTime'},
-        reason: REASON
-      },
-      {
-        type: 'warning',
-        pattern: %r{multiple different potential matches for the url 'http://hl7\.org/fhir/StructureDefinition/patient-interpreterRequired'},
-        reason: REASON
-      },
-      {
-        type: 'warning',
-        pattern: %r{multiple different potential matches for the url 'http://hl7\.org/fhir/StructureDefinition/patient-mothersMaidenName'},
-        reason: REASON
-      },
-      {
-        type: 'warning',
-        pattern: %r{multiple different potential matches for the url 'http://hl7\.org/fhir/StructureDefinition/patient-sexParameterForClinicalUse'},
-        reason: REASON
-      },
-      {
-        type: 'warning',
-        pattern: %r{multiple different potential matches for the url 'http://hl7\.org/fhir/StructureDefinition/procedure-targetBodyStructure'},
-        reason: REASON
-      },
-      {
-        type: 'warning',
-        pattern: %r{multiple different potential matches for the url 'http://hl7\.org/fhir/StructureDefinition/timezone'},
-        reason: REASON
-      },
-      {
-        type: 'warning',
-        pattern: %r{multiple different potential matches for the url 'http://terminology\.hl7\.org/ValueSet/recorded-sex-or-gender-type'},
-        reason: REASON
-      },
-      {
-        type: 'warning',
-        pattern: /A Reference without an actual reference or identifier should have a display/,
-        reason: REASON
-      },
-      {
-        type: 'warning',
-        pattern: %r{
-          Unknown\ code\ '[^']+'\ in\ the\ CodeSystem\ 'http://pbs\.gov\.au/code/item';\s
-          The\ provided\ code\ 'http://pbs\.gov\.au/code/item\#[^']+'\ was\ not\ found\ in\ the\ value\ set\s
-          'https://healthterminologies\.gov\.au/fhir/ValueSet/australian-medication[^']*'
-        }x,
-        reason: REASON
-      },
-      {
-        type: 'warning',
-        pattern: %r{
-          A\ definition\ for\ CodeSystem\ 'http://pbs\.gov\.au/code/item'\s
-          could\ not\ be\ found,\ so\ the\ code\ cannot\ be\ validated
-        }x,
-        reason: REASON
-      },
-      {
-        type: 'warning',
-        pattern: %r{
-          A\ definition\ for\ CodeSystem\ 'http://www\.mims\.com\.au/codes'\s
-          could\ not\ be\ found,\ so\ the\ code\ cannot\ be\ validated
-        }x,
-        reason: REASON
+        pattern: %r{Found multiple matching profiles among 2 choices: http://hl7\.org\.au/fhir/ps/StructureDefinition/au-ps-smokingstatus, http://hl7\.org/fhir/StructureDefinition/Observation},
+        reason: 'AU PS Bundle profile is sliced by resource type. For profiles of type Observation, the slice includes all relevant profiles and to remain open (allowing for additional profiles of Observation) includes the Observation resource. This means that Artefacts inherit multiple profiles for certain data types (e.g., Address, Identifier). The IG Publisher cannot match example instances to a single profile and generates these warnings. This behaviour is expected and consistent with the design of AU PS (and IPS).',
       },
       {
         type: 'warning',
         pattern: %r{No definition could be found for URL value 'http://hl7\.org\.au/id/abn'},
-        reason: REASON
-      },
-      {
-        type: 'warning',
-        pattern: %r{No definition could be found for URL value 'http://ns\.electronichealth\.net\.au/id/dva'},
-        reason: REASON
-      },
-      {
-        type: 'warning',
-        pattern: %r{No definition could be found for URL value 'http://ns\.electronichealth\.net\.au/id/hi/hpii/1\.0'},
-        reason: REASON
+        reason: 'The canonical URL for following identifier types currently resolves to a html page and not a FHIR artefact. See the list of AU Base identifier profiles for the corresponding data type profile.',
       },
       {
         type: 'warning',
         pattern: %r{No definition could be found for URL value 'http://ns\.electronichealth\.net\.au/id/hi/hpio/1\.0'},
-        reason: REASON
+        reason: 'The canonical URL for following identifier types currently resolves to a html page and not a FHIR artefact. See the list of AU Base identifier profiles for the corresponding data type profile.',
+      },
+      {
+        type: 'warning',
+        pattern: %r{No definition could be found for URL value 'http://ns\.electronichealth\.net\.au/id/dva'},
+        reason: 'The canonical URL for following identifier types currently resolves to a html page and not a FHIR artefact. See the list of AU Base identifier profiles for the corresponding data type profile.',
+      },
+      {
+        type: 'warning',
+        pattern: %r{No definition could be found for URL value 'http://ns\.electronichealth\.net\.au/id/hi/hpii/1\.0'},
+        reason: 'The canonical URL for following identifier types currently resolves to a html page and not a FHIR artefact. See the list of AU Base identifier profiles for the corresponding data type profile.',
       },
       {
         type: 'warning',
         pattern: %r{No definition could be found for URL value 'http://ns\.electronichealth\.net\.au/id/medicare-provider-number'},
-        reason: REASON
+        reason: 'The canonical URL for following identifier types currently resolves to a html page and not a FHIR artefact. See the list of AU Base identifier profiles for the corresponding data type profile.',
       },
       {
         type: 'warning',
-        pattern: %r{No definition could be found for URL value 'http://pca\.digitalhealth\.gov\.au/id/pca-healthcare-service'},
-        reason: REASON
+        pattern: %r{No definition could be found for URL value 'http://ns\.electronichealth\.net\.au/id/medicare-number'},
+        reason: 'The canonical URL for following identifier types currently resolves to a html page and not a FHIR artefact. See the list of AU Base identifier profiles for the corresponding data type profile.',
       },
       {
         type: 'warning',
-        pattern: %r{No definition could be found for URL value 'http://ns\.electronichealth\.net\.au/id/abn-scoped/service-provider-individual/1\.0/[^']*'},
-        reason: REASON
+        pattern: %r{No definition could be found for URL value 'http://ns\.electronichealth\.net\.au/id/medicare-prescriber-number'},
+        reason: 'The canonical URL for following identifier types currently resolves to a html page and not a FHIR artefact. See the list of AU Base identifier profiles for the corresponding data type profile.',
       },
       {
         type: 'warning',
-        pattern: %r{No definition could be found for URL value 'http://ns\.electronichealth\.net\.au/id/hpio-scoped/medicalrecord/1\.0/[^']*'},
-        reason: REASON
+        pattern: %r{There are multiple different potential matches for the url 'http://hl7\.org/fhir/StructureDefinition/individual-recordedSexOrGender'\. It might be a good idea to fix to the correct version to reduce the likelihood of a wrong version being selected by an implementation/implementer, or use the \[IG Parameter `pin-canonicals`\]\(https://hl7\.org/fhir/tools/CodeSystem-ig-parameters\.html\)\. Using version '5\.3\.0', found versions: 1\.0\.0 \(from hl7\.fhir\.uv\.extensions\.r4\#1\.0\.0\), 5\.1\.0-cibuild \(from hl7\.fhir\.uv\.extensions\.r4\#5\.1\.0-snapshot1\), 5\.2\.0 \(from hl7\.fhir\.uv\.extensions\.r4\#5\.2\.0\), 5\.3\.0 \(from hl7\.fhir\.uv\.extensions\.r4\#5\.3\.0\)\. Suggested fix: change the canonical reference from 'http://hl7\.org/fhir/StructureDefinition/individual-recordedSexOrGender' to 'http://hl7\.org/fhir/StructureDefinition/individual-recordedSexOrGender\|5\.3\.0'},
+        reason: 'INHERITED FROM AU BASE: AU Base does not pin the version of these standard FHIR extensions sourced from the FHIR Extensions Pack.',
       },
       {
         type: 'warning',
-        pattern: %r{
-          Resolved\ system\ http://pbs\.gov\.au/code/item\ \([^)]*\),\ but\ the\ definition\ doesn't\ include\s
-          any\ codes,\ so\ the\ code\ has\ not\ been\ validated
-        }x,
-        reason: REASON
+        pattern: %r{There are multiple different potential matches for the url 'http://hl7\.org/fhir/StructureDefinition/individual-pronouns'\. It might be a good idea to fix to the correct version to reduce the likelihood of a wrong version being selected by an implementation/implementer, or use the \[IG Parameter `pin-canonicals`\]\(https://hl7\.org/fhir/tools/CodeSystem-ig-parameters\.html\)\. Using version '5\.3\.0', found versions: 1\.0\.0 \(from hl7\.fhir\.uv\.extensions\.r4\#1\.0\.0\), 5\.1\.0-cibuild \(from hl7\.fhir\.uv\.extensions\.r4\#5\.1\.0-snapshot1\), 5\.2\.0 \(from hl7\.fhir\.uv\.extensions\.r4\#5\.2\.0\), 5\.3\.0 \(from hl7\.fhir\.uv\.extensions\.r4\#5\.3\.0\)\. Suggested fix: change the canonical reference from 'http://hl7\.org/fhir/StructureDefinition/individual-pronouns' to 'http://hl7\.org/fhir/StructureDefinition/individual-pronouns\|5\.3\.0'},
+        reason: 'INHERITED FROM AU BASE: AU Base does not pin the version of these standard FHIR extensions sourced from the FHIR Extensions Pack.',
       },
       {
         type: 'warning',
-        pattern: %r{
-          Unable\ to\ check\ whether\ the\ code\ is\ in\ the\ value\ set\s
-          'http://terminology\.hl7\.org\.au/ValueSet/mims\|[^']*'\s
-          because\ the\ code\ system\ http://snomed\.info/sct\ was\ not\ found
-        }x,
-        reason: REASON
+        pattern: %r{There are multiple different potential matches for the url 'http://hl7\.org/fhir/StructureDefinition/individual-genderIdentity'\. It might be a good idea to fix to the correct version to reduce the likelihood of a wrong version being selected by an implementation/implementer, or use the \[IG Parameter `pin-canonicals`\]\(https://hl7\.org/fhir/tools/CodeSystem-ig-parameters\.html\)\. Using version '5\.3\.0', found versions: 1\.0\.0 \(from hl7\.fhir\.uv\.extensions\.r4\#1\.0\.0\), 5\.1\.0-cibuild \(from hl7\.fhir\.uv\.extensions\.r4\#5\.1\.0-snapshot1\), 5\.2\.0 \(from hl7\.fhir\.uv\.extensions\.r4\#5\.2\.0\), 5\.3\.0 \(from hl7\.fhir\.uv\.extensions\.r4\#5\.3\.0\)\. Suggested fix: change the canonical reference from 'http://hl7\.org/fhir/StructureDefinition/individual-genderIdentity' to 'http://hl7\.org/fhir/StructureDefinition/individual-genderIdentity\|5\.3\.0'},
+        reason: 'INHERITED FROM AU BASE: AU Base does not pin the version of these standard FHIR extensions sourced from the FHIR Extensions Pack.',
       },
       {
         type: 'warning',
-        pattern: %r{
-          Unable\ to\ check\ whether\ the\ code\ is\ in\ the\ value\ set\s
-          'http://terminology\.hl7\.org\.au/ValueSet/pbs-item\|[^']*'\s
-          because\ the\ code\ system\ http://snomed\.info/sct\ was\ not\ found
-        }x,
-        reason: REASON
+        pattern: %r{There are multiple different potential matches for the url 'http://hl7\.org/fhir/StructureDefinition/procedure-targetBodyStructure'\. It might be a good idea to fix to the correct version to reduce the likelihood of a wrong version being selected by an implementation/implementer, or use the \[IG Parameter `pin-canonicals`\]\(https://hl7\.org/fhir/tools/CodeSystem-ig-parameters\.html\)\. Using version '5\.3\.0', found versions: 1\.0\.0 \(from hl7\.fhir\.uv\.extensions\.r4\#1\.0\.0\), 4\.0\.1 \(from hl7\.fhir\.r4\.core\#4\.0\.1\), 5\.1\.0-cibuild \(from hl7\.fhir\.uv\.extensions\.r4\#5\.1\.0-snapshot1\), 5\.2\.0 \(from hl7\.fhir\.uv\.extensions\.r4\#5\.2\.0\), 5\.3\.0 \(from hl7\.fhir\.uv\.extensions\.r4\#5\.3\.0\)\. Suggested fix: change the canonical reference from 'http://hl7\.org/fhir/StructureDefinition/procedure-targetBodyStructure' to 'http://hl7\.org/fhir/StructureDefinition/procedure-targetBodyStructure\|5\.3\.0'},
+        reason: 'INHERITED FROM AU BASE: AU Base does not pin the version of these standard FHIR extensions sourced from the FHIR Extensions Pack.',
       },
       {
         type: 'warning',
-        pattern: %r{
-          Unable\ to\ check\ whether\ the\ code\ is\ in\ the\ value\ set\ ''\s
-          because\ the\ code\ system\ http://pbs\.gov\.au/code/item\ was\ not\ found
-        }x,
-        reason: REASON
+        pattern: %r{There are multiple different potential matches for the url 'http://hl7\.org/fhir/StructureDefinition/patient-sexParameterForClinicalUse'\. It might be a good idea to fix to the correct version to reduce the likelihood of a wrong version being selected by an implementation/implementer, or use the \[IG Parameter `pin-canonicals`\]\(https://hl7\.org/fhir/tools/CodeSystem-ig-parameters\.html\)\. Using version '5\.3\.0', found versions: 1\.0\.0 \(from hl7\.fhir\.uv\.extensions\.r4\#1\.0\.0\), 5\.1\.0-cibuild \(from hl7\.fhir\.uv\.extensions\.r4\#5\.1\.0-snapshot1\), 5\.2\.0 \(from hl7\.fhir\.uv\.extensions\.r4\#5\.2\.0\), 5\.3\.0 \(from hl7\.fhir\.uv\.extensions\.r4\#5\.3\.0\)\. Suggested fix: change the canonical reference from 'http://hl7\.org/fhir/StructureDefinition/patient-sexParameterForClinicalUse' to 'http://hl7\.org/fhir/StructureDefinition/patient-sexParameterForClinicalUse\|5\.3\.0'},
+        reason: 'INHERITED FROM AU BASE: AU Base does not pin the version of these standard FHIR extensions sourced from the FHIR Extensions Pack.',
       },
       {
         type: 'warning',
-        pattern: %r{
-          Unable\ to\ check\ whether\ the\ code\ is\ in\ the\ value\ set\s
-          'http://terminology\.hl7\.org\.au/ValueSet/pbs-item\|[^']*'\s
-          because\ the\ code\ system\ http://pbs\.gov\.au/code/item\ was\ not\ found
-        }x,
-        reason: REASON
+        pattern: %r{There are multiple different potential matches for the url 'http://hl7\.org/fhir/StructureDefinition/timezone'\. It might be a good idea to fix to the correct version to reduce the likelihood of a wrong version being selected by an implementation/implementer, or use the \[IG Parameter `pin-canonicals`\]\(https://hl7\.org/fhir/tools/CodeSystem-ig-parameters\.html\)\. Using version '5\.3\.0', found versions: 1\.0\.0 \(from hl7\.fhir\.uv\.extensions\.r4\#1\.0\.0\), 5\.1\.0-cibuild \(from hl7\.fhir\.uv\.extensions\.r4\#5\.1\.0-snapshot1\), 5\.2\.0 \(from hl7\.fhir\.uv\.extensions\.r4\#5\.2\.0\), 5\.3\.0 \(from hl7\.fhir\.uv\.extensions\.r4\#5\.3\.0\)\. Suggested fix: change the canonical reference from 'http://hl7\.org/fhir/StructureDefinition/timezone' to 'http://hl7\.org/fhir/StructureDefinition/timezone\|5\.3\.0'},
+        reason: 'INHERITED FROM AU BASE: AU Base does not pin the version of these standard FHIR extensions sourced from the FHIR Extensions Pack.',
       },
       {
         type: 'warning',
-        pattern: %r{
-          The\ provided\ code\ 'http://snomed\.info/sct\#\d+'\ was\ not\ found\ in\ the\ value\ set\s
-          'http://hl7\.org/fhir/ValueSet/observation-vitalsignresult\|[^']*'
-        }x,
-        reason: REASON
+        pattern: %r{There are multiple different potential matches for the url 'http://hl7\.org/fhir/StructureDefinition/patient-birthTime'\. It might be a good idea to fix to the correct version to reduce the likelihood of a wrong version being selected by an implementation/implementer, or use the \[IG Parameter `pin-canonicals`\]\(https://hl7\.org/fhir/tools/CodeSystem-ig-parameters\.html\)\. Using version '5\.3\.0', found versions: 1\.0\.0 \(from hl7\.fhir\.uv\.extensions\.r4\#1\.0\.0\), 4\.0\.1 \(from hl7\.fhir\.r4\.core\#4\.0\.1\), 5\.1\.0-cibuild \(from hl7\.fhir\.uv\.extensions\.r4\#5\.1\.0-snapshot1\), 5\.2\.0 \(from hl7\.fhir\.uv\.extensions\.r4\#5\.2\.0\), 5\.3\.0 \(from hl7\.fhir\.uv\.extensions\.r4\#5\.3\.0\)\. Suggested fix: change the canonical reference from 'http://hl7\.org/fhir/StructureDefinition/patient-birthTime' to 'http://hl7\.org/fhir/StructureDefinition/patient-birthTime\|5\.3\.0'},
+        reason: 'INHERITED FROM AU BASE: AU Base does not pin the version of these standard FHIR extensions sourced from the FHIR Extensions Pack.',
       },
       {
         type: 'warning',
-        pattern: %r{
-          A\ definition\ for\ CodeSystem\ 'http://snomed\.info/sct'\ version\ 'null'\s
-          could\ not\ be\ found,\ so\ the\ code\ cannot\ be\ validated
-        }x,
-        reason: REASON
+        pattern: %r{There are multiple different potential matches for the url 'http://hl7\.org/fhir/StructureDefinition/patient-interpreterRequired'\. It might be a good idea to fix to the correct version to reduce the likelihood of a wrong version being selected by an implementation/implementer, or use the \[IG Parameter `pin-canonicals`\]\(https://hl7\.org/fhir/tools/CodeSystem-ig-parameters\.html\)\. Using version '5\.3\.0', found versions: 1\.0\.0 \(from hl7\.fhir\.uv\.extensions\.r4\#1\.0\.0\), 4\.0\.1 \(from hl7\.fhir\.r4\.core\#4\.0\.1\), 5\.1\.0-cibuild \(from hl7\.fhir\.uv\.extensions\.r4\#5\.1\.0-snapshot1\), 5\.2\.0 \(from hl7\.fhir\.uv\.extensions\.r4\#5\.2\.0\), 5\.3\.0 \(from hl7\.fhir\.uv\.extensions\.r4\#5\.3\.0\)\. Suggested fix: change the canonical reference from 'http://hl7\.org/fhir/StructureDefinition/patient-interpreterRequired' to 'http://hl7\.org/fhir/StructureDefinition/patient-interpreterRequired\|5\.3\.0'},
+        reason: 'INHERITED FROM AU BASE: AU Base does not pin the version of these standard FHIR extensions sourced from the FHIR Extensions Pack.',
       },
       {
         type: 'warning',
-        pattern: %r{
-          A\ definition\ for\ CodeSystem\ 'http://terminology\.hl7\.org/CodeSystem/v3-RoleCode'\ version\ 'null'\s
-          could\ not\ be\ found,\ so\ the\ code\ cannot\ be\ validated
-        }x,
-        reason: REASON
+        pattern: %r{There are multiple different potential matches for the url 'http://hl7\.org/fhir/StructureDefinition/patient-mothersMaidenName'\. It might be a good idea to fix to the correct version to reduce the likelihood of a wrong version being selected by an implementation/implementer, or use the \[IG Parameter `pin-canonicals`\]\(https://hl7\.org/fhir/tools/CodeSystem-ig-parameters\.html\)\. Using version '5\.3\.0', found versions: 1\.0\.0 \(from hl7\.fhir\.uv\.extensions\.r4\#1\.0\.0\), 4\.0\.1 \(from hl7\.fhir\.r4\.core\#4\.0\.1\), 5\.1\.0-cibuild \(from hl7\.fhir\.uv\.extensions\.r4\#5\.1\.0-snapshot1\), 5\.2\.0 \(from hl7\.fhir\.uv\.extensions\.r4\#5\.2\.0\), 5\.3\.0 \(from hl7\.fhir\.uv\.extensions\.r4\#5\.3\.0\)\. Suggested fix: change the canonical reference from 'http://hl7\.org/fhir/StructureDefinition/patient-mothersMaidenName' to 'http://hl7\.org/fhir/StructureDefinition/patient-mothersMaidenName\|5\.3\.0'},
+        reason: 'INHERITED FROM AU BASE: AU Base does not pin the version of these standard FHIR extensions sourced from the FHIR Extensions Pack.',
       },
       {
         type: 'warning',
-        pattern: %r{
-          Unable\ to\ check\ whether\ the\ code\ is\ in\ the\ value\ set\s
-          'http://terminology\.hl7\.org\.au/ValueSet/v3-ServiceDeliveryLocationRoleType-extended\|[^']*'\s
-          because\ the\ code\ system\ http://snomed\.info/sct\ was\ not\ found
-        }x,
-        reason: REASON
+        pattern: %r{There are multiple different potential matches for the url 'http://hl7\.org/fhir/StructureDefinition/patient-birthPlace'\. It might be a good idea to fix to the correct version to reduce the likelihood of a wrong version being selected by an implementation/implementer, or use the \[IG Parameter `pin-canonicals`\]\(https://hl7\.org/fhir/tools/CodeSystem-ig-parameters\.html\)\. Using version '5\.3\.0', found versions: 1\.0\.0 \(from hl7\.fhir\.uv\.extensions\.r4\#1\.0\.0\), 4\.0\.1 \(from hl7\.fhir\.r4\.core\#4\.0\.1\), 5\.1\.0-cibuild \(from hl7\.fhir\.uv\.extensions\.r4\#5\.1\.0-snapshot1\), 5\.2\.0 \(from hl7\.fhir\.uv\.extensions\.r4\#5\.2\.0\), 5\.3\.0 \(from hl7\.fhir\.uv\.extensions\.r4\#5\.3\.0\)\. Suggested fix: change the canonical reference from 'http://hl7\.org/fhir/StructureDefinition/patient-birthPlace' to 'http://hl7\.org/fhir/StructureDefinition/patient-birthPlace\|5\.3\.0'},
+        reason: 'INHERITED FROM AU BASE: AU Base does not pin the version of these standard FHIR extensions sourced from the FHIR Extensions Pack.',
       },
       {
         type: 'warning',
-        pattern: %r{
-          Unable\ to\ check\ whether\ the\ code\ is\ in\ the\ value\ set\s
-          'http://terminology\.hl7\.org\.au/ValueSet/v3-ServiceDeliveryLocationRoleType-extended\|[^']*'\s
-          because\ the\ code\ system\ http://terminology\.hl7\.org/CodeSystem/v3-RoleCode\ was\ not\ found
-        }x,
-        reason: REASON
+        pattern: %r{There are multiple different potential matches for the url 'http://terminology\.hl7\.org/ValueSet/v2-0092'\. It might be a good idea to fix to the correct version to reduce the likelihood of a wrong version being selected by an implementation/implementer, or use the \[IG Parameter `pin-canonicals`\]\(https://hl7\.org/fhir/tools/CodeSystem-ig-parameters\.html\)\. Using version '3\.0\.0', found versions: 2\.0\.0 \(from hl7\.terminology\.r4\#6\.5\.0\), 3\.0\.0 \(from hl7\.terminology\.r4\#7\.1\.0\)\. Suggested fix: change the canonical reference from 'http://terminology\.hl7\.org/ValueSet/v2-0092' to 'http://terminology\.hl7\.org/ValueSet/v2-0092\|3\.0\.0'},
+        reason: 'INHERITED FROM AU BASE: AU Base does not pin the version of these standard FHIR extensions sourced from the FHIR Extensions Pack.',
+      },
+      {
+        type: 'warning',
+        pattern: %r{No definition could be found for URL value 'http://ns\.electronichealth\.net\.au/id/abn-scoped/service-provider-individual/1\.0/12345678901'},
+        reason: 'Examples of ABN or HPIO scoped identifier system URLs do not have formal definition as they are examples.',
+      },
+      {
+        type: 'warning',
+        pattern: %r{Best Practice Recommendation: In general, all observations should have a performer},
+        reason: 'Flags aspects of FHIR implementation of best practice. These warnings do not indicate an error in the specification, and ignore profiled requirements.',
+      },
+      {
+        type: 'warning',
+        pattern: %r{A definition for CodeSystem 'http://pbs\.gov\.au/code/item' could not be found, so the code cannot be validated},
+        reason: 'INHERITED FROM AU BASE: These AU Base CodeSystems referenced do not include any codes in their definition so can not be validated.',
+      },
+      {
+        type: 'warning',
+        pattern: %r{A definition for CodeSystem 'http://www\.mims\.com\.au/codes' could not be found, so the code cannot be validated},
+        reason: 'INHERITED FROM AU BASE: These AU Base CodeSystems referenced do not include any codes in their definition so can not be validated.',
+      },
+      {
+        type: 'warning',
+        pattern: %r{Unable to check whether the code is in the value set 'http://terminology\.hl7\.org\.au/ValueSet/mims\|6\.0\.1-ci-build' because the code system http://snomed\.info/sct was not found},
+        reason: 'INHERITED FROM AU BASE: Example codes are tested against bound terminology (MIMS/PBS). These AU Base CodeSystems referenced do not include any codes in their definition so can not be validated.',
+      },
+      {
+        type: 'warning',
+        pattern: %r{Unable to check whether the code is in the value set 'http://terminology\.hl7\.org\.au/ValueSet/pbs-item\|6\.0\.1-ci-build' because the code system http://snomed\.info/sct was not found},
+        reason: 'INHERITED FROM AU BASE: Example codes are tested against bound terminology (MIMS/PBS). These AU Base CodeSystems referenced do not include any codes in their definition so can not be validated.',
+      },
+      {
+        type: 'warning',
+        pattern: %r{A Reference without an actual reference or identifier should have a display},
+        reason: 'Example demonstrates how to represent missing data and therefore uses the Data Absent Reason extension as per AU PS rules. The IG Publisher triggers a warning because of this, but the example is intentionally designed to show the correct handling of missing data and does not indicate any issues with the IG.',
+      },
+      {
+        type: 'warning',
+        pattern: %r{The validator cannot confirm that this profile complies with the claimed profile 'http://hl7\.org/fhir/uv/ips/StructureDefinition/Condition-uv-ips' because: The valueSet http://hl7\.org/fhir/ValueSet/condition-category\|4\.0\.1 includes codes not allowed in the claimed profile which has value set http://hl7\.org/fhir/uv/ips/ValueSet/problem-type-uv-ips\|2\.0\.0 \(codes: diagnostic-report-impression, encounter-diagnosis\)},
+        reason: 'AU PS Condition binds to the FHIR standard value set as extensible, while the IPS profile binds to a stricter value set as extensible. The validator is not able to confirm a profile (AU PS) complies with another profile (IPS) when it has an extended value set and therefore provides a warning. This is not an AU PS defect.',
+      },
+      {
+        type: 'warning',
+        pattern: %r{The resource status 'active' and the standards status 'draft' are not consistent},
+        reason: 'This implementation guide is undergoing Ballot for Working Standard and as such the standards status is still "draft". This warning is generated when an IG standards status is "draft" and contains "active" resources (e.g. profiles at AFMM 1). This warning is expected when balloting a first release.',
+      },
+      {
+        type: 'info',
+        pattern: %r{Reference to draft ValueSet http://hl7\.org/fhir/ValueSet/condition-severity\|4\.0\.1},
+        reason: 'INHERITED FROM FHIR STANDARD: Some FHIR standard ValueSets are published as draft.',
+      },
+      {
+        type: 'info',
+        pattern: %r{Reference to draft ValueSet http://hl7\.org/fhir/ValueSet/encounter-reason\|4\.0\.1},
+        reason: 'INHERITED FROM FHIR STANDARD: Some FHIR standard ValueSets are published as draft.',
+      },
+      {
+        type: 'info',
+        pattern: %r{Reference to draft ValueSet http://hl7\.org/fhir/ValueSet/c80-practice-codes\|4\.0\.1},
+        reason: 'INHERITED FROM FHIR STANDARD: Some FHIR standard ValueSets are published as draft.',
+      },
+      {
+        type: 'info',
+        pattern: %r{Reference to deprecated ValueSet http://hl7\.org/fhir/5\.0/ValueSet/jurisdiction\|5\.0\.0},
+        reason: 'INHERITED FROM FHIR STANDARD: Some FHIR standard ValueSets are deprecated.',
+      },
+      {
+        type: 'info',
+        pattern: %r{The discriminator type 'pattern' is deprecated in R5\+\. For future compatibility, you could consider using type=value with a pattern\[x\] instead \(if this is not an inherited slicing\)},
+        reason: 'These issues are known FHIR standard and Extension Pack future version and current deprecations.',
+      },
+      {
+        type: 'info',
+        pattern: %r{The extension http://hl7\.org/fhir/StructureDefinition/elementdefinition-maxValueSet\|5\.3\.0 is deprecated with the note: 'Use additionalBinding extension or element instead'},
+        reason: 'These issues are known FHIR standard and Extension Pack future version and current deprecations.',
+      },
+      {
+        type: 'info',
+        pattern: %r{The extension http://hl7\.org/fhir/StructureDefinition/regex\|5\.3\.0 is deprecated with the note: 'This was deprecated in favor of using a constraint on the element using FHIRPath, since constraints allow for the provision of a human readable message associated with the regex'},
+        reason: 'These issues are known FHIR standard and Extension Pack future version and current deprecations.',
+      },
+      {
+        type: 'info',
+        pattern: %r{Reference to experimental CodeSystem http://www\.abs\.gov\.au/ausstats/abs@\.nsf/mf/1292\.0\|20130626},
+        reason: 'Known NCTS published CodeSystem published as experimental.',
+      },
+      {
+        type: 'info',
+        pattern: %r{Reference to trial-use ValueSet http://hl7\.org/fhir/uv/ips/ValueSet/results-coded-values-laboratory-pathology-uv-ips\|2\.0\.0},
+        reason: 'INHERITED FROM AU Base or IPS: ValueSets published in AU Base and IPS are published as trial use to match the IG standards status.',
+      },
+      {
+        type: 'info',
+        pattern: %r{Reference to trial-use ValueSet http://hl7\.org/fhir/uv/ips/ValueSet/results-microorganism-uv-ips\|2\.0\.0},
+        reason: 'INHERITED FROM AU Base or IPS: ValueSets published in AU Base and IPS are published as trial use to match the IG standards status.',
+      },
+      {
+        type: 'info',
+        pattern: %r{Reference to trial-use ValueSet http://hl7\.org/fhir/uv/ips/ValueSet/results-presence-absence-uv-ips\|2\.0\.0},
+        reason: 'INHERITED FROM AU Base or IPS: ValueSets published in AU Base and IPS are published as trial use to match the IG standards status.',
+      },
+      {
+        type: 'info',
+        pattern: %r{Reference to trial-use ValueSet http://hl7\.org/fhir/uv/ips/ValueSet/results-blood-group-uv-ips\|2\.0\.0},
+        reason: 'INHERITED FROM AU Base or IPS: ValueSets published in AU Base and IPS are published as trial use to match the IG standards status.',
+      },
+      {
+        type: 'info',
+        pattern: %r{Reference to trial-use ValueSet http://hl7\.org/fhir/uv/ips/ValueSet/results-pathology-uv-ips\|2\.0\.0},
+        reason: 'INHERITED FROM AU Base or IPS: ValueSets published in AU Base and IPS are published as trial use to match the IG standards status.',
+      },
+      {
+        type: 'info',
+        pattern: %r{Reference to trial-use ValueSet http://hl7\.org/fhir/uv/ips/ValueSet/pregnancy-status-uv-ips\|2\.0\.0},
+        reason: 'INHERITED FROM AU Base or IPS: ValueSets published in AU Base and IPS are published as trial use to match the IG standards status.',
+      },
+      {
+        type: 'info',
+        pattern: %r{Reference to trial-use ValueSet http://hl7\.org/fhir/uv/ips/ValueSet/edd-method-uv-ips\|2\.0\.0},
+        reason: 'INHERITED FROM AU Base or IPS: ValueSets published in AU Base and IPS are published as trial use to match the IG standards status.',
+      },
+      {
+        type: 'info',
+        pattern: %r{Reference to trial-use ValueSet http://terminology\.hl7\.org/ValueSet/v3-ServiceDeliveryLocationRoleType\|2014-03-26},
+        reason: 'INHERITED FROM AU Base or IPS: ValueSets published in AU Base and IPS are published as trial use to match the IG standards status.',
+      },
+      {
+        type: 'info',
+        pattern: %r{Reference to trial-use ValueSet http://terminology\.hl7\.org\.au/ValueSet/v3-ServiceDeliveryLocationRoleType-extended\|6\.0\.1-ci-build},
+        reason: 'INHERITED FROM AU Base or IPS: ValueSets published in AU Base and IPS are published as trial use to match the IG standards status.',
+      },
+      {
+        type: 'info',
+        pattern: %r{Reference to trial-use CodeSystem http://terminology\.hl7\.org\.au/CodeSystem/location-type\|6\.0\.1-ci-build},
+        reason: 'INHERITED FROM AU Base or IPS: ValueSets published in AU Base and IPS are published as trial use to match the IG standards status.',
+      },
+      {
+        type: 'info',
+        pattern: %r{The Implementation Guide contains no explicitly linked examples for this profile},
+        reason: 'AU PS includes only complete examples i.e. Bundle examples. While each profile does have at least one Bundle instace with an example of this profile this information message is present in an IG if a standalone resource instance example is not present, it does not look inside Bundles or other resource types (e.g. if a resource instance is contained).',
+      },
+      {
+        type: 'info',
+        pattern: %r{The entry resource matched more than one of the allowed profiles \(http://hl7\.org/fhir/StructureDefinition/Observation, http://hl7\.org\.au/fhir/ps/StructureDefinition/au-ps-diagnosticresult-path\)},
+        reason: 'AU PS Bundle profile is sliced by resource type. For profiles of type Observation, the slice includes all relevant profiles and to remain open (allowing for additional profiles of Observation) includes the Observation resource. This means that Artefacts inherit multiple profiles for certain data types (e.g., Address, Identifier). The IG Publisher cannot match example instances to a single profile and generates these warnings. This behaviour is expected and consistent with the design of AU PS (and IPS).',
+      },
+      {
+        type: 'info',
+        pattern: %r{The entry resource matched more than one of the allowed profiles \(http://hl7\.org/fhir/StructureDefinition/Observation, http://hl7\.org\.au/fhir/ps/StructureDefinition/au-ps-smokingstatus\)},
+        reason: 'AU PS Bundle profile is sliced by resource type. For profiles of type Observation, the slice includes all relevant profiles and to remain open (allowing for additional profiles of Observation) includes the Observation resource. This means that Artefacts inherit multiple profiles for certain data types (e.g., Address, Identifier). The IG Publisher cannot match example instances to a single profile and generates these warnings. This behaviour is expected and consistent with the design of AU PS (and IPS).',
+      },
+      {
+        type: 'info',
+        pattern: %r{This element does not match any known slice defined in the profile http://hl7\.org/fhir/StructureDefinition/obligation\|5\.3\.0 \(this may not be a problem, but you should check that it's not intended to match a slice\)},
+        reason: 'The use of the obligation extension generates multiple slicing information messages in the snapshot. This extension is reused across many resources in leading to repeated validation messages that do not appear to indicate an actual problem. Other IGs that are using obligations (e.g. IPS, IPA, EPS) show the same set of QA "element does not match any known slice" slicing information messages that have been accepted for publication (see https://chat.fhir.org/#narrow/channel/179252-IG-creation/topic/Obligations.20extension.20does.20not.20meet.20slice/with/553529895).',
+      },
+      {
+        type: 'info',
+        pattern: %r{Signing Certificate Details: Subject='OU=IG Publisher,L=Ann Arbor,CN=hl7\.org,O=HL7,ST=Missouri,C=us', Issuer='OU=IG Publisher,L=Ann Arbor,CN=hl7\.org,O=HL7,ST=Missouri,C=us', Serial='0'},
+        reason: 'The Bundle example that is digitally signed uses a feature in IG publisher to generate that signature when building the IG. These information messages provide the metadata around that signature generation',
+      },
+      {
+        type: 'info',
+        pattern: %r{Signing Certificate Source: -----BEGIN CERTIFICATE-----MIIDozCCAoqgAwIBAgIBADANBgkqhkiG9w0BAQ0FADBrMQswCQYDVQQGEwJ1czERMA8GA1UECAwITWlzc291cmkxDDAKBgNVBAoMA0hMNzEQMA4GA1UEAwwHaGw3Lm9yZzESMBAGA1UEBwwJQW5uIEFyYm9yMRUwEwYDVQQLDAxJRyBQdWJsaXNoZXIwHhcNMjUwNjE5MDIzMDMzWhcNMjYwNjIwMDIzMDMzWjBrMQswCQYDVQQGEwJ1czERMA8GA1UECAwITWlzc291cmkxDDAKBgNVBAoMA0hMNzEQMA4GA1UEAwwHaGw3Lm9yZzESMBAGA1UEBwwJQW5uIEFyYm9yMRUwEwYDVQQLDAxJRyBQdWJsaXNoZXIwggEjMA0GCSqGSIb3DQEBAQUAA4IBEAAwggELAoIBAgC9Us8v0UyOy\+XWLRff29GHQa9axqtDao7azsWnF2/ABdg1g6dOF/0ZkrhLdqJISj8MlSP5VLou67iZIH0RxRMfSA0e/fi9DE8QSzpIOlueeH2M8Q2VesKp3hIkp\+xCaGPbc4L0kZVkE6EW\+TUR7QTs1NkaxtwYvW87gKzn6BL0Yx/5mu1UFWcJ/XtLHkiagtIbSiEXSdsjxviObJM2SaV3taCaayGKVFpU6rPLD/VRart6ZP1CJQ2zlIskEEOnnUKEUuwcFpL7t5FXiHVOX0hZ5fsuGYt8EuLwa7giEQvf/PaQbTrTVMOdKH/EGVJI81MfNgzEbrA/CvcG/lgG3DM\+JwIDAQABo1AwTjAdBgNVHQ4EFgQUqBKo2iQ0R5r5GiNlh2sNCzEq9QIwHwYDVR0jBBgwFoAUqBKo2iQ0R5r5GiNlh2sNCzEq9QIwDAYDVR0TBAUwAwEB/zANBgkqhkiG9w0BAQ0FAAOCAQIAi8FVsqZJ4Ofiigjgp4\+CeHDx6LJRuq6YoiNerxJ4l\+ET4Bb7j8E/DDeEfebEQvwPrhlOyFOfyoszaBnF8Ep/Hk7Oj6cpLhoAHjeV3GUy\+3xg3NB3DuE7Jhnx99kwfRL9tOXJ5\+Ll1AIhyT0JID8J6/99Q5VmwSCUeRfnhnnigZlwS4VhAoanhrqzwXvpOco\+HyhL0y3mmbBH/eKU\+H5P\+L2IFiSFL6XAL4PM3pYI/zj\+NyhAXZZZwllRjoIKflGOO8HUc5iJiTHhYo0iKS1lPxCHoKyA\+aVEaVE/goqBwoe3V9mxHAz4Uq8e/aQ0OfciFmj55s6mx5eUdy5lQqfoekE=-----END CERTIFICATE-----},
+        reason: 'The Bundle example that is digitally signed uses a feature in IG publisher to generate that signature when building the IG. These information messages provide the metadata around that signature generation',
+      },
+      {
+        type: 'info',
+        pattern: %r{The content was signed by OU=IG Publisher, L=Ann Arbor, CN=hl7\.org, O=HL7, ST=Missouri, C=us,OU=IG Publisher,L=Ann Arbor,CN=hl7\.org,O=HL7,ST=Missouri,C=us,ou=ig publisher,l=ann arbor,cn=hl7\.org,o=hl7,st=missouri,c=us \(and this has been verified by the signature\)},
+        reason: 'The Bundle example that is digitally signed uses a feature in IG publisher to generate that signature when building the IG. These information messages provide the metadata around that signature generation',
+      },
+      {
+        type: 'info',
+        pattern: %r{The content was signed for the purpose of Verification Signature \(urn:oid:1\.2\.840\.10065\.1\.12\.1\.5\) \(and this has been verified by the signature\)},
+        reason: 'The Bundle example that is digitally signed uses a feature in IG publisher to generate that signature when building the IG. These information messages provide the metadata around that signature generation',
+      },
+      {
+        type: 'info',
+        pattern: %r{The signature verified OK},
+        reason: 'The Bundle example that is digitally signed uses a feature in IG publisher to generate that signature when building the IG. These information messages provide the metadata around that signature generation',
+      },
+      {
+        type: 'info',
+        pattern: %r{Signature Verification is a work in progress\. Feedback welcome at https://chat\.fhir\.org/\#narrow/channel/179247-Security-and-Privacy/topic/Signature/with/524324965},
+        reason: 'The Bundle example that is digitally signed uses a feature in IG publisher to generate that signature when building the IG. These information messages provide the metadata around that signature generation',
+      },
+      {
+        type: 'info',
+        pattern: %r{%The content was signed at%},
+        reason: 'The Bundle example that is digitally signed uses a feature in IG publisher to generate that signature when building the IG. These information messages provide the metadata around that signature generation',
+      },
+      {
+        type: 'info',
+        pattern: %r{The entry resource did not match the profile http://hl7\.org/fhir/StructureDefinition/Observation because: Unable to find a profile match for urn:uuid:85822a88-55b1-460c-bb7b-e8fc22d8568f among choices: http://hl7\.org/fhir/uv/ips/StructureDefinition/Patient-uv-ips},
+        reason: 'This information message is caused by an IPS 2.0.0 internal dependency on hl7.fhir.uv.extensions.r4#5.3.0-ballot-tc1 that downstream IGs don’t load. Not an AU PS defect. IPS will publish a 2.0.1 errata/technical correction to resolve this for downstream IGs. See Zulip: https://chat.fhir.org/#narrow/channel/207835-IPS/topic/IPS.202.2E0.2E1.20errata.2Ftechnical.20correction/with/547940503',
+      },
+      {
+        type: 'info',
+        pattern: %r{The entry resource did not match the profile http://hl7\.org/fhir/uv/ips/StructureDefinition/Observation-pregnancy-edd-uv-ips because: Unable to find a profile match for urn:uuid:85822a88-55b1-460c-bb7b-e8fc22d8568f among choices: http://hl7\.org/fhir/uv/ips/StructureDefinition/Patient-uv-ips},
+        reason: 'This information message is caused by an IPS 2.0.0 internal dependency on hl7.fhir.uv.extensions.r4#5.3.0-ballot-tc1 that downstream IGs don’t load. Not an AU PS defect. IPS will publish a 2.0.1 errata/technical correction to resolve this for downstream IGs. See Zulip: https://chat.fhir.org/#narrow/channel/207835-IPS/topic/IPS.202.2E0.2E1.20errata.2Ftechnical.20correction/with/547940503',
+      },
+      {
+        type: 'info',
+        pattern: %r{The entry resource did not match the profile http://hl7\.org/fhir/StructureDefinition/Observation because: Unable to find a profile match for urn:uuid:85822a88-55b1-460c-bb7b-e8fc22d8568f among choices: http://hl7\.org/fhir/uv/ips/StructureDefinition/Patient-uv-ips and Unable to find a profile match for urn:uuid:ad82d71b-ca1c-4db6-a726-cc70cf638306 among choices: http://hl7\.org/fhir/uv/ips/StructureDefinition/Observation-pregnancy-edd-uv-ips},
+        reason: 'This information message is caused by an IPS 2.0.0 internal dependency on hl7.fhir.uv.extensions.r4#5.3.0-ballot-tc1 that downstream IGs don’t load. Not an AU PS defect. IPS will publish a 2.0.1 errata/technical correction to resolve this for downstream IGs. See Zulip: https://chat.fhir.org/#narrow/channel/207835-IPS/topic/IPS.202.2E0.2E1.20errata.2Ftechnical.20correction/with/547940503',
+      },
+      {
+        type: 'info',
+        pattern: %r{Details for urn:uuid:ad82d71b-ca1c-4db6-a726-cc70cf638306 matching against profile http://hl7\.org/fhir/uv/ips/StructureDefinition/Observation-pregnancy-edd-uv-ips\|2\.0\.0},
+        reason: 'This information message is caused by an IPS 2.0.0 internal dependency on hl7.fhir.uv.extensions.r4#5.3.0-ballot-tc1 that downstream IGs don’t load. Not an AU PS defect. IPS will publish a 2.0.1 errata/technical correction to resolve this for downstream IGs. See Zulip: https://chat.fhir.org/#narrow/channel/207835-IPS/topic/IPS.202.2E0.2E1.20errata.2Ftechnical.20correction/with/547940503',
+      },
+      {
+        type: 'info',
+        pattern: %r{Details for urn:uuid:f85ad223-7bed-46f3-893d-e89d6082f9a9 matching against profile http://hl7\.org/fhir/StructureDefinition/Observation\|4\.0\.1},
+        reason: 'This information message is caused by an IPS 2.0.0 internal dependency on hl7.fhir.uv.extensions.r4#5.3.0-ballot-tc1 that downstream IGs don’t load. Not an AU PS defect. IPS will publish a 2.0.1 errata/technical correction to resolve this for downstream IGs. See Zulip: https://chat.fhir.org/#narrow/channel/207835-IPS/topic/IPS.202.2E0.2E1.20errata.2Ftechnical.20correction/with/547940503',
+      },
+      {
+        type: 'info',
+        pattern: %r{Details for urn:uuid:85822a88-55b1-460c-bb7b-e8fc22d8568f matching against profile http://hl7\.org/fhir/uv/ips/StructureDefinition/Patient-uv-ips\|2\.0\.0},
+        reason: 'This information message is caused by an IPS 2.0.0 internal dependency on hl7.fhir.uv.extensions.r4#5.3.0-ballot-tc1 that downstream IGs don’t load. Not an AU PS defect. IPS will publish a 2.0.1 errata/technical correction to resolve this for downstream IGs. See Zulip: https://chat.fhir.org/#narrow/channel/207835-IPS/topic/IPS.202.2E0.2E1.20errata.2Ftechnical.20correction/with/547940503',
+      },
+      {
+        type: 'info',
+        pattern: %r{Details for urn:uuid:ad82d71b-ca1c-4db6-a726-cc70cf638306 matching against profile http://hl7\.org/fhir/StructureDefinition/Observation\|4\.0\.1},
+        reason: 'This information message is caused by an IPS 2.0.0 internal dependency on hl7.fhir.uv.extensions.r4#5.3.0-ballot-tc1 that downstream IGs don’t load. Not an AU PS defect. IPS will publish a 2.0.1 errata/technical correction to resolve this for downstream IGs. See Zulip: https://chat.fhir.org/#narrow/channel/207835-IPS/topic/IPS.202.2E0.2E1.20errata.2Ftechnical.20correction/with/547940503',
+      },
+      {
+        type: 'info',
+        pattern: %r{This element does not match any known slice defined in the profile http://hl7\.org\.au/fhir/ps/StructureDefinition/au-ps-patient\|1\.0\.1-ci-build \(this may not be a problem, but you should check that it's not intended to match a slice\)},
+        reason: 'This example demonstrates how to represent missing or supressed data and therefore uses the Data Absent Reason extension as per AU PS rules. The IG Publisher triggers a slicing information message because of this, but the example is intentionally designed to show the correct handling of missing data and does not indicate any issues with the IG.',
+      },
+      {
+        type: 'info',
+        pattern: %r{This element does not match any known slice defined in the profile http://hl7\.org\.au/fhir/ps/StructureDefinition/au-ps-practitionerrole\|1\.0\.1-ci-build \(this may not be a problem, but you should check that it's not intended to match a slice\)},
+        reason: 'Example intentionally demonstrates inclusion of an allowed value that is not part of the defined slices.',
+      },
+      {
+        type: 'info',
+        pattern: %r{This element does not match any known slice defined in the profile http://hl7\.org\.au/fhir/ps/StructureDefinition/au-ps-practitioner\|1\.0\.1-ci-build \(this may not be a problem, but you should check that it's not intended to match a slice\)},
+        reason: 'Example intentionally demonstrates inclusion of an allowed value that is not part of the defined slices.',
+      },
+      {
+        type: 'info',
+        pattern: %r{This element does not match any known slice defined in the profile http://hl7\.org\.au/fhir/ps/StructureDefinition/au-ps-diagnosticresult-path\|1\.0\.1-ci-build \(this may not be a problem, but you should check that it's not intended to match a slice\)},
+        reason: 'Example intentionally demonstrates inclusion of an allowed value that is not part of the defined slices.',
+      },
+      {
+        type: 'info',
+        pattern: %r{This element does not match any known slice defined in the profile http://hl7\.org\.au/fhir/ps/StructureDefinition/au-ps-medicationstatement\|1\.0\.1-ci-build \(this may not be a problem, but you should check that it's not intended to match a slice\)},
+        reason: 'Example intentionally demonstrates inclusion of an allowed value that is not part of the defined slices.',
+      },
+      {
+        type: 'info',
+        pattern: %r{This element does not match any known slice defined in the profile http://hl7\.org\.au/fhir/ps/StructureDefinition/au-ps-immunization\|1\.0\.1-ci-build \(this may not be a problem, but you should check that it's not intended to match a slice\)},
+        reason: 'Example intentionally demonstrates inclusion of an allowed value that is not part of the defined slices.',
+      },
+      {
+        type: 'info',
+        pattern: %r{This element does not match any known slice defined in the profile http://hl7\.org\.au/fhir/ps/StructureDefinition/au-ps-composition\|1\.0\.1-ci-build \(this may not be a problem, but you should check that it's not intended to match a slice\)},
+        reason: 'Example intentionally demonstrates inclusion of an allowed value that is not part of the defined slices.',
+      },
+      {
+        type: 'info',
+        pattern: %r{This element does not match any known slice defined in the profile http://hl7\.org\.au/fhir/ps/StructureDefinition/au-ps-smokingstatus\|1\.0\.1-ci-build \(this may not be a problem, but you should check that it's not intended to match a slice\)},
+        reason: 'Generated due to the profile approach that mixes slice and pattern. The AU PS profile is valid and the code is valid according to the profile but is defined using pattern and is outside the slice definition.',
+      },
+      {
+        type: 'info',
+        pattern: %r{The entry resource did not match the profile http://hl7\.org/fhir/uv/ips/StructureDefinition/Observation-pregnancy-outcome-uv-ips because: None of the codings provided are in the value set 'Pregnancy Outcome - IPS' \(http://hl7\.org/fhir/uv/ips/ValueSet/pregnancies-summary-uv-ips\|2\.0\.0\), and a coding from this value set is required\) \(codes = http://snomed\.info/sct\#161714006, http://loinc\.org\#11778-8\) and Unable to find a profile match for urn:uuid:85822a88-55b1-460c-bb7b-e8fc22d8568f among choices: http://hl7\.org/fhir/uv/ips/StructureDefinition/Patient-uv-ips},
+        reason: 'AU PS Bundle allows multiple Observation profiles. IG Publisher evaluates each Observation entry against all allowed Observation profiles and reports information messages for profiles that do not match. This is expected behaviour when an Observation is intended to conform to one specific profile. Messages involving Patient-uv-ips resolution failures are a consequence of the IPS dependency limitation described in ERROR 01 and do not indicate any issues with the AU PS specification.',
+      },
+      {
+        type: 'info',
+        pattern: %r{The entry resource did not match the profile http://hl7\.org/fhir/uv/ips/StructureDefinition/Observation-alcoholuse-uv-ips because: The pattern \[system http://loinc\.org, code 74013-4, and display 'null'\] defined in the profile http://hl7\.org/fhir/uv/ips/StructureDefinition/Observation-alcoholuse-uv-ips\|2\.0\.0 not found\. Issues: \[ValidationMessage\[level=ERROR,type=VALUE,location=Bundle\.entry\[15\]\.resource/\*Observation/null\*/\.code\.coding\.system,message=Value is 'http://snomed\.info/sct' but is fixed to 'http://loinc\.org' in the profile http://hl7\.org/fhir/uv/ips/StructureDefinition/Observation-alcoholuse-uv-ips\|2\.0\.0\#Observation\], ValidationMessage\[level=ERROR,type=VALUE,location=Bundle\.entry\[15\]\.resource/\*Observation/null\*/\.code\.coding\.code,message=Value is '161714006' but is fixed to '74013-4' in the profile http://hl7\.org/fhir/uv/ips/StructureDefinition/Observation-alcoholuse-uv-ips\|2\.0\.0\#Observation\], ValidationMessage\[level=ERROR,type=VALUE,location=Bundle\.entry\[15\]\.resource/\*Observation/null\*/\.code\.coding\.code,message=Value is '11778-8' but is fixed to '74013-4' in the profile http://hl7\.org/fhir/uv/ips/StructureDefinition/Observation-alcoholuse-uv-ips\|2\.0\.0\#Observation\]\] and Unable to find a profile match for urn:uuid:85822a88-55b1-460c-bb7b-e8fc22d8568f among choices: http://hl7\.org/fhir/uv/ips/StructureDefinition/Patient-uv-ips},
+        reason: 'AU PS Bundle allows multiple Observation profiles. IG Publisher evaluates each Observation entry against all allowed Observation profiles and reports information messages for profiles that do not match. This is expected behaviour when an Observation is intended to conform to one specific profile. Messages involving Patient-uv-ips resolution failures are a consequence of the IPS dependency limitation described in ERROR 01 and do not indicate any issues with the AU PS specification.',
+      },
+      {
+        type: 'info',
+        pattern: %r{The entry resource did not match the profile http://hl7\.org\.au/fhir/ps/StructureDefinition/au-ps-smokingstatus because: Slice 'Observation\.category:socialHistory': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/ps/StructureDefinition/au-ps-smokingstatus\|1\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, The pattern \[system http://snomed\.info/sct, code 1747861000168109, and display 'null'\] defined in the profile http://hl7\.org\.au/fhir/ps/StructureDefinition/au-ps-smokingstatus\|1\.0\.1-ci-build not found\. Issues: \[ValidationMessage\[level=ERROR,type=VALUE,location=Bundle\.entry\[15\]\.resource/\*Observation/null\*/\.code\.coding\.code,message=Value is '161714006' but is fixed to '1747861000168109' in the profile http://hl7\.org\.au/fhir/ps/StructureDefinition/au-ps-smokingstatus\|1\.0\.1-ci-build\#Observation\], ValidationMessage\[level=ERROR,type=VALUE,location=Bundle\.entry\[15\]\.resource/\*Observation/null\*/\.code\.coding\.system,message=Value is 'http://loinc\.org' but is fixed to 'http://snomed\.info/sct' in the profile http://hl7\.org\.au/fhir/ps/StructureDefinition/au-ps-smokingstatus\|1\.0\.1-ci-build\#Observation\], ValidationMessage\[level=ERROR,type=VALUE,location=Bundle\.entry\[15\]\.resource/\*Observation/null\*/\.code\.coding\.code,message=Value is '11778-8' but is fixed to '1747861000168109' in the profile http://hl7\.org\.au/fhir/ps/StructureDefinition/au-ps-smokingstatus\|1\.0\.1-ci-build\#Observation\]\], The pattern \[system http://snomed\.info/sct, code 1747861000168109, and display 'null'\] defined in the profile http://hl7\.org\.au/fhir/ps/StructureDefinition/au-ps-smokingstatus\|1\.0\.1-ci-build not found\. Issues: \[ValidationMessage\[level=ERROR,type=VALUE,location=Bundle\.entry\[15\]\.resource/\*Observation/null\*/\.code\.coding\.code,message=Value is '161714006' but is fixed to '1747861000168109' in the profile http://hl7\.org\.au/fhir/ps/StructureDefinition/au-ps-smokingstatus\|1\.0\.1-ci-build\#Observation\.code\], ValidationMessage\[level=ERROR,type=VALUE,location=Bundle\.entry\[15\]\.resource/\*Observation/null\*/\.code\.coding\.system,message=Value is 'http://loinc\.org' but is fixed to 'http://snomed\.info/sct' in the profile http://hl7\.org\.au/fhir/ps/StructureDefinition/au-ps-smokingstatus\|1\.0\.1-ci-build\#Observation\.code\], ValidationMessage\[level=ERROR,type=VALUE,location=Bundle\.entry\[15\]\.resource/\*Observation/null\*/\.code\.coding\.code,message=Value is '11778-8' but is fixed to '1747861000168109' in the profile http://hl7\.org\.au/fhir/ps/StructureDefinition/au-ps-smokingstatus\|1\.0\.1-ci-build\#Observation\.code\]\], Slice 'Observation\.code\.coding:loincSmokingStatus': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/ps/StructureDefinition/au-ps-smokingstatus\|1\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, The Profile 'http://hl7\.org\.au/fhir/ps/StructureDefinition/au-ps-smokingstatus\|1\.0\.1-ci-build' definition allows for the type CodeableConcept but found type dateTime and Unable to find a profile match for urn:uuid:85822a88-55b1-460c-bb7b-e8fc22d8568f among choices: http://hl7\.org/fhir/uv/ips/StructureDefinition/Patient-uv-ips},
+        reason: 'AU PS Bundle allows multiple Observation profiles. IG Publisher evaluates each Observation entry against all allowed Observation profiles and reports information messages for profiles that do not match. This is expected behaviour when an Observation is intended to conform to one specific profile. Messages involving Patient-uv-ips resolution failures are a consequence of the IPS dependency limitation described in ERROR 01 and do not indicate any issues with the AU PS specification.',
+      },
+      {
+        type: 'info',
+        pattern: %r{The entry resource did not match the profile http://hl7\.org\.au/fhir/ps/StructureDefinition/au-ps-diagnosticresult-path because: Slice 'Observation\.category:lab': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/ps/StructureDefinition/au-ps-diagnosticresult-path\|1\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, Observation\.performer: minimum required = 1, but only found 0 \(from http://hl7\.org\.au/fhir/ps/StructureDefinition/au-ps-diagnosticresult-path\|1\.0\.1-ci-build\) and Unable to find a profile match for urn:uuid:85822a88-55b1-460c-bb7b-e8fc22d8568f among choices: http://hl7\.org/fhir/uv/ips/StructureDefinition/Patient-uv-ips},
+        reason: 'AU PS Bundle allows multiple Observation profiles. IG Publisher evaluates each Observation entry against all allowed Observation profiles and reports information messages for profiles that do not match. This is expected behaviour when an Observation is intended to conform to one specific profile. Messages involving Patient-uv-ips resolution failures are a consequence of the IPS dependency limitation described in ERROR 01 and do not indicate any issues with the AU PS specification.',
+      },
+      {
+        type: 'info',
+        pattern: %r{The entry resource did not match the profile http://hl7\.org/fhir/uv/ips/StructureDefinition/Observation-results-radiology-uv-ips because: Observation\.performer: minimum required = 1, but only found 0 \(from http://hl7\.org/fhir/uv/ips/StructureDefinition/Observation-results-radiology-uv-ips\|2\.0\.0\) and Unable to find a profile match for urn:uuid:85822a88-55b1-460c-bb7b-e8fc22d8568f among choices: http://hl7\.org/fhir/uv/ips/StructureDefinition/Patient-uv-ips},
+        reason: 'AU PS Bundle allows multiple Observation profiles. IG Publisher evaluates each Observation entry against all allowed Observation profiles and reports information messages for profiles that do not match. This is expected behaviour when an Observation is intended to conform to one specific profile. Messages involving Patient-uv-ips resolution failures are a consequence of the IPS dependency limitation described in ERROR 01 and do not indicate any issues with the AU PS specification.',
+      },
+      {
+        type: 'info',
+        pattern: %r{The entry resource did not match the profile http://hl7\.org/fhir/StructureDefinition/vitalsigns because: Slice 'Observation\.category:VSCat': a matching slice is required, but not found \(from http://hl7\.org/fhir/StructureDefinition/vitalsigns\|4\.0\.1\)\. Note that other slices are allowed in addition to this required slice and Unable to find a profile match for urn:uuid:85822a88-55b1-460c-bb7b-e8fc22d8568f among choices: http://hl7\.org/fhir/uv/ips/StructureDefinition/Patient-uv-ips},
+        reason: 'AU PS Bundle allows multiple Observation profiles. IG Publisher evaluates each Observation entry against all allowed Observation profiles and reports information messages for profiles that do not match. This is expected behaviour when an Observation is intended to conform to one specific profile. Messages involving Patient-uv-ips resolution failures are a consequence of the IPS dependency limitation described in ERROR 01 and do not indicate any issues with the AU PS specification.',
+      },
+      {
+        type: 'info',
+        pattern: %r{The entry resource did not match the profile http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bloodpressure because: This element does not match any known slice defined in the profile http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bloodpressure\|2\.0\.1-ci-build and slicing is CLOSED: Bundle\.entry\[15\]\.resource/\*Observation/null\*/\.value\.ofType\(dateTime\): Does not match slice 'valueQuantity' \(discriminator: \$this\.empty\(\)\), Slice 'Observation\.category:VSCat': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bloodpressure\|2\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, Observation\.component: minimum required = 2, but only found 0 \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bloodpressure\|2\.0\.1-ci-build\), Slice 'Observation\.component:SystolicBP': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bloodpressure\|2\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, Slice 'Observation\.component:DiastolicBP': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bloodpressure\|2\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, Slice 'Observation\.code\.coding:BPCode': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bloodpressure\|2\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, Slice 'Observation\.code\.coding:snomedBPCode': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bloodpressure\|2\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, The Profile 'http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bloodpressure\|2\.0\.1-ci-build' definition allows for the type Quantity but found type dateTime and Unable to find a profile match for urn:uuid:85822a88-55b1-460c-bb7b-e8fc22d8568f among choices: http://hl7\.org/fhir/uv/ips/StructureDefinition/Patient-uv-ips},
+        reason: 'AU PS Bundle allows multiple Observation profiles. IG Publisher evaluates each Observation entry against all allowed Observation profiles and reports information messages for profiles that do not match. This is expected behaviour when an Observation is intended to conform to one specific profile. Messages involving Patient-uv-ips resolution failures are a consequence of the IPS dependency limitation described in ERROR 01 and do not indicate any issues with the AU PS specification.',
+      },
+      {
+        type: 'info',
+        pattern: %r{The entry resource did not match the profile http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bodyweight because: This element does not match any known slice defined in the profile http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bodyweight\|2\.0\.1-ci-build and slicing is CLOSED: Bundle\.entry\[15\]\.resource/\*Observation/null\*/\.value\.ofType\(dateTime\): Does not match slice 'valueQuantity' \(discriminator: \(\$this is Quantity\)\), Slice 'Observation\.category:VSCat': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bodyweight\|2\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, Slice 'Observation\.code\.coding:BodyWeightCode': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bodyweight\|2\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, Slice 'Observation\.code\.coding:snomedBodyWeightCode': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bodyweight\|2\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, The Profile 'http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bodyweight\|2\.0\.1-ci-build' definition allows for the type Quantity but found type dateTime and Unable to find a profile match for urn:uuid:85822a88-55b1-460c-bb7b-e8fc22d8568f among choices: http://hl7\.org/fhir/uv/ips/StructureDefinition/Patient-uv-ips},
+        reason: 'AU PS Bundle allows multiple Observation profiles. IG Publisher evaluates each Observation entry against all allowed Observation profiles and reports information messages for profiles that do not match. This is expected behaviour when an Observation is intended to conform to one specific profile. Messages involving Patient-uv-ips resolution failures are a consequence of the IPS dependency limitation described in ERROR 01 and do not indicate any issues with the AU PS specification.',
+      },
+      {
+        type: 'info',
+        pattern: %r{The entry resource did not match the profile http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-heartrate because: This element does not match any known slice defined in the profile http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-heartrate\|2\.0\.1-ci-build and slicing is CLOSED: Bundle\.entry\[15\]\.resource/\*Observation/null\*/\.value\.ofType\(dateTime\): Does not match slice 'valueQuantity' \(discriminator: \(\$this is Quantity\)\), Slice 'Observation\.category:VSCat': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-heartrate\|2\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, Slice 'Observation\.code\.coding:HeartRateCode': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-heartrate\|2\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, Slice 'Observation\.code\.coding:snomedHeartRateCode': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-heartrate\|2\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, The Profile 'http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-heartrate\|2\.0\.1-ci-build' definition allows for the type Quantity but found type dateTime and Unable to find a profile match for urn:uuid:85822a88-55b1-460c-bb7b-e8fc22d8568f among choices: http://hl7\.org/fhir/uv/ips/StructureDefinition/Patient-uv-ips},
+        reason: 'AU PS Bundle allows multiple Observation profiles. IG Publisher evaluates each Observation entry against all allowed Observation profiles and reports information messages for profiles that do not match. This is expected behaviour when an Observation is intended to conform to one specific profile. Messages involving Patient-uv-ips resolution failures are a consequence of the IPS dependency limitation described in ERROR 01 and do not indicate any issues with the AU PS specification.',
+      },
+      {
+        type: 'info',
+        pattern: %r{The entry resource did not match the profile http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-resprate because: This element does not match any known slice defined in the profile http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-resprate\|2\.0\.1-ci-build and slicing is CLOSED: Bundle\.entry\[15\]\.resource/\*Observation/null\*/\.value\.ofType\(dateTime\): Does not match slice 'valueQuantity' \(discriminator: \(\$this is Quantity\)\), Slice 'Observation\.category:VSCat': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-resprate\|2\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, Slice 'Observation\.code\.coding:RespRateCode': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-resprate\|2\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, Slice 'Observation\.code\.coding:snomedRespRateCode': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-resprate\|2\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, The Profile 'http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-resprate\|2\.0\.1-ci-build' definition allows for the type Quantity but found type dateTime and Unable to find a profile match for urn:uuid:85822a88-55b1-460c-bb7b-e8fc22d8568f among choices: http://hl7\.org/fhir/uv/ips/StructureDefinition/Patient-uv-ips},
+        reason: 'AU PS Bundle allows multiple Observation profiles. IG Publisher evaluates each Observation entry against all allowed Observation profiles and reports information messages for profiles that do not match. This is expected behaviour when an Observation is intended to conform to one specific profile. Messages involving Patient-uv-ips resolution failures are a consequence of the IPS dependency limitation described in ERROR 01 and do not indicate any issues with the AU PS specification.',
+      },
+      {
+        type: 'info',
+        pattern: %r{The entry resource did not match the profile http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-waistcircum because: Slice 'Observation\.category:VSCat': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-waistcircum\|2\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, Slice 'Observation\.code\.coding:loincWaistCircumCode': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-waistcircum\|2\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, Slice 'Observation\.code\.coding:snomedWaistCircumCode': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-waistcircum\|2\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice and Unable to find a profile match for urn:uuid:85822a88-55b1-460c-bb7b-e8fc22d8568f among choices: http://hl7\.org/fhir/uv/ips/StructureDefinition/Patient-uv-ips},
+        reason: 'AU PS Bundle allows multiple Observation profiles. IG Publisher evaluates each Observation entry against all allowed Observation profiles and reports information messages for profiles that do not match. This is expected behaviour when an Observation is intended to conform to one specific profile. Messages involving Patient-uv-ips resolution failures are a consequence of the IPS dependency limitation described in ERROR 01 and do not indicate any issues with the AU PS specification.',
+      },
+      {
+        type: 'info',
+        pattern: %r{The entry resource did not match the profile http://hl7\.org/fhir/uv/ips/StructureDefinition/Observation-pregnancy-status-uv-ips because: Unable to find a profile match for urn:uuid:85822a88-55b1-460c-bb7b-e8fc22d8568f among choices: http://hl7\.org/fhir/uv/ips/StructureDefinition/Patient-uv-ips and Unable to find a profile match for urn:uuid:ad82d71b-ca1c-4db6-a726-cc70cf638306 among choices: http://hl7\.org/fhir/uv/ips/StructureDefinition/Observation-pregnancy-edd-uv-ips},
+        reason: 'AU PS Bundle allows multiple Observation profiles. IG Publisher evaluates each Observation entry against all allowed Observation profiles and reports information messages for profiles that do not match. This is expected behaviour when an Observation is intended to conform to one specific profile. Messages involving Patient-uv-ips resolution failures are a consequence of the IPS dependency limitation described in ERROR 01 and do not indicate any issues with the AU PS specification.',
+      },
+      {
+        type: 'info',
+        pattern: %r{The entry resource did not match the profile http://hl7\.org\.au/fhir/ps/StructureDefinition/au-ps-smokingstatus because: The pattern \[system http://snomed\.info/sct, code 1747861000168109, and display 'null'\] defined in the profile http://hl7\.org\.au/fhir/ps/StructureDefinition/au-ps-smokingstatus\|1\.0\.1-ci-build not found\. Issues: \[ValidationMessage\[level=ERROR,type=VALUE,location=Bundle\.entry\[16\]\.resource/\*Observation/null\*/\.code\.coding\.system,message=Value is 'http://loinc\.org' but is fixed to 'http://snomed\.info/sct' in the profile http://hl7\.org\.au/fhir/ps/StructureDefinition/au-ps-smokingstatus\|1\.0\.1-ci-build\#Observation\], ValidationMessage\[level=ERROR,type=VALUE,location=Bundle\.entry\[16\]\.resource/\*Observation/null\*/\.code\.coding\.code,message=Value is '82810-3' but is fixed to '1747861000168109' in the profile http://hl7\.org\.au/fhir/ps/StructureDefinition/au-ps-smokingstatus\|1\.0\.1-ci-build\#Observation\]\], The pattern \[system http://snomed\.info/sct, code 1747861000168109, and display 'null'\] defined in the profile http://hl7\.org\.au/fhir/ps/StructureDefinition/au-ps-smokingstatus\|1\.0\.1-ci-build not found\. Issues: \[ValidationMessage\[level=ERROR,type=VALUE,location=Bundle\.entry\[16\]\.resource/\*Observation/null\*/\.code\.coding\.system,message=Value is 'http://loinc\.org' but is fixed to 'http://snomed\.info/sct' in the profile http://hl7\.org\.au/fhir/ps/StructureDefinition/au-ps-smokingstatus\|1\.0\.1-ci-build\#Observation\.code\], ValidationMessage\[level=ERROR,type=VALUE,location=Bundle\.entry\[16\]\.resource/\*Observation/null\*/\.code\.coding\.code,message=Value is '82810-3' but is fixed to '1747861000168109' in the profile http://hl7\.org\.au/fhir/ps/StructureDefinition/au-ps-smokingstatus\|1\.0\.1-ci-build\#Observation\.code\]\], Observation\.code\.coding: minimum required = 2, but only found 1 \(from http://hl7\.org\.au/fhir/ps/StructureDefinition/au-ps-smokingstatus\|1\.0\.1-ci-build\), Slice 'Observation\.code\.coding:loincSmokingStatus': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/ps/StructureDefinition/au-ps-smokingstatus\|1\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, Unable to find a profile match for urn:uuid:85822a88-55b1-460c-bb7b-e8fc22d8568f among choices: http://hl7\.org/fhir/uv/ips/StructureDefinition/Patient-uv-ips and Unable to find a profile match for urn:uuid:ad82d71b-ca1c-4db6-a726-cc70cf638306 among choices: http://hl7\.org/fhir/uv/ips/StructureDefinition/Observation-pregnancy-edd-uv-ips},
+        reason: 'AU PS Bundle allows multiple Observation profiles. IG Publisher evaluates each Observation entry against all allowed Observation profiles and reports information messages for profiles that do not match. This is expected behaviour when an Observation is intended to conform to one specific profile. Messages involving Patient-uv-ips resolution failures are a consequence of the IPS dependency limitation described in ERROR 01 and do not indicate any issues with the AU PS specification.',
+      },
+      {
+        type: 'info',
+        pattern: %r{The entry resource did not match the profile http://hl7\.org/fhir/uv/ips/StructureDefinition/Observation-results-radiology-uv-ips because: Slice 'Observation\.category:radiology': a matching slice is required, but not found \(from http://hl7\.org/fhir/uv/ips/StructureDefinition/Observation-results-radiology-uv-ips\|2\.0\.0\)\. Note that other slices are allowed in addition to this required slice, Observation\.performer: minimum required = 1, but only found 0 \(from http://hl7\.org/fhir/uv/ips/StructureDefinition/Observation-results-radiology-uv-ips\|2\.0\.0\), Unable to find a profile match for urn:uuid:85822a88-55b1-460c-bb7b-e8fc22d8568f among choices: http://hl7\.org/fhir/uv/ips/StructureDefinition/Patient-uv-ips, Unable to find a profile match for urn:uuid:ad82d71b-ca1c-4db6-a726-cc70cf638306 among choices: http://hl7\.org/fhir/uv/ips/StructureDefinition/Observation-results-radiology-uv-ips, Unable to find a profile match for urn:uuid:85822a88-55b1-460c-bb7b-e8fc22d8568f among choices: http://hl7\.org/fhir/uv/ips/StructureDefinition/Patient-uv-ips and Unable to find a profile match for urn:uuid:ad82d71b-ca1c-4db6-a726-cc70cf638306 among choices: http://hl7\.org/fhir/uv/ips/StructureDefinition/Observation-pregnancy-edd-uv-ips},
+        reason: 'AU PS Bundle allows multiple Observation profiles. IG Publisher evaluates each Observation entry against all allowed Observation profiles and reports information messages for profiles that do not match. This is expected behaviour when an Observation is intended to conform to one specific profile. Messages involving Patient-uv-ips resolution failures are a consequence of the IPS dependency limitation described in ERROR 01 and do not indicate any issues with the AU PS specification.',
+      },
+      {
+        type: 'info',
+        pattern: %r{The entry resource did not match the profile http://hl7\.org/fhir/StructureDefinition/vitalsigns because: Slice 'Observation\.category:VSCat': a matching slice is required, but not found \(from http://hl7\.org/fhir/StructureDefinition/vitalsigns\|4\.0\.1\)\. Note that other slices are allowed in addition to this required slice, Unable to find a profile match for urn:uuid:85822a88-55b1-460c-bb7b-e8fc22d8568f among choices: http://hl7\.org/fhir/uv/ips/StructureDefinition/Patient-uv-ips and Unable to find a profile match for urn:uuid:ad82d71b-ca1c-4db6-a726-cc70cf638306 among choices: http://hl7\.org/fhir/uv/ips/StructureDefinition/Observation-pregnancy-edd-uv-ips},
+        reason: 'AU PS Bundle allows multiple Observation profiles. IG Publisher evaluates each Observation entry against all allowed Observation profiles and reports information messages for profiles that do not match. This is expected behaviour when an Observation is intended to conform to one specific profile. Messages involving Patient-uv-ips resolution failures are a consequence of the IPS dependency limitation described in ERROR 01 and do not indicate any issues with the AU PS specification.',
+      },
+      {
+        type: 'info',
+        pattern: %r{The entry resource did not match the profile http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bloodpressure because: This element does not match any known slice defined in the profile http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bloodpressure\|2\.0\.1-ci-build and slicing is CLOSED: Bundle\.entry\[16\]\.resource/\*Observation/null\*/\.value\.ofType\(CodeableConcept\): Does not match slice 'valueQuantity' \(discriminator: \$this\.empty\(\)\), Slice 'Observation\.category:VSCat': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bloodpressure\|2\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, Observation\.component: minimum required = 2, but only found 0 \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bloodpressure\|2\.0\.1-ci-build\), Slice 'Observation\.component:SystolicBP': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bloodpressure\|2\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, Slice 'Observation\.component:DiastolicBP': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bloodpressure\|2\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, Observation\.code\.coding: minimum required = 2, but only found 1 \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bloodpressure\|2\.0\.1-ci-build\), Slice 'Observation\.code\.coding:BPCode': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bloodpressure\|2\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, Slice 'Observation\.code\.coding:snomedBPCode': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bloodpressure\|2\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, The Profile 'http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bloodpressure\|2\.0\.1-ci-build' definition allows for the type Quantity but found type CodeableConcept, This element is not allowed by the profile http://hl7\.org/fhir/StructureDefinition/Quantity\|4\.0\.1, This element is not allowed by the profile http://hl7\.org/fhir/StructureDefinition/Quantity\|4\.0\.1, This element is not allowed by the profile http://hl7\.org/fhir/StructureDefinition/Quantity\|4\.0\.1, Unable to find a profile match for urn:uuid:85822a88-55b1-460c-bb7b-e8fc22d8568f among choices: http://hl7\.org/fhir/uv/ips/StructureDefinition/Patient-uv-ips and Unable to find a profile match for urn:uuid:ad82d71b-ca1c-4db6-a726-cc70cf638306 among choices: http://hl7\.org/fhir/uv/ips/StructureDefinition/Observation-pregnancy-edd-uv-ips},
+        reason: 'AU PS Bundle allows multiple Observation profiles. IG Publisher evaluates each Observation entry against all allowed Observation profiles and reports information messages for profiles that do not match. This is expected behaviour when an Observation is intended to conform to one specific profile. Messages involving Patient-uv-ips resolution failures are a consequence of the IPS dependency limitation described in ERROR 01 and do not indicate any issues with the AU PS specification.',
+      },
+      {
+        type: 'info',
+        pattern: %r{The entry resource did not match the profile http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bodytemp because: This element does not match any known slice defined in the profile http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bodytemp\|2\.0\.1-ci-build and slicing is CLOSED: Bundle\.entry\[16\]\.resource/\*Observation/null\*/\.value\.ofType\(CodeableConcept\): Does not match slice 'valueQuantity' \(discriminator: \(\$this is Quantity\)\), Slice 'Observation\.category:VSCat': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bodytemp\|2\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, Observation\.code\.coding: minimum required = 2, but only found 1 \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bodytemp\|2\.0\.1-ci-build\), Slice 'Observation\.code\.coding:BodyTempCode': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bodytemp\|2\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, Slice 'Observation\.code\.coding:snomedBodyTempCode': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bodytemp\|2\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, The Profile 'http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bodytemp\|2\.0\.1-ci-build' definition allows for the type Quantity but found type CodeableConcept, This element is not allowed by the profile http://hl7\.org/fhir/StructureDefinition/Quantity\|4\.0\.1, This element is not allowed by the profile http://hl7\.org/fhir/StructureDefinition/Quantity\|4\.0\.1, This element is not allowed by the profile http://hl7\.org/fhir/StructureDefinition/Quantity\|4\.0\.1, Unable to find a profile match for urn:uuid:85822a88-55b1-460c-bb7b-e8fc22d8568f among choices: http://hl7\.org/fhir/uv/ips/StructureDefinition/Patient-uv-ips and Unable to find a profile match for urn:uuid:ad82d71b-ca1c-4db6-a726-cc70cf638306 among choices: http://hl7\.org/fhir/uv/ips/StructureDefinition/Observation-pregnancy-edd-uv-ips},
+        reason: 'AU PS Bundle allows multiple Observation profiles. IG Publisher evaluates each Observation entry against all allowed Observation profiles and reports information messages for profiles that do not match. This is expected behaviour when an Observation is intended to conform to one specific profile. Messages involving Patient-uv-ips resolution failures are a consequence of the IPS dependency limitation described in ERROR 01 and do not indicate any issues with the AU PS specification.',
+      },
+      {
+        type: 'info',
+        pattern: %r{The entry resource did not match the profile http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bodyweight because: This element does not match any known slice defined in the profile http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bodyweight\|2\.0\.1-ci-build and slicing is CLOSED: Bundle\.entry\[16\]\.resource/\*Observation/null\*/\.value\.ofType\(CodeableConcept\): Does not match slice 'valueQuantity' \(discriminator: \(\$this is Quantity\)\), Slice 'Observation\.category:VSCat': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bodyweight\|2\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, Observation\.code\.coding: minimum required = 2, but only found 1 \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bodyweight\|2\.0\.1-ci-build\), Slice 'Observation\.code\.coding:BodyWeightCode': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bodyweight\|2\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, Slice 'Observation\.code\.coding:snomedBodyWeightCode': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bodyweight\|2\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, The Profile 'http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bodyweight\|2\.0\.1-ci-build' definition allows for the type Quantity but found type CodeableConcept, This element is not allowed by the profile http://hl7\.org/fhir/StructureDefinition/Quantity\|4\.0\.1, This element is not allowed by the profile http://hl7\.org/fhir/StructureDefinition/Quantity\|4\.0\.1, This element is not allowed by the profile http://hl7\.org/fhir/StructureDefinition/Quantity\|4\.0\.1, Unable to find a profile match for urn:uuid:85822a88-55b1-460c-bb7b-e8fc22d8568f among choices: http://hl7\.org/fhir/uv/ips/StructureDefinition/Patient-uv-ips and Unable to find a profile match for urn:uuid:ad82d71b-ca1c-4db6-a726-cc70cf638306 among choices: http://hl7\.org/fhir/uv/ips/StructureDefinition/Observation-pregnancy-edd-uv-ips},
+        reason: 'AU PS Bundle allows multiple Observation profiles. IG Publisher evaluates each Observation entry against all allowed Observation profiles and reports information messages for profiles that do not match. This is expected behaviour when an Observation is intended to conform to one specific profile. Messages involving Patient-uv-ips resolution failures are a consequence of the IPS dependency limitation described in ERROR 01 and do not indicate any issues with the AU PS specification.',
+      },
+      {
+        type: 'info',
+        pattern: %r{The entry resource did not match the profile http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-heartrate because: This element does not match any known slice defined in the profile http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-heartrate\|2\.0\.1-ci-build and slicing is CLOSED: Bundle\.entry\[16\]\.resource/\*Observation/null\*/\.value\.ofType\(CodeableConcept\): Does not match slice 'valueQuantity' \(discriminator: \(\$this is Quantity\)\), Slice 'Observation\.category:VSCat': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-heartrate\|2\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, Observation\.code\.coding: minimum required = 2, but only found 1 \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-heartrate\|2\.0\.1-ci-build\), Slice 'Observation\.code\.coding:HeartRateCode': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-heartrate\|2\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, Slice 'Observation\.code\.coding:snomedHeartRateCode': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-heartrate\|2\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, The Profile 'http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-heartrate\|2\.0\.1-ci-build' definition allows for the type Quantity but found type CodeableConcept, This element is not allowed by the profile http://hl7\.org/fhir/StructureDefinition/Quantity\|4\.0\.1, This element is not allowed by the profile http://hl7\.org/fhir/StructureDefinition/Quantity\|4\.0\.1, This element is not allowed by the profile http://hl7\.org/fhir/StructureDefinition/Quantity\|4\.0\.1, Unable to find a profile match for urn:uuid:85822a88-55b1-460c-bb7b-e8fc22d8568f among choices: http://hl7\.org/fhir/uv/ips/StructureDefinition/Patient-uv-ips and Unable to find a profile match for urn:uuid:ad82d71b-ca1c-4db6-a726-cc70cf638306 among choices: http://hl7\.org/fhir/uv/ips/StructureDefinition/Observation-pregnancy-edd-uv-ips},
+        reason: 'AU PS Bundle allows multiple Observation profiles. IG Publisher evaluates each Observation entry against all allowed Observation profiles and reports information messages for profiles that do not match. This is expected behaviour when an Observation is intended to conform to one specific profile. Messages involving Patient-uv-ips resolution failures are a consequence of the IPS dependency limitation described in ERROR 01 and do not indicate any issues with the AU PS specification.',
+      },
+      {
+        type: 'info',
+        pattern: %r{The entry resource did not match the profile http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-resprate because: This element does not match any known slice defined in the profile http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-resprate\|2\.0\.1-ci-build and slicing is CLOSED: Bundle\.entry\[16\]\.resource/\*Observation/null\*/\.value\.ofType\(CodeableConcept\): Does not match slice 'valueQuantity' \(discriminator: \(\$this is Quantity\)\), Slice 'Observation\.category:VSCat': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-resprate\|2\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, Observation\.code\.coding: minimum required = 2, but only found 1 \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-resprate\|2\.0\.1-ci-build\), Slice 'Observation\.code\.coding:RespRateCode': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-resprate\|2\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, Slice 'Observation\.code\.coding:snomedRespRateCode': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-resprate\|2\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, The Profile 'http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-resprate\|2\.0\.1-ci-build' definition allows for the type Quantity but found type CodeableConcept, This element is not allowed by the profile http://hl7\.org/fhir/StructureDefinition/Quantity\|4\.0\.1, This element is not allowed by the profile http://hl7\.org/fhir/StructureDefinition/Quantity\|4\.0\.1, This element is not allowed by the profile http://hl7\.org/fhir/StructureDefinition/Quantity\|4\.0\.1, Unable to find a profile match for urn:uuid:85822a88-55b1-460c-bb7b-e8fc22d8568f among choices: http://hl7\.org/fhir/uv/ips/StructureDefinition/Patient-uv-ips and Unable to find a profile match for urn:uuid:ad82d71b-ca1c-4db6-a726-cc70cf638306 among choices: http://hl7\.org/fhir/uv/ips/StructureDefinition/Observation-pregnancy-edd-uv-ips},
+        reason: 'AU PS Bundle allows multiple Observation profiles. IG Publisher evaluates each Observation entry against all allowed Observation profiles and reports information messages for profiles that do not match. This is expected behaviour when an Observation is intended to conform to one specific profile. Messages involving Patient-uv-ips resolution failures are a consequence of the IPS dependency limitation described in ERROR 01 and do not indicate any issues with the AU PS specification.',
+      },
+      {
+        type: 'info',
+        pattern: %r{The entry resource did not match the profile http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-waistcircum because: Slice 'Observation\.category:VSCat': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-waistcircum\|2\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, Observation\.code\.coding: minimum required = 2, but only found 1 \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-waistcircum\|2\.0\.1-ci-build\), Slice 'Observation\.code\.coding:loincWaistCircumCode': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-waistcircum\|2\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, Slice 'Observation\.code\.coding:snomedWaistCircumCode': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-waistcircum\|2\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, Unable to find a profile match for urn:uuid:85822a88-55b1-460c-bb7b-e8fc22d8568f among choices: http://hl7\.org/fhir/uv/ips/StructureDefinition/Patient-uv-ips and Unable to find a profile match for urn:uuid:ad82d71b-ca1c-4db6-a726-cc70cf638306 among choices: http://hl7\.org/fhir/uv/ips/StructureDefinition/Observation-pregnancy-edd-uv-ips},
+        reason: 'AU PS Bundle allows multiple Observation profiles. IG Publisher evaluates each Observation entry against all allowed Observation profiles and reports information messages for profiles that do not match. This is expected behaviour when an Observation is intended to conform to one specific profile. Messages involving Patient-uv-ips resolution failures are a consequence of the IPS dependency limitation described in ERROR 01 and do not indicate any issues with the AU PS specification.',
+      },
+      {
+        type: 'info',
+        pattern: %r{The entry resource did not match the profile http://hl7\.org/fhir/uv/ips/StructureDefinition/Observation-pregnancy-edd-uv-ips because: None of the codings provided are in the value set 'Pregnancy Expected Delivery Date Method - IPS' \(http://hl7\.org/fhir/uv/ips/ValueSet/edd-method-uv-ips\|2\.0\.0\), and a coding from this value set is required\) \(codes = http://loinc\.org\#82810-3\), Unable to find a profile match for urn:uuid:85822a88-55b1-460c-bb7b-e8fc22d8568f among choices: http://hl7\.org/fhir/uv/ips/StructureDefinition/Patient-uv-ips, Unable to find a profile match for urn:uuid:85822a88-55b1-460c-bb7b-e8fc22d8568f among choices: http://hl7\.org/fhir/uv/ips/StructureDefinition/Patient-uv-ips and Unable to find a profile match for urn:uuid:ad82d71b-ca1c-4db6-a726-cc70cf638306 among choices: http://hl7\.org/fhir/uv/ips/StructureDefinition/Observation-pregnancy-edd-uv-ips},
+        reason: 'AU PS Bundle allows multiple Observation profiles. IG Publisher evaluates each Observation entry against all allowed Observation profiles and reports information messages for profiles that do not match. This is expected behaviour when an Observation is intended to conform to one specific profile. Messages involving Patient-uv-ips resolution failures are a consequence of the IPS dependency limitation described in ERROR 01 and do not indicate any issues with the AU PS specification.',
+      },
+      {
+        type: 'info',
+        pattern: %r{The entry resource did not match the profile http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bodyheight because: This element does not match any known slice defined in the profile http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bodyheight\|2\.0\.1-ci-build and slicing is CLOSED: Bundle\.entry\[16\]\.resource/\*Observation/null\*/\.value\.ofType\(CodeableConcept\): Does not match slice 'valueQuantity' \(discriminator: \(\$this is Quantity\)\), Slice 'Observation\.category:VSCat': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bodyheight\|2\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, Observation\.code\.coding: minimum required = 2, but only found 1 \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bodyheight\|2\.0\.1-ci-build\), Slice 'Observation\.code\.coding:BodyHeightCode': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bodyheight\|2\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, Slice 'Observation\.code\.coding:snomedBodyHeightCode': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bodyheight\|2\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, The Profile 'http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bodyheight\|2\.0\.1-ci-build' definition allows for the type Quantity but found type CodeableConcept, This element is not allowed by the profile http://hl7\.org/fhir/StructureDefinition/Quantity\|4\.0\.1, This element is not allowed by the profile http://hl7\.org/fhir/StructureDefinition/Quantity\|4\.0\.1, This element is not allowed by the profile http://hl7\.org/fhir/StructureDefinition/Quantity\|4\.0\.1, Unable to find a profile match for urn:uuid:85822a88-55b1-460c-bb7b-e8fc22d8568f among choices: http://hl7\.org/fhir/uv/ips/StructureDefinition/Patient-uv-ips and Unable to find a profile match for urn:uuid:ad82d71b-ca1c-4db6-a726-cc70cf638306 among choices: http://hl7\.org/fhir/uv/ips/StructureDefinition/Observation-pregnancy-edd-uv-ips},
+        reason: 'AU PS Bundle allows multiple Observation profiles. IG Publisher evaluates each Observation entry against all allowed Observation profiles and reports information messages for profiles that do not match. This is expected behaviour when an Observation is intended to conform to one specific profile. Messages involving Patient-uv-ips resolution failures are a consequence of the IPS dependency limitation described in ERROR 01 and do not indicate any issues with the AU PS specification.',
+      },
+      {
+        type: 'info',
+        pattern: %r{The entry resource did not match the profile http://hl7\.org/fhir/uv/ips/StructureDefinition/Observation-pregnancy-status-uv-ips because: The pattern \[system http://loinc\.org, code 82810-3, and display 'null'\] defined in the profile http://hl7\.org/fhir/uv/ips/StructureDefinition/Observation-pregnancy-status-uv-ips\|2\.0\.0 not found\. Issues: \[ValidationMessage\[level=ERROR,type=VALUE,location=Bundle\.entry\[10\]\.resource/\*Observation/ad82d71b-ca1c-4db6-a726-cc70cf638306\*/\.code\.coding\.system,message=Value is 'http://snomed\.info/sct' but is fixed to 'http://loinc\.org' in the profile http://hl7\.org/fhir/uv/ips/StructureDefinition/Observation-pregnancy-status-uv-ips\|2\.0\.0\#Observation\], ValidationMessage\[level=ERROR,type=VALUE,location=Bundle\.entry\[10\]\.resource/\*Observation/ad82d71b-ca1c-4db6-a726-cc70cf638306\*/\.code\.coding\.code,message=Value is '161714006' but is fixed to '82810-3' in the profile http://hl7\.org/fhir/uv/ips/StructureDefinition/Observation-pregnancy-status-uv-ips\|2\.0\.0\#Observation\], ValidationMessage\[level=ERROR,type=VALUE,location=Bundle\.entry\[10\]\.resource/\*Observation/ad82d71b-ca1c-4db6-a726-cc70cf638306\*/\.code\.coding\.code,message=Value is '11778-8' but is fixed to '82810-3' in the profile http://hl7\.org/fhir/uv/ips/StructureDefinition/Observation-pregnancy-status-uv-ips\|2\.0\.0\#Observation\]\] and Unable to find a profile match for urn:uuid:85822a88-55b1-460c-bb7b-e8fc22d8568f among choices: http://hl7\.org/fhir/uv/ips/StructureDefinition/Patient-uv-ips},
+        reason: 'AU PS Bundle allows multiple Observation profiles. IG Publisher evaluates each Observation entry against all allowed Observation profiles and reports information messages for profiles that do not match. This is expected behaviour when an Observation is intended to conform to one specific profile. Messages involving Patient-uv-ips resolution failures are a consequence of the IPS dependency limitation described in ERROR 01 and do not indicate any issues with the AU PS specification.',
+      },
+      {
+        type: 'info',
+        pattern: %r{The entry resource did not match the profile http://hl7\.org/fhir/uv/ips/StructureDefinition/Observation-alcoholuse-uv-ips because: The pattern \[system http://loinc\.org, code 74013-4, and display 'null'\] defined in the profile http://hl7\.org/fhir/uv/ips/StructureDefinition/Observation-alcoholuse-uv-ips\|2\.0\.0 not found\. Issues: \[ValidationMessage\[level=ERROR,type=VALUE,location=Bundle\.entry\[10\]\.resource/\*Observation/ad82d71b-ca1c-4db6-a726-cc70cf638306\*/\.code\.coding\.system,message=Value is 'http://snomed\.info/sct' but is fixed to 'http://loinc\.org' in the profile http://hl7\.org/fhir/uv/ips/StructureDefinition/Observation-alcoholuse-uv-ips\|2\.0\.0\#Observation\], ValidationMessage\[level=ERROR,type=VALUE,location=Bundle\.entry\[10\]\.resource/\*Observation/ad82d71b-ca1c-4db6-a726-cc70cf638306\*/\.code\.coding\.code,message=Value is '161714006' but is fixed to '74013-4' in the profile http://hl7\.org/fhir/uv/ips/StructureDefinition/Observation-alcoholuse-uv-ips\|2\.0\.0\#Observation\], ValidationMessage\[level=ERROR,type=VALUE,location=Bundle\.entry\[10\]\.resource/\*Observation/ad82d71b-ca1c-4db6-a726-cc70cf638306\*/\.code\.coding\.code,message=Value is '11778-8' but is fixed to '74013-4' in the profile http://hl7\.org/fhir/uv/ips/StructureDefinition/Observation-alcoholuse-uv-ips\|2\.0\.0\#Observation\]\] and Unable to find a profile match for urn:uuid:85822a88-55b1-460c-bb7b-e8fc22d8568f among choices: http://hl7\.org/fhir/uv/ips/StructureDefinition/Patient-uv-ips},
+        reason: 'AU PS Bundle allows multiple Observation profiles. IG Publisher evaluates each Observation entry against all allowed Observation profiles and reports information messages for profiles that do not match. This is expected behaviour when an Observation is intended to conform to one specific profile. Messages involving Patient-uv-ips resolution failures are a consequence of the IPS dependency limitation described in ERROR 01 and do not indicate any issues with the AU PS specification.',
+      },
+      {
+        type: 'info',
+        pattern: %r{The entry resource did not match the profile http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bloodpressure because: This element does not match any known slice defined in the profile http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bloodpressure\|2\.0\.1-ci-build and slicing is CLOSED: Bundle\.entry\[10\]\.resource/\*Observation/ad82d71b-ca1c-4db6-a726-cc70cf638306\*/\.value\.ofType\(dateTime\): Does not match slice 'valueQuantity' \(discriminator: \$this\.empty\(\)\), Slice 'Observation\.category:VSCat': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bloodpressure\|2\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, Observation\.component: minimum required = 2, but only found 0 \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bloodpressure\|2\.0\.1-ci-build\), Slice 'Observation\.component:SystolicBP': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bloodpressure\|2\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, Slice 'Observation\.component:DiastolicBP': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bloodpressure\|2\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, Slice 'Observation\.code\.coding:BPCode': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bloodpressure\|2\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, Slice 'Observation\.code\.coding:snomedBPCode': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bloodpressure\|2\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, The Profile 'http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bloodpressure\|2\.0\.1-ci-build' definition allows for the type Quantity but found type dateTime and Unable to find a profile match for urn:uuid:85822a88-55b1-460c-bb7b-e8fc22d8568f among choices: http://hl7\.org/fhir/uv/ips/StructureDefinition/Patient-uv-ips},
+        reason: 'AU PS Bundle allows multiple Observation profiles. IG Publisher evaluates each Observation entry against all allowed Observation profiles and reports information messages for profiles that do not match. This is expected behaviour when an Observation is intended to conform to one specific profile. Messages involving Patient-uv-ips resolution failures are a consequence of the IPS dependency limitation described in ERROR 01 and do not indicate any issues with the AU PS specification.',
+      },
+      {
+        type: 'info',
+        pattern: %r{The entry resource did not match the profile http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bodyheight because: This element does not match any known slice defined in the profile http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bodyheight\|2\.0\.1-ci-build and slicing is CLOSED: Bundle\.entry\[10\]\.resource/\*Observation/ad82d71b-ca1c-4db6-a726-cc70cf638306\*/\.value\.ofType\(dateTime\): Does not match slice 'valueQuantity' \(discriminator: \(\$this is Quantity\)\), Slice 'Observation\.category:VSCat': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bodyheight\|2\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, Slice 'Observation\.code\.coding:BodyHeightCode': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bodyheight\|2\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, Slice 'Observation\.code\.coding:snomedBodyHeightCode': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bodyheight\|2\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, The Profile 'http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bodyheight\|2\.0\.1-ci-build' definition allows for the type Quantity but found type dateTime and Unable to find a profile match for urn:uuid:85822a88-55b1-460c-bb7b-e8fc22d8568f among choices: http://hl7\.org/fhir/uv/ips/StructureDefinition/Patient-uv-ips},
+        reason: 'AU PS Bundle allows multiple Observation profiles. IG Publisher evaluates each Observation entry against all allowed Observation profiles and reports information messages for profiles that do not match. This is expected behaviour when an Observation is intended to conform to one specific profile. Messages involving Patient-uv-ips resolution failures are a consequence of the IPS dependency limitation described in ERROR 01 and do not indicate any issues with the AU PS specification.',
+      },
+      {
+        type: 'info',
+        pattern: %r{The entry resource did not match the profile http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bodytemp because: This element does not match any known slice defined in the profile http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bodytemp\|2\.0\.1-ci-build and slicing is CLOSED: Bundle\.entry\[10\]\.resource/\*Observation/ad82d71b-ca1c-4db6-a726-cc70cf638306\*/\.value\.ofType\(dateTime\): Does not match slice 'valueQuantity' \(discriminator: \(\$this is Quantity\)\), Slice 'Observation\.category:VSCat': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bodytemp\|2\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, Slice 'Observation\.code\.coding:BodyTempCode': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bodytemp\|2\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, Slice 'Observation\.code\.coding:snomedBodyTempCode': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bodytemp\|2\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, The Profile 'http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bodytemp\|2\.0\.1-ci-build' definition allows for the type Quantity but found type dateTime and Unable to find a profile match for urn:uuid:85822a88-55b1-460c-bb7b-e8fc22d8568f among choices: http://hl7\.org/fhir/uv/ips/StructureDefinition/Patient-uv-ips},
+        reason: 'AU PS Bundle allows multiple Observation profiles. IG Publisher evaluates each Observation entry against all allowed Observation profiles and reports information messages for profiles that do not match. This is expected behaviour when an Observation is intended to conform to one specific profile. Messages involving Patient-uv-ips resolution failures are a consequence of the IPS dependency limitation described in ERROR 01 and do not indicate any issues with the AU PS specification.',
+      },
+      {
+        type: 'info',
+        pattern: %r{The entry resource did not match the profile http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bodyweight because: This element does not match any known slice defined in the profile http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bodyweight\|2\.0\.1-ci-build and slicing is CLOSED: Bundle\.entry\[10\]\.resource/\*Observation/ad82d71b-ca1c-4db6-a726-cc70cf638306\*/\.value\.ofType\(dateTime\): Does not match slice 'valueQuantity' \(discriminator: \(\$this is Quantity\)\), Slice 'Observation\.category:VSCat': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bodyweight\|2\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, Slice 'Observation\.code\.coding:BodyWeightCode': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bodyweight\|2\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, Slice 'Observation\.code\.coding:snomedBodyWeightCode': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bodyweight\|2\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, The Profile 'http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bodyweight\|2\.0\.1-ci-build' definition allows for the type Quantity but found type dateTime and Unable to find a profile match for urn:uuid:85822a88-55b1-460c-bb7b-e8fc22d8568f among choices: http://hl7\.org/fhir/uv/ips/StructureDefinition/Patient-uv-ips},
+        reason: 'AU PS Bundle allows multiple Observation profiles. IG Publisher evaluates each Observation entry against all allowed Observation profiles and reports information messages for profiles that do not match. This is expected behaviour when an Observation is intended to conform to one specific profile. Messages involving Patient-uv-ips resolution failures are a consequence of the IPS dependency limitation described in ERROR 01 and do not indicate any issues with the AU PS specification.',
+      },
+      {
+        type: 'info',
+        pattern: %r{The entry resource did not match the profile http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-heartrate because: This element does not match any known slice defined in the profile http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-heartrate\|2\.0\.1-ci-build and slicing is CLOSED: Bundle\.entry\[10\]\.resource/\*Observation/ad82d71b-ca1c-4db6-a726-cc70cf638306\*/\.value\.ofType\(dateTime\): Does not match slice 'valueQuantity' \(discriminator: \(\$this is Quantity\)\), Slice 'Observation\.category:VSCat': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-heartrate\|2\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, Slice 'Observation\.code\.coding:HeartRateCode': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-heartrate\|2\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, Slice 'Observation\.code\.coding:snomedHeartRateCode': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-heartrate\|2\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, The Profile 'http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-heartrate\|2\.0\.1-ci-build' definition allows for the type Quantity but found type dateTime and Unable to find a profile match for urn:uuid:85822a88-55b1-460c-bb7b-e8fc22d8568f among choices: http://hl7\.org/fhir/uv/ips/StructureDefinition/Patient-uv-ips},
+        reason: 'AU PS Bundle allows multiple Observation profiles. IG Publisher evaluates each Observation entry against all allowed Observation profiles and reports information messages for profiles that do not match. This is expected behaviour when an Observation is intended to conform to one specific profile. Messages involving Patient-uv-ips resolution failures are a consequence of the IPS dependency limitation described in ERROR 01 and do not indicate any issues with the AU PS specification.',
+      },
+      {
+        type: 'info',
+        pattern: %r{The entry resource did not match the profile http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-resprate because: This element does not match any known slice defined in the profile http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-resprate\|2\.0\.1-ci-build and slicing is CLOSED: Bundle\.entry\[10\]\.resource/\*Observation/ad82d71b-ca1c-4db6-a726-cc70cf638306\*/\.value\.ofType\(dateTime\): Does not match slice 'valueQuantity' \(discriminator: \(\$this is Quantity\)\), Slice 'Observation\.category:VSCat': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-resprate\|2\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, Slice 'Observation\.code\.coding:RespRateCode': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-resprate\|2\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, Slice 'Observation\.code\.coding:snomedRespRateCode': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-resprate\|2\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, The Profile 'http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-resprate\|2\.0\.1-ci-build' definition allows for the type Quantity but found type dateTime and Unable to find a profile match for urn:uuid:85822a88-55b1-460c-bb7b-e8fc22d8568f among choices: http://hl7\.org/fhir/uv/ips/StructureDefinition/Patient-uv-ips},
+        reason: 'AU PS Bundle allows multiple Observation profiles. IG Publisher evaluates each Observation entry against all allowed Observation profiles and reports information messages for profiles that do not match. This is expected behaviour when an Observation is intended to conform to one specific profile. Messages involving Patient-uv-ips resolution failures are a consequence of the IPS dependency limitation described in ERROR 01 and do not indicate any issues with the AU PS specification.',
+      },
+      {
+        type: 'info',
+        pattern: %r{The entry resource did not match the profile http://hl7\.org\.au/fhir/ps/StructureDefinition/au-ps-smokingstatus because: The pattern \[system http://snomed\.info/sct, code 1747861000168109, and display 'null'\] defined in the profile http://hl7\.org\.au/fhir/ps/StructureDefinition/au-ps-smokingstatus\|1\.0\.1-ci-build not found\. Issues: \[ValidationMessage\[level=ERROR,type=VALUE,location=Bundle\.entry\[11\]\.resource/\*Observation/f85ad223-7bed-46f3-893d-e89d6082f9a9\*/\.code\.coding\.system,message=Value is 'http://loinc\.org' but is fixed to 'http://snomed\.info/sct' in the profile http://hl7\.org\.au/fhir/ps/StructureDefinition/au-ps-smokingstatus\|1\.0\.1-ci-build\#Observation\], ValidationMessage\[level=ERROR,type=VALUE,location=Bundle\.entry\[11\]\.resource/\*Observation/f85ad223-7bed-46f3-893d-e89d6082f9a9\*/\.code\.coding\.code,message=Value is '82810-3' but is fixed to '1747861000168109' in the profile http://hl7\.org\.au/fhir/ps/StructureDefinition/au-ps-smokingstatus\|1\.0\.1-ci-build\#Observation\]\], The pattern \[system http://snomed\.info/sct, code 1747861000168109, and display 'null'\] defined in the profile http://hl7\.org\.au/fhir/ps/StructureDefinition/au-ps-smokingstatus\|1\.0\.1-ci-build not found\. Issues: \[ValidationMessage\[level=ERROR,type=VALUE,location=Bundle\.entry\[11\]\.resource/\*Observation/f85ad223-7bed-46f3-893d-e89d6082f9a9\*/\.code\.coding\.system,message=Value is 'http://loinc\.org' but is fixed to 'http://snomed\.info/sct' in the profile http://hl7\.org\.au/fhir/ps/StructureDefinition/au-ps-smokingstatus\|1\.0\.1-ci-build\#Observation\.code\], ValidationMessage\[level=ERROR,type=VALUE,location=Bundle\.entry\[11\]\.resource/\*Observation/f85ad223-7bed-46f3-893d-e89d6082f9a9\*/\.code\.coding\.code,message=Value is '82810-3' but is fixed to '1747861000168109' in the profile http://hl7\.org\.au/fhir/ps/StructureDefinition/au-ps-smokingstatus\|1\.0\.1-ci-build\#Observation\.code\]\], Observation\.code\.coding: minimum required = 2, but only found 1 \(from http://hl7\.org\.au/fhir/ps/StructureDefinition/au-ps-smokingstatus\|1\.0\.1-ci-build\), Slice 'Observation\.code\.coding:loincSmokingStatus': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/ps/StructureDefinition/au-ps-smokingstatus\|1\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, Unable to find a profile match for urn:uuid:85822a88-55b1-460c-bb7b-e8fc22d8568f among choices: http://hl7\.org/fhir/uv/ips/StructureDefinition/Patient-uv-ips and Unable to find a profile match for urn:uuid:ad82d71b-ca1c-4db6-a726-cc70cf638306 among choices: http://hl7\.org/fhir/uv/ips/StructureDefinition/Observation-pregnancy-edd-uv-ips},
+        reason: 'AU PS Bundle allows multiple Observation profiles. IG Publisher evaluates each Observation entry against all allowed Observation profiles and reports information messages for profiles that do not match. This is expected behaviour when an Observation is intended to conform to one specific profile. Messages involving Patient-uv-ips resolution failures are a consequence of the IPS dependency limitation described in ERROR 01 and do not indicate any issues with the AU PS specification.',
+      },
+      {
+        type: 'info',
+        pattern: %r{The entry resource did not match the profile http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bloodpressure because: This element does not match any known slice defined in the profile http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bloodpressure\|2\.0\.1-ci-build and slicing is CLOSED: Bundle\.entry\[11\]\.resource/\*Observation/f85ad223-7bed-46f3-893d-e89d6082f9a9\*/\.value\.ofType\(CodeableConcept\): Does not match slice 'valueQuantity' \(discriminator: \$this\.empty\(\)\), Slice 'Observation\.category:VSCat': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bloodpressure\|2\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, Observation\.component: minimum required = 2, but only found 0 \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bloodpressure\|2\.0\.1-ci-build\), Slice 'Observation\.component:SystolicBP': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bloodpressure\|2\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, Slice 'Observation\.component:DiastolicBP': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bloodpressure\|2\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, Observation\.code\.coding: minimum required = 2, but only found 1 \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bloodpressure\|2\.0\.1-ci-build\), Slice 'Observation\.code\.coding:BPCode': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bloodpressure\|2\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, Slice 'Observation\.code\.coding:snomedBPCode': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bloodpressure\|2\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, The Profile 'http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bloodpressure\|2\.0\.1-ci-build' definition allows for the type Quantity but found type CodeableConcept, This element is not allowed by the profile http://hl7\.org/fhir/StructureDefinition/Quantity\|4\.0\.1, This element is not allowed by the profile http://hl7\.org/fhir/StructureDefinition/Quantity\|4\.0\.1, This element is not allowed by the profile http://hl7\.org/fhir/StructureDefinition/Quantity\|4\.0\.1, Unable to find a profile match for urn:uuid:85822a88-55b1-460c-bb7b-e8fc22d8568f among choices: http://hl7\.org/fhir/uv/ips/StructureDefinition/Patient-uv-ips and Unable to find a profile match for urn:uuid:ad82d71b-ca1c-4db6-a726-cc70cf638306 among choices: http://hl7\.org/fhir/uv/ips/StructureDefinition/Observation-pregnancy-edd-uv-ips},
+        reason: 'AU PS Bundle allows multiple Observation profiles. IG Publisher evaluates each Observation entry against all allowed Observation profiles and reports information messages for profiles that do not match. This is expected behaviour when an Observation is intended to conform to one specific profile. Messages involving Patient-uv-ips resolution failures are a consequence of the IPS dependency limitation described in ERROR 01 and do not indicate any issues with the AU PS specification.',
+      },
+      {
+        type: 'info',
+        pattern: %r{The entry resource did not match the profile http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bodyheight because: This element does not match any known slice defined in the profile http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bodyheight\|2\.0\.1-ci-build and slicing is CLOSED: Bundle\.entry\[11\]\.resource/\*Observation/f85ad223-7bed-46f3-893d-e89d6082f9a9\*/\.value\.ofType\(CodeableConcept\): Does not match slice 'valueQuantity' \(discriminator: \(\$this is Quantity\)\), Slice 'Observation\.category:VSCat': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bodyheight\|2\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, Observation\.code\.coding: minimum required = 2, but only found 1 \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bodyheight\|2\.0\.1-ci-build\), Slice 'Observation\.code\.coding:BodyHeightCode': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bodyheight\|2\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, Slice 'Observation\.code\.coding:snomedBodyHeightCode': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bodyheight\|2\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, The Profile 'http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bodyheight\|2\.0\.1-ci-build' definition allows for the type Quantity but found type CodeableConcept, This element is not allowed by the profile http://hl7\.org/fhir/StructureDefinition/Quantity\|4\.0\.1, This element is not allowed by the profile http://hl7\.org/fhir/StructureDefinition/Quantity\|4\.0\.1, This element is not allowed by the profile http://hl7\.org/fhir/StructureDefinition/Quantity\|4\.0\.1, Unable to find a profile match for urn:uuid:85822a88-55b1-460c-bb7b-e8fc22d8568f among choices: http://hl7\.org/fhir/uv/ips/StructureDefinition/Patient-uv-ips and Unable to find a profile match for urn:uuid:ad82d71b-ca1c-4db6-a726-cc70cf638306 among choices: http://hl7\.org/fhir/uv/ips/StructureDefinition/Observation-pregnancy-edd-uv-ips},
+        reason: 'AU PS Bundle allows multiple Observation profiles. IG Publisher evaluates each Observation entry against all allowed Observation profiles and reports information messages for profiles that do not match. This is expected behaviour when an Observation is intended to conform to one specific profile. Messages involving Patient-uv-ips resolution failures are a consequence of the IPS dependency limitation described in ERROR 01 and do not indicate any issues with the AU PS specification.',
+      },
+      {
+        type: 'info',
+        pattern: %r{The entry resource did not match the profile http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bodytemp because: This element does not match any known slice defined in the profile http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bodytemp\|2\.0\.1-ci-build and slicing is CLOSED: Bundle\.entry\[11\]\.resource/\*Observation/f85ad223-7bed-46f3-893d-e89d6082f9a9\*/\.value\.ofType\(CodeableConcept\): Does not match slice 'valueQuantity' \(discriminator: \(\$this is Quantity\)\), Slice 'Observation\.category:VSCat': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bodytemp\|2\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, Observation\.code\.coding: minimum required = 2, but only found 1 \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bodytemp\|2\.0\.1-ci-build\), Slice 'Observation\.code\.coding:BodyTempCode': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bodytemp\|2\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, Slice 'Observation\.code\.coding:snomedBodyTempCode': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bodytemp\|2\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, The Profile 'http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bodytemp\|2\.0\.1-ci-build' definition allows for the type Quantity but found type CodeableConcept, This element is not allowed by the profile http://hl7\.org/fhir/StructureDefinition/Quantity\|4\.0\.1, This element is not allowed by the profile http://hl7\.org/fhir/StructureDefinition/Quantity\|4\.0\.1, This element is not allowed by the profile http://hl7\.org/fhir/StructureDefinition/Quantity\|4\.0\.1, Unable to find a profile match for urn:uuid:85822a88-55b1-460c-bb7b-e8fc22d8568f among choices: http://hl7\.org/fhir/uv/ips/StructureDefinition/Patient-uv-ips and Unable to find a profile match for urn:uuid:ad82d71b-ca1c-4db6-a726-cc70cf638306 among choices: http://hl7\.org/fhir/uv/ips/StructureDefinition/Observation-pregnancy-edd-uv-ips},
+        reason: 'AU PS Bundle allows multiple Observation profiles. IG Publisher evaluates each Observation entry against all allowed Observation profiles and reports information messages for profiles that do not match. This is expected behaviour when an Observation is intended to conform to one specific profile. Messages involving Patient-uv-ips resolution failures are a consequence of the IPS dependency limitation described in ERROR 01 and do not indicate any issues with the AU PS specification.',
+      },
+      {
+        type: 'info',
+        pattern: %r{The entry resource did not match the profile http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bodyweight because: This element does not match any known slice defined in the profile http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bodyweight\|2\.0\.1-ci-build and slicing is CLOSED: Bundle\.entry\[11\]\.resource/\*Observation/f85ad223-7bed-46f3-893d-e89d6082f9a9\*/\.value\.ofType\(CodeableConcept\): Does not match slice 'valueQuantity' \(discriminator: \(\$this is Quantity\)\), Slice 'Observation\.category:VSCat': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bodyweight\|2\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, Observation\.code\.coding: minimum required = 2, but only found 1 \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bodyweight\|2\.0\.1-ci-build\), Slice 'Observation\.code\.coding:BodyWeightCode': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bodyweight\|2\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, Slice 'Observation\.code\.coding:snomedBodyWeightCode': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bodyweight\|2\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, The Profile 'http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bodyweight\|2\.0\.1-ci-build' definition allows for the type Quantity but found type CodeableConcept, This element is not allowed by the profile http://hl7\.org/fhir/StructureDefinition/Quantity\|4\.0\.1, This element is not allowed by the profile http://hl7\.org/fhir/StructureDefinition/Quantity\|4\.0\.1, This element is not allowed by the profile http://hl7\.org/fhir/StructureDefinition/Quantity\|4\.0\.1, Unable to find a profile match for urn:uuid:85822a88-55b1-460c-bb7b-e8fc22d8568f among choices: http://hl7\.org/fhir/uv/ips/StructureDefinition/Patient-uv-ips and Unable to find a profile match for urn:uuid:ad82d71b-ca1c-4db6-a726-cc70cf638306 among choices: http://hl7\.org/fhir/uv/ips/StructureDefinition/Observation-pregnancy-edd-uv-ips},
+        reason: 'AU PS Bundle allows multiple Observation profiles. IG Publisher evaluates each Observation entry against all allowed Observation profiles and reports information messages for profiles that do not match. This is expected behaviour when an Observation is intended to conform to one specific profile. Messages involving Patient-uv-ips resolution failures are a consequence of the IPS dependency limitation described in ERROR 01 and do not indicate any issues with the AU PS specification.',
+      },
+      {
+        type: 'info',
+        pattern: %r{The entry resource did not match the profile http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-heartrate because: This element does not match any known slice defined in the profile http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-heartrate\|2\.0\.1-ci-build and slicing is CLOSED: Bundle\.entry\[11\]\.resource/\*Observation/f85ad223-7bed-46f3-893d-e89d6082f9a9\*/\.value\.ofType\(CodeableConcept\): Does not match slice 'valueQuantity' \(discriminator: \(\$this is Quantity\)\), Slice 'Observation\.category:VSCat': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-heartrate\|2\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, Observation\.code\.coding: minimum required = 2, but only found 1 \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-heartrate\|2\.0\.1-ci-build\), Slice 'Observation\.code\.coding:HeartRateCode': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-heartrate\|2\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, Slice 'Observation\.code\.coding:snomedHeartRateCode': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-heartrate\|2\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, The Profile 'http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-heartrate\|2\.0\.1-ci-build' definition allows for the type Quantity but found type CodeableConcept, This element is not allowed by the profile http://hl7\.org/fhir/StructureDefinition/Quantity\|4\.0\.1, This element is not allowed by the profile http://hl7\.org/fhir/StructureDefinition/Quantity\|4\.0\.1, This element is not allowed by the profile http://hl7\.org/fhir/StructureDefinition/Quantity\|4\.0\.1, Unable to find a profile match for urn:uuid:85822a88-55b1-460c-bb7b-e8fc22d8568f among choices: http://hl7\.org/fhir/uv/ips/StructureDefinition/Patient-uv-ips and Unable to find a profile match for urn:uuid:ad82d71b-ca1c-4db6-a726-cc70cf638306 among choices: http://hl7\.org/fhir/uv/ips/StructureDefinition/Observation-pregnancy-edd-uv-ips},
+        reason: 'AU PS Bundle allows multiple Observation profiles. IG Publisher evaluates each Observation entry against all allowed Observation profiles and reports information messages for profiles that do not match. This is expected behaviour when an Observation is intended to conform to one specific profile. Messages involving Patient-uv-ips resolution failures are a consequence of the IPS dependency limitation described in ERROR 01 and do not indicate any issues with the AU PS specification.',
+      },
+      {
+        type: 'info',
+        pattern: %r{The entry resource did not match the profile http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-resprate because: This element does not match any known slice defined in the profile http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-resprate\|2\.0\.1-ci-build and slicing is CLOSED: Bundle\.entry\[11\]\.resource/\*Observation/f85ad223-7bed-46f3-893d-e89d6082f9a9\*/\.value\.ofType\(CodeableConcept\): Does not match slice 'valueQuantity' \(discriminator: \(\$this is Quantity\)\), Slice 'Observation\.category:VSCat': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-resprate\|2\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, Observation\.code\.coding: minimum required = 2, but only found 1 \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-resprate\|2\.0\.1-ci-build\), Slice 'Observation\.code\.coding:RespRateCode': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-resprate\|2\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, Slice 'Observation\.code\.coding:snomedRespRateCode': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-resprate\|2\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, The Profile 'http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-resprate\|2\.0\.1-ci-build' definition allows for the type Quantity but found type CodeableConcept, This element is not allowed by the profile http://hl7\.org/fhir/StructureDefinition/Quantity\|4\.0\.1, This element is not allowed by the profile http://hl7\.org/fhir/StructureDefinition/Quantity\|4\.0\.1, This element is not allowed by the profile http://hl7\.org/fhir/StructureDefinition/Quantity\|4\.0\.1, Unable to find a profile match for urn:uuid:85822a88-55b1-460c-bb7b-e8fc22d8568f among choices: http://hl7\.org/fhir/uv/ips/StructureDefinition/Patient-uv-ips and Unable to find a profile match for urn:uuid:ad82d71b-ca1c-4db6-a726-cc70cf638306 among choices: http://hl7\.org/fhir/uv/ips/StructureDefinition/Observation-pregnancy-edd-uv-ips},
+        reason: 'AU PS Bundle allows multiple Observation profiles. IG Publisher evaluates each Observation entry against all allowed Observation profiles and reports information messages for profiles that do not match. This is expected behaviour when an Observation is intended to conform to one specific profile. Messages involving Patient-uv-ips resolution failures are a consequence of the IPS dependency limitation described in ERROR 01 and do not indicate any issues with the AU PS specification.',
+      },
+      {
+        type: 'info',
+        pattern: %r{The entry resource did not match the profile http://hl7\.org/fhir/uv/ips/StructureDefinition/Observation-alcoholuse-uv-ips because: The pattern \[system http://loinc\.org, code 74013-4, and display 'null'\] defined in the profile http://hl7\.org/fhir/uv/ips/StructureDefinition/Observation-alcoholuse-uv-ips\|2\.0\.0 not found\. Issues: \[ValidationMessage\[level=ERROR,type=VALUE,location=Bundle\.entry\[16\]\.resource/\*Observation/null\*/\.code\.coding\.code,message=Value is '82810-3' but is fixed to '74013-4' in the profile http://hl7\.org/fhir/uv/ips/StructureDefinition/Observation-alcoholuse-uv-ips\|2\.0\.0\#Observation\]\], Unable to find a profile match for urn:uuid:85822a88-55b1-460c-bb7b-e8fc22d8568f among choices: http://hl7\.org/fhir/uv/ips/StructureDefinition/Patient-uv-ips, Unable to find a profile match for urn:uuid:85822a88-55b1-460c-bb7b-e8fc22d8568f among choices: http://hl7\.org/fhir/uv/ips/StructureDefinition/Patient-uv-ips and Unable to find a profile match for urn:uuid:ad82d71b-ca1c-4db6-a726-cc70cf638306 among choices: http://hl7\.org/fhir/uv/ips/StructureDefinition/Observation-pregnancy-edd-uv-ips},
+        reason: 'AU PS Bundle allows multiple Observation profiles. IG Publisher evaluates each Observation entry against all allowed Observation profiles and reports information messages for profiles that do not match. This is expected behaviour when an Observation is intended to conform to one specific profile. Messages involving Patient-uv-ips resolution failures are a consequence of the IPS dependency limitation described in ERROR 01 and do not indicate any issues with the AU PS specification.',
+      },
+      {
+        type: 'info',
+        pattern: %r{The entry resource did not match the profile http://hl7\.org/fhir/uv/ips/StructureDefinition/Observation-pregnancy-status-uv-ips because: The pattern \[system http://loinc\.org, code 82810-3, and display 'null'\] defined in the profile http://hl7\.org/fhir/uv/ips/StructureDefinition/Observation-pregnancy-status-uv-ips\|2\.0\.0 not found\. Issues: \[ValidationMessage\[level=ERROR,type=VALUE,location=Bundle\.entry\[15\]\.resource/\*Observation/null\*/\.code\.coding\.system,message=Value is 'http://snomed\.info/sct' but is fixed to 'http://loinc\.org' in the profile http://hl7\.org/fhir/uv/ips/StructureDefinition/Observation-pregnancy-status-uv-ips\|2\.0\.0\#Observation\], ValidationMessage\[level=ERROR,type=VALUE,location=Bundle\.entry\[15\]\.resource/\*Observation/null\*/\.code\.coding\.code,message=Value is '161714006' but is fixed to '82810-3' in the profile http://hl7\.org/fhir/uv/ips/StructureDefinition/Observation-pregnancy-status-uv-ips\|2\.0\.0\#Observation\], ValidationMessage\[level=ERROR,type=VALUE,location=Bundle\.entry\[15\]\.resource/\*Observation/null\*/\.code\.coding\.code,message=Value is '11778-8' but is fixed to '82810-3' in the profile http://hl7\.org/fhir/uv/ips/StructureDefinition/Observation-pregnancy-status-uv-ips\|2\.0\.0\#Observation\]\] and Unable to find a profile match for urn:uuid:85822a88-55b1-460c-bb7b-e8fc22d8568f among choices: http://hl7\.org/fhir/uv/ips/StructureDefinition/Patient-uv-ips},
+        reason: 'AU PS Bundle allows multiple Observation profiles. IG Publisher evaluates each Observation entry against all allowed Observation profiles and reports information messages for profiles that do not match. This is expected behaviour when an Observation is intended to conform to one specific profile. Messages involving Patient-uv-ips resolution failures are a consequence of the IPS dependency limitation described in ERROR 01 and do not indicate any issues with the AU PS specification.',
+      },
+      {
+        type: 'info',
+        pattern: %r{The entry resource did not match the profile http://hl7\.org/fhir/uv/ips/StructureDefinition/Observation-pregnancy-outcome-uv-ips because: None of the codings provided are in the value set 'Pregnancy Outcome - IPS' \(http://hl7\.org/fhir/uv/ips/ValueSet/pregnancies-summary-uv-ips\|2\.0\.0\), and a coding from this value set is required\) \(codes = http://loinc\.org\#82810-3\), Unable to find a profile match for urn:uuid:85822a88-55b1-460c-bb7b-e8fc22d8568f among choices: http://hl7\.org/fhir/uv/ips/StructureDefinition/Patient-uv-ips and Unable to find a profile match for urn:uuid:ad82d71b-ca1c-4db6-a726-cc70cf638306 among choices: http://hl7\.org/fhir/uv/ips/StructureDefinition/Observation-pregnancy-edd-uv-ips},
+        reason: 'AU PS Bundle allows multiple Observation profiles. IG Publisher evaluates each Observation entry against all allowed Observation profiles and reports information messages for profiles that do not match. This is expected behaviour when an Observation is intended to conform to one specific profile. Messages involving Patient-uv-ips resolution failures are a consequence of the IPS dependency limitation described in ERROR 01 and do not indicate any issues with the AU PS specification.',
+      },
+      {
+        type: 'info',
+        pattern: %r{The entry resource did not match the profile http://hl7\.org\.au/fhir/ps/StructureDefinition/au-ps-diagnosticresult-path because: Slice 'Observation\.category:lab': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/ps/StructureDefinition/au-ps-diagnosticresult-path\|1\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, Observation\.performer: minimum required = 1, but only found 0 \(from http://hl7\.org\.au/fhir/ps/StructureDefinition/au-ps-diagnosticresult-path\|1\.0\.1-ci-build\), Unable to find a profile match for urn:uuid:ad82d71b-ca1c-4db6-a726-cc70cf638306 among choices: http://hl7\.org\.au/fhir/ps/StructureDefinition/au-ps-diagnosticresult-path, Unable to find a profile match for urn:uuid:85822a88-55b1-460c-bb7b-e8fc22d8568f among choices: http://hl7\.org/fhir/uv/ips/StructureDefinition/Patient-uv-ips and Unable to find a profile match for urn:uuid:ad82d71b-ca1c-4db6-a726-cc70cf638306 among choices: http://hl7\.org/fhir/uv/ips/StructureDefinition/Observation-pregnancy-edd-uv-ips},
+        reason: 'AU PS Bundle allows multiple Observation profiles. IG Publisher evaluates each Observation entry against all allowed Observation profiles and reports information messages for profiles that do not match. This is expected behaviour when an Observation is intended to conform to one specific profile. Messages involving Patient-uv-ips resolution failures are a consequence of the IPS dependency limitation described in ERROR 01 and do not indicate any issues with the AU PS specification.',
+      },
+      {
+        type: 'info',
+        pattern: %r{The entry resource did not match the profile http://hl7\.org\.au/fhir/ps/StructureDefinition/au-ps-smokingstatus because: Slice 'Observation\.category:socialHistory': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/ps/StructureDefinition/au-ps-smokingstatus\|1\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, The pattern \[system http://snomed\.info/sct, code 1747861000168109, and display 'null'\] defined in the profile http://hl7\.org\.au/fhir/ps/StructureDefinition/au-ps-smokingstatus\|1\.0\.1-ci-build not found\. Issues: \[ValidationMessage\[level=ERROR,type=VALUE,location=Bundle\.entry\[10\]\.resource/\*Observation/ad82d71b-ca1c-4db6-a726-cc70cf638306\*/\.code\.coding\.code,message=Value is '161714006' but is fixed to '1747861000168109' in the profile http://hl7\.org\.au/fhir/ps/StructureDefinition/au-ps-smokingstatus\|1\.0\.1-ci-build\#Observation\], ValidationMessage\[level=ERROR,type=VALUE,location=Bundle\.entry\[10\]\.resource/\*Observation/ad82d71b-ca1c-4db6-a726-cc70cf638306\*/\.code\.coding\.system,message=Value is 'http://loinc\.org' but is fixed to 'http://snomed\.info/sct' in the profile http://hl7\.org\.au/fhir/ps/StructureDefinition/au-ps-smokingstatus\|1\.0\.1-ci-build\#Observation\], ValidationMessage\[level=ERROR,type=VALUE,location=Bundle\.entry\[10\]\.resource/\*Observation/ad82d71b-ca1c-4db6-a726-cc70cf638306\*/\.code\.coding\.code,message=Value is '11778-8' but is fixed to '1747861000168109' in the profile http://hl7\.org\.au/fhir/ps/StructureDefinition/au-ps-smokingstatus\|1\.0\.1-ci-build\#Observation\]\], The pattern \[system http://snomed\.info/sct, code 1747861000168109, and display 'null'\] defined in the profile http://hl7\.org\.au/fhir/ps/StructureDefinition/au-ps-smokingstatus\|1\.0\.1-ci-build not found\. Issues: \[ValidationMessage\[level=ERROR,type=VALUE,location=Bundle\.entry\[10\]\.resource/\*Observation/ad82d71b-ca1c-4db6-a726-cc70cf638306\*/\.code\.coding\.code,message=Value is '161714006' but is fixed to '1747861000168109' in the profile http://hl7\.org\.au/fhir/ps/StructureDefinition/au-ps-smokingstatus\|1\.0\.1-ci-build\#Observation\.code\], ValidationMessage\[level=ERROR,type=VALUE,location=Bundle\.entry\[10\]\.resource/\*Observation/ad82d71b-ca1c-4db6-a726-cc70cf638306\*/\.code\.coding\.system,message=Value is 'http://loinc\.org' but is fixed to 'http://snomed\.info/sct' in the profile http://hl7\.org\.au/fhir/ps/StructureDefinition/au-ps-smokingstatus\|1\.0\.1-ci-build\#Observation\.code\], ValidationMessage\[level=ERROR,type=VALUE,location=Bundle\.entry\[10\]\.resource/\*Observation/ad82d71b-ca1c-4db6-a726-cc70cf638306\*/\.code\.coding\.code,message=Value is '11778-8' but is fixed to '1747861000168109' in the profile http://hl7\.org\.au/fhir/ps/StructureDefinition/au-ps-smokingstatus\|1\.0\.1-ci-build\#Observation\.code\]\], Slice 'Observation\.code\.coding:loincSmokingStatus': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/ps/StructureDefinition/au-ps-smokingstatus\|1\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, The Profile 'http://hl7\.org\.au/fhir/ps/StructureDefinition/au-ps-smokingstatus\|1\.0\.1-ci-build' definition allows for the type CodeableConcept but found type dateTime and Unable to find a profile match for urn:uuid:85822a88-55b1-460c-bb7b-e8fc22d8568f among choices: http://hl7\.org/fhir/uv/ips/StructureDefinition/Patient-uv-ips},
+        reason: 'AU PS Bundle allows multiple Observation profiles. IG Publisher evaluates each Observation entry against all allowed Observation profiles and reports information messages for profiles that do not match. This is expected behaviour when an Observation is intended to conform to one specific profile. Messages involving Patient-uv-ips resolution failures are a consequence of the IPS dependency limitation described in ERROR 01 and do not indicate any issues with the AU PS specification.',
+      },
+      {
+        type: 'info',
+        pattern: %r{The entry resource did not match the profile http://hl7\.org/fhir/uv/ips/StructureDefinition/Observation-alcoholuse-uv-ips because: The pattern \[system http://loinc\.org, code 74013-4, and display 'null'\] defined in the profile http://hl7\.org/fhir/uv/ips/StructureDefinition/Observation-alcoholuse-uv-ips\|2\.0\.0 not found\. Issues: \[ValidationMessage\[level=ERROR,type=VALUE,location=Bundle\.entry\[11\]\.resource/\*Observation/f85ad223-7bed-46f3-893d-e89d6082f9a9\*/\.code\.coding\.code,message=Value is '82810-3' but is fixed to '74013-4' in the profile http://hl7\.org/fhir/uv/ips/StructureDefinition/Observation-alcoholuse-uv-ips\|2\.0\.0\#Observation\]\], Unable to find a profile match for urn:uuid:85822a88-55b1-460c-bb7b-e8fc22d8568f among choices: http://hl7\.org/fhir/uv/ips/StructureDefinition/Patient-uv-ips, Unable to find a profile match for urn:uuid:85822a88-55b1-460c-bb7b-e8fc22d8568f among choices: http://hl7\.org/fhir/uv/ips/StructureDefinition/Patient-uv-ips and Unable to find a profile match for urn:uuid:ad82d71b-ca1c-4db6-a726-cc70cf638306 among choices: http://hl7\.org/fhir/uv/ips/StructureDefinition/Observation-pregnancy-edd-uv-ips},
+        reason: 'AU PS Bundle allows multiple Observation profiles. IG Publisher evaluates each Observation entry against all allowed Observation profiles and reports information messages for profiles that do not match. This is expected behaviour when an Observation is intended to conform to one specific profile. Messages involving Patient-uv-ips resolution failures are a consequence of the IPS dependency limitation described in ERROR 01 and do not indicate any issues with the AU PS specification.',
+      },
+      {
+        type: 'info',
+        pattern: %r{The entry resource did not match the profile http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bodyheight because: This element does not match any known slice defined in the profile http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bodyheight\|2\.0\.1-ci-build and slicing is CLOSED: Bundle\.entry\[16\]\.resource/\*Observation/null\*/\.value\.ofType\(CodeableConcept\): Does not match slice 'valueQuantity' \(discriminator: \(\$this is Quantity\)\), Slice 'Observation\.category:VSCat': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bodyheight\|2\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, Observation\.code\.coding: minimum required = 2, but only found 1 \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bodyheight\|2\.0\.1-ci-build\), Slice 'Observation\.code\.coding:BodyHeightCode': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bodyheight\|2\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, Slice 'Observation\.code\.coding:snomedBodyHeightCode': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bodyheight\|2\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, The Profile 'http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bodyheight\|2\.0\.1-ci-build' definition allows for the type Quantity but found type CodeableConcept, This element is not allowed by the profile http://hl7\.org/fhir/StructureDefinition/Quantity\|4\.0\.1, This element is not allowed by the profile http://hl7\.org/fhir/StructureDefinition/Quantity\|4\.0\.1, This element is not allowed by the profile http://hl7\.org/fhir/StructureDefinition/Quantity\|4\.0\.1, Unable to find a profile match for urn:uuid:85822a88-55b1-460c-bb7b-e8fc22d8568f among choices: http://hl7\.org/fhir/uv/ips/StructureDefinition/Patient-uv-ips and Unable to find a profile match for urn:uuid:ad82d71b-ca1c-4db6-a726-cc70cf638306 among choices: http://hl7\.org/fhir/uv/ips/StructureDefinition/Observation-pregnancy-edd-uv-ips},
+        reason: 'AU PS Bundle allows multiple Observation profiles. IG Publisher evaluates each Observation entry against all allowed Observation profiles and reports information messages for profiles that do not match. This is expected behaviour when an Observation is intended to conform to one specific profile. Messages involving Patient-uv-ips resolution failures are a consequence of the IPS dependency limitation described in ERROR 01 and do not indicate any issues with the AU PS specification.',
+      },
+      {
+        type: 'info',
+        pattern: %r{The entry resource did not match the profile http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bodyheight because: This element does not match any known slice defined in the profile http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bodyheight\|2\.0\.1-ci-build and slicing is CLOSED: Bundle\.entry\[15\]\.resource/\*Observation/null\*/\.value\.ofType\(dateTime\): Does not match slice 'valueQuantity' \(discriminator: \(\$this is Quantity\)\), Slice 'Observation\.category:VSCat': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bodyheight\|2\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, Slice 'Observation\.code\.coding:BodyHeightCode': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bodyheight\|2\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, Slice 'Observation\.code\.coding:snomedBodyHeightCode': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bodyheight\|2\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, The Profile 'http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bodyheight\|2\.0\.1-ci-build' definition allows for the type Quantity but found type dateTime and Unable to find a profile match for urn:uuid:85822a88-55b1-460c-bb7b-e8fc22d8568f among choices: http://hl7\.org/fhir/uv/ips/StructureDefinition/Patient-uv-ips},
+        reason: 'AU PS Bundle allows multiple Observation profiles. IG Publisher evaluates each Observation entry against all allowed Observation profiles and reports information messages for profiles that do not match. This is expected behaviour when an Observation is intended to conform to one specific profile. Messages involving Patient-uv-ips resolution failures are a consequence of the IPS dependency limitation described in ERROR 01 and do not indicate any issues with the AU PS specification.',
+      },
+      {
+        type: 'info',
+        pattern: %r{The entry resource did not match the profile http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bodytemp because: This element does not match any known slice defined in the profile http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bodytemp\|2\.0\.1-ci-build and slicing is CLOSED: Bundle\.entry\[15\]\.resource/\*Observation/null\*/\.value\.ofType\(dateTime\): Does not match slice 'valueQuantity' \(discriminator: \(\$this is Quantity\)\), Slice 'Observation\.category:VSCat': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bodytemp\|2\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, Slice 'Observation\.code\.coding:BodyTempCode': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bodytemp\|2\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, Slice 'Observation\.code\.coding:snomedBodyTempCode': a matching slice is required, but not found \(from http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bodytemp\|2\.0\.1-ci-build\)\. Note that other slices are allowed in addition to this required slice, The Profile 'http://hl7\.org\.au/fhir/core/StructureDefinition/au-core-bodytemp\|2\.0\.1-ci-build' definition allows for the type Quantity but found type dateTime and Unable to find a profile match for urn:uuid:85822a88-55b1-460c-bb7b-e8fc22d8568f among choices: http://hl7\.org/fhir/uv/ips/StructureDefinition/Patient-uv-ips},
+        reason: 'AU PS Bundle allows multiple Observation profiles. IG Publisher evaluates each Observation entry against all allowed Observation profiles and reports information messages for profiles that do not match. This is expected behaviour when an Observation is intended to conform to one specific profile. Messages involving Patient-uv-ips resolution failures are a consequence of the IPS dependency limitation described in ERROR 01 and do not indicate any issues with the AU PS specification.',
+      },
+      {
+        type: 'info',
+        pattern: %r{Reference to external CodeSystem http://terminology\.hl7\.org/CodeSystem/v3-RoleCode\|2018-08-12},
+        reason: 'INHERITED FROM AU BASE: ValueSets references external code system.',
       }
     ].freeze
   end
