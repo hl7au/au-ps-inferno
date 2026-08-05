@@ -82,7 +82,24 @@ RSpec.describe AUPSTestKit::AddressCountryCheck do
     messages = described_class.messages_for(bundle)
 
     expect(messages.length).to eq(1)
-    expect(messages.first[:message]).to include('contact.address[0]')
+    expect(messages.first[:message]).to include('contact[0].address[0]')
+  end
+
+  it 'references the correct per-segment index for a nested path with multiple contacts' do
+    patient = FHIR::Patient.new(
+      resourceType: 'Patient',
+      id: 'p1',
+      contact: [
+        { address: { country: 'AU' } },
+        { address: { country: 'Australia' } }
+      ]
+    )
+    bundle = bundle_with(patient)
+
+    messages = described_class.messages_for(bundle)
+
+    expect(messages.length).to eq(1)
+    expect(messages.first[:message]).to include('contact[1].address[0]')
   end
 
   it 'covers more than one resource type, not just Patient' do

@@ -32,22 +32,28 @@ module AUPSTestKit
     end
 
     def incorrect_country_messages(resource, path)
-      addresses_at_path(resource, path).each_with_index.filter_map do |address, idx|
+      addresses_at_path(resource, path).filter_map do |address, indexed_path|
         country = address&.country
         next if country.blank? || country == AU_COUNTRY_CODE
 
-        { type: 'warning', message: incorrect_country_message(resource, path, idx, country) }
+        { type: 'warning', message: incorrect_country_message(resource, indexed_path, country) }
       end
     end
 
     def addresses_at_path(resource, path)
-      path.split('.').inject([resource]) do |nodes, segment|
-        nodes.flat_map { |node| node.respond_to?(segment) ? Array(node.public_send(segment)) : [] }
+      path.split('.').inject([[resource, '']]) do |nodes, segment|
+        nodes.flat_map do |node, prefix|
+          next [] unless node.respond_to?(segment)
+
+          Array(node.public_send(segment)).each_with_index.map do |child, idx|
+            [child, prefix.empty? ? "#{segment}[#{idx}]" : "#{prefix}.#{segment}[#{idx}]"]
+          end
+        end
       end
     end
 
-    def incorrect_country_message(resource, path, idx, country)
-      "#{resource.resourceType}/#{resource.id}: #{path}[#{idx}].country = \"#{country}\" does " \
+    def incorrect_country_message(resource, indexed_path, country)
+      "#{resource.resourceType}/#{resource.id}: #{indexed_path}.country = \"#{country}\" does " \
         'not match the au-address fixed code "AU".'
     end
   end
