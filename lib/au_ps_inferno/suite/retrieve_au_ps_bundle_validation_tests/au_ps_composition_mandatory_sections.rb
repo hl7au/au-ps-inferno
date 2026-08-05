@@ -4,6 +4,8 @@ require_relative 'au_ps_composition_mandatory_sections/composition_mandatory_sec
 
 require_relative 'au_ps_composition_mandatory_sections/composition_mandatory_sections_mandatory_sections_entry_profiles'
 
+require_relative 'au_ps_composition_mandatory_sections/composition_mandatory_sections_nilknown_warning'
+
 module AUPSTestKit
   # Automatically generated primitive group for AU PS Composition Mandatory Sections
   class AUPSSuiteRetrieveAuPsBundleValidationTestsAuPsCompositionMandatorySections < Inferno::TestGroup
@@ -16,5 +18,7 @@ module AUPSTestKit
     test from: :suite_retrieve_au_ps_bundle_validation_tests_au_ps_composition_mandatory_sections_sections_shall_populated
 
     test from: :suite_retrieve_au_ps_bundle_validation_tests_au_ps_composition_mandatory_sections_mandatory_sections_entry_profiles
+
+    test from: :suite_retrieve_au_ps_bundle_validation_tests_au_ps_composition_mandatory_sections_nilknown_warning
   end
 end
