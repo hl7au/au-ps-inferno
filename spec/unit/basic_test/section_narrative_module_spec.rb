@@ -90,6 +90,31 @@ RSpec.describe AUPSTestKit::BasicTestSectionNarrativeModule do
       expect(result).not_to include('alert(1)')
     end
 
+    it 'strips http(s) img src so a narrative cannot be used as a tracking pixel' do
+      section = section_with_text(
+        status: 'generated',
+        div: '<div xmlns="http://www.w3.org/1999/xhtml">' \
+             '<img src="https://example.invalid/pixel.gif" alt="tracker"></div>'
+      )
+
+      result = test_instance.section_narrative_body(section)
+
+      expect(result).not_to include('example.invalid')
+      expect(result).not_to include('https://')
+    end
+
+    it 'keeps data URI img src so self-contained narrative images still render' do
+      data_uri = 'data:image/png;base64,iVBORw0KGgo='
+      section = section_with_text(
+        status: 'generated',
+        div: "<div xmlns=\"http://www.w3.org/1999/xhtml\"><img src=\"#{data_uri}\" alt=\"inline\"></div>"
+      )
+
+      result = test_instance.section_narrative_body(section)
+
+      expect(result).to include(data_uri)
+    end
+
     it 'strips event-handler attributes even from tags reverse_markdown has no converter for' do
       section = section_with_text(
         status: 'generated',

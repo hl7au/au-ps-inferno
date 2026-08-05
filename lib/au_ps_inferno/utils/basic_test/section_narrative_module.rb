@@ -20,7 +20,7 @@ module AUPSTestKit
       ),
       protocols: Sanitize::Config.merge(
         Sanitize::Config::BASIC[:protocols],
-        'img' => { 'src' => ['http', 'https', :relative] }
+        'img' => { 'src' => ['data', :relative] }
       )
     ).freeze
 
