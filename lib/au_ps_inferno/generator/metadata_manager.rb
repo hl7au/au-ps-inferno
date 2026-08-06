@@ -100,8 +100,12 @@ class Generator
       end
     end
 
-    def metadata_to_dump
-      metadata_dump_sections.merge(metadata_dump_ms_elements).merge(metadata_dump_tail)
+    def composition_metadata_to_dump
+      metadata_dump_sections.merge(metadata_dump_ms_elements).merge(resources_filters: @resources_filters)
+    end
+
+    def core_metadata_to_dump
+      { profiles: @profiles }
     end
 
     def metadata_dump_sections
@@ -122,13 +126,6 @@ class Generator
         composition_optional_ms_sub_elements: @composition_optional_ms_sub_elements,
         composition_mandatory_ms_slices: @composition_mandatory_ms_slices,
         composition_optional_ms_slices: @composition_optional_ms_slices
-      }
-    end
-
-    def metadata_dump_tail
-      {
-        profiles: @profiles,
-        resources_filters: @resources_filters
       }
     end
 
@@ -597,7 +594,7 @@ class Generator
     end
 
     private :reset_composition_metadata_ivars!, :metadata_dump_sections, :metadata_dump_ms_elements,
-            :metadata_dump_tail, :section_element_expression_min, :slice_metadata_base,
+            :section_element_expression_min, :slice_metadata_base,
             :slice_relative_sub_paths, :ms_composition_path?, :metadata_hash_for_profile_ref
   end
   # rubocop:enable Metrics/ClassLength

@@ -110,12 +110,14 @@ class Generator
   end
 
   def save_metadata_to_version_folder
-    metadata_path = File.join(File.expand_path(File.join('lib', 'au_ps_inferno')), 'metadata.yaml')
-    FileUtils.mkdir_p(File.dirname(metadata_path))
+    au_ps_inferno_dir = File.expand_path(File.join('lib', 'au_ps_inferno'))
+    FileUtils.mkdir_p(au_ps_inferno_dir)
     @metadata.initiate_build
-    old_metadata = @metadata.metadata_to_dump
-    new_metadata = @new_metadata&.to_hash || {}
-    merged_metadata = merge_metadata_values(old_metadata, new_metadata)
-    File.write(metadata_path, YAML.dump(merged_metadata))
+
+    core_metadata = merge_metadata_values(@metadata.core_metadata_to_dump, @new_metadata&.to_hash || {})
+    File.write(File.join(au_ps_inferno_dir, 'metadata.yaml'), YAML.dump(core_metadata))
+
+    composition_metadata = @metadata.composition_metadata_to_dump
+    File.write(File.join(au_ps_inferno_dir, 'composition_metadata.yaml'), YAML.dump(composition_metadata))
   end
 end
