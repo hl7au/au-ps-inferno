@@ -34,6 +34,6 @@ namespace :generator do
       extra = default_extra if File.directory?(default_extra)
     end
     opts = extra ? { additional_resources_path: extra } : {}
-    Generator.new('lib/au_ps_inferno/igs/1.0.0.tgz', **opts).generate
+    Generator.new(**opts).generate
   end
 end

@@ -9,12 +9,11 @@ class Generator
       config_keeper = Registry.get(:config_keeper)
       return nil unless config_keeper
 
-      ig_resources = InfernoSuiteGenerator::Generator::IGLoader.new(config_keeper.ig_deps_path).load
-      if ig_resources.cs_resources.present?
-        return InfernoSuiteGenerator::Generator::IGMetadataExtractor.new(ig_resources).extract
+      if @ig_resources.cs_resources.present?
+        return InfernoSuiteGenerator::Generator::IGMetadataExtractor.new(@ig_resources).extract
       end
 
-      build_new_metadata_without_capability_statement(ig_resources, config_keeper)
+      build_new_metadata_without_capability_statement(@ig_resources, config_keeper)
     end
 
     def build_new_metadata_without_capability_statement(ig_resources, config_keeper)

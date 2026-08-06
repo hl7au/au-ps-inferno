@@ -13,7 +13,7 @@ class Generator
   # Output hash keys: +composition_sections+, +composition_mandatory_ms_elements+,
   # +composition_optional_ms_elements+, +profiles+.
   #
-  # @see Generator::IGResourcesExtractor for loading IG resources
+  # @see InfernoSuiteGenerator::Generator::IGLoader for loading IG resources
   # rubocop:disable Metrics/ClassLength
   class MetadataManager
     # @return [Array<Hash>] Array of section metadata hashes
@@ -53,7 +53,7 @@ class Generator
 
     # Initializes a MetadataManager for the given IG resources.
     #
-    # @param ig_resources [Array<FHIR::Model>] Parsed IG resources (e.g. from IGResourcesExtractor#ig_resources)
+    # @param ig_resources [InfernoSuiteGenerator::Generator::IGResources] Parsed IG resources
     def initialize(ig_resources)
       @ig_resources = ig_resources
       reset_composition_metadata_ivars!
@@ -198,9 +198,7 @@ class Generator
     #
     # @return [Array<FHIR::StructureDefinition>]
     def main_profiles
-      @ig_resources.filter do |resource|
-        next unless resource.resourceType == 'StructureDefinition'
-
+      get_resources_by_type('StructureDefinition').filter do |resource|
         resource.url.to_s.include?('http://hl7.org.au/fhir/ps/StructureDefinition/')
       end
     end
@@ -345,9 +343,7 @@ class Generator
     # @param type [String] FHIR resource type (e.g. +StructureDefinition+)
     # @return [Array<FHIR::Model>]
     def get_resources_by_type(type)
-      @ig_resources.filter do |resource|
-        resource.resourceType == type
-      end
+      @ig_resources.get_resources_by_type(type)
     end
 
     # Finds the StructureDefinition for a logical resource type (e.g. Composition, Patient).
