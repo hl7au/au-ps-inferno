@@ -14,7 +14,7 @@ module AUPSTestKit
     id :suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_mandatory_sections_nilknown_warning
 
     run do
-      warn_on_nilknown_empty_reason(%w[11450-4 48765-2 10160-0])
+      warn_on_nilknown_empty_reason(MANDATORY_SECTIONS_CODES)
     end
   end
 end

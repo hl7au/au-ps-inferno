@@ -17,7 +17,7 @@ RSpec.shared_context 'composition section negation check setup' do
 
       id test_id
 
-      run { warn_on_nilknown_empty_reason(%w[11450-4 48765-2 10160-0]) }
+      run { warn_on_nilknown_empty_reason(AUPSTestKit::BasicTestCompositionSectionReadModule::MANDATORY_SECTIONS_CODES) }
     end
 
     repo = Inferno::Repositories::Tests.new
