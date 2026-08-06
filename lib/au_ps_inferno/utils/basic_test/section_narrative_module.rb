@@ -9,18 +9,13 @@ module AUPSTestKit
     NARRATIVE_SANITIZE_CONFIG = Sanitize::Config.merge(
       Sanitize::Config::BASIC,
       elements: Sanitize::Config::BASIC[:elements] + %w[
-        div span hr img table caption thead tbody tfoot tr th td h1 h2 h3 h4 h5 h6
+        div span hr table caption thead tbody tfoot tr th td h1 h2 h3 h4 h5 h6
       ],
       attributes: Sanitize::Config.merge(
         Sanitize::Config::BASIC[:attributes],
         'span' => %w[title],
-        'img' => %w[alt src title],
         'th' => %w[colspan rowspan],
         'td' => %w[colspan rowspan]
-      ),
-      protocols: Sanitize::Config.merge(
-        Sanitize::Config::BASIC[:protocols],
-        'img' => { 'src' => ['data', :relative] }
       )
     ).freeze
 
