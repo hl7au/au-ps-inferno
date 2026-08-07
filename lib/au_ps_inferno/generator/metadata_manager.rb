@@ -104,10 +104,6 @@ class Generator
       metadata_dump_sections.merge(metadata_dump_ms_elements).merge(resources_filters: @resources_filters)
     end
 
-    def core_metadata_to_dump
-      { profiles: @profiles }
-    end
-
     def metadata_dump_sections
       {
         composition_sections: @composition_sections,

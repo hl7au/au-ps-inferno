@@ -14,7 +14,26 @@
     "links": []
   },
   "configs": {
-    "generic": {},
+    "generic": {
+      "target_profiles": [
+        "http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-allergyintolerance",
+        "http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-composition",
+        "http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-condition",
+        "http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-diagnosticresult-path",
+        "http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-encounter",
+        "http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-immunization",
+        "http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medication",
+        "http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medicationrequest",
+        "http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medicationstatement",
+        "http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-organization",
+        "http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-patient",
+        "http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-practitioner",
+        "http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-practitionerrole",
+        "http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-procedure",
+        "http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-relatedperson",
+        "http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-smokingstatus"
+      ]
+    },
     "profiles": {},
     "resources": {}
   }

@@ -27,10 +27,6 @@ require_relative 'generator_group_based_metadata_module'
 #   generator.generate
 #
 class Generator
-  SyntheticCapability = Struct.new(
-    :type, :interaction, :operation, :searchParam, :searchInclude, :searchRevInclude, :extension
-  )
-
   include Naming
   include GeneratorGroupBasedMetadataModule
 
@@ -40,6 +36,8 @@ class Generator
     @ig_resources = load_ig_resources
     @metadata = MetadataManager.new(@ig_resources)
     @new_metadata = build_new_metadata
+    @core_metadata = InfernoSuiteGenerator::Generator::IGMetadataExtractor.new(@ig_resources).extract
+    @composition_metadata = MetadataManager.new(@ig_resources)
   end
 
   def generate
@@ -111,13 +109,10 @@ class Generator
 
   def save_metadata_to_version_folder
     au_ps_inferno_dir = File.expand_path(File.join('lib', 'au_ps_inferno'))
-    FileUtils.mkdir_p(au_ps_inferno_dir)
-    @metadata.initiate_build
+    FileUtils.mkdir_p(File.expand_path(File.join('lib', 'au_ps_inferno')))
+    @composition_metadata.initiate_build
 
-    core_metadata = merge_metadata_values(@metadata.core_metadata_to_dump, @new_metadata&.to_hash || {})
-    File.write(File.join(au_ps_inferno_dir, 'metadata.yaml'), YAML.dump(core_metadata))
-
-    composition_metadata = @metadata.composition_metadata_to_dump
-    File.write(File.join(au_ps_inferno_dir, 'composition_metadata.yaml'), YAML.dump(composition_metadata))
+    File.write(File.join(au_ps_inferno_dir, 'metadata.yaml'), YAML.dump(@core_metadata&.to_hash || {}))
+    File.write(File.join(au_ps_inferno_dir, 'composition_metadata.yaml'), YAML.dump(@composition_metadata.composition_metadata_to_dump))
   end
 end
