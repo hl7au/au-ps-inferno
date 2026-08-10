@@ -94,6 +94,134 @@ module AUPSTestKit
       }
     ].freeze
 
+    SECTION_TIERS = [
+      {
+        group_id: :au_ps_composition_mandatory_sections,
+        group_title: 'AU PS Composition Mandatory Sections',
+        group_description: 'Verify the mandatory sections are correctly populated in the AU PS Composition resource',
+        codes: %w[11450-4 48765-2 10160-0],
+        populated_optional: false,
+        populated_id: :sections_shall_populated,
+        populated_title: 'AU PS Composition Mandatory Sections are correctly populated',
+        populated_description: 'Mandatory section SHALL be correctly populated if a value is known',
+        entry_profiles_id: :mandatory_sections_entry_profiles,
+        entry_profiles_title: 'AU PS Composition Mandatory Sections capable of populating referenced profiles',
+        entry_profiles_description: 'Mandatory section SHALL be capable of populating section.entry with the ' \
+                                    'referenced profiles and SHOULD correctly populate section.entry if a value is known.',
+        entry_profiles_method: :test_composition_mandatory_sections,
+        entry_profiles_dsl_optional: false
+      },
+      {
+        group_id: :au_ps_composition_recommended_sections,
+        group_title: 'AU PS Composition Recommended Sections',
+        group_description: 'Verify the recommended sections are correctly populated in the Composition resource',
+        codes: %w[11369-6 30954-2 47519-4 46264-8],
+        populated_optional: true,
+        populated_id: :sections_should_populated,
+        populated_title: 'AU PS Composition recommended sections are correctly populated',
+        populated_description: 'Recommended sections SHOULD be correctly populated if a value is known',
+        entry_profiles_id: :recommended_sections_entry_profiles,
+        entry_profiles_title: 'AU PS Composition Recommended Sections capable of populating referenced profiles',
+        entry_profiles_description: 'Recommended section SHALL be capable of populating section.entry with the ' \
+                                    'referenced profiles and SHOULD correctly populate section.entry if a value is known.',
+        entry_profiles_method: :test_composition_recommended_sections,
+        entry_profiles_dsl_optional: false
+      },
+      {
+        group_id: :au_ps_composition_optional_sections,
+        group_title: 'AU PS Composition Optional Sections',
+        group_description: 'Verify the optional sections are correctly populated in the AU PS Composition resource',
+        codes: %w[42348-3 104605-1 47420-5 11348-0 10162-6 81338-6 18776-5 29762-2 8716-3],
+        populated_optional: true,
+        populated_id: :sections_may_populated,
+        populated_title: 'AU PS Composition optional sections are correctly populated',
+        populated_description: 'Optional section MAY be correctly populated if a value is known',
+        entry_profiles_id: :optional_sections_entry_profiles,
+        entry_profiles_title: 'AU PS Composition Optional Sections capable of populating referenced profiles',
+        entry_profiles_description: 'Optional section SHALL be capable of populating section.entry with the ' \
+                                    'referenced profiles and SHOULD correctly populate section.entry if a value is known.',
+        entry_profiles_method: :test_composition_optional_sections,
+        entry_profiles_dsl_optional: true
+      }
+    ].freeze
+
+    ACTOR_GROUPS = [
+      {
+        key: 'subject',
+        group_id: :au_ps_composition_subject,
+        group_title: 'AU PS Composition Subject',
+        group_description: 'Verify the referenced subject is a correctly populated AU PS Patient resource.',
+        group_optional: false,
+        resource_type_id: :subject_resource_type_is_valid,
+        resource_type_text: 'Subject reference in the AU PS Composition SHALL resolve to a valid resource ' \
+                            'type (Patient).',
+        ms_elements_id: :subject_ms_elements,
+        ms_elements_text: 'Must Support elements SHALL be populated if a value is known',
+        ms_subelements_id: :subject_ms_subelements_populated,
+        ms_subelements_text: 'Must Support sub-element SHALL be populated if a value is known and the parent is populated',
+        ms_identifier_slices_id: :subject_ms_identifier_slices,
+        ms_identifier_slices_title: 'Must Support identifier slices SHALL be populated if a value is known',
+        ms_identifier_slices_description: 'Must Support identifier slices SHALL be populated if a value is ' \
+                                          'known (i.e. ihi, dva, medicare).',
+        ms_identifier_slices_method: :test_subject_ms_identifier_slices
+      },
+      {
+        key: 'author',
+        group_id: :au_ps_composition_author,
+        group_title: 'AU PS Composition Author',
+        group_description: 'Verify the referenced author is a correctly populated AU PS Practitioner, AU PS ' \
+                           'PractitionerRole, AU PS Patient, AU PS RelatedPerson, AU PS Organization profiles ' \
+                           'or Device resource.',
+        group_optional: false,
+        resource_type_id: :author_resource_type_is_valid,
+        resource_type_text: 'Author reference in the AU PS Composition SHALL resolve to a valid resource type ' \
+                            '(Practitioner, PractitionerRole, Device, Patient, RelatedPerson, Organization).',
+        ms_elements_id: :author_ms_elements,
+        ms_elements_text: 'Must Support elements SHALL be populated if a value is known',
+        ms_subelements_id: :author_ms_subelements,
+        ms_subelements_text: 'Must Support sub-elements SHALL be populated if a value is known',
+        ms_identifier_slices_id: :author_ms_identifier_slices,
+        ms_identifier_slices_title: 'Must Support identifier slices SHALL be populated if a value is known',
+        ms_identifier_slices_description: 'Must Support identifier slices SHALL be populated if a value is known',
+        ms_identifier_slices_method: :test_composition_author_ms_identifier_slices
+      },
+      {
+        key: 'custodian',
+        group_id: :au_ps_composition_custodian,
+        group_title: 'AU PS Composition Custodian',
+        group_description: 'Verify the referenced custodian is a correctly populated AU PS Organization resource.',
+        group_optional: true,
+        resource_type_id: nil,
+        resource_type_text: nil,
+        ms_elements_id: :custodian_ms_elements,
+        ms_elements_text: 'Must Support element SHALL be populated if a value is known',
+        ms_subelements_id: :custodian_ms_subelements,
+        ms_subelements_text: 'Must Support sub-element SHALL be populated if a value is known',
+        ms_identifier_slices_id: :custodian_ms_identifier_slices,
+        ms_identifier_slices_title: 'Must Support identifier slices SHALL be populated if a value is known',
+        ms_identifier_slices_description: 'Must Support identifier slices SHALL be populated if a value is known',
+        ms_identifier_slices_method: :test_composition_custodian_ms_identifier_slices
+      },
+      {
+        key: 'attester',
+        group_id: :au_ps_composition_attester,
+        group_title: 'AU PS Composition Attester',
+        group_description: 'Verify the referenced attester.party is a correctly populated AU PS Patient, ' \
+                           'RelatedPerson, Practitioner, PractitionerRole, or Organization resource.',
+        group_optional: true,
+        resource_type_id: nil,
+        resource_type_text: nil,
+        ms_elements_id: :attester_party_ms_elements,
+        ms_elements_text: 'Must Support elements SHALL be populated if a value is known',
+        ms_subelements_id: :attester_party_ms_subelements,
+        ms_subelements_text: 'Must Support sub-element SHALL be populated if a value is known',
+        ms_identifier_slices_id: :attester_party_ms_identifier_slices,
+        ms_identifier_slices_title: 'Must Support identifier slices SHALL be populated if a value is known',
+        ms_identifier_slices_description: 'Must Support identifier slices SHALL be populated if a value is known',
+        ms_identifier_slices_method: :test_composition_attester_party_ms_identifier_slices
+      }
+    ].freeze
+
     BUNDLE_SOURCES.each do |source|
       group do
         id source[:top_id]
@@ -194,78 +322,33 @@ module AUPSTestKit
           end
         end
 
-        group do
-          id :au_ps_composition_mandatory_sections
-          title 'AU PS Composition Mandatory Sections'
-          description 'Verify the mandatory sections are correctly populated in the AU PS Composition resource'
-          run_as_group
+        SECTION_TIERS.each do |tier|
+          group do
+            id tier[:group_id]
+            title tier[:group_title]
+            description tier[:group_description]
+            run_as_group
 
-          test from: :single_file_basic_test do
-            id :sections_shall_populated
-            title 'AU PS Composition Mandatory Sections are correctly populated'
-            description 'Mandatory section SHALL be correctly populated if a value is known'
-            run { validate_populated_sections_in_bundle(%w[11450-4 48765-2 10160-0], %w[title code text]) }
-          end
-
-          test from: :single_file_basic_test do
-            id :mandatory_sections_entry_profiles
-            title 'AU PS Composition Mandatory Sections capable of populating referenced profiles'
-            description 'Mandatory section SHALL be capable of populating section.entry with the referenced ' \
-                        'profiles and SHOULD correctly populate section.entry if a value is known.'
-            run { test_composition_mandatory_sections }
-          end
-        end
-
-        group do
-          id :au_ps_composition_recommended_sections
-          title 'AU PS Composition Recommended Sections'
-          description 'Verify the recommended sections are correctly populated in the Composition resource'
-          run_as_group
-
-          test from: :single_file_basic_test do
-            id :sections_should_populated
-            title 'AU PS Composition recommended sections are correctly populated'
-            description 'Recommended sections SHOULD be correctly populated if a value is known'
-            run do
-              validate_populated_sections_in_bundle(%w[11369-6 30954-2 47519-4 46264-8], %w[title code text],
-                                                    optional: true)
+            test from: :single_file_basic_test do
+              id tier[:populated_id]
+              title tier[:populated_title]
+              description tier[:populated_description]
+              run do
+                validate_populated_sections_in_bundle(tier[:codes], %w[title code text],
+                                                      optional: tier[:populated_optional])
+              end
             end
-          end
 
-          test from: :single_file_basic_test do
-            id :recommended_sections_entry_profiles
-            title 'AU PS Composition Recommended Sections capable of populating referenced profiles'
-            description 'Recommended section SHALL be capable of populating section.entry with the referenced ' \
-                        'profiles and SHOULD correctly populate section.entry if a value is known.'
-            run { test_composition_recommended_sections }
-          end
-        end
-
-        group do
-          id :au_ps_composition_optional_sections
-          title 'AU PS Composition Optional Sections'
-          description 'Verify the optional sections are correctly populated in the AU PS Composition resource'
-          run_as_group
-
-          test from: :single_file_basic_test do
-            id :sections_may_populated
-            title 'AU PS Composition optional sections are correctly populated'
-            description 'Optional section MAY be correctly populated if a value is known'
-            run do
-              validate_populated_sections_in_bundle(
-                %w[42348-3 104605-1 47420-5 11348-0 10162-6 81338-6 18776-5 29762-2 8716-3],
-                %w[title code text], optional: true
-              )
+            test from: :single_file_basic_test do
+              id tier[:entry_profiles_id]
+              title tier[:entry_profiles_title]
+              description tier[:entry_profiles_description]
+              optional if tier[:entry_profiles_dsl_optional]
+              # send, not public_send: test_composition_*_sections are declared private
+              # in BasicTestCompositionSectionReadModule (callable via the bare, implicit-
+              # receiver calls the generated files used; send reproduces that here).
+              run { send(tier[:entry_profiles_method]) }
             end
-          end
-
-          test from: :single_file_basic_test do
-            id :optional_sections_entry_profiles
-            title 'AU PS Composition Optional Sections capable of populating referenced profiles'
-            description 'Optional section SHALL be capable of populating section.entry with the referenced ' \
-                        'profiles and SHOULD correctly populate section.entry if a value is known.'
-            optional
-            run { test_composition_optional_sections }
           end
         end
 
@@ -289,136 +372,43 @@ module AUPSTestKit
           end
         end
 
-        group do
-          id :au_ps_composition_subject
-          title 'AU PS Composition Subject'
-          description 'Verify the referenced subject is a correctly populated AU PS Patient resource.'
-          run_as_group
+        ACTOR_GROUPS.each do |actor|
+          group do
+            id actor[:group_id]
+            title actor[:group_title]
+            description actor[:group_description]
+            optional if actor[:group_optional]
+            run_as_group
 
-          test from: :single_file_basic_test do
-            id :subject_resource_type_is_valid
-            title 'Subject reference in the AU PS Composition SHALL resolve to a valid resource type (Patient).'
-            description 'Subject reference in the AU PS Composition SHALL resolve to a valid resource type (Patient).'
-            run { test_resource_type_is_valid?('subject') }
-          end
+            if actor[:resource_type_id]
+              test from: :single_file_basic_test do
+                id actor[:resource_type_id]
+                title actor[:resource_type_text]
+                description actor[:resource_type_text]
+                run { test_resource_type_is_valid?(actor[:key]) }
+              end
+            end
 
-          test from: :single_file_basic_test do
-            id :subject_ms_elements
-            title 'Must Support elements SHALL be populated if a value is known'
-            description 'Must Support elements SHALL be populated if a value is known'
-            run { ms_elements_populated_message('subject') }
-          end
+            test from: :single_file_basic_test do
+              id actor[:ms_elements_id]
+              title actor[:ms_elements_text]
+              description actor[:ms_elements_text]
+              run { ms_elements_populated_message(actor[:key]) }
+            end
 
-          test from: :single_file_basic_test do
-            id :subject_ms_subelements_populated
-            title 'Must Support sub-element SHALL be populated if a value is known and the parent is populated'
-            description 'Must Support sub-element SHALL be populated if a value is known and the parent is populated'
-            run { ms_sub_elements_populated_message('subject') }
-          end
+            test from: :single_file_basic_test do
+              id actor[:ms_subelements_id]
+              title actor[:ms_subelements_text]
+              description actor[:ms_subelements_text]
+              run { ms_sub_elements_populated_message(actor[:key]) }
+            end
 
-          test from: :single_file_basic_test do
-            id :subject_ms_identifier_slices
-            title 'Must Support identifier slices SHALL be populated if a value is known'
-            description 'Must Support identifier slices SHALL be populated if a value is known (i.e. ihi, dva, medicare).'
-            run { test_subject_ms_identifier_slices }
-          end
-        end
-
-        group do
-          id :au_ps_composition_author
-          title 'AU PS Composition Author'
-          description 'Verify the referenced author is a correctly populated AU PS Practitioner, AU PS ' \
-                      'PractitionerRole, AU PS Patient, AU PS RelatedPerson, AU PS Organization profiles or ' \
-                      'Device resource.'
-          run_as_group
-
-          test from: :single_file_basic_test do
-            id :author_resource_type_is_valid
-            title 'Author reference in the AU PS Composition SHALL resolve to a valid resource type ' \
-                 '(Practitioner, PractitionerRole, Device, Patient, RelatedPerson, Organization).'
-            description 'Author reference in the AU PS Composition SHALL resolve to a valid resource type ' \
-                        '(Practitioner, PractitionerRole, Device, Patient, RelatedPerson, Organization).'
-            run { test_resource_type_is_valid?('author') }
-          end
-
-          test from: :single_file_basic_test do
-            id :author_ms_elements
-            title 'Must Support elements SHALL be populated if a value is known'
-            description 'Must Support elements SHALL be populated if a value is known'
-            run { ms_elements_populated_message('author') }
-          end
-
-          test from: :single_file_basic_test do
-            id :author_ms_subelements
-            title 'Must Support sub-elements SHALL be populated if a value is known'
-            description 'Must Support sub-elements SHALL be populated if a value is known'
-            run { ms_sub_elements_populated_message('author') }
-          end
-
-          test from: :single_file_basic_test do
-            id :author_ms_identifier_slices
-            title 'Must Support identifier slices SHALL be populated if a value is known'
-            description 'Must Support identifier slices SHALL be populated if a value is known'
-            run { test_composition_author_ms_identifier_slices }
-          end
-        end
-
-        group do
-          id :au_ps_composition_custodian
-          title 'AU PS Composition Custodian'
-          description 'Verify the referenced custodian is a correctly populated AU PS Organization resource.'
-          optional
-          run_as_group
-
-          test from: :single_file_basic_test do
-            id :custodian_ms_elements
-            title 'Must Support element SHALL be populated if a value is known'
-            description 'Must Support element SHALL be populated if a value is known'
-            run { ms_elements_populated_message('custodian') }
-          end
-
-          test from: :single_file_basic_test do
-            id :custodian_ms_subelements
-            title 'Must Support sub-element SHALL be populated if a value is known'
-            description 'Must Support sub-element SHALL be populated if a value is known'
-            run { ms_sub_elements_populated_message('custodian') }
-          end
-
-          test from: :single_file_basic_test do
-            id :custodian_ms_identifier_slices
-            title 'Must Support identifier slices SHALL be populated if a value is known'
-            description 'Must Support identifier slices SHALL be populated if a value is known'
-            run { test_composition_custodian_ms_identifier_slices }
-          end
-        end
-
-        group do
-          id :au_ps_composition_attester
-          title 'AU PS Composition Attester'
-          description 'Verify the referenced attester.party is a correctly populated AU PS Patient, ' \
-                      'RelatedPerson, Practitioner, PractitionerRole, or Organization resource.'
-          optional
-          run_as_group
-
-          test from: :single_file_basic_test do
-            id :attester_party_ms_elements
-            title 'Must Support elements SHALL be populated if a value is known'
-            description 'Must Support elements SHALL be populated if a value is known'
-            run { ms_elements_populated_message('attester') }
-          end
-
-          test from: :single_file_basic_test do
-            id :attester_party_ms_subelements
-            title 'Must Support sub-element SHALL be populated if a value is known'
-            description 'Must Support sub-element SHALL be populated if a value is known'
-            run { ms_sub_elements_populated_message('attester') }
-          end
-
-          test from: :single_file_basic_test do
-            id :attester_party_ms_identifier_slices
-            title 'Must Support identifier slices SHALL be populated if a value is known'
-            description 'Must Support identifier slices SHALL be populated if a value is known'
-            run { test_composition_attester_party_ms_identifier_slices }
+            test from: :single_file_basic_test do
+              id actor[:ms_identifier_slices_id]
+              title actor[:ms_identifier_slices_title]
+              description actor[:ms_identifier_slices_description]
+              run { public_send(actor[:ms_identifier_slices_method]) }
+            end
           end
         end
       end
