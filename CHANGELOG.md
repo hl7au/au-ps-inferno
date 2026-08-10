@@ -1,5 +1,11 @@
 # Changelog
 
+## [Unreleased]
+
+### Added
+
+- Added support for suppressing known, accepted FHIR validator messages (e.g. false positives or unavoidable terminology gaps) via a `SUPPRESSED_VALIDATION_MESSAGES` list.
+
 ## [0.2.1] - 2026-07-21
 
 ### Fixed
