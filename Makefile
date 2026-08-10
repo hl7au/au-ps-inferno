@@ -72,4 +72,6 @@ clean_generated:
 
 generate_and_fix: build generate rubocop_fix
 
+new_release_and_fix: build new_release rubocop_fix
+
 dev_restart: stop down build generate rubocop_fix setup up
