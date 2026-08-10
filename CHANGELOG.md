@@ -1,5 +1,9 @@
 # Changelog
 
+## [Unreleased]
+
+- Relax the `inferno_core` dependency from `~> 1.0.6` to `>= 1.0.6`. The tilde pin resolved to `>= 1.0.6, < 1.1.0` and was the only cap on `inferno_core` anywhere in the dependency tree, so it held every host application on 1.0.x. The kit uses only the public validation DSL (`resource_is_valid?`), which is unchanged through 1.4.x.
+
 ## [1.0.0] - 2026-07-29
 
 First stable release of the AU PS Inferno Test Kit, targeting AU PS Implementation Guide version 1.0.0. This release is functionally identical to 0.2.1; the version bump signals API and behaviour stability rather than new changes.
