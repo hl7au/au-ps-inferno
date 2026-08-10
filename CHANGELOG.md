@@ -5,6 +5,7 @@
 ### Added
 
 - Warn when `Address.country` on a Patient, Practitioner, RelatedPerson, or Organization resource doesn't match the `au-address` fixed code `"AU"` (e.g. `"Australia"`, `"AUS"`) (#35).
+- Warn when the Problems, Allergies, or Medications section uses `Composition.section.emptyReason = nilknown` instead of an explicit negation code on the section's entry resource (e.g. `AllergyIntolerance.code = 716186003 |No known allergy|`), the pattern AU PS prefers over `emptyReason`. This is an advisory warning, not a failure.
 
 ### Fixed
 
