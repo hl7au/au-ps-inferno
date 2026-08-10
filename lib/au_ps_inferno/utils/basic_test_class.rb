@@ -20,6 +20,7 @@ require_relative 'basic_test/ms_identifier_slices_module'
 require_relative 'basic_test/composition_elements_and_slices_module'
 require_relative 'basic_test/section_bundle_validation_module'
 require_relative 'basic_test/section_narrative_module'
+require_relative 'basic_test/composition_section_negation_module'
 require_relative 'basic_test/resolve_path_debug_module'
 require_relative 'basic_test/ms_elements_populated_module'
 require_relative 'basic_test/ms_sub_elements_populated_module'
@@ -48,6 +49,7 @@ module AUPSTestKit
     include BasicTestCompositionElementsAndSlicesModule
     include BasicTestSectionBundleValidationModule
     include BasicTestSectionNarrativeModule
+    include BasicTestCompositionSectionNegationModule
     include BasicTestResolvePathDebugModule
     include BasicTestMsElementsPopulatedModule
     include BasicTestMsSubElementsPopulatedModule
