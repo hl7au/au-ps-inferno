@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'fhir_models'
 require 'fileutils'
 require 'json'
 require 'pathname'
@@ -7,7 +8,6 @@ require 'tempfile'
 require 'yaml'
 require_relative '../utils/inferno_suite_generator_compat'
 require_relative '../generator/metadata_manager'
-require_relative '../suite/single_file_suite_builder'
 require_relative 'version_naming'
 
 module Release
