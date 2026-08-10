@@ -34,8 +34,6 @@ class Generator
     @additional_resources_path = additional_resources_path
     register_inferno_suite_generator_config
     @ig_resources = load_ig_resources
-    @metadata = MetadataManager.new(@ig_resources)
-    @new_metadata = build_new_metadata
     @core_metadata = InfernoSuiteGenerator::Generator::IGMetadataExtractor.new(@ig_resources).extract
     @composition_metadata = MetadataManager.new(@ig_resources)
   end

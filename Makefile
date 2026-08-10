@@ -32,7 +32,7 @@ setup: pull build migrate
 
 run: build up
 
-restart: stop down setup up
+restart: down setup up
 
 tests:
 	$(compose) $(inferno) bundle exec rspec spec/unit
