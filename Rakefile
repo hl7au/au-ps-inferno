@@ -37,3 +37,26 @@ namespace :generator do
     Generator.new(**opts).generate
   end
 end
+
+namespace :release do
+  desc 'Download every published hl7.fhir.au.ps package version into lib/au_ps_inferno/igs'
+  task :fetch_igs do
+    require 'au_ps_inferno/release/package_source'
+    Release::PackageSource.new.sync_all
+  end
+
+  desc 'Fetch every IG package version (if needed) and generate its suite folder'
+  task :generate do
+    require 'au_ps_inferno/release/pipeline'
+    Release::Pipeline.new.generate_all
+  end
+
+  desc 'Rewrite the generated-requires block in lib/au_ps_inferno.rb'
+  task :attach do
+    require 'au_ps_inferno/release/main_file_writer'
+    Release::MainFileWriter.new.write!
+  end
+
+  desc 'Full release pipeline: fetch every IG version, generate its suite, attach it to lib/au_ps_inferno.rb'
+  task new: %i[generate attach]
+end

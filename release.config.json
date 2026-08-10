@@ -1,0 +1,6 @@
+{
+  "ig_id": "hl7.fhir.au.ps",
+  "registries": ["https://packages.fhir.org"],
+  "destination": "lib/au_ps_inferno/igs",
+  "ignore_list": "release_ignore.yml"
+}

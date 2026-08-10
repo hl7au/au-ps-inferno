@@ -8,7 +8,7 @@ inferno = run inferno
 generated_v1_path = lib/au_ps_inferno/1.0.0-ballot
 generated_v1_preview_path = lib/au_ps_inferno/1.0.0
 
-.PHONY: pull build up stop down migrate setup run tests coverage rubocop snapshot-tests snapshot-tests-update
+.PHONY: pull build up stop down migrate setup run tests coverage rubocop snapshot-tests snapshot-tests-update new_release
 
 pull:
 	$(compose) pull
@@ -51,6 +51,9 @@ rubocop:
 
 rake_generate:
 	$(compose) $(inferno) bundle exec rake generator:generate
+
+new_release:
+	$(compose) $(inferno) bundle exec rake release:new
 
 rm_generated:
 	rm -rf $(generated_v1_preview_path)

@@ -1,0 +1,138 @@
+# frozen_string_literal: true
+
+require 'fileutils'
+require 'json'
+require 'pathname'
+require 'tempfile'
+require 'yaml'
+require_relative '../utils/inferno_suite_generator_compat'
+require_relative '../generator/metadata_manager'
+require_relative '../suite/single_file_suite_builder'
+require_relative 'version_naming'
+
+module Release
+  # Builds one independent, single-file suite for a single IG package version
+  class SuiteVersionBuilder
+    DEFAULT_BASE_CONFIG_PATH = 'inferno_suite_generator.config.json'
+    DEFAULT_GENERATED_ROOT = 'lib/au_ps_inferno/generated'
+    DEFAULT_ADDITIONAL_RESOURCES_PATH = 'additional_resources'
+
+    def initialize(version:, package_archive_path:, base_config_path: DEFAULT_BASE_CONFIG_PATH,
+                   generated_root: DEFAULT_GENERATED_ROOT,
+                   additional_resources_path: DEFAULT_ADDITIONAL_RESOURCES_PATH)
+      @version = version
+      @package_archive_path = File.expand_path(package_archive_path)
+      @base_config_path = File.expand_path(base_config_path)
+      @generated_root = File.expand_path(generated_root)
+      @additional_resources_path = additional_resources_path && File.expand_path(additional_resources_path)
+    end
+
+    def build!
+      ig_resources = load_ig_resources
+      FileUtils.mkdir_p(output_dir)
+      write_metadata(ig_resources)
+      write_suite_file
+      output_dir
+    end
+
+    private
+
+    attr_reader :version, :package_archive_path, :base_config_path, :generated_root, :additional_resources_path
+
+    def output_dir
+      @output_dir ||= File.join(generated_root, VersionNaming.folder_name(version))
+    end
+
+    def load_ig_resources
+      register_config_keeper
+      keeper = Registry.get(:config_keeper)
+      ig_resources = InfernoSuiteGenerator::Generator::IGLoader.new(keeper.ig_deps_path).load
+      load_additional_resources(ig_resources) if additional_resources_dir?
+      ig_resources
+    end
+
+    def additional_resources_dir?
+      additional_resources_path && File.directory?(additional_resources_path)
+    end
+
+    def load_additional_resources(ig_resources)
+      Dir.glob(File.join(additional_resources_path, '**', '*.json')).each do |file_path|
+        next if file_path.end_with?('.openapi.json')
+
+        add_resource_from_file(ig_resources, file_path)
+      end
+    end
+
+    def add_resource_from_file(ig_resources, file_path)
+      content = File.read(file_path)
+      json = JSON.parse(content)
+      return unless json.is_a?(Hash) && json['resourceType']
+
+      ig_resources.add(FHIR.from_contents(content))
+    rescue StandardError => e
+      warn "Error processing #{file_path}: #{e.message}"
+    end
+
+    def register_config_keeper
+      InfernoSuiteGenerator::Generator::GeneratorConfigKeeper::Constants::EMPTY_MUTABLE_HASH.clear
+      keeper = InfernoSuiteGenerator::Generator::GeneratorConfigKeeper.new([base_config_path, override_config_path])
+      Registry.register(:config_keeper, keeper)
+    end
+
+    def override_config_path
+      override_file = Tempfile.new(['release_ig_override', '.json'])
+      override = { 'ig' => { 'version' => version, 'package_archive_path' => package_archive_path } }
+      override_file.write(JSON.dump(override))
+      override_file.close
+      @override_file = override_file
+      override_file.path
+    end
+
+    def write_metadata(ig_resources)
+      core_metadata = InfernoSuiteGenerator::Generator::IGMetadataExtractor.new(ig_resources).extract
+      composition_metadata = ::Generator::MetadataManager.new(ig_resources)
+      composition_metadata.initiate_build
+
+      File.write(File.join(output_dir, 'metadata.yaml'), YAML.dump(core_metadata&.to_hash || {}))
+      File.write(File.join(output_dir, 'composition_metadata.yaml'),
+                 YAML.dump(composition_metadata.composition_metadata_to_dump))
+    ensure
+      @override_file&.unlink
+    end
+
+    def write_suite_file
+      File.write(File.join(output_dir, 'suite.rb'), suite_file_contents)
+    end
+
+    def suite_file_contents
+      <<~RUBY
+        require_relative '#{suite_builder_require_path}'
+
+        module AUPSTestKit
+          #{VersionNaming.suite_constant_name(version)} = SingleFileSuiteBuilder.build(
+            suite_id: #{VersionNaming.suite_id(version).inspect},
+            ig_version: #{version.inspect},
+            suite_title: #{suite_title.inspect},
+            suite_description: #{suite_description.inspect},
+            metadata_dir: File.expand_path(__dir__)
+          )
+        end
+      RUBY
+    end
+
+    def suite_builder_require_path
+      expanded = File.expand_path('../suite/single_file_suite_builder.rb', __dir__)
+      suite_builder_file = Pathname.new(File.realpath(expanded))
+      relative_dir = suite_builder_file.dirname.relative_path_from(Pathname.new(File.realpath(output_dir)))
+      relative_dir.join(suite_builder_file.basename('.rb')).to_s
+    end
+
+    def suite_title
+      "AU PS #{version} Test Suite (release pipeline)"
+    end
+
+    def suite_description
+      "Generated by the automated release pipeline from the hl7.fhir.au.ps@#{version} package."
+    end
+  end
+end

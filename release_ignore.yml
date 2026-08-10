@@ -1,0 +1,6 @@
+# Versions/packages the `make new_release` pipeline should skip.
+#
+# - hl7.fhir.au.ps               # ignores every version of the package
+# - name: hl7.fhir.au.ps
+#   version: 1.0.0-preview        # ignores a single version
+[]
