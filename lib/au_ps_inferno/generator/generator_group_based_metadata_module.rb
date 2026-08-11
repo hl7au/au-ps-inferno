@@ -5,13 +5,6 @@ class Generator
   module GeneratorGroupBasedMetadataModule
     private
 
-    def build_new_metadata
-      config_keeper = Registry.get(:config_keeper)
-      return nil unless config_keeper
-
-      InfernoSuiteGenerator::Generator::IGMetadataExtractor.new(@ig_resources).extract
-    end
-
     def register_inferno_suite_generator_config
       return if Registry.get(:config_keeper)
 

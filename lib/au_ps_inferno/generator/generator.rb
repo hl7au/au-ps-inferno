@@ -52,6 +52,8 @@ class Generator
   # @return [InfernoSuiteGenerator::Generator::IGResources]
   def load_ig_resources
     config_keeper = Registry.get(:config_keeper)
+    raise 'inferno_suite_generator.config.json not found; cannot load IG resources' unless config_keeper
+
     ig_resources = InfernoSuiteGenerator::Generator::IGLoader.new(config_keeper.ig_deps_path).load
     load_additional_resources(ig_resources) if @additional_resources_path
     ig_resources
