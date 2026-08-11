@@ -49,6 +49,9 @@ snapshot-tests-update:
 rubocop:
 	$(compose) $(inferno) rubocop
 
+rubocop_fix:
+	$(compose) $(inferno) rubocop -A
+
 rake_generate:
 	$(compose) $(inferno) bundle exec rake generator:generate
 

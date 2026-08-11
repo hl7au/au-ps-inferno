@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+### Added
+
+- Warn when the Problems, Allergies, or Medications section uses `Composition.section.emptyReason = nilknown` instead of an explicit negation code on the section's entry resource (e.g. `AllergyIntolerance.code = 716186003 |No known allergy|`), the pattern AU PS prefers over `emptyReason`. This is an advisory warning, not a failure.
+- Include the section's narrative (`Composition.section.text`), converted from HTML to Markdown, in the Must Support element population message for each section. The HTML is sanitized first (stripping scripts, styles, and other unsafe or non-display markup, including `img` tags) so untrusted narrative content can't inject anything unsafe into the test report.
+
 ### Fixed
 
 - Select the Australian SNOMED CT edition for validation instead of the validator's International default. The AU terminology server carries only the Australian edition, so the default made every SNOMED lookup fail and caused valid codes to be reported as absent from their value sets. Validating the AU PS `aups-basicsummary` example against `tx.dev.hl7.org.au` drops from 28 warnings and 19 information messages to 8 and 9, and removes a spurious error on the contained Medication's AMT code. Override with the `SNOMED_EDITION` environment variable.
