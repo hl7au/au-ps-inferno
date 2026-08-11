@@ -68,6 +68,8 @@ class Generator
     end
 
     def composition_metadata_to_dump
+      raise 'initiate_build must be called before composition_metadata_to_dump' if @producer.nil?
+
       metadata_dump_sections.merge(metadata_dump_ms_elements).merge(resources_filters: @resources_filters)
     end
 

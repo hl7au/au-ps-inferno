@@ -36,6 +36,8 @@ class Generator
     @ig_resources = load_ig_resources
     @core_metadata = InfernoSuiteGenerator::Generator::IGMetadataExtractor.new(@ig_resources).extract
     @composition_metadata = MetadataManager.new(@ig_resources)
+  ensure
+    cleanup_additional_resources_tmp_dir
   end
 
   def generate
@@ -45,51 +47,17 @@ class Generator
 
   private
 
-  # Loads IG resources via the shared InfernoSuiteGenerator extractor, then merges in any
-  # additional FHIR resources (e.g. base FHIR/IPS StructureDefinitions not present in the IG
-  # package) from {#additional_resources_path}, if given.
+  # Loads IG resources via the shared InfernoSuiteGenerator extractor. Any additional FHIR
+  # resources from {#additional_resources_path} are merged in by IGLoader itself, via the
+  # +extra_json_paths+ entry that {#register_inferno_suite_generator_config} adds to the
+  # registered config when {#additional_resources_path} is given.
   #
   # @return [InfernoSuiteGenerator::Generator::IGResources]
   def load_ig_resources
     config_keeper = Registry.get(:config_keeper)
-    ig_resources = InfernoSuiteGenerator::Generator::IGLoader.new(config_keeper.ig_deps_path).load
-    load_additional_resources(ig_resources) if @additional_resources_path
-    ig_resources
-  end
+    raise 'inferno_suite_generator.config.json not found; cannot load IG resources' unless config_keeper
 
-  # Loads all .json files from {#additional_resources_path} (and subfolders) into +ig_resources+.
-  # Skips OpenAPI JSON files. Must be a Hash with resourceType.
-  #
-  # @param ig_resources [InfernoSuiteGenerator::Generator::IGResources]
-  # @return [void]
-  def load_additional_resources(ig_resources)
-    path = File.expand_path(@additional_resources_path)
-    unless File.directory?(path)
-      puts "Error: additional resources path is not a directory: #{path}"
-      return
-    end
-
-    Dir.glob(File.join(path, '**', '*.json')).each do |file_path|
-      next if file_path.end_with?('.openapi.json')
-
-      add_resource_from_file(ig_resources, file_path)
-    end
-  end
-
-  # @param ig_resources [InfernoSuiteGenerator::Generator::IGResources]
-  # @param file_path [String] Absolute path to a JSON file
-  # @return [void]
-  def add_resource_from_file(ig_resources, file_path)
-    content = File.read(file_path)
-    json = JSON.parse(content)
-    return unless json.is_a?(Hash) && json['resourceType']
-
-    resource = FHIR.from_contents(content)
-    puts "Resource: #{resource.resourceType} with ID: #{resource.id} is loaded from #{file_path}"
-
-    ig_resources.add(resource)
-  rescue StandardError => e
-    puts "Error processing #{file_path}: #{e.message}"
+    InfernoSuiteGenerator::Generator::IGLoader.new(config_keeper.ig_deps_path).load
   end
 
   def update_ig_version_rb(version)
