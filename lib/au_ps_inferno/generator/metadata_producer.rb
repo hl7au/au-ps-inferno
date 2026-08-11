@@ -184,7 +184,6 @@ class Generator
     #
     # @return [Array<FHIR::Element>] Snapshot elements; empty if no Composition StructureDefinition
     def composition_extract_ms_elements_without_slices
-      composition_structure_definition = get_structure_definition_by_type('Composition')
       return [] if composition_structure_definition.nil?
 
       elements = composition_structure_definition.snapshot.element
@@ -196,7 +195,6 @@ class Generator
     end
 
     def all_ms_elements_related_to_slice(slice)
-      composition_structure_definition = get_structure_definition_by_type('Composition')
       return [] if composition_structure_definition.nil?
 
       elements = composition_structure_definition.snapshot.element
@@ -222,12 +220,13 @@ class Generator
     end
 
     def composition_extract_slices
-      composition_structure_definition = get_structure_definition_by_type('Composition')
-      return [] if composition_structure_definition.nil?
-
-      elements = composition_structure_definition.snapshot.element
-      filtered_elements = elements.filter { |element| element_is_slice?(element) }
-      filtered_elements.map { |element| build_metadata_for_slice(element) }
+      @composition_extract_slices ||= if composition_structure_definition.nil?
+                                        []
+                                      else
+                                        elements = composition_structure_definition.snapshot.element
+                                        filtered_elements = elements.filter { |element| element_is_slice?(element) }
+                                        filtered_elements.map { |element| build_metadata_for_slice(element) }
+                                      end
     end
 
     def build_metadata_for_slice(element)
@@ -277,6 +276,13 @@ class Generator
       get_resources_by_type('StructureDefinition').find do |resource|
         resource.type == type
       end
+    end
+
+    # Memoized Composition StructureDefinition lookup, reused by every method below that needs it.
+    #
+    # @return [FHIR::StructureDefinition, nil]
+    def composition_structure_definition
+      @composition_structure_definition ||= get_structure_definition_by_type('Composition')
     end
 
     # Finds a StructureDefinition in ig_resources whose canonical URL matches the given profile.
@@ -332,16 +338,16 @@ class Generator
     #
     # @return [void]
     def generate_metadata_for_composition
-      composition_structure_definition = get_structure_definition_by_type('Composition')
       return if composition_structure_definition.nil?
 
       elements = composition_structure_definition.snapshot.element
+      ms_sections_elements = composition_ms_sections_elements
       sections = elements.filter do |element|
         element.path == 'Composition.section' && !element.sliceName.nil?
       end
 
       sections.each do |section|
-        @composition_sections << build_section_data(section, elements)
+        @composition_sections << build_section_data(section, elements, ms_sections_elements)
       end
     end
 
@@ -349,10 +355,12 @@ class Generator
     #
     # @param section [FHIR::Element] Snapshot element for Composition.section (with sliceName)
     # @param elements [Array<FHIR::Element>] All snapshot elements from the Composition StructureDefinition
+    # @param ms_sections_elements [Array<Hash>] Result of {#composition_ms_sections_elements}, computed
+    #   once per {#generate_metadata_for_composition} call and shared across all sections
     # @return [Hash] Section metadata hash including keys:
     #   :id, :short, :definition, :min, :max, :required, :mustSupport, :code, :entries
-    def build_section_data(section, elements)
-      basic_section_data = build_basic_section_data(section)
+    def build_section_data(section, elements, ms_sections_elements)
+      basic_section_data = build_basic_section_data(section, ms_sections_elements)
       {
         **basic_section_data,
         code: section_code(section.id, elements),
@@ -363,9 +371,10 @@ class Generator
     # Builds the basic section fields from a snapshot element (no code or entries).
     #
     # @param section [FHIR::Element] Snapshot element for Composition.section (with sliceName)
+    # @param ms_sections_elements [Array<Hash>] Result of {#composition_ms_sections_elements}
     # @return [Hash] Basic section fields:
     #   :id, :short, :definition, :min, :max, :required, :mustSupport
-    def build_basic_section_data(section)
+    def build_basic_section_data(section, ms_sections_elements)
       {
         id: section.id,
         short: section.short,
@@ -374,7 +383,7 @@ class Generator
         max: section.max,
         required: section.min.positive?,
         mustSupport: section.mustSupport || false,
-        ms_elements: composition_ms_sections_elements
+        ms_elements: ms_sections_elements
       }
     end
 
