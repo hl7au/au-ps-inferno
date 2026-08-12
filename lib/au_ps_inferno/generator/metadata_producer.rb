@@ -9,7 +9,7 @@ class Generator
   #
   # @see InfernoSuiteGenerator::Generator::IGLoader for loading IG resources
   # rubocop:disable Metrics/ClassLength
-  class MetadataProducer
+  class CompositionMetadataProducer
     include Constants
 
     RECOMMENDED_SECTIONS_CODES = %w[11369-6 30954-2 47519-4 46264-8].freeze

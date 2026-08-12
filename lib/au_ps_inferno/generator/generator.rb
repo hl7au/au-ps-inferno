@@ -35,7 +35,7 @@ class Generator
     register_inferno_suite_generator_config
     @ig_resources = load_ig_resources
     @core_metadata = InfernoSuiteGenerator::Generator::IGMetadataExtractor.new(@ig_resources).extract
-    @composition_metadata = MetadataManager.new(@ig_resources)
+    @composition_metadata = CompositionMetadataManager.new(@ig_resources)
   ensure
     cleanup_additional_resources_tmp_dir
   end

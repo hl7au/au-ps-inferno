@@ -11,7 +11,7 @@ module AUPSTestKit
     id :suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_must_support_conformance_composition_mandatory_ms_populated
 
     def metadata_manager
-      @metadata_manager ||= MetadataManager.new(File.expand_path('../../../metadata.yaml', __dir__))
+      @metadata_manager ||= CompositionMetadataManager.new(File.expand_path('../../../metadata.yaml', __dir__))
     end
 
     run do

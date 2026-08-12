@@ -71,7 +71,7 @@ RSpec.describe 'Author Must Support element tests omit when author is Device' do
       id test_id
       run { send(method_name, 'author') }
       define_method(:metadata_manager) do
-        @metadata_manager ||= AUPSTestKit::MetadataManager.new(DEVICE_AUTHOR_FIXTURE_METADATA_PATH)
+        @metadata_manager ||= AUPSTestKit::CompositionMetadataManager.new(DEVICE_AUTHOR_FIXTURE_METADATA_PATH)
       end
     end
     repo = Inferno::Repositories::Tests.new
