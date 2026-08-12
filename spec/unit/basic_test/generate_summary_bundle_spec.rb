@@ -62,4 +62,27 @@ RSpec.describe AUPSTestKit::GenerateSummaryBundleTestClass do
 
     expect(result.result).to eq('omit')
   end
+
+  it 'retrieves a Bundle by ID from the FHIR server when a bundle_id is provided instead of patient details' do
+    stub_request(:get, "#{server_url}/Bundle/bundle1")
+      .to_return(status: 200, body: bundle_json, headers: { 'Content-Type' => 'application/fhir+json' })
+
+    test = create_test('suite_generate_au_ps_using_ips_summary_validation_tests_bundle_id_test')
+    scratch = {}
+    result = run(test, { url: server_url, bundle_id: 'bundle1' }, scratch)
+
+    expect(result.result).to eq('pass')
+    expect(scratch[:bundle_ips_resource_summary]).to be_a(FHIR::Bundle)
+  end
+
+  it 'prefers $summary over bundle_id when both patient details and a bundle_id are provided' do
+    stub_request(:get, "#{server_url}/Patient/pat1/$summary")
+      .to_return(status: 200, body: bundle_json, headers: { 'Content-Type' => 'application/fhir+json' })
+
+    test = create_test('suite_generate_au_ps_using_ips_summary_validation_tests_prefers_summary_test')
+    result = run(test, { url: server_url, patient_id: 'pat1', bundle_id: 'bundle1' })
+
+    expect(result.result).to eq('pass')
+    expect(WebMock).not_to have_requested(:get, "#{server_url}/Bundle/bundle1")
+  end
 end

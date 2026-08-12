@@ -60,7 +60,8 @@ RSpec.describe AUPSTestKit::RetrieveBundleTestClass do
       .to_return(status: 200, body: bundle_json, headers: { 'Content-Type' => 'application/fhir+json' })
 
     test = create_test('suite_retrieve_au_ps_bundle_validation_tests_url_header_test')
-    result = run(test, { bundle_url: bundle_url, header_name: 'X-Api-Key', header_value: 'secret' })
+    result = run(test, { bundle_url: bundle_url, bundle_url_header_name: 'X-Api-Key',
+                         bundle_url_header_value: 'secret' })
 
     expect(result.result).to eq('pass')
   end
