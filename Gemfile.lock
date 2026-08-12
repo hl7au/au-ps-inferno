@@ -123,6 +123,7 @@ GEM
       date_time_precision (>= 0.8)
       mime-types (>= 3.0)
       nokogiri (>= 1.11.4)
+    fhir_packages_manager (0.3.0)
     fhir_stu3_models (3.2.0)
       bcp47 (>= 0.3)
       date_time_precision (>= 0.8)
@@ -362,6 +363,7 @@ DEPENDENCIES
   database_cleaner-sequel (~> 1.8)
   debug
   factory_bot (~> 6.1)
+  fhir_packages_manager (~> 0.3)
   inferno_suite_generator!
   pg (~> 1.5)
   rspec (~> 3.10)
