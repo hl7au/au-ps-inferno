@@ -13,11 +13,6 @@ RSpec.describe 'AU PS single-file suite: AU PS Bundle Instance run behavior' do
   let(:suite_id) { 'au_ps_v100_single_file' }
   let(:suite) { Inferno::Repositories::TestSuites.new.find(suite_id) }
 
-  # Metadata fixture with known composition_sections/subject/author/custodian/attester content, so
-  # this spec's expectations don't depend on the real generated production metadata.yaml being
-  # present or up to date.
-  FIXTURE_METADATA_PATH = File.expand_path('../fixtures/metadata.yaml', __dir__).freeze
-
   def find_by_title(runnable, title)
     runnable.children.find { |c| c.title == title }
   end
@@ -28,8 +23,11 @@ RSpec.describe 'AU PS single-file suite: AU PS Bundle Instance run behavior' do
     find_by_title(mandatory_group, title)
   end
 
+  # Metadata fixture with known composition_sections/subject/author/custodian/attester content, so
+  # this spec's expectations don't depend on the real generated production metadata.yaml being
+  # present or up to date.
   def stub_test_metadata_manager(test_class)
-    manager = AUPSTestKit::MetadataManager.new(FIXTURE_METADATA_PATH)
+    manager = AUPSTestKit::MetadataManager.new(File.expand_path('../fixtures/metadata.yaml', __dir__))
     test_class.class_eval { define_method(:metadata_manager) { manager } }
   end
 
