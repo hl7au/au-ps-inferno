@@ -162,7 +162,15 @@ module AUPSTestKit
         entry_profiles_title: 'AU PS Composition Mandatory Sections capable of populating referenced profiles',
         entry_profiles_description: 'Mandatory section SHALL be capable of populating section.entry with the ' \
                                     'referenced profiles and SHOULD correctly populate section.entry if a value is known.',
-        entry_profiles_dsl_optional: false
+        entry_profiles_dsl_optional: false,
+        nilknown_warning_id: :mandatory_sections_nilknown_warning,
+        nilknown_warning_title: 'AU PS Composition Mandatory Sections do not rely on emptyReason=nilknown',
+        nilknown_warning_description: 'Warns when a mandatory section (Problems, Allergies, Medications) uses ' \
+                                      'Composition.section.emptyReason = nilknown instead of an explicit ' \
+                                      "negation code on the section's entry resource (e.g. " \
+                                      'AllergyIntolerance.code = 716186003 |No known allergy|). AU PS prefers ' \
+                                      'the explicit-entry pattern used by FHIR, IPS and AU Core over ' \
+                                      'emptyReason - this is a warning, not a failure.'
       },
       {
         group_id: :au_ps_composition_recommended_sections,
@@ -350,6 +358,15 @@ module AUPSTestKit
                     omit_unless_bundle_in_scratch
                     test_composition_sections_data(sections_codes: tier[:codes], bundle_data: scratch_bundle,
                                                    mandatory: tier[:mandatory])
+                  end
+                end
+
+                if tier[:nilknown_warning_id]
+                  test from: basic_test_class.id do
+                    id tier[:nilknown_warning_id]
+                    title tier[:nilknown_warning_title]
+                    description tier[:nilknown_warning_description]
+                    run { warn_on_nilknown_empty_reason(tier[:codes]) }
                   end
                 end
               end
