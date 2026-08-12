@@ -981,13 +981,37 @@
     - Observation
   - :path: section.entry
     :resources:
+    - Observation
+  - :path: section.entry
+    :resources:
+    - DiagnosticReport
+  - :path: section.entry
+    :resources:
     - Procedure
   - :path: section.entry
     :resources:
+    - DeviceUseStatement
+  - :path: section.entry
+    :resources:
+    - Flag
+  - :path: section.entry
+    :resources:
     - Condition
   - :path: section.entry
     :resources:
     - Condition
+  - :path: section.entry
+    :resources:
+    - Observation
+  - :path: section.entry
+    :resources:
+    - Observation
+  - :path: section.entry
+    :resources:
+    - Observation
+  - :path: section.entry
+    :resources:
+    - Observation
   - :path: section.entry
     :resources:
     - Observation
@@ -1392,6 +1416,668 @@
     - DocumentReference
     - Observation
   :delayed_references: []
+- :name: Observation_alcoholuse_uv_ips
+  :class_name: ObservationAlcoholuseUvIpsSequence
+  :version: v1.0.0
+  :reformatted_version: v100
+  :resource: Observation
+  :profile_url: http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-alcoholuse-uv-ips
+  :profile_name: Observation Social History - Alcohol Use (IPS)
+  :profile_version: 2.0.0
+  :title: Observation Social History - Alcohol Use (IPS)
+  :short_description: Verify support for the server capabilities required by the Observation
+    Social History - Alcohol Use (IPS).
+  :interactions: []
+  :operations: []
+  :searches: []
+  :search_definitions: {}
+  :include_params: *1
+  :revincludes: *2
+  :required_concepts: []
+  :must_supports:
+    :extensions: []
+    :slices: []
+    :elements:
+    - :path: code.coding.code
+      :fixed_value: 74013-4
+    - :path: subject
+      :types:
+      - Reference
+      :target_profiles:
+      - http://hl7.org/fhir/uv/ips/StructureDefinition/Patient-uv-ips
+    - :path: subject.reference
+    - :path: effective[x]
+  :mandatory_elements:
+  - Observation.status
+  - Observation.code
+  - Observation.subject
+  - Observation.subject.reference
+  - Observation.effective[x]
+  - Observation.component.code
+  :bindings:
+  - :type: code
+    :strength: required
+    :system: http://hl7.org/fhir/ValueSet/observation-status
+    :path: status
+  :references:
+  - :path: Observation.basedOn
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/CarePlan|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/DeviceRequest|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/ImmunizationRecommendation|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/MedicationRequest|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/NutritionOrder|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/ServiceRequest|4.0.1
+    :resource_types:
+    - CarePlan
+    - ImmunizationRecommendation
+    - MedicationRequest
+  - :path: Observation.partOf
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/MedicationAdministration|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/MedicationDispense|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/MedicationStatement|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/Procedure|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/Immunization|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/ImagingStudy|4.0.1
+    :resource_types:
+    - MedicationAdministration
+    - MedicationDispense
+    - MedicationStatement
+    - Procedure
+    - Immunization
+  - :path: Observation.subject
+    :profiles:
+    - http://hl7.org/fhir/uv/ips/StructureDefinition/Patient-uv-ips
+  - :path: Observation.focus
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/Resource|4.0.1
+    :resource_types:
+    - Resource
+  - :path: Observation.encounter
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/Encounter|4.0.1
+  - :path: Observation.performer
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/Practitioner|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/PractitionerRole|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/Organization|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/CareTeam|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/Patient|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/RelatedPerson|4.0.1
+  - :path: Observation.specimen
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/Specimen|4.0.1
+  - :path: Observation.device
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/Device|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/DeviceMetric|4.0.1
+  - :path: Observation.hasMember
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/Observation|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/QuestionnaireResponse|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/MolecularSequence|4.0.1
+    :resource_types:
+    - Observation
+  - :path: Observation.derivedFrom
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/DocumentReference|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/ImagingStudy|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/Media|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/QuestionnaireResponse|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/Observation|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/MolecularSequence|4.0.1
+    :resource_types:
+    - DocumentReference
+    - Observation
+  :delayed_references: []
+- :name: Observation_pregnancy_outcome_uv_ips
+  :class_name: ObservationPregnancyOutcomeUvIpsSequence
+  :version: v1.0.0
+  :reformatted_version: v100
+  :resource: Observation
+  :profile_url: http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-pregnancy-outcome-uv-ips
+  :profile_name: Observation Pregnancy - Outcome (IPS)
+  :profile_version: 2.0.0
+  :title: Observation Pregnancy - Outcome (IPS)
+  :short_description: Verify support for the server capabilities required by the Observation
+    Pregnancy - Outcome (IPS).
+  :interactions: []
+  :operations: []
+  :searches: []
+  :search_definitions: {}
+  :include_params: *1
+  :revincludes: *2
+  :required_concepts: []
+  :must_supports:
+    :extensions: []
+    :slices:
+    - :slice_id: Observation.value[x]:valueQuantity
+      :slice_name: valueQuantity
+      :path: value[x]
+      :discriminator:
+        :type: type
+        :code: Quantity
+    :elements:
+    - :path: code
+    - :path: subject
+      :types:
+      - Reference
+      :target_profiles:
+      - http://hl7.org/fhir/uv/ips/StructureDefinition/Patient-uv-ips
+    - :path: subject.reference
+    - :path: effective[x]
+  :mandatory_elements:
+  - Observation.status
+  - Observation.code
+  - Observation.subject
+  - Observation.subject.reference
+  - Observation.effective[x]
+  - Observation.component.code
+  :bindings:
+  - :type: code
+    :strength: required
+    :system: http://hl7.org/fhir/ValueSet/observation-status
+    :path: status
+  - :type: CodeableConcept
+    :strength: required
+    :system: http://hl7.org/fhir/uv/ips/ValueSet/pregnancies-summary-uv-ips
+    :path: code
+  :references:
+  - :path: Observation.basedOn
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/CarePlan|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/DeviceRequest|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/ImmunizationRecommendation|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/MedicationRequest|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/NutritionOrder|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/ServiceRequest|4.0.1
+    :resource_types:
+    - CarePlan
+    - ImmunizationRecommendation
+    - MedicationRequest
+  - :path: Observation.partOf
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/MedicationAdministration|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/MedicationDispense|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/MedicationStatement|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/Procedure|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/Immunization|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/ImagingStudy|4.0.1
+    :resource_types:
+    - MedicationAdministration
+    - MedicationDispense
+    - MedicationStatement
+    - Procedure
+    - Immunization
+  - :path: Observation.subject
+    :profiles:
+    - http://hl7.org/fhir/uv/ips/StructureDefinition/Patient-uv-ips
+  - :path: Observation.focus
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/Resource|4.0.1
+    :resource_types:
+    - Resource
+  - :path: Observation.encounter
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/Encounter|4.0.1
+  - :path: Observation.performer
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/Practitioner|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/PractitionerRole|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/Organization|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/CareTeam|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/Patient|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/RelatedPerson|4.0.1
+  - :path: Observation.specimen
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/Specimen|4.0.1
+  - :path: Observation.device
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/Device|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/DeviceMetric|4.0.1
+  - :path: Observation.hasMember
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/Observation|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/QuestionnaireResponse|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/MolecularSequence|4.0.1
+    :resource_types:
+    - Observation
+  - :path: Observation.derivedFrom
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/DocumentReference|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/ImagingStudy|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/Media|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/QuestionnaireResponse|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/Observation|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/MolecularSequence|4.0.1
+    :resource_types:
+    - DocumentReference
+    - Observation
+  :delayed_references: []
+- :name: Observation_pregnancy_status_uv_ips
+  :class_name: ObservationPregnancyStatusUvIpsSequence
+  :version: v1.0.0
+  :reformatted_version: v100
+  :resource: Observation
+  :profile_url: http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-pregnancy-status-uv-ips
+  :profile_name: Observation Pregnancy - Status (IPS)
+  :profile_version: 2.0.0
+  :title: Observation Pregnancy - Status (IPS)
+  :short_description: Verify support for the server capabilities required by the Observation
+    Pregnancy - Status (IPS).
+  :interactions: []
+  :operations: []
+  :searches: []
+  :search_definitions: {}
+  :include_params: *1
+  :revincludes: *2
+  :required_concepts: []
+  :must_supports:
+    :extensions: []
+    :slices:
+    - :slice_id: Observation.value[x]:valueCodeableConcept
+      :slice_name: valueCodeableConcept
+      :path: value[x]
+      :discriminator:
+        :type: type
+        :code: CodeableConcept
+    :elements:
+    - :path: code.coding.code
+      :fixed_value: 82810-3
+    - :path: subject
+      :types:
+      - Reference
+      :target_profiles:
+      - http://hl7.org/fhir/uv/ips/StructureDefinition/Patient-uv-ips
+    - :path: subject.reference
+    - :path: effective[x]
+    - :path: hasMember
+      :types:
+      - Reference
+      :target_profiles:
+      - http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-pregnancy-edd-uv-ips
+    - :path: hasMember.reference
+  :mandatory_elements:
+  - Observation.status
+  - Observation.code
+  - Observation.subject
+  - Observation.subject.reference
+  - Observation.effective[x]
+  - Observation.hasMember.reference
+  - Observation.component.code
+  :bindings:
+  - :type: code
+    :strength: required
+    :system: http://hl7.org/fhir/ValueSet/observation-status
+    :path: status
+  :references:
+  - :path: Observation.basedOn
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/CarePlan|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/DeviceRequest|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/ImmunizationRecommendation|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/MedicationRequest|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/NutritionOrder|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/ServiceRequest|4.0.1
+    :resource_types:
+    - CarePlan
+    - ImmunizationRecommendation
+    - MedicationRequest
+  - :path: Observation.partOf
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/MedicationAdministration|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/MedicationDispense|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/MedicationStatement|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/Procedure|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/Immunization|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/ImagingStudy|4.0.1
+    :resource_types:
+    - MedicationAdministration
+    - MedicationDispense
+    - MedicationStatement
+    - Procedure
+    - Immunization
+  - :path: Observation.subject
+    :profiles:
+    - http://hl7.org/fhir/uv/ips/StructureDefinition/Patient-uv-ips
+  - :path: Observation.focus
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/Resource|4.0.1
+    :resource_types:
+    - Resource
+  - :path: Observation.encounter
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/Encounter|4.0.1
+  - :path: Observation.performer
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/Practitioner|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/PractitionerRole|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/Organization|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/CareTeam|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/Patient|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/RelatedPerson|4.0.1
+  - :path: Observation.specimen
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/Specimen|4.0.1
+  - :path: Observation.device
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/Device|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/DeviceMetric|4.0.1
+  - :path: Observation.hasMember
+    :profiles:
+    - http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-pregnancy-edd-uv-ips
+  - :path: Observation.derivedFrom
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/DocumentReference|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/ImagingStudy|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/Media|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/QuestionnaireResponse|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/Observation|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/MolecularSequence|4.0.1
+    :resource_types:
+    - DocumentReference
+    - Observation
+  :delayed_references: []
+- :name: Observation_results_radiology_uv_ips
+  :class_name: ObservationResultsRadiologyUvIpsSequence
+  :version: v1.0.0
+  :reformatted_version: v100
+  :resource: Observation
+  :profile_url: http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-results-radiology-uv-ips
+  :profile_name: Observation Results - Radiology (IPS)
+  :profile_version: 2.0.0
+  :title: Observation Results - Radiology (IPS)
+  :short_description: Verify support for the server capabilities required by the Observation
+    Results - Radiology (IPS).
+  :interactions: []
+  :operations: []
+  :searches: []
+  :search_definitions: {}
+  :include_params: *1
+  :revincludes: *2
+  :required_concepts: []
+  :must_supports:
+    :extensions: []
+    :slices:
+    - :slice_id: Observation.effective[x]:effectiveDateTime
+      :slice_name: effectiveDateTime
+      :path: effective[x]
+      :discriminator:
+        :type: type
+        :code: DateTime
+    - :slice_id: Observation.value[x]:valueString
+      :slice_name: valueString
+      :path: value[x]
+      :discriminator:
+        :type: type
+        :code: String
+    - :slice_id: Observation.category:radiology
+      :slice_name: radiology
+      :path: category
+      :discriminator:
+        :type: value
+        :values: []
+    :elements:
+    - :path: code
+    - :path: subject
+      :types:
+      - Reference
+      :target_profiles:
+      - http://hl7.org/fhir/uv/ips/StructureDefinition/Patient-uv-ips
+    - :path: subject.reference
+    - :path: effective[x]
+    - :path: performer
+      :types:
+      - Reference
+    - :path: component
+  :mandatory_elements:
+  - Observation.status
+  - Observation.category
+  - Observation.code
+  - Observation.subject
+  - Observation.subject.reference
+  - Observation.effective[x]
+  - Observation.performer
+  - Observation.component.code
+  :bindings:
+  - :type: code
+    :strength: required
+    :system: http://hl7.org/fhir/uv/ips/ValueSet/results-status-uv-ips
+    :path: status
+  :references:
+  - :path: Observation.basedOn
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/CarePlan|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/DeviceRequest|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/ImmunizationRecommendation|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/MedicationRequest|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/NutritionOrder|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/ServiceRequest|4.0.1
+    :resource_types:
+    - CarePlan
+    - ImmunizationRecommendation
+    - MedicationRequest
+  - :path: Observation.partOf
+    :profiles:
+    - http://hl7.org/fhir/uv/ips/StructureDefinition/ImagingStudy-uv-ips
+  - :path: Observation.subject
+    :profiles:
+    - http://hl7.org/fhir/uv/ips/StructureDefinition/Patient-uv-ips
+  - :path: Observation.focus
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/Resource|4.0.1
+    :resource_types:
+    - Resource
+  - :path: Observation.encounter
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/Encounter|4.0.1
+  - :path: Observation.performer
+    :profiles:
+    - http://hl7.org/fhir/uv/ips/StructureDefinition/Practitioner-uv-ips
+    - http://hl7.org/fhir/uv/ips/StructureDefinition/PractitionerRole-uv-ips
+    - http://hl7.org/fhir/uv/ips/StructureDefinition/Organization-uv-ips
+    - http://hl7.org/fhir/StructureDefinition/CareTeam
+    - http://hl7.org/fhir/uv/ips/StructureDefinition/Patient-uv-ips
+    - http://hl7.org/fhir/StructureDefinition/RelatedPerson
+  - :path: Observation.specimen
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/Specimen|4.0.1
+  - :path: Observation.device
+    :profiles:
+    - http://hl7.org/fhir/uv/ips/StructureDefinition/Device-observer-uv-ips
+  - :path: Observation.hasMember
+    :profiles:
+    - http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-results-radiology-uv-ips
+    :resource_types:
+    - Observation
+  - :path: Observation.derivedFrom
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/DocumentReference|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/ImagingStudy|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/Media|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/QuestionnaireResponse|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/Observation|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/MolecularSequence|4.0.1
+    :resource_types:
+    - DocumentReference
+    - Observation
+  :delayed_references:
+  - :path: hasMember
+    :resources:
+    - Observation
+- :name: vitalsigns
+  :class_name: VitalsignsSequence
+  :version: v1.0.0
+  :reformatted_version: v100
+  :resource: Observation
+  :profile_url: http://hl7.org/fhir/StructureDefinition/vitalsigns
+  :profile_name: Vital Signs Profile
+  :profile_version: 5.0.0
+  :title: Observation Vital Signs
+  :short_description: Verify support for the server capabilities required by the Vital
+    Signs Profile.
+  :interactions: []
+  :operations: []
+  :searches: []
+  :search_definitions: {}
+  :include_params: *1
+  :revincludes: *2
+  :required_concepts: []
+  :must_supports:
+    :extensions: []
+    :slices:
+    - :slice_id: Observation.component.value[x]:valueQuantity
+      :slice_name: valueQuantity
+      :path: component.value[x]
+      :discriminator:
+        :type: type
+        :code: Quantity
+    - :slice_id: Observation.category:VSCat
+      :slice_name: VSCat
+      :path: category
+      :discriminator:
+        :type: value
+        :values:
+        - :path: coding.code
+          :value: vital-signs
+        - :path: coding.system
+          :value: http://terminology.hl7.org/CodeSystem/observation-category
+    :elements:
+    - :path: status
+    - :path: category
+    - :path: category:VSCat.coding
+    - :path: category:VSCat.coding.system
+      :fixed_value: http://terminology.hl7.org/CodeSystem/observation-category
+    - :path: category:VSCat.coding.code
+      :fixed_value: vital-signs
+    - :path: code
+    - :path: subject
+      :types:
+      - Reference
+    - :path: effective[x]
+    - :path: value[x]
+      :types:
+      - Reference
+    - :path: dataAbsentReason
+    - :path: component
+    - :path: component.code
+    - :path: component.value[x]
+      :types:
+      - Reference
+    - :path: component.dataAbsentReason
+  :mandatory_elements:
+  - Observation.triggeredBy.observation
+  - Observation.triggeredBy.type
+  - Observation.status
+  - Observation.category
+  - Observation.category.coding
+  - Observation.category.coding.system
+  - Observation.category.coding.code
+  - Observation.code
+  - Observation.subject
+  - Observation.effective[x]
+  - Observation.component.code
+  :bindings:
+  - :type: code
+    :strength: required
+    :system: http://hl7.org/fhir/ValueSet/all-languages
+    :path: language
+  - :type: code
+    :strength: required
+    :system: http://hl7.org/fhir/ValueSet/observation-triggeredbytype
+    :path: triggeredBy.type
+  - :type: code
+    :strength: required
+    :system: http://hl7.org/fhir/ValueSet/observation-status
+    :path: status
+  :references:
+  - :path: Observation.basedOn
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/CarePlan
+    - http://hl7.org/fhir/StructureDefinition/DeviceRequest
+    - http://hl7.org/fhir/StructureDefinition/ImmunizationRecommendation
+    - http://hl7.org/fhir/StructureDefinition/MedicationRequest
+    - http://hl7.org/fhir/StructureDefinition/NutritionOrder
+    - http://hl7.org/fhir/StructureDefinition/ServiceRequest
+    :resource_types:
+    - CarePlan
+    - ImmunizationRecommendation
+    - MedicationRequest
+  - :path: Observation.triggeredBy.observation
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/Observation
+    :resource_types:
+    - Observation
+  - :path: Observation.partOf
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/MedicationAdministration
+    - http://hl7.org/fhir/StructureDefinition/MedicationDispense
+    - http://hl7.org/fhir/StructureDefinition/MedicationStatement
+    - http://hl7.org/fhir/StructureDefinition/Procedure
+    - http://hl7.org/fhir/StructureDefinition/Immunization
+    - http://hl7.org/fhir/StructureDefinition/ImagingStudy
+    - http://hl7.org/fhir/StructureDefinition/GenomicStudy
+    :resource_types:
+    - MedicationAdministration
+    - MedicationDispense
+    - MedicationStatement
+    - Procedure
+    - Immunization
+  - :path: Observation.subject
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/Patient
+  - :path: Observation.focus
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/Resource
+    :resource_types:
+    - Resource
+  - :path: Observation.encounter
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/Encounter
+  - :path: Observation.performer
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/Practitioner
+    - http://hl7.org/fhir/StructureDefinition/PractitionerRole
+    - http://hl7.org/fhir/StructureDefinition/Organization
+    - http://hl7.org/fhir/StructureDefinition/CareTeam
+    - http://hl7.org/fhir/StructureDefinition/Patient
+    - http://hl7.org/fhir/StructureDefinition/RelatedPerson
+  - :path: Observation.bodyStructure
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/BodyStructure
+  - :path: Observation.specimen
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/Specimen
+    - http://hl7.org/fhir/StructureDefinition/Group
+  - :path: Observation.device
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/Device
+    - http://hl7.org/fhir/StructureDefinition/DeviceMetric
+  - :path: Observation.hasMember
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/QuestionnaireResponse
+    - http://hl7.org/fhir/StructureDefinition/MolecularSequence
+    - http://hl7.org/fhir/StructureDefinition/vitalsigns
+    :resource_types:
+    - Observation
+  - :path: Observation.derivedFrom
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/DocumentReference
+    - http://hl7.org/fhir/StructureDefinition/ImagingStudy
+    - http://hl7.org/fhir/StructureDefinition/QuestionnaireResponse
+    - http://hl7.org/fhir/StructureDefinition/MolecularSequence
+    - http://hl7.org/fhir/StructureDefinition/vitalsigns
+    :resource_types:
+    - DocumentReference
+    - Observation
+  :delayed_references:
+  - :path: hasMember
+    :resources:
+    - Observation
+  - :path: derivedFrom
+    :resources:
+    - Observation
 - :name: au_ps_encounter
   :class_name: AuPsEncounterSequence
   :version: v1.0.0
@@ -1996,6 +2682,7 @@
   - :path: reasonReference
     :resources:
     - Condition
+    - DiagnosticReport
 - :name: au_ps_organization
   :class_name: AuPsOrganizationSequence
   :version: v1.0.0
@@ -2495,4 +3182,324 @@
     - http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-patient
     :resource_types:
     - Patient
+  :delayed_references: []
+- :name: Device_uv_ips
+  :class_name: DeviceUvIpsSequence
+  :version: v1.0.0
+  :reformatted_version: v100
+  :resource: Device
+  :profile_url: http://hl7.org/fhir/uv/ips/StructureDefinition/Device-uv-ips
+  :profile_name: Device (IPS)
+  :profile_version: 2.0.0
+  :title: Device (IPS)
+  :short_description: Verify support for the server capabilities required by the Device
+    (IPS).
+  :interactions: []
+  :operations: []
+  :searches: []
+  :search_definitions: {}
+  :include_params: []
+  :revincludes: []
+  :required_concepts: []
+  :must_supports:
+    :extensions: []
+    :slices: []
+    :elements:
+    - :path: type
+  :mandatory_elements:
+  - Device.deviceName.name
+  - Device.deviceName.type
+  - Device.specialization.systemType
+  - Device.version.value
+  - Device.property.type
+  :bindings:
+  - :type: code
+    :strength: required
+    :system: http://hl7.org/fhir/ValueSet/udi-entry-type
+    :path: udiCarrier.entryType
+  - :type: code
+    :strength: required
+    :system: http://hl7.org/fhir/ValueSet/device-status
+    :path: status
+  - :type: code
+    :strength: required
+    :system: http://hl7.org/fhir/ValueSet/device-nametype
+    :path: deviceName.type
+  :references:
+  - :path: Device.definition
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/DeviceDefinition|4.0.1
+  - :path: Device.patient
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/Patient|4.0.1
+  - :path: Device.owner
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/Organization|4.0.1
+  - :path: Device.location
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/Location|4.0.1
+  - :path: Device.parent
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/Device|4.0.1
+  :delayed_references: []
+- :name: DeviceUseStatement_uv_ips
+  :class_name: DeviceusestatementUvIpsSequence
+  :version: v1.0.0
+  :reformatted_version: v100
+  :resource: DeviceUseStatement
+  :profile_url: http://hl7.org/fhir/uv/ips/StructureDefinition/DeviceUseStatement-uv-ips
+  :profile_name: DeviceUseStatement (IPS)
+  :profile_version: 2.0.0
+  :title: DeviceUseStatement (IPS)
+  :short_description: Verify support for the server capabilities required by the DeviceUseStatement
+    (IPS).
+  :interactions: []
+  :operations: []
+  :searches: []
+  :search_definitions: {}
+  :include_params: []
+  :revincludes: []
+  :required_concepts: []
+  :must_supports:
+    :extensions: []
+    :slices:
+    - :slice_id: DeviceUseStatement.timing[x]:timingDateTime
+      :slice_name: timingDateTime
+      :path: timing[x]
+      :discriminator:
+        :type: type
+        :code: DateTime
+    :elements:
+    - :path: subject
+      :types:
+      - Reference
+      :target_profiles:
+      - http://hl7.org/fhir/uv/ips/StructureDefinition/Patient-uv-ips
+    - :path: subject.reference
+    - :path: timing[x]
+    - :path: device
+      :types:
+      - Reference
+      :target_profiles:
+      - http://hl7.org/fhir/uv/ips/StructureDefinition/Device-uv-ips
+  :mandatory_elements:
+  - DeviceUseStatement.status
+  - DeviceUseStatement.subject
+  - DeviceUseStatement.subject.reference
+  - DeviceUseStatement.timing[x]
+  - DeviceUseStatement.device
+  :bindings:
+  - :type: code
+    :strength: required
+    :system: http://hl7.org/fhir/ValueSet/device-statement-status
+    :path: status
+  :references:
+  - :path: DeviceUseStatement.basedOn
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/ServiceRequest|4.0.1
+  - :path: DeviceUseStatement.subject
+    :profiles:
+    - http://hl7.org/fhir/uv/ips/StructureDefinition/Patient-uv-ips
+  - :path: DeviceUseStatement.derivedFrom
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/ServiceRequest|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/Procedure|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/Claim|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/Observation|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/QuestionnaireResponse|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/DocumentReference|4.0.1
+    :resource_types:
+    - Procedure
+    - Observation
+    - DocumentReference
+  - :path: DeviceUseStatement.source
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/Patient|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/Practitioner|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/PractitionerRole|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/RelatedPerson|4.0.1
+  - :path: DeviceUseStatement.device
+    :profiles:
+    - http://hl7.org/fhir/uv/ips/StructureDefinition/Device-uv-ips
+    :resource_types:
+    - Device
+  - :path: DeviceUseStatement.reasonReference
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/Condition|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/Observation|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/DiagnosticReport|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/DocumentReference|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/Media|4.0.1
+    :resource_types:
+    - Condition
+    - Observation
+    - DiagnosticReport
+    - DocumentReference
+  :delayed_references:
+  - :path: device
+    :resources:
+    - Device
+- :name: DiagnosticReport_uv_ips
+  :class_name: DiagnosticreportUvIpsSequence
+  :version: v1.0.0
+  :reformatted_version: v100
+  :resource: DiagnosticReport
+  :profile_url: http://hl7.org/fhir/uv/ips/StructureDefinition/DiagnosticReport-uv-ips
+  :profile_name: DiagnosticReport (IPS)
+  :profile_version: 2.0.0
+  :title: DiagnosticReport (IPS)
+  :short_description: Verify support for the server capabilities required by the DiagnosticReport
+    (IPS).
+  :interactions: []
+  :operations: []
+  :searches: []
+  :search_definitions: {}
+  :include_params: []
+  :revincludes: []
+  :required_concepts: []
+  :must_supports:
+    :extensions: []
+    :slices:
+    - :slice_id: DiagnosticReport.effective[x]:effectiveDateTime
+      :slice_name: effectiveDateTime
+      :path: effective[x]
+      :discriminator:
+        :type: type
+        :code: DateTime
+    :elements:
+    - :path: code
+    - :path: subject
+      :types:
+      - Reference
+    - :path: subject.reference
+    - :path: effective[x]
+    - :path: performer
+      :types:
+      - Reference
+  :mandatory_elements:
+  - DiagnosticReport.status
+  - DiagnosticReport.code
+  - DiagnosticReport.subject
+  - DiagnosticReport.subject.reference
+  - DiagnosticReport.effective[x]
+  - DiagnosticReport.media.link
+  :bindings:
+  - :type: code
+    :strength: required
+    :system: http://hl7.org/fhir/uv/ips/ValueSet/diagnostics-report-status-uv-ips
+    :path: status
+  :references:
+  - :path: DiagnosticReport.basedOn
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/CarePlan|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/ImmunizationRecommendation|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/MedicationRequest|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/NutritionOrder|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/ServiceRequest|4.0.1
+    :resource_types:
+    - CarePlan
+    - ImmunizationRecommendation
+    - MedicationRequest
+  - :path: DiagnosticReport.subject
+    :profiles:
+    - http://hl7.org/fhir/uv/ips/StructureDefinition/Patient-uv-ips
+    - http://hl7.org/fhir/StructureDefinition/Group
+  - :path: DiagnosticReport.encounter
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/Encounter|4.0.1
+  - :path: DiagnosticReport.performer
+    :profiles:
+    - http://hl7.org/fhir/uv/ips/StructureDefinition/Practitioner-uv-ips
+    - http://hl7.org/fhir/uv/ips/StructureDefinition/PractitionerRole-uv-ips
+    - http://hl7.org/fhir/uv/ips/StructureDefinition/Organization-uv-ips
+    - http://hl7.org/fhir/StructureDefinition/CareTeam
+  - :path: DiagnosticReport.resultsInterpreter
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/Practitioner|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/PractitionerRole|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/Organization|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/CareTeam|4.0.1
+  - :path: DiagnosticReport.specimen
+    :profiles:
+    - http://hl7.org/fhir/uv/ips/StructureDefinition/Specimen-uv-ips
+  - :path: DiagnosticReport.result
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/Observation|4.0.1
+    :resource_types:
+    - Observation
+  - :path: DiagnosticReport.result
+    :profiles:
+    - http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-results-laboratory-pathology-uv-ips
+    - http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-results-radiology-uv-ips
+    :resource_types:
+    - Observation
+  - :path: DiagnosticReport.imagingStudy
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/ImagingStudy|4.0.1
+  - :path: DiagnosticReport.media.link
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/Media|4.0.1
+  :delayed_references:
+  - :path: result
+    :resources:
+    - Observation
+- :name: Flag_alert_uv_ips
+  :class_name: FlagAlertUvIpsSequence
+  :version: v1.0.0
+  :reformatted_version: v100
+  :resource: Flag
+  :profile_url: http://hl7.org/fhir/uv/ips/StructureDefinition/Flag-alert-uv-ips
+  :profile_name: Flag - Alert (IPS)
+  :profile_version: 2.0.0
+  :title: Flag - Alert (IPS)
+  :short_description: Verify support for the server capabilities required by the Flag
+    - Alert (IPS).
+  :interactions: []
+  :operations: []
+  :searches: []
+  :search_definitions: {}
+  :include_params: []
+  :revincludes: []
+  :required_concepts: []
+  :must_supports:
+    :extensions:
+    - :id: Flag.extension:flag-priority
+      :url: http://hl7.org/fhir/StructureDefinition/flag-priority
+    :slices: []
+    :elements:
+    - :path: category
+    - :path: code
+    - :path: subject
+      :types:
+      - Reference
+    - :path: subject.reference
+  :mandatory_elements:
+  - Flag.status
+  - Flag.code
+  - Flag.subject
+  - Flag.subject.reference
+  :bindings: []
+  :references:
+  - :path: Flag.subject
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/Patient|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/Location|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/Group|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/Organization|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/Practitioner|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/PlanDefinition|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/Medication|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/Procedure|4.0.1
+    :resource_types:
+    - Procedure
+  - :path: Flag.encounter
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/Encounter|4.0.1
+  - :path: Flag.author
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/Device|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/Organization|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/Patient|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/Practitioner|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/PractitionerRole|4.0.1
   :delayed_references: []
