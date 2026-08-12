@@ -57,7 +57,7 @@ RSpec.describe 'Subject Must Support sub-elements populated (test 1.8.03)' do
       id test_id
       run { ms_sub_elements_populated_message('subject') }
       define_method(:metadata_manager) do
-        @metadata_manager ||= AUPSTestKit::MetadataManager.new(SUBJECT_MS_SUB_ELEMENTS_FIXTURE_METADATA_PATH)
+        @metadata_manager ||= AUPSTestKit::CompositionMetadataManager.new(SUBJECT_MS_SUB_ELEMENTS_FIXTURE_METADATA_PATH)
       end
     end
     repo = Inferno::Repositories::Tests.new

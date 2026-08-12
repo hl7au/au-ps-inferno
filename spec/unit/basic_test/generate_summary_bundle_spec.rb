@@ -27,7 +27,7 @@ RSpec.describe AUPSTestKit::GenerateSummaryBundleTestClass do
     klass = Class.new(described_class) do
       id test_id
       define_method(:metadata_manager) do
-        @metadata_manager ||= AUPSTestKit::MetadataManager.new(GENERATE_SUMMARY_FIXTURE_METADATA_PATH)
+        @metadata_manager ||= AUPSTestKit::CompositionMetadataManager.new(GENERATE_SUMMARY_FIXTURE_METADATA_PATH)
       end
     end
     repo = Inferno::Repositories::Tests.new

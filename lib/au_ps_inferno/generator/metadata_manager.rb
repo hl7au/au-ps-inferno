@@ -8,17 +8,17 @@ class Generator
   # Builds and persists metadata for Composition sections from IG resources.
   #
   # Delegates extraction of Composition StructureDefinition sections and their entry
-  # constraints (profiles, cardinality, mustSupport, section codes) to {MetadataProducer},
+  # constraints (profiles, cardinality, mustSupport, section codes) to {CompositionMetadataProducer},
   # then assembles and serializes the result to YAML.
   # Output hash keys: +composition_sections+, +composition_mandatory_ms_elements+,
   # +composition_optional_ms_elements+, +profiles+.
   #
-  # @see MetadataProducer for the IG resource extraction logic
-  class MetadataManager
+  # @see CompositionMetadataProducer for the IG resource extraction logic
+  class CompositionMetadataManager
     # @return [Array<Hash>] Array of section metadata hashes
     attr_reader :composition_sections
 
-    # Initializes a MetadataManager for the given IG resources.
+    # Initializes a CompositionMetadataManager for the given IG resources.
     #
     # @param ig_resources [InfernoSuiteGenerator::Generator::IGResources] Parsed IG resources
     def initialize(ig_resources)
@@ -39,12 +39,12 @@ class Generator
       @normalized_sections_data = []
     end
 
-    # Runs {MetadataProducer} against the IG resources and stores the result (in-memory only).
+    # Runs {CompositionMetadataProducer} against the IG resources and stores the result (in-memory only).
     # Populates the internal composition sections and related metadata used by {#save_to_file}.
     #
     # @return [void]
     def initiate_build
-      @producer = MetadataProducer.new(@ig_resources).build!
+      @producer = CompositionMetadataProducer.new(@ig_resources).build!
       apply_producer_data(@producer)
       normalize_sections_data
     end

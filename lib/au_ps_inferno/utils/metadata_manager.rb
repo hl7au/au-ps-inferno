@@ -9,7 +9,7 @@ module AUPSTestKit
   # +metadata_yaml_path+. Composition-specific metadata (sections, subject/author/custodian/
   # attester actor profiles) lives in a sibling +composition_metadata.yaml+ file in the same
   # directory, loaded transparently on first access. See Generator#save_metadata_to_version_folder.
-  class MetadataManager
+  class CompositionMetadataManager
     COMPOSITION_METADATA_FILENAME = 'composition_metadata.yaml'
 
     def initialize(metadata_yaml_path)
