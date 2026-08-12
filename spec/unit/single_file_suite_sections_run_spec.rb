@@ -27,7 +27,7 @@ RSpec.describe 'AU PS single-file suite: AU PS Bundle Instance run behavior' do
   # this spec's expectations don't depend on the real generated production metadata.yaml being
   # present or up to date.
   def stub_test_metadata_manager(test_class)
-    manager = AUPSTestKit::MetadataManager.new(File.expand_path('../fixtures/metadata.yaml', __dir__))
+    manager = AUPSTestKit::CompositionMetadataManager.new(File.expand_path('../fixtures/metadata.yaml', __dir__))
     test_class.class_eval { define_method(:metadata_manager) { manager } }
   end
 

@@ -249,7 +249,7 @@ module AUPSTestKit
         id :"#{suite_id}_basic_test"
 
         define_method(:metadata_manager) do
-          @metadata_manager ||= MetadataManager.new(File.expand_path('metadata.yaml', metadata_dir))
+          @metadata_manager ||= CompositionMetadataManager.new(File.expand_path('metadata.yaml', metadata_dir))
         end
       end
       klass.add_self_to_repository
