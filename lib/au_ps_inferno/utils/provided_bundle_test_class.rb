@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative 'basic_test_class'
+require_relative 'common_inputs_module'
 
 module AUPSTestKit
   # Loads a Bundle pasted as text into the group's scratch space
@@ -9,10 +10,7 @@ module AUPSTestKit
 
     NO_PROVIDED_BUNDLE_MESSAGE = 'No Bundle resource was provided, so this test group is omitted.'
 
-    input :bundle_resource,
-          optional: true,
-          description: 'If you want to check existing Bundle resource',
-          type: 'textarea'
+    CommonInputsModule.bundle_resource_inputs(self)
 
     def parse_bundle_resource
       FHIR.from_contents(bundle_resource)

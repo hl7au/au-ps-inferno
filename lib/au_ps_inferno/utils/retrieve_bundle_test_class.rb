@@ -1,53 +1,16 @@
 # frozen_string_literal: true
 
 require_relative 'basic_test_class'
+require_relative 'common_inputs_module'
 
 module AUPSTestKit
-  # Retrieves a Bundle from a FHIR server (or a direct URL) into the group's scratch space
+  # Retrieves a Bundle from a direct URL into the group's scratch space
   class RetrieveBundleTestClass < BasicTest
     id :retrieve_bundle_test_class
-    input_order :bundle_url, :url, :bundle_id, :credentials, :header_name, :header_value
 
-    NO_RETRIEVAL_INPUTS_MESSAGE = 'No FHIR server URL with Bundle ID, and no Bundle URL, were provided, ' \
-                                  'so this test group is omitted.'
+    NO_RETRIEVAL_INPUTS_MESSAGE = 'No Bundle URL was provided, so this test group is omitted.'
 
-    input :bundle_id,
-          optional: true,
-          description: 'To request Bundle/{bundle_id}'
-
-    input :bundle_url,
-          optional: true,
-          description: 'To retrieve document Bundle using HTTP GET request'
-
-    input :url,
-          title: 'FHIR Server Base Url',
-          optional: true
-
-    input :credentials,
-          title: 'OAuth Credentials',
-          type: :oauth_credentials,
-          optional: true
-
-    input :header_name,
-          title: 'Header name',
-          optional: true
-
-    input :header_value,
-          title: 'Header value',
-          optional: true
-
-    fhir_client do
-      url :url
-      oauth_credentials :credentials
-      headers(header_name.present? && header_value.present? ? { header_name => header_value } : {})
-    end
-
-    def get_bundle_resource_from_fhir_server(bundle_id)
-      fhir_read(:bundle, bundle_id)
-      assert_response_status(200)
-      assert_resource_type(:bundle)
-      save_bundle_to_scratch(resource)
-    end
+    CommonInputsModule.bundle_url_inputs(self)
 
     def get_bundle_resource_from_url(bundle_url)
       get(bundle_url, headers: extra_headers)
@@ -60,7 +23,9 @@ module AUPSTestKit
     end
 
     def extra_headers
-      header_name.present? && header_value.present? ? { header_name => header_value } : {}
+      return {} if bundle_url_header_name.blank? || bundle_url_header_value.blank?
+
+      { bundle_url_header_name => bundle_url_header_value }
     end
 
     def parse_bundle(body)
@@ -70,20 +35,12 @@ module AUPSTestKit
     end
 
     def skip_test?
-      !((url.present? && bundle_id.present?) || bundle_url.present?)
-    end
-
-    def read_and_save_data
-      if url.present? && bundle_id.present?
-        get_bundle_resource_from_fhir_server(bundle_id)
-      elsif bundle_url.present?
-        get_bundle_resource_from_url(bundle_url)
-      end
+      bundle_url.blank?
     end
 
     run do
       omit_if skip_test?, NO_RETRIEVAL_INPUTS_MESSAGE
-      read_and_save_data
+      get_bundle_resource_from_url(bundle_url)
     end
   end
 end
