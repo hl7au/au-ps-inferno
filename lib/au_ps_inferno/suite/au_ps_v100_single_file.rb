@@ -5,7 +5,7 @@ require_relative 'single_file_suite_builder'
 
 module AUPSTestKit
   AUPSSuiteSingleFile = SingleFileSuiteBuilder.build(
-    suite_id: :au_ps_v100_single_file,
+    suite_id: :au_ps_v100,
     ig_version: AUPSTestKit::IG_VERSION,
     suite_title: "AU PS #{AUPSTestKit::IG_VERSION} Test Suite (single-file, metaprogrammed)",
     suite_description: 'Same structure and test logic as au_ps_v100, built by looping over a small ' \

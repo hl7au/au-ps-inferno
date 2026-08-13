@@ -11,6 +11,7 @@ module AUPSTestKit
         top_description: 'Validates a static AU PS bundle instance for profile conformance, Must Support ' \
                          'elements, and composition sections.',
         acquisition_from: :provided_bundle_test_class,
+        acquisition_test_id: :bundle_provide,
         acquisition_group_title: 'Provide AU PS Bundle',
         acquisition_group_description: 'Loads the Bundle resource pasted as text and stores it for the ' \
                                        'validation tests in this group.',
@@ -30,6 +31,7 @@ module AUPSTestKit
         top_description: 'Retrieve document Bundle using Bundle read interaction or other HTTP GET request ' \
                          'and verify response is valid AU PS Bundle',
         acquisition_from: :retrieve_bundle_test_class,
+        acquisition_test_id: :bundle_retrieve,
         acquisition_group_title: 'Retrieve AU PS Bundle',
         acquisition_group_description: 'Retrieves the document Bundle using a Bundle read interaction or a ' \
                                        'direct HTTP GET request and stores it for the validation tests in this group.',
@@ -49,6 +51,7 @@ module AUPSTestKit
         top_description: 'Generate AU Patient Summary using IPS $summary operation and verify response is ' \
                          'valid AU PS Bundle',
         acquisition_from: :generate_summary_bundle_test_class,
+        acquisition_test_id: :bundle_generate,
         acquisition_group_title: 'Generate AU PS Bundle using $summary',
         acquisition_group_description: 'Invokes the IPS $summary operation on the FHIR server and stores the ' \
                                        'returned Bundle for the validation tests in this group.',
@@ -155,7 +158,7 @@ module AUPSTestKit
         entry_profiles_description: 'Mandatory section SHALL be capable of populating section.entry with the ' \
                                     'referenced profiles and SHOULD correctly populate section.entry if a value is known.',
         entry_profiles_dsl_optional: false,
-        nilknown_warning_id: :mandatory_sections_nilknown_warning,
+        nilknown_warning_id: :nilknown_warning,
         nilknown_warning_title: 'AU PS Composition Mandatory Sections do not rely on emptyReason=nilknown',
         nilknown_warning_description: 'Warns when a mandatory section (Problems, Allergies, Medications) uses ' \
                                       'Composition.section.emptyReason = nilknown instead of an explicit ' \

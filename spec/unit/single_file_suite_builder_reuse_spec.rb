@@ -4,15 +4,25 @@ require 'fhir_models'
 
 require File.join(Gem::Specification.find_by_name('inferno_core').full_gem_path, 'spec/runnable_context')
 
-require_relative '../../lib/au_ps_inferno'
+require_relative '../../lib/au_ps_inferno/version'
+require_relative '../../lib/au_ps_inferno/suite/single_file_suite_builder'
 
-# Proves SingleFileSuiteBuilder.build can be called a second time, with a different
-# suite id/ig_version, and produce a fully independent suite. Reuses
-# au_ps_v100_single_file's own metadata_dir since no second real AU PS release ships
-# in this repo -- the point being demonstrated is the builder call producing an
-# isolated suite, not the metadata content, which is intentionally identical.
-SECOND_BUILD_SUITE_ID = :au_ps_single_file_builder_reuse_demo
+# Proves SingleFileSuiteBuilder.build can be called more than once, with different
+# suite ids/ig_versions, and each call produces a fully independent suite. Both builds here use
+# scratch ids (not au_ps_v100, which the production au_ps_v100_single_file.rb deliberately
+# collides with so it can stand in for the generated suite) so this spec is safe to run alongside
+# any other spec file in the same process.
+FIRST_BUILD_SUITE_ID = :au_ps_single_file_builder_reuse_demo_first
+SECOND_BUILD_SUITE_ID = :au_ps_single_file_builder_reuse_demo_second
 SECOND_BUILD_IG_VERSION = '9.9.9-reuse-demo'
+
+AUPSTestKit::SingleFileSuiteBuilder.build(
+  suite_id: FIRST_BUILD_SUITE_ID,
+  ig_version: AUPSTestKit::IG_VERSION,
+  suite_title: 'AU PS Single-File Builder Reuse Demo (first build)',
+  suite_description: 'First call to the builder, used as the baseline the second call is compared against.',
+  metadata_dir: File.expand_path('../../lib/au_ps_inferno', __dir__)
+)
 
 AUPSTestKit::SingleFileSuiteBuilder.build(
   suite_id: SECOND_BUILD_SUITE_ID,
@@ -27,9 +37,9 @@ RSpec.describe 'SingleFileSuiteBuilder: a second build() call is fully independe
 
   let(:suite_id) { SECOND_BUILD_SUITE_ID.to_s }
   let(:suite) { Inferno::Repositories::TestSuites.new.find(SECOND_BUILD_SUITE_ID.to_s) }
-  let(:original_suite) { Inferno::Repositories::TestSuites.new.find('au_ps_v100_single_file') }
+  let(:original_suite) { Inferno::Repositories::TestSuites.new.find(FIRST_BUILD_SUITE_ID.to_s) }
 
-  it 'registers independently from au_ps_v100_single_file' do
+  it 'registers independently from the first build' do
     expect(suite).to be_present
     expect(original_suite).to be_present
     expect(suite.id).not_to eq(original_suite.id)
@@ -39,7 +49,7 @@ RSpec.describe 'SingleFileSuiteBuilder: a second build() call is fully independe
     expect(suite.groups.map(&:title)).to contain_exactly(*original_suite.groups.map(&:title))
   end
 
-  it "pins its own fhir_resource_validator to the ig_version it was built with, not au_ps_v100_single_file's" do
+  it "pins its own fhir_resource_validator to the ig_version it was built with, not the first build's" do
     definition = suite.fhir_validators[:default].first.validation_context.definition
     original_definition = original_suite.fhir_validators[:default].first.validation_context.definition
 

@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+- Relax the `inferno_core` dependency from `~> 1.0.6` to `>= 1.0.6`. The tilde pin resolved to `>= 1.0.6, < 1.1.0` and was the only cap on `inferno_core` anywhere in the dependency tree, so it held every host application on 1.0.x. The kit uses only the public validation DSL (`resource_is_valid?`), which is unchanged through 1.4.x.
+
 ### Added
 
 - Warn when the Problems, Allergies, or Medications section uses `Composition.section.emptyReason = nilknown` instead of an explicit negation code on the section's entry resource (e.g. `AllergyIntolerance.code = 716186003 |No known allergy|`), the pattern AU PS prefers over `emptyReason`. This is an advisory warning, not a failure.
