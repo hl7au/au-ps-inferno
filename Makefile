@@ -7,8 +7,9 @@ endif
 inferno = run inferno
 generated_v1_path = lib/au_ps_inferno/1.0.0-ballot
 generated_v1_preview_path = lib/au_ps_inferno/1.0.0
+SUITE ?= au_ps_v100
 
-.PHONY: pull build up stop down migrate setup run tests coverage rubocop snapshot-tests snapshot-tests-update
+.PHONY: pull build up stop down migrate setup run tests coverage rubocop snapshot-tests snapshot-tests-update snapshot-tool-install snapshot-tool-init snapshot-tool-run
 
 pull:
 	$(compose) pull
@@ -73,3 +74,16 @@ clean_generated:
 generate_and_fix: build generate rubocop_fix
 
 dev_restart: stop down build generate rubocop_fix setup up
+
+# inferno_snapshot_tool (https://github.com/projkov/inferno_snapshot_tool) lives in its own
+# local bundle under snapshot_tool/, so it never becomes a dependency of the suite itself.
+# Runs directly on the host — point snapshot_tool/inferno_snapshot.yml's inferno_base_url
+# at wherever the au_ps_v100 suite is actually reachable before running these.
+snapshot-tool-install:
+	cd snapshot_tool && bundle install
+
+snapshot-tool-init:
+	cd snapshot_tool && bundle exec inferno_snapshot_tool init $(SUITE)
+
+snapshot-tool-run:
+	cd snapshot_tool && bundle exec inferno_snapshot_tool run $(SUITE)
