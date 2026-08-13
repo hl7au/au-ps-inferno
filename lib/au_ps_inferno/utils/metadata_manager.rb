@@ -3,14 +3,26 @@
 require 'yaml'
 
 module AUPSTestKit
-  # Manages metadata from the ballot YAML file.
-  class MetadataManager
+  # Manages metadata from the generated YAML files.
+  #
+  # Core IG-level metadata (ig_id, ig_title, groups, profiles, ...) is loaded from the given
+  # +metadata_yaml_path+. Composition-specific metadata (sections, subject/author/custodian/
+  # attester actor profiles) lives in a sibling +composition_metadata.yaml+ file in the same
+  # directory, loaded transparently on first access. See Generator#save_metadata_to_version_folder.
+  class CompositionMetadataManager
+    COMPOSITION_METADATA_FILENAME = 'composition_metadata.yaml'
+
     def initialize(metadata_yaml_path)
       @metadata_yaml_path = metadata_yaml_path
     end
 
     def metadata
       @metadata ||= YAML.safe_load_file(@metadata_yaml_path, permitted_classes: [Symbol], aliases: true)
+    end
+
+    def composition_metadata
+      @composition_metadata ||= YAML.safe_load_file(composition_metadata_yaml_path, permitted_classes: [Symbol],
+                                                                                    aliases: true)
     end
 
     def sections_metadata_by_codes(codes)
@@ -32,27 +44,33 @@ module AUPSTestKit
     end
 
     def composition_sections_metadata
-      metadata[:composition_sections]
+      composition_metadata[:composition_sections]
     end
 
     def subject_metadata
-      metadata[:subject]
+      composition_metadata[:subject]
     end
 
     def author_metadata
-      metadata[:author]
+      composition_metadata[:author]
     end
 
     def custodian_metadata
-      metadata[:custodian]
+      composition_metadata[:custodian]
     end
 
     def attester_metadata
-      metadata[:attester]
+      composition_metadata[:attester]
     end
 
     def groups_metadata
       metadata[:groups]
+    end
+
+    private
+
+    def composition_metadata_yaml_path
+      File.join(File.dirname(@metadata_yaml_path), COMPOSITION_METADATA_FILENAME)
     end
   end
 end

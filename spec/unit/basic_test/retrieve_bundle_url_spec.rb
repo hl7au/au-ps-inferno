@@ -27,7 +27,7 @@ RSpec.describe AUPSTestKit::RetrieveBundleTestClass do
     klass = Class.new(described_class) do
       id test_id
       define_method(:metadata_manager) do
-        @metadata_manager ||= AUPSTestKit::MetadataManager.new(RETRIEVE_URL_FIXTURE_METADATA_PATH)
+        @metadata_manager ||= AUPSTestKit::CompositionMetadataManager.new(RETRIEVE_URL_FIXTURE_METADATA_PATH)
       end
     end
     repo = Inferno::Repositories::Tests.new

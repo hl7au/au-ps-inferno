@@ -5,7 +5,6 @@ require 'fileutils'
 require 'yaml'
 require_relative '../utils/inferno_suite_generator_compat'
 
-require_relative 'ig_resources_extractor'
 require_relative 'metadata_manager'
 require_relative 'naming'
 require_relative 'sections_validation_group_generator'
@@ -15,41 +14,51 @@ require_relative 'generator_group_based_metadata_module'
 # Generator for test suites targeting AU PS and IPS implementation guides.
 #
 # This class automates extraction and persistence of IG resource metadata for use in test suite
-# generation, including support for additional FHIR resource folders.
+# generation, including support for additional FHIR resource folders. IG resources are loaded via
+# {InfernoSuiteGenerator::Generator::IGLoader}, which reads the package archive path from
+# +inferno_suite_generator.config.json+ (+ig.package_archive_path+).
 #
 # @example Basic usage
-#   generator = Generator.new('/path/to/ig')
+#   generator = Generator.new
 #   generator.generate
 #
 # @example With extra folder containing additional FHIR resources (e.g. extra StructureDefinitions)
-#   generator = Generator.new('/path/to/ig', additional_resources_path: 'path/to/extra-ig-resources')
+#   generator = Generator.new(additional_resources_path: 'path/to/extra-ig-resources')
 #   generator.generate
 #
 class Generator
-  SyntheticCapability = Struct.new(
-    :type, :interaction, :operation, :searchParam, :searchInclude, :searchRevInclude, :extension
-  )
-
   include Naming
   include GeneratorGroupBasedMetadataModule
 
-  def initialize(ig_path, additional_resources_path: nil)
+  def initialize(additional_resources_path: nil)
+    @additional_resources_path = additional_resources_path
     register_inferno_suite_generator_config
-    @resources_manager = IGResourcesExtractor.new(
-      ig_path,
-      additional_resources_path: additional_resources_path
-    )
-    @metadata = MetadataManager.new(@resources_manager.ig_resources)
-    @new_metadata = build_new_metadata
+    @ig_resources = load_ig_resources
+    @core_metadata = InfernoSuiteGenerator::Generator::IGMetadataExtractor.new(@ig_resources).extract
+    @composition_metadata = CompositionMetadataManager.new(@ig_resources)
+  ensure
+    cleanup_additional_resources_tmp_dir
   end
 
   def generate
-    @resources_manager.extract
     save_metadata_to_version_folder
-    update_ig_version_rb(@resources_manager.ig_version)
+    update_ig_version_rb(@ig_resources.ig&.version)
   end
 
   private
+
+  # Loads IG resources via the shared InfernoSuiteGenerator extractor. Any additional FHIR
+  # resources from {#additional_resources_path} are merged in by IGLoader itself, via the
+  # +extra_json_paths+ entry that {#register_inferno_suite_generator_config} adds to the
+  # registered config when {#additional_resources_path} is given.
+  #
+  # @return [InfernoSuiteGenerator::Generator::IGResources]
+  def load_ig_resources
+    config_keeper = Registry.get(:config_keeper)
+    raise 'inferno_suite_generator.config.json not found; cannot load IG resources' unless config_keeper
+
+    InfernoSuiteGenerator::Generator::IGLoader.new(config_keeper.ig_deps_path).load
+  end
 
   def update_ig_version_rb(version)
     return if version.nil? || version.empty?
@@ -65,12 +74,11 @@ class Generator
   end
 
   def save_metadata_to_version_folder
-    metadata_path = File.join(File.expand_path(File.join('lib', 'au_ps_inferno')), 'metadata.yaml')
-    FileUtils.mkdir_p(File.dirname(metadata_path))
-    @metadata.initiate_build
-    old_metadata = @metadata.metadata_to_dump
-    new_metadata = @new_metadata&.to_hash || {}
-    merged_metadata = merge_metadata_values(old_metadata, new_metadata)
-    File.write(metadata_path, YAML.dump(merged_metadata))
+    au_ps_inferno_dir = File.expand_path(File.join('lib', 'au_ps_inferno'))
+    FileUtils.mkdir_p(File.expand_path(File.join('lib', 'au_ps_inferno')))
+    @composition_metadata.initiate_build
+
+    File.write(File.join(au_ps_inferno_dir, 'metadata.yaml'), YAML.dump(@core_metadata&.to_hash || {}))
+    File.write(File.join(au_ps_inferno_dir, 'composition_metadata.yaml'), YAML.dump(@composition_metadata.composition_metadata_to_dump))
   end
 end

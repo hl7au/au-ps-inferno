@@ -15,7 +15,7 @@ module AUPSTestKit
     id :suite_au_ps_bundle_instance_bundle_validation_bundle_valid
 
     def metadata_manager
-      @metadata_manager ||= MetadataManager.new(File.expand_path('../../../metadata.yaml', __dir__))
+      @metadata_manager ||= CompositionMetadataManager.new(File.expand_path('../../../metadata.yaml', __dir__))
     end
   end
 end

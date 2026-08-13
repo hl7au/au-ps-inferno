@@ -62,7 +62,7 @@ RSpec.describe 'Bundle scratch isolation between top-level groups (issue #98)' d
       id test_id
       run { test_resource_type_is_valid?('subject') }
       define_method(:metadata_manager) do
-        @metadata_manager ||= AUPSTestKit::MetadataManager.new(BUNDLE_SCRATCH_FIXTURE_METADATA_PATH)
+        @metadata_manager ||= AUPSTestKit::CompositionMetadataManager.new(BUNDLE_SCRATCH_FIXTURE_METADATA_PATH)
       end
     end
     repo = Inferno::Repositories::Tests.new

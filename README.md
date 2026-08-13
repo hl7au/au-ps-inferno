@@ -39,7 +39,7 @@ If a new AU PS IG release appears at http://hl7.org.au/fhir/ps/history.html, fol
 ### What the pipeline does
 
 1. Runs `make generate_and_fix`, which invokes the generator against the IG archive already present in `lib/au_ps_inferno/igs/`;
-2. The generator extracts IG resources from the archive, updates `lib/au_ps_inferno/metadata.yaml`, and sets `IG_VERSION` in `lib/au_ps_inferno/version.rb` to the version declared in the package's `package.json`;
+2. The generator extracts IG resources from the archive, updates `lib/au_ps_inferno/metadata.yaml` (core IG metadata) and `lib/au_ps_inferno/composition_metadata.yaml` (Composition-specific metadata), and sets `IG_VERSION` in `lib/au_ps_inferno/version.rb` to the version declared in the package's `package.json`;
 3. If there are any changes, a Pull Request is created automatically.
 
 ## Development workflow
