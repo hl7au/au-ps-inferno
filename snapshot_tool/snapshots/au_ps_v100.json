@@ -1,0 +1,4077 @@
+[
+  {
+    "id": "2249fef4-e16d-4929-81e2-ec21312012be",
+    "created_at": "2026-08-13T14:58:27.611+00:00",
+    "inputs": [
+      {
+        "name": "bundle_resource",
+        "label": null,
+        "description": "If you want to check existing Bundle resource",
+        "value": "Input is too large to display, please visit\nhttp://localhost:4567/api/test_sessions/k4XYUT4vizo/results/2249fef4-e16d-4929-81e2-ec21312012be/io/inputs/bundle_resource\nfor details\n",
+        "type": "textarea",
+        "is_large": true
+      },
+      {
+        "name": "validate_against",
+        "label": "Validate Against",
+        "description": null,
+        "value": [
+          "au_ps_bundle"
+        ],
+        "type": "checkbox"
+      },
+      {
+        "name": "url",
+        "label": "FHIR Server Base Url",
+        "description": null,
+        "value": "https://hl7-ips-server.hl7.org/fhir",
+        "type": "text"
+      },
+      {
+        "name": "credentials",
+        "label": "OAuth Credentials",
+        "description": null,
+        "value": "{\"name\":\"credentials\"}",
+        "type": "oauth_credentials"
+      },
+      {
+        "name": "header_name",
+        "label": "Header name",
+        "description": null,
+        "value": null,
+        "type": "text"
+      },
+      {
+        "name": "header_value",
+        "label": "Header value",
+        "description": null,
+        "value": null,
+        "type": "text"
+      },
+      {
+        "name": "bundle_url",
+        "label": null,
+        "description": "To retrieve document Bundle using HTTP GET request",
+        "value": "https://build.fhir.org/ig/hl7au/au-fhir-ps/Bundle-aups-basicsummary.json",
+        "type": "text"
+      },
+      {
+        "name": "bundle_id",
+        "label": null,
+        "description": "To request Bundle/{bundle_id}",
+        "value": null,
+        "type": "text"
+      },
+      {
+        "name": "patient_id",
+        "label": null,
+        "description": "To request Patient/{patient_id}/$summary",
+        "value": "example-r4",
+        "type": "text"
+      },
+      {
+        "name": "identifier",
+        "label": null,
+        "description": "To request Patient/$summary?identifier={identifier}",
+        "value": null,
+        "type": "text"
+      },
+      {
+        "name": "profile",
+        "label": null,
+        "description": "To specify profile for the patient summary",
+        "value": "http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-bundle",
+        "type": "text"
+      }
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "fail",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "test_suite_id": "au_ps_v100",
+    "updated_at": "2026-08-13T14:58:27.611+00:00"
+  },
+  {
+    "id": "3237b277-07ac-4776-8cab-3cc345c2177e",
+    "created_at": "2026-08-13T14:58:24.215+00:00",
+    "inputs": [
+      {
+        "name": "url",
+        "label": "FHIR Server Base Url",
+        "description": null,
+        "value": "https://hl7-ips-server.hl7.org/fhir",
+        "type": "text"
+      },
+      {
+        "name": "credentials",
+        "label": "OAuth Credentials",
+        "description": null,
+        "value": "{\"name\":\"credentials\"}",
+        "type": "oauth_credentials"
+      },
+      {
+        "name": "header_name",
+        "label": "Header name",
+        "description": null,
+        "value": null,
+        "type": "text"
+      },
+      {
+        "name": "header_value",
+        "label": "Header value",
+        "description": null,
+        "value": null,
+        "type": "text"
+      }
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_group_id": "au_ps_v100-au_ps_retrieve_cs_group_100preview",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:24.215+00:00"
+  },
+  {
+    "id": "69a2acc3-b1d1-4e15-b6e9-b7bdcc228e82",
+    "created_at": "2026-08-13T14:58:19.819+00:00",
+    "inputs": [
+      {
+        "name": "url",
+        "value": "https://hl7-ips-server.hl7.org/fhir",
+        "type": "text"
+      },
+      {
+        "name": "credentials",
+        "value": "{\"name\":\"credentials\"}",
+        "type": "oauth_credentials"
+      },
+      {
+        "name": "header_name",
+        "value": null,
+        "type": "text"
+      },
+      {
+        "name": "header_value",
+        "value": null,
+        "type": "text"
+      }
+    ],
+    "messages": [
+      {
+        "message": "Capability Statement saved to scratch: #<FHIR::CapabilityStatement:0x0000ffff69e9cbe0>",
+        "type": "info"
+      }
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+      {
+        "id": "2179c9d9-8059-4802-b951-a582b9001fb5",
+        "direction": "outgoing",
+        "index": 1,
+        "result_id": "69a2acc3-b1d1-4e15-b6e9-b7bdcc228e82",
+        "status": 200,
+        "timestamp": "2026-08-13T14:58:19.821+00:00",
+        "url": "https://hl7-ips-server.hl7.org/fhir/metadata",
+        "verb": "get"
+      }
+    ],
+    "result": "pass",
+    "test_id": "au_ps_v100-au_ps_retrieve_cs_group_100preview-au_ps_cs_is_valid_100preview",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:19.819+00:00"
+  },
+  {
+    "id": "f962e81d-4bc8-4467-b605-eba4c0648c7b",
+    "created_at": "2026-08-13T14:58:24.213+00:00",
+    "inputs": [
+      {
+        "name": "url",
+        "value": "https://hl7-ips-server.hl7.org/fhir",
+        "type": "text"
+      },
+      {
+        "name": "credentials",
+        "value": "{\"name\":\"credentials\"}",
+        "type": "oauth_credentials"
+      },
+      {
+        "name": "header_name",
+        "value": null,
+        "type": "text"
+      },
+      {
+        "name": "header_value",
+        "value": null,
+        "type": "text"
+      }
+    ],
+    "messages": [
+      {
+        "message": "**For each of the following AU PS profiles indicate if it is referenced as a supported profile**:\n\nAUPSAllergyIntolerance (http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-allergyintolerance): No\n\nAUPSBundle (http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-bundle): No\n\nAUPSComposition (http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-composition): No\n\nAUPSCondition (http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-condition): No\n\nAUPSMedicationRequest (http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medicationrequest): No\n\nAUPSMedicationStatement (http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medicationstatement): No\n\nAUPSPatient (http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-patient): No",
+        "type": "info"
+      },
+      {
+        "message": "**List any other AU PS profiles referenced as supported profile**:\n\nAUPSPathologyResult (http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-diagnosticresult-path): No\n\nAUPSEncounter (http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-encounter): No\n\nAUPSImmunization (http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-immunization): No\n\nAUPSMedication (http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medication): No\n\nAUPSOrganization (http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-organization): No\n\nAUPSPractitioner (http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-practitioner): No\n\nAUPSPractitionerRole (http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-practitionerrole): No\n\nAUPSProcedure (http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-procedure): No\n\nAUPSRelatedPerson (http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-relatedperson): No\n\nAUPSSmokingStatus (http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-smokingstatus): No",
+        "type": "info"
+      }
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_id": "au_ps_v100-au_ps_retrieve_cs_group_100preview-au_ps_cs_supports_au_ps_profiles_100preview",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:24.213+00:00"
+  },
+  {
+    "id": "3a017fde-0064-47be-aa0a-1c337d1774e5",
+    "created_at": "2026-08-13T14:58:21.957+00:00",
+    "inputs": [
+      {
+        "name": "url",
+        "value": "https://hl7-ips-server.hl7.org/fhir",
+        "type": "text"
+      },
+      {
+        "name": "credentials",
+        "value": "{\"name\":\"credentials\"}",
+        "type": "oauth_credentials"
+      },
+      {
+        "name": "header_name",
+        "value": null,
+        "type": "text"
+      },
+      {
+        "name": "header_value",
+        "value": null,
+        "type": "text"
+      }
+    ],
+    "messages": [
+      {
+        "message": "Server CapabilityStatement declares support for operation http://hl7.org/fhir/uv/ips/OperationDefinition/summary: ✅ Declared",
+        "type": "info"
+      },
+      {
+        "message": "Server CapabilityStatement does not declare support for operation http://hl7.org/fhir/uv/ipa/OperationDefinition/docref. This operation is not required by AU PS; this message is informational only.",
+        "type": "info"
+      }
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+      {
+        "id": "d8039e6e-f2b7-422f-a0b0-b2e6f046864a",
+        "direction": "outgoing",
+        "index": 2,
+        "result_id": "3a017fde-0064-47be-aa0a-1c337d1774e5",
+        "status": 200,
+        "timestamp": "2026-08-13T14:58:21.959+00:00",
+        "url": "https://hl7-ips-server.hl7.org/fhir/metadata",
+        "verb": "get"
+      },
+      {
+        "id": "dd785411-5a62-4912-94ac-b67e822d2107",
+        "direction": "outgoing",
+        "index": 3,
+        "result_id": "3a017fde-0064-47be-aa0a-1c337d1774e5",
+        "status": 200,
+        "timestamp": "2026-08-13T14:58:21.988+00:00",
+        "url": "https://hl7-ips-server.hl7.org/fhir/metadata",
+        "verb": "get"
+      }
+    ],
+    "result": "pass",
+    "test_id": "au_ps_v100-au_ps_retrieve_cs_group_100preview-au_ps_cs_supports_ips_recommended_ops_100preview",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:21.957+00:00"
+  },
+  {
+    "id": "298db2dc-5cba-499d-947f-31c71c5565e4",
+    "created_at": "2026-08-13T14:58:17.684+00:00",
+    "inputs": [
+      {
+        "name": "bundle_resource",
+        "label": null,
+        "description": "If you want to check existing Bundle resource",
+        "value": "Input is too large to display, please visit\nhttp://localhost:4567/api/test_sessions/k4XYUT4vizo/results/298db2dc-5cba-499d-947f-31c71c5565e4/io/inputs/bundle_resource\nfor details\n",
+        "type": "textarea",
+        "is_large": true
+      },
+      {
+        "name": "validate_against",
+        "label": "Validate Against",
+        "description": null,
+        "value": [
+          "au_ps_bundle"
+        ],
+        "type": "checkbox"
+      }
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "fail",
+    "test_group_id": "au_ps_v100-suite_au_ps_bundle_instance",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:17.684+00:00"
+  },
+  {
+    "id": "44018695-c4e4-446f-acd3-2961f027c7a3",
+    "created_at": "2026-08-13T14:58:17.424+00:00",
+    "inputs": [
+
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_group_id": "au_ps_v100-suite_au_ps_bundle_instance-suite_au_ps_bundle_instance_au_ps_bundle_must_support_conformance",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:17.424+00:00"
+  },
+  {
+    "id": "bbd8e69c-6cae-44d7-afb5-64950d8d2090",
+    "created_at": "2026-08-13T14:58:17.423+00:00",
+    "inputs": [
+
+    ],
+    "messages": [
+      {
+        "message": "**List mandatory Must Support elements populated and missing**:\n\n**identifier**: ✅ Populated\n\n**type**: ✅ Populated\n\n**timestamp**: ✅ Populated\n\n**All entry exists fullUrl**: ✅ Populated",
+        "type": "info"
+      },
+      {
+        "message": "**List any entry resources by type (and meta.profile if exists)**:\n\nComposition x1\n\nPatient x1\n\nOrganization x1\n\nPractitionerRole x1\n\nPractitioner x1\n\nAllergyIntolerance x3\n\nMedicationStatement x1\n\nCondition x1",
+        "type": "info"
+      }
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_id": "au_ps_v100-suite_au_ps_bundle_instance-suite_au_ps_bundle_instance_au_ps_bundle_must_support_conformance-suite_au_ps_bundle_instance_au_ps_bundle_must_support_conformance_bundle_must_support_populated",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:17.423+00:00"
+  },
+  {
+    "id": "4bf843a5-51d8-4aec-857e-5ecccd7618d8",
+    "created_at": "2026-08-13T14:58:17.681+00:00",
+    "inputs": [
+
+    ],
+    "optional": true,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "skip",
+    "test_group_id": "au_ps_v100-suite_au_ps_bundle_instance-suite_au_ps_bundle_instance_au_ps_composition_attester",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:17.681+00:00"
+  },
+  {
+    "id": "b51b2e07-57f5-41a6-b148-e99f70dd9f93",
+    "created_at": "2026-08-13T14:58:17.676+00:00",
+    "inputs": [
+
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "skip",
+    "result_message": "Attester reference does not resolve",
+    "test_id": "au_ps_v100-suite_au_ps_bundle_instance-suite_au_ps_bundle_instance_au_ps_composition_attester-suite_au_ps_bundle_instance_au_ps_composition_attester_attester_party_ms_elements",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:17.676+00:00"
+  },
+  {
+    "id": "fe92e23e-83fb-4c3e-88da-5637acc529aa",
+    "created_at": "2026-08-13T14:58:17.681+00:00",
+    "inputs": [
+
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "skip",
+    "result_message": "Attester or attester.party is not populated",
+    "test_id": "au_ps_v100-suite_au_ps_bundle_instance-suite_au_ps_bundle_instance_au_ps_composition_attester-suite_au_ps_bundle_instance_au_ps_composition_attester_attester_party_ms_identifier_slices",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:17.681+00:00"
+  },
+  {
+    "id": "455908f5-10a1-4a59-ace7-546056300f0c",
+    "created_at": "2026-08-13T14:58:17.679+00:00",
+    "inputs": [
+
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "skip",
+    "result_message": "Attester reference does not resolve",
+    "test_id": "au_ps_v100-suite_au_ps_bundle_instance-suite_au_ps_bundle_instance_au_ps_composition_attester-suite_au_ps_bundle_instance_au_ps_composition_attester_attester_party_ms_subelements",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:17.679+00:00"
+  },
+  {
+    "id": "46f0b44b-b1f1-49f0-b5ce-133de899a50f",
+    "created_at": "2026-08-13T14:58:17.638+00:00",
+    "inputs": [
+
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_group_id": "au_ps_v100-suite_au_ps_bundle_instance-suite_au_ps_bundle_instance_au_ps_composition_author",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:17.638+00:00"
+  },
+  {
+    "id": "a6d9d555-fddd-4aa2-bf70-ba6936fae45b",
+    "created_at": "2026-08-13T14:58:17.612+00:00",
+    "inputs": [
+
+    ],
+    "messages": [
+      {
+        "message": "At least one optional Must Support element is not populated. Further testing with data containing the missing elements or clarification the system does not ever know a value for the element is required.\n\n**Profile**: PractitionerRole — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-practitionerrole\n\nList of Must Support elements populated or missing\n\n✅ Populated: identifier\n\n✅ Populated: practitioner (M)\n\n✅ Populated: organization\n\n✅ Populated: code\n\n⚠️ Missing: specialty\n\n✅ Populated: telecom",
+        "type": "warning"
+      }
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_id": "au_ps_v100-suite_au_ps_bundle_instance-suite_au_ps_bundle_instance_au_ps_composition_author-suite_au_ps_bundle_instance_au_ps_composition_author_author_ms_elements",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:17.612+00:00"
+  },
+  {
+    "id": "7a8b8b7c-a138-4b77-8450-5093ab25cd10",
+    "created_at": "2026-08-13T14:58:17.637+00:00",
+    "inputs": [
+
+    ],
+    "messages": [
+      {
+        "message": "Must support identifier slices correctly populated\n\n## List of Must Support identifier slices populated or missing\n\n⚠️ Missing: **MEDICARE PROVIDER**",
+        "type": "warning"
+      },
+      {
+        "message": "At least one Must Support identifier slices is populated\n\n## List of Must Support identifier slices populated or missing (system when populated)\n\n⚠️ Missing: **MEDICARE PROVIDER**",
+        "type": "warning"
+      }
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_id": "au_ps_v100-suite_au_ps_bundle_instance-suite_au_ps_bundle_instance_au_ps_composition_author-suite_au_ps_bundle_instance_au_ps_composition_author_author_ms_identifier_slices",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:17.637+00:00"
+  },
+  {
+    "id": "19c96162-f423-488b-8e0a-9956d33229bc",
+    "created_at": "2026-08-13T14:58:17.625+00:00",
+    "inputs": [
+
+    ],
+    "messages": [
+      {
+        "message": "Must Support sub-elements correctly populated\n\n**Referenced subject**: PractitionerRole\n\n## Complex element **telecom** — Must Support sub-elements populated or missing\n\n✅ Populated: telecom.system\n\n✅ Populated: telecom.value",
+        "type": "info"
+      }
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_id": "au_ps_v100-suite_au_ps_bundle_instance-suite_au_ps_bundle_instance_au_ps_composition_author-suite_au_ps_bundle_instance_au_ps_composition_author_author_ms_subelements",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:17.625+00:00"
+  },
+  {
+    "id": "a9454a4b-7891-4e63-93a0-d4f6e6845972",
+    "created_at": "2026-08-13T14:58:17.597+00:00",
+    "inputs": [
+
+    ],
+    "messages": [
+      {
+        "message": "Author reference resolves to a resource with valid resource type: PractitionerRole",
+        "type": "info"
+      }
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_id": "au_ps_v100-suite_au_ps_bundle_instance-suite_au_ps_bundle_instance_au_ps_composition_author-suite_au_ps_bundle_instance_au_ps_composition_author_author_resource_type_is_valid",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:17.597+00:00"
+  },
+  {
+    "id": "3a709708-ff55-451d-be03-9fccf8a11276",
+    "created_at": "2026-08-13T14:58:17.672+00:00",
+    "inputs": [
+
+    ],
+    "optional": true,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_group_id": "au_ps_v100-suite_au_ps_bundle_instance-suite_au_ps_bundle_instance_au_ps_composition_custodian",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:17.672+00:00"
+  },
+  {
+    "id": "0f0e431d-16cb-4904-aab8-ae395ada6908",
+    "created_at": "2026-08-13T14:58:17.653+00:00",
+    "inputs": [
+
+    ],
+    "messages": [
+      {
+        "message": "All Must Support elements are populated.\n\n**Profile**: Organization — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-organization\n\nList of Must Support elements populated or missing\n\n✅ Populated: identifier\n\n✅ Populated: type\n\n✅ Populated: name (M)\n\n✅ Populated: telecom\n\n✅ Populated: address",
+        "type": "info"
+      }
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_id": "au_ps_v100-suite_au_ps_bundle_instance-suite_au_ps_bundle_instance_au_ps_composition_custodian-suite_au_ps_bundle_instance_au_ps_composition_custodian_custodian_ms_elements",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:17.653+00:00"
+  },
+  {
+    "id": "01da037e-2f1f-4aae-95ff-992e92e6f5c5",
+    "created_at": "2026-08-13T14:58:17.671+00:00",
+    "inputs": [
+
+    ],
+    "messages": [
+      {
+        "message": "Must support identifier slices correctly populated\n\n**Referenced custodian**: Organization\n\n## List of Must Support identifier slices populated or missing (type and system when populated)\n\n✅ Populated: **ABN** — system: http://hl7.org.au/id/abn, type: ABN\n\n⚠️ Missing: **HPIO**",
+        "type": "warning"
+      }
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_id": "au_ps_v100-suite_au_ps_bundle_instance-suite_au_ps_bundle_instance_au_ps_composition_custodian-suite_au_ps_bundle_instance_au_ps_composition_custodian_custodian_ms_identifier_slices",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:17.671+00:00"
+  },
+  {
+    "id": "0321e4ef-007b-49df-bc90-f75074c7fde8",
+    "created_at": "2026-08-13T14:58:17.668+00:00",
+    "inputs": [
+
+    ],
+    "messages": [
+      {
+        "message": "Must Support sub-elements correctly populated\n\n**Referenced subject**: Organization\n\n## Complex element **telecom** — Must Support sub-elements populated or missing\n\n✅ Populated: telecom.system\n\n✅ Populated: telecom.value",
+        "type": "info"
+      }
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_id": "au_ps_v100-suite_au_ps_bundle_instance-suite_au_ps_bundle_instance_au_ps_composition_custodian-suite_au_ps_bundle_instance_au_ps_composition_custodian_custodian_ms_subelements",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:17.668+00:00"
+  },
+  {
+    "id": "bca3c28c-b061-41ce-a328-4afbd4d9a334",
+    "created_at": "2026-08-13T14:58:17.471+00:00",
+    "inputs": [
+
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_group_id": "au_ps_v100-suite_au_ps_bundle_instance-suite_au_ps_bundle_instance_au_ps_composition_mandatory_sections",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:17.471+00:00"
+  },
+  {
+    "id": "6ff18d33-891a-416c-9e0a-7e946d17b0e6",
+    "created_at": "2026-08-13T14:58:17.465+00:00",
+    "inputs": [
+
+    ],
+    "messages": [
+      {
+        "message": "Patient Summary Problems Section (11450-4)\n\nentry[0]: **urn:uuid:310f1593-d610-4144-a6e8-1f823d955e0d** -> Condition (no meta.profile)",
+        "type": "info"
+      },
+      {
+        "message": "Patient Summary Allergies and Intolerances Section (48765-2)\n\nentry[0]: **urn:uuid:ad6fb7b7-c76f-441e-88a5-9051e795db26** -> AllergyIntolerance (no meta.profile)\n\nentry[1]: **urn:uuid:06ba95f5-345b-412d-aa66-99e354470015** -> AllergyIntolerance (no meta.profile)\n\nentry[2]: **urn:uuid:d24db2d5-3400-4158-892c-d018acdeba09** -> AllergyIntolerance (no meta.profile)",
+        "type": "info"
+      },
+      {
+        "message": "Patient Summary Medication Summary Section (10160-0)\n\nentry[0]: **urn:uuid:347e8435-cea1-4e94-9755-abb027926bb1** -> MedicationStatement (no meta.profile)",
+        "type": "info"
+      },
+      {
+        "message": "At least one optional Must Support element is not populated in the Patient Summary Problems Section (11450-4) section. Further testing with data containing the missing elements or clarification the system does not ever know a value for the element is required.\n\n**Profile**: Condition — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-condition\n\nList of Must Support elements populated or missing\n\n✅ Populated: clinicalStatus\n\n⚠️ Missing: verificationStatus\n\n✅ Populated: category (M)\n\n⚠️ Missing: severity\n\n✅ Populated: code (M)\n\n✅ Populated: subject (M)\n\n|- ✅ Populated: subject.reference (M)\n\n⚠️ Missing: onsetDateTime\n\n⚠️ Missing: abatement[x]\n\n⚠️ Missing: note",
+        "type": "warning"
+      },
+      {
+        "message": "At least one optional Must Support element is not populated in the Patient Summary Allergies and Intolerances Section (48765-2) section. Further testing with data containing the missing elements or clarification the system does not ever know a value for the element is required.\n\n**Profile**: AllergyIntolerance — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-allergyintolerance\n\nList of Must Support elements populated or missing\n\n✅ Populated: clinicalStatus\n\n⚠️ Missing: verificationStatus\n\n⚠️ Missing: type\n\n✅ Populated: code (M)\n\n✅ Populated: patient (M)\n\n|- ✅ Populated: patient.reference (M)\n\n✅ Populated: onsetDateTime\n\n⚠️ Missing: note\n\n✅ Populated: reaction\n\n|- ✅ Populated: reaction.manifestation (M)\n\n|- ✅ Populated: reaction.severity",
+        "type": "warning"
+      },
+      {
+        "message": "At least one optional Must Support element is not populated in the Patient Summary Medication Summary Section (10160-0) section. Further testing with data containing the missing elements or clarification the system does not ever know a value for the element is required.\n\n**Profile**: MedicationStatement — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medicationstatement\n\nList of Must Support elements populated or missing\n\n✅ Populated: status (M)\n\n✅ Populated: medication[x] (M)\n\n✅ Populated: subject (M)\n\n|- ✅ Populated: subject.reference (M)\n\n✅ Populated: effectiveDateTime\n\n✅ Populated: dateAsserted\n\n⚠️ Missing: reasonCode\n\n⚠️ Missing: reasonReference\n\n✅ Populated: dosage\n\n|- ✅ Populated: dosage.text\n\n|- ⚠️ Missing: dosage.timing",
+        "type": "warning"
+      },
+      {
+        "message": "No resources found\n\n**Profile**: MedicationRequest — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medicationrequest",
+        "type": "warning"
+      }
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_id": "au_ps_v100-suite_au_ps_bundle_instance-suite_au_ps_bundle_instance_au_ps_composition_mandatory_sections-suite_au_ps_bundle_instance_au_ps_composition_mandatory_sections_mandatory_sections_entry_profiles",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:17.465+00:00"
+  },
+  {
+    "id": "f1e24933-eb51-49db-97f6-4dc6fe9ab4b7",
+    "created_at": "2026-08-13T14:58:17.470+00:00",
+    "inputs": [
+
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_id": "au_ps_v100-suite_au_ps_bundle_instance-suite_au_ps_bundle_instance_au_ps_composition_mandatory_sections-suite_au_ps_bundle_instance_au_ps_composition_mandatory_sections_nilknown_warning",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:17.470+00:00"
+  },
+  {
+    "id": "77a31bb4-d556-4954-ab77-830f4b2bd1ab",
+    "created_at": "2026-08-13T14:58:17.445+00:00",
+    "inputs": [
+
+    ],
+    "messages": [
+      {
+        "message": "Section correctly populated\n\n### Problem list - Reported (11450-4)\n\nList of Must Support elements populated or missing:\n\n**title**: ✅ Populated\n\n**code**: ✅ Populated\n\n**text**: ✅ Populated\n\nNarrative status: `generated`\n\n21/12/2024 No current problem or disability.",
+        "type": "info"
+      },
+      {
+        "message": "Section correctly populated\n\n### Allergies and adverse reactions Document (48765-2)\n\nList of Must Support elements populated or missing:\n\n**title**: ✅ Populated\n\n**code**: ✅ Populated\n\n**text**: ✅ Populated\n\nNarrative status: `generated`\n\n| Allergy, Intolerance, Substance | Onset | Recorded | Manifestation | Manifestation Severity |\n| --- | --- | --- | --- | --- |\n| Intolerance to lactose | 2022 | 14/03/2023 | Abdominal pain, Abdominal bloating, Diarrhoea | Mild |\n| Gluten intolerance | 1999 | 12/01/2023 | Fatigue | Mild |\n| Chlorhexidine | 12/01/2023 | 09/09/2023 | Hives | Mild |",
+        "type": "info"
+      },
+      {
+        "message": "Section correctly populated\n\n### History of Medication use Narrative (10160-0)\n\nList of Must Support elements populated or missing:\n\n**title**: ✅ Populated\n\n**code**: ✅ Populated\n\n**text**: ✅ Populated\n\nNarrative status: `generated`\n\n| Medicine | Directions | Date asserted |\n| --- | --- | --- |\n| **Bisoprolol** 2.5mg tab | Take 1/2 tablet in the morning | 05/01/2025 |",
+        "type": "info"
+      }
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_id": "au_ps_v100-suite_au_ps_bundle_instance-suite_au_ps_bundle_instance_au_ps_composition_mandatory_sections-suite_au_ps_bundle_instance_au_ps_composition_mandatory_sections_sections_shall_populated",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:17.445+00:00"
+  },
+  {
+    "id": "fe894b33-4920-401c-bd4d-274dbab0bd5f",
+    "created_at": "2026-08-13T14:58:17.438+00:00",
+    "inputs": [
+
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_group_id": "au_ps_v100-suite_au_ps_bundle_instance-suite_au_ps_bundle_instance_au_ps_composition_must_support_conformance",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:17.438+00:00"
+  },
+  {
+    "id": "4b9c90da-ef88-4c3a-adae-988ced408510",
+    "created_at": "2026-08-13T14:58:17.428+00:00",
+    "inputs": [
+
+    ],
+    "messages": [
+      {
+        "message": "## List of populated elements\n\n✅ Populated: **author** (M)\n\n✅ Populated: **date** (M)\n\n✅ Populated: **status** (M)\n\n✅ Populated: **subject** (M)\n\n✅ Populated: **title** (M)\n\n✅ Populated: **type** (M)",
+        "type": "info"
+      }
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_id": "au_ps_v100-suite_au_ps_bundle_instance-suite_au_ps_bundle_instance_au_ps_composition_must_support_conformance-suite_au_ps_bundle_instance_au_ps_composition_must_support_conformance_composition_mandatory_ms_populated",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:17.428+00:00"
+  },
+  {
+    "id": "d5d11cfa-03cc-4ae7-a840-e18762d488b7",
+    "created_at": "2026-08-13T14:58:17.434+00:00",
+    "inputs": [
+
+    ],
+    "messages": [
+      {
+        "message": "Must Support sub-elements correctly populated\n\nComposition\n\n**Complex element attester** is not populated. Must Support sub-elements that would be validated: attester.mode, attester.party, attester.time.",
+        "type": "warning"
+      },
+      {
+        "message": "## List of populated elements\n\n✅ Populated: **subject.reference** (M)",
+        "type": "info"
+      }
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_id": "au_ps_v100-suite_au_ps_bundle_instance-suite_au_ps_bundle_instance_au_ps_composition_must_support_conformance-suite_au_ps_bundle_instance_au_ps_composition_must_support_conformance_composition_ms_subelements_populated",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:17.434+00:00"
+  },
+  {
+    "id": "8840cba0-19de-4040-a475-2d7a744bbd8b",
+    "created_at": "2026-08-13T14:58:17.432+00:00",
+    "inputs": [
+
+    ],
+    "messages": [
+      {
+        "message": "## List of populated elements\n\n⚠️ Missing: **attester**\n\n✅ Populated: **custodian**\n\n⚠️ Missing: **identifier**\n\n✅ Populated: **text**\n\n⚠️ Missing: **event**",
+        "type": "warning"
+      }
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_id": "au_ps_v100-suite_au_ps_bundle_instance-suite_au_ps_bundle_instance_au_ps_composition_must_support_conformance-suite_au_ps_bundle_instance_au_ps_composition_must_support_conformance_composition_optional_ms_populated",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:17.432+00:00"
+  },
+  {
+    "id": "320f26a7-366a-44dc-9655-b14a744a120d",
+    "created_at": "2026-08-13T14:58:17.437+00:00",
+    "inputs": [
+
+    ],
+    "messages": [
+      {
+        "message": "event:careProvisioningEvent slice is not present",
+        "type": "warning"
+      }
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_id": "au_ps_v100-suite_au_ps_bundle_instance-suite_au_ps_bundle_instance_au_ps_composition_must_support_conformance-suite_au_ps_bundle_instance_au_ps_composition_must_support_conformance_composition_optional_ms_slices",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:17.437+00:00"
+  },
+  {
+    "id": "af5ce498-8973-43dc-8904-b9b9a74b15eb",
+    "created_at": "2026-08-13T14:58:17.524+00:00",
+    "inputs": [
+
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_group_id": "au_ps_v100-suite_au_ps_bundle_instance-suite_au_ps_bundle_instance_au_ps_composition_optional_sections",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:17.524+00:00"
+  },
+  {
+    "id": "1fb4142d-c559-4bef-a435-bf5a51f60523",
+    "created_at": "2026-08-13T14:58:17.519+00:00",
+    "inputs": [
+
+    ],
+    "messages": [
+      {
+        "message": "Patient Summary Advance Directives Section (42348-3)\n\nNo composition section found for code: 42348-3",
+        "type": "warning"
+      },
+      {
+        "message": "Patient Summary Alerts Section (104605-1)\n\nNo composition section found for code: 104605-1",
+        "type": "warning"
+      },
+      {
+        "message": "Patient Summary Functional Status Section (47420-5)\n\nNo composition section found for code: 47420-5",
+        "type": "warning"
+      },
+      {
+        "message": "Patient Summary History of Past Illness Section (11348-0)\n\nNo composition section found for code: 11348-0",
+        "type": "warning"
+      },
+      {
+        "message": "Patient Summary History of Pregnancy Section (10162-6)\n\nNo composition section found for code: 10162-6",
+        "type": "warning"
+      },
+      {
+        "message": "Patient Summary Patient Story Section (81338-6)\n\nNo composition section found for code: 81338-6",
+        "type": "warning"
+      },
+      {
+        "message": "Patient Summary Plan of Care Section (18776-5)\n\nNo composition section found for code: 18776-5",
+        "type": "warning"
+      },
+      {
+        "message": "Patient Summary Social History Section (29762-2)\n\nNo composition section found for code: 29762-2",
+        "type": "warning"
+      },
+      {
+        "message": "Patient Summary Vital Signs Section (8716-3)\n\nNo composition section found for code: 8716-3",
+        "type": "warning"
+      },
+      {
+        "message": "No resources found\n\n**Profile**: Condition — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-condition",
+        "type": "warning"
+      },
+      {
+        "message": "No resources found\n\n**Profile**: Observation — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-smokingstatus",
+        "type": "warning"
+      }
+    ],
+    "optional": true,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_id": "au_ps_v100-suite_au_ps_bundle_instance-suite_au_ps_bundle_instance_au_ps_composition_optional_sections-suite_au_ps_bundle_instance_au_ps_composition_optional_sections_optional_sections_entry_profiles",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:17.519+00:00"
+  },
+  {
+    "id": "468e90ec-d2be-4c94-9482-be47f5847319",
+    "created_at": "2026-08-13T14:58:17.494+00:00",
+    "inputs": [
+
+    ],
+    "messages": [
+      {
+        "message": "Patient Summary Advance Directives Section (42348-3) is missing",
+        "type": "warning"
+      },
+      {
+        "message": "Patient Summary Alerts Section (104605-1) is missing",
+        "type": "warning"
+      },
+      {
+        "message": "Patient Summary Functional Status Section (47420-5) is missing",
+        "type": "warning"
+      },
+      {
+        "message": "Patient Summary History of Past Illness Section (11348-0) is missing",
+        "type": "warning"
+      },
+      {
+        "message": "Patient Summary History of Pregnancy Section (10162-6) is missing",
+        "type": "warning"
+      },
+      {
+        "message": "Patient Summary Patient Story Section (81338-6) is missing",
+        "type": "warning"
+      },
+      {
+        "message": "Patient Summary Plan of Care Section (18776-5) is missing",
+        "type": "warning"
+      },
+      {
+        "message": "Patient Summary Social History Section (29762-2) is missing",
+        "type": "warning"
+      },
+      {
+        "message": "Patient Summary Vital Signs Section (8716-3) is missing",
+        "type": "warning"
+      }
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_id": "au_ps_v100-suite_au_ps_bundle_instance-suite_au_ps_bundle_instance_au_ps_composition_optional_sections-suite_au_ps_bundle_instance_au_ps_composition_optional_sections_sections_may_populated",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:17.494+00:00"
+  },
+  {
+    "id": "763e21c7-48c0-478d-9462-1e19e856e59c",
+    "created_at": "2026-08-13T14:58:17.490+00:00",
+    "inputs": [
+
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_group_id": "au_ps_v100-suite_au_ps_bundle_instance-suite_au_ps_bundle_instance_au_ps_composition_recommended_sections",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:17.490+00:00"
+  },
+  {
+    "id": "c6cf13c7-208e-4b94-85d2-daf131d6f2ee",
+    "created_at": "2026-08-13T14:58:17.488+00:00",
+    "inputs": [
+
+    ],
+    "messages": [
+      {
+        "message": "Patient Summary Immunizations Section (11369-6)\n\nNo composition section found for code: 11369-6",
+        "type": "warning"
+      },
+      {
+        "message": "Patient Summary Results Section (30954-2)\n\nNo composition section found for code: 30954-2",
+        "type": "warning"
+      },
+      {
+        "message": "Patient Summary History of Procedures Section (47519-4)\n\nNo composition section found for code: 47519-4",
+        "type": "warning"
+      },
+      {
+        "message": "Patient Summary Medical Devices Section (46264-8)\n\nNo composition section found for code: 46264-8",
+        "type": "warning"
+      },
+      {
+        "message": "No resources found\n\n**Profile**: Immunization — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-immunization",
+        "type": "warning"
+      },
+      {
+        "message": "No resources found\n\n**Profile**: Observation — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-diagnosticresult-path",
+        "type": "warning"
+      },
+      {
+        "message": "No resources found\n\n**Profile**: Procedure — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-procedure",
+        "type": "warning"
+      }
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_id": "au_ps_v100-suite_au_ps_bundle_instance-suite_au_ps_bundle_instance_au_ps_composition_recommended_sections-suite_au_ps_bundle_instance_au_ps_composition_recommended_sections_recommended_sections_entry_profiles",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:17.488+00:00"
+  },
+  {
+    "id": "6504d75a-e1ae-482e-8fe6-5fb00c2762fa",
+    "created_at": "2026-08-13T14:58:17.475+00:00",
+    "inputs": [
+
+    ],
+    "messages": [
+      {
+        "message": "Patient Summary Immunizations Section (11369-6) is missing",
+        "type": "warning"
+      },
+      {
+        "message": "Patient Summary Results Section (30954-2) is missing",
+        "type": "warning"
+      },
+      {
+        "message": "Patient Summary History of Procedures Section (47519-4) is missing",
+        "type": "warning"
+      },
+      {
+        "message": "Patient Summary Medical Devices Section (46264-8) is missing",
+        "type": "warning"
+      }
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_id": "au_ps_v100-suite_au_ps_bundle_instance-suite_au_ps_bundle_instance_au_ps_composition_recommended_sections-suite_au_ps_bundle_instance_au_ps_composition_recommended_sections_sections_should_populated",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:17.475+00:00"
+  },
+  {
+    "id": "aef1a6b1-e7e3-4ebc-abce-1939053ea852",
+    "created_at": "2026-08-13T14:58:17.585+00:00",
+    "inputs": [
+
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_group_id": "au_ps_v100-suite_au_ps_bundle_instance-suite_au_ps_bundle_instance_au_ps_composition_subject",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:17.585+00:00"
+  },
+  {
+    "id": "6c825e52-1671-4b29-8c1a-13da0aecd6b2",
+    "created_at": "2026-08-13T14:58:17.554+00:00",
+    "inputs": [
+
+    ],
+    "messages": [
+      {
+        "message": "At least one optional Must Support element is not populated. Further testing with data containing the missing elements or clarification the system does not ever know a value for the element is required.\n\n**Profile**: Patient — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-patient\n\nList of Must Support elements populated or missing\n\n✅ Populated: identifier (M)\n\n✅ Populated: name (M)\n\n✅ Populated: telecom\n\n✅ Populated: gender (M)\n\n✅ Populated: birthDate (M)\n\n✅ Populated: address\n\n⚠️ Missing: communication\n\n⚠️ Missing: generalPractitioner\n\n⚠️ Missing: indigenousStatus\n\n✅ Populated: genderIdentity\n\n✅ Populated: individualPronouns",
+        "type": "warning"
+      }
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_id": "au_ps_v100-suite_au_ps_bundle_instance-suite_au_ps_bundle_instance_au_ps_composition_subject-suite_au_ps_bundle_instance_au_ps_composition_subject_subject_ms_elements",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:17.554+00:00"
+  },
+  {
+    "id": "efa74158-1062-4ed8-aa8d-07e5a0ae9395",
+    "created_at": "2026-08-13T14:58:17.583+00:00",
+    "inputs": [
+
+    ],
+    "messages": [
+      {
+        "message": "Must support identifier slices correctly populated\n\n## List of Must Support identifier slices populated or missing\n\n✅ Populated: **IHI** — system: http://ns.electronichealth.net.au/id/hi/ihi/1.0, type: NI\n\n⚠️ Missing: **DVA**\n\n⚠️ Missing: **MEDICARE**",
+        "type": "warning"
+      },
+      {
+        "message": "At least one Must Support identifier slices is populated\n\n## List of Must Support identifier slices populated or missing (system when populated)\n\n✅ Populated: **IHI** — system: http://ns.electronichealth.net.au/id/hi/ihi/1.0\n\n⚠️ Missing: **DVA**\n\n⚠️ Missing: **MEDICARE**",
+        "type": "info"
+      }
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_id": "au_ps_v100-suite_au_ps_bundle_instance-suite_au_ps_bundle_instance_au_ps_composition_subject-suite_au_ps_bundle_instance_au_ps_composition_subject_subject_ms_identifier_slices",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:17.583+00:00"
+  },
+  {
+    "id": "7da26043-7a2b-4437-96ef-2a8a58bd5632",
+    "created_at": "2026-08-13T14:58:17.570+00:00",
+    "inputs": [
+
+    ],
+    "messages": [
+      {
+        "message": "Must Support sub-elements correctly populated\n\n**Referenced subject**: Patient\n\n## Complex element **name** — Must Support sub-elements populated or missing\n\n✅ Populated: name.use\n\n⚠️ Missing: name.text\n\n✅ Populated: name.family\n\n✅ Populated: name.given",
+        "type": "warning"
+      },
+      {
+        "message": "Must Support sub-elements correctly populated\n\n**Referenced subject**: Patient\n\n## Complex element **telecom** — Must Support sub-elements populated or missing\n\n✅ Populated: telecom.system\n\n✅ Populated: telecom.value\n\n✅ Populated: telecom.use",
+        "type": "info"
+      },
+      {
+        "message": "Must Support sub-elements correctly populated\n\n**Referenced subject**: Patient\n\n## Complex element **communication** — Must Support sub-elements populated or missing\n\n**Complex element communication** is not populated. Must Support sub-elements that would be validated: communication.language, communication.preferred.",
+        "type": "warning"
+      }
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_id": "au_ps_v100-suite_au_ps_bundle_instance-suite_au_ps_bundle_instance_au_ps_composition_subject-suite_au_ps_bundle_instance_au_ps_composition_subject_subject_ms_subelements_populated",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:17.570+00:00"
+  },
+  {
+    "id": "67fe68b5-e68f-4f53-952c-9469607c6e0a",
+    "created_at": "2026-08-13T14:58:17.541+00:00",
+    "inputs": [
+
+    ],
+    "messages": [
+      {
+        "message": "Subject reference resolves to a resource with valid resource type: Patient",
+        "type": "info"
+      }
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_id": "au_ps_v100-suite_au_ps_bundle_instance-suite_au_ps_bundle_instance_au_ps_composition_subject-suite_au_ps_bundle_instance_au_ps_composition_subject_subject_resource_type_is_valid",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:17.541+00:00"
+  },
+  {
+    "id": "586072bc-5445-4905-b004-45dfce7f7f74",
+    "created_at": "2026-08-13T14:58:17.529+00:00",
+    "inputs": [
+
+    ],
+    "optional": true,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "skip",
+    "test_group_id": "au_ps_v100-suite_au_ps_bundle_instance-suite_au_ps_bundle_instance_au_ps_composition_undefined_sections",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:17.529+00:00"
+  },
+  {
+    "id": "daf71fb4-9016-46cc-a8a9-bc2d55cc0a2c",
+    "created_at": "2026-08-13T14:58:17.529+00:00",
+    "inputs": [
+
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "skip",
+    "result_message": "No sections to validate",
+    "test_id": "au_ps_v100-suite_au_ps_bundle_instance-suite_au_ps_bundle_instance_au_ps_composition_undefined_sections-suite_au_ps_bundle_instance_au_ps_composition_undefined_sections_sections_may_undefined",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:17.529+00:00"
+  },
+  {
+    "id": "801fd9ee-f860-4734-833c-2ef7a64bb3e4",
+    "created_at": "2026-08-13T14:58:14.179+00:00",
+    "inputs": [
+      {
+        "name": "bundle_resource",
+        "label": null,
+        "description": "If you want to check existing Bundle resource",
+        "value": "Input is too large to display, please visit\nhttp://localhost:4567/api/test_sessions/k4XYUT4vizo/results/801fd9ee-f860-4734-833c-2ef7a64bb3e4/io/inputs/bundle_resource\nfor details\n",
+        "type": "textarea",
+        "is_large": true
+      }
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_group_id": "au_ps_v100-suite_au_ps_bundle_instance-suite_au_ps_bundle_instance_bundle_acquisition",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:14.179+00:00"
+  },
+  {
+    "id": "3cc95dae-8236-48f9-a990-0304b0639104",
+    "created_at": "2026-08-13T14:58:14.175+00:00",
+    "inputs": [
+      {
+        "name": "bundle_resource",
+        "value": "Input is too large to display, please visit\nhttp://localhost:4567/api/test_sessions/k4XYUT4vizo/results/3cc95dae-8236-48f9-a990-0304b0639104/io/inputs/bundle_resource\nfor details\n",
+        "type": "textarea",
+        "is_large": true
+      }
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_id": "au_ps_v100-suite_au_ps_bundle_instance-suite_au_ps_bundle_instance_bundle_acquisition-suite_au_ps_bundle_instance_bundle_provide",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:14.175+00:00"
+  },
+  {
+    "id": "9e533bb3-358d-4cc9-88f0-d957fe7739f7",
+    "created_at": "2026-08-13T14:58:17.420+00:00",
+    "inputs": [
+      {
+        "name": "validate_against",
+        "label": "Validate Against",
+        "description": null,
+        "value": [
+          "au_ps_bundle"
+        ],
+        "type": "checkbox"
+      }
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "fail",
+    "test_group_id": "au_ps_v100-suite_au_ps_bundle_instance-suite_au_ps_bundle_instance_bundle_validation",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:17.420+00:00"
+  },
+  {
+    "id": "573503fc-590c-4492-8729-666082aa4247",
+    "created_at": "2026-08-13T14:58:17.412+00:00",
+    "inputs": [
+      {
+        "name": "validate_against",
+        "value": [
+          "au_ps_bundle"
+        ],
+        "type": "checkbox"
+      }
+    ],
+    "messages": [
+      {
+        "message": "Using validator version 2512.2 and validator wrapper version 0.0.1",
+        "type": "info"
+      },
+      {
+        "message": "Bundle/aups-basicsummary: Bundle: Bundle.meta.profile: The property's value cannot be empty",
+        "type": "error"
+      }
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "fail",
+    "result_message": "Resource does not conform to the profile http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-bundle|1.0.0",
+    "test_id": "au_ps_v100-suite_au_ps_bundle_instance-suite_au_ps_bundle_instance_bundle_validation-suite_au_ps_bundle_instance_bundle_validation_bundle_valid",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:17.412+00:00"
+  },
+  {
+    "id": "f65a27af-549a-4b1b-8529-b2cb1ec21d94",
+    "created_at": "2026-08-13T14:58:17.419+00:00",
+    "inputs": [
+      {
+        "name": "validate_against",
+        "value": [
+          "au_ps_bundle"
+        ],
+        "type": "checkbox"
+      }
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "omit",
+    "result_message": "Validation against the IPS Bundle profile is disabled because \"IPS Bundle Validation\" is not selected in the \"Validate Against\" input.",
+    "test_id": "au_ps_v100-suite_au_ps_bundle_instance-suite_au_ps_bundle_instance_bundle_validation-suite_au_ps_bundle_instance_bundle_validation_bundle_valid_ips",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:17.419+00:00"
+  },
+  {
+    "id": "aea285db-02e0-4af7-8ba5-eba9c912b5dc",
+    "created_at": "2026-08-13T14:58:27.609+00:00",
+    "inputs": [
+      {
+        "name": "url",
+        "label": "FHIR Server Base Url",
+        "description": null,
+        "value": "https://hl7-ips-server.hl7.org/fhir",
+        "type": "text"
+      },
+      {
+        "name": "patient_id",
+        "label": null,
+        "description": "To request Patient/{patient_id}/$summary",
+        "value": "example-r4",
+        "type": "text"
+      },
+      {
+        "name": "identifier",
+        "label": null,
+        "description": "To request Patient/$summary?identifier={identifier}",
+        "value": null,
+        "type": "text"
+      },
+      {
+        "name": "profile",
+        "label": null,
+        "description": "To specify profile for the patient summary",
+        "value": "http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-bundle",
+        "type": "text"
+      },
+      {
+        "name": "credentials",
+        "label": "OAuth Credentials",
+        "description": null,
+        "value": "{\"name\":\"credentials\"}",
+        "type": "oauth_credentials"
+      },
+      {
+        "name": "header_name",
+        "label": "Header name",
+        "description": null,
+        "value": null,
+        "type": "text"
+      },
+      {
+        "name": "header_value",
+        "label": "Header value",
+        "description": null,
+        "value": null,
+        "type": "text"
+      },
+      {
+        "name": "validate_against",
+        "label": "Validate Against",
+        "description": null,
+        "value": [
+          "au_ps_bundle"
+        ],
+        "type": "checkbox"
+      }
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "fail",
+    "test_group_id": "au_ps_v100-suite_generate_au_ps_using_ips_summary_validation_tests",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:27.609+00:00"
+  },
+  {
+    "id": "4da431f3-fa8f-4970-b249-3883714e2c3b",
+    "created_at": "2026-08-13T14:58:27.354+00:00",
+    "inputs": [
+
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_group_id": "au_ps_v100-suite_generate_au_ps_using_ips_summary_validation_tests-suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_bundle_must_support_conformance",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:27.354+00:00"
+  },
+  {
+    "id": "3e720713-08b5-425f-a655-f558a688c268",
+    "created_at": "2026-08-13T14:58:27.350+00:00",
+    "inputs": [
+
+    ],
+    "messages": [
+      {
+        "message": "**List mandatory Must Support elements populated and missing**:\n\n**identifier**: ✅ Populated\n\n**type**: ✅ Populated\n\n**timestamp**: ✅ Populated\n\n**All entry exists fullUrl**: ✅ Populated",
+        "type": "info"
+      },
+      {
+        "message": "**List any entry resources by type (and meta.profile if exists)**:\n\nComposition x1\n\nPatient x1\n\nAllergyIntolerance x1\n\nMedicationStatement x1\n\nCondition x1\n\nOrganization x1",
+        "type": "info"
+      }
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_id": "au_ps_v100-suite_generate_au_ps_using_ips_summary_validation_tests-suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_bundle_must_support_conformance-suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_bundle_must_support_conformance_bundle_must_support_populated",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:27.350+00:00"
+  },
+  {
+    "id": "c116bbc4-30bd-4a7c-b91d-e70a69eb3bf6",
+    "created_at": "2026-08-13T14:58:27.606+00:00",
+    "inputs": [
+
+    ],
+    "optional": true,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "skip",
+    "test_group_id": "au_ps_v100-suite_generate_au_ps_using_ips_summary_validation_tests-suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_attester",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:27.606+00:00"
+  },
+  {
+    "id": "db19a9f6-b58d-4122-ae6f-c50fbc74063f",
+    "created_at": "2026-08-13T14:58:27.601+00:00",
+    "inputs": [
+
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "skip",
+    "result_message": "Attester reference does not resolve",
+    "test_id": "au_ps_v100-suite_generate_au_ps_using_ips_summary_validation_tests-suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_attester-suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_attester_attester_party_ms_elements",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:27.601+00:00"
+  },
+  {
+    "id": "75c29427-d9e5-4f1d-a090-e3beb7c1a364",
+    "created_at": "2026-08-13T14:58:27.606+00:00",
+    "inputs": [
+
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "skip",
+    "result_message": "Attester or attester.party is not populated",
+    "test_id": "au_ps_v100-suite_generate_au_ps_using_ips_summary_validation_tests-suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_attester-suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_attester_attester_party_ms_identifier_slices",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:27.606+00:00"
+  },
+  {
+    "id": "63f1e644-29d0-407a-8e17-e965d5a1b39c",
+    "created_at": "2026-08-13T14:58:27.603+00:00",
+    "inputs": [
+
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "skip",
+    "result_message": "Attester reference does not resolve",
+    "test_id": "au_ps_v100-suite_generate_au_ps_using_ips_summary_validation_tests-suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_attester-suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_attester_attester_party_ms_subelements",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:27.603+00:00"
+  },
+  {
+    "id": "ce4498b3-9256-4d1a-b960-811fe1018318",
+    "created_at": "2026-08-13T14:58:27.584+00:00",
+    "inputs": [
+
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_group_id": "au_ps_v100-suite_generate_au_ps_using_ips_summary_validation_tests-suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_author",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:27.584+00:00"
+  },
+  {
+    "id": "f1a4871c-2f19-4176-ba78-b025db80fe93",
+    "created_at": "2026-08-13T14:58:27.556+00:00",
+    "inputs": [
+
+    ],
+    "messages": [
+      {
+        "message": "At least one optional Must Support element is not populated. Further testing with data containing the missing elements or clarification the system does not ever know a value for the element is required.\n\n**Profile**: Organization — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-organization\n\nList of Must Support elements populated or missing\n\n⚠️ Missing: identifier\n\n⚠️ Missing: type\n\n✅ Populated: name (M)\n\n⚠️ Missing: telecom\n\n✅ Populated: address",
+        "type": "warning"
+      }
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_id": "au_ps_v100-suite_generate_au_ps_using_ips_summary_validation_tests-suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_author-suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_author_author_ms_elements",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:27.556+00:00"
+  },
+  {
+    "id": "d9982aa1-139d-4df2-ac3e-8d42d0572444",
+    "created_at": "2026-08-13T14:58:27.583+00:00",
+    "inputs": [
+
+    ],
+    "messages": [
+      {
+        "message": "Must support identifier slices correctly populated\n\n## List of Must Support identifier slices populated or missing\n\n⚠️ Missing: **ABN**\n\n⚠️ Missing: **HPIO**",
+        "type": "warning"
+      },
+      {
+        "message": "At least one Must Support identifier slices is populated\n\n## List of Must Support identifier slices populated or missing (system when populated)\n\n⚠️ Missing: **ABN**\n\n⚠️ Missing: **HPIO**",
+        "type": "warning"
+      }
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_id": "au_ps_v100-suite_generate_au_ps_using_ips_summary_validation_tests-suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_author-suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_author_author_ms_identifier_slices",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:27.583+00:00"
+  },
+  {
+    "id": "153bf3e6-254a-4ef5-9fca-fd8e1533c73e",
+    "created_at": "2026-08-13T14:58:27.570+00:00",
+    "inputs": [
+
+    ],
+    "messages": [
+      {
+        "message": "Must Support sub-elements correctly populated\n\n**Referenced subject**: Organization\n\n## Complex element **telecom** — Must Support sub-elements populated or missing\n\n**Complex element telecom** is not populated. Must Support sub-elements that would be validated: telecom.system, telecom.value.",
+        "type": "warning"
+      }
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_id": "au_ps_v100-suite_generate_au_ps_using_ips_summary_validation_tests-suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_author-suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_author_author_ms_subelements",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:27.570+00:00"
+  },
+  {
+    "id": "888d1890-d3d4-4400-bd7a-b34a95e6f13f",
+    "created_at": "2026-08-13T14:58:27.541+00:00",
+    "inputs": [
+
+    ],
+    "messages": [
+      {
+        "message": "Author reference resolves to a resource with valid resource type: Organization",
+        "type": "info"
+      }
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_id": "au_ps_v100-suite_generate_au_ps_using_ips_summary_validation_tests-suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_author-suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_author_author_resource_type_is_valid",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:27.541+00:00"
+  },
+  {
+    "id": "94e3c54f-319a-4140-904f-e37f5f0f71c5",
+    "created_at": "2026-08-13T14:58:27.596+00:00",
+    "inputs": [
+
+    ],
+    "optional": true,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "skip",
+    "test_group_id": "au_ps_v100-suite_generate_au_ps_using_ips_summary_validation_tests-suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_custodian",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:27.596+00:00"
+  },
+  {
+    "id": "290926f8-0fe0-4dfd-8c15-a97028af1c33",
+    "created_at": "2026-08-13T14:58:27.591+00:00",
+    "inputs": [
+
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "skip",
+    "result_message": "Custodian reference does not resolve",
+    "test_id": "au_ps_v100-suite_generate_au_ps_using_ips_summary_validation_tests-suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_custodian-suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_custodian_custodian_ms_elements",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:27.591+00:00"
+  },
+  {
+    "id": "1cb74faf-e547-4fd8-974b-3752c71387f8",
+    "created_at": "2026-08-13T14:58:27.596+00:00",
+    "inputs": [
+
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "skip",
+    "result_message": "Custodian is not populated",
+    "test_id": "au_ps_v100-suite_generate_au_ps_using_ips_summary_validation_tests-suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_custodian-suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_custodian_custodian_ms_identifier_slices",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:27.596+00:00"
+  },
+  {
+    "id": "36d24e24-7f01-4e89-aaa2-2c2db2d988c8",
+    "created_at": "2026-08-13T14:58:27.593+00:00",
+    "inputs": [
+
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "skip",
+    "result_message": "Custodian reference does not resolve",
+    "test_id": "au_ps_v100-suite_generate_au_ps_using_ips_summary_validation_tests-suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_custodian-suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_custodian_custodian_ms_subelements",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:27.593+00:00"
+  },
+  {
+    "id": "4f790829-cf19-4877-9c04-1ce638aaee0a",
+    "created_at": "2026-08-13T14:58:27.410+00:00",
+    "inputs": [
+
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "fail",
+    "test_group_id": "au_ps_v100-suite_generate_au_ps_using_ips_summary_validation_tests-suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_mandatory_sections",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:27.410+00:00"
+  },
+  {
+    "id": "5b5b798f-6323-46e7-970b-5e3e3aad9bf7",
+    "created_at": "2026-08-13T14:58:27.404+00:00",
+    "inputs": [
+
+    ],
+    "messages": [
+      {
+        "message": "Patient Summary Problems Section (11450-4)\n\nentry[0]: **urn:uuid:63e657f0-9ed0-4082-8d9f-3d0a8fecdf76** -> Condition (no meta.profile)",
+        "type": "info"
+      },
+      {
+        "message": "Patient Summary Allergies and Intolerances Section (48765-2)\n\nentry[0]: **urn:uuid:8a88c426-1c9f-4637-b1af-2991e8473b35** -> AllergyIntolerance (no meta.profile)",
+        "type": "info"
+      },
+      {
+        "message": "Patient Summary Medication Summary Section (10160-0)\n\nentry[0]: **urn:uuid:79bb59df-55c5-4a9e-b6cb-75cac9f43412** -> MedicationStatement (no meta.profile)",
+        "type": "info"
+      },
+      {
+        "message": "At least one mandatory Must Support element is not populated in the Patient Summary Problems Section (11450-4) section.\n\n**Profile**: Condition — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-condition\n\nList of Must Support elements populated or missing\n\n✅ Populated: clinicalStatus\n\n⚠️ Missing: verificationStatus\n\n❌ Missing: category (M)\n\n⚠️ Missing: severity\n\n✅ Populated: code (M)\n\n✅ Populated: subject (M)\n\n|- ✅ Populated: subject.reference (M)\n\n⚠️ Missing: onsetDateTime\n\n⚠️ Missing: abatement[x]\n\n⚠️ Missing: note",
+        "type": "error"
+      },
+      {
+        "message": "At least one optional Must Support element is not populated in the Patient Summary Allergies and Intolerances Section (48765-2) section. Further testing with data containing the missing elements or clarification the system does not ever know a value for the element is required.\n\n**Profile**: AllergyIntolerance — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-allergyintolerance\n\nList of Must Support elements populated or missing\n\n✅ Populated: clinicalStatus\n\n⚠️ Missing: verificationStatus\n\n⚠️ Missing: type\n\n✅ Populated: code (M)\n\n✅ Populated: patient (M)\n\n|- ✅ Populated: patient.reference (M)\n\n⚠️ Missing: onsetDateTime\n\n⚠️ Missing: note\n\n⚠️ Missing: reaction",
+        "type": "warning"
+      },
+      {
+        "message": "At least one optional Must Support element is not populated in the Patient Summary Medication Summary Section (10160-0) section. Further testing with data containing the missing elements or clarification the system does not ever know a value for the element is required.\n\n**Profile**: MedicationStatement — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medicationstatement\n\nList of Must Support elements populated or missing\n\n✅ Populated: status (M)\n\n✅ Populated: medication[x] (M)\n\n✅ Populated: subject (M)\n\n|- ✅ Populated: subject.reference (M)\n\n⚠️ Missing: effectiveDateTime\n\n⚠️ Missing: dateAsserted\n\n⚠️ Missing: reasonCode\n\n⚠️ Missing: reasonReference\n\n⚠️ Missing: dosage",
+        "type": "warning"
+      },
+      {
+        "message": "No resources found\n\n**Profile**: MedicationRequest — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medicationrequest",
+        "type": "warning"
+      }
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "fail",
+    "result_message": "Some of the sections are not populated with the correct Must Support elements.",
+    "test_id": "au_ps_v100-suite_generate_au_ps_using_ips_summary_validation_tests-suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_mandatory_sections-suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_mandatory_sections_mandatory_sections_entry_profiles",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:27.404+00:00"
+  },
+  {
+    "id": "67197db0-304f-40e8-a585-70706e5c5632",
+    "created_at": "2026-08-13T14:58:27.410+00:00",
+    "inputs": [
+
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_id": "au_ps_v100-suite_generate_au_ps_using_ips_summary_validation_tests-suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_mandatory_sections-suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_mandatory_sections_nilknown_warning",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:27.410+00:00"
+  },
+  {
+    "id": "5fca50f9-e5a2-4a01-94f4-53b92fe25cbd",
+    "created_at": "2026-08-13T14:58:27.386+00:00",
+    "inputs": [
+
+    ],
+    "messages": [
+      {
+        "message": "Section correctly populated\n\n### Problem List (11450-4)\n\nList of Must Support elements populated or missing:\n\n**title**: ✅ Populated\n\n**code**: ✅ Populated\n\n**text**: ✅ Populated\n\nNarrative status: `generated`\n\n<caption>Problem List</caption>\n| Medical Problems | Status | Comments | Onset Date |\n| --- | --- | --- | --- |\n| No information about problems | active | | |",
+        "type": "info"
+      },
+      {
+        "message": "Section correctly populated\n\n### Allergies and Adverse Reactions (48765-2)\n\nList of Must Support elements populated or missing:\n\n**title**: ✅ Populated\n\n**code**: ✅ Populated\n\n**text**: ✅ Populated\n\nNarrative status: `generated`\n\n<caption>Allergies And Intolerances</caption>\n| Allergen | Status | Category | Reaction | Severity | Comments | Onset |\n| --- | --- | --- | --- | --- | --- | --- |\n| No information about allergies | active | | | | | |",
+        "type": "info"
+      },
+      {
+        "message": "Section correctly populated\n\n### Medication List (10160-0)\n\nList of Must Support elements populated or missing:\n\n**title**: ✅ Populated\n\n**code**: ✅ Populated\n\n**text**: ✅ Populated\n\nNarrative status: `generated`\n\n<caption>Medication Summary: Medication Requests</caption>\n| Medication | Status | Route | Sig | Comments | Authored Date |\n| --- | --- | --- | --- | --- | --- |\n\n<caption>Medication Summary: Medication Statements</caption>\n| Medication | Status | Route | Sig | Date |\n| --- | --- | --- | --- | --- |\n| No information about medications | Unknown | | | |",
+        "type": "info"
+      }
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_id": "au_ps_v100-suite_generate_au_ps_using_ips_summary_validation_tests-suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_mandatory_sections-suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_mandatory_sections_sections_shall_populated",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:27.386+00:00"
+  },
+  {
+    "id": "6ea34966-3a16-4641-8333-3acd2db011b1",
+    "created_at": "2026-08-13T14:58:27.381+00:00",
+    "inputs": [
+
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_group_id": "au_ps_v100-suite_generate_au_ps_using_ips_summary_validation_tests-suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_must_support_conformance",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:27.381+00:00"
+  },
+  {
+    "id": "06417d3a-1b18-4d50-8ffa-da8c56c4d644",
+    "created_at": "2026-08-13T14:58:27.358+00:00",
+    "inputs": [
+
+    ],
+    "messages": [
+      {
+        "message": "## List of populated elements\n\n✅ Populated: **author** (M)\n\n✅ Populated: **date** (M)\n\n✅ Populated: **status** (M)\n\n✅ Populated: **subject** (M)\n\n✅ Populated: **title** (M)\n\n✅ Populated: **type** (M)",
+        "type": "info"
+      }
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_id": "au_ps_v100-suite_generate_au_ps_using_ips_summary_validation_tests-suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_must_support_conformance-suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_must_support_conformance_composition_mandatory_ms_populated",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:27.358+00:00"
+  },
+  {
+    "id": "65682f5c-45fd-4b3a-9a9f-05f5622cf2d2",
+    "created_at": "2026-08-13T14:58:27.378+00:00",
+    "inputs": [
+
+    ],
+    "messages": [
+      {
+        "message": "Must Support sub-elements correctly populated\n\nComposition\n\n**Complex element attester** is not populated. Must Support sub-elements that would be validated: attester.mode, attester.party, attester.time.",
+        "type": "warning"
+      },
+      {
+        "message": "## List of populated elements\n\n✅ Populated: **subject.reference** (M)",
+        "type": "info"
+      }
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_id": "au_ps_v100-suite_generate_au_ps_using_ips_summary_validation_tests-suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_must_support_conformance-suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_must_support_conformance_composition_ms_subelements_populated",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:27.378+00:00"
+  },
+  {
+    "id": "96435753-382d-47fb-ba8b-cf3ef66c3bfa",
+    "created_at": "2026-08-13T14:58:27.369+00:00",
+    "inputs": [
+
+    ],
+    "messages": [
+      {
+        "message": "## List of populated elements\n\n⚠️ Missing: **attester**\n\n⚠️ Missing: **custodian**\n\n⚠️ Missing: **identifier**\n\n✅ Populated: **text**\n\n⚠️ Missing: **event**",
+        "type": "warning"
+      }
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_id": "au_ps_v100-suite_generate_au_ps_using_ips_summary_validation_tests-suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_must_support_conformance-suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_must_support_conformance_composition_optional_ms_populated",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:27.369+00:00"
+  },
+  {
+    "id": "69d95429-b252-4210-96d0-b1d582115206",
+    "created_at": "2026-08-13T14:58:27.381+00:00",
+    "inputs": [
+
+    ],
+    "messages": [
+      {
+        "message": "event:careProvisioningEvent slice is not present",
+        "type": "warning"
+      }
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_id": "au_ps_v100-suite_generate_au_ps_using_ips_summary_validation_tests-suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_must_support_conformance-suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_must_support_conformance_composition_optional_ms_slices",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:27.381+00:00"
+  },
+  {
+    "id": "9fc82b9f-236d-49f5-9ea6-a81d4cd04a25",
+    "created_at": "2026-08-13T14:58:27.467+00:00",
+    "inputs": [
+
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_group_id": "au_ps_v100-suite_generate_au_ps_using_ips_summary_validation_tests-suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_optional_sections",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:27.467+00:00"
+  },
+  {
+    "id": "7714fee8-d489-4fbc-b4b1-13880a151664",
+    "created_at": "2026-08-13T14:58:27.463+00:00",
+    "inputs": [
+
+    ],
+    "messages": [
+      {
+        "message": "Patient Summary Advance Directives Section (42348-3)\n\nNo composition section found for code: 42348-3",
+        "type": "warning"
+      },
+      {
+        "message": "Patient Summary Alerts Section (104605-1)\n\nNo composition section found for code: 104605-1",
+        "type": "warning"
+      },
+      {
+        "message": "Patient Summary Functional Status Section (47420-5)\n\nNo entries; no emptyReason.",
+        "type": "info"
+      },
+      {
+        "message": "Patient Summary History of Past Illness Section (11348-0)\n\nNo entries; no emptyReason.",
+        "type": "info"
+      },
+      {
+        "message": "Patient Summary History of Pregnancy Section (10162-6)\n\nNo entries; no emptyReason.",
+        "type": "info"
+      },
+      {
+        "message": "Patient Summary Patient Story Section (81338-6)\n\nNo composition section found for code: 81338-6",
+        "type": "warning"
+      },
+      {
+        "message": "Patient Summary Plan of Care Section (18776-5)\n\nNo entries; no emptyReason.",
+        "type": "info"
+      },
+      {
+        "message": "Patient Summary Social History Section (29762-2)\n\nNo entries; no emptyReason.",
+        "type": "info"
+      },
+      {
+        "message": "Patient Summary Vital Signs Section (8716-3)\n\nNo entries; no emptyReason.",
+        "type": "info"
+      },
+      {
+        "message": "No resources found\n\n**Profile**: Condition — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-condition",
+        "type": "warning"
+      },
+      {
+        "message": "No resources found\n\n**Profile**: Observation — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-smokingstatus",
+        "type": "warning"
+      }
+    ],
+    "optional": true,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_id": "au_ps_v100-suite_generate_au_ps_using_ips_summary_validation_tests-suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_optional_sections-suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_optional_sections_optional_sections_entry_profiles",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:27.463+00:00"
+  },
+  {
+    "id": "54cb5ea9-d021-43e8-b0e3-5d3f43b744e6",
+    "created_at": "2026-08-13T14:58:27.439+00:00",
+    "inputs": [
+
+    ],
+    "messages": [
+      {
+        "message": "Patient Summary Advance Directives Section (42348-3) is missing",
+        "type": "warning"
+      },
+      {
+        "message": "Patient Summary Alerts Section (104605-1) is missing",
+        "type": "warning"
+      },
+      {
+        "message": "Section correctly populated\n\n### Functional Status (47420-5)\n\nList of Must Support elements populated or missing:\n\n**title**: ✅ Populated\n\n**code**: ✅ Populated\n\n**text**: ✅ Populated\n\nNarrative status: `generated`\n\n<caption>Functional Status</caption>\n| Assessment | Status | Finding | Comments | Date |\n| --- | --- | --- | --- | --- |",
+        "type": "info"
+      },
+      {
+        "message": "Section correctly populated\n\n### History of Past Illness (11348-0)\n\nList of Must Support elements populated or missing:\n\n**title**: ✅ Populated\n\n**code**: ✅ Populated\n\n**text**: ✅ Populated\n\nNo narrative (`text`) present for this section.",
+        "type": "info"
+      },
+      {
+        "message": "Section correctly populated\n\n### Pregnancy Information (10162-6)\n\nList of Must Support elements populated or missing:\n\n**title**: ✅ Populated\n\n**code**: ✅ Populated\n\n**text**: ✅ Populated\n\nNarrative status: `generated`\n\n<caption>Pregnancy</caption>\n| Code | Result | Comments | Date |\n| --- | --- | --- | --- |",
+        "type": "info"
+      },
+      {
+        "message": "Patient Summary Patient Story Section (81338-6) is missing",
+        "type": "warning"
+      },
+      {
+        "message": "Section correctly populated\n\n### Plan of Care (18776-5)\n\nList of Must Support elements populated or missing:\n\n**title**: ✅ Populated\n\n**code**: ✅ Populated\n\n**text**: ✅ Populated\n\nNarrative status: `generated`\n\n<caption>Plan of Care</caption>\n| Activity | Intent | Comments | Planned Start | Planned End |\n| --- | --- | --- | --- | --- |",
+        "type": "info"
+      },
+      {
+        "message": "Section correctly populated\n\n### Social History (29762-2)\n\nList of Must Support elements populated or missing:\n\n**title**: ✅ Populated\n\n**code**: ✅ Populated\n\n**text**: ✅ Populated\n\nNarrative status: `generated`\n\n<caption>Social History</caption>\n| Code | Result | Unit | Comments | Date |\n| --- | --- | --- | --- | --- |",
+        "type": "info"
+      },
+      {
+        "message": "Section correctly populated\n\n### Vital Signs (8716-3)\n\nList of Must Support elements populated or missing:\n\n**title**: ✅ Populated\n\n**code**: ✅ Populated\n\n**text**: ✅ Populated\n\nNarrative status: `generated`\n\n<caption>Vital Signs</caption>\n| Code | Result | Unit | Interpretation | Comments | Date |\n| --- | --- | --- | --- | --- | --- |",
+        "type": "info"
+      }
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_id": "au_ps_v100-suite_generate_au_ps_using_ips_summary_validation_tests-suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_optional_sections-suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_optional_sections_sections_may_populated",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:27.439+00:00"
+  },
+  {
+    "id": "dec6d399-9f47-4018-b755-9553074aeb9d",
+    "created_at": "2026-08-13T14:58:27.432+00:00",
+    "inputs": [
+
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_group_id": "au_ps_v100-suite_generate_au_ps_using_ips_summary_validation_tests-suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_recommended_sections",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:27.432+00:00"
+  },
+  {
+    "id": "cc0ec545-5eb3-4e01-be01-86fec31d9af8",
+    "created_at": "2026-08-13T14:58:27.429+00:00",
+    "inputs": [
+
+    ],
+    "messages": [
+      {
+        "message": "Patient Summary Immunizations Section (11369-6)\n\nNo entries; no emptyReason.",
+        "type": "info"
+      },
+      {
+        "message": "Patient Summary Results Section (30954-2)\n\nNo entries; no emptyReason.",
+        "type": "info"
+      },
+      {
+        "message": "Patient Summary History of Procedures Section (47519-4)\n\nNo entries; no emptyReason.",
+        "type": "info"
+      },
+      {
+        "message": "Patient Summary Medical Devices Section (46264-8)\n\nNo composition section found for code: 46264-8",
+        "type": "warning"
+      },
+      {
+        "message": "No resources found\n\n**Profile**: Immunization — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-immunization",
+        "type": "warning"
+      },
+      {
+        "message": "No resources found\n\n**Profile**: Observation — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-diagnosticresult-path",
+        "type": "warning"
+      },
+      {
+        "message": "No resources found\n\n**Profile**: Procedure — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-procedure",
+        "type": "warning"
+      }
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_id": "au_ps_v100-suite_generate_au_ps_using_ips_summary_validation_tests-suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_recommended_sections-suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_recommended_sections_recommended_sections_entry_profiles",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:27.429+00:00"
+  },
+  {
+    "id": "6a371f30-3983-46d8-a595-0d1a8f1ddf84",
+    "created_at": "2026-08-13T14:58:27.415+00:00",
+    "inputs": [
+
+    ],
+    "messages": [
+      {
+        "message": "Section correctly populated\n\n### History of Immunizations (11369-6)\n\nList of Must Support elements populated or missing:\n\n**title**: ✅ Populated\n\n**code**: ✅ Populated\n\n**text**: ✅ Populated\n\nNarrative status: `generated`\n\n<caption>Immunizations</caption>\n| Immunization | Status | Dose Number | Manufacturer | Lot Number | Comments | Date |\n| --- | --- | --- | --- | --- | --- | --- |",
+        "type": "info"
+      },
+      {
+        "message": "Section correctly populated\n\n### Diagnostic Results (30954-2)\n\nList of Must Support elements populated or missing:\n\n**title**: ✅ Populated\n\n**code**: ✅ Populated\n\n**text**: ✅ Populated\n\nNarrative status: `generated`\n\n<caption>Diagnostic Results: Observations</caption>\n| Code | Result | Unit | Interpretation | Reference Range | Comments | Date |\n| --- | --- | --- | --- | --- | --- | --- |\n\n<caption>Diagnostic Results: Diagnostic Reports</caption>\n| Code | Date |\n| --- | --- |",
+        "type": "info"
+      },
+      {
+        "message": "Section correctly populated\n\n### History of Procedures (47519-4)\n\nList of Must Support elements populated or missing:\n\n**title**: ✅ Populated\n\n**code**: ✅ Populated\n\n**text**: ✅ Populated\n\nNarrative status: `generated`\n\n<caption>History Of Procedures</caption>\n| Procedure | Comments | Date |\n| --- | --- | --- |",
+        "type": "info"
+      },
+      {
+        "message": "Patient Summary Medical Devices Section (46264-8) is missing",
+        "type": "warning"
+      }
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_id": "au_ps_v100-suite_generate_au_ps_using_ips_summary_validation_tests-suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_recommended_sections-suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_recommended_sections_sections_should_populated",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:27.415+00:00"
+  },
+  {
+    "id": "5bd02222-0aa1-475e-99db-e02815ea3e04",
+    "created_at": "2026-08-13T14:58:27.530+00:00",
+    "inputs": [
+
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_group_id": "au_ps_v100-suite_generate_au_ps_using_ips_summary_validation_tests-suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_subject",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:27.530+00:00"
+  },
+  {
+    "id": "edb873ee-465a-41a8-9b7a-c8a6e241ce22",
+    "created_at": "2026-08-13T14:58:27.500+00:00",
+    "inputs": [
+
+    ],
+    "messages": [
+      {
+        "message": "At least one optional Must Support element is not populated. Further testing with data containing the missing elements or clarification the system does not ever know a value for the element is required.\n\n**Profile**: Patient — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-patient\n\nList of Must Support elements populated or missing\n\n✅ Populated: identifier (M)\n\n✅ Populated: name (M)\n\n✅ Populated: telecom\n\n✅ Populated: gender (M)\n\n✅ Populated: birthDate (M)\n\n✅ Populated: address\n\n⚠️ Missing: communication\n\n⚠️ Missing: generalPractitioner\n\n⚠️ Missing: indigenousStatus\n\n⚠️ Missing: genderIdentity\n\n⚠️ Missing: individualPronouns",
+        "type": "warning"
+      }
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_id": "au_ps_v100-suite_generate_au_ps_using_ips_summary_validation_tests-suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_subject-suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_subject_subject_ms_elements",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:27.500+00:00"
+  },
+  {
+    "id": "a2adc7dc-7413-4377-8ea3-6751e84d3f46",
+    "created_at": "2026-08-13T14:58:27.528+00:00",
+    "inputs": [
+
+    ],
+    "messages": [
+      {
+        "message": "Must support identifier slices correctly populated\n\n## List of Must Support identifier slices populated or missing\n\n⚠️ Missing: **IHI**\n\n⚠️ Missing: **DVA**\n\n⚠️ Missing: **MEDICARE**",
+        "type": "warning"
+      },
+      {
+        "message": "At least one Must Support identifier slices is populated\n\n## List of Must Support identifier slices populated or missing (system when populated)\n\n⚠️ Missing: **IHI**\n\n⚠️ Missing: **DVA**\n\n⚠️ Missing: **MEDICARE**",
+        "type": "warning"
+      }
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_id": "au_ps_v100-suite_generate_au_ps_using_ips_summary_validation_tests-suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_subject-suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_subject_subject_ms_identifier_slices",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:27.528+00:00"
+  },
+  {
+    "id": "4f3ef287-d985-429c-8e98-48a78a3e8781",
+    "created_at": "2026-08-13T14:58:27.516+00:00",
+    "inputs": [
+
+    ],
+    "messages": [
+      {
+        "message": "Must Support sub-elements correctly populated\n\n**Referenced subject**: Patient\n\n## Complex element **name** — Must Support sub-elements populated or missing\n\n✅ Populated: name.use\n\n⚠️ Missing: name.text\n\n✅ Populated: name.family\n\n✅ Populated: name.given",
+        "type": "warning"
+      },
+      {
+        "message": "Must Support sub-elements correctly populated\n\n**Referenced subject**: Patient\n\n## Complex element **telecom** — Must Support sub-elements populated or missing\n\n✅ Populated: telecom.system\n\n✅ Populated: telecom.value\n\n✅ Populated: telecom.use",
+        "type": "info"
+      },
+      {
+        "message": "Must Support sub-elements correctly populated\n\n**Referenced subject**: Patient\n\n## Complex element **communication** — Must Support sub-elements populated or missing\n\n**Complex element communication** is not populated. Must Support sub-elements that would be validated: communication.language, communication.preferred.",
+        "type": "warning"
+      }
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_id": "au_ps_v100-suite_generate_au_ps_using_ips_summary_validation_tests-suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_subject-suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_subject_subject_ms_subelements_populated",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:27.516+00:00"
+  },
+  {
+    "id": "31743594-5b51-4905-8de1-d6c3a6fc0a58",
+    "created_at": "2026-08-13T14:58:27.487+00:00",
+    "inputs": [
+
+    ],
+    "messages": [
+      {
+        "message": "Subject reference resolves to a resource with valid resource type: Patient",
+        "type": "info"
+      }
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_id": "au_ps_v100-suite_generate_au_ps_using_ips_summary_validation_tests-suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_subject-suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_subject_subject_resource_type_is_valid",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:27.487+00:00"
+  },
+  {
+    "id": "d3ec7af5-1be1-426b-8021-487ced1953e6",
+    "created_at": "2026-08-13T14:58:27.475+00:00",
+    "inputs": [
+
+    ],
+    "optional": true,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_group_id": "au_ps_v100-suite_generate_au_ps_using_ips_summary_validation_tests-suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_undefined_sections",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:27.475+00:00"
+  },
+  {
+    "id": "dc0e26db-5938-4b51-891d-62168aa3e015",
+    "created_at": "2026-08-13T14:58:27.474+00:00",
+    "inputs": [
+
+    ],
+    "messages": [
+      {
+        "message": "Section correctly populated\n\n### Medical Devices (46240-8)\n\nList of Must Support elements populated or missing:\n\n**title**: ✅ Populated\n\n**code**: ✅ Populated\n\n**text**: ✅ Populated\n\nNarrative status: `generated`\n\n<caption>Medical Devices</caption>\n| Device | Status | Comments | Date Recorded |\n| --- | --- | --- | --- |",
+        "type": "info"
+      },
+      {
+        "message": "Section correctly populated\n\n### Advance Directives (42349-0)\n\nList of Must Support elements populated or missing:\n\n**title**: ✅ Populated\n\n**code**: ✅ Populated\n\n**text**: ✅ Populated\n\nNarrative status: `generated`\n\n<caption>Advance Directives</caption>\n| Scope | Status | Action Controlled | Date |\n| --- | --- | --- | --- |",
+        "type": "info"
+      }
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_id": "au_ps_v100-suite_generate_au_ps_using_ips_summary_validation_tests-suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_undefined_sections-suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_undefined_sections_sections_may_undefined",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:27.474+00:00"
+  },
+  {
+    "id": "e51fddde-96dc-4358-8a16-bfa66cec9692",
+    "created_at": "2026-08-13T14:58:26.411+00:00",
+    "inputs": [
+      {
+        "name": "url",
+        "label": "FHIR Server Base Url",
+        "description": null,
+        "value": "https://hl7-ips-server.hl7.org/fhir",
+        "type": "text"
+      },
+      {
+        "name": "patient_id",
+        "label": null,
+        "description": "To request Patient/{patient_id}/$summary",
+        "value": "example-r4",
+        "type": "text"
+      },
+      {
+        "name": "identifier",
+        "label": null,
+        "description": "To request Patient/$summary?identifier={identifier}",
+        "value": null,
+        "type": "text"
+      },
+      {
+        "name": "profile",
+        "label": null,
+        "description": "To specify profile for the patient summary",
+        "value": "http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-bundle",
+        "type": "text"
+      },
+      {
+        "name": "credentials",
+        "label": "OAuth Credentials",
+        "description": null,
+        "value": "{\"name\":\"credentials\"}",
+        "type": "oauth_credentials"
+      },
+      {
+        "name": "header_name",
+        "label": "Header name",
+        "description": null,
+        "value": null,
+        "type": "text"
+      },
+      {
+        "name": "header_value",
+        "label": "Header value",
+        "description": null,
+        "value": null,
+        "type": "text"
+      }
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_group_id": "au_ps_v100-suite_generate_au_ps_using_ips_summary_validation_tests-suite_generate_au_ps_using_ips_summary_validation_tests_bundle_acquisition",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:26.411+00:00"
+  },
+  {
+    "id": "d9c3f450-bfa5-450e-af62-68c023f4d38a",
+    "created_at": "2026-08-13T14:58:26.397+00:00",
+    "inputs": [
+      {
+        "name": "url",
+        "value": "https://hl7-ips-server.hl7.org/fhir",
+        "type": "text"
+      },
+      {
+        "name": "credentials",
+        "value": "{\"name\":\"credentials\"}",
+        "type": "oauth_credentials"
+      },
+      {
+        "name": "header_name",
+        "value": null,
+        "type": "text"
+      },
+      {
+        "name": "header_value",
+        "value": null,
+        "type": "text"
+      },
+      {
+        "name": "patient_id",
+        "value": "example-r4",
+        "type": "text"
+      },
+      {
+        "name": "identifier",
+        "value": null,
+        "type": "text"
+      },
+      {
+        "name": "profile",
+        "value": "http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-bundle",
+        "type": "text"
+      }
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+      {
+        "id": "7fafe035-b32e-4c3b-9311-0f6ab4fe4202",
+        "direction": "outgoing",
+        "index": 5,
+        "result_id": "d9c3f450-bfa5-450e-af62-68c023f4d38a",
+        "status": 200,
+        "timestamp": "2026-08-13T14:58:26.401+00:00",
+        "url": "https://hl7-ips-server.hl7.org/fhir/Patient/example-r4/$summary?profile=http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-bundle",
+        "verb": "get"
+      }
+    ],
+    "result": "pass",
+    "test_id": "au_ps_v100-suite_generate_au_ps_using_ips_summary_validation_tests-suite_generate_au_ps_using_ips_summary_validation_tests_bundle_acquisition-suite_generate_au_ps_using_ips_summary_validation_tests_bundle_generate",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:26.397+00:00"
+  },
+  {
+    "id": "d2a2213f-6c16-48e9-9870-b2134b1bc716",
+    "created_at": "2026-08-13T14:58:27.348+00:00",
+    "inputs": [
+      {
+        "name": "validate_against",
+        "label": "Validate Against",
+        "description": null,
+        "value": [
+          "au_ps_bundle"
+        ],
+        "type": "checkbox"
+      }
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "fail",
+    "test_group_id": "au_ps_v100-suite_generate_au_ps_using_ips_summary_validation_tests-suite_generate_au_ps_using_ips_summary_validation_tests_bundle_validation",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:27.348+00:00"
+  },
+  {
+    "id": "2fd925f9-8a46-43f7-8e48-259d6848e471",
+    "created_at": "2026-08-13T14:58:27.342+00:00",
+    "inputs": [
+      {
+        "name": "validate_against",
+        "value": [
+          "au_ps_bundle"
+        ],
+        "type": "checkbox"
+      }
+    ],
+    "messages": [
+      {
+        "message": "Using validator version 2512.2 and validator wrapper version 0.0.1",
+        "type": "info"
+      },
+      {
+        "message": "Bundle: Bundle: Bundle.entry[0].resource.section[10].text.div: The property 'div' is required",
+        "type": "error"
+      },
+      {
+        "message": "Bundle: Bundle: Bundle.entry[2].resource.extension[0].valueUri: Unrecognized property 'valueUri'",
+        "type": "error"
+      },
+      {
+        "message": "Bundle: Bundle: Bundle.entry[3].resource.extension[0].valueUri: Unrecognized property 'valueUri'",
+        "type": "error"
+      },
+      {
+        "message": "Bundle: Bundle: Bundle.entry[4].resource.extension[0].valueUri: Unrecognized property 'valueUri'",
+        "type": "error"
+      },
+      {
+        "message": "Bundle: Bundle: Bundle.meta.profile: The property's value cannot be empty",
+        "type": "error"
+      }
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "fail",
+    "result_message": "Resource does not conform to the profile http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-bundle|1.0.0",
+    "test_id": "au_ps_v100-suite_generate_au_ps_using_ips_summary_validation_tests-suite_generate_au_ps_using_ips_summary_validation_tests_bundle_validation-suite_generate_au_ps_using_ips_summary_validation_tests_bundle_validation_bundle_valid",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:27.342+00:00"
+  },
+  {
+    "id": "c6573104-0611-47df-b15a-35f7da9ca869",
+    "created_at": "2026-08-13T14:58:27.347+00:00",
+    "inputs": [
+      {
+        "name": "validate_against",
+        "value": [
+          "au_ps_bundle"
+        ],
+        "type": "checkbox"
+      }
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "omit",
+    "result_message": "Validation against the IPS Bundle profile is disabled because \"IPS Bundle Validation\" is not selected in the \"Validate Against\" input.",
+    "test_id": "au_ps_v100-suite_generate_au_ps_using_ips_summary_validation_tests-suite_generate_au_ps_using_ips_summary_validation_tests_bundle_validation-suite_generate_au_ps_using_ips_summary_validation_tests_bundle_validation_bundle_valid_ips",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:27.347+00:00"
+  },
+  {
+    "id": "64fa039c-2a94-45bd-ab9f-3b90e27bfd82",
+    "created_at": "2026-08-13T14:58:25.549+00:00",
+    "inputs": [
+      {
+        "name": "bundle_url",
+        "label": null,
+        "description": "To retrieve document Bundle using HTTP GET request",
+        "value": "https://build.fhir.org/ig/hl7au/au-fhir-ps/Bundle-aups-basicsummary.json",
+        "type": "text"
+      },
+      {
+        "name": "url",
+        "label": "FHIR Server Base Url",
+        "description": null,
+        "value": "https://hl7-ips-server.hl7.org/fhir",
+        "type": "text"
+      },
+      {
+        "name": "bundle_id",
+        "label": null,
+        "description": "To request Bundle/{bundle_id}",
+        "value": null,
+        "type": "text"
+      },
+      {
+        "name": "credentials",
+        "label": "OAuth Credentials",
+        "description": null,
+        "value": "{\"name\":\"credentials\"}",
+        "type": "oauth_credentials"
+      },
+      {
+        "name": "header_name",
+        "label": "Header name",
+        "description": null,
+        "value": null,
+        "type": "text"
+      },
+      {
+        "name": "header_value",
+        "label": "Header value",
+        "description": null,
+        "value": null,
+        "type": "text"
+      },
+      {
+        "name": "validate_against",
+        "label": "Validate Against",
+        "description": null,
+        "value": [
+          "au_ps_bundle"
+        ],
+        "type": "checkbox"
+      }
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "fail",
+    "test_group_id": "au_ps_v100-suite_retrieve_au_ps_bundle_validation_tests",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:25.549+00:00"
+  },
+  {
+    "id": "d583e283-39b8-430f-b45b-8c8924d333ea",
+    "created_at": "2026-08-13T14:58:25.273+00:00",
+    "inputs": [
+
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_group_id": "au_ps_v100-suite_retrieve_au_ps_bundle_validation_tests-suite_retrieve_au_ps_bundle_validation_tests_au_ps_bundle_must_support_conformance",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:25.273+00:00"
+  },
+  {
+    "id": "abcb181c-9258-4fc3-b690-8707c185b5ae",
+    "created_at": "2026-08-13T14:58:25.272+00:00",
+    "inputs": [
+
+    ],
+    "messages": [
+      {
+        "message": "**List mandatory Must Support elements populated and missing**:\n\n**identifier**: ✅ Populated\n\n**type**: ✅ Populated\n\n**timestamp**: ✅ Populated\n\n**All entry exists fullUrl**: ✅ Populated",
+        "type": "info"
+      },
+      {
+        "message": "**List any entry resources by type (and meta.profile if exists)**:\n\nComposition x1\n\nPatient x1\n\nOrganization x1\n\nPractitionerRole x1\n\nPractitioner x1\n\nAllergyIntolerance x3\n\nMedicationStatement x1\n\nCondition x1",
+        "type": "info"
+      }
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_id": "au_ps_v100-suite_retrieve_au_ps_bundle_validation_tests-suite_retrieve_au_ps_bundle_validation_tests_au_ps_bundle_must_support_conformance-suite_retrieve_au_ps_bundle_validation_tests_au_ps_bundle_must_support_conformance_bundle_must_support_populated",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:25.272+00:00"
+  },
+  {
+    "id": "0d2a557a-4940-4e14-8cd0-e0251fc3a0af",
+    "created_at": "2026-08-13T14:58:25.546+00:00",
+    "inputs": [
+
+    ],
+    "optional": true,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "skip",
+    "test_group_id": "au_ps_v100-suite_retrieve_au_ps_bundle_validation_tests-suite_retrieve_au_ps_bundle_validation_tests_au_ps_composition_attester",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:25.546+00:00"
+  },
+  {
+    "id": "a410d47d-b065-42ac-868c-31f2d7f19d4f",
+    "created_at": "2026-08-13T14:58:25.540+00:00",
+    "inputs": [
+
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "skip",
+    "result_message": "Attester reference does not resolve",
+    "test_id": "au_ps_v100-suite_retrieve_au_ps_bundle_validation_tests-suite_retrieve_au_ps_bundle_validation_tests_au_ps_composition_attester-suite_retrieve_au_ps_bundle_validation_tests_au_ps_composition_attester_attester_party_ms_elements",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:25.540+00:00"
+  },
+  {
+    "id": "58911e2f-553e-4c23-bdb0-02e8a3268b89",
+    "created_at": "2026-08-13T14:58:25.545+00:00",
+    "inputs": [
+
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "skip",
+    "result_message": "Attester or attester.party is not populated",
+    "test_id": "au_ps_v100-suite_retrieve_au_ps_bundle_validation_tests-suite_retrieve_au_ps_bundle_validation_tests_au_ps_composition_attester-suite_retrieve_au_ps_bundle_validation_tests_au_ps_composition_attester_attester_party_ms_identifier_slices",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:25.545+00:00"
+  },
+  {
+    "id": "1960ac85-92e4-4a23-93f0-63b0d1e5a281",
+    "created_at": "2026-08-13T14:58:25.542+00:00",
+    "inputs": [
+
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "skip",
+    "result_message": "Attester reference does not resolve",
+    "test_id": "au_ps_v100-suite_retrieve_au_ps_bundle_validation_tests-suite_retrieve_au_ps_bundle_validation_tests_au_ps_composition_attester-suite_retrieve_au_ps_bundle_validation_tests_au_ps_composition_attester_attester_party_ms_subelements",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:25.542+00:00"
+  },
+  {
+    "id": "50749c79-faad-410c-90f4-1715e2dab1fc",
+    "created_at": "2026-08-13T14:58:25.496+00:00",
+    "inputs": [
+
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_group_id": "au_ps_v100-suite_retrieve_au_ps_bundle_validation_tests-suite_retrieve_au_ps_bundle_validation_tests_au_ps_composition_author",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:25.496+00:00"
+  },
+  {
+    "id": "671f5360-592c-4648-8725-4e4bd8a489e7",
+    "created_at": "2026-08-13T14:58:25.466+00:00",
+    "inputs": [
+
+    ],
+    "messages": [
+      {
+        "message": "At least one optional Must Support element is not populated. Further testing with data containing the missing elements or clarification the system does not ever know a value for the element is required.\n\n**Profile**: PractitionerRole — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-practitionerrole\n\nList of Must Support elements populated or missing\n\n✅ Populated: identifier\n\n✅ Populated: practitioner (M)\n\n✅ Populated: organization\n\n✅ Populated: code\n\n⚠️ Missing: specialty\n\n✅ Populated: telecom",
+        "type": "warning"
+      }
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_id": "au_ps_v100-suite_retrieve_au_ps_bundle_validation_tests-suite_retrieve_au_ps_bundle_validation_tests_au_ps_composition_author-suite_retrieve_au_ps_bundle_validation_tests_au_ps_composition_author_author_ms_elements",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:25.466+00:00"
+  },
+  {
+    "id": "e88b78e1-a27c-445c-98e2-f0d62d3f9c9a",
+    "created_at": "2026-08-13T14:58:25.494+00:00",
+    "inputs": [
+
+    ],
+    "messages": [
+      {
+        "message": "Must support identifier slices correctly populated\n\n## List of Must Support identifier slices populated or missing\n\n⚠️ Missing: **MEDICARE PROVIDER**",
+        "type": "warning"
+      },
+      {
+        "message": "At least one Must Support identifier slices is populated\n\n## List of Must Support identifier slices populated or missing (system when populated)\n\n⚠️ Missing: **MEDICARE PROVIDER**",
+        "type": "warning"
+      }
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_id": "au_ps_v100-suite_retrieve_au_ps_bundle_validation_tests-suite_retrieve_au_ps_bundle_validation_tests_au_ps_composition_author-suite_retrieve_au_ps_bundle_validation_tests_au_ps_composition_author_author_ms_identifier_slices",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:25.494+00:00"
+  },
+  {
+    "id": "7f9afd7b-de4b-42ec-a5ff-916e4edf8d65",
+    "created_at": "2026-08-13T14:58:25.478+00:00",
+    "inputs": [
+
+    ],
+    "messages": [
+      {
+        "message": "Must Support sub-elements correctly populated\n\n**Referenced subject**: PractitionerRole\n\n## Complex element **telecom** — Must Support sub-elements populated or missing\n\n✅ Populated: telecom.system\n\n✅ Populated: telecom.value",
+        "type": "info"
+      }
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_id": "au_ps_v100-suite_retrieve_au_ps_bundle_validation_tests-suite_retrieve_au_ps_bundle_validation_tests_au_ps_composition_author-suite_retrieve_au_ps_bundle_validation_tests_au_ps_composition_author_author_ms_subelements",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:25.478+00:00"
+  },
+  {
+    "id": "5bb8c7e5-cfa0-4740-b23f-010a7f1a6387",
+    "created_at": "2026-08-13T14:58:25.452+00:00",
+    "inputs": [
+
+    ],
+    "messages": [
+      {
+        "message": "Author reference resolves to a resource with valid resource type: PractitionerRole",
+        "type": "info"
+      }
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_id": "au_ps_v100-suite_retrieve_au_ps_bundle_validation_tests-suite_retrieve_au_ps_bundle_validation_tests_au_ps_composition_author-suite_retrieve_au_ps_bundle_validation_tests_au_ps_composition_author_author_resource_type_is_valid",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:25.452+00:00"
+  },
+  {
+    "id": "5a787b77-ace1-4eb1-87e2-bef1e75e3185",
+    "created_at": "2026-08-13T14:58:25.534+00:00",
+    "inputs": [
+
+    ],
+    "optional": true,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_group_id": "au_ps_v100-suite_retrieve_au_ps_bundle_validation_tests-suite_retrieve_au_ps_bundle_validation_tests_au_ps_composition_custodian",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:25.534+00:00"
+  },
+  {
+    "id": "daf6fff3-bcd8-4f98-8199-caafcf69c252",
+    "created_at": "2026-08-13T14:58:25.515+00:00",
+    "inputs": [
+
+    ],
+    "messages": [
+      {
+        "message": "All Must Support elements are populated.\n\n**Profile**: Organization — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-organization\n\nList of Must Support elements populated or missing\n\n✅ Populated: identifier\n\n✅ Populated: type\n\n✅ Populated: name (M)\n\n✅ Populated: telecom\n\n✅ Populated: address",
+        "type": "info"
+      }
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_id": "au_ps_v100-suite_retrieve_au_ps_bundle_validation_tests-suite_retrieve_au_ps_bundle_validation_tests_au_ps_composition_custodian-suite_retrieve_au_ps_bundle_validation_tests_au_ps_composition_custodian_custodian_ms_elements",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:25.515+00:00"
+  },
+  {
+    "id": "d2feed0e-0017-434f-abd5-890376a3611f",
+    "created_at": "2026-08-13T14:58:25.533+00:00",
+    "inputs": [
+
+    ],
+    "messages": [
+      {
+        "message": "Must support identifier slices correctly populated\n\n**Referenced custodian**: Organization\n\n## List of Must Support identifier slices populated or missing (type and system when populated)\n\n✅ Populated: **ABN** — system: http://hl7.org.au/id/abn, type: ABN\n\n⚠️ Missing: **HPIO**",
+        "type": "warning"
+      }
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_id": "au_ps_v100-suite_retrieve_au_ps_bundle_validation_tests-suite_retrieve_au_ps_bundle_validation_tests_au_ps_composition_custodian-suite_retrieve_au_ps_bundle_validation_tests_au_ps_composition_custodian_custodian_ms_identifier_slices",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:25.533+00:00"
+  },
+  {
+    "id": "0224f4ef-c39c-4a7a-8bdd-976ab8e75bb4",
+    "created_at": "2026-08-13T14:58:25.530+00:00",
+    "inputs": [
+
+    ],
+    "messages": [
+      {
+        "message": "Must Support sub-elements correctly populated\n\n**Referenced subject**: Organization\n\n## Complex element **telecom** — Must Support sub-elements populated or missing\n\n✅ Populated: telecom.system\n\n✅ Populated: telecom.value",
+        "type": "info"
+      }
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_id": "au_ps_v100-suite_retrieve_au_ps_bundle_validation_tests-suite_retrieve_au_ps_bundle_validation_tests_au_ps_composition_custodian-suite_retrieve_au_ps_bundle_validation_tests_au_ps_composition_custodian_custodian_ms_subelements",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:25.530+00:00"
+  },
+  {
+    "id": "63d62ca1-e721-417e-9316-c870e2252b86",
+    "created_at": "2026-08-13T14:58:25.321+00:00",
+    "inputs": [
+
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_group_id": "au_ps_v100-suite_retrieve_au_ps_bundle_validation_tests-suite_retrieve_au_ps_bundle_validation_tests_au_ps_composition_mandatory_sections",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:25.321+00:00"
+  },
+  {
+    "id": "45484f67-a01f-4c84-875c-2bbd253efcb6",
+    "created_at": "2026-08-13T14:58:25.314+00:00",
+    "inputs": [
+
+    ],
+    "messages": [
+      {
+        "message": "Patient Summary Problems Section (11450-4)\n\nentry[0]: **urn:uuid:310f1593-d610-4144-a6e8-1f823d955e0d** -> Condition (no meta.profile)",
+        "type": "info"
+      },
+      {
+        "message": "Patient Summary Allergies and Intolerances Section (48765-2)\n\nentry[0]: **urn:uuid:ad6fb7b7-c76f-441e-88a5-9051e795db26** -> AllergyIntolerance (no meta.profile)\n\nentry[1]: **urn:uuid:06ba95f5-345b-412d-aa66-99e354470015** -> AllergyIntolerance (no meta.profile)\n\nentry[2]: **urn:uuid:d24db2d5-3400-4158-892c-d018acdeba09** -> AllergyIntolerance (no meta.profile)",
+        "type": "info"
+      },
+      {
+        "message": "Patient Summary Medication Summary Section (10160-0)\n\nentry[0]: **urn:uuid:347e8435-cea1-4e94-9755-abb027926bb1** -> MedicationStatement (no meta.profile)",
+        "type": "info"
+      },
+      {
+        "message": "At least one optional Must Support element is not populated in the Patient Summary Problems Section (11450-4) section. Further testing with data containing the missing elements or clarification the system does not ever know a value for the element is required.\n\n**Profile**: Condition — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-condition\n\nList of Must Support elements populated or missing\n\n✅ Populated: clinicalStatus\n\n⚠️ Missing: verificationStatus\n\n✅ Populated: category (M)\n\n⚠️ Missing: severity\n\n✅ Populated: code (M)\n\n✅ Populated: subject (M)\n\n|- ✅ Populated: subject.reference (M)\n\n⚠️ Missing: onsetDateTime\n\n⚠️ Missing: abatement[x]\n\n⚠️ Missing: note",
+        "type": "warning"
+      },
+      {
+        "message": "At least one optional Must Support element is not populated in the Patient Summary Allergies and Intolerances Section (48765-2) section. Further testing with data containing the missing elements or clarification the system does not ever know a value for the element is required.\n\n**Profile**: AllergyIntolerance — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-allergyintolerance\n\nList of Must Support elements populated or missing\n\n✅ Populated: clinicalStatus\n\n⚠️ Missing: verificationStatus\n\n⚠️ Missing: type\n\n✅ Populated: code (M)\n\n✅ Populated: patient (M)\n\n|- ✅ Populated: patient.reference (M)\n\n✅ Populated: onsetDateTime\n\n⚠️ Missing: note\n\n✅ Populated: reaction\n\n|- ✅ Populated: reaction.manifestation (M)\n\n|- ✅ Populated: reaction.severity",
+        "type": "warning"
+      },
+      {
+        "message": "At least one optional Must Support element is not populated in the Patient Summary Medication Summary Section (10160-0) section. Further testing with data containing the missing elements or clarification the system does not ever know a value for the element is required.\n\n**Profile**: MedicationStatement — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medicationstatement\n\nList of Must Support elements populated or missing\n\n✅ Populated: status (M)\n\n✅ Populated: medication[x] (M)\n\n✅ Populated: subject (M)\n\n|- ✅ Populated: subject.reference (M)\n\n✅ Populated: effectiveDateTime\n\n✅ Populated: dateAsserted\n\n⚠️ Missing: reasonCode\n\n⚠️ Missing: reasonReference\n\n✅ Populated: dosage\n\n|- ✅ Populated: dosage.text\n\n|- ⚠️ Missing: dosage.timing",
+        "type": "warning"
+      },
+      {
+        "message": "No resources found\n\n**Profile**: MedicationRequest — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medicationrequest",
+        "type": "warning"
+      }
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_id": "au_ps_v100-suite_retrieve_au_ps_bundle_validation_tests-suite_retrieve_au_ps_bundle_validation_tests_au_ps_composition_mandatory_sections-suite_retrieve_au_ps_bundle_validation_tests_au_ps_composition_mandatory_sections_mandatory_sections_entry_profiles",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:25.314+00:00"
+  },
+  {
+    "id": "43a2c527-5fab-4e4d-8177-15568ad39b90",
+    "created_at": "2026-08-13T14:58:25.320+00:00",
+    "inputs": [
+
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_id": "au_ps_v100-suite_retrieve_au_ps_bundle_validation_tests-suite_retrieve_au_ps_bundle_validation_tests_au_ps_composition_mandatory_sections-suite_retrieve_au_ps_bundle_validation_tests_au_ps_composition_mandatory_sections_nilknown_warning",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:25.320+00:00"
+  },
+  {
+    "id": "2ef62555-349c-43b4-9016-7e4e1a4e61c5",
+    "created_at": "2026-08-13T14:58:25.296+00:00",
+    "inputs": [
+
+    ],
+    "messages": [
+      {
+        "message": "Section correctly populated\n\n### Problem list - Reported (11450-4)\n\nList of Must Support elements populated or missing:\n\n**title**: ✅ Populated\n\n**code**: ✅ Populated\n\n**text**: ✅ Populated\n\nNarrative status: `generated`\n\n21/12/2024 No current problem or disability.",
+        "type": "info"
+      },
+      {
+        "message": "Section correctly populated\n\n### Allergies and adverse reactions Document (48765-2)\n\nList of Must Support elements populated or missing:\n\n**title**: ✅ Populated\n\n**code**: ✅ Populated\n\n**text**: ✅ Populated\n\nNarrative status: `generated`\n\n| Allergy, Intolerance, Substance | Onset | Recorded | Manifestation | Manifestation Severity |\n| --- | --- | --- | --- | --- |\n| Intolerance to lactose | 2022 | 14/03/2023 | Abdominal pain, Abdominal bloating, Diarrhoea | Mild |\n| Gluten intolerance | 1999 | 12/01/2023 | Fatigue | Mild |\n| Chlorhexidine | 12/01/2023 | 09/09/2023 | Hives | Mild |",
+        "type": "info"
+      },
+      {
+        "message": "Section correctly populated\n\n### History of Medication use Narrative (10160-0)\n\nList of Must Support elements populated or missing:\n\n**title**: ✅ Populated\n\n**code**: ✅ Populated\n\n**text**: ✅ Populated\n\nNarrative status: `generated`\n\n| Medicine | Directions | Date asserted |\n| --- | --- | --- |\n| **Bisoprolol** 2.5mg tab | Take 1/2 tablet in the morning | 05/01/2025 |",
+        "type": "info"
+      }
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_id": "au_ps_v100-suite_retrieve_au_ps_bundle_validation_tests-suite_retrieve_au_ps_bundle_validation_tests_au_ps_composition_mandatory_sections-suite_retrieve_au_ps_bundle_validation_tests_au_ps_composition_mandatory_sections_sections_shall_populated",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:25.296+00:00"
+  },
+  {
+    "id": "15fffb38-d9a4-4744-b86a-bd7c419ed4a8",
+    "created_at": "2026-08-13T14:58:25.290+00:00",
+    "inputs": [
+
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_group_id": "au_ps_v100-suite_retrieve_au_ps_bundle_validation_tests-suite_retrieve_au_ps_bundle_validation_tests_au_ps_composition_must_support_conformance",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:25.290+00:00"
+  },
+  {
+    "id": "6c9fc3db-fba7-4658-b91a-02c25e364ad0",
+    "created_at": "2026-08-13T14:58:25.277+00:00",
+    "inputs": [
+
+    ],
+    "messages": [
+      {
+        "message": "## List of populated elements\n\n✅ Populated: **author** (M)\n\n✅ Populated: **date** (M)\n\n✅ Populated: **status** (M)\n\n✅ Populated: **subject** (M)\n\n✅ Populated: **title** (M)\n\n✅ Populated: **type** (M)",
+        "type": "info"
+      }
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_id": "au_ps_v100-suite_retrieve_au_ps_bundle_validation_tests-suite_retrieve_au_ps_bundle_validation_tests_au_ps_composition_must_support_conformance-suite_retrieve_au_ps_bundle_validation_tests_au_ps_composition_must_support_conformance_composition_mandatory_ms_populated",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:25.277+00:00"
+  },
+  {
+    "id": "6e73f471-4860-4c09-9f7b-e4221969b145",
+    "created_at": "2026-08-13T14:58:25.285+00:00",
+    "inputs": [
+
+    ],
+    "messages": [
+      {
+        "message": "Must Support sub-elements correctly populated\n\nComposition\n\n**Complex element attester** is not populated. Must Support sub-elements that would be validated: attester.mode, attester.party, attester.time.",
+        "type": "warning"
+      },
+      {
+        "message": "## List of populated elements\n\n✅ Populated: **subject.reference** (M)",
+        "type": "info"
+      }
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_id": "au_ps_v100-suite_retrieve_au_ps_bundle_validation_tests-suite_retrieve_au_ps_bundle_validation_tests_au_ps_composition_must_support_conformance-suite_retrieve_au_ps_bundle_validation_tests_au_ps_composition_must_support_conformance_composition_ms_subelements_populated",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:25.285+00:00"
+  },
+  {
+    "id": "95dbb6ac-eb36-4d3e-95cd-b9653eae4bb3",
+    "created_at": "2026-08-13T14:58:25.281+00:00",
+    "inputs": [
+
+    ],
+    "messages": [
+      {
+        "message": "## List of populated elements\n\n⚠️ Missing: **attester**\n\n✅ Populated: **custodian**\n\n⚠️ Missing: **identifier**\n\n✅ Populated: **text**\n\n⚠️ Missing: **event**",
+        "type": "warning"
+      }
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_id": "au_ps_v100-suite_retrieve_au_ps_bundle_validation_tests-suite_retrieve_au_ps_bundle_validation_tests_au_ps_composition_must_support_conformance-suite_retrieve_au_ps_bundle_validation_tests_au_ps_composition_must_support_conformance_composition_optional_ms_populated",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:25.281+00:00"
+  },
+  {
+    "id": "27b14810-299d-4440-975e-ae0951a76502",
+    "created_at": "2026-08-13T14:58:25.288+00:00",
+    "inputs": [
+
+    ],
+    "messages": [
+      {
+        "message": "event:careProvisioningEvent slice is not present",
+        "type": "warning"
+      }
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_id": "au_ps_v100-suite_retrieve_au_ps_bundle_validation_tests-suite_retrieve_au_ps_bundle_validation_tests_au_ps_composition_must_support_conformance-suite_retrieve_au_ps_bundle_validation_tests_au_ps_composition_must_support_conformance_composition_optional_ms_slices",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:25.288+00:00"
+  },
+  {
+    "id": "b5d8d916-98c7-4e4b-87e8-cd6c91506f0d",
+    "created_at": "2026-08-13T14:58:25.365+00:00",
+    "inputs": [
+
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_group_id": "au_ps_v100-suite_retrieve_au_ps_bundle_validation_tests-suite_retrieve_au_ps_bundle_validation_tests_au_ps_composition_optional_sections",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:25.365+00:00"
+  },
+  {
+    "id": "39b2e028-83a5-4bde-8628-94191e45ecfb",
+    "created_at": "2026-08-13T14:58:25.360+00:00",
+    "inputs": [
+
+    ],
+    "messages": [
+      {
+        "message": "Patient Summary Advance Directives Section (42348-3)\n\nNo composition section found for code: 42348-3",
+        "type": "warning"
+      },
+      {
+        "message": "Patient Summary Alerts Section (104605-1)\n\nNo composition section found for code: 104605-1",
+        "type": "warning"
+      },
+      {
+        "message": "Patient Summary Functional Status Section (47420-5)\n\nNo composition section found for code: 47420-5",
+        "type": "warning"
+      },
+      {
+        "message": "Patient Summary History of Past Illness Section (11348-0)\n\nNo composition section found for code: 11348-0",
+        "type": "warning"
+      },
+      {
+        "message": "Patient Summary History of Pregnancy Section (10162-6)\n\nNo composition section found for code: 10162-6",
+        "type": "warning"
+      },
+      {
+        "message": "Patient Summary Patient Story Section (81338-6)\n\nNo composition section found for code: 81338-6",
+        "type": "warning"
+      },
+      {
+        "message": "Patient Summary Plan of Care Section (18776-5)\n\nNo composition section found for code: 18776-5",
+        "type": "warning"
+      },
+      {
+        "message": "Patient Summary Social History Section (29762-2)\n\nNo composition section found for code: 29762-2",
+        "type": "warning"
+      },
+      {
+        "message": "Patient Summary Vital Signs Section (8716-3)\n\nNo composition section found for code: 8716-3",
+        "type": "warning"
+      },
+      {
+        "message": "No resources found\n\n**Profile**: Condition — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-condition",
+        "type": "warning"
+      },
+      {
+        "message": "No resources found\n\n**Profile**: Observation — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-smokingstatus",
+        "type": "warning"
+      }
+    ],
+    "optional": true,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_id": "au_ps_v100-suite_retrieve_au_ps_bundle_validation_tests-suite_retrieve_au_ps_bundle_validation_tests_au_ps_composition_optional_sections-suite_retrieve_au_ps_bundle_validation_tests_au_ps_composition_optional_sections_optional_sections_entry_profiles",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:25.360+00:00"
+  },
+  {
+    "id": "d56e61ba-fac1-406a-94bd-9f6367d28ab4",
+    "created_at": "2026-08-13T14:58:25.345+00:00",
+    "inputs": [
+
+    ],
+    "messages": [
+      {
+        "message": "Patient Summary Advance Directives Section (42348-3) is missing",
+        "type": "warning"
+      },
+      {
+        "message": "Patient Summary Alerts Section (104605-1) is missing",
+        "type": "warning"
+      },
+      {
+        "message": "Patient Summary Functional Status Section (47420-5) is missing",
+        "type": "warning"
+      },
+      {
+        "message": "Patient Summary History of Past Illness Section (11348-0) is missing",
+        "type": "warning"
+      },
+      {
+        "message": "Patient Summary History of Pregnancy Section (10162-6) is missing",
+        "type": "warning"
+      },
+      {
+        "message": "Patient Summary Patient Story Section (81338-6) is missing",
+        "type": "warning"
+      },
+      {
+        "message": "Patient Summary Plan of Care Section (18776-5) is missing",
+        "type": "warning"
+      },
+      {
+        "message": "Patient Summary Social History Section (29762-2) is missing",
+        "type": "warning"
+      },
+      {
+        "message": "Patient Summary Vital Signs Section (8716-3) is missing",
+        "type": "warning"
+      }
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_id": "au_ps_v100-suite_retrieve_au_ps_bundle_validation_tests-suite_retrieve_au_ps_bundle_validation_tests_au_ps_composition_optional_sections-suite_retrieve_au_ps_bundle_validation_tests_au_ps_composition_optional_sections_sections_may_populated",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:25.345+00:00"
+  },
+  {
+    "id": "143d3b47-5dbc-4eb0-85a4-b33c4c7ac7d9",
+    "created_at": "2026-08-13T14:58:25.341+00:00",
+    "inputs": [
+
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_group_id": "au_ps_v100-suite_retrieve_au_ps_bundle_validation_tests-suite_retrieve_au_ps_bundle_validation_tests_au_ps_composition_recommended_sections",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:25.341+00:00"
+  },
+  {
+    "id": "2012ff07-c30a-40ce-b608-ff218617bce5",
+    "created_at": "2026-08-13T14:58:25.337+00:00",
+    "inputs": [
+
+    ],
+    "messages": [
+      {
+        "message": "Patient Summary Medical Devices Section (46264-8)\n\nNo composition section found for code: 46264-8",
+        "type": "warning"
+      },
+      {
+        "message": "Patient Summary Immunizations Section (11369-6)\n\nNo composition section found for code: 11369-6",
+        "type": "warning"
+      },
+      {
+        "message": "Patient Summary Results Section (30954-2)\n\nNo composition section found for code: 30954-2",
+        "type": "warning"
+      },
+      {
+        "message": "Patient Summary History of Procedures Section (47519-4)\n\nNo composition section found for code: 47519-4",
+        "type": "warning"
+      },
+      {
+        "message": "No resources found\n\n**Profile**: Immunization — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-immunization",
+        "type": "warning"
+      },
+      {
+        "message": "No resources found\n\n**Profile**: Observation — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-diagnosticresult-path",
+        "type": "warning"
+      },
+      {
+        "message": "No resources found\n\n**Profile**: Procedure — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-procedure",
+        "type": "warning"
+      }
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_id": "au_ps_v100-suite_retrieve_au_ps_bundle_validation_tests-suite_retrieve_au_ps_bundle_validation_tests_au_ps_composition_recommended_sections-suite_retrieve_au_ps_bundle_validation_tests_au_ps_composition_recommended_sections_recommended_sections_entry_profiles",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:25.337+00:00"
+  },
+  {
+    "id": "9c4abb9f-5e9d-4afc-98a5-816fb07bd655",
+    "created_at": "2026-08-13T14:58:25.325+00:00",
+    "inputs": [
+
+    ],
+    "messages": [
+      {
+        "message": "Patient Summary Immunizations Section (11369-6) is missing",
+        "type": "warning"
+      },
+      {
+        "message": "Patient Summary Results Section (30954-2) is missing",
+        "type": "warning"
+      },
+      {
+        "message": "Patient Summary History of Procedures Section (47519-4) is missing",
+        "type": "warning"
+      },
+      {
+        "message": "Patient Summary Medical Devices Section (46264-8) is missing",
+        "type": "warning"
+      }
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_id": "au_ps_v100-suite_retrieve_au_ps_bundle_validation_tests-suite_retrieve_au_ps_bundle_validation_tests_au_ps_composition_recommended_sections-suite_retrieve_au_ps_bundle_validation_tests_au_ps_composition_recommended_sections_sections_should_populated",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:25.325+00:00"
+  },
+  {
+    "id": "d56ffa03-873d-4dba-9a73-974e3140345a",
+    "created_at": "2026-08-13T14:58:25.431+00:00",
+    "inputs": [
+
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_group_id": "au_ps_v100-suite_retrieve_au_ps_bundle_validation_tests-suite_retrieve_au_ps_bundle_validation_tests_au_ps_composition_subject",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:25.431+00:00"
+  },
+  {
+    "id": "90c8892f-497b-421f-a8ae-acde6ed1a34e",
+    "created_at": "2026-08-13T14:58:25.400+00:00",
+    "inputs": [
+
+    ],
+    "messages": [
+      {
+        "message": "At least one optional Must Support element is not populated. Further testing with data containing the missing elements or clarification the system does not ever know a value for the element is required.\n\n**Profile**: Patient — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-patient\n\nList of Must Support elements populated or missing\n\n✅ Populated: identifier (M)\n\n✅ Populated: name (M)\n\n✅ Populated: telecom\n\n✅ Populated: gender (M)\n\n✅ Populated: birthDate (M)\n\n✅ Populated: address\n\n⚠️ Missing: communication\n\n⚠️ Missing: generalPractitioner\n\n⚠️ Missing: indigenousStatus\n\n✅ Populated: genderIdentity\n\n✅ Populated: individualPronouns",
+        "type": "warning"
+      }
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_id": "au_ps_v100-suite_retrieve_au_ps_bundle_validation_tests-suite_retrieve_au_ps_bundle_validation_tests_au_ps_composition_subject-suite_retrieve_au_ps_bundle_validation_tests_au_ps_composition_subject_subject_ms_elements",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:25.400+00:00"
+  },
+  {
+    "id": "7f58557c-7bd2-45ef-a043-abc5387e1d6b",
+    "created_at": "2026-08-13T14:58:25.429+00:00",
+    "inputs": [
+
+    ],
+    "messages": [
+      {
+        "message": "Must support identifier slices correctly populated\n\n## List of Must Support identifier slices populated or missing\n\n✅ Populated: **IHI** — system: http://ns.electronichealth.net.au/id/hi/ihi/1.0, type: NI\n\n⚠️ Missing: **DVA**\n\n⚠️ Missing: **MEDICARE**",
+        "type": "warning"
+      },
+      {
+        "message": "At least one Must Support identifier slices is populated\n\n## List of Must Support identifier slices populated or missing (system when populated)\n\n✅ Populated: **IHI** — system: http://ns.electronichealth.net.au/id/hi/ihi/1.0\n\n⚠️ Missing: **DVA**\n\n⚠️ Missing: **MEDICARE**",
+        "type": "info"
+      }
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_id": "au_ps_v100-suite_retrieve_au_ps_bundle_validation_tests-suite_retrieve_au_ps_bundle_validation_tests_au_ps_composition_subject-suite_retrieve_au_ps_bundle_validation_tests_au_ps_composition_subject_subject_ms_identifier_slices",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:25.429+00:00"
+  },
+  {
+    "id": "c26d44ca-14ef-4e41-8c16-7b94a9981cd4",
+    "created_at": "2026-08-13T14:58:25.415+00:00",
+    "inputs": [
+
+    ],
+    "messages": [
+      {
+        "message": "Must Support sub-elements correctly populated\n\n**Referenced subject**: Patient\n\n## Complex element **name** — Must Support sub-elements populated or missing\n\n✅ Populated: name.use\n\n⚠️ Missing: name.text\n\n✅ Populated: name.family\n\n✅ Populated: name.given",
+        "type": "warning"
+      },
+      {
+        "message": "Must Support sub-elements correctly populated\n\n**Referenced subject**: Patient\n\n## Complex element **telecom** — Must Support sub-elements populated or missing\n\n✅ Populated: telecom.system\n\n✅ Populated: telecom.value\n\n✅ Populated: telecom.use",
+        "type": "info"
+      },
+      {
+        "message": "Must Support sub-elements correctly populated\n\n**Referenced subject**: Patient\n\n## Complex element **communication** — Must Support sub-elements populated or missing\n\n**Complex element communication** is not populated. Must Support sub-elements that would be validated: communication.language, communication.preferred.",
+        "type": "warning"
+      }
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_id": "au_ps_v100-suite_retrieve_au_ps_bundle_validation_tests-suite_retrieve_au_ps_bundle_validation_tests_au_ps_composition_subject-suite_retrieve_au_ps_bundle_validation_tests_au_ps_composition_subject_subject_ms_subelements_populated",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:25.415+00:00"
+  },
+  {
+    "id": "2575a1fc-cf20-4aac-a318-7fa83e3fd88f",
+    "created_at": "2026-08-13T14:58:25.384+00:00",
+    "inputs": [
+
+    ],
+    "messages": [
+      {
+        "message": "Subject reference resolves to a resource with valid resource type: Patient",
+        "type": "info"
+      }
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_id": "au_ps_v100-suite_retrieve_au_ps_bundle_validation_tests-suite_retrieve_au_ps_bundle_validation_tests_au_ps_composition_subject-suite_retrieve_au_ps_bundle_validation_tests_au_ps_composition_subject_subject_resource_type_is_valid",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:25.384+00:00"
+  },
+  {
+    "id": "0c9e9ba3-b220-4c78-9f7b-fbf48b6a588e",
+    "created_at": "2026-08-13T14:58:25.370+00:00",
+    "inputs": [
+
+    ],
+    "optional": true,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "skip",
+    "test_group_id": "au_ps_v100-suite_retrieve_au_ps_bundle_validation_tests-suite_retrieve_au_ps_bundle_validation_tests_au_ps_composition_undefined_sections",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:25.370+00:00"
+  },
+  {
+    "id": "cdbf177d-f036-4866-b5bf-8e6b5575853b",
+    "created_at": "2026-08-13T14:58:25.369+00:00",
+    "inputs": [
+
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "skip",
+    "result_message": "No sections to validate",
+    "test_id": "au_ps_v100-suite_retrieve_au_ps_bundle_validation_tests-suite_retrieve_au_ps_bundle_validation_tests_au_ps_composition_undefined_sections-suite_retrieve_au_ps_bundle_validation_tests_au_ps_composition_undefined_sections_sections_may_undefined",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:25.369+00:00"
+  },
+  {
+    "id": "fb011b28-8b54-4681-9c51-570b2b792d67",
+    "created_at": "2026-08-13T14:58:25.225+00:00",
+    "inputs": [
+      {
+        "name": "bundle_url",
+        "label": null,
+        "description": "To retrieve document Bundle using HTTP GET request",
+        "value": "https://build.fhir.org/ig/hl7au/au-fhir-ps/Bundle-aups-basicsummary.json",
+        "type": "text"
+      },
+      {
+        "name": "url",
+        "label": "FHIR Server Base Url",
+        "description": null,
+        "value": "https://hl7-ips-server.hl7.org/fhir",
+        "type": "text"
+      },
+      {
+        "name": "bundle_id",
+        "label": null,
+        "description": "To request Bundle/{bundle_id}",
+        "value": null,
+        "type": "text"
+      },
+      {
+        "name": "credentials",
+        "label": "OAuth Credentials",
+        "description": null,
+        "value": "{\"name\":\"credentials\"}",
+        "type": "oauth_credentials"
+      },
+      {
+        "name": "header_name",
+        "label": "Header name",
+        "description": null,
+        "value": null,
+        "type": "text"
+      },
+      {
+        "name": "header_value",
+        "label": "Header value",
+        "description": null,
+        "value": null,
+        "type": "text"
+      }
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "pass",
+    "test_group_id": "au_ps_v100-suite_retrieve_au_ps_bundle_validation_tests-suite_retrieve_au_ps_bundle_validation_tests_bundle_acquisition",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:25.225+00:00"
+  },
+  {
+    "id": "1d5b3e27-991d-4165-a329-90e109228d39",
+    "created_at": "2026-08-13T14:58:25.210+00:00",
+    "inputs": [
+      {
+        "name": "bundle_id",
+        "value": null,
+        "type": "text"
+      },
+      {
+        "name": "bundle_url",
+        "value": "https://build.fhir.org/ig/hl7au/au-fhir-ps/Bundle-aups-basicsummary.json",
+        "type": "text"
+      },
+      {
+        "name": "url",
+        "value": "https://hl7-ips-server.hl7.org/fhir",
+        "type": "text"
+      },
+      {
+        "name": "credentials",
+        "value": "{\"name\":\"credentials\"}",
+        "type": "oauth_credentials"
+      },
+      {
+        "name": "header_name",
+        "value": null,
+        "type": "text"
+      },
+      {
+        "name": "header_value",
+        "value": null,
+        "type": "text"
+      }
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+      {
+        "id": "18efecf7-bf45-46c7-bbe6-200f6b1ba9aa",
+        "direction": "outgoing",
+        "index": 4,
+        "result_id": "1d5b3e27-991d-4165-a329-90e109228d39",
+        "status": 200,
+        "timestamp": "2026-08-13T14:58:25.213+00:00",
+        "url": "https://build.fhir.org/ig/hl7au/au-fhir-ps/Bundle-aups-basicsummary.json",
+        "verb": "get"
+      }
+    ],
+    "result": "pass",
+    "test_id": "au_ps_v100-suite_retrieve_au_ps_bundle_validation_tests-suite_retrieve_au_ps_bundle_validation_tests_bundle_acquisition-suite_retrieve_au_ps_bundle_validation_tests_bundle_retrieve",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:25.210+00:00"
+  },
+  {
+    "id": "5a4d21c9-d5b0-49c5-a6ad-db8ad4cadafe",
+    "created_at": "2026-08-13T14:58:25.269+00:00",
+    "inputs": [
+      {
+        "name": "validate_against",
+        "label": "Validate Against",
+        "description": null,
+        "value": [
+          "au_ps_bundle"
+        ],
+        "type": "checkbox"
+      }
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "fail",
+    "test_group_id": "au_ps_v100-suite_retrieve_au_ps_bundle_validation_tests-suite_retrieve_au_ps_bundle_validation_tests_bundle_validation",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:25.269+00:00"
+  },
+  {
+    "id": "1b3ccf2c-d992-48bd-9fd8-f5d93a9330be",
+    "created_at": "2026-08-13T14:58:25.265+00:00",
+    "inputs": [
+      {
+        "name": "validate_against",
+        "value": [
+          "au_ps_bundle"
+        ],
+        "type": "checkbox"
+      }
+    ],
+    "messages": [
+      {
+        "message": "Using validator version 2512.2 and validator wrapper version 0.0.1",
+        "type": "info"
+      },
+      {
+        "message": "Bundle/aups-basicsummary: Bundle: Bundle.meta.profile: The property's value cannot be empty",
+        "type": "error"
+      }
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "fail",
+    "result_message": "Resource does not conform to the profile http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-bundle|1.0.0",
+    "test_id": "au_ps_v100-suite_retrieve_au_ps_bundle_validation_tests-suite_retrieve_au_ps_bundle_validation_tests_bundle_validation-suite_retrieve_au_ps_bundle_validation_tests_bundle_validation_bundle_valid",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:25.265+00:00"
+  },
+  {
+    "id": "6ed28916-cce6-49a0-a5cd-aebb3e66fae6",
+    "created_at": "2026-08-13T14:58:25.268+00:00",
+    "inputs": [
+      {
+        "name": "validate_against",
+        "value": [
+          "au_ps_bundle"
+        ],
+        "type": "checkbox"
+      }
+    ],
+    "optional": false,
+    "outputs": [
+
+    ],
+    "requests": [
+
+    ],
+    "result": "omit",
+    "result_message": "Validation against the IPS Bundle profile is disabled because \"IPS Bundle Validation\" is not selected in the \"Validate Against\" input.",
+    "test_id": "au_ps_v100-suite_retrieve_au_ps_bundle_validation_tests-suite_retrieve_au_ps_bundle_validation_tests_bundle_validation-suite_retrieve_au_ps_bundle_validation_tests_bundle_validation_bundle_valid_ips",
+    "test_run_id": "a1e28b3f-d85c-42ed-8bc8-9900acce6bd3",
+    "test_session_id": "k4XYUT4vizo",
+    "updated_at": "2026-08-13T14:58:25.268+00:00"
+  }
+]
