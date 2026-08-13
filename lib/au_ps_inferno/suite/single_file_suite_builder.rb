@@ -34,33 +34,43 @@ module AUPSTestKit
         end
 
         SingleFileSuiteConfig::BUNDLE_SOURCES.each do |source|
+          # Reproduces the id scheme baked into the generated (multi-file) suite: every
+          # group/test id is "suite_<top_id>[_<group_short_id>][_<test_short_id>]",
+          # flattened rather than relying on Inferno's ancestor-prefixing, so that a
+          # suite built here is id-for-id identical to the generated one. The lone
+          # exception is the acquisition test, whose own id (bundle_provide /
+          # bundle_retrieve / bundle_generate) is used bare, without the
+          # bundle_acquisition group segment.
+          legacy_prefix = "suite_#{source[:top_id]}"
+          pid = ->(*parts) { parts.empty? ? legacy_prefix.to_sym : :"#{legacy_prefix}_#{parts.join('_')}" }
+
           group do
-            id source[:top_id]
+            id pid.call
             title source[:top_title]
             description source[:top_description]
             run_as_group
 
             group do
-              id :bundle_acquisition
+              id pid.call('bundle_acquisition')
               title source[:acquisition_group_title]
               description source[:acquisition_group_description]
               run_as_group
 
               test from: source[:acquisition_from] do
-                id :bundle_provide
+                id pid.call(source[:acquisition_test_id])
                 title source[:acquisition_test_title]
                 description source[:acquisition_test_description]
               end
             end
 
             group do
-              id :bundle_validation
+              id pid.call('bundle_validation')
               title 'Bundle Validation'
               description 'Validates that the bundle conforms to the Bundle profiles.'
               run_as_group
 
               test from: :bundle_is_valid_class_test do
-                id :bundle_valid
+                id pid.call('bundle_validation', 'bundle_valid')
                 title source[:bundle_valid_title]
                 description source[:bundle_valid_description]
 
@@ -70,20 +80,20 @@ module AUPSTestKit
               end
 
               test from: :ips_bundle_is_valid_class_base do
-                id :bundle_valid_ips
+                id pid.call('bundle_validation', 'bundle_valid_ips')
                 title source[:bundle_valid_ips_title]
                 description source[:bundle_valid_ips_description]
               end
             end
 
             group do
-              id :au_ps_bundle_must_support_conformance
+              id pid.call('au_ps_bundle_must_support_conformance')
               title 'AU PS Bundle Must Support Conformance'
               description 'Verifies that Must Support elements at the bundle level are populated when data is available.'
               run_as_group
 
               test from: basic_test_class.id do
-                id :bundle_must_support_populated
+                id pid.call('au_ps_bundle_must_support_conformance', 'bundle_must_support_populated')
                 title 'AU PS Bundle Must Support elements are correctly populated'
                 description 'Must Support elements SHALL be populated when an element value is known and allowed to share.'
                 run { bundle_mandatory_ms_elements_info }
@@ -91,14 +101,14 @@ module AUPSTestKit
             end
 
             group do
-              id :au_ps_composition_must_support_conformance
+              id pid.call('au_ps_composition_must_support_conformance')
               title 'AU PS Composition Must Support Conformance'
               description 'Verifies that Composition Must Support elements (mandatory, optional, sub-elements, ' \
                           'slices) are correctly populated when data is known.'
               run_as_group
 
               test from: basic_test_class.id do
-                id :composition_mandatory_ms_populated
+                id pid.call('au_ps_composition_must_support_conformance', 'composition_mandatory_ms_populated')
                 title 'Mandatory Must Support elements are correctly populated'
                 description 'Mandatory Must Support element SHALL be able to be populated if a value is known ' \
                             'and allowed to share.'
@@ -106,7 +116,7 @@ module AUPSTestKit
               end
 
               test from: basic_test_class.id do
-                id :composition_optional_ms_populated
+                id pid.call('au_ps_composition_must_support_conformance', 'composition_optional_ms_populated')
                 title 'Optional Must Support elements are correctly populated'
                 description 'Optional Must Support elements SHALL be correctly populated if a value is known'
                 run do
@@ -116,7 +126,7 @@ module AUPSTestKit
               end
 
               test from: basic_test_class.id do
-                id :composition_ms_subelements_populated
+                id pid.call('au_ps_composition_must_support_conformance', 'composition_ms_subelements_populated')
                 title 'Must Support sub-elements of a complex element are correctly populated'
                 description 'Must Support sub-elements of a complex element SHALL be correctly populated if a value is known'
                 run do
@@ -126,7 +136,7 @@ module AUPSTestKit
               end
 
               test from: basic_test_class.id do
-                id :composition_optional_ms_slices
+                id pid.call('au_ps_composition_must_support_conformance', 'composition_optional_ms_slices')
                 title 'Must Support slices are correctly populated'
                 description 'Must Support slice careProvisioningEvent SHALL be populated if a value is known.'
                 run do
@@ -140,13 +150,13 @@ module AUPSTestKit
 
             section_tiers.each do |tier|
               group do
-                id tier[:group_id]
+                id pid.call(tier[:group_id])
                 title tier[:group_title]
                 description tier[:group_description]
                 run_as_group
 
                 test from: basic_test_class.id do
-                  id tier[:populated_id]
+                  id pid.call(tier[:group_id], tier[:populated_id])
                   title tier[:populated_title]
                   description tier[:populated_description]
                   run do
@@ -156,7 +166,7 @@ module AUPSTestKit
                 end
 
                 test from: basic_test_class.id do
-                  id tier[:entry_profiles_id]
+                  id pid.call(tier[:group_id], tier[:entry_profiles_id])
                   title tier[:entry_profiles_title]
                   description tier[:entry_profiles_description]
                   optional if tier[:entry_profiles_dsl_optional]
@@ -170,7 +180,7 @@ module AUPSTestKit
 
                 if tier[:nilknown_warning_id]
                   test from: basic_test_class.id do
-                    id tier[:nilknown_warning_id]
+                    id pid.call(tier[:group_id], tier[:nilknown_warning_id])
                     title tier[:nilknown_warning_title]
                     description tier[:nilknown_warning_description]
                     run { warn_on_nilknown_empty_reason(tier[:codes]) }
@@ -180,14 +190,14 @@ module AUPSTestKit
             end
 
             group do
-              id :au_ps_composition_undefined_sections
+              id pid.call('au_ps_composition_undefined_sections')
               title 'AU PS Composition Undefined Sections'
               description 'Verify the undefined sections are correctly populated in the AU PS Composition resource.'
               optional
               run_as_group
 
               test from: basic_test_class.id do
-                id :sections_may_undefined
+                id pid.call('au_ps_composition_undefined_sections', 'sections_may_undefined')
                 title 'Undefined sections are correctly populated'
                 description 'Undefined sections MAY be populated if a value is known'
                 run { validate_populated_undefined_sections_in_bundle(all_section_codes, %w[title code text]) }
@@ -196,7 +206,7 @@ module AUPSTestKit
 
             SingleFileSuiteConfig::ACTOR_GROUPS.each do |actor|
               group do
-                id actor[:group_id]
+                id pid.call(actor[:group_id])
                 title actor[:group_title]
                 description actor[:group_description]
                 optional if actor[:group_optional]
@@ -204,7 +214,7 @@ module AUPSTestKit
 
                 if actor[:resource_type_id]
                   test from: basic_test_class.id do
-                    id actor[:resource_type_id]
+                    id pid.call(actor[:group_id], actor[:resource_type_id])
                     title actor[:resource_type_text]
                     description actor[:resource_type_text]
                     run { test_resource_type_is_valid?(actor[:key]) }
@@ -212,21 +222,21 @@ module AUPSTestKit
                 end
 
                 test from: basic_test_class.id do
-                  id actor[:ms_elements_id]
+                  id pid.call(actor[:group_id], actor[:ms_elements_id])
                   title actor[:ms_elements_text]
                   description actor[:ms_elements_text]
                   run { ms_elements_populated_message(actor[:key]) }
                 end
 
                 test from: basic_test_class.id do
-                  id actor[:ms_subelements_id]
+                  id pid.call(actor[:group_id], actor[:ms_subelements_id])
                   title actor[:ms_subelements_text]
                   description actor[:ms_subelements_text]
                   run { ms_sub_elements_populated_message(actor[:key]) }
                 end
 
                 test from: basic_test_class.id do
-                  id actor[:ms_identifier_slices_id]
+                  id pid.call(actor[:group_id], actor[:ms_identifier_slices_id])
                   title actor[:ms_identifier_slices_title]
                   description actor[:ms_identifier_slices_description]
                   run { public_send(actor[:ms_identifier_slices_method]) }
