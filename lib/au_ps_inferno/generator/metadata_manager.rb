@@ -26,6 +26,7 @@ class Generator
       reset_composition_metadata_ivars!
     end
 
+    # rubocop:disable Metrics/MethodLength
     def reset_composition_metadata_ivars!
       @composition_sections = []
       @composition_mandatory_ms_elements = []
@@ -37,7 +38,9 @@ class Generator
       @profiles = []
       @resources_filters = {}
       @normalized_sections_data = []
+      @address_profile_elements = []
     end
+    # rubocop:enable Metrics/MethodLength
 
     # Runs {CompositionMetadataProducer} against the IG resources and stores the result (in-memory only).
     # Populates the internal composition sections and related metadata used by {#save_to_file}.
@@ -59,6 +62,7 @@ class Generator
       @composition_optional_ms_slices = producer.composition_optional_ms_slices
       @profiles = producer.profiles
       @resources_filters = producer.resources_filters
+      @address_profile_elements = producer.address_profile_elements
     end
 
     def normalize_sections_data
@@ -70,7 +74,10 @@ class Generator
     def composition_metadata_to_dump
       raise 'initiate_build must be called before composition_metadata_to_dump' if @producer.nil?
 
-      metadata_dump_sections.merge(metadata_dump_ms_elements).merge(resources_filters: @resources_filters)
+      metadata_dump_sections.merge(metadata_dump_ms_elements).merge(
+        resources_filters: @resources_filters,
+        address_profile_elements: @address_profile_elements
+      )
     end
 
     def metadata_dump_sections
