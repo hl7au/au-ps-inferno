@@ -14,6 +14,7 @@
 
 - Bump the `inferno_core` dependency to `~> 1.4.0` to pick up the `enable_when` input attribute used for the conditional bundle-retrieval fields above.
 - Move the "Validate Against" checkbox to the top of the run test modal, above the Bundle Retrieval Method and its conditional fields, so the validation scope is chosen before the acquisition details (issue #86).
+- Remove the "Profile URL" input from the $summary generation fields and always request the AU PS Bundle profile. The value was a free-text override of a suite that only ever validates against the AU PS/IPS Bundle profiles, so letting it be blank or point elsewhere didn't serve a real testing purpose and just added a confusing field to the FHIR Server input group (issue #86).
 
 ### Fixed
 

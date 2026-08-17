@@ -13,6 +13,8 @@ module AUPSTestKit
     NO_SUMMARY_INPUTS_MESSAGE = 'No FHIR server URL with a Bundle ID, patient ID, or patient identifier was ' \
                                 'provided, so this test group is omitted.'
 
+    AU_PS_BUNDLE_PROFILE = 'http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-bundle'
+
     CommonInputsModule.fhir_server_inputs(self)
 
     makes_request :summary_operation
@@ -38,11 +40,9 @@ module AUPSTestKit
 
     def operation_path
       if patient_id
-        profile ? "Patient/#{patient_id}/$summary?profile=#{profile}" : "Patient/#{patient_id}/$summary"
-      elsif profile
-        "Patient/$summary?identifier=#{identifier}&profile=#{profile}"
+        "Patient/#{patient_id}/$summary?profile=#{AU_PS_BUNDLE_PROFILE}"
       else
-        "Patient/$summary?identifier=#{identifier}"
+        "Patient/$summary?identifier=#{identifier}&profile=#{AU_PS_BUNDLE_PROFILE}"
       end
     end
 

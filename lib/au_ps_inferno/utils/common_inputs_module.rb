@@ -15,7 +15,7 @@ module AUPSTestKit
   # enable_when condition; the Bundle URL path gets its own
   # `bundle_url_header_name`/`bundle_url_header_value` pair so its condition can't be
   # clobbered by that merge.
-  module CommonInputsModule # rubocop:disable Metrics/ModuleLength
+  module CommonInputsModule
     SINGLE_INPUT_DEFINITIONS = {
       bundle_retrieve_method_input: [:bundle_retrieve_method, {
         title: 'Bundle Retrieval Method',
@@ -63,12 +63,6 @@ module AUPSTestKit
         description: 'To request Patient/$summary?identifier={identifier}',
         enable_when: { input_name: 'bundle_retrieve_method', value: 'fhir_server' }
       }],
-      profile_input: [:profile, {
-        title: 'Profile URL', optional: true,
-        default: 'http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-bundle',
-        description: 'To specify profile for the patient summary',
-        enable_when: { input_name: 'bundle_retrieve_method', value: 'fhir_server' }
-      }],
       credentials_input: [:credentials, {
         title: 'OAuth Credentials', type: :oauth_credentials, optional: true,
         enable_when: { input_name: 'bundle_retrieve_method', value: 'fhir_server' }
@@ -87,7 +81,7 @@ module AUPSTestKit
     BUNDLE_URL_INPUTS_DEFINITION = %i[bundle_retrieve_method_input bundle_url_input
                                       bundle_url_header_name_input bundle_url_header_value_input].freeze
     FHIR_SERVER_INPUTS_DEFINITION = %i[bundle_retrieve_method_input fhir_server_url_input bundle_id_input
-                                       patient_id_input patient_identifier_input profile_input
+                                       patient_id_input patient_identifier_input
                                        credentials_input header_name_input header_value_input].freeze
     RETRIEVE_CS_INPUTS_DEFINITION = %i[bundle_retrieve_method_input fhir_server_url_input credentials_input
                                        header_name_input header_value_input].freeze

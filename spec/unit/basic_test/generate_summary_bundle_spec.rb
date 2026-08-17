@@ -46,11 +46,7 @@ RSpec.describe AUPSTestKit::GenerateSummaryBundleTestClass do
 
     test = create_test('suite_generate_au_ps_using_ips_summary_validation_tests_no_cs_gate_test')
     scratch = { summary_op_defined: false }
-    result = run(test, {
-                   url: server_url,
-                   patient_id: 'pat1',
-                   profile: 'http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-bundle'
-                 }, scratch)
+    result = run(test, { url: server_url, patient_id: 'pat1' }, scratch)
 
     expect(result.result).to eq('pass')
     expect(scratch[:bundle_ips_resource_summary]).to be_a(FHIR::Bundle)
@@ -77,6 +73,7 @@ RSpec.describe AUPSTestKit::GenerateSummaryBundleTestClass do
 
   it 'prefers $summary over bundle_id when both patient details and a bundle_id are provided' do
     stub_request(:get, "#{server_url}/Patient/pat1/$summary")
+      .with(query: { 'profile' => 'http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-bundle' })
       .to_return(status: 200, body: bundle_json, headers: { 'Content-Type' => 'application/fhir+json' })
 
     test = create_test('suite_generate_au_ps_using_ips_summary_validation_tests_prefers_summary_test')
