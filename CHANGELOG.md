@@ -8,6 +8,13 @@
 
 - Warn when the Problems, Allergies, or Medications section uses `Composition.section.emptyReason = nilknown` instead of an explicit negation code on the section's entry resource (e.g. `AllergyIntolerance.code = 716186003 |No known allergy|`), the pattern AU PS prefers over `emptyReason`. This is an advisory warning, not a failure.
 - Include the section's narrative (`Composition.section.text`), converted from HTML to Markdown, in the Must Support element population message for each section. The HTML is sanitized first (stripping scripts, styles, and other unsafe or non-display markup, including `img` tags) so untrusted narrative content can't inject anything unsafe into the test report.
+- Add a "Bundle Retrieval Method" input to the run test modal so the Bundle Resource, FHIR Server, and Bundle URL fields are shown one at a time instead of all at once (issue #86). Selecting "FHIR Server" now also covers retrieving a Bundle by ID (previously mixed into the Bundle URL fields) and gates the CapabilityStatement tests, since those only make sense against a FHIR server.
+
+### Changed
+
+- Bump the `inferno_core` dependency to `~> 1.4.0` to pick up the `enable_when` input attribute used for the conditional bundle-retrieval fields above.
+- Move the "Validate Against" checkbox to the top of the run test modal, above the Bundle Retrieval Method and its conditional fields, so the validation scope is chosen before the acquisition details (issue #86).
+- Remove the "Profile URL" input from the $summary generation fields and always request the AU PS Bundle profile. The value was a free-text override of a suite that only ever validates against the AU PS/IPS Bundle profiles, so letting it be blank or point elsewhere didn't serve a real testing purpose and just added a confusing field to the FHIR Server input group (issue #86).
 
 ### Fixed
 

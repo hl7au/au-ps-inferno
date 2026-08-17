@@ -33,6 +33,8 @@ module AUPSTestKit
 
     run_as_group
 
+    input_order :validate_against
+
     group from: :suite_generate_au_ps_using_ips_summary_validation_tests_bundle_acquisition
 
     group from: :suite_generate_au_ps_using_ips_summary_validation_tests_bundle_validation
