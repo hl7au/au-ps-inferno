@@ -65,12 +65,13 @@ class Generator
 
     version_rb_path = File.expand_path(File.join('lib', 'au_ps_inferno', 'version.rb'))
     content = File.read(version_rb_path)
-    updated = content.gsub(/IG_VERSION = '.*'/) { "IG_VERSION = '#{version}'" }
-    if updated == content
+    unless content.match?(/IG_VERSION = '.*'/)
       puts "Warning: IG_VERSION pattern not found in #{version_rb_path}; version was not updated."
       return
     end
-    File.write(version_rb_path, updated)
+
+    updated = content.gsub(/IG_VERSION = '.*'/) { "IG_VERSION = '#{version}'" }
+    File.write(version_rb_path, updated) unless updated == content
   end
 
   def save_metadata_to_version_folder
