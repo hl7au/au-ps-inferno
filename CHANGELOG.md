@@ -13,6 +13,7 @@
 ### Changed
 
 - Bump the `inferno_core` dependency to `~> 1.4.0` to pick up the `enable_when` input attribute used for the conditional bundle-retrieval fields above.
+- Move the "Validate Against" checkbox to the top of the run test modal, above the Bundle Retrieval Method and its conditional fields, so the validation scope is chosen before the acquisition details (issue #86).
 
 ### Fixed
 
