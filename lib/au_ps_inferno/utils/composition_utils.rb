@@ -32,8 +32,41 @@ module CompositionUtils
     scratch[bundle_scratch_key] = bundle
   end
 
+  def bundle_url_scratch_key
+    :"#{bundle_scratch_key}_url"
+  end
+
+  def scratch_bundle_url
+    scratch[bundle_url_scratch_key]
+  end
+
+  def save_bundle_url_to_scratch(url)
+    scratch[bundle_url_scratch_key] = url
+  end
+
   def omit_unless_bundle_in_scratch
     omit_if scratch_bundle.blank?, NO_BUNDLE_OMIT_MESSAGE
+  end
+
+  def composition_fhirpath_prefix
+    return '' if scratch_bundle.blank?
+
+    index = BundleDecorator.new(scratch_bundle).composition_entry_index
+    return '' if index.nil?
+
+    "Bundle.entry[#{index}].resource."
+  end
+
+  def section_fhirpath_prefix(section)
+    code = section_first_coding_code(section)
+    return '' if code.blank?
+
+    "Bundle.entry.where(resource is Composition).resource.section.where(code.coding.code='#{code}')."
+  end
+
+  def section_first_coding_code(section)
+    coding = section&.code&.coding
+    coding&.first&.code
   end
 
   def group_section_output(section_info_array)

@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'cgi'
 require 'fhir_models'
 
 require_relative '../../../lib/au_ps_inferno/utils/section_decorator'
@@ -7,6 +8,10 @@ require_relative '../../support/basic_test/basic_test_instance_setup'
 
 RSpec.describe AUPSTestKit::BasicTestSectionBundleValidationModule do
   include_context 'basic test instance setup'
+
+  def section_title_expression
+    "Bundle.entry.where(resource is Composition).resource.section.where(code.coding.code='11450-4').title"
+  end
 
   def build_section(title: 'Patient Summary Problems Section', status: 'generated', narrative: 'Some narrative text.')
     SectionDecorator.new(
@@ -25,6 +30,19 @@ RSpec.describe AUPSTestKit::BasicTestSectionBundleValidationModule do
       expect(result).to include('**title**:')
       expect(result).to include('Narrative status: `generated`')
       expect(result).to include('Some narrative text.')
+    end
+
+    it 'links the short element name to fhirpath-lab, evaluating the full Bundle-rooted expression, ' \
+       'once the Bundle URL is known' do
+      test_instance.scratch[:bundle_ips_resource_url] = 'https://example.com/fhir/Bundle/doc-1'
+      section = build_section
+      result = test_instance.send(:section_ms_elements_message, section, %w[title code text])
+
+      expect(result).to include(
+        '**[title](https://fhirpath-lab.com/FhirPath?' \
+        "expression=#{CGI.escape(section_title_expression)}" \
+        '&engine=fhirpath.js&resource=https%3A%2F%2Fexample.com%2Ffhir%2FBundle%2Fdoc-1)**:'
+      )
     end
   end
 

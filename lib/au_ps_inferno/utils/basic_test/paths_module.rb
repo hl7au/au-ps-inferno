@@ -7,9 +7,10 @@ module AUPSTestKit
 
     def populated_paths_info(resource, elements_array, mandatory_array: [])
       title = '## List of populated elements'
+      prefix = composition_fhirpath_prefix
       result = elements_array.map do |element|
         mandatory = mandatory_array.include?(element)
-        element_str = "**#{element}**"
+        element_str = "**#{fhirpath_lab_link(element, full_expression: "#{prefix}#{element}")}**"
         element_str += ' (M)' if mandatory
         "#{boolean_to_existent_string(resolve_path_with_dar(resource, element).first.present?,
                                       optional: !mandatory)}: #{element_str}"

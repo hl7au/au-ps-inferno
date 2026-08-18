@@ -57,6 +57,7 @@ module AUPSTestKit
       assert bundle_resource.resourceType == 'Bundle',
              "The resource at #{bundle_url} is a #{bundle_resource.resourceType}, expected a Bundle"
       save_bundle_to_scratch(bundle_resource)
+      save_bundle_url_to_scratch(bundle_url)
     end
 
     def extra_headers

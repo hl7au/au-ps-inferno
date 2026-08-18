@@ -60,16 +60,20 @@ module AUPSTestKit
     end
 
     def section_ms_elements_message(section, elements_array)
-      title = "### #{section.code_display_str}"
-      elements_list = elements_array.map do |element|
-        "**#{element}**: #{boolean_to_existent_string(resolve_path_with_dar(section, element).first.present?)}"
-      end.join("\n\n")
       [
-        title,
+        "### #{section.code_display_str}",
         'List of Must Support elements populated or missing:',
-        elements_list,
+        section_ms_elements_list(section, elements_array),
         section_narrative_body(section)
       ].join("\n\n")
+    end
+
+    def section_ms_elements_list(section, elements_array)
+      prefix = section_fhirpath_prefix(section)
+      elements_array.map do |element|
+        "**#{fhirpath_lab_link(element, full_expression: "#{prefix}#{element}")}**: " \
+          "#{boolean_to_existent_string(resolve_path_with_dar(section, element).first.present?)}"
+      end.join("\n\n")
     end
   end
 end

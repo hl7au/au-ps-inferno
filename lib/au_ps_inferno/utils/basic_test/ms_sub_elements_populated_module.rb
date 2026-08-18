@@ -115,10 +115,9 @@ module AUPSTestKit
     end
 
     def parent_element_is_not_populated_text(parent_path, sub_elements)
-      "**Complex element #{parent_path}** is not populated. " \
-        "Must Support sub-elements that would be validated: #{sub_elements.map do |element|
-          element[:path]
-        end.join(', ')}."
+      sub_elements_list = sub_elements.map { |element| fhirpath_lab_link(element[:path]) }.join(', ')
+      "**Complex element #{fhirpath_lab_link(parent_path)}** is not populated. " \
+        "Must Support sub-elements that would be validated: #{sub_elements_list}."
     end
 
     def sub_element?(path)

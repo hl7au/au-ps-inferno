@@ -65,8 +65,13 @@ module AUPSTestKit
     end
 
     def composition_subelement_parent_unpopulated_message(parent_path, sub_elements)
-      detail = "**Complex element #{parent_path}** is not populated. " \
-               "Must Support sub-elements that would be validated: #{sub_elements.join(', ')}."
+      prefix = composition_fhirpath_prefix
+      sub_elements_list = sub_elements.map do |element|
+        fhirpath_lab_link(element, full_expression: "#{prefix}#{element}")
+      end.join(', ')
+      detail = "**Complex element #{fhirpath_lab_link(parent_path, full_expression: "#{prefix}#{parent_path}")}** " \
+               'is not populated. ' \
+               "Must Support sub-elements that would be validated: #{sub_elements_list}."
       ['Must Support sub-elements correctly populated', 'Composition', detail].join("\n\n")
     end
 

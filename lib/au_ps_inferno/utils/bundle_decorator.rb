@@ -23,6 +23,10 @@ class BundleDecorator < FHIR::Bundle
     entry.find { |entr| entr.resource.resourceType == 'Composition' }
   end
 
+  def composition_entry_index
+    entry.index { |entr| entr.resource.resourceType == 'Composition' } || 0
+  end
+
   def resources_by_references(entry_references)
     entry_references.filter_map { |ref| resource_by_reference(ref) }.uniq
   end
