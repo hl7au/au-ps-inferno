@@ -2,6 +2,7 @@
 
 require_relative 'bundle_decorator'
 require_relative 'composition_utils/boolean_and_stats'
+require 'inferno_suite_generator/utils/kept_resources_repository'
 
 # Utilities for FHIR Composition resources
 module CompositionUtils
@@ -30,6 +31,7 @@ module CompositionUtils
 
   def save_bundle_to_scratch(bundle)
     scratch[bundle_scratch_key] = bundle
+    InfernoSuiteGenerator::KeptResourcesRepository.new.save(session_id: test_session_id, resource: bundle)
   end
 
   def omit_unless_bundle_in_scratch
