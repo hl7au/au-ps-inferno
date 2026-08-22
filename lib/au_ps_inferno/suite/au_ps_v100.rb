@@ -47,8 +47,6 @@ module AUPSTestKit
 
     FHIRPATHLAB_URL = ENV.fetch('FHIRPATHLAB_URL', 'https://fhirpath-lab.com/FhirPath').presence
 
-    suite_endpoint :post, '/resources/:session_id/:resource_type/:resource_id',
-                   InfernoSuiteGenerator::SaveResourceEndpoint
     suite_endpoint :get, '/resources/:session_id/:resource_type/:resource_id',
                    InfernoSuiteGenerator::FetchResourceEndpoint
     suite_endpoint :delete, '/resources/:session_id',
