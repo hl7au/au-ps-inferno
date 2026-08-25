@@ -34,25 +34,25 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do
 
           List of Must Support elements populated or missing
 
-          Condition/cccccccc-0003-0000-0000-000000000006: clinicalStatus: ✅ Populated
+          ✅ Populated: Condition/cccccccc-0003-0000-0000-000000000006: clinicalStatus
 
-          Condition/cccccccc-0003-0000-0000-000000000006: verificationStatus: ✅ Populated
+          ✅ Populated: Condition/cccccccc-0003-0000-0000-000000000006: verificationStatus
 
-          Condition/cccccccc-0003-0000-0000-000000000006: category: ✅ Populated (M)
+          ✅ Populated (M): Condition/cccccccc-0003-0000-0000-000000000006: category
 
-          Condition/cccccccc-0003-0000-0000-000000000006: severity: ✅ Populated
+          ✅ Populated: Condition/cccccccc-0003-0000-0000-000000000006: severity
 
-          Condition/cccccccc-0003-0000-0000-000000000006: code: ✅ Populated (M)
+          ✅ Populated (M): Condition/cccccccc-0003-0000-0000-000000000006: code
 
-          Condition/cccccccc-0003-0000-0000-000000000006: subject: ✅ Populated (M)
+          ✅ Populated (M): Condition/cccccccc-0003-0000-0000-000000000006: subject
 
-          Condition/cccccccc-0003-0000-0000-000000000006: subject.reference: ✅ Populated (M)
+          ✅ Populated (M): Condition/cccccccc-0003-0000-0000-000000000006: subject.reference
 
-          Condition/cccccccc-0003-0000-0000-000000000006: onsetDateTime: ✅ Populated
+          ✅ Populated: Condition/cccccccc-0003-0000-0000-000000000006: onsetDateTime
 
-          Condition/cccccccc-0003-0000-0000-000000000006: abatement[x]: ✅ Populated
+          ✅ Populated: Condition/cccccccc-0003-0000-0000-000000000006: abatement[x]
 
-          Condition/cccccccc-0003-0000-0000-000000000006: note: ✅ Populated
+          ✅ Populated: Condition/cccccccc-0003-0000-0000-000000000006: note
         MSG
       )
     end
@@ -82,25 +82,25 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do
 
           List of Must Support elements populated or missing
 
-          Condition/cccccccc-0004-0000-0000-000000000007: clinicalStatus: ✅ Populated
+          ✅ Populated: Condition/cccccccc-0004-0000-0000-000000000007: clinicalStatus
 
-          Condition/cccccccc-0004-0000-0000-000000000007: verificationStatus: ✅ Populated
+          ✅ Populated: Condition/cccccccc-0004-0000-0000-000000000007: verificationStatus
 
-          Condition/cccccccc-0004-0000-0000-000000000007: category: ❌ Missing (M)
+          ❌ Missing (M): Condition/cccccccc-0004-0000-0000-000000000007: category
 
-          Condition/cccccccc-0004-0000-0000-000000000007: severity: ⚠️ Missing
+          ⚠️ Missing: Condition/cccccccc-0004-0000-0000-000000000007: severity
 
-          Condition/cccccccc-0004-0000-0000-000000000007: code: ✅ Populated (M)
+          ✅ Populated (M): Condition/cccccccc-0004-0000-0000-000000000007: code
 
-          Condition/cccccccc-0004-0000-0000-000000000007: subject: ✅ Populated (M)
+          ✅ Populated (M): Condition/cccccccc-0004-0000-0000-000000000007: subject
 
-          Condition/cccccccc-0004-0000-0000-000000000007: subject.reference: ✅ Populated (M)
+          ✅ Populated (M): Condition/cccccccc-0004-0000-0000-000000000007: subject.reference
 
-          Condition/cccccccc-0004-0000-0000-000000000007: onsetDateTime: ⚠️ Missing
+          ⚠️ Missing: Condition/cccccccc-0004-0000-0000-000000000007: onsetDateTime
 
-          Condition/cccccccc-0004-0000-0000-000000000007: abatement[x]: ⚠️ Missing
+          ⚠️ Missing: Condition/cccccccc-0004-0000-0000-000000000007: abatement[x]
 
-          Condition/cccccccc-0004-0000-0000-000000000007: note: ⚠️ Missing
+          ⚠️ Missing: Condition/cccccccc-0004-0000-0000-000000000007: note
         MSG
       )
     end

@@ -2,7 +2,9 @@
 
 require_relative 'bundle_decorator'
 require_relative 'composition_utils/boolean_and_stats'
+require 'dry/container/error'
 require 'inferno_suite_generator/utils/kept_resources_repository'
+require 'inferno_suite_generator/utils/fhirpath_lab_message_linker'
 
 # Utilities for FHIR Composition resources
 module CompositionUtils
@@ -64,7 +66,35 @@ module CompositionUtils
     resource_id = resource.id
     return nil if resource_type.blank? || resource_id.blank?
 
-    "#{resource_type}/#{resource_id}: #{prefix}#{element}: #{status}"
+    expression = "#{prefix}#{element}"
+    path_display = fhirpath_lab_link(resource_type, resource_id, expression) || expression
+
+    "#{status}: #{resource_type}/#{resource_id}: #{path_display}"
+  end
+
+  def fhirpath_lab_link(resource_type, resource_id, expression)
+    base_url = fhirpathlab_url_for_linking
+    resource_base_url = resource_base_url_for_linking
+    return nil if base_url.blank? || resource_base_url.blank? || test_session_id.blank?
+
+    InfernoSuiteGenerator::FhirpathLabMessageLinker.link_for(
+      { resource_type: resource_type, resource_id: resource_id, path: expression },
+      base_url: base_url,
+      resource_base_url: resource_base_url,
+      session_id: test_session_id
+    )
+  end
+
+  def fhirpathlab_url_for_linking
+    self.class.suite::FHIRPATHLAB_URL
+  rescue NameError, Dry::Container::Error
+    nil
+  end
+
+  def resource_base_url_for_linking
+    "#{Inferno::Application['base_url']}/custom/#{self.class.suite.id}/resources"
+  rescue NameError, Dry::Container::Error
+    nil
   end
 
   def section_first_coding_code(section)

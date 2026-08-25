@@ -77,7 +77,7 @@ module AUPSTestKit
     def section_ms_element_line(composition, section, element, prefix)
       status = boolean_to_existent_string(resolve_path_with_dar(section, element).first.present?)
 
-      element_fhirpath_line(composition, prefix, element, status) || "**#{element}**: #{status}"
+      element_fhirpath_line(composition, prefix, element, status) || "#{status}: **#{element}**"
     end
   end
 end

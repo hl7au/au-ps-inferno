@@ -34,21 +34,21 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do
 
           List of Must Support elements populated or missing
 
-          Immunization/cccccccc-0001-0000-0000-000000000006: status: ✅ Populated (M)
+          ✅ Populated (M): Immunization/cccccccc-0001-0000-0000-000000000006: status
 
-          Immunization/cccccccc-0001-0000-0000-000000000006: vaccineCode: ✅ Populated (M)
+          ✅ Populated (M): Immunization/cccccccc-0001-0000-0000-000000000006: vaccineCode
 
-          Immunization/cccccccc-0001-0000-0000-000000000006: patient: ✅ Populated (M)
+          ✅ Populated (M): Immunization/cccccccc-0001-0000-0000-000000000006: patient
 
-          Immunization/cccccccc-0001-0000-0000-000000000006: patient.reference: ✅ Populated (M)
+          ✅ Populated (M): Immunization/cccccccc-0001-0000-0000-000000000006: patient.reference
 
-          Immunization/cccccccc-0001-0000-0000-000000000006: occurrenceDateTime: ✅ Populated
+          ✅ Populated: Immunization/cccccccc-0001-0000-0000-000000000006: occurrenceDateTime
 
-          Immunization/cccccccc-0001-0000-0000-000000000006: primarySource: ✅ Populated
+          ✅ Populated: Immunization/cccccccc-0001-0000-0000-000000000006: primarySource
 
-          Immunization/cccccccc-0001-0000-0000-000000000006: lotNumber: ✅ Populated
+          ✅ Populated: Immunization/cccccccc-0001-0000-0000-000000000006: lotNumber
 
-          Immunization/cccccccc-0001-0000-0000-000000000006: note: ✅ Populated
+          ✅ Populated: Immunization/cccccccc-0001-0000-0000-000000000006: note
         MSG
       )
     end
@@ -65,39 +65,39 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do
 
           List of Must Support elements populated or missing
 
-          Observation/cccccccc-0001-0000-0000-000000000007: status: ✅ Populated (M)
+          ✅ Populated (M): Observation/cccccccc-0001-0000-0000-000000000007: status
 
-          Observation/cccccccc-0001-0000-0000-000000000007: category: ✅ Populated (M)
+          ✅ Populated (M): Observation/cccccccc-0001-0000-0000-000000000007: category
 
-          Observation/cccccccc-0001-0000-0000-000000000007: code: ✅ Populated (M)
+          ✅ Populated (M): Observation/cccccccc-0001-0000-0000-000000000007: code
 
-          Observation/cccccccc-0001-0000-0000-000000000007: subject: ✅ Populated (M)
+          ✅ Populated (M): Observation/cccccccc-0001-0000-0000-000000000007: subject
 
-          Observation/cccccccc-0001-0000-0000-000000000007: subject.reference: ✅ Populated (M)
+          ✅ Populated (M): Observation/cccccccc-0001-0000-0000-000000000007: subject.reference
 
-          Observation/cccccccc-0001-0000-0000-000000000007: effectiveDateTime: ✅ Populated
+          ✅ Populated: Observation/cccccccc-0001-0000-0000-000000000007: effectiveDateTime
 
-          Observation/cccccccc-0001-0000-0000-000000000007: performer: ✅ Populated (M)
+          ✅ Populated (M): Observation/cccccccc-0001-0000-0000-000000000007: performer
 
-          Observation/cccccccc-0001-0000-0000-000000000007: value[x]: ⚠️ Missing
+          ⚠️ Missing: Observation/cccccccc-0001-0000-0000-000000000007: value[x]
 
-          Observation/cccccccc-0001-0000-0000-000000000007: dataAbsentReason: ⚠️ Missing
+          ⚠️ Missing: Observation/cccccccc-0001-0000-0000-000000000007: dataAbsentReason
 
-          Observation/cccccccc-0001-0000-0000-000000000007: interpretation: ⚠️ Missing
+          ⚠️ Missing: Observation/cccccccc-0001-0000-0000-000000000007: interpretation
 
-          Observation/cccccccc-0001-0000-0000-000000000007: specimen: ⚠️ Missing
+          ⚠️ Missing: Observation/cccccccc-0001-0000-0000-000000000007: specimen
 
-          Observation/cccccccc-0001-0000-0000-000000000007: referenceRange: ⚠️ Missing
+          ⚠️ Missing: Observation/cccccccc-0001-0000-0000-000000000007: referenceRange
 
-          Observation/cccccccc-0001-0000-0000-000000000007: hasMember: ⚠️ Missing
+          ⚠️ Missing: Observation/cccccccc-0001-0000-0000-000000000007: hasMember
 
-          Observation/cccccccc-0001-0000-0000-000000000007: component: ✅ Populated
+          ✅ Populated: Observation/cccccccc-0001-0000-0000-000000000007: component
 
-          Observation/cccccccc-0001-0000-0000-000000000007: component.code: ✅ Populated (M)
+          ✅ Populated (M): Observation/cccccccc-0001-0000-0000-000000000007: component.code
 
-          Observation/cccccccc-0001-0000-0000-000000000007: component.value[x]: ✅ Populated
+          ✅ Populated: Observation/cccccccc-0001-0000-0000-000000000007: component.value[x]
 
-          Observation/cccccccc-0001-0000-0000-000000000007: component.dataAbsentReason: ⚠️ Missing
+          ⚠️ Missing: Observation/cccccccc-0001-0000-0000-000000000007: component.dataAbsentReason
         MSG
       )
     end
@@ -127,21 +127,21 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do
 
           List of Must Support elements populated or missing
 
-          Immunization/cccccccc-0002-0000-0000-000000000006: status: ✅ Populated (M)
+          ✅ Populated (M): Immunization/cccccccc-0002-0000-0000-000000000006: status
 
-          Immunization/cccccccc-0002-0000-0000-000000000006: vaccineCode: ❌ Missing (M)
+          ❌ Missing (M): Immunization/cccccccc-0002-0000-0000-000000000006: vaccineCode
 
-          Immunization/cccccccc-0002-0000-0000-000000000006: patient: ✅ Populated (M)
+          ✅ Populated (M): Immunization/cccccccc-0002-0000-0000-000000000006: patient
 
-          Immunization/cccccccc-0002-0000-0000-000000000006: patient.reference: ✅ Populated (M)
+          ✅ Populated (M): Immunization/cccccccc-0002-0000-0000-000000000006: patient.reference
 
-          Immunization/cccccccc-0002-0000-0000-000000000006: occurrenceDateTime: ✅ Populated
+          ✅ Populated: Immunization/cccccccc-0002-0000-0000-000000000006: occurrenceDateTime
 
-          Immunization/cccccccc-0002-0000-0000-000000000006: primarySource: ✅ Populated
+          ✅ Populated: Immunization/cccccccc-0002-0000-0000-000000000006: primarySource
 
-          Immunization/cccccccc-0002-0000-0000-000000000006: lotNumber: ⚠️ Missing
+          ⚠️ Missing: Immunization/cccccccc-0002-0000-0000-000000000006: lotNumber
 
-          Immunization/cccccccc-0002-0000-0000-000000000006: note: ✅ Populated
+          ✅ Populated: Immunization/cccccccc-0002-0000-0000-000000000006: note
         MSG
       )
     end

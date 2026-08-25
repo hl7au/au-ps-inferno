@@ -120,10 +120,12 @@ module AUPSTestKit
 
       type_str = include_type ? identifier_type_display(result[:identifier]) : ''
       expression = "identifier.where(system='#{result[:slice][:system]}')"
-      status = "✅ Populated — system: #{result[:slice][:system]}#{type_str}"
+      extra = " — system: #{result[:slice][:system]}#{type_str}"
 
-      element_fhirpath_line(resource, '', expression, status) ||
-        "✅ Populated: **#{result[:slice][:name]}** — system: #{result[:slice][:system]}#{type_str}"
+      line = element_fhirpath_line(resource, '', expression, '✅ Populated')
+      return "#{line}#{extra}" if line
+
+      "✅ Populated: **#{result[:slice][:name]}**#{extra}"
     end
 
     def guard_populated_resource(container_type)

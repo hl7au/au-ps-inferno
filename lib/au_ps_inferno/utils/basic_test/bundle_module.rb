@@ -30,7 +30,7 @@ module AUPSTestKit
     # against yet.
     def bundle_ms_element_line(element, populated, label: element)
       status = boolean_to_existent_string(populated)
-      element_fhirpath_line(scratch_bundle, '', element, status) || "**#{label}**: #{status}"
+      element_fhirpath_line(scratch_bundle, '', element, status) || "#{status}: **#{label}**"
     end
 
     def skip_validation?

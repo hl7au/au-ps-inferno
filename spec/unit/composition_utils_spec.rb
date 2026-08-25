@@ -47,13 +47,13 @@ RSpec.describe CompositionUtils do
   end
 
   describe '#element_fhirpath_line' do
-    it 'builds a linkable "ResourceType/<id>: <expression>: <status>" line addressed at the given resource' do
+    it 'builds a linkable "<status>: ResourceType/<id>: <expression>" line addressed at the given resource' do
       resource = FHIR::Composition.new(id: 'comp-1')
 
       line = test_instance.element_fhirpath_line(resource, "section.where(code.coding.code='11450-4').", 'title',
                                                  '✅ Populated')
 
-      expect(line).to eq("Composition/comp-1: section.where(code.coding.code='11450-4').title: ✅ Populated")
+      expect(line).to eq("✅ Populated: Composition/comp-1: section.where(code.coding.code='11450-4').title")
     end
 
     it 'returns nil when the resource has no id' do

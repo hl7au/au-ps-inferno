@@ -34,27 +34,27 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do
 
           List of Must Support elements populated or missing
 
-          AllergyIntolerance/ad6fb7b7-c76f-441e-88a5-9051e795db26: clinicalStatus: ✅ Populated
+          ✅ Populated: AllergyIntolerance/ad6fb7b7-c76f-441e-88a5-9051e795db26: clinicalStatus
 
-          AllergyIntolerance/ad6fb7b7-c76f-441e-88a5-9051e795db26: verificationStatus: ✅ Populated
+          ✅ Populated: AllergyIntolerance/ad6fb7b7-c76f-441e-88a5-9051e795db26: verificationStatus
 
-          AllergyIntolerance/ad6fb7b7-c76f-441e-88a5-9051e795db26: type: ✅ Populated
+          ✅ Populated: AllergyIntolerance/ad6fb7b7-c76f-441e-88a5-9051e795db26: type
 
-          AllergyIntolerance/ad6fb7b7-c76f-441e-88a5-9051e795db26: code: ✅ Populated (M)
+          ✅ Populated (M): AllergyIntolerance/ad6fb7b7-c76f-441e-88a5-9051e795db26: code
 
-          AllergyIntolerance/ad6fb7b7-c76f-441e-88a5-9051e795db26: patient: ✅ Populated (M)
+          ✅ Populated (M): AllergyIntolerance/ad6fb7b7-c76f-441e-88a5-9051e795db26: patient
 
-          AllergyIntolerance/ad6fb7b7-c76f-441e-88a5-9051e795db26: patient.reference: ✅ Populated (M)
+          ✅ Populated (M): AllergyIntolerance/ad6fb7b7-c76f-441e-88a5-9051e795db26: patient.reference
 
-          AllergyIntolerance/ad6fb7b7-c76f-441e-88a5-9051e795db26: onsetDateTime: ✅ Populated
+          ✅ Populated: AllergyIntolerance/ad6fb7b7-c76f-441e-88a5-9051e795db26: onsetDateTime
 
-          AllergyIntolerance/ad6fb7b7-c76f-441e-88a5-9051e795db26: note: ✅ Populated
+          ✅ Populated: AllergyIntolerance/ad6fb7b7-c76f-441e-88a5-9051e795db26: note
 
-          AllergyIntolerance/ad6fb7b7-c76f-441e-88a5-9051e795db26: reaction: ✅ Populated
+          ✅ Populated: AllergyIntolerance/ad6fb7b7-c76f-441e-88a5-9051e795db26: reaction
 
-          AllergyIntolerance/ad6fb7b7-c76f-441e-88a5-9051e795db26: reaction.manifestation: ✅ Populated (M)
+          ✅ Populated (M): AllergyIntolerance/ad6fb7b7-c76f-441e-88a5-9051e795db26: reaction.manifestation
 
-          AllergyIntolerance/ad6fb7b7-c76f-441e-88a5-9051e795db26: reaction.severity: ✅ Populated
+          ✅ Populated: AllergyIntolerance/ad6fb7b7-c76f-441e-88a5-9051e795db26: reaction.severity
         MSG
       )
     end
@@ -71,25 +71,25 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do
 
           List of Must Support elements populated or missing
 
-          Condition/310f1593-d610-4144-a6e8-1f823d955e0d: clinicalStatus: ✅ Populated
+          ✅ Populated: Condition/310f1593-d610-4144-a6e8-1f823d955e0d: clinicalStatus
 
-          Condition/310f1593-d610-4144-a6e8-1f823d955e0d: verificationStatus: ✅ Populated
+          ✅ Populated: Condition/310f1593-d610-4144-a6e8-1f823d955e0d: verificationStatus
 
-          Condition/310f1593-d610-4144-a6e8-1f823d955e0d: category: ✅ Populated (M)
+          ✅ Populated (M): Condition/310f1593-d610-4144-a6e8-1f823d955e0d: category
 
-          Condition/310f1593-d610-4144-a6e8-1f823d955e0d: severity: ✅ Populated
+          ✅ Populated: Condition/310f1593-d610-4144-a6e8-1f823d955e0d: severity
 
-          Condition/310f1593-d610-4144-a6e8-1f823d955e0d: code: ✅ Populated (M)
+          ✅ Populated (M): Condition/310f1593-d610-4144-a6e8-1f823d955e0d: code
 
-          Condition/310f1593-d610-4144-a6e8-1f823d955e0d: subject: ✅ Populated (M)
+          ✅ Populated (M): Condition/310f1593-d610-4144-a6e8-1f823d955e0d: subject
 
-          Condition/310f1593-d610-4144-a6e8-1f823d955e0d: subject.reference: ✅ Populated (M)
+          ✅ Populated (M): Condition/310f1593-d610-4144-a6e8-1f823d955e0d: subject.reference
 
-          Condition/310f1593-d610-4144-a6e8-1f823d955e0d: onsetDateTime: ✅ Populated
+          ✅ Populated: Condition/310f1593-d610-4144-a6e8-1f823d955e0d: onsetDateTime
 
-          Condition/310f1593-d610-4144-a6e8-1f823d955e0d: abatement[x]: ✅ Populated
+          ✅ Populated: Condition/310f1593-d610-4144-a6e8-1f823d955e0d: abatement[x]
 
-          Condition/310f1593-d610-4144-a6e8-1f823d955e0d: note: ✅ Populated
+          ✅ Populated: Condition/310f1593-d610-4144-a6e8-1f823d955e0d: note
         MSG
       )
     end
@@ -106,27 +106,27 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do
 
           List of Must Support elements populated or missing
 
-          MedicationStatement/347e8435-cea1-4e94-9755-abb027926bb1: status: ✅ Populated (M)
+          ✅ Populated (M): MedicationStatement/347e8435-cea1-4e94-9755-abb027926bb1: status
 
-          MedicationStatement/347e8435-cea1-4e94-9755-abb027926bb1: medication[x]: ✅ Populated (M)
+          ✅ Populated (M): MedicationStatement/347e8435-cea1-4e94-9755-abb027926bb1: medication[x]
 
-          MedicationStatement/347e8435-cea1-4e94-9755-abb027926bb1: subject: ✅ Populated (M)
+          ✅ Populated (M): MedicationStatement/347e8435-cea1-4e94-9755-abb027926bb1: subject
 
-          MedicationStatement/347e8435-cea1-4e94-9755-abb027926bb1: subject.reference: ✅ Populated (M)
+          ✅ Populated (M): MedicationStatement/347e8435-cea1-4e94-9755-abb027926bb1: subject.reference
 
-          MedicationStatement/347e8435-cea1-4e94-9755-abb027926bb1: effectiveDateTime: ✅ Populated
+          ✅ Populated: MedicationStatement/347e8435-cea1-4e94-9755-abb027926bb1: effectiveDateTime
 
-          MedicationStatement/347e8435-cea1-4e94-9755-abb027926bb1: dateAsserted: ✅ Populated
+          ✅ Populated: MedicationStatement/347e8435-cea1-4e94-9755-abb027926bb1: dateAsserted
 
-          MedicationStatement/347e8435-cea1-4e94-9755-abb027926bb1: reasonCode: ✅ Populated
+          ✅ Populated: MedicationStatement/347e8435-cea1-4e94-9755-abb027926bb1: reasonCode
 
-          MedicationStatement/347e8435-cea1-4e94-9755-abb027926bb1: reasonReference: ✅ Populated
+          ✅ Populated: MedicationStatement/347e8435-cea1-4e94-9755-abb027926bb1: reasonReference
 
-          MedicationStatement/347e8435-cea1-4e94-9755-abb027926bb1: dosage: ✅ Populated
+          ✅ Populated: MedicationStatement/347e8435-cea1-4e94-9755-abb027926bb1: dosage
 
-          MedicationStatement/347e8435-cea1-4e94-9755-abb027926bb1: dosage.text: ✅ Populated
+          ✅ Populated: MedicationStatement/347e8435-cea1-4e94-9755-abb027926bb1: dosage.text
 
-          MedicationStatement/347e8435-cea1-4e94-9755-abb027926bb1: dosage.timing: ✅ Populated
+          ✅ Populated: MedicationStatement/347e8435-cea1-4e94-9755-abb027926bb1: dosage.timing
         MSG
       )
     end
@@ -156,25 +156,25 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do
 
           List of Must Support elements populated or missing
 
-          Condition/310f1593-d610-4144-a6e8-1f823d955e0d: clinicalStatus: ✅ Populated
+          ✅ Populated: Condition/310f1593-d610-4144-a6e8-1f823d955e0d: clinicalStatus
 
-          Condition/310f1593-d610-4144-a6e8-1f823d955e0d: verificationStatus: ⚠️ Missing
+          ⚠️ Missing: Condition/310f1593-d610-4144-a6e8-1f823d955e0d: verificationStatus
 
-          Condition/310f1593-d610-4144-a6e8-1f823d955e0d: category: ❌ Missing (M)
+          ❌ Missing (M): Condition/310f1593-d610-4144-a6e8-1f823d955e0d: category
 
-          Condition/310f1593-d610-4144-a6e8-1f823d955e0d: severity: ⚠️ Missing
+          ⚠️ Missing: Condition/310f1593-d610-4144-a6e8-1f823d955e0d: severity
 
-          Condition/310f1593-d610-4144-a6e8-1f823d955e0d: code: ✅ Populated (M)
+          ✅ Populated (M): Condition/310f1593-d610-4144-a6e8-1f823d955e0d: code
 
-          Condition/310f1593-d610-4144-a6e8-1f823d955e0d: subject: ✅ Populated (M)
+          ✅ Populated (M): Condition/310f1593-d610-4144-a6e8-1f823d955e0d: subject
 
-          Condition/310f1593-d610-4144-a6e8-1f823d955e0d: subject.reference: ✅ Populated (M)
+          ✅ Populated (M): Condition/310f1593-d610-4144-a6e8-1f823d955e0d: subject.reference
 
-          Condition/310f1593-d610-4144-a6e8-1f823d955e0d: onsetDateTime: ⚠️ Missing
+          ⚠️ Missing: Condition/310f1593-d610-4144-a6e8-1f823d955e0d: onsetDateTime
 
-          Condition/310f1593-d610-4144-a6e8-1f823d955e0d: abatement[x]: ⚠️ Missing
+          ⚠️ Missing: Condition/310f1593-d610-4144-a6e8-1f823d955e0d: abatement[x]
 
-          Condition/310f1593-d610-4144-a6e8-1f823d955e0d: note: ⚠️ Missing
+          ⚠️ Missing: Condition/310f1593-d610-4144-a6e8-1f823d955e0d: note
         MSG
       )
     end
