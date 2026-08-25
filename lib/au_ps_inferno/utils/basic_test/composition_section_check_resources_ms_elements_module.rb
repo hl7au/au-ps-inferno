@@ -113,11 +113,44 @@ module AUPSTestKit
       def build_ms_outcome(profile_metadata, resources, section_context = nil, all_present: false)
         ms_helper = ms_checker_for(profile_metadata, section_context)
         ms_checks_results = check_ms_elements_populated(profile_metadata.profile_url, resources, all_present:)
+        message = ms_helper.build_report_message(profile_metadata, ms_checks_results)
 
         {
           status: ms_helper.calculate_elements_status_message_level(ms_checks_results),
-          message: ms_helper.build_report_message(profile_metadata, ms_checks_results)
+          message: linked_ms_report_message(message, ms_checks_results, resources.first)
         }
+      end
+
+      def linked_ms_report_message(message, ms_checks_results, primary_resource)
+        header_lines = message.first(message.length - ms_checks_results.length)
+        element_lines = ms_checks_results.map { |status| ms_element_status_line(status, primary_resource) }
+
+        header_lines + element_lines
+      end
+
+      def ms_element_status_line(element_status, primary_resource)
+        path = element_status[:path]
+        mandatory = element_status[:mandatory]
+        status_text = ms_element_status_icon_text(element_status)
+        detail = mandatory ? "#{status_text} (M)" : status_text
+
+        element_fhirpath_line(primary_resource, '', path, detail) ||
+          ms_element_status_plain_line(path, status_text, mandatory)
+      end
+
+      def ms_element_status_icon_text(element_status)
+        return "#{InfernoSuiteGenerator::MSChecker::SUCCESS_ICON} Populated" if element_status[:present]
+
+        "#{ms_missing_icon(element_status[:mandatory])} Missing"
+      end
+
+      def ms_missing_icon(mandatory)
+        mandatory ? InfernoSuiteGenerator::MSChecker::ERROR_ICON : InfernoSuiteGenerator::MSChecker::WARNING_ICON
+      end
+
+      def ms_element_status_plain_line(path, status_text, mandatory)
+        line = "#{status_text}: #{path}#{' (M)' if mandatory}"
+        path.include?('.') ? "|- #{line}" : line
       end
 
       def process_profile(section_profile, resources_to_check_ms, all_present: false)

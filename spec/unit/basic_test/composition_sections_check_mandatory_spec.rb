@@ -34,27 +34,27 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do
 
           List of Must Support elements populated or missing
 
-          ✅ Populated: clinicalStatus
+          AllergyIntolerance/ad6fb7b7-c76f-441e-88a5-9051e795db26: clinicalStatus: ✅ Populated
 
-          ⚠️ Missing: verificationStatus
+          AllergyIntolerance/ad6fb7b7-c76f-441e-88a5-9051e795db26: verificationStatus: ⚠️ Missing
 
-          ⚠️ Missing: type
+          AllergyIntolerance/ad6fb7b7-c76f-441e-88a5-9051e795db26: type: ⚠️ Missing
 
-          ✅ Populated: code (M)
+          AllergyIntolerance/ad6fb7b7-c76f-441e-88a5-9051e795db26: code: ✅ Populated (M)
 
-          ✅ Populated: patient (M)
+          AllergyIntolerance/ad6fb7b7-c76f-441e-88a5-9051e795db26: patient: ✅ Populated (M)
 
-          |- ✅ Populated: patient.reference (M)
+          AllergyIntolerance/ad6fb7b7-c76f-441e-88a5-9051e795db26: patient.reference: ✅ Populated (M)
 
-          ✅ Populated: onsetDateTime
+          AllergyIntolerance/ad6fb7b7-c76f-441e-88a5-9051e795db26: onsetDateTime: ✅ Populated
 
-          ⚠️ Missing: note
+          AllergyIntolerance/ad6fb7b7-c76f-441e-88a5-9051e795db26: note: ⚠️ Missing
 
-          ✅ Populated: reaction
+          AllergyIntolerance/ad6fb7b7-c76f-441e-88a5-9051e795db26: reaction: ✅ Populated
 
-          |- ✅ Populated: reaction.manifestation (M)
+          AllergyIntolerance/ad6fb7b7-c76f-441e-88a5-9051e795db26: reaction.manifestation: ✅ Populated (M)
 
-          |- ✅ Populated: reaction.severity
+          AllergyIntolerance/ad6fb7b7-c76f-441e-88a5-9051e795db26: reaction.severity: ✅ Populated
         MSG
       )
     end
@@ -71,25 +71,25 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do
 
           List of Must Support elements populated or missing
 
-          ✅ Populated: clinicalStatus
+          Condition/310f1593-d610-4144-a6e8-1f823d955e0d: clinicalStatus: ✅ Populated
 
-          ⚠️ Missing: verificationStatus
+          Condition/310f1593-d610-4144-a6e8-1f823d955e0d: verificationStatus: ⚠️ Missing
 
-          ✅ Populated: category (M)
+          Condition/310f1593-d610-4144-a6e8-1f823d955e0d: category: ✅ Populated (M)
 
-          ⚠️ Missing: severity
+          Condition/310f1593-d610-4144-a6e8-1f823d955e0d: severity: ⚠️ Missing
 
-          ✅ Populated: code (M)
+          Condition/310f1593-d610-4144-a6e8-1f823d955e0d: code: ✅ Populated (M)
 
-          ✅ Populated: subject (M)
+          Condition/310f1593-d610-4144-a6e8-1f823d955e0d: subject: ✅ Populated (M)
 
-          |- ✅ Populated: subject.reference (M)
+          Condition/310f1593-d610-4144-a6e8-1f823d955e0d: subject.reference: ✅ Populated (M)
 
-          ⚠️ Missing: onsetDateTime
+          Condition/310f1593-d610-4144-a6e8-1f823d955e0d: onsetDateTime: ⚠️ Missing
 
-          ⚠️ Missing: abatement[x]
+          Condition/310f1593-d610-4144-a6e8-1f823d955e0d: abatement[x]: ⚠️ Missing
 
-          ⚠️ Missing: note
+          Condition/310f1593-d610-4144-a6e8-1f823d955e0d: note: ⚠️ Missing
         MSG
       )
     end
@@ -119,25 +119,25 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do
 
           List of Must Support elements populated or missing
 
-          ✅ Populated: clinicalStatus
+          Condition/310f1593-d610-4144-a6e8-1f823d955e0d: clinicalStatus: ✅ Populated
 
-          ⚠️ Missing: verificationStatus
+          Condition/310f1593-d610-4144-a6e8-1f823d955e0d: verificationStatus: ⚠️ Missing
 
-          ❌ Missing: category (M)
+          Condition/310f1593-d610-4144-a6e8-1f823d955e0d: category: ❌ Missing (M)
 
-          ⚠️ Missing: severity
+          Condition/310f1593-d610-4144-a6e8-1f823d955e0d: severity: ⚠️ Missing
 
-          ✅ Populated: code (M)
+          Condition/310f1593-d610-4144-a6e8-1f823d955e0d: code: ✅ Populated (M)
 
-          ✅ Populated: subject (M)
+          Condition/310f1593-d610-4144-a6e8-1f823d955e0d: subject: ✅ Populated (M)
 
-          |- ✅ Populated: subject.reference (M)
+          Condition/310f1593-d610-4144-a6e8-1f823d955e0d: subject.reference: ✅ Populated (M)
 
-          ⚠️ Missing: onsetDateTime
+          Condition/310f1593-d610-4144-a6e8-1f823d955e0d: onsetDateTime: ⚠️ Missing
 
-          ⚠️ Missing: abatement[x]
+          Condition/310f1593-d610-4144-a6e8-1f823d955e0d: abatement[x]: ⚠️ Missing
 
-          ⚠️ Missing: note
+          Condition/310f1593-d610-4144-a6e8-1f823d955e0d: note: ⚠️ Missing
         MSG
       )
     end

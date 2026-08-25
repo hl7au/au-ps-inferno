@@ -32,10 +32,44 @@ module CompositionUtils
   def save_bundle_to_scratch(bundle)
     scratch[bundle_scratch_key] = bundle
     InfernoSuiteGenerator::KeptResourcesRepository.new.save(session_id: test_session_id, resource: bundle)
+    save_entry_resources_to_scratch(bundle)
+  end
+
+  def save_entry_resources_to_scratch(bundle)
+    resources = (bundle.entry || []).filter_map(&:resource).select { |resource| resource.id.present? }
+    InfernoSuiteGenerator::KeptResourcesRepository.new.save_all(session_id: test_session_id, resources: resources)
   end
 
   def omit_unless_bundle_in_scratch
     omit_if scratch_bundle.blank?, NO_BUNDLE_OMIT_MESSAGE
+  end
+
+  def composition_resource_from_scratch
+    return nil if scratch_bundle.blank?
+
+    BundleDecorator.new(scratch_bundle).composition_resource
+  end
+
+  def section_fhirpath_prefix(section)
+    code = section_first_coding_code(section)
+    return '' if code.blank?
+
+    "section.where(code.coding.code='#{code}')."
+  end
+
+  def element_fhirpath_line(resource, prefix, element, status)
+    return nil if resource.blank?
+
+    resource_type = resource.resourceType
+    resource_id = resource.id
+    return nil if resource_type.blank? || resource_id.blank?
+
+    "#{resource_type}/#{resource_id}: #{prefix}#{element}: #{status}"
+  end
+
+  def section_first_coding_code(section)
+    coding = section&.code&.coding
+    coding&.first&.code
   end
 
   def group_section_output(section_info_array)
