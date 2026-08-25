@@ -22,13 +22,13 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do
       expect_fail(outcome)
     end
 
-    it 'returns a warning message when optional AllergyIntolerance Must Support elements are not populated' do
+    it 'returns an info message when all AllergyIntolerance Must Support elements are populated' do
       outcome = run_with_fixture_bundle(test, fixture_filename: success_bundle_filename)
 
-      expect_warning_message(
+      expect_info_message(
         outcome,
         msg(<<~MSG)
-          At least one optional Must Support element is not populated in the Patient Summary Allergies and Intolerances Section (48765-2) section. Further testing with data containing the missing elements or clarification the system does not ever know a value for the element is required.
+          All Must Support elements are populated in the Patient Summary Allergies and Intolerances Section (48765-2) section.
 
           **Profile**: AllergyIntolerance — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-allergyintolerance
 
@@ -36,9 +36,9 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do
 
           AllergyIntolerance/ad6fb7b7-c76f-441e-88a5-9051e795db26: clinicalStatus: ✅ Populated
 
-          AllergyIntolerance/ad6fb7b7-c76f-441e-88a5-9051e795db26: verificationStatus: ⚠️ Missing
+          AllergyIntolerance/ad6fb7b7-c76f-441e-88a5-9051e795db26: verificationStatus: ✅ Populated
 
-          AllergyIntolerance/ad6fb7b7-c76f-441e-88a5-9051e795db26: type: ⚠️ Missing
+          AllergyIntolerance/ad6fb7b7-c76f-441e-88a5-9051e795db26: type: ✅ Populated
 
           AllergyIntolerance/ad6fb7b7-c76f-441e-88a5-9051e795db26: code: ✅ Populated (M)
 
@@ -48,7 +48,7 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do
 
           AllergyIntolerance/ad6fb7b7-c76f-441e-88a5-9051e795db26: onsetDateTime: ✅ Populated
 
-          AllergyIntolerance/ad6fb7b7-c76f-441e-88a5-9051e795db26: note: ⚠️ Missing
+          AllergyIntolerance/ad6fb7b7-c76f-441e-88a5-9051e795db26: note: ✅ Populated
 
           AllergyIntolerance/ad6fb7b7-c76f-441e-88a5-9051e795db26: reaction: ✅ Populated
 
@@ -59,13 +59,13 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do
       )
     end
 
-    it 'returns a warning message when mandatory elements are populated but optional elements are not' do
+    it 'returns an info message when all Condition Must Support elements are populated' do
       outcome = run_with_fixture_bundle(test, fixture_filename: success_bundle_filename)
 
-      expect_warning_message(
+      expect_info_message(
         outcome,
         msg(<<~MSG)
-          At least one optional Must Support element is not populated in the Patient Summary Problems Section (11450-4) section. Further testing with data containing the missing elements or clarification the system does not ever know a value for the element is required.
+          All Must Support elements are populated in the Patient Summary Problems Section (11450-4) section.
 
           **Profile**: Condition — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-condition
 
@@ -73,11 +73,11 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do
 
           Condition/310f1593-d610-4144-a6e8-1f823d955e0d: clinicalStatus: ✅ Populated
 
-          Condition/310f1593-d610-4144-a6e8-1f823d955e0d: verificationStatus: ⚠️ Missing
+          Condition/310f1593-d610-4144-a6e8-1f823d955e0d: verificationStatus: ✅ Populated
 
           Condition/310f1593-d610-4144-a6e8-1f823d955e0d: category: ✅ Populated (M)
 
-          Condition/310f1593-d610-4144-a6e8-1f823d955e0d: severity: ⚠️ Missing
+          Condition/310f1593-d610-4144-a6e8-1f823d955e0d: severity: ✅ Populated
 
           Condition/310f1593-d610-4144-a6e8-1f823d955e0d: code: ✅ Populated (M)
 
@@ -85,11 +85,48 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do
 
           Condition/310f1593-d610-4144-a6e8-1f823d955e0d: subject.reference: ✅ Populated (M)
 
-          Condition/310f1593-d610-4144-a6e8-1f823d955e0d: onsetDateTime: ⚠️ Missing
+          Condition/310f1593-d610-4144-a6e8-1f823d955e0d: onsetDateTime: ✅ Populated
 
-          Condition/310f1593-d610-4144-a6e8-1f823d955e0d: abatement[x]: ⚠️ Missing
+          Condition/310f1593-d610-4144-a6e8-1f823d955e0d: abatement[x]: ✅ Populated
 
-          Condition/310f1593-d610-4144-a6e8-1f823d955e0d: note: ⚠️ Missing
+          Condition/310f1593-d610-4144-a6e8-1f823d955e0d: note: ✅ Populated
+        MSG
+      )
+    end
+
+    it 'returns an info message when all MedicationStatement Must Support elements are populated' do
+      outcome = run_with_fixture_bundle(test, fixture_filename: success_bundle_filename)
+
+      expect_info_message(
+        outcome,
+        msg(<<~MSG)
+          All Must Support elements are populated in the Patient Summary Medication Summary Section (10160-0) section.
+
+          **Profile**: MedicationStatement — http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medicationstatement
+
+          List of Must Support elements populated or missing
+
+          MedicationStatement/347e8435-cea1-4e94-9755-abb027926bb1: status: ✅ Populated (M)
+
+          MedicationStatement/347e8435-cea1-4e94-9755-abb027926bb1: medication[x]: ✅ Populated (M)
+
+          MedicationStatement/347e8435-cea1-4e94-9755-abb027926bb1: subject: ✅ Populated (M)
+
+          MedicationStatement/347e8435-cea1-4e94-9755-abb027926bb1: subject.reference: ✅ Populated (M)
+
+          MedicationStatement/347e8435-cea1-4e94-9755-abb027926bb1: effectiveDateTime: ✅ Populated
+
+          MedicationStatement/347e8435-cea1-4e94-9755-abb027926bb1: dateAsserted: ✅ Populated
+
+          MedicationStatement/347e8435-cea1-4e94-9755-abb027926bb1: reasonCode: ✅ Populated
+
+          MedicationStatement/347e8435-cea1-4e94-9755-abb027926bb1: reasonReference: ✅ Populated
+
+          MedicationStatement/347e8435-cea1-4e94-9755-abb027926bb1: dosage: ✅ Populated
+
+          MedicationStatement/347e8435-cea1-4e94-9755-abb027926bb1: dosage.text: ✅ Populated
+
+          MedicationStatement/347e8435-cea1-4e94-9755-abb027926bb1: dosage.timing: ✅ Populated
         MSG
       )
     end

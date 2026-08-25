@@ -115,6 +115,17 @@ module AUPSTestKit
       ", type: #{coding['display'].presence || coding['code'].presence || '—'}"
     end
 
+    def identifier_slice_line(resource, result, include_type: true)
+      return "⚠️ Missing: **#{result[:slice][:name]}**" if result[:identifier].blank?
+
+      type_str = include_type ? identifier_type_display(result[:identifier]) : ''
+      expression = "identifier.where(system='#{result[:slice][:system]}')"
+      status = "✅ Populated — system: #{result[:slice][:system]}#{type_str}"
+
+      element_fhirpath_line(resource, '', expression, status) ||
+        "✅ Populated: **#{result[:slice][:name]}** — system: #{result[:slice][:system]}#{type_str}"
+    end
+
     def guard_populated_resource(container_type)
       omit_unless_bundle_in_scratch
       resource_is_poluated = raw_resource_type_is_valid(container_type)

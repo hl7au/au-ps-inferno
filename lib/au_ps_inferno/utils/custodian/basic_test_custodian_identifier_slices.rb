@@ -8,7 +8,7 @@ module AUPSTestKit
 
       custodian_header = custodian_identifier_slices_header(resource_type_str, profile_str)
       slice_results = custodian_identifier_slice_results(identifiers_from_resource(resource) || [], slices)
-      custodian_post_identifier_slices_message(custodian_header, slice_results)
+      custodian_post_identifier_slices_message(resource, custodian_header, slice_results)
     end
 
     private
@@ -24,19 +24,10 @@ module AUPSTestKit
       end
     end
 
-    def custodian_post_identifier_slices_message(custodian_header, slice_results)
-      lines = slice_results.map { |result| custodian_identifier_slice_line(result) }
+    def custodian_post_identifier_slices_message(resource, custodian_header, slice_results)
+      lines = slice_results.map { |result| identifier_slice_line(resource, result) }
       message_type = slice_results.all? { |r| r[:identifier].present? } ? 'info' : 'warning'
       add_message(message_type, custodian_identifier_slices_full_message(custodian_header, lines))
-    end
-
-    def custodian_identifier_slice_line(result)
-      if result[:identifier].present?
-        type_str = identifier_type_display(result[:identifier])
-        "✅ Populated: **#{result[:slice][:name]}** — system: #{result[:slice][:system]}#{type_str}"
-      else
-        "⚠️ Missing: **#{result[:slice][:name]}**"
-      end
     end
 
     def custodian_identifier_slices_full_message(custodian_header, lines)
