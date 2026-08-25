@@ -1,11 +1,13 @@
 # frozen_string_literal: true
 
 require_relative 'ms_elements_populated_helpers_module'
+require_relative 'ms_element_status_linking_module'
 
 module AUPSTestKit
   # Must Support elements populated or missing message.
   module BasicTestMsSubElementsPopulatedModule
     include BasicTestMsElementsPopulatedHelpersModule
+    include BasicTestMsElementStatusLinkingModule
 
     def ms_sub_elements_populated_message(container_type)
       guard_populated_resource(container_type)
@@ -79,7 +81,7 @@ module AUPSTestKit
 
     def sub_element_message(ms_checker, sub_elements, resource, parent_path, results)
       message_level = build_message_level(ms_checker, sub_elements, results)
-      message = build_sub_element_message_content(ms_checker, sub_elements, resource, parent_path, results)
+      message = build_sub_element_message_content(sub_elements, resource, parent_path, results)
       add_message(message_level, message)
     end
 
@@ -89,24 +91,27 @@ module AUPSTestKit
       ms_checker.calculate_elements_status_message_level(sub_elements)
     end
 
-    def build_sub_element_message_content(ms_checker, sub_elements, resource, parent_path, results)
+    def build_sub_element_message_content(sub_elements, resource, parent_path, results)
       [
         'Must Support sub-elements correctly populated',
         "**Referenced subject**: #{resource.resourceType}",
         "## Complex element **#{parent_path}** — Must Support sub-elements populated or missing",
-        sub_element_statuses_texts(ms_checker, sub_elements, results, parent_path)
+        sub_element_statuses_texts(sub_elements, resource, results, parent_path)
       ].join("\n\n")
     end
 
-    def sub_element_statuses_texts(ms_checker, sub_elements, results, parent_path)
+    # Sub-element paths (e.g. "subject.reference") always have a ".", so
+    # ms_element_status_line's unlinked fallback would always add the
+    # "|- " child prefix — strip it here too, same as before: these lines
+    # already sit under a "Complex element X" heading, so the indent is
+    # redundant regardless of whether the line ended up linked.
+    def sub_element_statuses_texts(sub_elements, resource, results, parent_path)
       if parent_element_is_not_populated?(sub_elements, results)
         return parent_element_is_not_populated_text(parent_path,
                                                     sub_elements)
       end
 
-      ms_checker.element_statuses_texts(sub_elements).map do |text|
-        text.gsub('|- ', '')
-      end.join("\n\n")
+      sub_elements.map { |status| ms_element_status_line(status, resource).gsub('|- ', '') }.join("\n\n")
     end
 
     def parent_element_is_not_populated?(sub_elements, results)

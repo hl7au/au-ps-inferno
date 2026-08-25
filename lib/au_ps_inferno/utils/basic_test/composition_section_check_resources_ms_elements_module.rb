@@ -1,11 +1,14 @@
 # frozen_string_literal: true
 
 require_relative '../inferno_suite_generator_compat'
+require_relative 'ms_element_status_linking_module'
 require 'inferno_suite_generator/test_utils/ms_checker'
 module AUPSTestKit
   module BasicTestCompositionSectionReadModule
     # Composition Must Support elements in sections.
     module BasicTestCompositionSectionCheckResourcesMSElementsModule # rubocop:disable Metrics/ModuleLength
+      include BasicTestMsElementStatusLinkingModule
+
       AU_PS_PROFILE_BASE_URL = 'http://hl7.org.au/fhir/ps/StructureDefinition/'
 
       def check_ms_elements_populated(profile_url, resources, all_present: false)
@@ -119,38 +122,6 @@ module AUPSTestKit
           status: ms_helper.calculate_elements_status_message_level(ms_checks_results),
           message: linked_ms_report_message(message, ms_checks_results, resources.first)
         }
-      end
-
-      def linked_ms_report_message(message, ms_checks_results, primary_resource)
-        header_lines = message.first(message.length - ms_checks_results.length)
-        element_lines = ms_checks_results.map { |status| ms_element_status_line(status, primary_resource) }
-
-        header_lines + element_lines
-      end
-
-      def ms_element_status_line(element_status, primary_resource)
-        path = element_status[:path]
-        mandatory = element_status[:mandatory]
-        status_text = ms_element_status_icon_text(element_status)
-        detail = mandatory ? "#{status_text} (M)" : status_text
-
-        element_fhirpath_line(primary_resource, '', path, detail) ||
-          ms_element_status_plain_line(path, status_text, mandatory)
-      end
-
-      def ms_element_status_icon_text(element_status)
-        return "#{InfernoSuiteGenerator::MSChecker::SUCCESS_ICON} Populated" if element_status[:present]
-
-        "#{ms_missing_icon(element_status[:mandatory])} Missing"
-      end
-
-      def ms_missing_icon(mandatory)
-        mandatory ? InfernoSuiteGenerator::MSChecker::ERROR_ICON : InfernoSuiteGenerator::MSChecker::WARNING_ICON
-      end
-
-      def ms_element_status_plain_line(path, status_text, mandatory)
-        line = "#{status_text}: #{path}#{' (M)' if mandatory}"
-        path.include?('.') ? "|- #{line}" : line
       end
 
       def process_profile(section_profile, resources_to_check_ms, all_present: false)
