@@ -1,8 +1,12 @@
 # Changelog
 
-## [Unreleased]
+## [1.0.1] - 2026-09-03
 
 - Relax the `inferno_core` dependency from `~> 1.0.6` to `>= 1.0.6`. The tilde pin resolved to `>= 1.0.6, < 1.1.0` and was the only cap on `inferno_core` anywhere in the dependency tree, so it held every host application on 1.0.x. The kit uses only the public validation DSL (`resource_is_valid?`), which is unchanged through 1.4.x.
+
+### Changed
+
+- Split the Composition metadata out of `metadata.yaml` into `composition_metadata.yaml` and read it through `CompositionMetadataManager`, and regenerate the suite against the reworked generator. The generator itself was restructured (`metadata_producer.rb` replaces most of `metadata_manager.rb` and `ig_resources_extractor.rb`), and a workflow now syncs the IG package and regenerates the suite.
 
 ### Added
 
