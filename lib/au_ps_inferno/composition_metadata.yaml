@@ -1145,3 +1145,14 @@
   :filters:
   - path: code.coding.code
     value: 74013-4
+:address_profile_elements:
+- :resource_type: Organization
+  :path: address
+- :resource_type: Patient
+  :path: address
+- :resource_type: Patient
+  :path: contact.address
+- :resource_type: Practitioner
+  :path: address
+- :resource_type: RelatedPerson
+  :path: address
