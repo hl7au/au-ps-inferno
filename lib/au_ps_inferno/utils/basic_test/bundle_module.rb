@@ -17,11 +17,20 @@ module AUPSTestKit
 
     def mandatory_ms_elements_info
       [
-        "**identifier**: #{boolean_to_existent_string(identifier_info?)}",
-        "**type**: #{boolean_to_existent_string(type_info?)}",
-        "**timestamp**: #{boolean_to_existent_string(timestamp_info?)}",
-        "**All entry exists fullUrl**: #{boolean_to_existent_string(all_entries_have_full_url_info?)}"
+        bundle_ms_element_line('identifier', identifier_info?),
+        bundle_ms_element_line('type', type_info?),
+        bundle_ms_element_line('timestamp', timestamp_info?),
+        bundle_ms_element_line('entry.fullUrl', all_entries_have_full_url_info?, label: 'All entry exists fullUrl')
       ].join("\n\n")
+    end
+
+    # Links `element` to FHIRPath Lab against the kept Bundle (same mechanism as
+    # CompositionUtils#element_fhirpath_line elsewhere), falling back to the
+    # original "**label**: status" text when there's no bundle id to link
+    # against yet.
+    def bundle_ms_element_line(element, populated, label: element)
+      status = boolean_to_existent_string(populated)
+      element_fhirpath_line(scratch_bundle, '', element, status) || "#{status}: **#{label}**"
     end
 
     def skip_validation?

@@ -34,25 +34,25 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do
 
           List of Must Support elements populated or missing
 
-          ✅ Populated: clinicalStatus
+          ✅ Populated: Condition/cccccccc-0003-0000-0000-000000000006: clinicalStatus
 
-          ✅ Populated: verificationStatus
+          ✅ Populated: Condition/cccccccc-0003-0000-0000-000000000006: verificationStatus
 
-          ✅ Populated: category (M)
+          ✅ Populated (M): Condition/cccccccc-0003-0000-0000-000000000006: category
 
-          ✅ Populated: severity
+          ✅ Populated: Condition/cccccccc-0003-0000-0000-000000000006: severity
 
-          ✅ Populated: code (M)
+          ✅ Populated (M): Condition/cccccccc-0003-0000-0000-000000000006: code
 
-          ✅ Populated: subject (M)
+          ✅ Populated (M): Condition/cccccccc-0003-0000-0000-000000000006: subject
 
-          |- ✅ Populated: subject.reference (M)
+          ✅ Populated (M): Condition/cccccccc-0003-0000-0000-000000000006: subject.reference
 
-          ✅ Populated: onsetDateTime
+          ✅ Populated: Condition/cccccccc-0003-0000-0000-000000000006: onsetDateTime
 
-          ✅ Populated: abatement[x]
+          ✅ Populated: Condition/cccccccc-0003-0000-0000-000000000006: abatement[x]
 
-          ✅ Populated: note
+          ✅ Populated: Condition/cccccccc-0003-0000-0000-000000000006: note
         MSG
       )
     end
@@ -82,25 +82,25 @@ RSpec.describe AUPSTestKit::BasicTestCompositionSectionReadModule do
 
           List of Must Support elements populated or missing
 
-          ✅ Populated: clinicalStatus
+          ✅ Populated: Condition/cccccccc-0004-0000-0000-000000000007: clinicalStatus
 
-          ✅ Populated: verificationStatus
+          ✅ Populated: Condition/cccccccc-0004-0000-0000-000000000007: verificationStatus
 
-          ❌ Missing: category (M)
+          ❌ Missing (M): Condition/cccccccc-0004-0000-0000-000000000007: category
 
-          ⚠️ Missing: severity
+          ⚠️ Missing: Condition/cccccccc-0004-0000-0000-000000000007: severity
 
-          ✅ Populated: code (M)
+          ✅ Populated (M): Condition/cccccccc-0004-0000-0000-000000000007: code
 
-          ✅ Populated: subject (M)
+          ✅ Populated (M): Condition/cccccccc-0004-0000-0000-000000000007: subject
 
-          |- ✅ Populated: subject.reference (M)
+          ✅ Populated (M): Condition/cccccccc-0004-0000-0000-000000000007: subject.reference
 
-          ⚠️ Missing: onsetDateTime
+          ⚠️ Missing: Condition/cccccccc-0004-0000-0000-000000000007: onsetDateTime
 
-          ⚠️ Missing: abatement[x]
+          ⚠️ Missing: Condition/cccccccc-0004-0000-0000-000000000007: abatement[x]
 
-          ⚠️ Missing: note
+          ⚠️ Missing: Condition/cccccccc-0004-0000-0000-000000000007: note
         MSG
       )
     end

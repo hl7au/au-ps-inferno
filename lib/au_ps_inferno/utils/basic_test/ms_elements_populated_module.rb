@@ -1,11 +1,13 @@
 # frozen_string_literal: true
 
 require_relative 'ms_elements_populated_helpers_module'
+require_relative 'ms_element_status_linking_module'
 
 module AUPSTestKit
   # Must Support elements populated or missing message.
   module BasicTestMsElementsPopulatedModule
     include BasicTestMsElementsPopulatedHelpersModule
+    include BasicTestMsElementStatusLinkingModule
 
     def ms_elements_populated_message(container_type)
       guard_populated_resource(container_type)
@@ -33,7 +35,7 @@ module AUPSTestKit
 
       status = ms_checker.calculate_elements_status_message_level(all_check_results)
       message = ms_checker.build_report_message(profile_metadata, all_check_results)
-      add_message(status, message.join("\n\n"))
+      add_message(status, linked_ms_report_message(message, all_check_results, resource).join("\n\n"))
 
       all_check_results.none? { |result| !result[:present] && result[:mandatory] }
     end
