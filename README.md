@@ -42,6 +42,17 @@ If a new AU PS IG release appears at http://hl7.org.au/fhir/ps/history.html, fol
 2. The generator extracts IG resources from the archive, updates `lib/au_ps_inferno/metadata.yaml` (core IG metadata) and `lib/au_ps_inferno/composition_metadata.yaml` (Composition-specific metadata), and sets `IG_VERSION` in `lib/au_ps_inferno/version.rb` to the version declared in the package's `package.json`;
 3. If there are any changes, a Pull Request is created automatically.
 
+## Suppressing Known Validation Messages
+
+Some FHIR validator messages are known false positives or otherwise unavoidable (e.g. gaps in external terminology). These can be suppressed via the `SUPPRESSED_VALIDATION_MESSAGES` constant in [`lib/au_ps_inferno/suite/au_ps_v100.rb`](lib/au_ps_inferno/suite/au_ps_v100.rb).
+
+Each entry is a hash with:
+- `type` — `'error'`, `'warning'`, or `'info'`, matched against the validator message's type.
+- `pattern` — a `Regexp` matched against the message text.
+- `reason` — a short note documenting why the message is suppressed.
+
+Only add an entry once the message has been confirmed as a known, acceptable issue (see [#38](https://github.com/hl7au/au-ps-inferno/issues/38)) — suppressing a message hides it from test results, so it must not be used to mask real validation failures.
+
 ## Development workflow
 This repository contains both the source code of the tests generator and the generated tests themselves.
 Even a small change in the generator source causes a huge amount of changes in the generated tests.

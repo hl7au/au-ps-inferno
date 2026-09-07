@@ -2,6 +2,8 @@
 
 require_relative '../version'
 
+require_relative 'suppressed_validation_messages'
+
 require_relative 'au_ps_bundle_instance/au_ps_bundle_instance'
 
 require_relative 'au_ps_retrieve_cs_group/au_ps_retrieve_cs_group'
@@ -18,6 +20,9 @@ module AUPSTestKit
     description 'Validates AU PS (Australian Primary Care and Shared Health) bundles, ' \
                 'compositions, sections, and server CapabilityStatement support for the ' \
                 "#{AUPSTestKit::IG_VERSION} implementation guide."
+
+    # See suppressed_validation_messages.rb for the list of known, accepted validation messages.
+    SUPPRESSED_VALIDATION_MESSAGES = SuppressedValidationMessages::LIST
 
     fhir_resource_validator do
       igs "hl7.fhir.au.ps##{AUPSTestKit::IG_VERSION}"
@@ -37,6 +42,12 @@ module AUPSTestKit
         # only resolvable here.
         snomedCT ENV.fetch('SNOMED_EDITION', 'au')
         noEcosystem true
+      end
+
+      exclude_message do |message|
+        SUPPRESSED_VALIDATION_MESSAGES.any? do |suppression|
+          message.type == suppression[:type] && suppression[:pattern].match?(message.message)
+        end
       end
     end
 
