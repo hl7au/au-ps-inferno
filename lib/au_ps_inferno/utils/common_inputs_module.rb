@@ -136,6 +136,11 @@ module AUPSTestKit
       configure_fhir_client(klass)
     end
 
+    def self.bundle_acquisition_inputs(klass)
+      declare_inputs(klass, *ALL_BUNDLE_ACQUISITION_INPUTS_DEFINITION)
+      configure_fhir_client(klass)
+    end
+
     def self.configure_fhir_client(klass)
       klass.fhir_client do
         url :url
