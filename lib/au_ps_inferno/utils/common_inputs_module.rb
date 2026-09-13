@@ -1,10 +1,9 @@
 # frozen_string_literal: true
 
 module AUPSTestKit
-  # Shared `input` declarations for the bundle-acquisition test classes used by the
-  # single-file suite (ProvidedBundleTestClass, RetrieveBundleTestClass,
-  # GenerateSummaryBundleTestClass) and the CapabilityStatement group
-  # (AUPSRetrieveCSGroup100preview).
+  # Shared `input` declarations for the five bundle-acquisition tests under
+  # suite_bundle_acquisition (AUPSSuiteBundleAcquisitionFrom{Resource,Url,BundleId,PatientId,
+  # Identifier}) and the CapabilityStatement group (AUPSRetrieveCSGroup100preview).
   #
   # All of them declare the same `bundle_retrieve_method` radio input, and gate their
   # own fields on it via `enable_when`, so a suite-wide run shows one "how do you want
