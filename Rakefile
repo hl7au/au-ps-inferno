@@ -24,6 +24,26 @@ namespace :deps do
   end
 end
 
+namespace :dev_tools do
+  desc 'Install or update the shared bin/hot-reload watcher script'
+  task :install_hot_reload do
+    require 'inferno_suite_generator/dev_tools/hot_reload_installer'
+
+    installer = InfernoSuiteGenerator::DevTools::HotReloadInstaller.new
+    result = installer.install!(force: ENV['FORCE'] == '1')
+
+    case result
+    when :installed
+      puts "Installed bin/hot-reload (v#{installer.installed_version})."
+      puts "Wire it into compose.yaml - see inferno_suite_generator's README 'Auto-reload' section."
+    when :updated
+      puts "Updated bin/hot-reload to v#{installer.installed_version}."
+    when :up_to_date
+      puts "bin/hot-reload is already up to date (v#{installer.installed_version})."
+    end
+  end
+end
+
 namespace :generator do
   desc 'Generate AU PS/IPS test suites. Set ADDITIONAL_IG_RESOURCES to a folder to load extra JSON resources.'
   task :generate do
