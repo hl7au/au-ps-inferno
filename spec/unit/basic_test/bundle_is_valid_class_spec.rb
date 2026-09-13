@@ -33,11 +33,23 @@ RSpec.describe AUPSTestKit::BundleIsValidClass do
     klass
   end
 
-  it 'omits when its group has no Bundle in scratch' do
-    test = create_test('bundle_is_valid_class_scratch_omit_test', described_class)
-    result = run(test, { validate_against: ['au_ps_bundle'] }, {})
+  def build_bundle
+    FHIR::Bundle.new(resourceType: 'Bundle', type: 'document', timestamp: '2025-01-01T00:00:00Z')
+  end
+
+  it 'omits when no Bundle was acquired' do
+    test = create_test('bundle_is_valid_class_no_bundle_test', described_class)
+    result = run(test, {}, { validate_against: ['au_ps_bundle'] })
 
     expect(result.result).to eq('omit')
     expect(result.result_message).to match(/No AU PS Bundle was loaded by this test group/)
+  end
+
+  it 'omits when the acquisition test did not select AU PS Bundle validation' do
+    test = create_test('bundle_is_valid_class_not_selected_test', described_class)
+    result = run(test, {}, { bundle_ips_resource: build_bundle, validate_against: ['ips_bundle'] })
+
+    expect(result.result).to eq('omit')
+    expect(result.result_message).to match(/AU PS Bundle.*Validation.*is not selected/)
   end
 end

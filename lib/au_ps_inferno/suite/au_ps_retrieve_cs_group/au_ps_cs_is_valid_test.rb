@@ -10,7 +10,7 @@ module AUPSTestKit
     id :au_ps_cs_is_valid_100preview
 
     run do
-      omit_if url.blank?, NO_SERVER_URL_OMIT_MESSAGE
+      omit_unless_fhir_server_bundle?
       fhir_get_capability_statement
       scratch[:capability_statement] = resource
       info "Capability Statement saved to scratch: #{scratch[:capability_statement]}"

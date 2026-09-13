@@ -10,24 +10,6 @@ module AUPSTestKit
 
     id :basic_validate_bundle_test
 
-    input :validate_against,
-          title: 'Validate Against',
-          optional: true,
-          type: 'checkbox',
-          default: %w[au_ps_bundle],
-          options: {
-            list_options: [
-              {
-                label: 'AU PS Bundle Validation',
-                value: 'au_ps_bundle'
-              },
-              {
-                label: 'IPS Bundle Validation',
-                value: 'ips_bundle'
-              }
-            ]
-          }
-
     def omit_au_ps_validation?
       omit_test_wrapper?('au_ps_bundle')
     end
@@ -37,6 +19,12 @@ module AUPSTestKit
     end
 
     private
+
+    # Set by the Bundle Acquisition test that populated scratch[:bundle_ips_resource], rather
+    # than declared as its own `input` here, so only the acquisition tests expose an inputs form.
+    def validate_against
+      scratch[:validate_against]
+    end
 
     def omit_test_wrapper?(include_str)
       validate_against.blank? || !validate_against.include?(include_str)

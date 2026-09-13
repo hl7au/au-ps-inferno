@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-require_relative '../../utils/basic_test_class'
+require_relative '../../utils/basic_test_with_url'
 require_relative '../../utils/capability_statement_decorator'
 
 module AUPSTestKit
   # Verifies that the CapabilityStatement declares support for the required AU PS profiles.
-  class AUPSCSSupportsAUPSProfiles100preview < BasicTest
+  class AUPSCSSupportsAUPSProfiles100preview < BasicTestWithURL
     title 'CapabilityStatement supports AU PS Profiles'
     description 'Verifies that the CapabilityStatement declares support for the required AU PS profiles.'
     id :au_ps_cs_supports_au_ps_profiles_100preview
@@ -23,7 +23,7 @@ module AUPSTestKit
     end
 
     run do
-      omit_if url.blank?, NO_SERVER_URL_OMIT_MESSAGE
+      omit_unless_fhir_server_bundle?
       skip_if scratch[:capability_statement].blank?, 'CapabilityStatement was not retrieved from the server'
       check_profiles_status(
         { 'http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-allergyintolerance' => 'AUPSAllergyIntolerance',
