@@ -74,6 +74,18 @@ module AUPSTestKit
       header_value_input: [:header_value, {
         title: 'Header value', optional: true,
         enable_when: { input_name: 'bundle_retrieve_method', value: 'fhir_server' }
+      }],
+      validate_against_input: [:validate_against, {
+        title: 'Validate Against',
+        optional: true,
+        type: 'checkbox',
+        default: %w[au_ps_bundle],
+        options: {
+          list_options: [
+            { label: 'AU PS Bundle Validation', value: 'au_ps_bundle' },
+            { label: 'IPS Bundle Validation', value: 'ips_bundle' }
+          ]
+        }
       }]
     }.freeze
 
@@ -85,6 +97,13 @@ module AUPSTestKit
                                        credentials_input header_name_input header_value_input].freeze
     RETRIEVE_CS_INPUTS_DEFINITION = %i[bundle_retrieve_method_input fhir_server_url_input credentials_input
                                        header_name_input header_value_input].freeze
+
+    # Every acquisition field plus validate_against, for the single Bundle Acquisition group.
+    # bundle_retrieve_method_input is shared by the three acquisition definitions above, so
+    # dedupe it.
+    ALL_BUNDLE_ACQUISITION_INPUTS_DEFINITION = (
+      BUNDLE_RESOURCE_INPUTS_DEFINITION + BUNDLE_URL_INPUTS_DEFINITION + FHIR_SERVER_INPUTS_DEFINITION
+    ).uniq + %i[validate_against_input]
 
     SINGLE_INPUT_DEFINITIONS.each do |method_name, (input_name, options)|
       define_singleton_method(method_name) do |klass|
