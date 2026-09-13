@@ -10,7 +10,7 @@ require File.join(Gem::Specification.find_by_name('inferno_core').full_gem_path,
 
 BUNDLE_SCRATCH_FIXTURE_METADATA_PATH = File.expand_path('../../fixtures/metadata.yaml', __dir__).freeze
 
-RSpec.describe 'Bundle scratch isolation between top-level groups (issue #98)' do
+RSpec.describe 'Bundle scratch key (single acquisition path, issue #86)' do
   include_context 'when testing a runnable'
 
   let(:suite_id) { 'bundle_scratch_isolation_test_suite' }
@@ -70,28 +70,19 @@ RSpec.describe 'Bundle scratch isolation between top-level groups (issue #98)' d
     klass
   end
 
-  describe 'per-group scratch keys' do
-    it 'reads the Bundle stored under its own group key' do
-      test = create_subject_resource_type_test('suite_au_ps_bundle_instance_scratch_own_key_test')
-      result = run(test, {}, { bundle_ips_resource_instance: build_bundle })
+  describe 'shared scratch key' do
+    it 'reads the Bundle stored under the shared key, regardless of the test id' do
+      test = create_subject_resource_type_test('suite_bundle_acquisition_scratch_shared_key_test')
+      result = run(test, {}, { bundle_ips_resource: build_bundle })
 
       expect(result.result).to eq('pass')
     end
 
-    it 'omits instead of reading a Bundle acquired by a different group' do
-      test = create_subject_resource_type_test('suite_retrieve_au_ps_bundle_validation_tests_scratch_leak_test')
+    it 'does not read a Bundle stored under any other key' do
+      test = create_subject_resource_type_test('suite_bundle_acquisition_scratch_other_key_test')
       result = run(test, {}, { bundle_ips_resource_instance: build_bundle })
 
       expect(result.result).to eq('omit')
-    end
-
-    it 'derives the summary group key from the test id' do
-      test = create_subject_resource_type_test(
-        'suite_generate_au_ps_using_ips_summary_validation_tests_scratch_key_test'
-      )
-      result = run(test, {}, { bundle_ips_resource_summary: build_bundle })
-
-      expect(result.result).to eq('pass')
     end
   end
 

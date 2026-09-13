@@ -65,13 +65,13 @@ RSpec.describe 'Bundle acquisition split from validation (issue #98)' do
       expect(result.result_message).to match(/expected a Bundle/)
     end
 
-    it 'stores the parsed Bundle under its own group scratch key' do
+    it 'stores the parsed Bundle under the shared scratch key' do
       test = create_test('suite_au_ps_bundle_instance_provide_store_test', described_class)
       scratch = {}
       result = run(test, { bundle_resource: bundle_json }, scratch)
 
       expect(result.result).to eq('pass')
-      expect(scratch[:bundle_ips_resource_instance]).to be_a(FHIR::Bundle)
+      expect(scratch[:bundle_ips_resource]).to be_a(FHIR::Bundle)
     end
   end
 

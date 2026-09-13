@@ -48,7 +48,7 @@ RSpec.describe AUPSTestKit::RetrieveBundleTestClass do
     result = run(test, { bundle_url: bundle_url }, scratch)
 
     expect(result.result).to eq('pass')
-    expect(scratch[:bundle_ips_resource_retrieve]).to be_a(FHIR::Bundle)
+    expect(scratch[:bundle_ips_resource]).to be_a(FHIR::Bundle)
     requests = Inferno::Repositories::Requests.new.requests_for_result(result.id)
     expect(requests.length).to eq(1)
     expect(requests.first.url).to eq(bundle_url)

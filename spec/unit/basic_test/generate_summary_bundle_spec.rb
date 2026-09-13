@@ -49,7 +49,7 @@ RSpec.describe AUPSTestKit::GenerateSummaryBundleTestClass do
     result = run(test, { url: server_url, patient_id: 'pat1' }, scratch)
 
     expect(result.result).to eq('pass')
-    expect(scratch[:bundle_ips_resource_summary]).to be_a(FHIR::Bundle)
+    expect(scratch[:bundle_ips_resource]).to be_a(FHIR::Bundle)
   end
 
   it 'omits when no server URL or patient details are provided' do
@@ -68,7 +68,7 @@ RSpec.describe AUPSTestKit::GenerateSummaryBundleTestClass do
     result = run(test, { url: server_url, bundle_id: 'bundle1' }, scratch)
 
     expect(result.result).to eq('pass')
-    expect(scratch[:bundle_ips_resource_summary]).to be_a(FHIR::Bundle)
+    expect(scratch[:bundle_ips_resource]).to be_a(FHIR::Bundle)
   end
 
   it 'prefers $summary over bundle_id when both patient details and a bundle_id are provided' do
