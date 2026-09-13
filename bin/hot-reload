@@ -1,0 +1,27 @@
+#!/bin/sh
+# inferno_suite_generator:hot-reload v1
+# Restart a long-running command whenever a .rb file under lib/ changes.
+#
+# It is intentionally polling-based (content hash, not inotify/rerun/listen):
+# Docker bind mounts from macOS and Windows/WSL2 hosts do not deliver
+# filesystem change events into the container, and mtimes seen inside the
+# container are frequently stale. Hashing file contents on an interval is
+# slower but works identically on every host OS.
+set -eu
+INTERVAL="${HOT_RELOAD_INTERVAL:-2}"
+CHILD=""
+fingerprint() {
+  find lib -name '*.rb' -type f -exec md5sum {} + 2>/dev/null | sort | md5sum
+}
+start() { "$@" & CHILD=$!; }
+stop() { [ -n "$CHILD" ] || return 0; kill "$CHILD" 2>/dev/null || true; wait "$CHILD" 2>/dev/null || true; CHILD=""; }
+trap 'stop; exit 0' TERM INT
+PREV="$(fingerprint)"
+start "$@"
+while sleep "$INTERVAL"; do
+  CUR="$(fingerprint)"
+  [ "$CUR" = "$PREV" ] && continue
+  PREV="$CUR"
+  stop
+  start "$@"
+done
