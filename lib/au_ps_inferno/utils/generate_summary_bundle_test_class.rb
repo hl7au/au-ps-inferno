@@ -63,6 +63,7 @@ module AUPSTestKit
     end
 
     run do
+      omit_unless_retrieve_method_is('fhir_server')
       omit_if skip_test?, NO_SUMMARY_INPUTS_MESSAGE
       read_and_save_data
     end

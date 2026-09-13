@@ -2,6 +2,7 @@
 
 require 'fhir_models'
 require 'json'
+require 'webmock/rspec'
 
 require_relative '../../../lib/au_ps_inferno/utils/provided_bundle_test_class'
 require_relative '../../../lib/au_ps_inferno/utils/bundle_is_valid_class'
@@ -15,6 +16,7 @@ RSpec.describe 'Bundle acquisition split from validation (issue #98)' do
   include_context 'when testing a runnable'
 
   let(:suite_id) { 'bundle_acquisition_split_test_suite' }
+  let(:server_url) { 'https://example.com/fhir' }
 
   before do
     suite_stub = Class.new(Inferno::TestSuite) { id 'bundle_acquisition_split_test_suite' }
@@ -72,6 +74,54 @@ RSpec.describe 'Bundle acquisition split from validation (issue #98)' do
 
       expect(result.result).to eq('pass')
       expect(scratch[:bundle_ips_resource_instance]).to be_a(FHIR::Bundle)
+    end
+
+    it 'omits when a different Bundle Retrieval Method is selected, even with a valid Bundle resource' do
+      test = create_test('suite_au_ps_bundle_instance_provide_other_method_test', described_class)
+      result = run(test, { bundle_retrieve_method: 'fhir_server', bundle_resource: bundle_json })
+
+      expect(result.result).to eq('omit')
+    end
+
+    it 'omits when the FHIR Server method is selected but no Bundle ID is provided' do
+      test = create_test('suite_au_ps_bundle_instance_provide_fhir_server_no_id_test', described_class)
+      result = run(test, { bundle_retrieve_method: 'fhir_server', url: server_url })
+
+      expect(result.result).to eq('omit')
+    end
+
+    it 'retrieves a Bundle by ID from a FHIR server when the FHIR Server method is selected' do
+      stub_request(:get, "#{server_url}/Bundle/bundle1")
+        .to_return(status: 200, body: bundle_json, headers: { 'Content-Type' => 'application/fhir+json' })
+
+      test = create_test('suite_au_ps_bundle_instance_provide_fhir_server_id_test', described_class)
+      scratch = {}
+      result = run(test, { bundle_retrieve_method: 'fhir_server', url: server_url, bundle_id: 'bundle1' }, scratch)
+
+      expect(result.result).to eq('pass')
+      expect(scratch[:bundle_ips_resource_instance]).to be_a(FHIR::Bundle)
+    end
+
+    it 'omits without a duplicate fetch when the Generate AU PS $summary group already retrieved a Bundle' do
+      test = create_test('suite_au_ps_bundle_instance_provide_fhir_server_dedup_test', described_class)
+      scratch = { bundle_ips_resource_summary: FHIR::Bundle.new(resourceType: 'Bundle') }
+      result = run(test, { bundle_retrieve_method: 'fhir_server', url: server_url, bundle_id: 'bundle1' }, scratch)
+
+      expect(result.result).to eq('omit')
+      expect(WebMock).not_to have_requested(:get, "#{server_url}/Bundle/bundle1")
+    end
+
+    it 'ignores a stale Bundle resource once the FHIR Server method is selected' do
+      stub_request(:get, "#{server_url}/Bundle/bundle1")
+        .to_return(status: 200, body: bundle_json, headers: { 'Content-Type' => 'application/fhir+json' })
+
+      test = create_test('suite_au_ps_bundle_instance_provide_fhir_server_ignores_resource_test', described_class)
+      result = run(test, {
+                     bundle_retrieve_method: 'fhir_server', url: server_url, bundle_id: 'bundle1',
+                     bundle_resource: FHIR::Patient.new(id: 'p1').to_json
+                   })
+
+      expect(result.result).to eq('pass')
     end
   end
 

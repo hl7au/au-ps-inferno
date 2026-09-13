@@ -39,6 +39,7 @@ module AUPSTestKit
     end
 
     run do
+      omit_unless_retrieve_method_is('bundle_url')
       omit_if skip_test?, NO_RETRIEVAL_INPUTS_MESSAGE
       get_bundle_resource_from_url(bundle_url)
     end

@@ -85,6 +85,10 @@ module AUPSTestKit
                                        credentials_input header_name_input header_value_input].freeze
     RETRIEVE_CS_INPUTS_DEFINITION = %i[bundle_retrieve_method_input fhir_server_url_input credentials_input
                                        header_name_input header_value_input].freeze
+    # AU PS Bundle Instance's acquisition test: a pasted Bundle resource, or a Bundle fetched by ID.
+    BUNDLE_RESOURCE_OR_FHIR_BUNDLE_ID_INPUTS_DEFINITION = (BUNDLE_RESOURCE_INPUTS_DEFINITION + %i[
+      fhir_server_url_input bundle_id_input credentials_input header_name_input header_value_input
+    ]).freeze
 
     SINGLE_INPUT_DEFINITIONS.each do |method_name, (input_name, options)|
       define_singleton_method(method_name) do |klass|
@@ -114,6 +118,11 @@ module AUPSTestKit
 
     def self.retrieve_cs_inputs(klass)
       declare_inputs(klass, *RETRIEVE_CS_INPUTS_DEFINITION)
+      configure_fhir_client(klass)
+    end
+
+    def self.bundle_resource_or_fhir_bundle_id_inputs(klass)
+      declare_inputs(klass, *BUNDLE_RESOURCE_OR_FHIR_BUNDLE_ID_INPUTS_DEFINITION)
       configure_fhir_client(klass)
     end
 

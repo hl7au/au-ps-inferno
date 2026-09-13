@@ -77,4 +77,12 @@ RSpec.describe AUPSTestKit::RetrieveBundleTestClass do
     expect(result.result).to eq('fail')
     expect(result.result_message).to match(/expected a Bundle/)
   end
+
+  it 'omits when a different Bundle Retrieval Method is selected, even with a valid Bundle URL' do
+    test = create_test('suite_retrieve_au_ps_bundle_validation_tests_url_other_method_test')
+    result = run(test, { bundle_retrieve_method: 'bundle_resource', bundle_url: bundle_url })
+
+    expect(result.result).to eq('omit')
+    expect(WebMock).not_to have_requested(:get, bundle_url)
+  end
 end

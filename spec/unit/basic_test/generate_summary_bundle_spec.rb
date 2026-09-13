@@ -59,6 +59,14 @@ RSpec.describe AUPSTestKit::GenerateSummaryBundleTestClass do
     expect(result.result).to eq('omit')
   end
 
+  it 'omits when a different Bundle Retrieval Method is selected, even with valid inputs' do
+    test = create_test('suite_generate_au_ps_using_ips_summary_validation_tests_other_method_test')
+    result = run(test, { bundle_retrieve_method: 'bundle_url', url: server_url, patient_id: 'pat1' })
+
+    expect(result.result).to eq('omit')
+    expect(WebMock).not_to have_requested(:get, "#{server_url}/Patient/pat1/$summary")
+  end
+
   it 'retrieves a Bundle by ID from the FHIR server when a bundle_id is provided instead of patient details' do
     stub_request(:get, "#{server_url}/Bundle/bundle1")
       .to_return(status: 200, body: bundle_json, headers: { 'Content-Type' => 'application/fhir+json' })

@@ -10,6 +10,9 @@ module CompositionUtils
   NO_BUNDLE_OMIT_MESSAGE = 'No AU PS Bundle was loaded by this test group (its inputs were not provided or ' \
                            'the Bundle could not be acquired), so this test is omitted.'
 
+  DIFFERENT_RETRIEVE_METHOD_OMIT_MESSAGE = 'A different Bundle Retrieval Method was selected for this test ' \
+                                           'run, so this test group is omitted.'
+
   # Each top-level group keeps its Bundle under its own scratch key so that a
   # group can never validate a Bundle acquired by a different group.
   BUNDLE_SOURCE_GROUPS = {
@@ -34,6 +37,25 @@ module CompositionUtils
 
   def omit_unless_bundle_in_scratch
     omit_if scratch_bundle.blank?, NO_BUNDLE_OMIT_MESSAGE
+  end
+
+  # Lets one acquisition group check whether another top-level group (identified by its
+  # BUNDLE_SOURCE_GROUPS slug) already acquired a Bundle earlier in this run, so two
+  # groups don't both fetch and validate the same server Bundle for overlapping inputs
+  # (e.g. a bundle_id acceptable to both the Generate AU PS $summary and AU PS Bundle
+  # Instance groups). Only meaningful for groups that run after the one being checked.
+  def bundle_already_acquired_by_group?(slug)
+    scratch[:"bundle_ips_resource_#{BUNDLE_SOURCE_GROUPS.fetch(slug)}"].present?
+  end
+
+  # The suite-wide `bundle_retrieve_method` radio (see CommonInputsModule) lets the user
+  # pick one Bundle-acquisition pathway; once they explicitly pick one, the other
+  # pathways' groups should omit even if their own fields still carry stale values from
+  # an earlier run, rather than only omitting when their own inputs happen to be blank.
+  def omit_unless_retrieve_method_is(*expected_values)
+    return if bundle_retrieve_method.blank?
+
+    omit_if expected_values.exclude?(bundle_retrieve_method), DIFFERENT_RETRIEVE_METHOD_OMIT_MESSAGE
   end
 
   def group_section_output(section_info_array)
