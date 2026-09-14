@@ -11,10 +11,6 @@ module AUPSTestKit
 
     NO_PROVIDED_BUNDLE_MESSAGE = 'No Bundle resource was provided, so this test group is omitted.'
     NO_FHIR_BUNDLE_ID_MESSAGE = 'No FHIR server URL with a Bundle ID was provided, so this test group is omitted.'
-    ALREADY_RETRIEVED_MESSAGE = 'This Bundle ID was already retrieved and validated by the Generate AU PS using ' \
-                                'IPS $summary group, so this test group is omitted.'
-
-    GENERATE_SUMMARY_GROUP_SLUG = 'generate_au_ps_using_ips_summary_validation_tests'
 
     CommonInputsModule.bundle_resource_or_fhir_bundle_id_inputs(self)
 
@@ -48,15 +44,14 @@ module AUPSTestKit
     # a previous run from being validated instead of fetching the current server Bundle,
     # matching how the other acquisition classes ignore fields outside their own method.
     #
-    # A bare bundle_id (no patient_id/identifier) also satisfies GenerateSummaryBundleTestClass's
-    # own fallback, and that group runs earlier in the suite, so this group defers to it
-    # rather than fetching and validating the same server Bundle a second time.
+    # A bare bundle_id is rejected by GenerateSummaryBundleTestClass's own group (it omits
+    # itself whenever a Bundle ID is present), so this group is the sole owner of Bundle ID
+    # retrieval and never needs to defer to it.
     run do
       omit_unless_retrieve_method_is('bundle_resource', 'fhir_server')
 
       if bundle_retrieve_method == 'fhir_server'
         omit_if skip_fhir_bundle_id_test?, NO_FHIR_BUNDLE_ID_MESSAGE
-        omit_if bundle_already_acquired_by_group?(GENERATE_SUMMARY_GROUP_SLUG), ALREADY_RETRIEVED_MESSAGE
         load_bundle_resource_from_fhir_server
       else
         omit_if bundle_resource.blank?, NO_PROVIDED_BUNDLE_MESSAGE

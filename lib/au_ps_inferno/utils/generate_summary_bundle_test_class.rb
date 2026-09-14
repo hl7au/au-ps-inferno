@@ -4,14 +4,16 @@ require_relative 'basic_test_class'
 require_relative 'common_inputs_module'
 
 module AUPSTestKit
-  # Retrieves a Bundle from a FHIR server, either via the IPS $summary operation
-  # (patient_id/identifier) or a Bundle read interaction (bundle_id), into the
-  # group's scratch space
+  # Retrieves a Bundle from a FHIR server via the IPS $summary operation
+  # (patient_id/identifier) into the group's scratch space
   class GenerateSummaryBundleTestClass < BasicTest
     id :generate_summary_bundle_test_class
 
-    NO_SUMMARY_INPUTS_MESSAGE = 'No FHIR server URL with a Bundle ID, patient ID, or patient identifier was ' \
-                                'provided, so this test group is omitted.'
+    NO_SUMMARY_INPUTS_MESSAGE = 'No FHIR server URL with a patient ID or patient identifier was provided, so ' \
+                                'this test group is omitted.'
+
+    BUNDLE_ID_PROVIDED_MESSAGE = 'A Bundle ID was provided, so this test group is omitted; validate that Bundle ' \
+                                 'in the AU PS Bundle Instance group instead.'
 
     AU_PS_BUNDLE_PROFILE = 'http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-bundle'
 
@@ -23,19 +25,8 @@ module AUPSTestKit
       url.present? && (patient_id.present? || identifier.present?)
     end
 
-    def bundle_by_id_available?
-      url.present? && bundle_id.present?
-    end
-
     def skip_test?
-      !(summary_data_available? || bundle_by_id_available?)
-    end
-
-    def get_bundle_resource_from_fhir_server(bundle_id)
-      fhir_read(:bundle, bundle_id)
-      assert_response_status(200)
-      assert_resource_type(:bundle)
-      save_bundle_to_scratch(resource)
+      !summary_data_available?
     end
 
     def operation_path
@@ -54,18 +45,11 @@ module AUPSTestKit
       save_bundle_to_scratch(resource_from_request)
     end
 
-    def read_and_save_data
-      if summary_data_available?
-        read_and_save_data_from_summary
-      elsif bundle_by_id_available?
-        get_bundle_resource_from_fhir_server(bundle_id)
-      end
-    end
-
     run do
       omit_unless_retrieve_method_is('fhir_server')
+      omit_if bundle_id.present?, BUNDLE_ID_PROVIDED_MESSAGE
       omit_if skip_test?, NO_SUMMARY_INPUTS_MESSAGE
-      read_and_save_data
+      read_and_save_data_from_summary
     end
   end
 end

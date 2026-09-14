@@ -102,15 +102,6 @@ RSpec.describe 'Bundle acquisition split from validation (issue #98)' do
       expect(scratch[:bundle_ips_resource_instance]).to be_a(FHIR::Bundle)
     end
 
-    it 'omits without a duplicate fetch when the Generate AU PS $summary group already retrieved a Bundle' do
-      test = create_test('suite_au_ps_bundle_instance_provide_fhir_server_dedup_test', described_class)
-      scratch = { bundle_ips_resource_summary: FHIR::Bundle.new(resourceType: 'Bundle') }
-      result = run(test, { bundle_retrieve_method: 'fhir_server', url: server_url, bundle_id: 'bundle1' }, scratch)
-
-      expect(result.result).to eq('omit')
-      expect(WebMock).not_to have_requested(:get, "#{server_url}/Bundle/bundle1")
-    end
-
     it 'ignores a stale Bundle resource once the FHIR Server method is selected' do
       stub_request(:get, "#{server_url}/Bundle/bundle1")
         .to_return(status: 200, body: bundle_json, headers: { 'Content-Type' => 'application/fhir+json' })
