@@ -8,14 +8,16 @@ require_relative '../../lib/au_ps_inferno'
 
 RSpec.describe 'AU PS suite structure' do
   let(:suite) { Inferno::Repositories::TestSuites.new.find('au_ps_v100') }
+  let(:all_tests_group) { suite.groups.first }
 
   def top_level_group(id_fragment)
-    suite.groups.find { |g| g.id.to_s.include?(id_fragment) }
+    all_tests_group.groups.find { |g| g.id.to_s.include?(id_fragment) }
   end
 
-  it 'loads a flat list of thirteen top-level groups, none nesting another group' do
-    expect(suite.groups.length).to eq(13)
-    expect(suite.groups).to all(satisfy { |g| g.groups.empty? })
+  it 'loads a single top-level group wrapping the thirteen groups, none nesting another group' do
+    expect(suite.groups.length).to eq(1)
+    expect(all_tests_group.groups.length).to eq(13)
+    expect(all_tests_group.groups).to all(satisfy { |g| g.groups.empty? })
   end
 
   it 'pins the validator to the Australian SNOMED CT edition' do
@@ -27,7 +29,7 @@ RSpec.describe 'AU PS suite structure' do
   it 'runs Bundle Acquisition first, with one test per acquisition method' do
     group = top_level_group('suite_bundle_acquisition')
 
-    expect(suite.groups.first).to eq(group)
+    expect(all_tests_group.groups.first).to eq(group)
     expect(group.children.map(&:title)).to eq(
       [
         'Bundle acquired from a pasted resource',
@@ -40,7 +42,7 @@ RSpec.describe 'AU PS suite structure' do
   end
 
   it 'runs the Capability Statement group right after Bundle Acquisition' do
-    expect(suite.groups.second.id.to_s).to include('au_ps_retrieve_cs_group_100preview')
+    expect(all_tests_group.groups.second.id.to_s).to include('au_ps_retrieve_cs_group_100preview')
   end
 
   it 'has a single flat Bundle Validation group reading the shared acquired Bundle' do

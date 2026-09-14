@@ -2,21 +2,7 @@
 
 require_relative '../version'
 
-require_relative 'bundle_acquisition/bundle_acquisition'
-
-require_relative 'au_ps_retrieve_cs_group/au_ps_retrieve_cs_group'
-
-require_relative 'au_ps_bundle_instance/bundle_validation'
-require_relative 'au_ps_bundle_instance/au_ps_bundle_must_support_conformance'
-require_relative 'au_ps_bundle_instance/au_ps_composition_must_support_conformance'
-require_relative 'au_ps_bundle_instance/au_ps_composition_mandatory_sections'
-require_relative 'au_ps_bundle_instance/au_ps_composition_recommended_sections'
-require_relative 'au_ps_bundle_instance/au_ps_composition_optional_sections'
-require_relative 'au_ps_bundle_instance/au_ps_composition_undefined_sections'
-require_relative 'au_ps_bundle_instance/au_ps_composition_subject'
-require_relative 'au_ps_bundle_instance/au_ps_composition_author'
-require_relative 'au_ps_bundle_instance/au_ps_composition_custodian'
-require_relative 'au_ps_bundle_instance/au_ps_composition_attester'
+require_relative 'all_tests'
 
 module AUPSTestKit
   # Test suite for the AU PS (Australian Primary Care and Shared Health) Implementation Guide.
@@ -48,18 +34,6 @@ module AUPSTestKit
       end
     end
 
-    group from: :suite_bundle_acquisition
-    group from: :au_ps_retrieve_cs_group_100preview
-    group from: :suite_au_ps_bundle_instance_bundle_validation
-    group from: :suite_au_ps_bundle_instance_au_ps_bundle_must_support_conformance
-    group from: :suite_au_ps_bundle_instance_au_ps_composition_must_support_conformance
-    group from: :suite_au_ps_bundle_instance_au_ps_composition_mandatory_sections
-    group from: :suite_au_ps_bundle_instance_au_ps_composition_recommended_sections
-    group from: :suite_au_ps_bundle_instance_au_ps_composition_optional_sections
-    group from: :suite_au_ps_bundle_instance_au_ps_composition_undefined_sections
-    group from: :suite_au_ps_bundle_instance_au_ps_composition_subject
-    group from: :suite_au_ps_bundle_instance_au_ps_composition_author
-    group from: :suite_au_ps_bundle_instance_au_ps_composition_custodian
-    group from: :suite_au_ps_bundle_instance_au_ps_composition_attester
+    group from: :suite_all_tests
   end
 end
