@@ -13,6 +13,10 @@ $VERBOSE = nil
 # Docker image sets APP_ENV=production; force test so .env.test (ASYNC_JOBS=false) applies.
 ENV['APP_ENV'] = 'test'
 
+# Must load before database_cleaner/sequel: that gem calls ActiveSupport's `delegate`
+# at require time, which needs ActiveSupport::Inflector already autoload-registered.
+require 'active_support/all'
+
 require 'database_cleaner/sequel'
 require 'pry'
 require 'pry-byebug'

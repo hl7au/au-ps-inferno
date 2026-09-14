@@ -10,6 +10,7 @@ module AUPSTestKit
     id :au_ps_cs_supports_ips_recommended_ops_100preview
 
     run do
+      omit_unless_retrieve_method_is('fhir_server')
       omit_if url.blank?, NO_SERVER_URL_OMIT_MESSAGE
       summary_op_defined?
       operation_defined?(operations, 'http://hl7.org/fhir/uv/ipa/OperationDefinition/docref', %w[docref],

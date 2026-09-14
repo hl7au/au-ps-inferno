@@ -589,5 +589,5 @@ suites:
     snapshot_dir: snapshots
     normalized_strings:
       - '/\/results\/[0-9a-fA-F-]{36}\/io\/inputs\/\w+/'
-      - '/#<FHIR::\w+:0x[0-9a-f]+>/'
+      - '/#<FHIR::[\w:]+:0x[0-9a-f]+>/'
       - '/urn:uuid:[0-9a-fA-F-]{36}/'
