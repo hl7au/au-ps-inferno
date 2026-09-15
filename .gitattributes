@@ -1,0 +1,2 @@
+bin/hot-reload text eol=lf
+*.sh text eol=lf
