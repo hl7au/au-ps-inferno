@@ -10,6 +10,7 @@
 
 ### Added
 
+- Added support for suppressing known, accepted FHIR validator messages (e.g. false positives or unavoidable terminology gaps) via a `SUPPRESSED_VALIDATION_MESSAGES` list.
 - Warn when the Problems, Allergies, or Medications section uses `Composition.section.emptyReason = nilknown` instead of an explicit negation code on the section's entry resource (e.g. `AllergyIntolerance.code = 716186003 |No known allergy|`), the pattern AU PS prefers over `emptyReason`. This is an advisory warning, not a failure.
 - Include the section's narrative (`Composition.section.text`), converted from HTML to Markdown, in the Must Support element population message for each section. The HTML is sanitized first (stripping scripts, styles, and other unsafe or non-display markup, including `img` tags) so untrusted narrative content can't inject anything unsafe into the test report.
 
