@@ -25,6 +25,10 @@ Metrics/BlockLength:
     - "spec/**/*"
     - "*.gemspec"
 
+Metrics/ModuleLength:
+  Exclude:
+    - "lib/au_ps_inferno/suite/suppressed_validation_messages.rb"
+
 Layout/LineLength:
   Exclude:
     - "lib/au_ps_inferno/generator/suite_structure/definitions.rb"
