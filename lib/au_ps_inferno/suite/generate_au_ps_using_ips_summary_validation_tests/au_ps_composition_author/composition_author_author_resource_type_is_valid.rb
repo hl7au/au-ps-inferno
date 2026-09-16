@@ -11,7 +11,7 @@ module AUPSTestKit
     id :suite_generate_au_ps_using_ips_summary_validation_tests_au_ps_composition_author_author_resource_type_is_valid
 
     def metadata_manager
-      @metadata_manager ||= MetadataManager.new(File.expand_path('../../../metadata.yaml', __dir__))
+      @metadata_manager ||= CompositionMetadataManager.new(File.expand_path('../../../metadata.yaml', __dir__))
     end
 
     run do

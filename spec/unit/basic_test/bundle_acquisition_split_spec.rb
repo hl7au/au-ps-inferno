@@ -34,7 +34,7 @@ RSpec.describe 'Bundle acquisition split from validation (issue #98)' do
     klass = Class.new(superclass) do
       id test_id
       define_method(:metadata_manager) do
-        @metadata_manager ||= AUPSTestKit::MetadataManager.new(BUNDLE_ACQUISITION_FIXTURE_METADATA_PATH)
+        @metadata_manager ||= AUPSTestKit::CompositionMetadataManager.new(BUNDLE_ACQUISITION_FIXTURE_METADATA_PATH)
       end
     end
     repo = Inferno::Repositories::Tests.new

@@ -1,0 +1,8 @@
+# frozen_string_literal: true
+
+source 'https://rubygems.org'
+
+ruby '3.3.6'
+
+gem 'inferno_core', '>= 1.4.2'
+gem 'inferno_snapshot_tool', github: 'projkov/inferno_snapshot_tool', ref: '69308054b5b7f384f9bcffa11541fe5b4dcb5e0d'

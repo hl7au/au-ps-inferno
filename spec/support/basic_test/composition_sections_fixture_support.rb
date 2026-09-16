@@ -28,7 +28,7 @@ module CompositionSectionsFixtureSupport
   end
 
   def configure_test_class_with_metadata_path(test_class, metadata_path)
-    manager = AUPSTestKit::MetadataManager.new(metadata_path)
+    manager = AUPSTestKit::CompositionMetadataManager.new(metadata_path)
     test_class.class_eval do
       include CompositionUtils unless ancestors.include?(CompositionUtils)
       unless ancestors.include?(AUPSTestKit::BasicTestCompositionSectionReadModule)

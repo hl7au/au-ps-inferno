@@ -6,7 +6,7 @@ RSpec.shared_context 'ms elements populated setup' do
   include_context 'basic test instance setup'
 
   let(:metadata_manager) do
-    AUPSTestKit::MetadataManager.new('spec/fixtures/metadata.yaml').tap do |manager|
+    AUPSTestKit::CompositionMetadataManager.new('spec/fixtures/metadata.yaml').tap do |manager|
       allow(manager).to receive(:metadata).and_return(minimal_metadata)
     end
   end

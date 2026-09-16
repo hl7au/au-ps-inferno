@@ -12,7 +12,7 @@ module AUPSTestKit
     optional
 
     def metadata_manager
-      @metadata_manager ||= MetadataManager.new(File.expand_path('../../../metadata.yaml', __dir__))
+      @metadata_manager ||= CompositionMetadataManager.new(File.expand_path('../../../metadata.yaml', __dir__))
     end
 
     run do

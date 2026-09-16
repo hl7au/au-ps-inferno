@@ -11,7 +11,7 @@ module AUPSTestKit
     id :suite_au_ps_bundle_instance_au_ps_composition_attester_attester_party_ms_subelements
 
     def metadata_manager
-      @metadata_manager ||= MetadataManager.new(File.expand_path('../../../metadata.yaml', __dir__))
+      @metadata_manager ||= CompositionMetadataManager.new(File.expand_path('../../../metadata.yaml', __dir__))
     end
 
     run do

@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative '../version'
+require_relative '../utils/address_country_check'
 
 require_relative 'suppressed_validation_messages'
 
@@ -26,6 +27,10 @@ module AUPSTestKit
 
     fhir_resource_validator do
       igs "hl7.fhir.au.ps##{AUPSTestKit::IG_VERSION}"
+
+      perform_additional_validation do |resource, _profile_url|
+        AUPSTestKit::AddressCountryCheck.messages_for(resource)
+      end
 
       cli_context do
         txServer ENV.fetch('TX_SERVER_URL', 'https://tx.dev.hl7.org.au/fhir')

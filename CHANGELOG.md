@@ -5,7 +5,20 @@
 ### Added
 
 - Added support for suppressing known, accepted FHIR validator messages (e.g. false positives or unavoidable terminology gaps) via a `SUPPRESSED_VALIDATION_MESSAGES` list.
+- Warn when `Address.country` on a Patient, Practitioner, RelatedPerson, or Organization resource doesn't match the `au-address` fixed code `"AU"` (e.g. `"Australia"`, `"AUS"`) (#35).
+
+## [1.0.1] - 2026-09-03
+
+- Relax the `inferno_core` dependency from `~> 1.0.6` to `>= 1.0.6`. The tilde pin resolved to `>= 1.0.6, < 1.1.0` and was the only cap on `inferno_core` anywhere in the dependency tree, so it held every host application on 1.0.x. The kit uses only the public validation DSL (`resource_is_valid?`), which is unchanged through 1.4.x.
+
+### Changed
+
+- Split the Composition metadata out of `metadata.yaml` into `composition_metadata.yaml` and read it through `CompositionMetadataManager`, and regenerate the suite against the reworked generator. The generator itself was restructured (`metadata_producer.rb` replaces most of `metadata_manager.rb` and `ig_resources_extractor.rb`), and a workflow now syncs the IG package and regenerates the suite.
+
+### Added
+
 - Warn when the Problems, Allergies, or Medications section uses `Composition.section.emptyReason = nilknown` instead of an explicit negation code on the section's entry resource (e.g. `AllergyIntolerance.code = 716186003 |No known allergy|`), the pattern AU PS prefers over `emptyReason`. This is an advisory warning, not a failure.
+- Include the section's narrative (`Composition.section.text`), converted from HTML to Markdown, in the Must Support element population message for each section. The HTML is sanitized first (stripping scripts, styles, and other unsafe or non-display markup, including `img` tags) so untrusted narrative content can't inject anything unsafe into the test report.
 
 ### Fixed
 

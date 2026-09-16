@@ -1,1369 +1,4 @@
 ---
-:composition_sections:
-- :id: Composition.section:sectionProblems
-  :short: Patient Summary Problems Section
-  :definition: Information about a patient's clinical problems or conditions that
-    are currently being monitored.
-  :min: 1
-  :max: '1'
-  :required: true
-  :mustSupport: true
-  :ms_elements:
-  - :expression: title
-    :min: 1
-  - :expression: code
-    :min: 1
-  - :expression: text
-    :min: 1
-  - :expression: entry
-    :min: 0
-  - :expression: emptyReason
-    :min: 0
-  :code: 11450-4
-  :entries:
-  - :id: Composition.section:sectionProblems.entry
-    :min: 0
-    :max: "*"
-    :required: false
-    :mustSupport: false
-    :profiles:
-    - Condition|http://hl7.org/fhir/StructureDefinition/Condition
-    - DocumentReference|http://hl7.org/fhir/StructureDefinition/DocumentReference
-  - :id: Composition.section:sectionProblems.entry:problem
-    :min: 0
-    :max: "*"
-    :required: false
-    :mustSupport: true
-    :profiles:
-    - Condition|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-condition
-- :id: Composition.section:sectionAllergies
-  :short: Patient Summary Allergies and Intolerances Section
-  :definition: Information about a patient's relevant allergies or intolerances, describing
-    the kind of reaction (e.g. rash, anaphylaxis, etc.); preferably the agents that
-    cause it; and optionally the criticality and the certainty of the allergy. At
-    a minimum, this section will list currently active and any relevant historical
-    allergies and adverse reactions. If no information about allergies is available,
-    or if no allergies are known this is to be clearly documented in this section.
-  :min: 1
-  :max: '1'
-  :required: true
-  :mustSupport: true
-  :ms_elements:
-  - :expression: title
-    :min: 1
-  - :expression: code
-    :min: 1
-  - :expression: text
-    :min: 1
-  - :expression: entry
-    :min: 0
-  - :expression: emptyReason
-    :min: 0
-  :code: 48765-2
-  :entries:
-  - :id: Composition.section:sectionAllergies.entry
-    :min: 0
-    :max: "*"
-    :required: false
-    :mustSupport: false
-    :profiles:
-    - AllergyIntolerance|http://hl7.org/fhir/StructureDefinition/AllergyIntolerance
-    - DocumentReference|http://hl7.org/fhir/StructureDefinition/DocumentReference
-  - :id: Composition.section:sectionAllergies.entry:allergyOrIntolerance
-    :min: 0
-    :max: "*"
-    :required: false
-    :mustSupport: true
-    :profiles:
-    - AllergyIntolerance|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-allergyintolerance
-- :id: Composition.section:sectionMedications
-  :short: Patient Summary Medication Summary Section
-  :definition: "Information about a patient's medications relevant for the scope of
-    the patient summary.\r\nThe actual content could depend on the jurisdiction, it
-    could report:\r\n\r\n- the currently active medications;\r\n\r\n- the current
-    and past medications considered relevant by the authoring GP;\r\n\r\n- the patient
-    prescriptions or dispensations automatically extracted by a regional or a national
-    EHR.\r\n\r\nIn those cases medications are documented in the Patient Summary as
-    medication statements or medication requests. This section requires either an
-    entry indicating the subject is known not to be on any relevant medication; either
-    an entry indicating that no information is available about medications; or entries
-    summarising the subject's relevant medications."
-  :min: 1
-  :max: '1'
-  :required: true
-  :mustSupport: true
-  :ms_elements:
-  - :expression: title
-    :min: 1
-  - :expression: code
-    :min: 1
-  - :expression: text
-    :min: 1
-  - :expression: entry
-    :min: 0
-  - :expression: emptyReason
-    :min: 0
-  :code: 10160-0
-  :entries:
-  - :id: Composition.section:sectionMedications.entry
-    :min: 0
-    :max: "*"
-    :required: false
-    :mustSupport: false
-    :profiles:
-    - MedicationStatement|http://hl7.org/fhir/StructureDefinition/MedicationStatement
-    - MedicationRequest|http://hl7.org/fhir/StructureDefinition/MedicationRequest
-    - MedicationAdministration|http://hl7.org/fhir/StructureDefinition/MedicationAdministration
-    - MedicationDispense|http://hl7.org/fhir/StructureDefinition/MedicationDispense
-    - DocumentReference|http://hl7.org/fhir/StructureDefinition/DocumentReference
-  - :id: Composition.section:sectionMedications.entry:medicationStatementOrRequest
-    :min: 0
-    :max: "*"
-    :required: false
-    :mustSupport: true
-    :profiles:
-    - MedicationStatement|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medicationstatement
-    - MedicationRequest|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medicationrequest
-- :id: Composition.section:sectionImmunizations
-  :short: Patient Summary Immunizations Section
-  :definition: "Information about a patient's current immunisation status and pertinent
-    immunisation history.\r\nThe primary use case for this section is to enable communication
-    of a patient's immunisation status.\r\nIt could contain the entire immunisation
-    history that is relevant to the period of time being summarised."
-  :min: 0
-  :max: '1'
-  :required: false
-  :mustSupport: true
-  :ms_elements:
-  - :expression: title
-    :min: 1
-  - :expression: code
-    :min: 1
-  - :expression: text
-    :min: 1
-  - :expression: entry
-    :min: 0
-  - :expression: emptyReason
-    :min: 0
-  :code: 11369-6
-  :entries:
-  - :id: Composition.section:sectionImmunizations.entry
-    :min: 0
-    :max: "*"
-    :required: false
-    :mustSupport: false
-    :profiles:
-    - Immunization|http://hl7.org/fhir/StructureDefinition/Immunization
-    - DocumentReference|http://hl7.org/fhir/StructureDefinition/DocumentReference
-  - :id: Composition.section:sectionImmunizations.entry:immunization
-    :min: 0
-    :max: "*"
-    :required: false
-    :mustSupport: true
-    :profiles:
-    - Immunization|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-immunization
-- :id: Composition.section:sectionResults
-  :short: Patient Summary Results Section
-  :definition: Information about a patient's relevant observation results collected
-    on the patient or produced on in-vitro biologic specimens collected from the patient.
-    Some of these results could be laboratory results, others could be anatomic pathology
-    results, others could be radiology results, and others could be clinical results.
-  :min: 0
-  :max: '1'
-  :required: false
-  :mustSupport: true
-  :ms_elements:
-  - :expression: title
-    :min: 1
-  - :expression: code
-    :min: 1
-  - :expression: text
-    :min: 1
-  - :expression: entry
-    :min: 0
-  - :expression: emptyReason
-    :min: 0
-  :code: 30954-2
-  :entries:
-  - :id: Composition.section:sectionResults.entry
-    :min: 0
-    :max: "*"
-    :required: false
-    :mustSupport: false
-    :profiles:
-    - Observation|http://hl7.org/fhir/StructureDefinition/Observation
-    - DiagnosticReport|http://hl7.org/fhir/StructureDefinition/DiagnosticReport
-    - DocumentReference|http://hl7.org/fhir/StructureDefinition/DocumentReference
-  - :id: Composition.section:sectionResults.entry:results-observation-laboratory-pathology
-    :min: 0
-    :max: "*"
-    :required: false
-    :mustSupport: true
-    :profiles:
-    - Observation|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-diagnosticresult-path
-  - :id: Composition.section:sectionResults.entry:results-observation-radiology
-    :min: 0
-    :max: "*"
-    :required: false
-    :mustSupport: true
-    :profiles:
-    - Observation|http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-results-radiology-uv-ips
-  - :id: Composition.section:sectionResults.entry:results-diagnosticReport
-    :min: 0
-    :max: "*"
-    :required: false
-    :mustSupport: true
-    :profiles:
-    - DiagnosticReport|http://hl7.org/fhir/uv/ips/StructureDefinition/DiagnosticReport-uv-ips
-- :id: Composition.section:sectionProceduresHx
-  :short: Patient Summary History of Procedures Section
-  :definition: "Information about a patient's past procedures that are pertinent to
-    the scope of this patient summary.\r\nProcedures could refer, for example to:\r\n1.
-    Invasive Diagnostic procedure: e.g. Cardiac catheterization; (the results of these
-    procedure are documented in the results section)\r\n2. Therapeutic procedure:
-    e.g. dialysis;\r\n3. Surgical procedure: e.g. appendectomy"
-  :min: 0
-  :max: '1'
-  :required: false
-  :mustSupport: true
-  :ms_elements:
-  - :expression: title
-    :min: 1
-  - :expression: code
-    :min: 1
-  - :expression: text
-    :min: 1
-  - :expression: entry
-    :min: 0
-  - :expression: emptyReason
-    :min: 0
-  :code: 47519-4
-  :entries:
-  - :id: Composition.section:sectionProceduresHx.entry
-    :min: 0
-    :max: "*"
-    :required: false
-    :mustSupport: false
-    :profiles:
-    - Procedure|http://hl7.org/fhir/StructureDefinition/Procedure
-    - DocumentReference|http://hl7.org/fhir/StructureDefinition/DocumentReference
-  - :id: Composition.section:sectionProceduresHx.entry:procedure
-    :min: 0
-    :max: "*"
-    :required: false
-    :mustSupport: true
-    :profiles:
-    - Procedure|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-procedure
-- :id: Composition.section:sectionMedicalDevices
-  :short: Patient Summary Medical Devices Section
-  :definition: Information about a patient's history of medical device use.
-  :min: 0
-  :max: '1'
-  :required: false
-  :mustSupport: true
-  :ms_elements:
-  - :expression: title
-    :min: 1
-  - :expression: code
-    :min: 1
-  - :expression: text
-    :min: 1
-  - :expression: entry
-    :min: 0
-  - :expression: emptyReason
-    :min: 0
-  :code: 46264-8
-  :entries:
-  - :id: Composition.section:sectionMedicalDevices.entry
-    :min: 0
-    :max: "*"
-    :required: false
-    :mustSupport: false
-    :profiles:
-    - DeviceUseStatement|http://hl7.org/fhir/StructureDefinition/DeviceUseStatement
-    - DocumentReference|http://hl7.org/fhir/StructureDefinition/DocumentReference
-  - :id: Composition.section:sectionMedicalDevices.entry:deviceStatement
-    :min: 0
-    :max: "*"
-    :required: false
-    :mustSupport: true
-    :profiles:
-    - DeviceUseStatement|http://hl7.org/fhir/uv/ips/StructureDefinition/DeviceUseStatement-uv-ips
-- :id: Composition.section:sectionAdvanceDirectives
-  :short: Patient Summary Advance Directives Section
-  :definition: Information about a patient's advance directives.
-  :min: 0
-  :max: '1'
-  :required: false
-  :mustSupport: true
-  :ms_elements:
-  - :expression: title
-    :min: 1
-  - :expression: code
-    :min: 1
-  - :expression: text
-    :min: 1
-  - :expression: entry
-    :min: 0
-  - :expression: emptyReason
-    :min: 0
-  :code: 42348-3
-  :entries:
-  - :id: Composition.section:sectionAdvanceDirectives.entry
-    :min: 0
-    :max: "*"
-    :required: false
-    :mustSupport: false
-    :profiles:
-    - Consent|http://hl7.org/fhir/StructureDefinition/Consent
-    - DocumentReference|http://hl7.org/fhir/StructureDefinition/DocumentReference
-  - :id: Composition.section:sectionAdvanceDirectives.entry:advanceDirectivesConsent
-    :min: 0
-    :max: "*"
-    :required: false
-    :mustSupport: false
-    :profiles:
-    - Consent|http://hl7.org/fhir/StructureDefinition/Consent
-- :id: Composition.section:sectionAlerts
-  :short: Patient Summary Alerts Section
-  :definition: Information about a patient's alerts pertinent to the scope of the
-    patient summary including flagging potential concerns and/or dangers to/from the
-    patient and can also include obstacles to care.
-  :min: 0
-  :max: '1'
-  :required: false
-  :mustSupport: true
-  :ms_elements:
-  - :expression: title
-    :min: 1
-  - :expression: code
-    :min: 1
-  - :expression: text
-    :min: 1
-  - :expression: entry
-    :min: 0
-  - :expression: emptyReason
-    :min: 0
-  :code: 104605-1
-  :entries:
-  - :id: Composition.section:sectionAlerts.entry
-    :min: 0
-    :max: "*"
-    :required: false
-    :mustSupport: false
-    :profiles:
-    - Flag|http://hl7.org/fhir/StructureDefinition/Flag
-    - DocumentReference|http://hl7.org/fhir/StructureDefinition/DocumentReference
-  - :id: Composition.section:sectionAlerts.entry:alertsFlag
-    :min: 0
-    :max: "*"
-    :required: false
-    :mustSupport: false
-    :profiles:
-    - Flag|http://hl7.org/fhir/uv/ips/StructureDefinition/Flag-alert-uv-ips
-- :id: Composition.section:sectionFunctionalStatus
-  :short: Patient Summary Functional Status Section
-  :definition: Information about a patient's functional status including a description
-    of capability of the patient to perform acts of daily living, including possible
-    needs of the patient to be continuously assessed by third parties. The invalidity
-    status can in fact influence decisions about how to administer treatments.
-  :min: 0
-  :max: '1'
-  :required: false
-  :mustSupport: true
-  :ms_elements:
-  - :expression: title
-    :min: 1
-  - :expression: code
-    :min: 1
-  - :expression: text
-    :min: 1
-  - :expression: entry
-    :min: 0
-  - :expression: emptyReason
-    :min: 0
-  :code: 47420-5
-  :entries:
-  - :id: Composition.section:sectionFunctionalStatus.entry
-    :min: 0
-    :max: "*"
-    :required: false
-    :mustSupport: false
-    :profiles:
-    - Condition|http://hl7.org/fhir/StructureDefinition/Condition
-    - ClinicalImpression|http://hl7.org/fhir/StructureDefinition/ClinicalImpression
-    - DocumentReference|http://hl7.org/fhir/StructureDefinition/DocumentReference
-  - :id: Composition.section:sectionFunctionalStatus.entry:disability
-    :min: 0
-    :max: "*"
-    :required: false
-    :mustSupport: false
-    :profiles:
-    - Condition|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-condition
-  - :id: Composition.section:sectionFunctionalStatus.entry:functionalAssessment
-    :min: 0
-    :max: "*"
-    :required: false
-    :mustSupport: false
-    :profiles:
-    - ClinicalImpression|http://hl7.org/fhir/StructureDefinition/ClinicalImpression
-- :id: Composition.section:sectionPastProblems
-  :short: Patient Summary History of Past Illness Section
-  :definition: Information about a patient's conditions that were suffered in the
-    past and are no longer tracked in the Problem List.
-  :min: 0
-  :max: '1'
-  :required: false
-  :mustSupport: true
-  :ms_elements:
-  - :expression: title
-    :min: 1
-  - :expression: code
-    :min: 1
-  - :expression: text
-    :min: 1
-  - :expression: entry
-    :min: 0
-  - :expression: emptyReason
-    :min: 0
-  :code: 11348-0
-  :entries:
-  - :id: Composition.section:sectionPastProblems.entry
-    :min: 0
-    :max: "*"
-    :required: false
-    :mustSupport: false
-    :profiles:
-    - Condition|http://hl7.org/fhir/StructureDefinition/Condition
-    - DocumentReference|http://hl7.org/fhir/StructureDefinition/DocumentReference
-  - :id: Composition.section:sectionPastProblems.entry:pastProblem
-    :min: 0
-    :max: "*"
-    :required: false
-    :mustSupport: false
-    :profiles:
-    - Condition|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-condition
-- :id: Composition.section:sectionPregnancyHx
-  :short: Patient Summary History of Pregnancy Section
-  :definition: Information about whether a patient is currently pregnant or not and
-    can contain additional summarising information about the outcome of earlier pregnancies.
-  :min: 0
-  :max: '1'
-  :required: false
-  :mustSupport: true
-  :ms_elements:
-  - :expression: title
-    :min: 1
-  - :expression: code
-    :min: 1
-  - :expression: text
-    :min: 1
-  - :expression: entry
-    :min: 0
-  - :expression: emptyReason
-    :min: 0
-  :code: 10162-6
-  :entries:
-  - :id: Composition.section:sectionPregnancyHx.entry
-    :min: 0
-    :max: "*"
-    :required: false
-    :mustSupport: false
-    :profiles:
-    - Observation|http://hl7.org/fhir/StructureDefinition/Observation
-    - DocumentReference|http://hl7.org/fhir/StructureDefinition/DocumentReference
-  - :id: Composition.section:sectionPregnancyHx.entry:pregnancyStatus
-    :min: 0
-    :max: "*"
-    :required: false
-    :mustSupport: false
-    :profiles:
-    - Observation|http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-pregnancy-status-uv-ips
-  - :id: Composition.section:sectionPregnancyHx.entry:pregnancyOutcome
-    :min: 0
-    :max: "*"
-    :required: false
-    :mustSupport: false
-    :profiles:
-    - Observation|http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-pregnancy-outcome-uv-ips
-- :id: Composition.section:sectionPatientStory
-  :short: Patient Summary Patient Story Section
-  :definition: Information about what matters to a patient. This can include needs,
-    strengths, values, concerns and preferences to others providing support and care.
-    The patient's story, provided here, can be told by the patient or by a proxy.
-  :min: 0
-  :max: '1'
-  :required: false
-  :mustSupport: true
-  :ms_elements:
-  - :expression: title
-    :min: 1
-  - :expression: code
-    :min: 1
-  - :expression: text
-    :min: 1
-  - :expression: entry
-    :min: 0
-  - :expression: emptyReason
-    :min: 0
-  :code: 81338-6
-  :entries:
-  - :id: Composition.section:sectionPatientStory.entry
-    :min: 0
-    :max: "*"
-    :required: false
-    :mustSupport: false
-    :profiles:
-    - Resource|http://hl7.org/fhir/StructureDefinition/Resource|4.0.1
-- :id: Composition.section:sectionPlanOfCare
-  :short: Patient Summary Plan of Care Section
-  :definition: Information about a patient's plans of care containing the expectations
-    for care including proposals, goals, and order requests for monitoring, tracking,
-    or improving the condition of the patient.
-  :min: 0
-  :max: '1'
-  :required: false
-  :mustSupport: true
-  :ms_elements:
-  - :expression: title
-    :min: 1
-  - :expression: code
-    :min: 1
-  - :expression: text
-    :min: 1
-  - :expression: entry
-    :min: 0
-  - :expression: emptyReason
-    :min: 0
-  :code: 18776-5
-  :entries:
-  - :id: Composition.section:sectionPlanOfCare.entry
-    :min: 0
-    :max: "*"
-    :required: false
-    :mustSupport: false
-    :profiles:
-    - CarePlan|http://hl7.org/fhir/StructureDefinition/CarePlan
-    - ImmunizationRecommendation|http://hl7.org/fhir/StructureDefinition/ImmunizationRecommendation
-    - DocumentReference|http://hl7.org/fhir/StructureDefinition/DocumentReference
-  - :id: Composition.section:sectionPlanOfCare.entry:carePlan
-    :min: 0
-    :max: "*"
-    :required: false
-    :mustSupport: false
-    :profiles:
-    - CarePlan|http://hl7.org/fhir/StructureDefinition/CarePlan
-  - :id: Composition.section:sectionPlanOfCare.entry:immunizationRecommendation
-    :min: 0
-    :max: "*"
-    :required: false
-    :mustSupport: false
-    :profiles:
-    - ImmunizationRecommendation|http://hl7.org/fhir/StructureDefinition/ImmunizationRecommendation
-- :id: Composition.section:sectionSocialHistory
-  :short: Patient Summary Social History Section
-  :definition: Information about a patient's health related "lifestyle factors" or
-    "lifestyle observations" (e.g. smoke habits, alcohol consumption, diets, risky
-    habits).
-  :min: 0
-  :max: '1'
-  :required: false
-  :mustSupport: true
-  :ms_elements:
-  - :expression: title
-    :min: 1
-  - :expression: code
-    :min: 1
-  - :expression: text
-    :min: 1
-  - :expression: entry
-    :min: 0
-  - :expression: emptyReason
-    :min: 0
-  :code: 29762-2
-  :entries:
-  - :id: Composition.section:sectionSocialHistory.entry
-    :min: 0
-    :max: "*"
-    :required: false
-    :mustSupport: false
-    :profiles:
-    - Observation|http://hl7.org/fhir/StructureDefinition/Observation
-    - DocumentReference|http://hl7.org/fhir/StructureDefinition/DocumentReference
-  - :id: Composition.section:sectionSocialHistory.entry:smokingTobaccoUse
-    :min: 0
-    :max: '1'
-    :required: false
-    :mustSupport: false
-    :profiles:
-    - Observation|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-smokingstatus
-  - :id: Composition.section:sectionSocialHistory.entry:alcoholUse
-    :min: 0
-    :max: '1'
-    :required: false
-    :mustSupport: false
-    :profiles:
-    - Observation|http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-alcoholuse-uv-ips
-- :id: Composition.section:sectionVitalSigns
-  :short: Patient Summary Vital Signs Section
-  :definition: Information about a patient's vital signs including blood pressure,
-    body temperature, heart rate, and respiratory rate. It can also include other
-    clinical findings, such as height, weight, body mass index, head circumference,
-    and pulse oximetry. In particular, notable vital signs or physical findings such
-    as the most recent, maximum and/or minimum, baseline, or relevant trends can be
-    included.
-  :min: 0
-  :max: '1'
-  :required: false
-  :mustSupport: true
-  :ms_elements:
-  - :expression: title
-    :min: 1
-  - :expression: code
-    :min: 1
-  - :expression: text
-    :min: 1
-  - :expression: entry
-    :min: 0
-  - :expression: emptyReason
-    :min: 0
-  :code: 8716-3
-  :entries:
-  - :id: Composition.section:sectionVitalSigns.entry
-    :min: 0
-    :max: "*"
-    :required: false
-    :mustSupport: false
-    :profiles:
-    - Observation|http://hl7.org/fhir/StructureDefinition/Observation
-    - DocumentReference|http://hl7.org/fhir/StructureDefinition/DocumentReference
-  - :id: Composition.section:sectionVitalSigns.entry:vitalSign
-    :min: 0
-    :max: "*"
-    :required: false
-    :mustSupport: false
-    :profiles:
-    - Observation|http://hl7.org/fhir/StructureDefinition/vitalsigns
-:subject:
-- :resource_type: Patient
-  :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-patient
-  :elements:
-  - :id: Patient.identifier
-    :expression: identifier
-    :min: 1
-  - :id: Patient.name
-    :expression: name
-    :min: 1
-  - :id: Patient.name.use
-    :expression: name.use
-    :min: 0
-  - :id: Patient.name.text
-    :expression: name.text
-    :min: 0
-  - :id: Patient.name.family
-    :expression: name.family
-    :min: 0
-  - :id: Patient.name.given
-    :expression: name.given
-    :min: 0
-  - :id: Patient.telecom
-    :expression: telecom
-    :min: 0
-  - :id: Patient.telecom.system
-    :expression: telecom.system
-    :min: 0
-  - :id: Patient.telecom.value
-    :expression: telecom.value
-    :min: 0
-  - :id: Patient.telecom.use
-    :expression: telecom.use
-    :min: 0
-  - :id: Patient.gender
-    :expression: gender
-    :min: 1
-  - :id: Patient.birthDate
-    :expression: birthDate
-    :min: 1
-  - :id: Patient.address
-    :expression: address
-    :min: 0
-  - :id: Patient.communication
-    :expression: communication
-    :min: 0
-  - :id: Patient.communication.language
-    :expression: communication.language
-    :min: 1
-  - :id: Patient.communication.preferred
-    :expression: communication.preferred
-    :min: 0
-  - :id: Patient.generalPractitioner
-    :expression: generalPractitioner
-    :min: 0
-  :slices:
-  - :id: Patient.extension:indigenousStatus
-    :expression: extension
-    :label: indigenousStatus
-    :min: 0
-    :max: '1'
-    :profile: http://hl7.org.au/fhir/StructureDefinition/indigenous-status
-  - :id: Patient.extension:genderIdentity
-    :expression: extension
-    :label: genderIdentity
-    :min: 0
-    :max: "*"
-    :profile: http://hl7.org/fhir/StructureDefinition/individual-genderIdentity
-  - :id: Patient.extension:individualPronouns
-    :expression: extension
-    :label: individualPronouns
-    :min: 0
-    :max: "*"
-    :profile: http://hl7.org/fhir/StructureDefinition/individual-pronouns
-  - :id: Patient.identifier:ihi
-    :expression: identifier
-    :label: ihi
-    :min: 0
-    :max: '1'
-    :profile: http://hl7.org.au/fhir/StructureDefinition/au-ihi
-  - :id: Patient.identifier:medicare
-    :expression: identifier
-    :label: medicare
-    :min: 0
-    :max: "*"
-    :profile: http://hl7.org.au/fhir/StructureDefinition/au-medicarecardnumber
-  - :id: Patient.identifier:dva
-    :expression: identifier
-    :label: dva
-    :min: 0
-    :max: '1'
-    :profile: http://hl7.org.au/fhir/StructureDefinition/au-dvanumber
-:author:
-- :resource_type: Practitioner
-  :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-practitioner
-  :elements:
-  - :id: Practitioner.identifier
-    :expression: identifier
-    :min: 0
-  - :id: Practitioner.name
-    :expression: name
-    :min: 1
-  - :id: Practitioner.name.family
-    :expression: name.family
-    :min: 1
-  - :id: Practitioner.name.given
-    :expression: name.given
-    :min: 0
-  - :id: Practitioner.telecom
-    :expression: telecom
-    :min: 0
-  - :id: Practitioner.address
-    :expression: address
-    :min: 0
-  :slices:
-  - :id: Practitioner.identifier:hpii
-    :expression: identifier
-    :label: hpii
-    :min: 0
-    :max: '1'
-    :profile: http://hl7.org.au/fhir/StructureDefinition/au-hpii
-- :resource_type: PractitionerRole
-  :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-practitionerrole
-  :elements:
-  - :id: PractitionerRole.identifier
-    :expression: identifier
-    :min: 0
-  - :id: PractitionerRole.practitioner
-    :expression: practitioner
-    :min: 1
-  - :id: PractitionerRole.organization
-    :expression: organization
-    :min: 0
-  - :id: PractitionerRole.code
-    :expression: code
-    :min: 0
-  - :id: PractitionerRole.specialty
-    :expression: specialty
-    :min: 0
-  - :id: PractitionerRole.telecom
-    :expression: telecom
-    :min: 0
-  - :id: PractitionerRole.telecom.system
-    :expression: telecom.system
-    :min: 0
-  - :id: PractitionerRole.telecom.value
-    :expression: telecom.value
-    :min: 0
-  :slices:
-  - :id: PractitionerRole.identifier:medicareProvider
-    :expression: identifier
-    :label: medicareProvider
-    :min: 0
-    :max: '1'
-    :profile: http://hl7.org.au/fhir/StructureDefinition/au-medicareprovidernumber
-- :resource_type: Patient
-  :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-patient
-  :elements:
-  - :id: Patient.identifier
-    :expression: identifier
-    :min: 1
-  - :id: Patient.name
-    :expression: name
-    :min: 1
-  - :id: Patient.name.use
-    :expression: name.use
-    :min: 0
-  - :id: Patient.name.text
-    :expression: name.text
-    :min: 0
-  - :id: Patient.name.family
-    :expression: name.family
-    :min: 0
-  - :id: Patient.name.given
-    :expression: name.given
-    :min: 0
-  - :id: Patient.telecom
-    :expression: telecom
-    :min: 0
-  - :id: Patient.telecom.system
-    :expression: telecom.system
-    :min: 0
-  - :id: Patient.telecom.value
-    :expression: telecom.value
-    :min: 0
-  - :id: Patient.telecom.use
-    :expression: telecom.use
-    :min: 0
-  - :id: Patient.gender
-    :expression: gender
-    :min: 1
-  - :id: Patient.birthDate
-    :expression: birthDate
-    :min: 1
-  - :id: Patient.address
-    :expression: address
-    :min: 0
-  - :id: Patient.communication
-    :expression: communication
-    :min: 0
-  - :id: Patient.communication.language
-    :expression: communication.language
-    :min: 1
-  - :id: Patient.communication.preferred
-    :expression: communication.preferred
-    :min: 0
-  - :id: Patient.generalPractitioner
-    :expression: generalPractitioner
-    :min: 0
-  :slices:
-  - :id: Patient.extension:indigenousStatus
-    :expression: extension
-    :label: indigenousStatus
-    :min: 0
-    :max: '1'
-    :profile: http://hl7.org.au/fhir/StructureDefinition/indigenous-status
-  - :id: Patient.extension:genderIdentity
-    :expression: extension
-    :label: genderIdentity
-    :min: 0
-    :max: "*"
-    :profile: http://hl7.org/fhir/StructureDefinition/individual-genderIdentity
-  - :id: Patient.extension:individualPronouns
-    :expression: extension
-    :label: individualPronouns
-    :min: 0
-    :max: "*"
-    :profile: http://hl7.org/fhir/StructureDefinition/individual-pronouns
-  - :id: Patient.identifier:ihi
-    :expression: identifier
-    :label: ihi
-    :min: 0
-    :max: '1'
-    :profile: http://hl7.org.au/fhir/StructureDefinition/au-ihi
-  - :id: Patient.identifier:medicare
-    :expression: identifier
-    :label: medicare
-    :min: 0
-    :max: "*"
-    :profile: http://hl7.org.au/fhir/StructureDefinition/au-medicarecardnumber
-  - :id: Patient.identifier:dva
-    :expression: identifier
-    :label: dva
-    :min: 0
-    :max: '1'
-    :profile: http://hl7.org.au/fhir/StructureDefinition/au-dvanumber
-- :resource_type: RelatedPerson
-  :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-relatedperson
-  :elements:
-  - :id: RelatedPerson.patient
-    :expression: patient
-    :min: 1
-  - :id: RelatedPerson.patient.reference
-    :expression: patient.reference
-    :min: 1
-  - :id: RelatedPerson.relationship
-    :expression: relationship
-    :min: 0
-  - :id: RelatedPerson.name
-    :expression: name
-    :min: 0
-  - :id: RelatedPerson.name.use
-    :expression: name.use
-    :min: 0
-  - :id: RelatedPerson.name.text
-    :expression: name.text
-    :min: 0
-  - :id: RelatedPerson.name.family
-    :expression: name.family
-    :min: 0
-  - :id: RelatedPerson.name.given
-    :expression: name.given
-    :min: 0
-  - :id: RelatedPerson.telecom
-    :expression: telecom
-    :min: 0
-  - :id: RelatedPerson.address
-    :expression: address
-    :min: 0
-  :slices: []
-- :resource_type: Organization
-  :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-organization
-  :elements:
-  - :id: Organization.identifier
-    :expression: identifier
-    :min: 0
-  - :id: Organization.type
-    :expression: type
-    :min: 0
-  - :id: Organization.name
-    :expression: name
-    :min: 1
-  - :id: Organization.telecom
-    :expression: telecom
-    :min: 0
-  - :id: Organization.telecom.system
-    :expression: telecom.system
-    :min: 0
-  - :id: Organization.telecom.value
-    :expression: telecom.value
-    :min: 0
-  - :id: Organization.address
-    :expression: address
-    :min: 0
-  :slices:
-  - :id: Organization.identifier:hpio
-    :expression: identifier
-    :label: hpio
-    :min: 0
-    :max: '1'
-    :profile: http://hl7.org.au/fhir/StructureDefinition/au-hpio
-  - :id: Organization.identifier:abn
-    :expression: identifier
-    :label: abn
-    :min: 0
-    :max: "*"
-    :profile: http://hl7.org.au/fhir/StructureDefinition/au-australianbusinessnumber
-- :resource_type: Device
-  :profile: http://hl7.org/fhir/uv/ips/StructureDefinition/Device-uv-ips
-  :elements:
-  - :id: Device.type
-    :expression: type
-    :min: 0
-  :slices: []
-:custodian:
-- :resource_type: Organization
-  :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-organization
-  :elements:
-  - :id: Organization.identifier
-    :expression: identifier
-    :min: 0
-  - :id: Organization.type
-    :expression: type
-    :min: 0
-  - :id: Organization.name
-    :expression: name
-    :min: 1
-  - :id: Organization.telecom
-    :expression: telecom
-    :min: 0
-  - :id: Organization.telecom.system
-    :expression: telecom.system
-    :min: 0
-  - :id: Organization.telecom.value
-    :expression: telecom.value
-    :min: 0
-  - :id: Organization.address
-    :expression: address
-    :min: 0
-  :slices:
-  - :id: Organization.identifier:hpio
-    :expression: identifier
-    :label: hpio
-    :min: 0
-    :max: '1'
-    :profile: http://hl7.org.au/fhir/StructureDefinition/au-hpio
-  - :id: Organization.identifier:abn
-    :expression: identifier
-    :label: abn
-    :min: 0
-    :max: "*"
-    :profile: http://hl7.org.au/fhir/StructureDefinition/au-australianbusinessnumber
-:attester:
-- :resource_type: Patient
-  :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-patient
-  :elements:
-  - :id: Patient.identifier
-    :expression: identifier
-    :min: 1
-  - :id: Patient.name
-    :expression: name
-    :min: 1
-  - :id: Patient.name.use
-    :expression: name.use
-    :min: 0
-  - :id: Patient.name.text
-    :expression: name.text
-    :min: 0
-  - :id: Patient.name.family
-    :expression: name.family
-    :min: 0
-  - :id: Patient.name.given
-    :expression: name.given
-    :min: 0
-  - :id: Patient.telecom
-    :expression: telecom
-    :min: 0
-  - :id: Patient.telecom.system
-    :expression: telecom.system
-    :min: 0
-  - :id: Patient.telecom.value
-    :expression: telecom.value
-    :min: 0
-  - :id: Patient.telecom.use
-    :expression: telecom.use
-    :min: 0
-  - :id: Patient.gender
-    :expression: gender
-    :min: 1
-  - :id: Patient.birthDate
-    :expression: birthDate
-    :min: 1
-  - :id: Patient.address
-    :expression: address
-    :min: 0
-  - :id: Patient.communication
-    :expression: communication
-    :min: 0
-  - :id: Patient.communication.language
-    :expression: communication.language
-    :min: 1
-  - :id: Patient.communication.preferred
-    :expression: communication.preferred
-    :min: 0
-  - :id: Patient.generalPractitioner
-    :expression: generalPractitioner
-    :min: 0
-  :slices:
-  - :id: Patient.extension:indigenousStatus
-    :expression: extension
-    :label: indigenousStatus
-    :min: 0
-    :max: '1'
-    :profile: http://hl7.org.au/fhir/StructureDefinition/indigenous-status
-  - :id: Patient.extension:genderIdentity
-    :expression: extension
-    :label: genderIdentity
-    :min: 0
-    :max: "*"
-    :profile: http://hl7.org/fhir/StructureDefinition/individual-genderIdentity
-  - :id: Patient.extension:individualPronouns
-    :expression: extension
-    :label: individualPronouns
-    :min: 0
-    :max: "*"
-    :profile: http://hl7.org/fhir/StructureDefinition/individual-pronouns
-  - :id: Patient.identifier:ihi
-    :expression: identifier
-    :label: ihi
-    :min: 0
-    :max: '1'
-    :profile: http://hl7.org.au/fhir/StructureDefinition/au-ihi
-  - :id: Patient.identifier:medicare
-    :expression: identifier
-    :label: medicare
-    :min: 0
-    :max: "*"
-    :profile: http://hl7.org.au/fhir/StructureDefinition/au-medicarecardnumber
-  - :id: Patient.identifier:dva
-    :expression: identifier
-    :label: dva
-    :min: 0
-    :max: '1'
-    :profile: http://hl7.org.au/fhir/StructureDefinition/au-dvanumber
-- :resource_type: RelatedPerson
-  :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-relatedperson
-  :elements:
-  - :id: RelatedPerson.patient
-    :expression: patient
-    :min: 1
-  - :id: RelatedPerson.patient.reference
-    :expression: patient.reference
-    :min: 1
-  - :id: RelatedPerson.relationship
-    :expression: relationship
-    :min: 0
-  - :id: RelatedPerson.name
-    :expression: name
-    :min: 0
-  - :id: RelatedPerson.name.use
-    :expression: name.use
-    :min: 0
-  - :id: RelatedPerson.name.text
-    :expression: name.text
-    :min: 0
-  - :id: RelatedPerson.name.family
-    :expression: name.family
-    :min: 0
-  - :id: RelatedPerson.name.given
-    :expression: name.given
-    :min: 0
-  - :id: RelatedPerson.telecom
-    :expression: telecom
-    :min: 0
-  - :id: RelatedPerson.address
-    :expression: address
-    :min: 0
-  :slices: []
-- :resource_type: Practitioner
-  :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-practitioner
-  :elements:
-  - :id: Practitioner.identifier
-    :expression: identifier
-    :min: 0
-  - :id: Practitioner.name
-    :expression: name
-    :min: 1
-  - :id: Practitioner.name.family
-    :expression: name.family
-    :min: 1
-  - :id: Practitioner.name.given
-    :expression: name.given
-    :min: 0
-  - :id: Practitioner.telecom
-    :expression: telecom
-    :min: 0
-  - :id: Practitioner.address
-    :expression: address
-    :min: 0
-  :slices:
-  - :id: Practitioner.identifier:hpii
-    :expression: identifier
-    :label: hpii
-    :min: 0
-    :max: '1'
-    :profile: http://hl7.org.au/fhir/StructureDefinition/au-hpii
-- :resource_type: PractitionerRole
-  :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-practitionerrole
-  :elements:
-  - :id: PractitionerRole.identifier
-    :expression: identifier
-    :min: 0
-  - :id: PractitionerRole.practitioner
-    :expression: practitioner
-    :min: 1
-  - :id: PractitionerRole.organization
-    :expression: organization
-    :min: 0
-  - :id: PractitionerRole.code
-    :expression: code
-    :min: 0
-  - :id: PractitionerRole.specialty
-    :expression: specialty
-    :min: 0
-  - :id: PractitionerRole.telecom
-    :expression: telecom
-    :min: 0
-  - :id: PractitionerRole.telecom.system
-    :expression: telecom.system
-    :min: 0
-  - :id: PractitionerRole.telecom.value
-    :expression: telecom.value
-    :min: 0
-  :slices:
-  - :id: PractitionerRole.identifier:medicareProvider
-    :expression: identifier
-    :label: medicareProvider
-    :min: 0
-    :max: '1'
-    :profile: http://hl7.org.au/fhir/StructureDefinition/au-medicareprovidernumber
-- :resource_type: Organization
-  :profile: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-organization
-  :elements:
-  - :id: Organization.identifier
-    :expression: identifier
-    :min: 0
-  - :id: Organization.type
-    :expression: type
-    :min: 0
-  - :id: Organization.name
-    :expression: name
-    :min: 1
-  - :id: Organization.telecom
-    :expression: telecom
-    :min: 0
-  - :id: Organization.telecom.system
-    :expression: telecom.system
-    :min: 0
-  - :id: Organization.telecom.value
-    :expression: telecom.value
-    :min: 0
-  - :id: Organization.address
-    :expression: address
-    :min: 0
-  :slices:
-  - :id: Organization.identifier:hpio
-    :expression: identifier
-    :label: hpio
-    :min: 0
-    :max: '1'
-    :profile: http://hl7.org.au/fhir/StructureDefinition/au-hpio
-  - :id: Organization.identifier:abn
-    :expression: identifier
-    :label: abn
-    :min: 0
-    :max: "*"
-    :profile: http://hl7.org.au/fhir/StructureDefinition/au-australianbusinessnumber
-:composition_mandatory_ms_elements:
-- author
-- date
-- status
-- subject
-- title
-- type
-:composition_mandatory_ms_sub_elements:
-- attester.mode
-- subject.reference
-:composition_optional_ms_elements:
-- attester
-- custodian
-- identifier
-- text
-- event
-:composition_optional_ms_sub_elements:
-- attester.party
-- attester.time
-:composition_mandatory_ms_slices: []
-:composition_optional_ms_slices:
-- :path: event
-  :sliceName: careProvisioningEvent
-  :min: 0
-  :max: '1'
-  :mustSupport: true
-  :mandatory_ms_sub_elements:
-  - period
-  :optional_ms_sub_elements:
-  - code
-:profiles:
-- :url: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-allergyintolerance
-  :name: AUPSAllergyIntolerance
-  :title: AU PS AllergyIntolerance
-  :required: true
-- :url: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-bundle
-  :name: AUPSBundle
-  :title: AU PS Bundle
-  :required: true
-- :url: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-composition
-  :name: AUPSComposition
-  :title: AU PS Composition
-  :required: true
-- :url: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-condition
-  :name: AUPSCondition
-  :title: AU PS Condition
-  :required: true
-- :url: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-diagnosticresult-path
-  :name: AUPSPathologyResult
-  :title: AU PS Pathology Result Observation
-  :required: false
-- :url: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-encounter
-  :name: AUPSEncounter
-  :title: AU PS Encounter
-  :required: false
-- :url: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-immunization
-  :name: AUPSImmunization
-  :title: AU PS Immunization
-  :required: false
-- :url: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medication
-  :name: AUPSMedication
-  :title: AU PS Medication
-  :required: false
-- :url: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medicationrequest
-  :name: AUPSMedicationRequest
-  :title: AU PS MedicationRequest
-  :required: true
-- :url: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medicationstatement
-  :name: AUPSMedicationStatement
-  :title: AU PS MedicationStatement
-  :required: true
-- :url: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-organization
-  :name: AUPSOrganization
-  :title: AU PS Organization
-  :required: false
-- :url: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-patient
-  :name: AUPSPatient
-  :title: AU PS Patient
-  :required: true
-- :url: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-practitioner
-  :name: AUPSPractitioner
-  :title: AU PS Practitioner
-  :required: false
-- :url: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-practitionerrole
-  :name: AUPSPractitionerRole
-  :title: AU PS PractitionerRole
-  :required: false
-- :url: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-procedure
-  :name: AUPSProcedure
-  :title: AU PS Procedure
-  :required: false
-- :url: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-relatedperson
-  :name: AUPSRelatedPerson
-  :title: AU PS RelatedPerson
-  :required: false
-- :url: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-smokingstatus
-  :name: AUPSSmokingStatus
-  :title: AU PS Smoking Status
-  :required: false
-:resources_filters:
-- :resource_profile: Observation|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-diagnosticresult-path
-  :filters:
-  - path: category.coding.code
-    value: laboratory
-- :resource_profile: Observation|http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-results-radiology-uv-ips
-  :filters:
-  - path: category.coding.code
-    value: imaging
-- :resource_profile: Observation|http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-pregnancy-status-uv-ips
-  :filters:
-  - path: code.coding.code
-    value: 82810-3
-- :resource_profile: Observation|http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-pregnancy-outcome-uv-ips
-  :filters:
-  - path: code.coding.code
-    value:
-    - 11636-8
-    - 11637-6
-    - 11638-4
-    - 11639-2
-    - 11640-0
-    - 11612-9
-    - 11613-7
-    - 11614-5
-    - 33065-4
-- :resource_profile: Observation|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-smokingstatus
-  :filters:
-  - path: code.coding.code
-    value: '1747861000168109'
-- :resource_profile: Observation|http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-alcoholuse-uv-ips
-  :filters:
-  - path: code.coding.code
-    value: 74013-4
 :ig_id: hl7.fhir.au.ps
 :ig_title: AU PS
 :ig_module_name_prefix: AUPS
@@ -1850,9 +485,13 @@
   - :path: Composition.event.detail
     :profiles:
     - http://hl7.org/fhir/StructureDefinition/Resource|4.0.1
+    :resource_types:
+    - Resource
   - :path: Composition.event.detail
     :profiles:
     - http://hl7.org/fhir/StructureDefinition/Resource|4.0.1
+    :resource_types:
+    - Resource
   - :path: Composition.section.author
     :profiles:
     - http://hl7.org/fhir/StructureDefinition/Practitioner|4.0.1
@@ -1864,9 +503,13 @@
   - :path: Composition.section.focus
     :profiles:
     - http://hl7.org/fhir/StructureDefinition/Resource|4.0.1
+    :resource_types:
+    - Resource
   - :path: Composition.section.entry
     :profiles:
     - http://hl7.org/fhir/StructureDefinition/Resource|4.0.1
+    :resource_types:
+    - Resource
   - :path: Composition.section.author
     :profiles:
     - http://hl7.org/fhir/StructureDefinition/Practitioner|4.0.1
@@ -1878,10 +521,15 @@
   - :path: Composition.section.focus
     :profiles:
     - http://hl7.org/fhir/StructureDefinition/Resource|4.0.1
+    :resource_types:
+    - Resource
   - :path: Composition.section.entry
     :profiles:
     - http://hl7.org/fhir/StructureDefinition/Condition
     - http://hl7.org/fhir/StructureDefinition/DocumentReference
+    :resource_types:
+    - Condition
+    - DocumentReference
   - :path: Composition.section.entry
     :profiles:
     - http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-condition
@@ -1898,10 +546,15 @@
   - :path: Composition.section.focus
     :profiles:
     - http://hl7.org/fhir/StructureDefinition/Resource|4.0.1
+    :resource_types:
+    - Resource
   - :path: Composition.section.entry
     :profiles:
     - http://hl7.org/fhir/StructureDefinition/AllergyIntolerance
     - http://hl7.org/fhir/StructureDefinition/DocumentReference
+    :resource_types:
+    - AllergyIntolerance
+    - DocumentReference
   - :path: Composition.section.entry
     :profiles:
     - http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-allergyintolerance
@@ -1918,6 +571,8 @@
   - :path: Composition.section.focus
     :profiles:
     - http://hl7.org/fhir/StructureDefinition/Resource|4.0.1
+    :resource_types:
+    - Resource
   - :path: Composition.section.entry
     :profiles:
     - http://hl7.org/fhir/StructureDefinition/MedicationStatement
@@ -1925,6 +580,12 @@
     - http://hl7.org/fhir/StructureDefinition/MedicationAdministration
     - http://hl7.org/fhir/StructureDefinition/MedicationDispense
     - http://hl7.org/fhir/StructureDefinition/DocumentReference
+    :resource_types:
+    - MedicationStatement
+    - MedicationRequest
+    - MedicationAdministration
+    - MedicationDispense
+    - DocumentReference
   - :path: Composition.section.entry
     :profiles:
     - http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medicationstatement
@@ -1943,10 +604,15 @@
   - :path: Composition.section.focus
     :profiles:
     - http://hl7.org/fhir/StructureDefinition/Resource|4.0.1
+    :resource_types:
+    - Resource
   - :path: Composition.section.entry
     :profiles:
     - http://hl7.org/fhir/StructureDefinition/Immunization
     - http://hl7.org/fhir/StructureDefinition/DocumentReference
+    :resource_types:
+    - Immunization
+    - DocumentReference
   - :path: Composition.section.entry
     :profiles:
     - http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-immunization
@@ -1963,11 +629,17 @@
   - :path: Composition.section.focus
     :profiles:
     - http://hl7.org/fhir/StructureDefinition/Resource|4.0.1
+    :resource_types:
+    - Resource
   - :path: Composition.section.entry
     :profiles:
     - http://hl7.org/fhir/StructureDefinition/Observation
     - http://hl7.org/fhir/StructureDefinition/DiagnosticReport
     - http://hl7.org/fhir/StructureDefinition/DocumentReference
+    :resource_types:
+    - Observation
+    - DiagnosticReport
+    - DocumentReference
   - :path: Composition.section.entry
     :profiles:
     - http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-diagnosticresult-path
@@ -1976,9 +648,13 @@
   - :path: Composition.section.entry
     :profiles:
     - http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-results-radiology-uv-ips
+    :resource_types:
+    - Observation
   - :path: Composition.section.entry
     :profiles:
     - http://hl7.org/fhir/uv/ips/StructureDefinition/DiagnosticReport-uv-ips
+    :resource_types:
+    - DiagnosticReport
   - :path: Composition.section.author
     :profiles:
     - http://hl7.org/fhir/StructureDefinition/Practitioner|4.0.1
@@ -1990,10 +666,15 @@
   - :path: Composition.section.focus
     :profiles:
     - http://hl7.org/fhir/StructureDefinition/Resource|4.0.1
+    :resource_types:
+    - Resource
   - :path: Composition.section.entry
     :profiles:
     - http://hl7.org/fhir/StructureDefinition/Procedure
     - http://hl7.org/fhir/StructureDefinition/DocumentReference
+    :resource_types:
+    - Procedure
+    - DocumentReference
   - :path: Composition.section.entry
     :profiles:
     - http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-procedure
@@ -2010,13 +691,20 @@
   - :path: Composition.section.focus
     :profiles:
     - http://hl7.org/fhir/StructureDefinition/Resource|4.0.1
+    :resource_types:
+    - Resource
   - :path: Composition.section.entry
     :profiles:
     - http://hl7.org/fhir/StructureDefinition/DeviceUseStatement
     - http://hl7.org/fhir/StructureDefinition/DocumentReference
+    :resource_types:
+    - DeviceUseStatement
+    - DocumentReference
   - :path: Composition.section.entry
     :profiles:
     - http://hl7.org/fhir/uv/ips/StructureDefinition/DeviceUseStatement-uv-ips
+    :resource_types:
+    - DeviceUseStatement
   - :path: Composition.section.author
     :profiles:
     - http://hl7.org/fhir/StructureDefinition/Practitioner|4.0.1
@@ -2028,13 +716,20 @@
   - :path: Composition.section.focus
     :profiles:
     - http://hl7.org/fhir/StructureDefinition/Resource|4.0.1
+    :resource_types:
+    - Resource
   - :path: Composition.section.entry
     :profiles:
     - http://hl7.org/fhir/StructureDefinition/Consent
     - http://hl7.org/fhir/StructureDefinition/DocumentReference
+    :resource_types:
+    - Consent
+    - DocumentReference
   - :path: Composition.section.entry
     :profiles:
     - http://hl7.org/fhir/StructureDefinition/Consent
+    :resource_types:
+    - Consent
   - :path: Composition.section.author
     :profiles:
     - http://hl7.org/fhir/StructureDefinition/Practitioner|4.0.1
@@ -2046,13 +741,20 @@
   - :path: Composition.section.focus
     :profiles:
     - http://hl7.org/fhir/StructureDefinition/Resource|4.0.1
+    :resource_types:
+    - Resource
   - :path: Composition.section.entry
     :profiles:
     - http://hl7.org/fhir/StructureDefinition/Flag
     - http://hl7.org/fhir/StructureDefinition/DocumentReference
+    :resource_types:
+    - Flag
+    - DocumentReference
   - :path: Composition.section.entry
     :profiles:
     - http://hl7.org/fhir/uv/ips/StructureDefinition/Flag-alert-uv-ips
+    :resource_types:
+    - Flag
   - :path: Composition.section.author
     :profiles:
     - http://hl7.org/fhir/StructureDefinition/Practitioner|4.0.1
@@ -2064,11 +766,17 @@
   - :path: Composition.section.focus
     :profiles:
     - http://hl7.org/fhir/StructureDefinition/Resource|4.0.1
+    :resource_types:
+    - Resource
   - :path: Composition.section.entry
     :profiles:
     - http://hl7.org/fhir/StructureDefinition/Condition
     - http://hl7.org/fhir/StructureDefinition/ClinicalImpression
     - http://hl7.org/fhir/StructureDefinition/DocumentReference
+    :resource_types:
+    - Condition
+    - ClinicalImpression
+    - DocumentReference
   - :path: Composition.section.entry
     :profiles:
     - http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-condition
@@ -2077,6 +785,8 @@
   - :path: Composition.section.entry
     :profiles:
     - http://hl7.org/fhir/StructureDefinition/ClinicalImpression
+    :resource_types:
+    - ClinicalImpression
   - :path: Composition.section.author
     :profiles:
     - http://hl7.org/fhir/StructureDefinition/Practitioner|4.0.1
@@ -2088,10 +798,15 @@
   - :path: Composition.section.focus
     :profiles:
     - http://hl7.org/fhir/StructureDefinition/Resource|4.0.1
+    :resource_types:
+    - Resource
   - :path: Composition.section.entry
     :profiles:
     - http://hl7.org/fhir/StructureDefinition/Condition
     - http://hl7.org/fhir/StructureDefinition/DocumentReference
+    :resource_types:
+    - Condition
+    - DocumentReference
   - :path: Composition.section.entry
     :profiles:
     - http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-condition
@@ -2108,16 +823,25 @@
   - :path: Composition.section.focus
     :profiles:
     - http://hl7.org/fhir/StructureDefinition/Resource|4.0.1
+    :resource_types:
+    - Resource
   - :path: Composition.section.entry
     :profiles:
     - http://hl7.org/fhir/StructureDefinition/Observation
     - http://hl7.org/fhir/StructureDefinition/DocumentReference
+    :resource_types:
+    - Observation
+    - DocumentReference
   - :path: Composition.section.entry
     :profiles:
     - http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-pregnancy-status-uv-ips
+    :resource_types:
+    - Observation
   - :path: Composition.section.entry
     :profiles:
     - http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-pregnancy-outcome-uv-ips
+    :resource_types:
+    - Observation
   - :path: Composition.section.author
     :profiles:
     - http://hl7.org/fhir/StructureDefinition/Practitioner|4.0.1
@@ -2129,9 +853,13 @@
   - :path: Composition.section.focus
     :profiles:
     - http://hl7.org/fhir/StructureDefinition/Resource|4.0.1
+    :resource_types:
+    - Resource
   - :path: Composition.section.entry
     :profiles:
     - http://hl7.org/fhir/StructureDefinition/Resource|4.0.1
+    :resource_types:
+    - Resource
   - :path: Composition.section.author
     :profiles:
     - http://hl7.org/fhir/StructureDefinition/Practitioner|4.0.1
@@ -2143,17 +871,27 @@
   - :path: Composition.section.focus
     :profiles:
     - http://hl7.org/fhir/StructureDefinition/Resource|4.0.1
+    :resource_types:
+    - Resource
   - :path: Composition.section.entry
     :profiles:
     - http://hl7.org/fhir/StructureDefinition/CarePlan
     - http://hl7.org/fhir/StructureDefinition/ImmunizationRecommendation
     - http://hl7.org/fhir/StructureDefinition/DocumentReference
+    :resource_types:
+    - CarePlan
+    - ImmunizationRecommendation
+    - DocumentReference
   - :path: Composition.section.entry
     :profiles:
     - http://hl7.org/fhir/StructureDefinition/CarePlan
+    :resource_types:
+    - CarePlan
   - :path: Composition.section.entry
     :profiles:
     - http://hl7.org/fhir/StructureDefinition/ImmunizationRecommendation
+    :resource_types:
+    - ImmunizationRecommendation
   - :path: Composition.section.author
     :profiles:
     - http://hl7.org/fhir/StructureDefinition/Practitioner|4.0.1
@@ -2165,10 +903,15 @@
   - :path: Composition.section.focus
     :profiles:
     - http://hl7.org/fhir/StructureDefinition/Resource|4.0.1
+    :resource_types:
+    - Resource
   - :path: Composition.section.entry
     :profiles:
     - http://hl7.org/fhir/StructureDefinition/Observation
     - http://hl7.org/fhir/StructureDefinition/DocumentReference
+    :resource_types:
+    - Observation
+    - DocumentReference
   - :path: Composition.section.entry
     :profiles:
     - http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-smokingstatus
@@ -2177,6 +920,8 @@
   - :path: Composition.section.entry
     :profiles:
     - http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-alcoholuse-uv-ips
+    :resource_types:
+    - Observation
   - :path: Composition.section.author
     :profiles:
     - http://hl7.org/fhir/StructureDefinition/Practitioner|4.0.1
@@ -2188,13 +933,20 @@
   - :path: Composition.section.focus
     :profiles:
     - http://hl7.org/fhir/StructureDefinition/Resource|4.0.1
+    :resource_types:
+    - Resource
   - :path: Composition.section.entry
     :profiles:
     - http://hl7.org/fhir/StructureDefinition/Observation
     - http://hl7.org/fhir/StructureDefinition/DocumentReference
+    :resource_types:
+    - Observation
+    - DocumentReference
   - :path: Composition.section.entry
     :profiles:
     - http://hl7.org/fhir/StructureDefinition/vitalsigns
+    :resource_types:
+    - Observation
   :delayed_references:
   - :path: author
     :resources:
@@ -2229,13 +981,37 @@
     - Observation
   - :path: section.entry
     :resources:
+    - Observation
+  - :path: section.entry
+    :resources:
+    - DiagnosticReport
+  - :path: section.entry
+    :resources:
     - Procedure
   - :path: section.entry
     :resources:
+    - DeviceUseStatement
+  - :path: section.entry
+    :resources:
+    - Flag
+  - :path: section.entry
+    :resources:
     - Condition
   - :path: section.entry
     :resources:
     - Condition
+  - :path: section.entry
+    :resources:
+    - Observation
+  - :path: section.entry
+    :resources:
+    - Observation
+  - :path: section.entry
+    :resources:
+    - Observation
+  - :path: section.entry
+    :resources:
+    - Observation
   - :path: section.entry
     :resources:
     - Observation
@@ -2318,9 +1094,15 @@
     - http://hl7.org/fhir/StructureDefinition/ClinicalImpression|4.0.1
     - http://hl7.org/fhir/StructureDefinition/DiagnosticReport|4.0.1
     - http://hl7.org/fhir/StructureDefinition/Observation|4.0.1
+    :resource_types:
+    - ClinicalImpression
+    - DiagnosticReport
+    - Observation
   - :path: Condition.evidence.detail
     :profiles:
     - http://hl7.org/fhir/StructureDefinition/Resource|4.0.1
+    :resource_types:
+    - Resource
   :delayed_references: []
 - :name: au_ps_diagnosticresult_path
   :class_name: AuPsDiagnosticresultPathSequence
@@ -2337,8 +1119,8 @@
   :operations: []
   :searches: []
   :search_definitions: {}
-  :include_params: []
-  :revincludes: []
+  :include_params: &1 []
+  :revincludes: &2 []
   :required_concepts: []
   :must_supports:
     :extensions: []
@@ -2432,6 +1214,10 @@
     - http://hl7.org/fhir/StructureDefinition/MedicationRequest|4.0.1
     - http://hl7.org/fhir/StructureDefinition/NutritionOrder|4.0.1
     - http://hl7.org/fhir/StructureDefinition/ServiceRequest|4.0.1
+    :resource_types:
+    - CarePlan
+    - ImmunizationRecommendation
+    - MedicationRequest
   - :path: Observation.partOf
     :profiles:
     - http://hl7.org/fhir/StructureDefinition/MedicationAdministration|4.0.1
@@ -2440,6 +1226,12 @@
     - http://hl7.org/fhir/StructureDefinition/Procedure|4.0.1
     - http://hl7.org/fhir/StructureDefinition/Immunization|4.0.1
     - http://hl7.org/fhir/StructureDefinition/ImagingStudy|4.0.1
+    :resource_types:
+    - MedicationAdministration
+    - MedicationDispense
+    - MedicationStatement
+    - Procedure
+    - Immunization
   - :path: Observation.subject
     :profiles:
     - http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-patient
@@ -2448,6 +1240,8 @@
   - :path: Observation.focus
     :profiles:
     - http://hl7.org/fhir/StructureDefinition/Resource|4.0.1
+    :resource_types:
+    - Resource
   - :path: Observation.encounter
     :profiles:
     - http://hl7.org/fhir/StructureDefinition/Encounter|4.0.1
@@ -2484,6 +1278,9 @@
     - http://hl7.org/fhir/StructureDefinition/QuestionnaireResponse|4.0.1
     - http://hl7.org/fhir/StructureDefinition/Observation|4.0.1
     - http://hl7.org/fhir/StructureDefinition/MolecularSequence|4.0.1
+    :resource_types:
+    - DocumentReference
+    - Observation
   :delayed_references:
   - :path: performer
     :resources:
@@ -2492,6 +1289,793 @@
     - Organization
     - RelatedPerson
   - :path: hasMember
+    :resources:
+    - Observation
+- :name: au_ps_smokingstatus
+  :class_name: AuPsSmokingstatusSequence
+  :version: v1.0.0
+  :reformatted_version: v100
+  :resource: Observation
+  :profile_url: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-smokingstatus
+  :profile_name: AU PS Smoking Status
+  :profile_version: 1.0.0
+  :title: Observation Smoking Status
+  :short_description: Verify support for the server capabilities required by the AU
+    PS Smoking Status.
+  :interactions: []
+  :operations: []
+  :searches: []
+  :search_definitions: {}
+  :include_params: *1
+  :revincludes: *2
+  :required_concepts: []
+  :must_supports:
+    :extensions: []
+    :slices: []
+    :elements:
+    - :path: status
+    - :path: category
+    - :path: code.coding.code
+      :fixed_value: '1747861000168109'
+    - :path: subject
+      :types:
+      - Reference
+      :target_profiles:
+      - http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-patient
+    - :path: subject.reference
+    - :path: effective[x]
+    - :path: value[x]
+    - :path: dataAbsentReason
+  :mandatory_elements:
+  - Observation.status
+  - Observation.category
+  - Observation.code
+  - Observation.code.coding
+  - Observation.code.coding.system
+  - Observation.code.coding.code
+  - Observation.subject
+  - Observation.subject.reference
+  - Observation.effective[x]
+  - Observation.component.code
+  :bindings:
+  - :type: code
+    :strength: required
+    :system: http://hl7.org/fhir/ValueSet/observation-status
+    :path: status
+  :references:
+  - :path: Observation.basedOn
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/CarePlan|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/DeviceRequest|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/ImmunizationRecommendation|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/MedicationRequest|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/NutritionOrder|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/ServiceRequest|4.0.1
+    :resource_types:
+    - CarePlan
+    - ImmunizationRecommendation
+    - MedicationRequest
+  - :path: Observation.partOf
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/MedicationAdministration|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/MedicationDispense|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/MedicationStatement|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/Procedure|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/Immunization|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/ImagingStudy|4.0.1
+    :resource_types:
+    - MedicationAdministration
+    - MedicationDispense
+    - MedicationStatement
+    - Procedure
+    - Immunization
+  - :path: Observation.subject
+    :profiles:
+    - http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-patient
+    :resource_types:
+    - Patient
+  - :path: Observation.focus
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/Resource|4.0.1
+    :resource_types:
+    - Resource
+  - :path: Observation.encounter
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/Encounter|4.0.1
+  - :path: Observation.performer
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/Practitioner|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/PractitionerRole|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/Organization|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/CareTeam|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/Patient|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/RelatedPerson|4.0.1
+  - :path: Observation.specimen
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/Specimen|4.0.1
+  - :path: Observation.device
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/Device|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/DeviceMetric|4.0.1
+  - :path: Observation.hasMember
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/Observation|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/QuestionnaireResponse|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/MolecularSequence|4.0.1
+    :resource_types:
+    - Observation
+  - :path: Observation.derivedFrom
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/DocumentReference|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/ImagingStudy|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/Media|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/QuestionnaireResponse|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/Observation|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/MolecularSequence|4.0.1
+    :resource_types:
+    - DocumentReference
+    - Observation
+  :delayed_references: []
+- :name: Observation_alcoholuse_uv_ips
+  :class_name: ObservationAlcoholuseUvIpsSequence
+  :version: v1.0.0
+  :reformatted_version: v100
+  :resource: Observation
+  :profile_url: http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-alcoholuse-uv-ips
+  :profile_name: Observation Social History - Alcohol Use (IPS)
+  :profile_version: 2.0.0
+  :title: Observation Social History - Alcohol Use (IPS)
+  :short_description: Verify support for the server capabilities required by the Observation
+    Social History - Alcohol Use (IPS).
+  :interactions: []
+  :operations: []
+  :searches: []
+  :search_definitions: {}
+  :include_params: *1
+  :revincludes: *2
+  :required_concepts: []
+  :must_supports:
+    :extensions: []
+    :slices: []
+    :elements:
+    - :path: code.coding.code
+      :fixed_value: 74013-4
+    - :path: subject
+      :types:
+      - Reference
+      :target_profiles:
+      - http://hl7.org/fhir/uv/ips/StructureDefinition/Patient-uv-ips
+    - :path: subject.reference
+    - :path: effective[x]
+  :mandatory_elements:
+  - Observation.status
+  - Observation.code
+  - Observation.subject
+  - Observation.subject.reference
+  - Observation.effective[x]
+  - Observation.component.code
+  :bindings:
+  - :type: code
+    :strength: required
+    :system: http://hl7.org/fhir/ValueSet/observation-status
+    :path: status
+  :references:
+  - :path: Observation.basedOn
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/CarePlan|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/DeviceRequest|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/ImmunizationRecommendation|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/MedicationRequest|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/NutritionOrder|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/ServiceRequest|4.0.1
+    :resource_types:
+    - CarePlan
+    - ImmunizationRecommendation
+    - MedicationRequest
+  - :path: Observation.partOf
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/MedicationAdministration|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/MedicationDispense|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/MedicationStatement|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/Procedure|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/Immunization|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/ImagingStudy|4.0.1
+    :resource_types:
+    - MedicationAdministration
+    - MedicationDispense
+    - MedicationStatement
+    - Procedure
+    - Immunization
+  - :path: Observation.subject
+    :profiles:
+    - http://hl7.org/fhir/uv/ips/StructureDefinition/Patient-uv-ips
+  - :path: Observation.focus
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/Resource|4.0.1
+    :resource_types:
+    - Resource
+  - :path: Observation.encounter
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/Encounter|4.0.1
+  - :path: Observation.performer
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/Practitioner|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/PractitionerRole|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/Organization|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/CareTeam|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/Patient|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/RelatedPerson|4.0.1
+  - :path: Observation.specimen
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/Specimen|4.0.1
+  - :path: Observation.device
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/Device|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/DeviceMetric|4.0.1
+  - :path: Observation.hasMember
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/Observation|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/QuestionnaireResponse|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/MolecularSequence|4.0.1
+    :resource_types:
+    - Observation
+  - :path: Observation.derivedFrom
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/DocumentReference|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/ImagingStudy|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/Media|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/QuestionnaireResponse|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/Observation|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/MolecularSequence|4.0.1
+    :resource_types:
+    - DocumentReference
+    - Observation
+  :delayed_references: []
+- :name: Observation_pregnancy_outcome_uv_ips
+  :class_name: ObservationPregnancyOutcomeUvIpsSequence
+  :version: v1.0.0
+  :reformatted_version: v100
+  :resource: Observation
+  :profile_url: http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-pregnancy-outcome-uv-ips
+  :profile_name: Observation Pregnancy - Outcome (IPS)
+  :profile_version: 2.0.0
+  :title: Observation Pregnancy - Outcome (IPS)
+  :short_description: Verify support for the server capabilities required by the Observation
+    Pregnancy - Outcome (IPS).
+  :interactions: []
+  :operations: []
+  :searches: []
+  :search_definitions: {}
+  :include_params: *1
+  :revincludes: *2
+  :required_concepts: []
+  :must_supports:
+    :extensions: []
+    :slices:
+    - :slice_id: Observation.value[x]:valueQuantity
+      :slice_name: valueQuantity
+      :path: value[x]
+      :discriminator:
+        :type: type
+        :code: Quantity
+    :elements:
+    - :path: code
+    - :path: subject
+      :types:
+      - Reference
+      :target_profiles:
+      - http://hl7.org/fhir/uv/ips/StructureDefinition/Patient-uv-ips
+    - :path: subject.reference
+    - :path: effective[x]
+  :mandatory_elements:
+  - Observation.status
+  - Observation.code
+  - Observation.subject
+  - Observation.subject.reference
+  - Observation.effective[x]
+  - Observation.component.code
+  :bindings:
+  - :type: code
+    :strength: required
+    :system: http://hl7.org/fhir/ValueSet/observation-status
+    :path: status
+  - :type: CodeableConcept
+    :strength: required
+    :system: http://hl7.org/fhir/uv/ips/ValueSet/pregnancies-summary-uv-ips
+    :path: code
+  :references:
+  - :path: Observation.basedOn
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/CarePlan|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/DeviceRequest|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/ImmunizationRecommendation|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/MedicationRequest|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/NutritionOrder|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/ServiceRequest|4.0.1
+    :resource_types:
+    - CarePlan
+    - ImmunizationRecommendation
+    - MedicationRequest
+  - :path: Observation.partOf
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/MedicationAdministration|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/MedicationDispense|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/MedicationStatement|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/Procedure|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/Immunization|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/ImagingStudy|4.0.1
+    :resource_types:
+    - MedicationAdministration
+    - MedicationDispense
+    - MedicationStatement
+    - Procedure
+    - Immunization
+  - :path: Observation.subject
+    :profiles:
+    - http://hl7.org/fhir/uv/ips/StructureDefinition/Patient-uv-ips
+  - :path: Observation.focus
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/Resource|4.0.1
+    :resource_types:
+    - Resource
+  - :path: Observation.encounter
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/Encounter|4.0.1
+  - :path: Observation.performer
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/Practitioner|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/PractitionerRole|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/Organization|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/CareTeam|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/Patient|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/RelatedPerson|4.0.1
+  - :path: Observation.specimen
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/Specimen|4.0.1
+  - :path: Observation.device
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/Device|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/DeviceMetric|4.0.1
+  - :path: Observation.hasMember
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/Observation|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/QuestionnaireResponse|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/MolecularSequence|4.0.1
+    :resource_types:
+    - Observation
+  - :path: Observation.derivedFrom
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/DocumentReference|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/ImagingStudy|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/Media|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/QuestionnaireResponse|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/Observation|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/MolecularSequence|4.0.1
+    :resource_types:
+    - DocumentReference
+    - Observation
+  :delayed_references: []
+- :name: Observation_pregnancy_status_uv_ips
+  :class_name: ObservationPregnancyStatusUvIpsSequence
+  :version: v1.0.0
+  :reformatted_version: v100
+  :resource: Observation
+  :profile_url: http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-pregnancy-status-uv-ips
+  :profile_name: Observation Pregnancy - Status (IPS)
+  :profile_version: 2.0.0
+  :title: Observation Pregnancy - Status (IPS)
+  :short_description: Verify support for the server capabilities required by the Observation
+    Pregnancy - Status (IPS).
+  :interactions: []
+  :operations: []
+  :searches: []
+  :search_definitions: {}
+  :include_params: *1
+  :revincludes: *2
+  :required_concepts: []
+  :must_supports:
+    :extensions: []
+    :slices:
+    - :slice_id: Observation.value[x]:valueCodeableConcept
+      :slice_name: valueCodeableConcept
+      :path: value[x]
+      :discriminator:
+        :type: type
+        :code: CodeableConcept
+    :elements:
+    - :path: code.coding.code
+      :fixed_value: 82810-3
+    - :path: subject
+      :types:
+      - Reference
+      :target_profiles:
+      - http://hl7.org/fhir/uv/ips/StructureDefinition/Patient-uv-ips
+    - :path: subject.reference
+    - :path: effective[x]
+    - :path: hasMember
+      :types:
+      - Reference
+      :target_profiles:
+      - http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-pregnancy-edd-uv-ips
+    - :path: hasMember.reference
+  :mandatory_elements:
+  - Observation.status
+  - Observation.code
+  - Observation.subject
+  - Observation.subject.reference
+  - Observation.effective[x]
+  - Observation.hasMember.reference
+  - Observation.component.code
+  :bindings:
+  - :type: code
+    :strength: required
+    :system: http://hl7.org/fhir/ValueSet/observation-status
+    :path: status
+  :references:
+  - :path: Observation.basedOn
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/CarePlan|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/DeviceRequest|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/ImmunizationRecommendation|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/MedicationRequest|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/NutritionOrder|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/ServiceRequest|4.0.1
+    :resource_types:
+    - CarePlan
+    - ImmunizationRecommendation
+    - MedicationRequest
+  - :path: Observation.partOf
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/MedicationAdministration|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/MedicationDispense|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/MedicationStatement|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/Procedure|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/Immunization|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/ImagingStudy|4.0.1
+    :resource_types:
+    - MedicationAdministration
+    - MedicationDispense
+    - MedicationStatement
+    - Procedure
+    - Immunization
+  - :path: Observation.subject
+    :profiles:
+    - http://hl7.org/fhir/uv/ips/StructureDefinition/Patient-uv-ips
+  - :path: Observation.focus
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/Resource|4.0.1
+    :resource_types:
+    - Resource
+  - :path: Observation.encounter
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/Encounter|4.0.1
+  - :path: Observation.performer
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/Practitioner|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/PractitionerRole|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/Organization|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/CareTeam|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/Patient|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/RelatedPerson|4.0.1
+  - :path: Observation.specimen
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/Specimen|4.0.1
+  - :path: Observation.device
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/Device|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/DeviceMetric|4.0.1
+  - :path: Observation.hasMember
+    :profiles:
+    - http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-pregnancy-edd-uv-ips
+  - :path: Observation.derivedFrom
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/DocumentReference|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/ImagingStudy|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/Media|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/QuestionnaireResponse|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/Observation|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/MolecularSequence|4.0.1
+    :resource_types:
+    - DocumentReference
+    - Observation
+  :delayed_references: []
+- :name: Observation_results_radiology_uv_ips
+  :class_name: ObservationResultsRadiologyUvIpsSequence
+  :version: v1.0.0
+  :reformatted_version: v100
+  :resource: Observation
+  :profile_url: http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-results-radiology-uv-ips
+  :profile_name: Observation Results - Radiology (IPS)
+  :profile_version: 2.0.0
+  :title: Observation Results - Radiology (IPS)
+  :short_description: Verify support for the server capabilities required by the Observation
+    Results - Radiology (IPS).
+  :interactions: []
+  :operations: []
+  :searches: []
+  :search_definitions: {}
+  :include_params: *1
+  :revincludes: *2
+  :required_concepts: []
+  :must_supports:
+    :extensions: []
+    :slices:
+    - :slice_id: Observation.effective[x]:effectiveDateTime
+      :slice_name: effectiveDateTime
+      :path: effective[x]
+      :discriminator:
+        :type: type
+        :code: DateTime
+    - :slice_id: Observation.value[x]:valueString
+      :slice_name: valueString
+      :path: value[x]
+      :discriminator:
+        :type: type
+        :code: String
+    - :slice_id: Observation.category:radiology
+      :slice_name: radiology
+      :path: category
+      :discriminator:
+        :type: value
+        :values: []
+    :elements:
+    - :path: code
+    - :path: subject
+      :types:
+      - Reference
+      :target_profiles:
+      - http://hl7.org/fhir/uv/ips/StructureDefinition/Patient-uv-ips
+    - :path: subject.reference
+    - :path: effective[x]
+    - :path: performer
+      :types:
+      - Reference
+    - :path: component
+  :mandatory_elements:
+  - Observation.status
+  - Observation.category
+  - Observation.code
+  - Observation.subject
+  - Observation.subject.reference
+  - Observation.effective[x]
+  - Observation.performer
+  - Observation.component.code
+  :bindings:
+  - :type: code
+    :strength: required
+    :system: http://hl7.org/fhir/uv/ips/ValueSet/results-status-uv-ips
+    :path: status
+  :references:
+  - :path: Observation.basedOn
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/CarePlan|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/DeviceRequest|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/ImmunizationRecommendation|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/MedicationRequest|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/NutritionOrder|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/ServiceRequest|4.0.1
+    :resource_types:
+    - CarePlan
+    - ImmunizationRecommendation
+    - MedicationRequest
+  - :path: Observation.partOf
+    :profiles:
+    - http://hl7.org/fhir/uv/ips/StructureDefinition/ImagingStudy-uv-ips
+  - :path: Observation.subject
+    :profiles:
+    - http://hl7.org/fhir/uv/ips/StructureDefinition/Patient-uv-ips
+  - :path: Observation.focus
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/Resource|4.0.1
+    :resource_types:
+    - Resource
+  - :path: Observation.encounter
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/Encounter|4.0.1
+  - :path: Observation.performer
+    :profiles:
+    - http://hl7.org/fhir/uv/ips/StructureDefinition/Practitioner-uv-ips
+    - http://hl7.org/fhir/uv/ips/StructureDefinition/PractitionerRole-uv-ips
+    - http://hl7.org/fhir/uv/ips/StructureDefinition/Organization-uv-ips
+    - http://hl7.org/fhir/StructureDefinition/CareTeam
+    - http://hl7.org/fhir/uv/ips/StructureDefinition/Patient-uv-ips
+    - http://hl7.org/fhir/StructureDefinition/RelatedPerson
+  - :path: Observation.specimen
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/Specimen|4.0.1
+  - :path: Observation.device
+    :profiles:
+    - http://hl7.org/fhir/uv/ips/StructureDefinition/Device-observer-uv-ips
+  - :path: Observation.hasMember
+    :profiles:
+    - http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-results-radiology-uv-ips
+    :resource_types:
+    - Observation
+  - :path: Observation.derivedFrom
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/DocumentReference|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/ImagingStudy|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/Media|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/QuestionnaireResponse|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/Observation|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/MolecularSequence|4.0.1
+    :resource_types:
+    - DocumentReference
+    - Observation
+  :delayed_references:
+  - :path: hasMember
+    :resources:
+    - Observation
+- :name: vitalsigns
+  :class_name: VitalsignsSequence
+  :version: v1.0.0
+  :reformatted_version: v100
+  :resource: Observation
+  :profile_url: http://hl7.org/fhir/StructureDefinition/vitalsigns
+  :profile_name: Vital Signs Profile
+  :profile_version: 5.0.0
+  :title: Observation Vital Signs
+  :short_description: Verify support for the server capabilities required by the Vital
+    Signs Profile.
+  :interactions: []
+  :operations: []
+  :searches: []
+  :search_definitions: {}
+  :include_params: *1
+  :revincludes: *2
+  :required_concepts: []
+  :must_supports:
+    :extensions: []
+    :slices:
+    - :slice_id: Observation.component.value[x]:valueQuantity
+      :slice_name: valueQuantity
+      :path: component.value[x]
+      :discriminator:
+        :type: type
+        :code: Quantity
+    - :slice_id: Observation.category:VSCat
+      :slice_name: VSCat
+      :path: category
+      :discriminator:
+        :type: value
+        :values:
+        - :path: coding.code
+          :value: vital-signs
+        - :path: coding.system
+          :value: http://terminology.hl7.org/CodeSystem/observation-category
+    :elements:
+    - :path: status
+    - :path: category
+    - :path: category:VSCat.coding
+    - :path: category:VSCat.coding.system
+      :fixed_value: http://terminology.hl7.org/CodeSystem/observation-category
+    - :path: category:VSCat.coding.code
+      :fixed_value: vital-signs
+    - :path: code
+    - :path: subject
+      :types:
+      - Reference
+    - :path: effective[x]
+    - :path: value[x]
+      :types:
+      - Reference
+    - :path: dataAbsentReason
+    - :path: component
+    - :path: component.code
+    - :path: component.value[x]
+      :types:
+      - Reference
+    - :path: component.dataAbsentReason
+  :mandatory_elements:
+  - Observation.triggeredBy.observation
+  - Observation.triggeredBy.type
+  - Observation.status
+  - Observation.category
+  - Observation.category.coding
+  - Observation.category.coding.system
+  - Observation.category.coding.code
+  - Observation.code
+  - Observation.subject
+  - Observation.effective[x]
+  - Observation.component.code
+  :bindings:
+  - :type: code
+    :strength: required
+    :system: http://hl7.org/fhir/ValueSet/all-languages
+    :path: language
+  - :type: code
+    :strength: required
+    :system: http://hl7.org/fhir/ValueSet/observation-triggeredbytype
+    :path: triggeredBy.type
+  - :type: code
+    :strength: required
+    :system: http://hl7.org/fhir/ValueSet/observation-status
+    :path: status
+  :references:
+  - :path: Observation.basedOn
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/CarePlan
+    - http://hl7.org/fhir/StructureDefinition/DeviceRequest
+    - http://hl7.org/fhir/StructureDefinition/ImmunizationRecommendation
+    - http://hl7.org/fhir/StructureDefinition/MedicationRequest
+    - http://hl7.org/fhir/StructureDefinition/NutritionOrder
+    - http://hl7.org/fhir/StructureDefinition/ServiceRequest
+    :resource_types:
+    - CarePlan
+    - ImmunizationRecommendation
+    - MedicationRequest
+  - :path: Observation.triggeredBy.observation
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/Observation
+    :resource_types:
+    - Observation
+  - :path: Observation.partOf
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/MedicationAdministration
+    - http://hl7.org/fhir/StructureDefinition/MedicationDispense
+    - http://hl7.org/fhir/StructureDefinition/MedicationStatement
+    - http://hl7.org/fhir/StructureDefinition/Procedure
+    - http://hl7.org/fhir/StructureDefinition/Immunization
+    - http://hl7.org/fhir/StructureDefinition/ImagingStudy
+    - http://hl7.org/fhir/StructureDefinition/GenomicStudy
+    :resource_types:
+    - MedicationAdministration
+    - MedicationDispense
+    - MedicationStatement
+    - Procedure
+    - Immunization
+  - :path: Observation.subject
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/Patient
+  - :path: Observation.focus
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/Resource
+    :resource_types:
+    - Resource
+  - :path: Observation.encounter
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/Encounter
+  - :path: Observation.performer
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/Practitioner
+    - http://hl7.org/fhir/StructureDefinition/PractitionerRole
+    - http://hl7.org/fhir/StructureDefinition/Organization
+    - http://hl7.org/fhir/StructureDefinition/CareTeam
+    - http://hl7.org/fhir/StructureDefinition/Patient
+    - http://hl7.org/fhir/StructureDefinition/RelatedPerson
+  - :path: Observation.bodyStructure
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/BodyStructure
+  - :path: Observation.specimen
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/Specimen
+    - http://hl7.org/fhir/StructureDefinition/Group
+  - :path: Observation.device
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/Device
+    - http://hl7.org/fhir/StructureDefinition/DeviceMetric
+  - :path: Observation.hasMember
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/QuestionnaireResponse
+    - http://hl7.org/fhir/StructureDefinition/MolecularSequence
+    - http://hl7.org/fhir/StructureDefinition/vitalsigns
+    :resource_types:
+    - Observation
+  - :path: Observation.derivedFrom
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/DocumentReference
+    - http://hl7.org/fhir/StructureDefinition/ImagingStudy
+    - http://hl7.org/fhir/StructureDefinition/QuestionnaireResponse
+    - http://hl7.org/fhir/StructureDefinition/MolecularSequence
+    - http://hl7.org/fhir/StructureDefinition/vitalsigns
+    :resource_types:
+    - DocumentReference
+    - Observation
+  :delayed_references:
+  - :path: hasMember
+    :resources:
+    - Observation
+  - :path: derivedFrom
     :resources:
     - Observation
 - :name: au_ps_encounter
@@ -2599,11 +2183,15 @@
     - http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-procedure
     :resource_types:
     - Condition
+    - Observation
     - Procedure
   - :path: Encounter.diagnosis.condition
     :profiles:
     - http://hl7.org/fhir/StructureDefinition/Condition|4.0.1
     - http://hl7.org/fhir/StructureDefinition/Procedure|4.0.1
+    :resource_types:
+    - Condition
+    - Procedure
   - :path: Encounter.account
     :profiles:
     - http://hl7.org/fhir/StructureDefinition/Account|4.0.1
@@ -2723,9 +2311,15 @@
     - http://hl7.org/fhir/StructureDefinition/Condition|4.0.1
     - http://hl7.org/fhir/StructureDefinition/Observation|4.0.1
     - http://hl7.org/fhir/StructureDefinition/DiagnosticReport|4.0.1
+    :resource_types:
+    - Condition
+    - Observation
+    - DiagnosticReport
   - :path: Immunization.reaction.detail
     :profiles:
     - http://hl7.org/fhir/StructureDefinition/Observation|4.0.1
+    :resource_types:
+    - Observation
   - :path: Immunization.protocolApplied.authority
     :profiles:
     - http://hl7.org/fhir/StructureDefinition/Organization|4.0.1
@@ -2874,6 +2468,8 @@
   - :path: MedicationRequest.supportingInformation
     :profiles:
     - http://hl7.org/fhir/StructureDefinition/Resource|4.0.1
+    :resource_types:
+    - Resource
   - :path: MedicationRequest.supportingInformation
     :profiles:
     - http://hl7.org/fhir/StructureDefinition/bodyheight
@@ -2912,12 +2508,17 @@
     - http://hl7.org/fhir/StructureDefinition/Observation
     :resource_types:
     - Condition
+    - Observation
   - :path: MedicationRequest.basedOn
     :profiles:
     - http://hl7.org/fhir/StructureDefinition/CarePlan|4.0.1
     - http://hl7.org/fhir/StructureDefinition/MedicationRequest|4.0.1
     - http://hl7.org/fhir/StructureDefinition/ServiceRequest|4.0.1
     - http://hl7.org/fhir/StructureDefinition/ImmunizationRecommendation|4.0.1
+    :resource_types:
+    - CarePlan
+    - MedicationRequest
+    - ImmunizationRecommendation
   - :path: MedicationRequest.insurance
     :profiles:
     - http://hl7.org/fhir/StructureDefinition/Coverage|4.0.1
@@ -2928,6 +2529,8 @@
   - :path: MedicationRequest.priorPrescription
     :profiles:
     - http://hl7.org/fhir/StructureDefinition/MedicationRequest|4.0.1
+    :resource_types:
+    - MedicationRequest
   - :path: MedicationRequest.detectedIssue
     :profiles:
     - http://hl7.org/fhir/StructureDefinition/DetectedIssue|4.0.1
@@ -3021,6 +2624,9 @@
     - http://hl7.org/fhir/StructureDefinition/MedicationRequest|4.0.1
     - http://hl7.org/fhir/StructureDefinition/CarePlan|4.0.1
     - http://hl7.org/fhir/StructureDefinition/ServiceRequest|4.0.1
+    :resource_types:
+    - MedicationRequest
+    - CarePlan
   - :path: MedicationStatement.partOf
     :profiles:
     - http://hl7.org/fhir/StructureDefinition/MedicationAdministration|4.0.1
@@ -3028,6 +2634,12 @@
     - http://hl7.org/fhir/StructureDefinition/MedicationStatement|4.0.1
     - http://hl7.org/fhir/StructureDefinition/Procedure|4.0.1
     - http://hl7.org/fhir/StructureDefinition/Observation|4.0.1
+    :resource_types:
+    - MedicationAdministration
+    - MedicationDispense
+    - MedicationStatement
+    - Procedure
+    - Observation
   - :path: MedicationStatement.medication[x]
     :profiles:
     - http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medication
@@ -3052,6 +2664,8 @@
   - :path: MedicationStatement.derivedFrom
     :profiles:
     - http://hl7.org/fhir/StructureDefinition/Resource|4.0.1
+    :resource_types:
+    - Resource
   - :path: MedicationStatement.reasonReference
     :profiles:
     - http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-condition
@@ -3059,6 +2673,8 @@
     - http://hl7.org/fhir/uv/ips/StructureDefinition/DiagnosticReport-uv-ips
     :resource_types:
     - Condition
+    - Observation
+    - DiagnosticReport
   :delayed_references:
   - :path: medication[x]
     :resources:
@@ -3066,6 +2682,7 @@
   - :path: reasonReference
     :resources:
     - Condition
+    - DiagnosticReport
 - :name: au_ps_organization
   :class_name: AuPsOrganizationSequence
   :version: v1.0.0
@@ -3406,11 +3023,17 @@
     :profiles:
     - http://hl7.org/fhir/StructureDefinition/CarePlan|4.0.1
     - http://hl7.org/fhir/StructureDefinition/ServiceRequest|4.0.1
+    :resource_types:
+    - CarePlan
   - :path: Procedure.partOf
     :profiles:
     - http://hl7.org/fhir/StructureDefinition/Procedure|4.0.1
     - http://hl7.org/fhir/StructureDefinition/Observation|4.0.1
     - http://hl7.org/fhir/StructureDefinition/MedicationAdministration|4.0.1
+    :resource_types:
+    - Procedure
+    - Observation
+    - MedicationAdministration
   - :path: Procedure.subject
     :profiles:
     - http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-patient
@@ -3463,15 +3086,22 @@
     - http://hl7.org/fhir/StructureDefinition/DocumentReference
     :resource_types:
     - Condition
+    - Observation
     - Procedure
+    - DocumentReference
   - :path: Procedure.report
     :profiles:
     - http://hl7.org/fhir/StructureDefinition/DiagnosticReport|4.0.1
     - http://hl7.org/fhir/StructureDefinition/DocumentReference|4.0.1
     - http://hl7.org/fhir/StructureDefinition/Composition|4.0.1
+    :resource_types:
+    - DiagnosticReport
+    - DocumentReference
   - :path: Procedure.complicationDetail
     :profiles:
     - http://hl7.org/fhir/StructureDefinition/Condition|4.0.1
+    :resource_types:
+    - Condition
   - :path: Procedure.focalDevice.manipulated
     :profiles:
     - http://hl7.org/fhir/StructureDefinition/Device|4.0.1
@@ -3553,17 +3183,17 @@
     :resource_types:
     - Patient
   :delayed_references: []
-- :name: au_ps_smokingstatus
-  :class_name: AuPsSmokingstatusSequence
+- :name: Device_uv_ips
+  :class_name: DeviceUvIpsSequence
   :version: v1.0.0
   :reformatted_version: v100
-  :resource: Observation
-  :profile_url: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-smokingstatus
-  :profile_name: AU PS Smoking Status
-  :profile_version: 1.0.0
-  :title: Observation Smoking Status
-  :short_description: Verify support for the server capabilities required by the AU
-    PS Smoking Status.
+  :resource: Device
+  :profile_url: http://hl7.org/fhir/uv/ips/StructureDefinition/Device-uv-ips
+  :profile_name: Device (IPS)
+  :profile_version: 2.0.0
+  :title: Device (IPS)
+  :short_description: Verify support for the server capabilities required by the Device
+    (IPS).
   :interactions: []
   :operations: []
   :searches: []
@@ -3575,89 +3205,301 @@
     :extensions: []
     :slices: []
     :elements:
-    - :path: status
-    - :path: category
-    - :path: code.coding.code
-      :fixed_value: '1747861000168109'
+    - :path: type
+  :mandatory_elements:
+  - Device.deviceName.name
+  - Device.deviceName.type
+  - Device.specialization.systemType
+  - Device.version.value
+  - Device.property.type
+  :bindings:
+  - :type: code
+    :strength: required
+    :system: http://hl7.org/fhir/ValueSet/udi-entry-type
+    :path: udiCarrier.entryType
+  - :type: code
+    :strength: required
+    :system: http://hl7.org/fhir/ValueSet/device-status
+    :path: status
+  - :type: code
+    :strength: required
+    :system: http://hl7.org/fhir/ValueSet/device-nametype
+    :path: deviceName.type
+  :references:
+  - :path: Device.definition
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/DeviceDefinition|4.0.1
+  - :path: Device.patient
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/Patient|4.0.1
+  - :path: Device.owner
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/Organization|4.0.1
+  - :path: Device.location
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/Location|4.0.1
+  - :path: Device.parent
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/Device|4.0.1
+  :delayed_references: []
+- :name: DeviceUseStatement_uv_ips
+  :class_name: DeviceusestatementUvIpsSequence
+  :version: v1.0.0
+  :reformatted_version: v100
+  :resource: DeviceUseStatement
+  :profile_url: http://hl7.org/fhir/uv/ips/StructureDefinition/DeviceUseStatement-uv-ips
+  :profile_name: DeviceUseStatement (IPS)
+  :profile_version: 2.0.0
+  :title: DeviceUseStatement (IPS)
+  :short_description: Verify support for the server capabilities required by the DeviceUseStatement
+    (IPS).
+  :interactions: []
+  :operations: []
+  :searches: []
+  :search_definitions: {}
+  :include_params: []
+  :revincludes: []
+  :required_concepts: []
+  :must_supports:
+    :extensions: []
+    :slices:
+    - :slice_id: DeviceUseStatement.timing[x]:timingDateTime
+      :slice_name: timingDateTime
+      :path: timing[x]
+      :discriminator:
+        :type: type
+        :code: DateTime
+    :elements:
     - :path: subject
       :types:
       - Reference
       :target_profiles:
-      - http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-patient
+      - http://hl7.org/fhir/uv/ips/StructureDefinition/Patient-uv-ips
     - :path: subject.reference
-    - :path: effective[x]
-    - :path: value[x]
-    - :path: dataAbsentReason
+    - :path: timing[x]
+    - :path: device
+      :types:
+      - Reference
+      :target_profiles:
+      - http://hl7.org/fhir/uv/ips/StructureDefinition/Device-uv-ips
   :mandatory_elements:
-  - Observation.status
-  - Observation.category
-  - Observation.code
-  - Observation.code.coding
-  - Observation.code.coding.system
-  - Observation.code.coding.code
-  - Observation.subject
-  - Observation.subject.reference
-  - Observation.effective[x]
-  - Observation.component.code
+  - DeviceUseStatement.status
+  - DeviceUseStatement.subject
+  - DeviceUseStatement.subject.reference
+  - DeviceUseStatement.timing[x]
+  - DeviceUseStatement.device
   :bindings:
   - :type: code
     :strength: required
-    :system: http://hl7.org/fhir/ValueSet/observation-status
+    :system: http://hl7.org/fhir/ValueSet/device-statement-status
     :path: status
   :references:
-  - :path: Observation.basedOn
+  - :path: DeviceUseStatement.basedOn
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/ServiceRequest|4.0.1
+  - :path: DeviceUseStatement.subject
+    :profiles:
+    - http://hl7.org/fhir/uv/ips/StructureDefinition/Patient-uv-ips
+  - :path: DeviceUseStatement.derivedFrom
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/ServiceRequest|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/Procedure|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/Claim|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/Observation|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/QuestionnaireResponse|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/DocumentReference|4.0.1
+    :resource_types:
+    - Procedure
+    - Observation
+    - DocumentReference
+  - :path: DeviceUseStatement.source
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/Patient|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/Practitioner|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/PractitionerRole|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/RelatedPerson|4.0.1
+  - :path: DeviceUseStatement.device
+    :profiles:
+    - http://hl7.org/fhir/uv/ips/StructureDefinition/Device-uv-ips
+    :resource_types:
+    - Device
+  - :path: DeviceUseStatement.reasonReference
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/Condition|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/Observation|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/DiagnosticReport|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/DocumentReference|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/Media|4.0.1
+    :resource_types:
+    - Condition
+    - Observation
+    - DiagnosticReport
+    - DocumentReference
+  :delayed_references:
+  - :path: device
+    :resources:
+    - Device
+- :name: DiagnosticReport_uv_ips
+  :class_name: DiagnosticreportUvIpsSequence
+  :version: v1.0.0
+  :reformatted_version: v100
+  :resource: DiagnosticReport
+  :profile_url: http://hl7.org/fhir/uv/ips/StructureDefinition/DiagnosticReport-uv-ips
+  :profile_name: DiagnosticReport (IPS)
+  :profile_version: 2.0.0
+  :title: DiagnosticReport (IPS)
+  :short_description: Verify support for the server capabilities required by the DiagnosticReport
+    (IPS).
+  :interactions: []
+  :operations: []
+  :searches: []
+  :search_definitions: {}
+  :include_params: []
+  :revincludes: []
+  :required_concepts: []
+  :must_supports:
+    :extensions: []
+    :slices:
+    - :slice_id: DiagnosticReport.effective[x]:effectiveDateTime
+      :slice_name: effectiveDateTime
+      :path: effective[x]
+      :discriminator:
+        :type: type
+        :code: DateTime
+    :elements:
+    - :path: code
+    - :path: subject
+      :types:
+      - Reference
+    - :path: subject.reference
+    - :path: effective[x]
+    - :path: performer
+      :types:
+      - Reference
+  :mandatory_elements:
+  - DiagnosticReport.status
+  - DiagnosticReport.code
+  - DiagnosticReport.subject
+  - DiagnosticReport.subject.reference
+  - DiagnosticReport.effective[x]
+  - DiagnosticReport.media.link
+  :bindings:
+  - :type: code
+    :strength: required
+    :system: http://hl7.org/fhir/uv/ips/ValueSet/diagnostics-report-status-uv-ips
+    :path: status
+  :references:
+  - :path: DiagnosticReport.basedOn
     :profiles:
     - http://hl7.org/fhir/StructureDefinition/CarePlan|4.0.1
-    - http://hl7.org/fhir/StructureDefinition/DeviceRequest|4.0.1
     - http://hl7.org/fhir/StructureDefinition/ImmunizationRecommendation|4.0.1
     - http://hl7.org/fhir/StructureDefinition/MedicationRequest|4.0.1
     - http://hl7.org/fhir/StructureDefinition/NutritionOrder|4.0.1
     - http://hl7.org/fhir/StructureDefinition/ServiceRequest|4.0.1
-  - :path: Observation.partOf
-    :profiles:
-    - http://hl7.org/fhir/StructureDefinition/MedicationAdministration|4.0.1
-    - http://hl7.org/fhir/StructureDefinition/MedicationDispense|4.0.1
-    - http://hl7.org/fhir/StructureDefinition/MedicationStatement|4.0.1
-    - http://hl7.org/fhir/StructureDefinition/Procedure|4.0.1
-    - http://hl7.org/fhir/StructureDefinition/Immunization|4.0.1
-    - http://hl7.org/fhir/StructureDefinition/ImagingStudy|4.0.1
-  - :path: Observation.subject
-    :profiles:
-    - http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-patient
     :resource_types:
-    - Patient
-  - :path: Observation.focus
+    - CarePlan
+    - ImmunizationRecommendation
+    - MedicationRequest
+  - :path: DiagnosticReport.subject
     :profiles:
-    - http://hl7.org/fhir/StructureDefinition/Resource|4.0.1
-  - :path: Observation.encounter
+    - http://hl7.org/fhir/uv/ips/StructureDefinition/Patient-uv-ips
+    - http://hl7.org/fhir/StructureDefinition/Group
+  - :path: DiagnosticReport.encounter
     :profiles:
     - http://hl7.org/fhir/StructureDefinition/Encounter|4.0.1
-  - :path: Observation.performer
+  - :path: DiagnosticReport.performer
+    :profiles:
+    - http://hl7.org/fhir/uv/ips/StructureDefinition/Practitioner-uv-ips
+    - http://hl7.org/fhir/uv/ips/StructureDefinition/PractitionerRole-uv-ips
+    - http://hl7.org/fhir/uv/ips/StructureDefinition/Organization-uv-ips
+    - http://hl7.org/fhir/StructureDefinition/CareTeam
+  - :path: DiagnosticReport.resultsInterpreter
     :profiles:
     - http://hl7.org/fhir/StructureDefinition/Practitioner|4.0.1
     - http://hl7.org/fhir/StructureDefinition/PractitionerRole|4.0.1
     - http://hl7.org/fhir/StructureDefinition/Organization|4.0.1
     - http://hl7.org/fhir/StructureDefinition/CareTeam|4.0.1
-    - http://hl7.org/fhir/StructureDefinition/Patient|4.0.1
-    - http://hl7.org/fhir/StructureDefinition/RelatedPerson|4.0.1
-  - :path: Observation.specimen
+  - :path: DiagnosticReport.specimen
     :profiles:
-    - http://hl7.org/fhir/StructureDefinition/Specimen|4.0.1
-  - :path: Observation.device
+    - http://hl7.org/fhir/uv/ips/StructureDefinition/Specimen-uv-ips
+  - :path: DiagnosticReport.result
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/Observation|4.0.1
+    :resource_types:
+    - Observation
+  - :path: DiagnosticReport.result
+    :profiles:
+    - http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-results-laboratory-pathology-uv-ips
+    - http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-results-radiology-uv-ips
+    :resource_types:
+    - Observation
+  - :path: DiagnosticReport.imagingStudy
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/ImagingStudy|4.0.1
+  - :path: DiagnosticReport.media.link
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/Media|4.0.1
+  :delayed_references:
+  - :path: result
+    :resources:
+    - Observation
+- :name: Flag_alert_uv_ips
+  :class_name: FlagAlertUvIpsSequence
+  :version: v1.0.0
+  :reformatted_version: v100
+  :resource: Flag
+  :profile_url: http://hl7.org/fhir/uv/ips/StructureDefinition/Flag-alert-uv-ips
+  :profile_name: Flag - Alert (IPS)
+  :profile_version: 2.0.0
+  :title: Flag - Alert (IPS)
+  :short_description: Verify support for the server capabilities required by the Flag
+    - Alert (IPS).
+  :interactions: []
+  :operations: []
+  :searches: []
+  :search_definitions: {}
+  :include_params: []
+  :revincludes: []
+  :required_concepts: []
+  :must_supports:
+    :extensions:
+    - :id: Flag.extension:flag-priority
+      :url: http://hl7.org/fhir/StructureDefinition/flag-priority
+    :slices: []
+    :elements:
+    - :path: category
+    - :path: code
+    - :path: subject
+      :types:
+      - Reference
+    - :path: subject.reference
+  :mandatory_elements:
+  - Flag.status
+  - Flag.code
+  - Flag.subject
+  - Flag.subject.reference
+  :bindings: []
+  :references:
+  - :path: Flag.subject
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/Patient|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/Location|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/Group|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/Organization|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/Practitioner|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/PlanDefinition|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/Medication|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/Procedure|4.0.1
+    :resource_types:
+    - Procedure
+  - :path: Flag.encounter
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/Encounter|4.0.1
+  - :path: Flag.author
     :profiles:
     - http://hl7.org/fhir/StructureDefinition/Device|4.0.1
-    - http://hl7.org/fhir/StructureDefinition/DeviceMetric|4.0.1
-  - :path: Observation.hasMember
-    :profiles:
-    - http://hl7.org/fhir/StructureDefinition/Observation|4.0.1
-    - http://hl7.org/fhir/StructureDefinition/QuestionnaireResponse|4.0.1
-    - http://hl7.org/fhir/StructureDefinition/MolecularSequence|4.0.1
-  - :path: Observation.derivedFrom
-    :profiles:
-    - http://hl7.org/fhir/StructureDefinition/DocumentReference|4.0.1
-    - http://hl7.org/fhir/StructureDefinition/ImagingStudy|4.0.1
-    - http://hl7.org/fhir/StructureDefinition/Media|4.0.1
-    - http://hl7.org/fhir/StructureDefinition/QuestionnaireResponse|4.0.1
-    - http://hl7.org/fhir/StructureDefinition/Observation|4.0.1
-    - http://hl7.org/fhir/StructureDefinition/MolecularSequence|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/Organization|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/Patient|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/Practitioner|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/PractitionerRole|4.0.1
   :delayed_references: []
