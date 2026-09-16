@@ -12,6 +12,7 @@ group :development, :test do
 end
 
 gem 'fhir_packages_manager', '~> 0.3'
+gem 'fhirpath-rb', '>= 0.1.7'
 gem 'inferno_suite_generator', github: 'hl7au/inferno_suite_generator', branch: 'main'
 gem 'pg', '~> 1.5'
 gem 'rubocop', '~> 1.71.2'
