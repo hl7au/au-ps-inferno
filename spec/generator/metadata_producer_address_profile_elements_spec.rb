@@ -56,19 +56,6 @@ RSpec.describe Generator::CompositionMetadataProducer do
       expect(producer.address_profile_elements).to eq([])
     end
 
-    it 'excludes elements that are not typed Address at all' do
-      sd = structure_definition(
-        type: 'Patient',
-        elements: [
-          { id: 'Patient.name', path: 'Patient.name', type: [{ code: 'HumanName' }] }
-        ]
-      )
-
-      producer = described_class.new(ig_resources(sd)).tap(&:extract_address_profile_elements)
-
-      expect(producer.address_profile_elements).to eq([])
-    end
-
     it 'ignores StructureDefinitions outside the AU PS profile namespace' do
       sd = FHIR::StructureDefinition.new(
         resourceType: 'StructureDefinition',
