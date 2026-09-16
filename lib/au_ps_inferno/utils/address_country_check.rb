@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'fhirpath'
+
 require_relative 'metadata_manager'
 
 module AUPSTestKit
@@ -32,28 +34,24 @@ module AUPSTestKit
     end
 
     def incorrect_country_messages(resource, path)
-      addresses_at_path(resource, path).filter_map do |address, indexed_path|
-        country = address&.country
-        next if country.blank? || country == AU_COUNTRY_CODE
-
-        { type: 'warning', message: incorrect_country_message(resource, indexed_path, country) }
+      non_au_addresses(resource, path).each_with_index.map do |address, index|
+        { type: 'warning', message: incorrect_country_message(resource, path, index, address.country) }
       end
     end
 
-    def addresses_at_path(resource, path)
-      path.split('.').inject([[resource, '']]) do |nodes, segment|
-        nodes.flat_map do |node, prefix|
-          next [] unless node.respond_to?(segment)
-
-          Array(node.public_send(segment)).each_with_index.map do |child, idx|
-            [child, prefix.empty? ? "#{segment}[#{idx}]" : "#{prefix}.#{segment}[#{idx}]"]
-          end
-        end
-      end
+    def non_au_addresses(resource, path)
+      compiled_non_au_query(resource.resourceType, path).call(resource)
     end
 
-    def incorrect_country_message(resource, indexed_path, country)
-      "#{resource.resourceType}/#{resource.id}: #{indexed_path}.country = \"#{country}\" does " \
+    def compiled_non_au_query(resource_type, path)
+      @compiled_non_au_queries ||= {}
+      @compiled_non_au_queries[[resource_type, path]] ||=
+        Fhirpath.compile_as_array("#{path}.where(country.exists() and country != '#{AU_COUNTRY_CODE}')",
+                                  FHIR.const_get(resource_type), FHIR::Address)
+    end
+
+    def incorrect_country_message(resource, path, index, country)
+      "#{resource.resourceType}/#{resource.id}: #{path}[#{index}].country = \"#{country}\" does " \
         'not match the au-address fixed code "AU".'
     end
   end

@@ -68,7 +68,7 @@ RSpec.describe AUPSTestKit::AddressCountryCheck do
     messages = described_class.messages_for(bundle)
 
     expect(messages.length).to eq(1)
-    expect(messages.first[:message]).to include('address[1]')
+    expect(messages.first[:message]).to include('address[0]')
   end
 
   it 'walks nested paths from metadata (e.g. Patient.contact.address)' do
@@ -82,10 +82,10 @@ RSpec.describe AUPSTestKit::AddressCountryCheck do
     messages = described_class.messages_for(bundle)
 
     expect(messages.length).to eq(1)
-    expect(messages.first[:message]).to include('contact[0].address[0]')
+    expect(messages.first[:message]).to include('contact.address[0]')
   end
 
-  it 'references the correct per-segment index for a nested path with multiple contacts' do
+  it 'references the correct flat index for a nested path with multiple offending contacts' do
     patient = FHIR::Patient.new(
       resourceType: 'Patient',
       id: 'p1',
@@ -99,7 +99,7 @@ RSpec.describe AUPSTestKit::AddressCountryCheck do
     messages = described_class.messages_for(bundle)
 
     expect(messages.length).to eq(1)
-    expect(messages.first[:message]).to include('contact[1].address[0]')
+    expect(messages.first[:message]).to include('contact.address[0]')
   end
 
   it 'covers more than one resource type, not just Patient' do
