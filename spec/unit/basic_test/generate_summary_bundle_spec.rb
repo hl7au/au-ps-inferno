@@ -46,11 +46,7 @@ RSpec.describe AUPSTestKit::GenerateSummaryBundleTestClass do
 
     test = create_test('suite_generate_au_ps_using_ips_summary_validation_tests_no_cs_gate_test')
     scratch = { summary_op_defined: false }
-    result = run(test, {
-                   url: server_url,
-                   patient_id: 'pat1',
-                   profile: 'http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-bundle'
-                 }, scratch)
+    result = run(test, { url: server_url, patient_id: 'pat1' }, scratch)
 
     expect(result.result).to eq('pass')
     expect(scratch[:bundle_ips_resource_summary]).to be_a(FHIR::Bundle)
@@ -61,5 +57,30 @@ RSpec.describe AUPSTestKit::GenerateSummaryBundleTestClass do
     result = run(test, {})
 
     expect(result.result).to eq('omit')
+  end
+
+  it 'omits when a different Bundle Retrieval Method is selected, even with valid inputs' do
+    test = create_test('suite_generate_au_ps_using_ips_summary_validation_tests_other_method_test')
+    result = run(test, { bundle_retrieve_method: 'bundle_url', url: server_url, patient_id: 'pat1' })
+
+    expect(result.result).to eq('omit')
+    expect(WebMock).not_to have_requested(:get, "#{server_url}/Patient/pat1/$summary")
+  end
+
+  it 'omits when a bundle_id is provided instead of patient details, and does not fetch by ID' do
+    test = create_test('suite_generate_au_ps_using_ips_summary_validation_tests_bundle_id_test')
+    result = run(test, { url: server_url, bundle_id: 'bundle1' })
+
+    expect(result.result).to eq('omit')
+    expect(WebMock).not_to have_requested(:get, "#{server_url}/Bundle/bundle1")
+  end
+
+  it 'omits when a bundle_id is provided even alongside patient details, without calling $summary' do
+    test = create_test('suite_generate_au_ps_using_ips_summary_validation_tests_bundle_id_and_patient_test')
+    result = run(test, { url: server_url, patient_id: 'pat1', bundle_id: 'bundle1' })
+
+    expect(result.result).to eq('omit')
+    expect(WebMock).not_to have_requested(:get, "#{server_url}/Patient/pat1/$summary")
+    expect(WebMock).not_to have_requested(:get, "#{server_url}/Bundle/bundle1")
   end
 end

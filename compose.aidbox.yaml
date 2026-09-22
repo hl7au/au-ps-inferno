@@ -3,6 +3,9 @@ services:
   inferno:
     build:
       context: ./
+    # Hot reload: restarts puma when a .rb under lib/ changes. Content-hash
+    # based (see bin/hot-reload) so it works on Windows/WSL2 + macOS mounts.
+    command: sh bin/hot-reload bundle exec puma
     volumes:
       - ./data:/opt/inferno/data
       - ./lib/:/opt/inferno/lib
@@ -26,7 +29,8 @@ services:
       context: ./
     volumes:
       - ./data:/opt/inferno/data
-    command: bundle exec sidekiq -r ./worker.rb
+      - ./:/opt/inferno/
+    command: sh bin/hot-reload bundle exec sidekiq -r ./worker.rb
     depends_on:
       validator-api-worker:
         condition: service_started

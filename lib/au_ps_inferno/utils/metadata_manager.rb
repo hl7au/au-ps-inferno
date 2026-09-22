@@ -63,6 +63,10 @@ module AUPSTestKit
       composition_metadata[:attester]
     end
 
+    def address_profile_elements
+      composition_metadata[:address_profile_elements] || []
+    end
+
     def groups_metadata
       metadata[:groups]
     end

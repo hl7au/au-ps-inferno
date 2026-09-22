@@ -42,12 +42,15 @@ class Generator
       'Patient|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-patient'
     ].freeze
 
+    AU_ADDRESS_PROFILE_URL = 'http://hl7.org.au/fhir/StructureDefinition/au-address'
+
     # @return [Array<Hash>] Array of section metadata hashes
     attr_reader :composition_sections, :composition_mandatory_ms_elements, :composition_mandatory_ms_sub_elements,
                 :composition_optional_ms_elements, :composition_optional_ms_sub_elements,
-                :profiles, :resources_filters
+                :profiles, :resources_filters, :address_profile_elements
 
     # @param ig_resources [InfernoSuiteGenerator::Generator::IGResources] Parsed IG resources
+    # rubocop:disable Metrics/MethodLength
     def initialize(ig_resources)
       @ig_resources = ig_resources
       @composition_sections = []
@@ -59,7 +62,9 @@ class Generator
       @composition_optional_ms_slices = []
       @profiles = []
       @resources_filters = {}
+      @address_profile_elements = []
     end
+    # rubocop:enable Metrics/MethodLength
 
     # Runs extraction from IG resources and populates the reader attributes above.
     #
@@ -70,6 +75,7 @@ class Generator
       extract_optional_ms_elements
       extract_profiles
       extract_resource_filters
+      extract_address_profile_elements
       self
     end
 
@@ -123,6 +129,26 @@ class Generator
     def main_profiles
       get_resources_by_type('StructureDefinition').filter do |resource|
         resource.url.to_s.include?('http://hl7.org.au/fhir/ps/StructureDefinition/')
+      end
+    end
+
+    # Populates @address_profile_elements with resource_type/path pairs for every Address-typed
+    # element (on an AU PS profile) that is constrained by the au-address profile.
+    #
+    # @return [void]
+    def extract_address_profile_elements
+      @address_profile_elements = main_profiles.flat_map { |sd| address_profile_elements_for(sd) }
+    end
+
+    def address_profile_elements_for(structure_definition)
+      structure_definition.snapshot.element.select { |element| au_address_typed?(element) }.map do |element|
+        { resource_type: structure_definition.type, path: element.path.gsub("#{structure_definition.type}.", '') }
+      end
+    end
+
+    def au_address_typed?(element)
+      (element.type || []).any? do |type|
+        type.code == 'Address' && (type.profile || []).include?(AU_ADDRESS_PROFILE_URL)
       end
     end
 

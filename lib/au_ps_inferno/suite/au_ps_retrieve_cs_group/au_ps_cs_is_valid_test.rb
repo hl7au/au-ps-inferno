@@ -10,6 +10,7 @@ module AUPSTestKit
     id :au_ps_cs_is_valid_100preview
 
     run do
+      omit_unless_retrieve_method_is('fhir_server')
       omit_if url.blank?, NO_SERVER_URL_OMIT_MESSAGE
       fhir_get_capability_statement
       scratch[:capability_statement] = resource

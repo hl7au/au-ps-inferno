@@ -5,6 +5,7 @@ require 'inferno_suite_generator/utils/fhirpath_lab_message_linker'
 require 'inferno_suite_generator/utils/resource_keeper_endpoints'
 
 require_relative '../version'
+require_relative '../utils/address_country_check'
 
 require_relative 'au_ps_bundle_instance/au_ps_bundle_instance'
 
@@ -26,6 +27,10 @@ module AUPSTestKit
 
     fhir_resource_validator do
       igs "hl7.fhir.au.ps##{AUPSTestKit::IG_VERSION}"
+
+      perform_additional_validation do |resource, _profile_url|
+        AUPSTestKit::AddressCountryCheck.messages_for(resource)
+      end
 
       cli_context do
         txServer ENV.fetch('TX_SERVER_URL', 'https://tx.dev.hl7.org.au/fhir')
@@ -55,9 +60,8 @@ module AUPSTestKit
     group from: :suite_au_ps_bundle_instance
 
     group from: :au_ps_retrieve_cs_group_100preview
-
     group from: :suite_retrieve_au_ps_bundle_validation_tests
-
     group from: :suite_generate_au_ps_using_ips_summary_validation_tests
+    group from: :suite_au_ps_bundle_instance
   end
 end
