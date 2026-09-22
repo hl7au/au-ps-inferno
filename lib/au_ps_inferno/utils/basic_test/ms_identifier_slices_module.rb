@@ -15,19 +15,19 @@ module AUPSTestKit
       return unless resource.present?
 
       slice_results = build_ms_identifier_slice_results(identifiers_from_resource(resource) || [], slices)
-      add_ms_identifier_slices_populated_message(slice_results)
-      add_ms_identifier_slices_at_least_one_message(slice_results)
+      add_ms_identifier_slices_populated_message(resource, slice_results)
+      add_ms_identifier_slices_at_least_one_message(resource, slice_results)
     end
 
-    def add_ms_identifier_slices_populated_message(slice_results)
-      lines = slice_results.map { |r| ms_identifier_slice_line_with_type(r) }
+    def add_ms_identifier_slices_populated_message(resource, slice_results)
+      lines = slice_results.map { |r| identifier_slice_line(resource, r) }
       heading = '## List of Must Support identifier slices populated or missing'
       body = ['Must support identifier slices correctly populated', heading, lines.join("\n\n")].join("\n\n")
       add_message(slice_results.all? { |r| r[:identifier].present? } ? 'info' : 'warning', body)
     end
 
-    def add_ms_identifier_slices_at_least_one_message(slice_results)
-      lines = slice_results.map { |r| ms_identifier_slice_line_system_only(r) }
+    def add_ms_identifier_slices_at_least_one_message(resource, slice_results)
+      lines = slice_results.map { |r| identifier_slice_line(resource, r, include_type: false) }
       heading = '## List of Must Support identifier slices populated or missing (system when populated)'
       intro = 'At least one Must Support identifier slices is populated'
       body = [intro, heading, lines.join("\n\n")].join("\n\n")
@@ -38,23 +38,6 @@ module AUPSTestKit
       slices.map do |slice|
         ident = find_identifier_by_system(identifiers, slice[:system])
         { slice: slice, identifier: ident }
-      end
-    end
-
-    def ms_identifier_slice_line_with_type(result)
-      if result[:identifier].present?
-        type_str = identifier_type_display(result[:identifier])
-        "✅ Populated: **#{result[:slice][:name]}** — system: #{result[:slice][:system]}#{type_str}"
-      else
-        "⚠️ Missing: **#{result[:slice][:name]}**"
-      end
-    end
-
-    def ms_identifier_slice_line_system_only(result)
-      if result[:identifier].present?
-        "✅ Populated: **#{result[:slice][:name]}** — system: #{result[:slice][:system]}"
-      else
-        "⚠️ Missing: **#{result[:slice][:name]}**"
       end
     end
   end

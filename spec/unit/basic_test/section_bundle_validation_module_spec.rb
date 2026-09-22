@@ -22,7 +22,7 @@ RSpec.describe AUPSTestKit::BasicTestSectionBundleValidationModule do
       result = test_instance.send(:section_ms_elements_message, section, %w[title code text])
 
       expect(result).to include('List of Must Support elements populated or missing:')
-      expect(result).to include('**title**:')
+      expect(result).to include(': **title**')
       expect(result).to include('Narrative status: `generated`')
       expect(result).to include('Some narrative text.')
     end
