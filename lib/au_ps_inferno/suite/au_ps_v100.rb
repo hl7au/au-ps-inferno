@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 
+require 'inferno_suite_generator/utils/fhirpath_lab_message_linker'
+
+require 'inferno_suite_generator/utils/resource_keeper_endpoints'
+
 require_relative '../version'
 require_relative '../utils/address_country_check'
 
@@ -12,6 +16,7 @@ require_relative 'au_ps_retrieve_cs_group/au_ps_retrieve_cs_group'
 require_relative 'retrieve_au_ps_bundle_validation_tests/retrieve_au_ps_bundle_validation_tests'
 
 require_relative 'generate_au_ps_using_ips_summary_validation_tests/generate_au_ps_using_ips_summary_validation_tests'
+
 
 module AUPSTestKit
   # Test suite for the AU PS (Australian Primary Care and Shared Health) Implementation Guide.
@@ -56,12 +61,17 @@ module AUPSTestKit
       end
     end
 
+    FHIRPATHLAB_URL = ENV.fetch('FHIRPATHLAB_URL', 'https://fhirpath-lab.com/FhirPath').presence
+
+    suite_endpoint :get, '/resources/:session_id/:resource_type/:resource_id',
+                   InfernoSuiteGenerator::FetchResourceEndpoint
+    suite_endpoint :delete, '/resources/:session_id',
+                   InfernoSuiteGenerator::DeleteSessionResourcesEndpoint
+
     group from: :suite_au_ps_bundle_instance
 
     group from: :au_ps_retrieve_cs_group_100preview
-
     group from: :suite_retrieve_au_ps_bundle_validation_tests
-
     group from: :suite_generate_au_ps_using_ips_summary_validation_tests
   end
 end

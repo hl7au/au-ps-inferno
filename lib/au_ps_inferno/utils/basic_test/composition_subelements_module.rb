@@ -14,12 +14,6 @@ module AUPSTestKit
       run_composition_subelements_assertions(composition_resource, grouped_elements, mandatory_ms)
     end
 
-    def composition_resource_from_scratch
-      return nil unless scratch_bundle.present?
-
-      BundleDecorator.new(scratch_bundle).composition_resource
-    end
-
     def run_composition_subelements_assertions(composition_resource, grouped_elements, mandatory_ms)
       any_parent = composition_any_subelement_parent_populated?(composition_resource, grouped_elements)
       mandatory_ok = composition_mandatory_subelements_ok?(composition_resource, grouped_elements, mandatory_ms)

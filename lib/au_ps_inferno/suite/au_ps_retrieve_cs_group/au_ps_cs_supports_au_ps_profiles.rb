@@ -23,6 +23,7 @@ module AUPSTestKit
     end
 
     run do
+      omit_unless_retrieve_method_is('fhir_server')
       omit_if url.blank?, NO_SERVER_URL_OMIT_MESSAGE
       skip_if scratch[:capability_statement].blank?, 'CapabilityStatement was not retrieved from the server'
       check_profiles_status(

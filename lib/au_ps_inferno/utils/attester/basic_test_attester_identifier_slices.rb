@@ -13,7 +13,7 @@ module AUPSTestKit
       identifiers = identifiers_from_resource(resource) || []
       slice_results = attester_party_build_slice_results(slices, identifiers)
       header = attester_party_referenced_type_profile_header(resource_type_str, profile_str)
-      lines = slice_results.map { |r| attester_party_format_identifier_slice_line(r) }
+      lines = slice_results.map { |r| identifier_slice_line(resource, r) }
       message_type = slice_results.all? { |r| r[:identifier].present? } ? 'info' : 'warning'
       add_message(message_type, attester_party_identifier_slices_full_message(header, lines))
     end
@@ -37,15 +37,6 @@ module AUPSTestKit
       slices.map do |slice|
         ident = find_identifier_by_system(identifiers, slice[:system])
         { slice: slice, identifier: ident }
-      end
-    end
-
-    def attester_party_format_identifier_slice_line(result)
-      if result[:identifier].present?
-        type_str = identifier_type_display(result[:identifier])
-        "✅ Populated: **#{result[:slice][:name]}** — system: #{result[:slice][:system]}#{type_str}"
-      else
-        "⚠️ Missing: **#{result[:slice][:name]}**"
       end
     end
 

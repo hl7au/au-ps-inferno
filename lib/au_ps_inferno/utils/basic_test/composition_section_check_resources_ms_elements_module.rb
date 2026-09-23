@@ -1,11 +1,14 @@
 # frozen_string_literal: true
 
 require_relative '../inferno_suite_generator_compat'
+require_relative 'ms_element_status_linking_module'
 require 'inferno_suite_generator/test_utils/ms_checker'
 module AUPSTestKit
   module BasicTestCompositionSectionReadModule
     # Composition Must Support elements in sections.
     module BasicTestCompositionSectionCheckResourcesMSElementsModule # rubocop:disable Metrics/ModuleLength
+      include BasicTestMsElementStatusLinkingModule
+
       AU_PS_PROFILE_BASE_URL = 'http://hl7.org.au/fhir/ps/StructureDefinition/'
 
       def check_ms_elements_populated(profile_url, resources, all_present: false)
@@ -113,10 +116,11 @@ module AUPSTestKit
       def build_ms_outcome(profile_metadata, resources, section_context = nil, all_present: false)
         ms_helper = ms_checker_for(profile_metadata, section_context)
         ms_checks_results = check_ms_elements_populated(profile_metadata.profile_url, resources, all_present:)
+        message = ms_helper.build_report_message(profile_metadata, ms_checks_results)
 
         {
           status: ms_helper.calculate_elements_status_message_level(ms_checks_results),
-          message: ms_helper.build_report_message(profile_metadata, ms_checks_results)
+          message: linked_ms_report_message(message, ms_checks_results, resources.first)
         }
       end
 
