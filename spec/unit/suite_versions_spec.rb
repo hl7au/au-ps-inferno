@@ -27,6 +27,13 @@ RSpec.describe 'AU PS suite versions' do
       expect(described_class.suite_id_for('1.1.0-ballot')).to eq(:au_ps_v110_ballot)
     end
 
+    it 'leaves profile canonicals unversioned when the validator package floats' do
+      version = described_class.new(key: 'ci-build', ig_version: '1.0.1-ci-build',
+                                    validator_package: 'hl7.fhir.au.ps#current')
+
+      expect(version.profile_version).to be_nil
+    end
+
     it 'rejects anything that is not a package version' do
       expect { described_class.suite_id_for('current') }.to raise_error(ArgumentError)
       expect { described_class.suite_id_for('') }.to raise_error(ArgumentError)
@@ -36,6 +43,7 @@ RSpec.describe 'AU PS suite versions' do
       version = described_class.new(key: '1.0.0', ig_version: '1.0.0')
 
       expect(version.validator_package).to eq('hl7.fhir.au.ps#1.0.0')
+      expect(version.profile_version).to eq('1.0.0')
       expect(version.metadata_path).to eq(File.join(root_dir, 'lib/au_ps_inferno/generated/1.0.0/metadata.yaml'))
     end
   end
@@ -95,6 +103,7 @@ RSpec.describe 'AU PS suite versions' do
         tests.each do |test|
           expect(test.metadata_manager.metadata_yaml_path).to eq(suite::SUITE_VERSION.metadata_path)
           expect(test.au_ps_ig_version).to eq(suite::SUITE_VERSION.ig_version)
+          expect(test.au_ps_profile_version).to eq(suite::SUITE_VERSION.profile_version)
         end
       end
     end

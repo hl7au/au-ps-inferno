@@ -17,6 +17,19 @@ module AUPSTestKit
       suite_version_option(:au_ps_ig_version)
     end
 
+    # @return [String, nil] the version to pin AU PS profile canonicals to, nil to leave them
+    #   unversioned (see {AUPSTestKit::SuiteVersion#profile_version})
+    def au_ps_profile_version
+      suite_version_option(:au_ps_profile_version)
+    end
+
+    # @param canonical [String] an AU PS profile canonical without a version
+    # @return [String] the canonical as this suite version validates against it
+    def au_ps_profile(canonical)
+      version = au_ps_profile_version
+      version ? "#{canonical}|#{version}" : canonical
+    end
+
     private
 
     def suite_version_option(name)
