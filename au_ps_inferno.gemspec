@@ -24,7 +24,8 @@ Gem::Specification.new do |spec|
   spec.files = [
     Dir['lib/**/*.rb'],
     Dir['lib/**/*.json'],
-    Dir['lib/**/*.tgz'],
+    # ci-build.tgz is a local download for regenerating the ci-build suite, not a release input.
+    Dir['lib/**/*.tgz'] - ['lib/au_ps_inferno/igs/ci-build.tgz'],
     Dir['lib/**/*.yaml'],
     Dir['lib/**/*.yml'],
     'LICENSE'

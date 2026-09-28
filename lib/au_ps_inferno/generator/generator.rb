@@ -48,6 +48,15 @@ class Generator
     def config_path_for(version_key, root_dir = ROOT_DIR)
       File.join(root_dir, "#{CONFIG_FILE_PREFIX}#{version_key}#{CONFIG_FILE_SUFFIX}")
     end
+
+    # A CI-build version (one whose config has a +ci_build+ section) is generated from a
+    # package that rake au_ps:ci_build:download fetches and nothing commits, so a plain
+    # regeneration of every version skips it.
+    #
+    # @return [Boolean]
+    def ci_build?(version_key, root_dir = ROOT_DIR)
+      JSON.parse(File.read(config_path_for(version_key, root_dir))).key?('ci_build')
+    end
   end
 
   attr_reader :version_key

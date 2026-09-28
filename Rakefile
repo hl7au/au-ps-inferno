@@ -46,7 +46,8 @@ end
 
 namespace :au_ps do
   desc 'Generate AU PS suite metadata. Pass a version key (e.g. au_ps:generate[1.0.0]) to generate one ' \
-       'version; with none, every version with a config.<key>.json is generated. ' \
+       'version; with none, every version with a config.<key>.json is generated except the CI build, ' \
+       'which au_ps:ci_build:refresh regenerates. ' \
        'Set ADDITIONAL_IG_RESOURCES to a folder to load extra JSON resources.'
   task :generate, [:version_key] do |_task, args|
     require 'au_ps_inferno/generator/generator'
@@ -56,8 +57,10 @@ namespace :au_ps do
       extra = default_extra if File.directory?(default_extra)
     end
     opts = extra ? { additional_resources_path: extra } : {}
-    version_keys = args[:version_key] ? [args[:version_key]] : Generator.version_keys
+    version_keys = args[:version_key] ? [args[:version_key]] : Generator.version_keys.reject { Generator.ci_build?(_1) }
     version_keys.each do |version_key|
+      # The ci-build package is a local download; refuse one the config does not describe.
+      AUPSTestKit::CIBuild.new.ensure_package! if version_key == AUPSTestKit::CIBuild::VERSION_KEY
       puts "Generating AU PS suite metadata for #{version_key}"
       Generator.new(version_key:, **opts).generate
     end
