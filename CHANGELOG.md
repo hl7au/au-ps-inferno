@@ -1,5 +1,13 @@
 # Changelog
 
+## [Unreleased]
+
+### Changed
+
+- Support several AU PS IG versions side by side. Each version has its own generator config (`inferno_suite_generator.config.<key>.json`), its own generated metadata in `lib/au_ps_inferno/<key>/`, and its own suite class with its own `IG_VERSION` constant; `AUPSTestKit::AUPSSuiteDefinition` assembles every version's suite from the shared groups and hands each one its metadata and IG version through Inferno's `config` options. The global `AUPSTestKit::IG_VERSION` and the single `lib/au_ps_inferno/metadata.yaml` are gone. The `au_ps_v100` suite, its ids and its behaviour are unchanged, which a structure snapshot spec now enforces.
+- `rake generator:generate` takes an optional version key and otherwise generates every version.
+- The Sync IG Package workflow adds a newly released IG version alongside the existing suites instead of rewriting the current one.
+
 ## [1.0.1] - 2026-09-03
 
 - Relax the `inferno_core` dependency from `~> 1.0.6` to `>= 1.0.6`. The tilde pin resolved to `>= 1.0.6, < 1.1.0` and was the only cap on `inferno_core` anywhere in the dependency tree, so it held every host application on 1.0.x. The kit uses only the public validation DSL (`resource_is_valid?`), which is unchanged through 1.4.x.

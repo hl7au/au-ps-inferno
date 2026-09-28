@@ -27,20 +27,30 @@ make run
 
 4. Navigate to http://localhost. The AU PS test suite will be available.
 
-## How to Regenerate the Suite for a New IG Version
+## Suite versions
 
-If a new AU PS IG release appears at http://hl7.org.au/fhir/ps/history.html, follow these steps to regenerate the suite metadata:
+The kit carries one suite per AU PS IG version, and several versions can be loaded side by side. Each version is made of:
 
-1. Download the new IG package (`.tgz`) from the release page and place it in `lib/au_ps_inferno/igs/`.
-2. Update the path in `Rakefile` (`generator:generate` task) to point to the new archive.
-3. Run the Generate Suite workflow: go to the [workflow page](https://github.com/hl7au/au-ps-inferno/actions/workflows/generate-suite.yaml), click **Run workflow**, and confirm.
-4. When the workflow completes, a Pull Request will be created automatically. Review and merge it.
+- a generator config in the repository root, `inferno_suite_generator.config.<key>.json`, whose `ig` block names the IG package archive and whose `kit.suite_file` names the suite class;
+- generated metadata in `lib/au_ps_inferno/<key>/` (`metadata.yaml` for core IG metadata, `composition_metadata.yaml` for Composition-specific metadata);
+- a suite class in `lib/au_ps_inferno/suite/` with its own `IG_VERSION` constant, registered in `lib/au_ps_inferno.rb`.
 
-### What the pipeline does
+For a released IG the key is the IG version (`1.0.0`). The suite id is derived from the IG version by `AUPSTestKit::SuiteVersion.suite_id_for`: the release digits are joined and a pre-release label is appended in snake case, so `1.0.0` becomes `au_ps_v100`.
 
-1. Runs `make generate_and_fix`, which invokes the generator against the IG archive already present in `lib/au_ps_inferno/igs/`;
-2. The generator extracts IG resources from the archive, updates `lib/au_ps_inferno/metadata.yaml` (core IG metadata) and `lib/au_ps_inferno/composition_metadata.yaml` (Composition-specific metadata), and sets `IG_VERSION` in `lib/au_ps_inferno/version.rb` to the version declared in the package's `package.json`;
-3. If there are any changes, a Pull Request is created automatically.
+All versions share the group and test classes under `lib/au_ps_inferno/suite/`. `AUPSTestKit::AUPSSuiteDefinition` assembles a suite from them and passes the version's metadata path and IG version down to every group and test through Inferno's `config` options, so a shared test reads the metadata of the suite it runs in. Inferno prefixes every group and test id with the id of its suite, so each version's ids are its own.
+
+### Regenerating metadata
+
+```bash
+bundle exec rake generator:generate          # every version
+bundle exec rake 'generator:generate[1.0.0]' # one version
+```
+
+The generator reads the version's package archive, writes `lib/au_ps_inferno/<key>/metadata.yaml` and `composition_metadata.yaml`, and sets `IG_VERSION` in that version's suite class to the version declared in the package's `package.json`. Other versions are left untouched. `make generate_and_fix` (used by the [Generate Suite workflow](https://github.com/hl7au/au-ps-inferno/actions/workflows/generate-suite.yaml)) regenerates every version inside Docker and opens a pull request.
+
+### Adding a new IG release
+
+Run the [Sync IG Package workflow](https://github.com/hl7au/au-ps-inferno/actions/workflows/sync-ig-package.yaml) (`scripts/sync_ig_and_generate_suite.rb`). When the FHIR package registry has an AU PS release newer than the newest released version the kit carries, it adds the new release alongside the existing ones: it downloads the package into `lib/au_ps_inferno/igs/`, writes `inferno_suite_generator.config.<version>.json`, scaffolds `lib/au_ps_inferno/suite/au_ps_v<digits>.rb`, registers it in `lib/au_ps_inferno.rb`, generates its metadata and opens a pull request. Existing suites, their ids and their sessions are not changed.
 
 ## Development workflow
 This repository contains both the source code of the tests generator and the generated tests themselves.
@@ -55,9 +65,7 @@ Once the code review is done, a person who merged the changes SHALL run the gene
 It may be a direct commit to the master branch. 
 
 ## Release management
-When we would like to issue a new release, you need to update the version constants in `lib/au_ps_inferno/version.rb`:
-- `VERSION` — the gem version (e.g. `'0.0.2'`)
-- `IG_VERSION` — the AU PS IG version the suite targets (e.g. `'1.0.0'`); this is also updated automatically when the generator runs (see [How to Generate New Test Suites](#how-to-generate-new-test-suites))
+When we would like to issue a new release, you need to update `VERSION` (the gem version, e.g. `'0.0.2'`) in `lib/au_ps_inferno/version.rb`. The IG version each suite targets is the `IG_VERSION` constant in that suite's class (see [Suite versions](#suite-versions)).
 
 Then you need to create a tag for this version. The tag name should start with `v` and then contain a numeric version like this `v0.0.1`
 Once a tag is created, you need to create a GitHub release for this newly published version.
