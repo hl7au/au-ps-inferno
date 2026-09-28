@@ -11,7 +11,7 @@ require_relative '../../scripts/sync_ig_and_generate_suite'
 RSpec.describe 'scripts/sync_ig_and_generate_suite.rb' do
   let(:root_dir) { Dir.mktmpdir('au_ps_sync_spec') }
   let(:base_config) do
-    JSON.parse(File.read(File.expand_path('../../inferno_suite_generator.config.1.0.0.json', __dir__)))
+    JSON.parse(File.read(File.expand_path('../../config.1.0.0.json', __dir__)))
   end
 
   before { stub_const('ROOT_DIR', root_dir) }
@@ -40,7 +40,7 @@ RSpec.describe 'scripts/sync_ig_and_generate_suite.rb' do
     write_config_for_new_version!(base_config, old_version: '1.0.0', new_version: '1.1.0',
                                                new_archive_path: 'lib/au_ps_inferno/igs/hl7.fhir.au.ps-1.1.0.tgz')
 
-    config = JSON.parse(File.read(File.join(root_dir, 'inferno_suite_generator.config.1.1.0.json')))
+    config = JSON.parse(File.read(File.join(root_dir, 'config.1.1.0.json')))
     expect(config['kit']['suite_file']).to eq('lib/au_ps_inferno/suite/au_ps_v110.rb')
     expect(config['ig']).to include('version' => '1.1.0',
                                     'package_archive_path' => 'lib/au_ps_inferno/igs/hl7.fhir.au.ps-1.1.0.tgz',
@@ -66,7 +66,7 @@ RSpec.describe 'scripts/sync_ig_and_generate_suite.rb' do
 
   it 'treats only releases as released versions' do
     %w[1.0.0 1.1.0-ballot ci-build].each do |key|
-      File.write(File.join(root_dir, "inferno_suite_generator.config.#{key}.json"), '{}')
+      File.write(File.join(root_dir, "config.#{key}.json"), '{}')
     end
 
     expect(released_version_keys).to contain_exactly('1.0.0', '1.1.0-ballot')
@@ -75,7 +75,7 @@ RSpec.describe 'scripts/sync_ig_and_generate_suite.rb' do
 
   it 'adds a release that is not carried, even when it sorts below a carried ballot' do
     %w[1.0.0 1.1.0-ballot].each do |key|
-      File.write(File.join(root_dir, "inferno_suite_generator.config.#{key}.json"), '{}')
+      File.write(File.join(root_dir, "config.#{key}.json"), '{}')
     end
 
     expect(carried?('1.1.0-ballot')).to be(true)

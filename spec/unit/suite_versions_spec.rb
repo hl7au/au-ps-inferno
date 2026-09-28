@@ -8,8 +8,8 @@ require_relative '../../lib/au_ps_inferno'
 
 RSpec.describe 'AU PS suite versions' do
   root_dir = File.expand_path('../..', __dir__)
-  configs = Dir.glob(File.join(root_dir, 'inferno_suite_generator.config.*.json')).to_h do |path|
-    [File.basename(path, '.json').delete_prefix('inferno_suite_generator.config.'), JSON.parse(File.read(path))]
+  configs = Dir.glob(File.join(root_dir, 'config.*.json')).to_h do |path|
+    [File.basename(path, '.json').delete_prefix('config.'), JSON.parse(File.read(path))]
   end
 
   def all_runnables(runnable)
@@ -36,7 +36,7 @@ RSpec.describe 'AU PS suite versions' do
       version = described_class.new(key: '1.0.0', ig_version: '1.0.0')
 
       expect(version.validator_package).to eq('hl7.fhir.au.ps#1.0.0')
-      expect(version.metadata_path).to eq(File.join(root_dir, 'lib/au_ps_inferno/1.0.0/metadata.yaml'))
+      expect(version.metadata_path).to eq(File.join(root_dir, 'lib/au_ps_inferno/generated/1.0.0/metadata.yaml'))
     end
   end
 
@@ -56,9 +56,9 @@ RSpec.describe 'AU PS suite versions' do
       context "for version #{key}" do
         let(:suite_file) { File.join(root_dir, config.dig('kit', 'suite_file')) }
 
-        it 'has generated metadata in lib/au_ps_inferno/<key>/' do
+        it 'has generated metadata in lib/au_ps_inferno/generated/<key>/' do
           %w[metadata.yaml composition_metadata.yaml].each do |file|
-            expect(File).to exist(File.join(root_dir, 'lib', 'au_ps_inferno', key, file))
+            expect(File).to exist(File.join(root_dir, 'lib', 'au_ps_inferno', 'generated', key, file))
           end
         end
 

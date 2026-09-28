@@ -24,7 +24,7 @@ class Generator
     # +extra_json_paths+ mechanism at a Bundle wrapping those resources, so the gem's own
     # loading logic (rather than a bespoke copy of it) picks them up.
     #
-    # @param config_path [String] Path to the version's inferno_suite_generator.config.<key>.json
+    # @param config_path [String] Path to the version's config.<key>.json
     # @return [Array<String>]
     def config_file_paths(config_path)
       paths = [config_path]

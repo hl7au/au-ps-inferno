@@ -4,14 +4,14 @@
 
 ### Changed
 
-- Support several AU PS IG versions side by side. Each version has its own generator config (`inferno_suite_generator.config.<key>.json`), its own generated metadata in `lib/au_ps_inferno/<key>/`, and its own suite class with its own `IG_VERSION` constant; `AUPSTestKit::AUPSSuiteDefinition` assembles every version's suite from the shared groups and hands each one its metadata and IG version through Inferno's `config` options. The `au_ps_v100` suite, its ids and its behaviour are unchanged, which a structure snapshot spec now enforces.
-- `rake generator:generate` takes an optional version key and otherwise generates every version.
+- Support several AU PS IG versions side by side. Each version has its own generator config (`config.<key>.json`), its own generated metadata in `lib/au_ps_inferno/generated/<key>/`, and its own suite class with its own `IG_VERSION` constant; `AUPSTestKit::AUPSSuiteDefinition` assembles every version's suite from the shared groups and hands each one its metadata and IG version through Inferno's `config` options. The `au_ps_v100` suite, its ids and its behaviour are unchanged, which a structure snapshot spec now enforces.
+- `rake au_ps:generate` (formerly `generator:generate`, still accepted) takes an optional version key and otherwise generates every version. The config, folder and task names follow the AU Core kit's (`config.<key>.json`, `generated/<key>/`).
 - The Sync IG Package workflow adds a newly released IG version alongside the existing suites instead of rewriting the current one.
 
 ### Removed
 
 - `AUPSTestKit::IG_VERSION`. Each suite class now carries its own `IG_VERSION` (for 1.0.0, `AUPSTestKit::AUPSSuitePreview::IG_VERSION`); code that read the global constant fails at load.
-- `lib/au_ps_inferno/metadata.yaml` and `composition_metadata.yaml`, now `lib/au_ps_inferno/1.0.0/metadata.yaml` and `composition_metadata.yaml`.
+- `lib/au_ps_inferno/metadata.yaml` and `composition_metadata.yaml`, now `lib/au_ps_inferno/generated/1.0.0/metadata.yaml` and `composition_metadata.yaml`.
 
 ## [1.0.1] - 2026-09-03
 

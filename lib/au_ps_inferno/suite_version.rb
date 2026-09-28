@@ -3,8 +3,8 @@
 module AUPSTestKit
   # One AU PS IG version the kit carries a suite for.
   #
-  # +key+ names the version's generator config (+inferno_suite_generator.config.<key>.json+)
-  # and its generated metadata folder (+lib/au_ps_inferno/<key>/+). For a released IG the key
+  # +key+ names the version's generator config (+config.<key>.json+)
+  # and its generated metadata folder (+lib/au_ps_inferno/generated/<key>/+). For a released IG the key
   # is the IG version itself; a moving target such as the CI build uses a stable key
   # (+ci-build+) so a new CI package version regenerates in place.
   #
@@ -71,7 +71,7 @@ module AUPSTestKit
     # @param key [String]
     # @return [String]
     def self.metadata_dir_for(key)
-      File.expand_path(key, __dir__)
+      File.expand_path(File.join('generated', key), __dir__)
     end
   end
 end

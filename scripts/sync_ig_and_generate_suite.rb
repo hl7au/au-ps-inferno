@@ -15,7 +15,7 @@ require 'rubygems'
 require_relative 'fetch_latest_ig_package'
 require_relative '../lib/au_ps_inferno/suite_version'
 
-CONFIG_PREFIX = 'inferno_suite_generator.config.'
+CONFIG_PREFIX = 'config.'
 ENTRY_POINT_PATH = File.join(ROOT_DIR, 'lib', 'au_ps_inferno.rb')
 NON_RELEASE_KEYS = %w[ci-build].freeze
 
@@ -146,7 +146,7 @@ if $PROGRAM_NAME == __FILE__
   scaffold_new_version!(base_config, old_version:, new_version:, new_archive_path:)
 
   Dir.chdir(ROOT_DIR) do
-    system('bundle', 'exec', 'rake', "generator:generate[#{new_version}]", exception: true)
+    system('bundle', 'exec', 'rake', "au_ps:generate[#{new_version}]", exception: true)
   end
 
   puts "Added AU PS #{new_version} suite alongside #{old_version}"

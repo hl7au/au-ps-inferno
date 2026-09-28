@@ -15,10 +15,10 @@ require_relative 'generator_group_based_metadata_module'
 # Generator for test suites targeting AU PS and IPS implementation guides.
 #
 # The kit carries one suite per AU PS IG version. Each version has its own generator config,
-# +inferno_suite_generator.config.<key>.json+ in the repository root, whose +ig+ block names the
+# +config.<key>.json+ in the repository root, whose +ig+ block names the
 # package archive to read (+ig.package_archive_path+) and whose +kit.suite_file+ names the suite
 # class for that version. Generating a version writes its metadata to
-# +lib/au_ps_inferno/<key>/metadata.yaml+ and +composition_metadata.yaml+ and sets the
+# +lib/au_ps_inferno/generated/<key>/metadata.yaml+ and +composition_metadata.yaml+ and sets the
 # +IG_VERSION+ constant in its suite class to the version declared in the package. Versions are
 # generated independently, so regenerating one never touches another.
 #
@@ -33,7 +33,7 @@ class Generator
   include GeneratorGroupBasedMetadataModule
 
   ROOT_DIR = File.expand_path('../../..', __dir__)
-  CONFIG_FILE_PREFIX = 'inferno_suite_generator.config.'
+  CONFIG_FILE_PREFIX = 'config.'
   CONFIG_FILE_SUFFIX = '.json'
 
   class << self
@@ -119,7 +119,7 @@ class Generator
   end
 
   def save_metadata_to_version_folder
-    output_dir = File.join(@root_dir, 'lib', 'au_ps_inferno', version_key)
+    output_dir = File.join(@root_dir, 'lib', 'au_ps_inferno', 'generated', version_key)
     FileUtils.mkdir_p(output_dir)
     @composition_metadata.initiate_build
 

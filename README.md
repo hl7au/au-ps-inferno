@@ -31,8 +31,8 @@ make run
 
 The kit carries one suite per AU PS IG version, and several versions can be loaded side by side. Each version is made of:
 
-- a generator config in the repository root, `inferno_suite_generator.config.<key>.json`, whose `ig` block names the IG package archive and whose `kit.suite_file` names the suite class;
-- generated metadata in `lib/au_ps_inferno/<key>/` (`metadata.yaml` for core IG metadata, `composition_metadata.yaml` for Composition-specific metadata);
+- a generator config in the repository root, `config.<key>.json`, whose `ig` block names the IG package archive and whose `kit.suite_file` names the suite class;
+- generated metadata in `lib/au_ps_inferno/generated/<key>/` (`metadata.yaml` for core IG metadata, `composition_metadata.yaml` for Composition-specific metadata);
 - a suite class in `lib/au_ps_inferno/suite/` with its own `IG_VERSION` constant, registered in `lib/au_ps_inferno.rb`.
 
 For a released IG the key is the IG version (`1.0.0`). The suite id is derived from the IG version by `AUPSTestKit::SuiteVersion.suite_id_for`: the release digits are joined and a pre-release label is appended in snake case, so `1.0.0` becomes `au_ps_v100`.
@@ -42,15 +42,15 @@ All versions share the group and test classes under `lib/au_ps_inferno/suite/`. 
 ### Regenerating metadata
 
 ```bash
-bundle exec rake generator:generate          # every version
-bundle exec rake 'generator:generate[1.0.0]' # one version
+bundle exec rake au_ps:generate          # every version
+bundle exec rake 'au_ps:generate[1.0.0]' # one version
 ```
 
-The generator reads the version's package archive, writes `lib/au_ps_inferno/<key>/metadata.yaml` and `composition_metadata.yaml`, and sets `IG_VERSION` in that version's suite class to the version declared in the package's `package.json`. Other versions are left untouched. `make generate_and_fix` (used by the [Generate Suite workflow](https://github.com/hl7au/au-ps-inferno/actions/workflows/generate-suite.yaml)) regenerates every version inside Docker and opens a pull request.
+The generator reads the version's package archive, writes `lib/au_ps_inferno/generated/<key>/metadata.yaml` and `composition_metadata.yaml`, and sets `IG_VERSION` in that version's suite class to the version declared in the package's `package.json`. Other versions are left untouched. `make generate_and_fix` (used by the [Generate Suite workflow](https://github.com/hl7au/au-ps-inferno/actions/workflows/generate-suite.yaml)) regenerates every version inside Docker and opens a pull request.
 
 ### Adding a new IG release
 
-Run the [Sync IG Package workflow](https://github.com/hl7au/au-ps-inferno/actions/workflows/sync-ig-package.yaml) (`scripts/sync_ig_and_generate_suite.rb`). When the FHIR package registry has an AU PS release newer than the newest released version the kit carries, it adds the new release alongside the existing ones: it downloads the package into `lib/au_ps_inferno/igs/`, writes `inferno_suite_generator.config.<version>.json`, scaffolds `lib/au_ps_inferno/suite/au_ps_v<digits>.rb`, registers it in `lib/au_ps_inferno.rb`, generates its metadata and opens a pull request. Existing suites, their ids and their sessions are not changed.
+Run the [Sync IG Package workflow](https://github.com/hl7au/au-ps-inferno/actions/workflows/sync-ig-package.yaml) (`scripts/sync_ig_and_generate_suite.rb`). When the FHIR package registry has an AU PS release newer than the newest released version the kit carries, it adds the new release alongside the existing ones: it downloads the package into `lib/au_ps_inferno/igs/`, writes `config.<version>.json`, scaffolds `lib/au_ps_inferno/suite/au_ps_v<digits>.rb`, registers it in `lib/au_ps_inferno.rb`, generates its metadata and opens a pull request. Existing suites, their ids and their sessions are not changed.
 
 ## Development workflow
 This repository contains both the source code of the tests generator and the generated tests themselves.

@@ -44,9 +44,9 @@ namespace :dev_tools do
   end
 end
 
-namespace :generator do
-  desc 'Generate AU PS suite metadata. Pass a version key (e.g. generator:generate[1.0.0]) to generate one ' \
-       'version; with none, every version with an inferno_suite_generator.config.<key>.json is generated. ' \
+namespace :au_ps do
+  desc 'Generate AU PS suite metadata. Pass a version key (e.g. au_ps:generate[1.0.0]) to generate one ' \
+       'version; with none, every version with a config.<key>.json is generated. ' \
        'Set ADDITIONAL_IG_RESOURCES to a folder to load extra JSON resources.'
   task :generate, [:version_key] do |_task, args|
     require 'au_ps_inferno/generator/generator'
@@ -62,4 +62,9 @@ namespace :generator do
       Generator.new(version_key:, **opts).generate
     end
   end
+end
+
+namespace :generator do
+  desc 'Former name of au_ps:generate'
+  task :generate, [:version_key] => 'au_ps:generate'
 end

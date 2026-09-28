@@ -12,7 +12,7 @@ RSpec.describe Generator do
   after { FileUtils.remove_entry(root_dir) }
 
   def write_config(key, config)
-    File.write(File.join(root_dir, "inferno_suite_generator.config.#{key}.json"), JSON.generate(config))
+    File.write(File.join(root_dir, "config.#{key}.json"), JSON.generate(config))
   end
 
   def config(version:, archive: nil)
