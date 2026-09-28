@@ -44,9 +44,11 @@ namespace :dev_tools do
   end
 end
 
-namespace :generator do
-  desc 'Generate AU PS/IPS test suites. Set ADDITIONAL_IG_RESOURCES to a folder to load extra JSON resources.'
-  task :generate do
+namespace :au_ps do
+  desc 'Generate AU PS suite metadata. Pass a version key (e.g. au_ps:generate[1.0.0]) to generate one ' \
+       'version; with none, every version with a config.<key>.json is generated. ' \
+       'Set ADDITIONAL_IG_RESOURCES to a folder to load extra JSON resources.'
+  task :generate, [:version_key] do |_task, args|
     require 'au_ps_inferno/generator/generator'
     extra = ENV.fetch('ADDITIONAL_IG_RESOURCES', nil)
     if extra.nil? || extra.empty?
@@ -54,6 +56,15 @@ namespace :generator do
       extra = default_extra if File.directory?(default_extra)
     end
     opts = extra ? { additional_resources_path: extra } : {}
-    Generator.new(**opts).generate
+    version_keys = args[:version_key] ? [args[:version_key]] : Generator.version_keys
+    version_keys.each do |version_key|
+      puts "Generating AU PS suite metadata for #{version_key}"
+      Generator.new(version_key:, **opts).generate
+    end
   end
+end
+
+namespace :generator do
+  desc 'Former name of au_ps:generate'
+  task :generate, [:version_key] => 'au_ps:generate'
 end

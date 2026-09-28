@@ -9,25 +9,14 @@ class Generator
   module GeneratorGroupBasedMetadataModule
     private
 
+    # Registers a config keeper for this generator's version, replacing any keeper a previous
+    # generator registered, so generating several versions in one process never reads another
+    # version's config.
     def register_inferno_suite_generator_config
-      return if Registry.get(:config_keeper)
-
-      config_path = inferno_suite_generator_config_path
-      return unless config_path
-
-      keeper = InfernoSuiteGenerator::Generator::GeneratorConfigKeeper.new(config_file_paths(config_path))
+      keeper = InfernoSuiteGenerator::Generator::GeneratorConfigKeeper.new(
+        config_file_paths(inferno_suite_generator_config_path)
+      )
       Registry.register(:config_keeper, keeper)
-    rescue StandardError => e
-      warn "Failed to register inferno_suite_generator config: #{e.message}"
-      nil
-    end
-
-    def inferno_suite_generator_config_path
-      config_paths = [
-        File.expand_path('../../../inferno_suite_generator.config.json', __dir__),
-        File.expand_path('../../../../inferno_suite_generator.config.json', __dir__)
-      ]
-      config_paths.find { |path| File.exist?(path) }
     end
 
     # Builds the config_file_paths array passed to GeneratorConfigKeeper. When
@@ -35,7 +24,7 @@ class Generator
     # +extra_json_paths+ mechanism at a Bundle wrapping those resources, so the gem's own
     # loading logic (rather than a bespoke copy of it) picks them up.
     #
-    # @param config_path [String] Path to inferno_suite_generator.config.json
+    # @param config_path [String] Path to the version's config.<key>.json
     # @return [Array<String>]
     def config_file_paths(config_path)
       paths = [config_path]

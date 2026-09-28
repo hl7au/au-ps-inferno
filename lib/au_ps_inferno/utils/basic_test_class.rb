@@ -25,6 +25,7 @@ require_relative 'basic_test/resolve_path_debug_module'
 require_relative 'basic_test/ms_elements_populated_module'
 require_relative 'basic_test/ms_sub_elements_populated_module'
 require_relative 'basic_test/resolve_resource_type_module'
+require_relative 'basic_test/suite_version_module'
 
 module AUPSTestKit
   # A base class for all tests to decrease code duplication.
@@ -54,5 +55,6 @@ module AUPSTestKit
     include BasicTestMsElementsPopulatedModule
     include BasicTestMsSubElementsPopulatedModule
     include BasicTestResolveResourceTypeModule
+    include BasicTestSuiteVersionModule
   end
 end
