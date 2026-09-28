@@ -42,7 +42,7 @@ All versions share the group and test classes under `lib/au_ps_inferno/suite/`. 
 ### Regenerating metadata
 
 ```bash
-bundle exec rake au_ps:generate          # every version
+bundle exec rake au_ps:generate          # every released version
 bundle exec rake 'au_ps:generate[1.0.0]' # one version
 ```
 
@@ -51,6 +51,25 @@ The generator reads the version's package archive, writes `lib/au_ps_inferno/gen
 ### Adding a new IG release
 
 Run the [Sync IG Package workflow](https://github.com/hl7au/au-ps-inferno/actions/workflows/sync-ig-package.yaml) (`scripts/sync_ig_and_generate_suite.rb`). When the FHIR package registry has an AU PS release newer than the newest released version the kit carries, it adds the new release alongside the existing ones: it downloads the package into `lib/au_ps_inferno/igs/`, writes `config.<version>.json`, scaffolds `lib/au_ps_inferno/suite/au_ps_v<digits>.rb`, registers it in `lib/au_ps_inferno.rb`, generates its metadata and opens a pull request. Existing suites, their ids and their sessions are not changed.
+
+### The CI build suite
+
+`lib/au_ps_inferno/suite/au_ps_ci_build.rb` tracks the continuous-integration build of the IG (https://build.fhir.org/ig/hl7au/au-fhir-ps/). It is carried in the gem but registered only when the environment sets `INFERNO_CI_BUILD_SUITES=true`, which the development deployment does and production does not. The tooling follows the AU Core kit's ci-build suite, so both kits read the same way.
+
+- Its key is `ci-build`: config `config.ci-build.json` (with a `ci_build` section recording the package and manifest URLs and the package date), metadata `lib/au_ps_inferno/generated/ci-build/`.
+- Its suite id is fixed, `au_ps_ci_build`, whatever the CI package version, so sessions and the places that list the suite by id survive a CI version bump. The title shows the current package version.
+- Its validator loads `hl7.fhir.au.ps#current`. The HL7 validator resolves `#current` from build.fhir.org itself and refreshes its package cache when the CI build changes; a running validator keeps the IG it already loaded until it restarts. Because `#current` can move ahead of the suite, the CI suite validates bundles against the unversioned AU PS profile canonicals.
+
+```bash
+bundle exec rake au_ps:ci_build:check            # has the CI build changed since the suite was generated?
+bundle exec rake au_ps:ci_build:download         # fetch package.tgz into lib/au_ps_inferno/igs/ci-build.tgz
+bundle exec rake 'au_ps:ci_build:refresh'        # regenerate if the CI build changed
+bundle exec rake 'au_ps:ci_build:refresh[force]' # regenerate regardless (make generate_ci_build)
+```
+
+A refresh takes the version and date from the downloaded package's own `package.json`, refuses a package that is not a `-ci-build` version, and puts the config back if generation fails. The package is not committed (it is in `.gitignore`, `.dockerignore` and excluded from the gem), so `rake au_ps:generate` without a key skips the CI build, and `rake 'au_ps:generate[ci-build]'` refuses a local package the config does not describe.
+
+The [Refresh CI Build Suite workflow](https://github.com/hl7au/au-ps-inferno/actions/workflows/refresh-ci-build-suite.yaml) runs the refresh daily at 19:00 UTC and on demand (with a `force` input), and opens or updates the `automated/refresh-ci-build-suite` pull request (label `automated-pr`). It opens the PR with a token from the kit automation GitHub App (org variable `KIT_AUTOMATION_APP_CLIENT_ID`, org secret `KIT_AUTOMATION_APP_PRIVATE_KEY`) so Automated Quality Control runs on it; until those exist it falls back to `GITHUB_TOKEN`, whose pushes start no workflows, and the reviewer runs `make tests` locally. After a generator change, run the workflow with `force` so the ci-build metadata is regenerated in the new format too.
 
 ## Development workflow
 This repository contains both the source code of the tests generator and the generated tests themselves.

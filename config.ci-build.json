@@ -1,0 +1,28 @@
+{
+  "kit": {
+    "suite_file": "lib/au_ps_inferno/suite/au_ps_ci_build.rb"
+  },
+  "ig": {
+    "id": "hl7.fhir.au.ps",
+    "version": "1.0.1-ci-build",
+    "name": "AU PS",
+    "link": "https://build.fhir.org/ig/hl7au/au-fhir-ps/",
+    "cs_profile_url": "http://hl7.org.au/fhir/ps/CapabilityStatement/au-ps-responder",
+    "package_archive_path": "lib/au_ps_inferno/igs/ci-build.tgz"
+  },
+  "suite": {
+    "title": "AU PS",
+    "tx_server_url": "https://tx.dev.hl7.org.au/fhir",
+    "links": []
+  },
+  "ci_build": {
+    "package_url": "https://build.fhir.org/ig/hl7au/au-fhir-ps/package.tgz",
+    "manifest_url": "https://build.fhir.org/ig/hl7au/au-fhir-ps/package.manifest.json",
+    "package_date": "20260922081252"
+  },
+  "configs": {
+    "generic": {},
+    "profiles": {},
+    "resources": {}
+  }
+}

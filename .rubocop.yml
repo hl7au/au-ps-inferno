@@ -27,6 +27,7 @@ Metrics/ModuleLength:
 Metrics/BlockLength:
   Exclude:
     - "spec/**/*"
+    - "rakelib/**/*.rake"
     - "*.gemspec"
 
 Layout/LineLength:

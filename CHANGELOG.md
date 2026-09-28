@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Added
+
+- A suite tracking the AU PS CI build, `au_ps_ci_build` (a fixed id; the title shows the package version, `1.0.1-ci-build` today), validated against `hl7.fhir.au.ps#current` and registered only when `INFERNO_CI_BUILD_SUITES=true`. `rake au_ps:ci_build:check|download|refresh[force]` and a daily Refresh CI Build Suite workflow regenerate it when the CI build's `package.manifest.json` date changes and open or update an `automated-pr` pull request, using the kit automation GitHub App's token when configured. The tooling mirrors the AU Core kit's ci-build suite.
+
 ### Changed
 
 - Support several AU PS IG versions side by side. Each version has its own generator config (`config.<key>.json`), its own generated metadata in `lib/au_ps_inferno/generated/<key>/`, and its own suite class with its own `IG_VERSION` constant; `AUPSTestKit::AUPSSuiteDefinition` assembles every version's suite from the shared groups and hands each one its metadata and IG version through Inferno's `config` options. The `au_ps_v100` suite, its ids and its behaviour are unchanged, which a structure snapshot spec now enforces.

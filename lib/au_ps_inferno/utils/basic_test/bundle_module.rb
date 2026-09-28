@@ -38,7 +38,7 @@ module AUPSTestKit
     end
 
     def validate_au_ps_bundle
-      validate_bundle_wrapper("http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-bundle|#{au_ps_ig_version}")
+      validate_bundle_wrapper(au_ps_profile('http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-bundle'))
     end
 
     def validate_ips_bundle
