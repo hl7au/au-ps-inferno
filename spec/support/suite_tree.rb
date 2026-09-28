@@ -52,7 +52,12 @@ module SuiteTree
   def validators(suite)
     suite.fhir_validators.transform_values do |validators|
       validators.map do |validator|
-        { 'igs' => validator.igs, 'context' => validator.validation_context.definition }
+        {
+          'igs' => validator.igs,
+          'context' => validator.validation_context.definition,
+          'additional_validations' => validator.additional_validations.length,
+          'exclude_message' => !validator.exclude_message.nil?
+        }
       end
     end
   end

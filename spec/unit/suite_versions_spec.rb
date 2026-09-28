@@ -89,10 +89,13 @@ RSpec.describe 'AU PS suite versions' do
 
     it 'resolve metadata and the bundle profile version per suite at run time' do
       au_ps_suites.each do |suite|
-        test = all_runnables(suite).find { |runnable| runnable < AUPSTestKit::BasicTest }.new(scratch: {})
+        tests = all_runnables(suite).select { |runnable| runnable < AUPSTestKit::BasicTest }.map { _1.new(scratch: {}) }
 
-        expect(test.metadata_manager.metadata_yaml_path).to eq(suite::SUITE_VERSION.metadata_path)
-        expect(test.au_ps_ig_version).to eq(suite::SUITE_VERSION.ig_version)
+        expect(tests).not_to be_empty
+        tests.each do |test|
+          expect(test.metadata_manager.metadata_yaml_path).to eq(suite::SUITE_VERSION.metadata_path)
+          expect(test.au_ps_ig_version).to eq(suite::SUITE_VERSION.ig_version)
+        end
       end
     end
 

@@ -7,7 +7,8 @@
 # generator config, scaffolds its suite class, registers it in lib/au_ps_inferno.rb and
 # generates its metadata. The existing suites, their ids and their sessions are untouched.
 #
-# The CI build is not a release and is refreshed by scripts/sync_ci_build.rb instead.
+# Keys in NON_RELEASE_KEYS name versions that are not releases (a moving CI build, for one)
+# and are never treated as the newest release.
 
 require 'json'
 require 'rubygems'
@@ -94,6 +95,19 @@ def scaffold_new_version!(base_config, old_version:, new_version:, new_archive_p
   register_suite!(new_version)
 end
 
+# A version counts as carried when the kit already has a config for it. Comparing by presence
+# rather than by version order means a release that sorts below a carried ballot (1.0.1 after
+# 1.1.0-ballot) is still added.
+def carried?(version)
+  File.exist?(config_path_for(version))
+end
+
+# fetch_latest_ig_package downloads before the version is known; remove the archive again
+# when that version is not added, so an unchanged run leaves the tree clean.
+def discard_download!(path, existed_before:)
+  File.delete(path) if !existed_before && File.exist?(path)
+end
+
 def write_github_output(old_version:, new_version:)
   output_path = ENV.fetch('GITHUB_OUTPUT', nil)
   return unless output_path
@@ -109,6 +123,7 @@ if $PROGRAM_NAME == __FILE__
   abort "No released AU PS version config (#{CONFIG_PREFIX}<version>.json) found in #{ROOT_DIR}" unless old_version
   base_config = JSON.parse(File.read(config_path_for(old_version)))
 
+  archives_before = Dir.glob(File.join(DEFAULT_DESTINATION, '*'))
   result = fetch_latest_ig_package
   case result.status
   when :not_found
@@ -121,8 +136,9 @@ if $PROGRAM_NAME == __FILE__
 
   new_version = result.package.version
 
-  if Gem::Version.new(new_version) <= Gem::Version.new(old_version)
-    puts "Already up to date: #{DEFAULT_PACKAGE_NAME}@#{old_version}"
+  if carried?(new_version)
+    discard_download!(result.path, existed_before: archives_before.include?(result.path))
+    puts "Already carried: #{DEFAULT_PACKAGE_NAME}@#{new_version}"
     exit 0
   end
 

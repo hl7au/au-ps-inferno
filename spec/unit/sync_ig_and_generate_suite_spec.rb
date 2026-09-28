@@ -72,4 +72,25 @@ RSpec.describe 'scripts/sync_ig_and_generate_suite.rb' do
     expect(released_version_keys).to contain_exactly('1.0.0', '1.1.0-ballot')
     expect(newest_released_key).to eq('1.1.0-ballot')
   end
+
+  it 'adds a release that is not carried, even when it sorts below a carried ballot' do
+    %w[1.0.0 1.1.0-ballot].each do |key|
+      File.write(File.join(root_dir, "inferno_suite_generator.config.#{key}.json"), '{}')
+    end
+
+    expect(carried?('1.1.0-ballot')).to be(true)
+    expect(carried?('1.0.1')).to be(false)
+  end
+
+  it 'removes a download that is not added, but never an archive that was already there' do
+    fresh = File.join(root_dir, 'fresh.tgz')
+    kept = File.join(root_dir, 'kept.tgz')
+    [fresh, kept].each { |path| File.write(path, 'tgz') }
+
+    discard_download!(fresh, existed_before: false)
+    discard_download!(kept, existed_before: true)
+
+    expect(File).not_to exist(fresh)
+    expect(File).to exist(kept)
+  end
 end

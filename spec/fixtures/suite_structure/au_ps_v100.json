@@ -21,7 +21,9 @@
           "txServer": "https://tx.dev.hl7.org.au/fhir",
           "snomedCT": "au",
           "noEcosystem": true
-        }
+        },
+        "additional_validations": 1,
+        "exclude_message": false
       }
     ]
   },
