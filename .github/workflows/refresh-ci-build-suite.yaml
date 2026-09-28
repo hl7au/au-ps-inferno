@@ -1,0 +1,91 @@
+name: Refresh CI Build Suite
+
+# Regenerates the ci-build suite when the AU PS CI build on build.fhir.org changes, by
+# comparing the date in its package.manifest.json with the one recorded in
+# config.ci-build.json, and opens or updates an automated-pr with the result. Only the
+# ci-build suite is regenerated; released suites are untouched. Mirrors the AU Core kit's
+# workflow of the same name.
+on:
+  schedule:
+    # Daily at 19:00 UTC, early morning in eastern Australia.
+    - cron: '0 19 * * *'
+  workflow_dispatch:
+    inputs:
+      force:
+        description: Regenerate even when the CI build date is unchanged
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: refresh-ci-build-suite
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+
+      - name: Regenerate the ci-build suite if the CI build changed
+        id: refresh
+        run: bundle exec rake "au_ps:ci_build:refresh[${{ inputs.force && 'force' || '' }}]"
+
+      # A pull request pushed with GITHUB_TOKEN starts no workflows, so Automated Quality
+      # Control would never run on it. A token from the kit automation GitHub App does start
+      # them. Until the org variable and secret exist, the step is skipped and the PR is
+      # opened with GITHUB_TOKEN as before.
+      - name: Create a GitHub App token so checks run on the pull request
+        id: app-token
+        if: steps.refresh.outputs.changed == 'true' && vars.KIT_AUTOMATION_APP_CLIENT_ID != ''
+        uses: actions/create-github-app-token@v3
+        with:
+          client-id: ${{ vars.KIT_AUTOMATION_APP_CLIENT_ID }}
+          private-key: ${{ secrets.KIT_AUTOMATION_APP_PRIVATE_KEY }}
+          permission-contents: write
+          permission-pull-requests: write
+
+      - name: Open or update the pull request
+        if: steps.refresh.outputs.changed == 'true'
+        uses: peter-evans/create-pull-request@v8
+        with:
+          token: ${{ steps.app-token.outputs.token || secrets.GITHUB_TOKEN }}
+          branch: automated/refresh-ci-build-suite
+          base: master
+          delete-branch: true
+          # Only the ci-build version's files; bundler-cache installs gems into vendor/bundle
+          # inside the checkout, which must never reach the PR.
+          add-paths: |
+            config.ci-build.json
+            lib/au_ps_inferno/generated/ci-build
+            lib/au_ps_inferno/suite/au_ps_ci_build.rb
+          commit-message: Regenerate the ci-build suite from AU PS ${{ steps.refresh.outputs.version }} dated ${{ steps.refresh.outputs.date }}
+          title: Regenerate the ci-build suite from the AU PS CI build
+          body: |
+            Regenerates `lib/au_ps_inferno/generated/ci-build` from the AU PS CI build
+            (https://build.fhir.org/ig/hl7au/au-fhir-ps/), package version
+            `${{ steps.refresh.outputs.version }}` dated `${{ steps.refresh.outputs.date }}`
+            (previously `${{ steps.refresh.outputs.previous_version }}` dated
+            `${{ steps.refresh.outputs.previous_date }}`).
+
+            Only the ci-build suite changes, and it is loaded only where
+            `INFERNO_CI_BUILD_SUITES=true`. Its suite id stays `au_ps_ci_build`. Tests can change
+            with a regeneration, so ci-build sessions started before this lands may stop
+            rendering. After it reaches a deployment, restart that deployment's validator so it
+            reloads `hl7.fhir.au.ps#current`.
+
+            If Automated Quality Control has not run on this PR (it was opened with
+            GITHUB_TOKEN because the kit automation app is not configured), run `make tests`
+            locally before merging.
+
+            Opened by the Refresh CI Build Suite workflow; a later CI build updates this PR.
+          labels: automated-pr
