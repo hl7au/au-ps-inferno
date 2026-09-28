@@ -12,6 +12,8 @@ module AUPSTestKit
   class CompositionMetadataManager
     COMPOSITION_METADATA_FILENAME = 'composition_metadata.yaml'
 
+    attr_reader :metadata_yaml_path
+
     def initialize(metadata_yaml_path)
       @metadata_yaml_path = metadata_yaml_path
     end

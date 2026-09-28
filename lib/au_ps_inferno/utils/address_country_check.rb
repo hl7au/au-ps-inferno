@@ -8,26 +8,29 @@ module AUPSTestKit
   # Flags Address.country values that don't match the au-address fixed code "AU"
   module AddressCountryCheck
     AU_COUNTRY_CODE = 'AU'
-    METADATA_PATH = File.expand_path('../metadata.yaml', __dir__)
 
     module_function
 
-    def address_paths_by_resource_type
-      @address_paths_by_resource_type ||=
-        CompositionMetadataManager.new(METADATA_PATH).address_profile_elements.each_with_object({}) do |element, paths|
+    # @param metadata_path [String] the suite version's metadata.yaml; each version reads the
+    #   Address element paths generated from its own IG package
+    def address_paths_by_resource_type(metadata_path)
+      @address_paths_by_resource_type ||= {}
+      @address_paths_by_resource_type[metadata_path] ||=
+        CompositionMetadataManager.new(metadata_path).address_profile_elements.each_with_object({}) do |element, paths|
           (paths[element[:resource_type]] ||= []) << element[:path]
         end
     end
 
-    def messages_for(resource)
+    def messages_for(resource, metadata_path:)
       return [] unless resource.is_a?(FHIR::Bundle)
 
-      resource.entry.flat_map { |entry| messages_for_entry(entry) }
+      address_paths = address_paths_by_resource_type(metadata_path)
+      resource.entry.flat_map { |entry| messages_for_entry(entry, address_paths) }
     end
 
-    def messages_for_entry(entry)
+    def messages_for_entry(entry, address_paths)
       candidate = entry&.resource
-      paths = candidate && address_paths_by_resource_type[candidate.resourceType]
+      paths = candidate && address_paths[candidate.resourceType]
       return [] if paths.blank?
 
       paths.flat_map { |path| incorrect_country_messages(candidate, path) }
