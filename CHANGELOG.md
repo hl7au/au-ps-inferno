@@ -4,7 +4,7 @@
 
 ### Added
 
-- Added support for suppressing known, accepted FHIR validator messages (e.g. false positives or unavoidable terminology gaps) via a `SUPPRESSED_VALIDATION_MESSAGES` list.
+- Added support for suppressing known, accepted FHIR validator messages (e.g. false positives or unavoidable terminology gaps) via a `SUPPRESSED_VALIDATION_MESSAGES` list (#38). The list is derived from the AU PS IG's `input/ignoreWarnings.txt` at the `release-1.0.0` tag. It keeps only messages Inferno can emit on a tester's instances (69 entries), and adds the `Bundle.signature.targetFormat` canonicalization MIME type false positive. The Bundle slice conformance error ("The entry resource did not match any of the allowed profiles") is never suppressed.
 - Warn when `Address.country` on a Patient, Practitioner, RelatedPerson, or Organization resource doesn't match the `au-address` fixed code `"AU"` (e.g. `"Australia"`, `"AUS"`) (#35).
 
 ## [1.0.1] - 2026-09-03

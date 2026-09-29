@@ -44,14 +44,22 @@ If a new AU PS IG release appears at http://hl7.org.au/fhir/ps/history.html, fol
 
 ## Suppressing Known Validation Messages
 
-Some FHIR validator messages are known false positives or otherwise unavoidable (e.g. gaps in external terminology). These can be suppressed via the `SUPPRESSED_VALIDATION_MESSAGES` constant in [`lib/au_ps_inferno/suite/au_ps_v100.rb`](lib/au_ps_inferno/suite/au_ps_v100.rb).
+Some FHIR validator messages are known false positives or otherwise unavoidable (e.g. gaps in external terminology). These are suppressed via `SuppressedValidationMessages::LIST` in [`lib/au_ps_inferno/suite/suppressed_validation_messages.rb`](lib/au_ps_inferno/suite/suppressed_validation_messages.rb), which the suite exposes as `SUPPRESSED_VALIDATION_MESSAGES` in [`lib/au_ps_inferno/suite/au_ps_v100.rb`](lib/au_ps_inferno/suite/au_ps_v100.rb).
 
 Each entry is a hash with:
 - `type` — `'error'`, `'warning'`, or `'info'`, matched against the validator message's type.
 - `pattern` — a `Regexp` matched against the message text.
 - `reason` — a short note documenting why the message is suppressed.
 
-Only add an entry once the message has been confirmed as a known, acceptable issue (see [#38](https://github.com/hl7au/au-ps-inferno/issues/38)) — suppressing a message hides it from test results, so it must not be used to mask real validation failures.
+The list is not hand-curated. It is derived from the IG's own suppressed messages, [`input/ignoreWarnings.txt`](https://github.com/hl7au/au-fhir-ps/blob/release-1.0.0/input/ignoreWarnings.txt) at the `release-1.0.0` tag of `hl7au/au-fhir-ps`: one entry per message line, with the `reason` taken from the group header and the IG Publisher `%` wildcard translated to `.*`. Only messages Inferno can emit when validating a tester's instances are kept. IG Publisher build messages, and groups justified only by an IG example, are left out. The header comment of the file lists every group left out and every entry added on top of the source, with the reason for each.
+
+To refresh the list for a new IG release:
+1. Diff `input/ignoreWarnings.txt` between the old and new **release** tags (never a ci-build).
+2. Apply the added and removed lines to the list, keeping the exclusions recorded in the file header.
+3. Update the tag in the file header and in this section.
+4. Run `bundle exec rspec spec/unit/suppressed_validation_messages_spec.rb`. It checks every entry and asserts the list against validator output captured for the IG's `Bundle-aups-referral-endoconsult-autogen` example, in [`spec/fixtures/validation_messages/`](spec/fixtures/validation_messages/). Recapture those fixtures when the validator or IG version changes.
+
+Only add an entry beyond the source once the message has been confirmed as a known, acceptable issue against a live Inferno run (see [#38](https://github.com/hl7au/au-ps-inferno/issues/38)). Suppressing a message hides it from test results, so it must not be used to mask real validation failures. In particular, the Bundle slice conformance error "The entry resource did not match any of the allowed profiles" is never suppressed.
 
 ## Development workflow
 This repository contains both the source code of the tests generator and the generated tests themselves.
