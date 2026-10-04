@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative 'ci_build' # rubocop:disable Lint/RequireRelativeSelfPath -- loads ci_build.rb, not this file
+require_relative 'ci_build'
 
 namespace :au_ps do
   namespace :ci_build do

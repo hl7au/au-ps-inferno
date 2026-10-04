@@ -8,7 +8,7 @@ class Generator
   # (profiles, cardinality, mustSupport, section codes) from IG resources.
   #
   # @see InfernoSuiteGenerator::Generator::IGLoader for loading IG resources
-  # rubocop:disable Metrics/ClassLength
+  # rubocop:disable-next Metrics/ClassLength
   class CompositionMetadataProducer
     include Constants
 
@@ -50,7 +50,7 @@ class Generator
                 :profiles, :resources_filters, :address_profile_elements
 
     # @param ig_resources [InfernoSuiteGenerator::Generator::IGResources] Parsed IG resources
-    # rubocop:disable Metrics/MethodLength
+    # rubocop:disable-next Metrics/MethodLength
     def initialize(ig_resources)
       @ig_resources = ig_resources
       @composition_sections = []
@@ -64,7 +64,6 @@ class Generator
       @resources_filters = {}
       @address_profile_elements = []
     end
-    # rubocop:enable Metrics/MethodLength
 
     # Runs extraction from IG resources and populates the reader attributes above.
     #
@@ -549,5 +548,4 @@ class Generator
     private :section_element_expression_min, :slice_metadata_base, :slice_relative_sub_paths, :ms_composition_path?,
             :metadata_hash_for_profile_ref
   end
-  # rubocop:enable Metrics/ClassLength
 end
