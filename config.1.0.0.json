@@ -1,4 +1,7 @@
 {
+  "kit": {
+    "suite_file": "lib/au_ps_inferno/suite/au_ps_v100.rb"
+  },
   "ig": {
     "id": "hl7.fhir.au.ps",
     "version": "1.0.0",

@@ -2,5 +2,4 @@
 
 module AUPSTestKit
   VERSION = '1.0.1'
-  IG_VERSION = '1.0.0'
 end

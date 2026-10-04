@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require_relative '../../../utils/basic_test_class'
-require_relative '../../../utils/metadata_manager'
 
 require_relative '../../../utils/bundle_is_valid_class'
 
@@ -13,9 +12,5 @@ module AUPSTestKit
     title 'Bundle is valid against IPS Bundle'
     description 'The Bundle resource is valid against the IPS Bundle profile using FHIR validator'
     id :suite_au_ps_bundle_instance_bundle_validation_bundle_valid_ips
-
-    def metadata_manager
-      @metadata_manager ||= CompositionMetadataManager.new(File.expand_path('../../../metadata.yaml', __dir__))
-    end
   end
 end

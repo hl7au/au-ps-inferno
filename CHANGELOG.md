@@ -6,6 +6,18 @@
 
 - Added support for suppressing known, accepted FHIR validator messages (e.g. false positives or unavoidable terminology gaps) via a `SUPPRESSED_VALIDATION_MESSAGES` list (#38). The list is derived from the AU PS IG's `input/ignoreWarnings.txt` at the `release-1.0.0` tag. It keeps only messages Inferno can emit on a tester's instances (69 entries), and adds the `Bundle.signature.targetFormat` canonicalization MIME type false positive. The Bundle slice conformance error ("The entry resource did not match any of the allowed profiles") is never suppressed.
 - Warn when `Address.country` on a Patient, Practitioner, RelatedPerson, or Organization resource doesn't match the `au-address` fixed code `"AU"` (e.g. `"Australia"`, `"AUS"`) (#35).
+- A suite tracking the AU PS CI build, `au_ps_ci_build` (a fixed id; the title shows the package version, `1.0.1-ci-build` today), validated against `hl7.fhir.au.ps#current` and registered only when `INFERNO_CI_BUILD_SUITES=true`. `rake au_ps:ci_build:check|download|refresh[force]` and a daily Refresh CI Build Suite workflow regenerate it when the CI build's `package.manifest.json` date changes and open or update an `automated-pr` pull request, using the kit automation GitHub App's token when configured. The tooling mirrors the AU Core kit's ci-build suite.
+
+### Changed
+
+- Support several AU PS IG versions side by side. Each version has its own generator config (`config.<key>.json`), its own generated metadata in `lib/au_ps_inferno/generated/<key>/`, and its own suite class with its own `IG_VERSION` constant; `AUPSTestKit::AUPSSuiteDefinition` assembles every version's suite from the shared groups and hands each one its metadata and IG version through Inferno's `config` options. The `au_ps_v100` suite, its ids and its behaviour are unchanged, which a structure snapshot spec now enforces.
+- `rake au_ps:generate` (formerly `generator:generate`, still accepted) takes an optional version key and otherwise generates every version. The config, folder and task names follow the AU Core kit's (`config.<key>.json`, `generated/<key>/`).
+- The Sync IG Package workflow adds a newly released IG version alongside the existing suites instead of rewriting the current one.
+
+### Removed
+
+- `AUPSTestKit::IG_VERSION`. Each suite class now carries its own `IG_VERSION` (for 1.0.0, `AUPSTestKit::AUPSSuitePreview::IG_VERSION`); code that read the global constant fails at load.
+- `lib/au_ps_inferno/metadata.yaml` and `composition_metadata.yaml`, now `lib/au_ps_inferno/generated/1.0.0/metadata.yaml` and `composition_metadata.yaml`.
 
 ## [1.0.1] - 2026-09-03
 

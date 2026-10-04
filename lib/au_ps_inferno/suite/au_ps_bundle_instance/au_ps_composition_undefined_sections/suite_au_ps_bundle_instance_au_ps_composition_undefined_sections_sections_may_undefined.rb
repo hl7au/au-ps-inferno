@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require_relative '../../../utils/basic_test_class'
-require_relative '../../../utils/metadata_manager'
 
 module AUPSTestKit
   # Automatically generated primitive test for Undefined sections are correctly populated
@@ -9,10 +8,6 @@ module AUPSTestKit
     title 'Undefined sections are correctly populated'
     description 'Undefined sections MAY be populated if a value is known'
     id :suite_au_ps_bundle_instance_au_ps_composition_undefined_sections_sections_may_undefined
-
-    def metadata_manager
-      @metadata_manager ||= CompositionMetadataManager.new(File.expand_path('../../../metadata.yaml', __dir__))
-    end
 
     run do
       validate_populated_undefined_sections_in_bundle(

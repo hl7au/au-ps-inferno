@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require_relative '../../utils/basic_test_class'
-require_relative '../../utils/metadata_manager'
 
 require_relative '../../utils/generate_summary_bundle_test_class'
 
@@ -12,9 +11,5 @@ module AUPSTestKit
     description 'The IPS $summary operation returns HTTP 200 with a Bundle. The generated Bundle is stored for ' \
                 'the validation tests in this group.'
     id :suite_generate_au_ps_using_ips_summary_validation_tests_bundle_generate
-
-    def metadata_manager
-      @metadata_manager ||= CompositionMetadataManager.new(File.expand_path('../../metadata.yaml', __dir__))
-    end
   end
 end

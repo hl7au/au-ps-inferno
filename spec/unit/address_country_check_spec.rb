@@ -7,14 +7,12 @@ require_relative '../../lib/au_ps_inferno/utils/address_country_check'
 RSpec.describe AUPSTestKit::AddressCountryCheck do
   # Stub the metadata-derived paths directly so the spec doesn't depend on (or drift with)
   # the real generated composition_metadata.yaml.
-  before do
-    described_class.instance_variable_set(:@address_paths_by_resource_type,
-                                          { 'Patient' => %w[address contact.address],
-                                            'Organization' => ['address'] })
-  end
+  let(:metadata_path) { '/suite-version/metadata.yaml' }
 
-  after do
-    described_class.instance_variable_set(:@address_paths_by_resource_type, nil)
+  before do
+    allow(described_class).to receive(:address_paths_by_resource_type)
+      .with(metadata_path)
+      .and_return({ 'Patient' => %w[address contact.address], 'Organization' => ['address'] })
   end
 
   def bundle_with(*resources)
@@ -32,19 +30,19 @@ RSpec.describe AUPSTestKit::AddressCountryCheck do
   it 'returns no messages when every address country is "AU"' do
     bundle = bundle_with(patient_with_address(id: 'p1', country: 'AU'))
 
-    expect(described_class.messages_for(bundle)).to eq([])
+    expect(described_class.messages_for(bundle, metadata_path:)).to eq([])
   end
 
   it 'returns no messages when country is absent' do
     bundle = bundle_with(FHIR::Patient.new(resourceType: 'Patient', id: 'p1', address: [{ city: 'Sydney' }]))
 
-    expect(described_class.messages_for(bundle)).to eq([])
+    expect(described_class.messages_for(bundle, metadata_path:)).to eq([])
   end
 
   it 'warns when country is a full country name' do
     bundle = bundle_with(patient_with_address(id: 'p1', country: 'Australia'))
 
-    messages = described_class.messages_for(bundle)
+    messages = described_class.messages_for(bundle, metadata_path:)
 
     expect(messages.length).to eq(1)
     expect(messages.first[:type]).to eq('warning')
@@ -54,7 +52,7 @@ RSpec.describe AUPSTestKit::AddressCountryCheck do
   it 'warns when country is the alpha-3 code' do
     bundle = bundle_with(patient_with_address(id: 'p1', country: 'AUS'))
 
-    expect(described_class.messages_for(bundle).length).to eq(1)
+    expect(described_class.messages_for(bundle, metadata_path:).length).to eq(1)
   end
 
   it 'warns once per offending address, referencing the correct index' do
@@ -65,7 +63,7 @@ RSpec.describe AUPSTestKit::AddressCountryCheck do
     )
     bundle = bundle_with(patient)
 
-    messages = described_class.messages_for(bundle)
+    messages = described_class.messages_for(bundle, metadata_path:)
 
     expect(messages.length).to eq(1)
     expect(messages.first[:message]).to include('address[0]')
@@ -79,7 +77,7 @@ RSpec.describe AUPSTestKit::AddressCountryCheck do
     )
     bundle = bundle_with(patient)
 
-    messages = described_class.messages_for(bundle)
+    messages = described_class.messages_for(bundle, metadata_path:)
 
     expect(messages.length).to eq(1)
     expect(messages.first[:message]).to include('contact.address[0]')
@@ -96,7 +94,7 @@ RSpec.describe AUPSTestKit::AddressCountryCheck do
     )
     bundle = bundle_with(patient)
 
-    messages = described_class.messages_for(bundle)
+    messages = described_class.messages_for(bundle, metadata_path:)
 
     expect(messages.length).to eq(1)
     expect(messages.first[:message]).to include('contact.address[0]')
@@ -106,7 +104,7 @@ RSpec.describe AUPSTestKit::AddressCountryCheck do
     organization = FHIR::Organization.new(resourceType: 'Organization', id: 'org1', address: [{ country: 'AUS' }])
     bundle = bundle_with(organization)
 
-    messages = described_class.messages_for(bundle)
+    messages = described_class.messages_for(bundle, metadata_path:)
 
     expect(messages.length).to eq(1)
     expect(messages.first[:message]).to include('Organization/org1')
@@ -116,12 +114,12 @@ RSpec.describe AUPSTestKit::AddressCountryCheck do
     practitioner = FHIR::Practitioner.new(resourceType: 'Practitioner', id: 'pr1', address: [{ country: 'Australia' }])
     bundle = bundle_with(practitioner)
 
-    expect(described_class.messages_for(bundle)).to eq([])
+    expect(described_class.messages_for(bundle, metadata_path:)).to eq([])
   end
 
   it 'returns no messages for a non-Bundle resource' do
     patient = patient_with_address(id: 'p1', country: 'Australia')
 
-    expect(described_class.messages_for(patient)).to eq([])
+    expect(described_class.messages_for(patient, metadata_path:)).to eq([])
   end
 end

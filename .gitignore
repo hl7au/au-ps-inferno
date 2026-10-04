@@ -20,3 +20,11 @@
 node_modules
 .env
 package_archive_bundle.json
+
+# Downloaded by rake au_ps:ci_build:download; config.ci-build.json records its version and date,
+# and the metadata generated from it in lib/au_ps_inferno/generated/ci-build/ is committed.
+/lib/au_ps_inferno/igs/ci-build.tgz
+
+# Gems installed into the checkout (ruby/setup-ruby bundler-cache, bundle install --path)
+/vendor/bundle
+/.bundle
