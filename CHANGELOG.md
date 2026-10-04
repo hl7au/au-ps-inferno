@@ -4,6 +4,8 @@
 
 ### Added
 
+- Added support for suppressing known, accepted FHIR validator messages (e.g. false positives or unavoidable terminology gaps) via the `SuppressedValidationMessages::LIST` list, applied to every AU PS suite (#38). The list is derived from the AU PS IG's `input/ignoreWarnings.txt` at the `release-1.0.0` tag. It keeps only messages Inferno can emit on a tester's instances (69 entries), and adds the `Bundle.signature.targetFormat` canonicalization MIME type false positive. The Bundle slice conformance error ("The entry resource did not match any of the allowed profiles") is never suppressed.
+- Warn when `Address.country` on a Patient, Practitioner, RelatedPerson, or Organization resource doesn't match the `au-address` fixed code `"AU"` (e.g. `"Australia"`, `"AUS"`) (#35).
 - A suite tracking the AU PS CI build, `au_ps_ci_build` (a fixed id; the title shows the package version, `1.0.1-ci-build` today), validated against `hl7.fhir.au.ps#current` and registered only when `INFERNO_CI_BUILD_SUITES=true`. `rake au_ps:ci_build:check|download|refresh[force]` and a daily Refresh CI Build Suite workflow regenerate it when the CI build's `package.manifest.json` date changes and open or update an `automated-pr` pull request, using the kit automation GitHub App's token when configured. The tooling mirrors the AU Core kit's ci-build suite.
 
 ### Changed
@@ -27,7 +29,6 @@
 
 ### Added
 
-- Warn when `Address.country` on a Patient, Practitioner, RelatedPerson, or Organization resource doesn't match the `au-address` fixed code `"AU"` (e.g. `"Australia"`, `"AUS"`) (#35).
 - Warn when the Problems, Allergies, or Medications section uses `Composition.section.emptyReason = nilknown` instead of an explicit negation code on the section's entry resource (e.g. `AllergyIntolerance.code = 716186003 |No known allergy|`), the pattern AU PS prefers over `emptyReason`. This is an advisory warning, not a failure.
 - Include the section's narrative (`Composition.section.text`), converted from HTML to Markdown, in the Must Support element population message for each section. The HTML is sanitized first (stripping scripts, styles, and other unsafe or non-display markup, including `img` tags) so untrusted narrative content can't inject anything unsafe into the test report.
 - Add a "Bundle Retrieval Method" input to the run test modal so the Bundle Resource, FHIR Server, and Bundle URL fields are shown one at a time instead of all at once (issue #86). Selecting "FHIR Server" now also covers retrieving a Bundle by ID (previously mixed into the Bundle URL fields) and gates the CapabilityStatement tests, since those only make sense against a FHIR server.
