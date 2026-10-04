@@ -14,14 +14,8 @@ RSpec.describe 'AU PS validation message suppression' do
     Inferno::Entities::Message.new(type: type, message: text)
   end
 
-  around do |example|
-    original = AUPSTestKit::AUPSSuitePreview::SUPPRESSED_VALIDATION_MESSAGES
-    AUPSTestKit::AUPSSuitePreview.send(:remove_const, :SUPPRESSED_VALIDATION_MESSAGES)
-    AUPSTestKit::AUPSSuitePreview.const_set(:SUPPRESSED_VALIDATION_MESSAGES, suppressions)
-    example.run
-  ensure
-    AUPSTestKit::AUPSSuitePreview.send(:remove_const, :SUPPRESSED_VALIDATION_MESSAGES)
-    AUPSTestKit::AUPSSuitePreview.const_set(:SUPPRESSED_VALIDATION_MESSAGES, original)
+  before do
+    stub_const('AUPSTestKit::SuppressedValidationMessages::LIST', suppressions)
   end
 
   let(:suppressions) do
