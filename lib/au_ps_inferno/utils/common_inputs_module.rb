@@ -15,7 +15,7 @@ module AUPSTestKit
   # enable_when condition; the Bundle URL path gets its own
   # `bundle_url_header_name`/`bundle_url_header_value` pair so its condition can't be
   # clobbered by that merge.
-  module CommonInputsModule # rubocop:disable Metrics/ModuleLength
+  module CommonInputsModule
     SINGLE_INPUT_DEFINITIONS = {
       bundle_retrieve_method_input: [:bundle_retrieve_method, {
         title: 'Bundle Retrieval Method',

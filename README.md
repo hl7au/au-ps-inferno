@@ -73,7 +73,7 @@ The [Refresh CI Build Suite workflow](https://github.com/hl7au/au-ps-inferno/act
 
 ## Suppressing Known Validation Messages
 
-Some FHIR validator messages are known false positives or otherwise unavoidable (e.g. gaps in external terminology). These are suppressed via `SuppressedValidationMessages::LIST` in [`lib/au_ps_inferno/suite/suppressed_validation_messages.rb`](lib/au_ps_inferno/suite/suppressed_validation_messages.rb), which the suite exposes as `SUPPRESSED_VALIDATION_MESSAGES` in [`lib/au_ps_inferno/suite/au_ps_v100.rb`](lib/au_ps_inferno/suite/au_ps_v100.rb).
+Some FHIR validator messages are known false positives or otherwise unavoidable (e.g. gaps in external terminology). These are suppressed via `SuppressedValidationMessages::LIST` in [`lib/au_ps_inferno/suite/suppressed_validation_messages.rb`](lib/au_ps_inferno/suite/suppressed_validation_messages.rb), which the validator's `exclude_message` block in [`lib/au_ps_inferno/suite/au_ps_suite_definition.rb`](lib/au_ps_inferno/suite/au_ps_suite_definition.rb) applies to every AU PS suite (including `au_ps_ci_build`).
 
 Each entry is a hash with:
 - `type` — `'error'`, `'warning'`, or `'info'`, matched against the validator message's type.

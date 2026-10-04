@@ -23,7 +23,7 @@ module AUPSTestKit
   #   alone).
   # - "A definition for CodeSystem 'http://snomed.info/sct' version 'null' could not be
   #   found..." (WARNING 12): hides a live SNOMED edition misconfiguration (see snomedCT
-  #   in au_ps_v100.rb and PR #108).
+  #   in au_ps_suite_definition.rb and PR #108).
   #
   # Added on top of the source (the last entries in LIST), confirmed against live Inferno runs:
   # - Bundle.signature.targetFormat MimeType errors for FHIR canonicalization MIME types
