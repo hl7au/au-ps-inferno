@@ -6,6 +6,8 @@ require 'json'
 require 'yaml'
 require_relative '../utils/inferno_suite_generator_compat'
 
+require_relative 'ci_build_suite_template'
+
 require_relative 'metadata_manager'
 require_relative 'naming'
 require_relative 'sections_validation_group_generator'
@@ -19,8 +21,10 @@ require_relative 'generator_group_based_metadata_module'
 # package archive to read (+ig.package_archive_path+) and whose +kit.suite_file+ names the suite
 # class for that version. Generating a version writes its metadata to
 # +lib/au_ps_inferno/generated/<key>/metadata.yaml+ and +composition_metadata.yaml+ and sets the
-# +IG_VERSION+ constant in its suite class to the version declared in the package. Versions are
-# generated independently, so regenerating one never touches another.
+# +IG_VERSION+ constant in its suite class to the version declared in the package. The CI build
+# (a config with a +ci_build+ section) has no hand-written class: its suite lives only on the
+# ci-build branch, so the generator writes the whole class from {AUPSTestKit::CIBuildSuiteTemplate}.
+# Versions are generated independently, so regenerating one never touches another.
 #
 # @example Generate every configured version
 #   Generator.version_keys.each { |key| Generator.new(version_key: key).generate }
@@ -75,7 +79,11 @@ class Generator
 
   def generate
     save_metadata_to_version_folder
-    update_suite_ig_version(@ig_resources.ig&.version)
+    if version_config.key?('ci_build')
+      write_ci_build_suite(@ig_resources.ig&.version)
+    else
+      update_suite_ig_version(@ig_resources.ig&.version)
+    end
   end
 
   private
@@ -116,15 +124,31 @@ class Generator
   def update_suite_ig_version(version)
     return if version.nil? || version.empty?
 
-    suite_file = version_config.dig('kit', 'suite_file')
-    raise ArgumentError, "Generator config for #{version_key.inspect} has no kit.suite_file" unless suite_file
-
-    suite_path = File.expand_path(suite_file, @root_dir)
+    suite_path = suite_path!
     content = File.read(suite_path)
     raise ArgumentError, "IG_VERSION constant not found in #{suite_path}" unless content.match?(/IG_VERSION = '.*'/)
 
     updated = content.sub(/IG_VERSION = '.*'/) { "IG_VERSION = '#{version}'" }
     File.write(suite_path, updated) unless updated == content
+  end
+
+  # Writes the CI build's whole suite class (+kit.suite_file+) for +version+, creating it when
+  # absent, as it is on a ci-build branch freshly made from master.
+  def write_ci_build_suite(version)
+    raise ArgumentError, "The IG package for #{version_key.inspect} declares no version" if version.nil? || version.empty?
+
+    suite_path = suite_path!
+    content = AUPSTestKit::CIBuildSuiteTemplate.source(version)
+    FileUtils.mkdir_p(File.dirname(suite_path))
+    File.write(suite_path, content) unless File.exist?(suite_path) && File.read(suite_path) == content
+  end
+
+  # @return [String] absolute path of the version's suite class (+kit.suite_file+)
+  def suite_path!
+    suite_file = version_config.dig('kit', 'suite_file')
+    raise ArgumentError, "Generator config for #{version_key.inspect} has no kit.suite_file" unless suite_file
+
+    File.expand_path(suite_file, @root_dir)
   end
 
   def save_metadata_to_version_folder
