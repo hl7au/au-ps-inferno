@@ -17,6 +17,8 @@
   :short_description: Verify support for the server capabilities required by the AU
     PS AllergyIntolerance.
   :interactions: []
+  :update_create: false
+  :update_create_expectation: MAY
   :operations: []
   :searches: []
   :search_definitions: {}
@@ -109,6 +111,8 @@
   :short_description: Verify support for the server capabilities required by the AU
     PS Composition.
   :interactions: []
+  :update_create: false
+  :update_create_expectation: MAY
   :operations: []
   :searches: []
   :search_definitions: {}
@@ -1027,6 +1031,8 @@
   :short_description: Verify support for the server capabilities required by the AU
     PS Condition.
   :interactions: []
+  :update_create: false
+  :update_create_expectation: MAY
   :operations: []
   :searches: []
   :search_definitions: {}
@@ -1116,6 +1122,8 @@
   :short_description: Verify support for the server capabilities required by the AU
     PS Pathology Result Observation.
   :interactions: []
+  :update_create: false
+  :update_create_expectation: MAY
   :operations: []
   :searches: []
   :search_definitions: {}
@@ -1303,6 +1311,8 @@
   :short_description: Verify support for the server capabilities required by the AU
     PS Smoking Status.
   :interactions: []
+  :update_create: false
+  :update_create_expectation: MAY
   :operations: []
   :searches: []
   :search_definitions: {}
@@ -1428,6 +1438,8 @@
   :short_description: Verify support for the server capabilities required by the Observation
     Social History - Alcohol Use (IPS).
   :interactions: []
+  :update_create: false
+  :update_create_expectation: MAY
   :operations: []
   :searches: []
   :search_definitions: {}
@@ -1543,6 +1555,8 @@
   :short_description: Verify support for the server capabilities required by the Observation
     Pregnancy - Outcome (IPS).
   :interactions: []
+  :update_create: false
+  :update_create_expectation: MAY
   :operations: []
   :searches: []
   :search_definitions: {}
@@ -1667,6 +1681,8 @@
   :short_description: Verify support for the server capabilities required by the Observation
     Pregnancy - Status (IPS).
   :interactions: []
+  :update_create: false
+  :update_create_expectation: MAY
   :operations: []
   :searches: []
   :search_definitions: {}
@@ -1791,6 +1807,8 @@
   :short_description: Verify support for the server capabilities required by the Observation
     Results - Radiology (IPS).
   :interactions: []
+  :update_create: false
+  :update_create_expectation: MAY
   :operations: []
   :searches: []
   :search_definitions: {}
@@ -1918,6 +1936,8 @@
   :short_description: Verify support for the server capabilities required by the Vital
     Signs Profile.
   :interactions: []
+  :update_create: false
+  :update_create_expectation: MAY
   :operations: []
   :searches: []
   :search_definitions: {}
@@ -2090,6 +2110,8 @@
   :short_description: Verify support for the server capabilities required by the AU
     PS Encounter.
   :interactions: []
+  :update_create: false
+  :update_create_expectation: MAY
   :operations: []
   :searches: []
   :search_definitions: {}
@@ -2239,6 +2261,8 @@
   :short_description: Verify support for the server capabilities required by the AU
     PS Immunization.
   :interactions: []
+  :update_create: false
+  :update_create_expectation: MAY
   :operations: []
   :searches: []
   :search_definitions: {}
@@ -2336,6 +2360,8 @@
   :short_description: Verify support for the server capabilities required by the AU
     PS Medication.
   :interactions: []
+  :update_create: false
+  :update_create_expectation: MAY
   :operations: []
   :searches: []
   :search_definitions: {}
@@ -2378,6 +2404,8 @@
   :short_description: Verify support for the server capabilities required by the AU
     PS MedicationRequest.
   :interactions: []
+  :update_create: false
+  :update_create_expectation: MAY
   :operations: []
   :searches: []
   :search_definitions: {}
@@ -2565,6 +2593,8 @@
   :short_description: Verify support for the server capabilities required by the AU
     PS MedicationStatement.
   :interactions: []
+  :update_create: false
+  :update_create_expectation: MAY
   :operations: []
   :searches: []
   :search_definitions: {}
@@ -2695,6 +2725,8 @@
   :short_description: Verify support for the server capabilities required by the AU
     PS Organization.
   :interactions: []
+  :update_create: false
+  :update_create_expectation: MAY
   :operations: []
   :searches: []
   :search_definitions: {}
@@ -2743,6 +2775,8 @@
   :short_description: Verify support for the server capabilities required by the AU
     PS Patient.
   :interactions: []
+  :update_create: false
+  :update_create_expectation: MAY
   :operations: []
   :searches: []
   :search_definitions: {}
@@ -2849,6 +2883,8 @@
   :short_description: Verify support for the server capabilities required by the AU
     PS Practitioner.
   :interactions: []
+  :update_create: false
+  :update_create_expectation: MAY
   :operations: []
   :searches: []
   :search_definitions: {}
@@ -2895,6 +2931,8 @@
   :short_description: Verify support for the server capabilities required by the AU
     PS PractitionerRole.
   :interactions: []
+  :update_create: false
+  :update_create_expectation: MAY
   :operations: []
   :searches: []
   :search_definitions: {}
@@ -2976,6 +3014,8 @@
   :short_description: Verify support for the server capabilities required by the AU
     PS Procedure.
   :interactions: []
+  :update_create: false
+  :update_create_expectation: MAY
   :operations: []
   :searches: []
   :search_definitions: {}
@@ -3139,6 +3179,8 @@
   :short_description: Verify support for the server capabilities required by the AU
     PS RelatedPerson.
   :interactions: []
+  :update_create: false
+  :update_create_expectation: MAY
   :operations: []
   :searches: []
   :search_definitions: {}
@@ -3195,6 +3237,8 @@
   :short_description: Verify support for the server capabilities required by the Device
     (IPS).
   :interactions: []
+  :update_create: false
+  :update_create_expectation: MAY
   :operations: []
   :searches: []
   :search_definitions: {}
@@ -3254,6 +3298,8 @@
   :short_description: Verify support for the server capabilities required by the DeviceUseStatement
     (IPS).
   :interactions: []
+  :update_create: false
+  :update_create_expectation: MAY
   :operations: []
   :searches: []
   :search_definitions: {}
@@ -3351,6 +3397,8 @@
   :short_description: Verify support for the server capabilities required by the DiagnosticReport
     (IPS).
   :interactions: []
+  :update_create: false
+  :update_create_expectation: MAY
   :operations: []
   :searches: []
   :search_definitions: {}
@@ -3455,6 +3503,8 @@
   :short_description: Verify support for the server capabilities required by the Flag
     - Alert (IPS).
   :interactions: []
+  :update_create: false
+  :update_create_expectation: MAY
   :operations: []
   :searches: []
   :search_definitions: {}
