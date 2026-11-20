@@ -28,14 +28,14 @@ concurrency:
 
 jobs:
   refresh:
-    # ubuntu-latest is now 26.04, for which no Ruby 3.3.6 build exists. Return to
-    # ubuntu-latest once the kit has moved to a Ruby that has one (3.3.12 or later).
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-latest
     env:
       GH_TOKEN: ${{ github.token }}
       # Lets gh find the repository even when checkout failed, so the failure issue still opens.
       GH_REPO: ${{ github.repository }}
       FAILURE_ISSUE_TITLE: CI build refresh failing
+      # Assigned so GitHub notifies a person; a failure nobody watches went unnoticed for a month.
+      FAILURE_ISSUE_ASSIGNEE: KyleOps
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
@@ -100,7 +100,7 @@ jobs:
           if [ -n "$issue" ]; then
             gh issue comment "$issue" --body "Failed again: $run_url"
           else
-            gh issue create --title "$FAILURE_ISSUE_TITLE" \
+            gh issue create --title "$FAILURE_ISSUE_TITLE" --assignee "$FAILURE_ISSUE_ASSIGNEE" \
               --body "The Refresh CI Build Suite workflow failed, so the ci-build suite is no longer following the AU PS CI build. Run: $run_url. This issue closes itself on the next successful run."
           fi
 
