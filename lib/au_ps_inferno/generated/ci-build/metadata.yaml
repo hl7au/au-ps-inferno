@@ -3,20 +3,22 @@
 :ig_title: AU PS
 :ig_module_name_prefix: AUPS
 :ig_test_id_prefix: au_ps
-:ig_version: v1.0.1-ci-build
+:ig_version: v1.1.0-ci-build
 :groups:
 - :name: au_ps_allergyintolerance
   :class_name: AuPsAllergyintoleranceSequence
-  :version: v1.0.1-ci-build
-  :reformatted_version: v101_ci_build
+  :version: v1.1.0-ci-build
+  :reformatted_version: v110_ci_build
   :resource: AllergyIntolerance
   :profile_url: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-allergyintolerance
   :profile_name: AU PS AllergyIntolerance
-  :profile_version: 1.0.1-ci-build
+  :profile_version: 1.1.0-ci-build
   :title: AllergyIntolerance
   :short_description: Verify support for the server capabilities required by the AU
     PS AllergyIntolerance.
   :interactions: []
+  :update_create: false
+  :update_create_expectation: MAY
   :operations: []
   :searches: []
   :search_definitions: {}
@@ -99,16 +101,18 @@
   :delayed_references: []
 - :name: au_ps_composition
   :class_name: AuPsCompositionSequence
-  :version: v1.0.1-ci-build
-  :reformatted_version: v101_ci_build
+  :version: v1.1.0-ci-build
+  :reformatted_version: v110_ci_build
   :resource: Composition
   :profile_url: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-composition
   :profile_name: AU PS Composition
-  :profile_version: 1.0.1-ci-build
+  :profile_version: 1.1.0-ci-build
   :title: Composition
   :short_description: Verify support for the server capabilities required by the AU
     PS Composition.
   :interactions: []
+  :update_create: false
+  :update_create_expectation: MAY
   :operations: []
   :searches: []
   :search_definitions: {}
@@ -652,7 +656,7 @@
     - Observation
   - :path: Composition.section.entry
     :profiles:
-    - http://hl7.org/fhir/uv/ips/StructureDefinition/DiagnosticReport-uv-ips
+    - http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-diagnosticreport
     :resource_types:
     - DiagnosticReport
   - :path: Composition.section.author
@@ -1017,16 +1021,18 @@
     - Observation
 - :name: au_ps_condition
   :class_name: AuPsConditionSequence
-  :version: v1.0.1-ci-build
-  :reformatted_version: v101_ci_build
+  :version: v1.1.0-ci-build
+  :reformatted_version: v110_ci_build
   :resource: Condition
   :profile_url: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-condition
   :profile_name: AU PS Condition
-  :profile_version: 1.0.1-ci-build
+  :profile_version: 1.1.0-ci-build
   :title: Condition
   :short_description: Verify support for the server capabilities required by the AU
     PS Condition.
   :interactions: []
+  :update_create: false
+  :update_create_expectation: MAY
   :operations: []
   :searches: []
   :search_definitions: {}
@@ -1104,23 +1110,260 @@
     :resource_types:
     - Resource
   :delayed_references: []
-- :name: au_ps_diagnosticresult_path
-  :class_name: AuPsDiagnosticresultPathSequence
-  :version: v1.0.1-ci-build
-  :reformatted_version: v101_ci_build
-  :resource: Observation
-  :profile_url: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-diagnosticresult-path
-  :profile_name: AU PS Pathology Result Observation
-  :profile_version: 1.0.1-ci-build
-  :title: Observation Pathology Result
+- :name: au_ps_diagnosticreport
+  :class_name: AuPsDiagnosticreportSequence
+  :version: v1.1.0-ci-build
+  :reformatted_version: v110_ci_build
+  :resource: DiagnosticReport
+  :profile_url: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-diagnosticreport
+  :profile_name: AU PS DiagnosticReport
+  :profile_version: 1.1.0-ci-build
+  :title: DiagnosticReport
   :short_description: Verify support for the server capabilities required by the AU
-    PS Pathology Result Observation.
+    PS DiagnosticReport.
   :interactions: []
+  :update_create: false
+  :update_create_expectation: MAY
   :operations: []
   :searches: []
   :search_definitions: {}
   :include_params: &1 []
   :revincludes: &2 []
+  :required_concepts: []
+  :must_supports:
+    :extensions: []
+    :slices:
+    - :slice_id: DiagnosticReport.effective[x]:effectiveDateTime
+      :slice_name: effectiveDateTime
+      :path: effective[x]
+      :discriminator:
+        :type: type
+        :code: DateTime
+    - :slice_id: DiagnosticReport.effective[x]:effectivePeriod
+      :slice_name: effectivePeriod
+      :path: effective[x]
+      :discriminator:
+        :type: type
+        :code: Period
+    :elements:
+    - :path: identifier
+    - :path: status
+    - :path: category
+    - :path: code
+    - :path: subject
+      :types:
+      - Reference
+      :target_profiles:
+      - http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-patient
+    - :path: subject.reference
+    - :path: effective[x]
+    - :path: issued
+    - :path: performer
+      :types:
+      - Reference
+    - :path: result
+      :types:
+      - Reference
+    - :path: presentedForm
+  :mandatory_elements:
+  - DiagnosticReport.status
+  - DiagnosticReport.category
+  - DiagnosticReport.code
+  - DiagnosticReport.subject
+  - DiagnosticReport.subject.reference
+  - DiagnosticReport.effective[x]
+  - DiagnosticReport.media.link
+  :bindings:
+  - :type: code
+    :strength: required
+    :system: http://hl7.org/fhir/uv/ips/ValueSet/diagnostics-report-status-uv-ips
+    :path: status
+  :references:
+  - :path: DiagnosticReport.basedOn
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/CarePlan
+    - http://hl7.org/fhir/StructureDefinition/ImmunizationRecommendation
+    - http://hl7.org/fhir/StructureDefinition/MedicationRequest
+    - http://hl7.org/fhir/StructureDefinition/NutritionOrder
+    - http://hl7.org/fhir/StructureDefinition/ServiceRequest
+    - http://hl7.org.au/fhir/StructureDefinition/au-servicerequest
+    :resource_types:
+    - CarePlan
+    - ImmunizationRecommendation
+    - MedicationRequest
+  - :path: DiagnosticReport.subject
+    :profiles:
+    - http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-patient
+    :resource_types:
+    - Patient
+  - :path: DiagnosticReport.encounter
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/Encounter|4.0.1
+  - :path: DiagnosticReport.performer
+    :profiles:
+    - http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-practitioner
+    - http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-practitionerrole
+    - http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-organization
+    - http://hl7.org/fhir/StructureDefinition/CareTeam
+    :resource_types:
+    - Practitioner
+    - PractitionerRole
+    - Organization
+  - :path: DiagnosticReport.resultsInterpreter
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/Practitioner|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/PractitionerRole|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/Organization|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/CareTeam|4.0.1
+  - :path: DiagnosticReport.specimen
+    :profiles:
+    - http://hl7.org.au/fhir/StructureDefinition/au-specimen
+  - :path: DiagnosticReport.result
+    :profiles:
+    - http://hl7.org.au/fhir/StructureDefinition/au-imagingresult
+    - http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-diagnosticresult-path
+    :resource_types:
+    - Observation
+  - :path: DiagnosticReport.imagingStudy
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/ImagingStudy|4.0.1
+  - :path: DiagnosticReport.media.link
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/Media|4.0.1
+  :delayed_references:
+  - :path: performer
+    :resources:
+    - Practitioner
+    - PractitionerRole
+    - Organization
+  - :path: result
+    :resources:
+    - Observation
+- :name: DiagnosticReport_uv_ips
+  :class_name: DiagnosticreportUvIpsSequence
+  :version: v1.1.0-ci-build
+  :reformatted_version: v110_ci_build
+  :resource: DiagnosticReport
+  :profile_url: http://hl7.org/fhir/uv/ips/StructureDefinition/DiagnosticReport-uv-ips
+  :profile_name: DiagnosticReport (IPS)
+  :profile_version: 2.0.0
+  :title: DiagnosticReport (IPS)
+  :short_description: Verify support for the server capabilities required by the DiagnosticReport
+    (IPS).
+  :interactions: []
+  :update_create: false
+  :update_create_expectation: MAY
+  :operations: []
+  :searches: []
+  :search_definitions: {}
+  :include_params: *1
+  :revincludes: *2
+  :required_concepts: []
+  :must_supports:
+    :extensions: []
+    :slices:
+    - :slice_id: DiagnosticReport.effective[x]:effectiveDateTime
+      :slice_name: effectiveDateTime
+      :path: effective[x]
+      :discriminator:
+        :type: type
+        :code: DateTime
+    :elements:
+    - :path: code
+    - :path: subject
+      :types:
+      - Reference
+    - :path: subject.reference
+    - :path: effective[x]
+    - :path: performer
+      :types:
+      - Reference
+  :mandatory_elements:
+  - DiagnosticReport.status
+  - DiagnosticReport.code
+  - DiagnosticReport.subject
+  - DiagnosticReport.subject.reference
+  - DiagnosticReport.effective[x]
+  - DiagnosticReport.media.link
+  :bindings:
+  - :type: code
+    :strength: required
+    :system: http://hl7.org/fhir/uv/ips/ValueSet/diagnostics-report-status-uv-ips
+    :path: status
+  :references:
+  - :path: DiagnosticReport.basedOn
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/CarePlan|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/ImmunizationRecommendation|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/MedicationRequest|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/NutritionOrder|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/ServiceRequest|4.0.1
+    :resource_types:
+    - CarePlan
+    - ImmunizationRecommendation
+    - MedicationRequest
+  - :path: DiagnosticReport.subject
+    :profiles:
+    - http://hl7.org/fhir/uv/ips/StructureDefinition/Patient-uv-ips
+    - http://hl7.org/fhir/StructureDefinition/Group
+  - :path: DiagnosticReport.encounter
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/Encounter|4.0.1
+  - :path: DiagnosticReport.performer
+    :profiles:
+    - http://hl7.org/fhir/uv/ips/StructureDefinition/Practitioner-uv-ips
+    - http://hl7.org/fhir/uv/ips/StructureDefinition/PractitionerRole-uv-ips
+    - http://hl7.org/fhir/uv/ips/StructureDefinition/Organization-uv-ips
+    - http://hl7.org/fhir/StructureDefinition/CareTeam
+  - :path: DiagnosticReport.resultsInterpreter
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/Practitioner|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/PractitionerRole|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/Organization|4.0.1
+    - http://hl7.org/fhir/StructureDefinition/CareTeam|4.0.1
+  - :path: DiagnosticReport.specimen
+    :profiles:
+    - http://hl7.org/fhir/uv/ips/StructureDefinition/Specimen-uv-ips
+  - :path: DiagnosticReport.result
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/Observation|4.0.1
+    :resource_types:
+    - Observation
+  - :path: DiagnosticReport.result
+    :profiles:
+    - http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-results-laboratory-pathology-uv-ips
+    - http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-results-radiology-uv-ips
+    :resource_types:
+    - Observation
+  - :path: DiagnosticReport.imagingStudy
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/ImagingStudy|4.0.1
+  - :path: DiagnosticReport.media.link
+    :profiles:
+    - http://hl7.org/fhir/StructureDefinition/Media|4.0.1
+  :delayed_references:
+  - :path: result
+    :resources:
+    - Observation
+- :name: au_ps_diagnosticresult_path
+  :class_name: AuPsDiagnosticresultPathSequence
+  :version: v1.1.0-ci-build
+  :reformatted_version: v110_ci_build
+  :resource: Observation
+  :profile_url: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-diagnosticresult-path
+  :profile_name: AU PS Pathology Result Observation
+  :profile_version: 1.1.0-ci-build
+  :title: Observation Pathology Result
+  :short_description: Verify support for the server capabilities required by the AU
+    PS Pathology Result Observation.
+  :interactions: []
+  :update_create: false
+  :update_create_expectation: MAY
+  :operations: []
+  :searches: []
+  :search_definitions: {}
+  :include_params: &3 []
+  :revincludes: &4 []
   :required_concepts: []
   :must_supports:
     :extensions: []
@@ -1131,6 +1374,66 @@
       :discriminator:
         :type: type
         :code: CodeableConcept
+    - :slice_id: Observation.value[x]:valueQuantity
+      :slice_name: valueQuantity
+      :path: value[x]
+      :discriminator:
+        :type: type
+        :code: Quantity
+    - :slice_id: Observation.value[x]:valueString
+      :slice_name: valueString
+      :path: value[x]
+      :discriminator:
+        :type: type
+        :code: String
+    - :slice_id: Observation.value[x]:valueBoolean
+      :slice_name: valueBoolean
+      :path: value[x]
+      :discriminator:
+        :type: type
+        :code: Boolean
+    - :slice_id: Observation.value[x]:valueInteger
+      :slice_name: valueInteger
+      :path: value[x]
+      :discriminator:
+        :type: type
+        :code: Integer
+    - :slice_id: Observation.value[x]:valueRange
+      :slice_name: valueRange
+      :path: value[x]
+      :discriminator:
+        :type: type
+        :code: Range
+    - :slice_id: Observation.value[x]:valueRatio
+      :slice_name: valueRatio
+      :path: value[x]
+      :discriminator:
+        :type: type
+        :code: Ratio
+    - :slice_id: Observation.value[x]:valueSampledData
+      :slice_name: valueSampledData
+      :path: value[x]
+      :discriminator:
+        :type: type
+        :code: SampledData
+    - :slice_id: Observation.value[x]:valueTime
+      :slice_name: valueTime
+      :path: value[x]
+      :discriminator:
+        :type: type
+        :code: Time
+    - :slice_id: Observation.value[x]:valueDateTime
+      :slice_name: valueDateTime
+      :path: value[x]
+      :discriminator:
+        :type: type
+        :code: DateTime
+    - :slice_id: Observation.value[x]:valuePeriod
+      :slice_name: valuePeriod
+      :path: value[x]
+      :discriminator:
+        :type: type
+        :code: Period
     - :slice_id: Observation.category:lab
       :slice_name: lab
       :path: category
@@ -1293,21 +1596,23 @@
     - Observation
 - :name: au_ps_smokingstatus
   :class_name: AuPsSmokingstatusSequence
-  :version: v1.0.1-ci-build
-  :reformatted_version: v101_ci_build
+  :version: v1.1.0-ci-build
+  :reformatted_version: v110_ci_build
   :resource: Observation
   :profile_url: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-smokingstatus
   :profile_name: AU PS Smoking Status
-  :profile_version: 1.0.1-ci-build
+  :profile_version: 1.1.0-ci-build
   :title: Observation Smoking Status
   :short_description: Verify support for the server capabilities required by the AU
     PS Smoking Status.
   :interactions: []
+  :update_create: false
+  :update_create_expectation: MAY
   :operations: []
   :searches: []
   :search_definitions: {}
-  :include_params: *1
-  :revincludes: *2
+  :include_params: *3
+  :revincludes: *4
   :required_concepts: []
   :must_supports:
     :extensions: []
@@ -1418,8 +1723,8 @@
   :delayed_references: []
 - :name: Observation_alcoholuse_uv_ips
   :class_name: ObservationAlcoholuseUvIpsSequence
-  :version: v1.0.1-ci-build
-  :reformatted_version: v101_ci_build
+  :version: v1.1.0-ci-build
+  :reformatted_version: v110_ci_build
   :resource: Observation
   :profile_url: http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-alcoholuse-uv-ips
   :profile_name: Observation Social History - Alcohol Use (IPS)
@@ -1428,11 +1733,13 @@
   :short_description: Verify support for the server capabilities required by the Observation
     Social History - Alcohol Use (IPS).
   :interactions: []
+  :update_create: false
+  :update_create_expectation: MAY
   :operations: []
   :searches: []
   :search_definitions: {}
-  :include_params: *1
-  :revincludes: *2
+  :include_params: *3
+  :revincludes: *4
   :required_concepts: []
   :must_supports:
     :extensions: []
@@ -1533,8 +1840,8 @@
   :delayed_references: []
 - :name: Observation_pregnancy_outcome_uv_ips
   :class_name: ObservationPregnancyOutcomeUvIpsSequence
-  :version: v1.0.1-ci-build
-  :reformatted_version: v101_ci_build
+  :version: v1.1.0-ci-build
+  :reformatted_version: v110_ci_build
   :resource: Observation
   :profile_url: http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-pregnancy-outcome-uv-ips
   :profile_name: Observation Pregnancy - Outcome (IPS)
@@ -1543,11 +1850,13 @@
   :short_description: Verify support for the server capabilities required by the Observation
     Pregnancy - Outcome (IPS).
   :interactions: []
+  :update_create: false
+  :update_create_expectation: MAY
   :operations: []
   :searches: []
   :search_definitions: {}
-  :include_params: *1
-  :revincludes: *2
+  :include_params: *3
+  :revincludes: *4
   :required_concepts: []
   :must_supports:
     :extensions: []
@@ -1657,8 +1966,8 @@
   :delayed_references: []
 - :name: Observation_pregnancy_status_uv_ips
   :class_name: ObservationPregnancyStatusUvIpsSequence
-  :version: v1.0.1-ci-build
-  :reformatted_version: v101_ci_build
+  :version: v1.1.0-ci-build
+  :reformatted_version: v110_ci_build
   :resource: Observation
   :profile_url: http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-pregnancy-status-uv-ips
   :profile_name: Observation Pregnancy - Status (IPS)
@@ -1667,11 +1976,13 @@
   :short_description: Verify support for the server capabilities required by the Observation
     Pregnancy - Status (IPS).
   :interactions: []
+  :update_create: false
+  :update_create_expectation: MAY
   :operations: []
   :searches: []
   :search_definitions: {}
-  :include_params: *1
-  :revincludes: *2
+  :include_params: *3
+  :revincludes: *4
   :required_concepts: []
   :must_supports:
     :extensions: []
@@ -1781,8 +2092,8 @@
   :delayed_references: []
 - :name: Observation_results_radiology_uv_ips
   :class_name: ObservationResultsRadiologyUvIpsSequence
-  :version: v1.0.1-ci-build
-  :reformatted_version: v101_ci_build
+  :version: v1.1.0-ci-build
+  :reformatted_version: v110_ci_build
   :resource: Observation
   :profile_url: http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-results-radiology-uv-ips
   :profile_name: Observation Results - Radiology (IPS)
@@ -1791,11 +2102,13 @@
   :short_description: Verify support for the server capabilities required by the Observation
     Results - Radiology (IPS).
   :interactions: []
+  :update_create: false
+  :update_create_expectation: MAY
   :operations: []
   :searches: []
   :search_definitions: {}
-  :include_params: *1
-  :revincludes: *2
+  :include_params: *3
+  :revincludes: *4
   :required_concepts: []
   :must_supports:
     :extensions: []
@@ -1908,8 +2221,8 @@
     - Observation
 - :name: vitalsigns
   :class_name: VitalsignsSequence
-  :version: v1.0.1-ci-build
-  :reformatted_version: v101_ci_build
+  :version: v1.1.0-ci-build
+  :reformatted_version: v110_ci_build
   :resource: Observation
   :profile_url: http://hl7.org/fhir/StructureDefinition/vitalsigns
   :profile_name: Vital Signs Profile
@@ -1918,11 +2231,13 @@
   :short_description: Verify support for the server capabilities required by the Vital
     Signs Profile.
   :interactions: []
+  :update_create: false
+  :update_create_expectation: MAY
   :operations: []
   :searches: []
   :search_definitions: {}
-  :include_params: *1
-  :revincludes: *2
+  :include_params: *3
+  :revincludes: *4
   :required_concepts: []
   :must_supports:
     :extensions: []
@@ -2080,16 +2395,18 @@
     - Observation
 - :name: au_ps_encounter
   :class_name: AuPsEncounterSequence
-  :version: v1.0.1-ci-build
-  :reformatted_version: v101_ci_build
+  :version: v1.1.0-ci-build
+  :reformatted_version: v110_ci_build
   :resource: Encounter
   :profile_url: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-encounter
   :profile_name: AU PS Encounter
-  :profile_version: 1.0.1-ci-build
+  :profile_version: 1.1.0-ci-build
   :title: Encounter
   :short_description: Verify support for the server capabilities required by the AU
     PS Encounter.
   :interactions: []
+  :update_create: false
+  :update_create_expectation: MAY
   :operations: []
   :searches: []
   :search_definitions: {}
@@ -2229,16 +2546,18 @@
     - Organization
 - :name: au_ps_immunization
   :class_name: AuPsImmunizationSequence
-  :version: v1.0.1-ci-build
-  :reformatted_version: v101_ci_build
+  :version: v1.1.0-ci-build
+  :reformatted_version: v110_ci_build
   :resource: Immunization
   :profile_url: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-immunization
   :profile_name: AU PS Immunization
-  :profile_version: 1.0.1-ci-build
+  :profile_version: 1.1.0-ci-build
   :title: Immunization
   :short_description: Verify support for the server capabilities required by the AU
     PS Immunization.
   :interactions: []
+  :update_create: false
+  :update_create_expectation: MAY
   :operations: []
   :searches: []
   :search_definitions: {}
@@ -2326,16 +2645,18 @@
   :delayed_references: []
 - :name: au_ps_medication
   :class_name: AuPsMedicationSequence
-  :version: v1.0.1-ci-build
-  :reformatted_version: v101_ci_build
+  :version: v1.1.0-ci-build
+  :reformatted_version: v110_ci_build
   :resource: Medication
   :profile_url: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medication
   :profile_name: AU PS Medication
-  :profile_version: 1.0.1-ci-build
+  :profile_version: 1.1.0-ci-build
   :title: Medication
   :short_description: Verify support for the server capabilities required by the AU
     PS Medication.
   :interactions: []
+  :update_create: false
+  :update_create_expectation: MAY
   :operations: []
   :searches: []
   :search_definitions: {}
@@ -2368,16 +2689,18 @@
   :delayed_references: []
 - :name: au_ps_medicationrequest
   :class_name: AuPsMedicationrequestSequence
-  :version: v1.0.1-ci-build
-  :reformatted_version: v101_ci_build
+  :version: v1.1.0-ci-build
+  :reformatted_version: v110_ci_build
   :resource: MedicationRequest
   :profile_url: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medicationrequest
   :profile_name: AU PS MedicationRequest
-  :profile_version: 1.0.1-ci-build
+  :profile_version: 1.1.0-ci-build
   :title: MedicationRequest
   :short_description: Verify support for the server capabilities required by the AU
     PS MedicationRequest.
   :interactions: []
+  :update_create: false
+  :update_create_expectation: MAY
   :operations: []
   :searches: []
   :search_definitions: {}
@@ -2555,16 +2878,18 @@
     - Condition
 - :name: au_ps_medicationstatement
   :class_name: AuPsMedicationstatementSequence
-  :version: v1.0.1-ci-build
-  :reformatted_version: v101_ci_build
+  :version: v1.1.0-ci-build
+  :reformatted_version: v110_ci_build
   :resource: MedicationStatement
   :profile_url: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-medicationstatement
   :profile_name: AU PS MedicationStatement
-  :profile_version: 1.0.1-ci-build
+  :profile_version: 1.1.0-ci-build
   :title: MedicationStatement
   :short_description: Verify support for the server capabilities required by the AU
     PS MedicationStatement.
   :interactions: []
+  :update_create: false
+  :update_create_expectation: MAY
   :operations: []
   :searches: []
   :search_definitions: {}
@@ -2670,7 +2995,7 @@
     :profiles:
     - http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-condition
     - http://hl7.org/fhir/StructureDefinition/Observation
-    - http://hl7.org/fhir/uv/ips/StructureDefinition/DiagnosticReport-uv-ips
+    - http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-diagnosticreport
     :resource_types:
     - Condition
     - Observation
@@ -2685,16 +3010,18 @@
     - DiagnosticReport
 - :name: au_ps_organization
   :class_name: AuPsOrganizationSequence
-  :version: v1.0.1-ci-build
-  :reformatted_version: v101_ci_build
+  :version: v1.1.0-ci-build
+  :reformatted_version: v110_ci_build
   :resource: Organization
   :profile_url: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-organization
   :profile_name: AU PS Organization
-  :profile_version: 1.0.1-ci-build
+  :profile_version: 1.1.0-ci-build
   :title: Organization
   :short_description: Verify support for the server capabilities required by the AU
     PS Organization.
   :interactions: []
+  :update_create: false
+  :update_create_expectation: MAY
   :operations: []
   :searches: []
   :search_definitions: {}
@@ -2733,16 +3060,18 @@
   :delayed_references: []
 - :name: au_ps_patient
   :class_name: AuPsPatientSequence
-  :version: v1.0.1-ci-build
-  :reformatted_version: v101_ci_build
+  :version: v1.1.0-ci-build
+  :reformatted_version: v110_ci_build
   :resource: Patient
   :profile_url: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-patient
   :profile_name: AU PS Patient
-  :profile_version: 1.0.1-ci-build
+  :profile_version: 1.1.0-ci-build
   :title: Patient
   :short_description: Verify support for the server capabilities required by the AU
     PS Patient.
   :interactions: []
+  :update_create: false
+  :update_create_expectation: MAY
   :operations: []
   :searches: []
   :search_definitions: {}
@@ -2839,16 +3168,18 @@
     - PractitionerRole
 - :name: au_ps_practitioner
   :class_name: AuPsPractitionerSequence
-  :version: v1.0.1-ci-build
-  :reformatted_version: v101_ci_build
+  :version: v1.1.0-ci-build
+  :reformatted_version: v110_ci_build
   :resource: Practitioner
   :profile_url: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-practitioner
   :profile_name: AU PS Practitioner
-  :profile_version: 1.0.1-ci-build
+  :profile_version: 1.1.0-ci-build
   :title: Practitioner
   :short_description: Verify support for the server capabilities required by the AU
     PS Practitioner.
   :interactions: []
+  :update_create: false
+  :update_create_expectation: MAY
   :operations: []
   :searches: []
   :search_definitions: {}
@@ -2885,16 +3216,18 @@
   :delayed_references: []
 - :name: au_ps_practitionerrole
   :class_name: AuPsPractitionerroleSequence
-  :version: v1.0.1-ci-build
-  :reformatted_version: v101_ci_build
+  :version: v1.1.0-ci-build
+  :reformatted_version: v110_ci_build
   :resource: PractitionerRole
   :profile_url: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-practitionerrole
   :profile_name: AU PS PractitionerRole
-  :profile_version: 1.0.1-ci-build
+  :profile_version: 1.1.0-ci-build
   :title: PractitionerRole
   :short_description: Verify support for the server capabilities required by the AU
     PS PractitionerRole.
   :interactions: []
+  :update_create: false
+  :update_create_expectation: MAY
   :operations: []
   :searches: []
   :search_definitions: {}
@@ -2966,16 +3299,18 @@
     - Organization
 - :name: au_ps_procedure
   :class_name: AuPsProcedureSequence
-  :version: v1.0.1-ci-build
-  :reformatted_version: v101_ci_build
+  :version: v1.1.0-ci-build
+  :reformatted_version: v110_ci_build
   :resource: Procedure
   :profile_url: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-procedure
   :profile_name: AU PS Procedure
-  :profile_version: 1.0.1-ci-build
+  :profile_version: 1.1.0-ci-build
   :title: Procedure
   :short_description: Verify support for the server capabilities required by the AU
     PS Procedure.
   :interactions: []
+  :update_create: false
+  :update_create_expectation: MAY
   :operations: []
   :searches: []
   :search_definitions: {}
@@ -3083,12 +3418,11 @@
     - http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-condition
     - http://hl7.org/fhir/StructureDefinition/Observation
     - http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-procedure
-    - http://hl7.org/fhir/StructureDefinition/DocumentReference
+    - http://hl7.org.au/fhir/core/StructureDefinition/au-core-documentreference
     :resource_types:
     - Condition
     - Observation
     - Procedure
-    - DocumentReference
   - :path: Procedure.report
     :profiles:
     - http://hl7.org/fhir/StructureDefinition/DiagnosticReport|4.0.1
@@ -3129,16 +3463,18 @@
     - Procedure
 - :name: au_ps_relatedperson
   :class_name: AuPsRelatedpersonSequence
-  :version: v1.0.1-ci-build
-  :reformatted_version: v101_ci_build
+  :version: v1.1.0-ci-build
+  :reformatted_version: v110_ci_build
   :resource: RelatedPerson
   :profile_url: http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-relatedperson
   :profile_name: AU PS RelatedPerson
-  :profile_version: 1.0.1-ci-build
+  :profile_version: 1.1.0-ci-build
   :title: RelatedPerson
   :short_description: Verify support for the server capabilities required by the AU
     PS RelatedPerson.
   :interactions: []
+  :update_create: false
+  :update_create_expectation: MAY
   :operations: []
   :searches: []
   :search_definitions: {}
@@ -3185,8 +3521,8 @@
   :delayed_references: []
 - :name: Device_uv_ips
   :class_name: DeviceUvIpsSequence
-  :version: v1.0.1-ci-build
-  :reformatted_version: v101_ci_build
+  :version: v1.1.0-ci-build
+  :reformatted_version: v110_ci_build
   :resource: Device
   :profile_url: http://hl7.org/fhir/uv/ips/StructureDefinition/Device-uv-ips
   :profile_name: Device (IPS)
@@ -3195,6 +3531,8 @@
   :short_description: Verify support for the server capabilities required by the Device
     (IPS).
   :interactions: []
+  :update_create: false
+  :update_create_expectation: MAY
   :operations: []
   :searches: []
   :search_definitions: {}
@@ -3244,8 +3582,8 @@
   :delayed_references: []
 - :name: DeviceUseStatement_uv_ips
   :class_name: DeviceusestatementUvIpsSequence
-  :version: v1.0.1-ci-build
-  :reformatted_version: v101_ci_build
+  :version: v1.1.0-ci-build
+  :reformatted_version: v110_ci_build
   :resource: DeviceUseStatement
   :profile_url: http://hl7.org/fhir/uv/ips/StructureDefinition/DeviceUseStatement-uv-ips
   :profile_name: DeviceUseStatement (IPS)
@@ -3254,6 +3592,8 @@
   :short_description: Verify support for the server capabilities required by the DeviceUseStatement
     (IPS).
   :interactions: []
+  :update_create: false
+  :update_create_expectation: MAY
   :operations: []
   :searches: []
   :search_definitions: {}
@@ -3339,114 +3679,10 @@
   - :path: device
     :resources:
     - Device
-- :name: DiagnosticReport_uv_ips
-  :class_name: DiagnosticreportUvIpsSequence
-  :version: v1.0.1-ci-build
-  :reformatted_version: v101_ci_build
-  :resource: DiagnosticReport
-  :profile_url: http://hl7.org/fhir/uv/ips/StructureDefinition/DiagnosticReport-uv-ips
-  :profile_name: DiagnosticReport (IPS)
-  :profile_version: 2.0.0
-  :title: DiagnosticReport (IPS)
-  :short_description: Verify support for the server capabilities required by the DiagnosticReport
-    (IPS).
-  :interactions: []
-  :operations: []
-  :searches: []
-  :search_definitions: {}
-  :include_params: []
-  :revincludes: []
-  :required_concepts: []
-  :must_supports:
-    :extensions: []
-    :slices:
-    - :slice_id: DiagnosticReport.effective[x]:effectiveDateTime
-      :slice_name: effectiveDateTime
-      :path: effective[x]
-      :discriminator:
-        :type: type
-        :code: DateTime
-    :elements:
-    - :path: code
-    - :path: subject
-      :types:
-      - Reference
-    - :path: subject.reference
-    - :path: effective[x]
-    - :path: performer
-      :types:
-      - Reference
-  :mandatory_elements:
-  - DiagnosticReport.status
-  - DiagnosticReport.code
-  - DiagnosticReport.subject
-  - DiagnosticReport.subject.reference
-  - DiagnosticReport.effective[x]
-  - DiagnosticReport.media.link
-  :bindings:
-  - :type: code
-    :strength: required
-    :system: http://hl7.org/fhir/uv/ips/ValueSet/diagnostics-report-status-uv-ips
-    :path: status
-  :references:
-  - :path: DiagnosticReport.basedOn
-    :profiles:
-    - http://hl7.org/fhir/StructureDefinition/CarePlan|4.0.1
-    - http://hl7.org/fhir/StructureDefinition/ImmunizationRecommendation|4.0.1
-    - http://hl7.org/fhir/StructureDefinition/MedicationRequest|4.0.1
-    - http://hl7.org/fhir/StructureDefinition/NutritionOrder|4.0.1
-    - http://hl7.org/fhir/StructureDefinition/ServiceRequest|4.0.1
-    :resource_types:
-    - CarePlan
-    - ImmunizationRecommendation
-    - MedicationRequest
-  - :path: DiagnosticReport.subject
-    :profiles:
-    - http://hl7.org/fhir/uv/ips/StructureDefinition/Patient-uv-ips
-    - http://hl7.org/fhir/StructureDefinition/Group
-  - :path: DiagnosticReport.encounter
-    :profiles:
-    - http://hl7.org/fhir/StructureDefinition/Encounter|4.0.1
-  - :path: DiagnosticReport.performer
-    :profiles:
-    - http://hl7.org/fhir/uv/ips/StructureDefinition/Practitioner-uv-ips
-    - http://hl7.org/fhir/uv/ips/StructureDefinition/PractitionerRole-uv-ips
-    - http://hl7.org/fhir/uv/ips/StructureDefinition/Organization-uv-ips
-    - http://hl7.org/fhir/StructureDefinition/CareTeam
-  - :path: DiagnosticReport.resultsInterpreter
-    :profiles:
-    - http://hl7.org/fhir/StructureDefinition/Practitioner|4.0.1
-    - http://hl7.org/fhir/StructureDefinition/PractitionerRole|4.0.1
-    - http://hl7.org/fhir/StructureDefinition/Organization|4.0.1
-    - http://hl7.org/fhir/StructureDefinition/CareTeam|4.0.1
-  - :path: DiagnosticReport.specimen
-    :profiles:
-    - http://hl7.org/fhir/uv/ips/StructureDefinition/Specimen-uv-ips
-  - :path: DiagnosticReport.result
-    :profiles:
-    - http://hl7.org/fhir/StructureDefinition/Observation|4.0.1
-    :resource_types:
-    - Observation
-  - :path: DiagnosticReport.result
-    :profiles:
-    - http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-results-laboratory-pathology-uv-ips
-    - http://hl7.org/fhir/uv/ips/StructureDefinition/Observation-results-radiology-uv-ips
-    :resource_types:
-    - Observation
-  - :path: DiagnosticReport.imagingStudy
-    :profiles:
-    - http://hl7.org/fhir/StructureDefinition/ImagingStudy|4.0.1
-  - :path: DiagnosticReport.media.link
-    :profiles:
-    - http://hl7.org/fhir/StructureDefinition/Media|4.0.1
-  :delayed_references:
-  - :path: result
-    :resources:
-    - Observation
 - :name: Flag_alert_uv_ips
   :class_name: FlagAlertUvIpsSequence
-  :version: v1.0.1-ci-build
-  :reformatted_version: v101_ci_build
+  :version: v1.1.0-ci-build
+  :reformatted_version: v110_ci_build
   :resource: Flag
   :profile_url: http://hl7.org/fhir/uv/ips/StructureDefinition/Flag-alert-uv-ips
   :profile_name: Flag - Alert (IPS)
@@ -3455,6 +3691,8 @@
   :short_description: Verify support for the server capabilities required by the Flag
     - Alert (IPS).
   :interactions: []
+  :update_create: false
+  :update_create_expectation: MAY
   :operations: []
   :searches: []
   :search_definitions: {}

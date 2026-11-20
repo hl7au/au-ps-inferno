@@ -9,7 +9,7 @@ module AUPSTestKit
   # IG_VERSION when the CI build changes. The suite id is fixed (au_ps_ci_build), so sessions
   # and the places that list the suite by id survive a CI version bump.
   class AUPSCIBuildSuite < Inferno::TestSuite
-    IG_VERSION = '1.0.1-ci-build'
+    IG_VERSION = '1.1.0-ci-build'
     # The validator resolves #current from build.fhir.org itself and refreshes it when the
     # CI build's package.manifest.json date changes.
     SUITE_VERSION = SuiteVersion.new(key: 'ci-build', ig_version: IG_VERSION, suite_id: :au_ps_ci_build,

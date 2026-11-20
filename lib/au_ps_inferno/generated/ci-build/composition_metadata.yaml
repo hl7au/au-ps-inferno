@@ -174,7 +174,7 @@
     :required: false
     :mustSupport: true
     :profiles:
-    - DiagnosticReport|http://hl7.org/fhir/uv/ips/StructureDefinition/DiagnosticReport-uv-ips
+    - DiagnosticReport|http://hl7.org.au/fhir/ps/StructureDefinition/au-ps-diagnosticreport
 - :id: Composition.section:sectionProceduresHx
   :short: Patient Summary History of Procedures Section
   :definition: "Information about a patient's past procedures that are pertinent to
