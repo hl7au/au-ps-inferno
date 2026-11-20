@@ -91,8 +91,7 @@ jobs:
       # changed, so a pull request that went red stays reported and one that went green late
       # still merges. Quality Control is dispatched only when the head commit has no result
       # yet. A failure or a 30-minute wait without a result fails the job, which keeps the
-      # failure issue below open. A merge made with GITHUB_TOKEN starts no push workflows on
-      # master; the commit merged is the one Quality Control passed.
+      # failure issue below open.
       - name: Run Quality Control on the pull request and merge it once it passes
         if: steps.pull-request.outputs.pull-request-number != ''
         env:
@@ -123,6 +122,13 @@ jobs:
             exit 1
           fi
           gh pr merge "$PR_NUMBER" --squash --match-head-commit "$HEAD_SHA" --delete-branch
+
+      # The GITHUB_TOKEN merge above starts no push run of Quality Control on master, so
+      # dispatch one: master's merge commit then has a Quality Control result like any other
+      # push, and anything that follows the mainline run (AU Core's image build does) fires.
+      - name: Run Quality Control on master after the merge
+        if: steps.pull-request.outputs.pull-request-number != ''
+        run: gh workflow run quality-control.yaml --ref master
 
       # A failing scheduled run is silent, so keep one issue open while the refresh fails and
       # close it on the next success.
