@@ -4,10 +4,11 @@
 
 ### Added
 
-- A suite tracking the AU PS CI build, `au_ps_ci_build` (a fixed id; the title shows the package version, `1.0.1-ci-build` today), validated against `hl7.fhir.au.ps#current` and registered only when `INFERNO_CI_BUILD_SUITES=true`. `rake au_ps:ci_build:check|download|refresh[force]` and a daily Refresh CI Build Suite workflow regenerate it when the CI build's `package.manifest.json` date changes and open or update an `automated-pr` pull request, using the kit automation GitHub App's token when configured. The tooling mirrors the AU Core kit's ci-build suite.
+- A suite tracking the AU PS CI build, `au_ps_ci_build` (a fixed id; the title shows the package version, `1.0.1-ci-build` today), validated against `hl7.fhir.au.ps#current` and registered only when `INFERNO_CI_BUILD_SUITES=true`. `rake au_ps:ci_build:check|download|refresh[force]` and a daily Refresh CI Build Suite workflow regenerate it when the CI build's `package.manifest.json` date changes and open or update an `automated-pr` pull request. The tooling mirrors the AU Core kit's ci-build suite.
 
 ### Changed
 
+- The Refresh CI Build Suite workflow dispatches Automated Quality Control on its pull request instead of relying on a GitHub App token, keeps a "CI build refresh failing" issue open while it fails, assigned to KyleOps so a person is notified. Quality Control gains a `workflow_dispatch` trigger, reports a dispatched run as a commit status (a dispatched run's check is left out of the pull request's checks), and moves to `actions/checkout@v7`. All of this matches the AU Core kit.
 - Support several AU PS IG versions side by side. Each version has its own generator config (`config.<key>.json`), its own generated metadata in `lib/au_ps_inferno/generated/<key>/`, and its own suite class with its own `IG_VERSION` constant; `AUPSTestKit::AUPSSuiteDefinition` assembles every version's suite from the shared groups and hands each one its metadata and IG version through Inferno's `config` options. The `au_ps_v100` suite, its ids and its behaviour are unchanged, which a structure snapshot spec now enforces.
 - `rake au_ps:generate` (formerly `generator:generate`, still accepted) takes an optional version key and otherwise generates every version. The config, folder and task names follow the AU Core kit's (`config.<key>.json`, `generated/<key>/`).
 - The Sync IG Package workflow adds a newly released IG version alongside the existing suites instead of rewriting the current one.
