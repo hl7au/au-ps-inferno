@@ -2,9 +2,13 @@
 
 ## [Unreleased]
 
+### Changed
+
+- The Refresh CI Build Suite workflow dispatches Automated Quality Control on its pull request instead of relying on a GitHub App token, keeps a "CI build refresh failing" issue open while it fails, and runs on ubuntu-24.04 until the kit moves to a Ruby with an ubuntu-26.04 build. Quality Control gains a `workflow_dispatch` trigger and moves to `actions/checkout@v7`. All of this matches the AU Core kit.
+
 ### Added
 
-- A suite tracking the AU PS CI build, `au_ps_ci_build` (a fixed id; the title shows the package version, `1.0.1-ci-build` today), validated against `hl7.fhir.au.ps#current` and registered only when `INFERNO_CI_BUILD_SUITES=true`. `rake au_ps:ci_build:check|download|refresh[force]` and a daily Refresh CI Build Suite workflow regenerate it when the CI build's `package.manifest.json` date changes and open or update an `automated-pr` pull request, using the kit automation GitHub App's token when configured. The tooling mirrors the AU Core kit's ci-build suite.
+- A suite tracking the AU PS CI build, `au_ps_ci_build` (a fixed id; the title shows the package version, `1.0.1-ci-build` today), validated against `hl7.fhir.au.ps#current` and registered only when `INFERNO_CI_BUILD_SUITES=true`. `rake au_ps:ci_build:check|download|refresh[force]` and a daily Refresh CI Build Suite workflow regenerate it when the CI build's `package.manifest.json` date changes and open or update an `automated-pr` pull request. The tooling mirrors the AU Core kit's ci-build suite.
 
 ### Changed
 
