@@ -83,29 +83,40 @@ jobs:
 
       # A push made with GITHUB_TOKEN triggers no workflows, so Quality Control would not run
       # on the pull request by itself. A workflow_dispatch is exempt from that rule. Its check
-      # run is left out of the pull request's checks, so the dispatched run also reports a
-      # commit status on the branch head, which does show there.
-      - name: Run Quality Control on the pull request
-        if: contains(fromJSON('["created", "updated"]'), steps.pull-request.outputs.pull-request-operation)
-        run: gh workflow run quality-control.yaml --ref "${{ steps.pull-request.outputs.pull-request-branch }}"
-
+      # run is left out of the pull request's checks, so the dispatched run reports itself as
+      # the "Automated Quality Control" commit status on the head commit, which does show.
+      #
       # Ruled 2026-11-20: a refresh pull request merges itself once Quality Control passes on
-      # it. The dispatched run reports as the "Automated Quality Control" commit status on the
-      # pull request's head, so wait for that status on that exact commit. A failure or a
-      # timeout fails this job, which opens the failure issue below. A merge made with
-      # GITHUB_TOKEN starts no push workflows on master; the same commit was just tested.
-      - name: Merge the pull request once Quality Control passes
-        if: contains(fromJSON('["created", "updated"]'), steps.pull-request.outputs.pull-request-operation)
+      # it. This runs on every refresh while the pull request is open, not only when it
+      # changed, so a pull request that went red stays reported and one that went green late
+      # still merges. Quality Control is dispatched only when the head commit has no result
+      # yet. A failure or a 30-minute wait without a result fails the job, which keeps the
+      # failure issue below open. A merge made with GITHUB_TOKEN starts no push workflows on
+      # master; the commit merged is the one Quality Control passed.
+      - name: Run Quality Control on the pull request and merge it once it passes
+        if: steps.pull-request.outputs.pull-request-number != ''
         env:
           PR_NUMBER: ${{ steps.pull-request.outputs.pull-request-number }}
           HEAD_SHA: ${{ steps.pull-request.outputs.pull-request-head-sha }}
+          BRANCH: ${{ steps.pull-request.outputs.pull-request-branch }}
         run: |
-          state=pending
+          qc_state() {
+            gh api "repos/$GH_REPO/commits/$HEAD_SHA/status" \
+              --jq '[.statuses[] | select(.context == "Automated Quality Control") | .state] | first // "absent"' \
+              || echo unknown
+          }
+          state=$(qc_state)
+          if [ "$state" = unknown ]; then
+            sleep 10
+            state=$(qc_state)
+          fi
+          if [ "$state" = absent ]; then
+            gh workflow run quality-control.yaml --ref "$BRANCH"
+          fi
           for _ in $(seq 1 60); do
-            state=$(gh api "repos/$GH_REPO/commits/$HEAD_SHA/status" \
-              --jq '[.statuses[] | select(.context == "Automated Quality Control") | .state] | first // "pending"')
-            if [ "$state" != pending ]; then break; fi
+            case "$state" in success | failure | error) break ;; esac
             sleep 30
+            state=$(qc_state)
           done
           if [ "$state" != success ]; then
             echo "::error::Automated Quality Control on $HEAD_SHA is $state, so #$PR_NUMBER was not merged"
