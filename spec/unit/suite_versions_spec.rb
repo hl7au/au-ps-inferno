@@ -8,6 +8,7 @@ require_relative '../../lib/au_ps_inferno'
 
 RSpec.describe 'AU PS suite versions' do
   root_dir = File.expand_path('../..', __dir__)
+  suite_absent = 'the ci-build suite is not generated in this tree; it lives on the ci-build branch'
   configs = Dir.glob(File.join(root_dir, 'config.*.json')).to_h do |path|
     [File.basename(path, '.json').delete_prefix('config.'), JSON.parse(File.read(path))]
   end
@@ -61,7 +62,11 @@ RSpec.describe 'AU PS suite versions' do
     end
 
     configs.each do |key, config|
-      context "for version #{key}" do
+      # The CI build's suite and metadata are generated only on the ci-build branch (and in the
+      # refresh job that maintains it); master carries its config without them.
+      generated = File.exist?(File.join(root_dir, config.dig('kit', 'suite_file')))
+
+      context "for version #{key}", skip: (suite_absent if config.key?('ci_build') && !generated) do
         let(:suite_file) { File.join(root_dir, config.dig('kit', 'suite_file')) }
 
         it 'has generated metadata in lib/au_ps_inferno/generated/<key>/' do

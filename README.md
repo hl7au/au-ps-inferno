@@ -54,11 +54,19 @@ Run the [Sync IG Package workflow](https://github.com/hl7au/au-ps-inferno/action
 
 ### The CI build suite
 
-`lib/au_ps_inferno/suite/au_ps_ci_build.rb` tracks the continuous-integration build of the IG (https://build.fhir.org/ig/hl7au/au-fhir-ps/). It is carried in the gem but registered only when the environment sets `INFERNO_CI_BUILD_SUITES=true`, which the development deployment does and production does not. The tooling follows the AU Core kit's ci-build suite, so both kits read the same way.
+The kit can also carry a suite that tracks the AU PS CI build at https://build.fhir.org/ig/hl7au/au-fhir-ps/ rather than a released version. That suite lives only on the [`ci-build` branch](https://github.com/hl7au/au-ps-inferno/tree/ci-build), as `lib/au_ps_inferno/suite/au_ps_ci_build.rb` and its metadata in `lib/au_ps_inferno/generated/ci-build/`. Master, and gems built from it, carry the tooling that generates it (`config.ci-build.json`, `rakelib/ci_build.rb`, the `au_ps:ci_build` rake tasks and the suite class template in `lib/au_ps_inferno/generator/ci_build_suite_template.rb`) but no CI build suite. The tooling follows the AU Core kit's ci-build suite, so both kits read the same way.
 
-- Its key is `ci-build`: config `config.ci-build.json` (with a `ci_build` section recording the package and manifest URLs and the package date), metadata `lib/au_ps_inferno/generated/ci-build/`.
-- Its suite id is fixed, `au_ps_ci_build`, whatever the CI package version, so sessions and the places that list the suite by id survive a CI version bump. The title shows the current package version.
-- Its validator loads `hl7.fhir.au.ps#current`. The HL7 validator resolves `#current` from build.fhir.org itself and refreshes its package cache when the CI build changes; a running validator keeps the IG it already loaded until it restarts. Because `#current` can move ahead of the suite, the CI suite validates bundles against the unversioned AU PS profile canonicals.
+The [Refresh CI Build Suite](https://github.com/hl7au/au-ps-inferno/actions/workflows/refresh-ci-build-suite.yaml) workflow maintains the branch. It runs daily at 19:00 UTC and on demand (with a `force` input): it merges master into `ci-build`, regenerates the suite when the CI build has changed (the date in its `package.manifest.json` differs from the one recorded in the branch's `config.ci-build.json`) or the merge brought in new master commits, runs RuboCop and the unit specs, and pushes the branch only if they pass. The branch is never rebased or force-pushed, so a commit pinned from it stays reachable. A merge conflict fails the run; merge master into `ci-build` by hand once to clear it (a master edit to `config.ci-build.json` is the likely cause). A failing run keeps one issue titled "CI build refresh failing" open, assigned to KyleOps so GitHub notifies a person, and the next successful run closes it.
+
+To use the suite, take the kit from the `ci-build` branch and set `INFERNO_CI_BUILD_SUITES=true`; without the flag, or on master, the suite is not loaded, so environments such as production never show it:
+
+```ruby
+gem 'au_ps_inferno', github: 'hl7au/au-ps-inferno', branch: 'ci-build'
+```
+
+- Its key is `ci-build`: config `config.ci-build.json` (with a `ci_build` section recording the package and manifest URLs and the package date), metadata `lib/au_ps_inferno/generated/ci-build/`. The generator writes the whole suite class from the template, so edit the template on master, not the class on the branch.
+- Its suite id is always `au_ps_ci_build`, whatever the CI package version, so sessions and the places that list the suite by id survive a CI version bump. The title shows the IG package version (for example `AU PS 1.1.0-ci-build Test Suite (tracks the CI build)`), never a version ahead of the IG. A regeneration replaces the suite in place, and it can change test ids, so ci-build sessions started before a refresh may stop rendering.
+- Its validator loads `hl7.fhir.au.ps#current`. The HL7 validator resolves `#current` from build.fhir.org itself and refreshes its package cache when the CI build changes; a running validator keeps the IG it already loaded, so after a deployment picks up a new suite, restart its validator. Because `#current` can move ahead of the suite, the CI suite validates bundles against the unversioned AU PS profile canonicals.
 
 ```bash
 bundle exec rake au_ps:ci_build:check            # has the CI build changed since the suite was generated?
@@ -67,9 +75,7 @@ bundle exec rake 'au_ps:ci_build:refresh'        # regenerate if the CI build ch
 bundle exec rake 'au_ps:ci_build:refresh[force]' # regenerate regardless (make generate_ci_build)
 ```
 
-A refresh takes the version and date from the downloaded package's own `package.json`, refuses a package that is not a `-ci-build` version, and puts the config back if generation fails. The package is not committed (it is in `.gitignore`, `.dockerignore` and excluded from the gem), so `rake au_ps:generate` without a key skips the CI build, and `rake 'au_ps:generate[ci-build]'` refuses a local package the config does not describe.
-
-The [Refresh CI Build Suite workflow](https://github.com/hl7au/au-ps-inferno/actions/workflows/refresh-ci-build-suite.yaml) runs the refresh daily at 19:00 UTC and on demand (with a `force` input), and opens or updates the `automated/refresh-ci-build-suite` pull request (label `automated-pr`). It opens the PR with a token from the kit automation GitHub App (org variable `KIT_AUTOMATION_APP_CLIENT_ID`, org secret `KIT_AUTOMATION_APP_PRIVATE_KEY`) so Automated Quality Control runs on it; until those exist it falls back to `GITHUB_TOKEN`, whose pushes start no workflows, and the reviewer runs `make tests` locally. After a generator change, run the workflow with `force` so the ci-build metadata is regenerated in the new format too.
+A refresh takes the version and date from the downloaded package's own `package.json`, refuses a package that is not a `-ci-build` version, and puts the config back if generation fails. The package is not committed (it is in `.gitignore`, `.dockerignore` and excluded from the gem), so `rake au_ps:generate` without a key skips the CI build, and `rake 'au_ps:generate[ci-build]'` refuses a local package the config does not describe. On master a local refresh is for inspection only: do not commit the generated suite or the updated `config.ci-build.json` there, because the suite belongs on the `ci-build` branch.
 
 ## Suppressing Known Validation Messages
 

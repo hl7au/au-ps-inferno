@@ -15,13 +15,22 @@ RSpec.describe Generator do
     File.write(File.join(root_dir, "config.#{key}.json"), JSON.generate(config))
   end
 
-  def config(version:, archive: nil)
+  def config(version:, archive: nil, ci_build: false)
     {
       'kit' => { 'suite_file' => suite_file },
       'ig' => { 'id' => 'hl7.fhir.au.ps', 'version' => version, 'package_archive_path' => archive },
       'suite' => { 'title' => 'AU PS' },
+      'ci_build' => ({ 'package_date' => '20261001000000' } if ci_build),
       'configs' => { 'generic' => {}, 'profiles' => {}, 'resources' => {} }
-    }
+    }.compact
+  end
+
+  # A generator for +key+ in root_dir without loading an IG package.
+  def bare_generator(key)
+    described_class.allocate.tap do |generator|
+      generator.instance_variable_set(:@version_key, key)
+      generator.instance_variable_set(:@root_dir, root_dir)
+    end
   end
 
   describe '.version_keys' do
@@ -52,12 +61,7 @@ RSpec.describe Generator do
   end
 
   describe '#update_suite_ig_version' do
-    let(:generator) do
-      described_class.allocate.tap do |generator|
-        generator.instance_variable_set(:@version_key, 'ci-build')
-        generator.instance_variable_set(:@root_dir, root_dir)
-      end
-    end
+    let(:generator) { bare_generator('ci-build') }
     let(:suite_path) { File.join(root_dir, suite_file) }
 
     before do
@@ -77,6 +81,62 @@ RSpec.describe Generator do
 
       expect { generator.send(:update_suite_ig_version, '1.0.2-ci-build') }
         .to raise_error(ArgumentError, /IG_VERSION constant not found/)
+    end
+  end
+
+  describe '#write_ci_build_suite' do
+    let(:generator) { bare_generator('ci-build') }
+    let(:suite_path) { File.join(root_dir, suite_file) }
+
+    before { write_config('ci-build', config(version: '1.0.1-ci-build', ci_build: true)) }
+
+    it 'creates the suite class when it is absent, as on a ci-build branch freshly made from master' do
+      generator.send(:write_ci_build_suite, '1.1.0-ci-build')
+
+      expect(File.read(suite_path)).to eq(AUPSTestKit::CIBuildSuiteTemplate.source('1.1.0-ci-build'))
+    end
+
+    it 'replaces the whole class, not only IG_VERSION' do
+      FileUtils.mkdir_p(File.dirname(suite_path))
+      File.write(suite_path, "class Suite\n  IG_VERSION = '1.0.1-ci-build'\nend\n")
+
+      generator.send(:write_ci_build_suite, '1.1.0-ci-build')
+
+      expect(File.read(suite_path)).to eq(AUPSTestKit::CIBuildSuiteTemplate.source('1.1.0-ci-build'))
+    end
+
+    it 'refuses a package without a version rather than writing a class without one' do
+      expect { generator.send(:write_ci_build_suite, nil) }.to raise_error(ArgumentError, /declares no version/)
+      expect(File).not_to exist(suite_path)
+    end
+  end
+
+  describe '#generate' do
+    let(:suite_path) { File.join(root_dir, suite_file) }
+
+    def generate(key, package_version)
+      generator = bare_generator(key)
+      generator.instance_variable_set(:@ig_resources, double(ig: double(version: package_version)))
+      allow(generator).to receive(:save_metadata_to_version_folder)
+      generator.generate
+    end
+
+    it 'writes the whole suite class for a CI build version' do
+      write_config('ci-build', config(version: '1.0.1-ci-build', ci_build: true))
+
+      generate('ci-build', '1.1.0-ci-build')
+
+      expect(File.read(suite_path)).to eq(AUPSTestKit::CIBuildSuiteTemplate.source('1.1.0-ci-build'))
+    end
+
+    it "rewrites only IG_VERSION in a released version's hand-written class" do
+      write_config('1.0.1', config(version: '1.0.1'))
+      FileUtils.mkdir_p(File.dirname(suite_path))
+      File.write(suite_path, "# hand-written\nclass Suite\n  IG_VERSION = '1.0.0'\nend\n")
+
+      generate('1.0.1', '1.0.1')
+
+      expect(File.read(suite_path)).to eq("# hand-written\nclass Suite\n  IG_VERSION = '1.0.1'\nend\n")
     end
   end
 end

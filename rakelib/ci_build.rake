@@ -22,8 +22,6 @@ namespace :au_ps do
     desc 'Regenerate the ci-build suite when the AU PS CI build has changed (pass "force" to always regenerate)'
     task :refresh, [:force] do |_task, args|
       ci_build = AUPSTestKit::CIBuild.new
-      previous_version = ci_build.version
-      previous_date = ci_build.recorded_date
       changed = ci_build.refresh(force: args[:force] == 'force') do
         Rake::Task['au_ps:generate'].invoke(AUPSTestKit::CIBuild::VERSION_KEY)
       end
@@ -32,8 +30,7 @@ namespace :au_ps do
       else
         puts "CI build unchanged since #{ci_build.recorded_date}; nothing to regenerate"
       end
-      AUPSTestKit::CIBuild.write_github_output(changed:, version: ci_build.version, date: ci_build.recorded_date,
-                                               previous_version:, previous_date:)
+      AUPSTestKit::CIBuild.write_github_output(changed:, version: ci_build.version, date: ci_build.recorded_date)
     end
   end
 end

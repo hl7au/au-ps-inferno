@@ -1,6 +1,9 @@
 AllCops:
   NewCops: enable
   Exclude:
+    # Listing Exclude here replaces RuboCop's default, which skips vendor/; gems that
+    # ruby/setup-ruby installs under vendor/bundle must not be inspected.
+    - "vendor/**/*"
     - "lib/au_ps_inferno/suite/**/*"
     - "spec/integration/suite_100ballot_snapshots_spec.rb"
     - "lib/au_ps_inferno/generator/primitive_test.rb"
