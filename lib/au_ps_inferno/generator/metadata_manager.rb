@@ -26,7 +26,7 @@ class Generator
       reset_composition_metadata_ivars!
     end
 
-    # rubocop:disable Metrics/MethodLength
+    # rubocop:disable-next Metrics/MethodLength
     def reset_composition_metadata_ivars!
       @composition_sections = []
       @composition_mandatory_ms_elements = []
@@ -40,7 +40,6 @@ class Generator
       @normalized_sections_data = []
       @address_profile_elements = []
     end
-    # rubocop:enable Metrics/MethodLength
 
     # Runs {CompositionMetadataProducer} against the IG resources and stores the result (in-memory only).
     # Populates the internal composition sections and related metadata used by {#save_to_file}.

@@ -82,7 +82,7 @@ module AUPSTestKit
     # block runs the generator. A failed refresh puts the config back as it was.
     #
     # @return [Boolean] whether the suite was regenerated
-    def refresh(force: false)
+    def refresh(force: false) # rubocop:disable Naming/PredicateMethod
       return false unless force || changed?
 
       original_config = File.read(config_path)

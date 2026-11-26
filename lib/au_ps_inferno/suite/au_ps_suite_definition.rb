@@ -15,6 +15,8 @@ require_relative 'retrieve_au_ps_bundle_validation_tests/retrieve_au_ps_bundle_v
 
 require_relative 'generate_au_ps_using_ips_summary_validation_tests/generate_au_ps_using_ips_summary_validation_tests'
 
+require_relative 'suppressed_validation_messages'
+
 module AUPSTestKit
   # The body shared by every AU PS suite version. A version's suite class extends this
   # module and calls {#define_au_ps_suite} with its {SuiteVersion}; the version supplies the
@@ -69,6 +71,12 @@ module AUPSTestKit
           # only resolvable here.
           snomedCT ENV.fetch('SNOMED_EDITION', 'au')
           noEcosystem true
+        end
+
+        exclude_message do |message|
+          SuppressedValidationMessages::LIST.any? do |suppression|
+            message.type == suppression[:type] && suppression[:pattern].match?(message.message)
+          end
         end
       end
     end
