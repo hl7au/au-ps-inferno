@@ -4,6 +4,7 @@
 
 ### Added
 
+- Added support for suppressing known, accepted FHIR validator messages (e.g. false positives or unavoidable terminology gaps) via the `SuppressedValidationMessages::LIST` list, applied to every AU PS suite (#38). The list is derived from the AU PS IG's `input/ignoreWarnings.txt` at the `release-1.0.0` tag. It keeps only messages Inferno can emit on a tester's instances (69 entries), and adds the `Bundle.signature.targetFormat` canonicalization MIME type false positive. The Bundle slice conformance error ("The entry resource did not match any of the allowed profiles") is never suppressed.
 - A suite tracking the AU PS CI build, `au_ps_ci_build` (a fixed id; the title shows the package version), validated against `hl7.fhir.au.ps#current`. The suite lives only on the long-lived `ci-build` branch; master and gems built from it carry the tooling that generates it but not the suite, and `lib/au_ps_inferno.rb` loads it only when `INFERNO_CI_BUILD_SUITES=true` and the suite file exists. The generator writes the whole suite class from `lib/au_ps_inferno/generator/ci_build_suite_template.rb`. `rake au_ps:ci_build:check|download|refresh[force]` regenerate it, and a daily Refresh CI Build Suite workflow merges master into `ci-build`, regenerates the suite when the CI build's `package.manifest.json` date changes or master moved, runs RuboCop and the unit specs, and pushes the branch only if they pass, never by pull request and never with a force-push. The tooling mirrors the AU Core kit's ci-build suite.
 
 ### Changed

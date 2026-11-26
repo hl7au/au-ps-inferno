@@ -23,7 +23,7 @@
           "noEcosystem": true
         },
         "additional_validations": 1,
-        "exclude_message": false
+        "exclude_message": true
       }
     ]
   },
